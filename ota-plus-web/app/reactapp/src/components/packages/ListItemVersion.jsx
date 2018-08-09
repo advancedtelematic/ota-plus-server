@@ -224,33 +224,37 @@ class ListItemVersion extends Component {
                     <span></span>
                     <span></span>
 
-                    <Dropdown show={this.isShown} hideSubmenu={this.hideSubmenu}>
-                        <li className="package-dropdown-item">
-                            <a className="package-dropdown-item" href="#" id="edit-comment"
-                               onClick={showEditComment.bind(this, version.filepath, version.comment)}>
-                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                Edit comment
-                            </a>
-                        </li>
-                        {alphaPlusEnabled ?
+                    {this.isShown ?
+                        <Dropdown hideSubmenu={this.hideSubmenu}>
                             <li className="package-dropdown-item">
-                                <i className="icon icon-dependencies"/>
-                                <a className="package-dropdown-item" href="#" id="show-dependencies"
-                                   onClick={showDependenciesManager.bind(this, version)}>
-                                    Edit dependencies
+                                <a className="package-dropdown-item" href="#" id="edit-comment"
+                                   onClick={showEditComment.bind(this, version.filepath, version.comment)}>
+                                    <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                    Edit comment
                                 </a>
                             </li>
-                        :
-                            null
-                        }
-                        <li className="package-dropdown-item">
-                            <a className="package-dropdown-item" href="#" id="delete-version"
-                               onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
-                                <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
-                                Delete version
-                            </a>
-                        </li>
-                    </Dropdown>
+                            {alphaPlusEnabled ?
+                                <li className="package-dropdown-item">
+                                    <i className="icon icon-dependencies"/>
+                                    <a className="package-dropdown-item" href="#" id="show-dependencies"
+                                       onClick={showDependenciesManager.bind(this, version)}>
+                                        Edit dependencies
+                                    </a>
+                                </li>
+                            :
+                                null
+                            }
+                            <li className="package-dropdown-item">
+                                <a className="package-dropdown-item" href="#" id="delete-version"
+                                   onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
+                                    <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                    Delete version
+                                </a>
+                            </li>
+                        </Dropdown>
+                    :
+                        null
+                    }
                 </div>
             </span>
         );

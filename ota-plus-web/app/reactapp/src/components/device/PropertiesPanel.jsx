@@ -12,7 +12,7 @@ const title = "Properties";
 class PropertiesPanel extends Component {
     render() {
         const { 
-            installTufPackage, 
+            installPackage, 
             packagesReady, 
         } = this.props;
         const { packagesStore } = this.props.stores;
@@ -28,7 +28,7 @@ class PropertiesPanel extends Component {
                         </div>
                     :
                         <PropertiesList
-                            installTufPackage={installTufPackage}
+                            installPackage={installPackage}
                         />
                     }
                 </div>
@@ -38,7 +38,7 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
-    installTufPackage: PropTypes.func.isRequired,
+    installPackage: PropTypes.func.isRequired,
 }
 
 export default PropertiesPanel;

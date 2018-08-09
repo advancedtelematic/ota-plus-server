@@ -85,19 +85,23 @@ class ListItem extends Component {
                                 <span></span>
                                 <span></span>
                             </div>
-                            <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
-                                <li className="package-dropdown-item">
-                                    <a className="package-dropdown-item" href="#" id="edit-comment"
-                                       onClick={(e) => {
-                                           e.preventDefault();
-                                           selectGroup({type: 'real', groupName: group.groupName, id: group.id, isAutomatic: isAutomatic});
-                                           this.showRenameModal();
-                                       }}>
-                                        <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                        Edit name
-                                    </a>
-                                </li>
-                            </Dropdown>
+                            {this.showEdit ?
+                                <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
+                                    <li className="package-dropdown-item">
+                                        <a className="package-dropdown-item" href="#" id="edit-comment"
+                                           onClick={(e) => {
+                                               e.preventDefault();
+                                               selectGroup({type: 'real', groupName: group.groupName, id: group.id, isAutomatic: isAutomatic});
+                                               this.showRenameModal();
+                                           }}>
+                                            <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                            Edit name
+                                        </a>
+                                    </li>
+                                </Dropdown>
+                            :
+                                null
+                            }
                         </div>
                         <div className="groups-panel__item-subtitle" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}

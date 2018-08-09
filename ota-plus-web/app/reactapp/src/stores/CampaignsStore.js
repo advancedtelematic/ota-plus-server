@@ -270,19 +270,7 @@ export default class CampaignsStore {
     }
 
     _getCampaign(id) {
-        return this._getTufCampaign(id);
-    }
-
-    _getTufCampaign(id) {
         return _.findWhere(this.campaigns, {id: id});
-    }
-
-    _updateTufCampaignData(id, data) {
-        let campaign = this._getTufCampaign(id);
-        _.each(data, (value, attr) => {
-            campaign[attr] = value;
-        });
-       this._prepareCampaigns();
     }
 
     _showFullScreen() {
@@ -377,7 +365,7 @@ export default class CampaignsStore {
         });
     }
 
-    @computed get lastActiveTufCampaigns() {
+    @computed get lastActiveCampaigns() {
         let campaigns = this.runningCampaigns;
         campaigns = _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;

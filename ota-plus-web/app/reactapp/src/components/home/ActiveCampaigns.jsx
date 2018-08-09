@@ -27,8 +27,8 @@ class ActiveCampaigns extends Component {
                         <Loader />
                     </div>
                 :
-                    campaignsStore.lastActiveTufCampaigns.length ?
-                        _.map(campaignsStore.lastActiveTufCampaigns, (campaign) => {
+                    campaignsStore.lastActiveCampaigns.length ?
+                        _.map(campaignsStore.lastActiveCampaigns, (campaign) => {
                             return (
                                 <ActiveCampaignItem
                                     campaign={campaign}
