@@ -157,6 +157,64 @@
           }
         }
 
+        .distribution-info {
+          padding: 15px 0;
+
+          .flex-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding:8px 0;
+
+            .btn-bordered {
+              width: 250px;
+              height:36px;
+              font-size: 14px;
+            }
+
+            .btn-checkbox {
+              margin: 0 10px 0 0;
+            }
+          }
+
+          .translations {
+            .flex-row {
+              justify-content: space-between;
+            }
+
+            .bold {
+              font-weight: 500;
+            }
+          }
+
+          .estimations {
+            border-top: 1px solid #EBEBEC;
+            padding: 10px 0;
+
+            .title {
+              margin-right: 50px;
+            }
+
+            .estimation {
+              padding:5px 0;
+              width: 40%;
+              justify-content: space-between;
+              align-items: center;
+              display: flex;
+
+              .time-value {
+                display: inline-block;
+                background-color: #EBEBEC;
+                width: 70px;
+                .c-form__input {
+                  padding: 5px;
+                  font-size: 12px !important;
+                }
+              }
+            }
+          }
+        }
+
         &.step-dependencies-management {
 
           .content {
