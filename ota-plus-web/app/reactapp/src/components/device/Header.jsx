@@ -136,24 +136,27 @@ class Header extends Component {
                                         <span></span>
                                         <span></span>
 
-                                        <Dropdown
-                                            show={this.headerMenuShown}
-                                            hideSubmenu={this.hideHeaderMenu}
-                                            customClassName={"relative"}
-                                        >
-                                            <li className="device-dropdown-item">
-                                                <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
-                                                    <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                                    Edit device
-                                                </a>
-                                            </li>
-                                            <li className="device-dropdown-item">
-                                                <a className="device-dropdown-item" id="delete-device" onClick={this.showDeleteConfirmation}>
-                                                    <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
-                                                    Delete device
-                                                </a>
-                                            </li>
-                                        </Dropdown>
+                                        {this.headerMenuShown ?
+                                            <Dropdown
+                                                hideSubmenu={this.hideHeaderMenu}
+                                                customClassName={"relative"}
+                                            >
+                                                <li className="device-dropdown-item">
+                                                    <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
+                                                        <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                                        Edit device
+                                                    </a>
+                                                </li>
+                                                <li className="device-dropdown-item">
+                                                    <a className="device-dropdown-item" id="delete-device" onClick={this.showDeleteConfirmation}>
+                                                        <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                                        Delete device
+                                                    </a>
+                                                </li>
+                                            </Dropdown>
+                                        :
+                                            null
+                                        }
                                     </div>
                                 </div>
                             </div>

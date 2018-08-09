@@ -23,10 +23,12 @@ class Home extends Component {
         super(props);
         this.showPackagesCreateModal = this.showPackagesCreateModal.bind(this);
         this.hidePackagesCreateModal = this.hidePackagesCreateModal.bind(this);
-        this.toggleDeviceSubmenu = this.toggleDeviceSubmenu.bind(this);
-        this.togglePackageSubmenu = this.togglePackageSubmenu.bind(this);
-        this.toggleCampaignSubmenu = this.toggleCampaignSubmenu.bind(this);
-        this.hideSubmenus = this.hideSubmenus.bind(this);
+        this.showDeviceSubmenu = this.showDeviceSubmenu.bind(this);
+        this.hideDeviceSubmenu = this.hideDeviceSubmenu.bind(this);
+        this.showPackageSubmenu = this.showPackageSubmenu.bind(this);
+        this.hidePackageSubmenu = this.hidePackageSubmenu.bind(this);
+        this.showCampaignSubmenu = this.showCampaignSubmenu.bind(this);
+        this.hideCampaignSubmenu = this.hideCampaignSubmenu.bind(this);
     }
     showPackagesCreateModal(e) {
         if(e) e.preventDefault();
@@ -36,28 +38,29 @@ class Home extends Component {
         if(e) e.preventDefault();
         this.packagesCreateModalShown = false;
     }
-    toggleDeviceSubmenu(e,) {
+    showDeviceSubmenu(e,) {
         if(e) e.preventDefault();
-        this.deviceSubmenuShown = !this.deviceSubmenuShown;
-        this.packageSubmenuShown = false;
-        this.campaignSubmenuShown= false;
+        this.deviceSubmenuShown = true;
     }
-    togglePackageSubmenu(e) {
+    hideDeviceSubmenu(e,) {
         if(e) e.preventDefault();
-        this.packageSubmenuShown = !this.packageSubmenuShown;
         this.deviceSubmenuShown = false;
+    }
+    showPackageSubmenu(e) {
+        if(e) e.preventDefault();
+        this.packageSubmenuShown = true;
+    }
+    hidePackageSubmenu(e) {
+        if(e) e.preventDefault();
+        this.packageSubmenuShown = false;
+    }
+    showCampaignSubmenu(e) {
+        if(e) e.preventDefault();
+        this.campaignSubmenuShown = true;
+    }
+    hideCampaignSubmenu(e) {
+        if(e) e.preventDefault();
         this.campaignSubmenuShown = false;
-    }
-    toggleCampaignSubmenu(e) {
-        if(e) e.preventDefault();
-        this.campaignSubmenuShown = !this.campaignSubmenuShown;
-        this.packageSubmenuShown = false;
-        this.deviceSubmenuShown = false;
-    }
-    hideSubmenus() {
-        this.campaignSubmenuShown = false;
-        this.packageSubmenuShown = false;
-        this.deviceSubmenuShown = false;
     }
     render() {
         const { addNewWizard  } = this.props;
@@ -173,27 +176,30 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Status
                             </div>
-                            <div className="dots" id="devices-menu" onClick={this.toggleDeviceSubmenu}>
+                            <div className="dots" id="devices-menu" onClick={this.showDeviceSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
 
-                                <Dropdown
-                                    show={this.deviceSubmenuShown}
-                                    hideSubmenu={this.hideSubmenus}
-                                >
-                                    <li className="device-dropdown-item">
-                                        <a className="device-dropdown-item" href="https://docs.atsgarage.com/quickstarts/start-intro.html" target="_blank" onClick={(e) => e.stopPropagation()}>
-                                            Add device
-                                        </a>
-                                    </li>
-                                    <li className="device-dropdown-item">
-                                        <Link
-                                            to="/devices">
-                                            View all
-                                        </Link>
-                                    </li>
-                                </Dropdown>
+                                {this.deviceSubmenuShown ?
+                                    <Dropdown
+                                        hideSubmenu={this.hideDeviceSubmenu}
+                                    >
+                                        <li className="device-dropdown-item">
+                                            <a className="device-dropdown-item" href="https://docs.atsgarage.com/quickstarts/start-intro.html" target="_blank" onClick={(e) => e.stopPropagation()}>
+                                                Add device
+                                            </a>
+                                        </li>
+                                        <li className="device-dropdown-item">
+                                            <Link
+                                                to="/devices">
+                                                View all
+                                            </Link>
+                                        </li>
+                                    </Dropdown>
+                                :
+                                    null
+                                }
                             </div>
                         </div>
                         <div className="home__body home__body--right">
@@ -211,27 +217,30 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Created at
                             </div>
-                            <div className="dots" id="packages-menu" onClick={this.togglePackageSubmenu}>
+                            <div className="dots" id="packages-menu" onClick={this.showPackageSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
 
-                                <Dropdown
-                                    show={this.packageSubmenuShown}
-                                    hideSubmenu={this.hideSubmenus}
-                                >
-                                    <li className="package-dropdown-item">
-                                        <a className="package-dropdown-item" href="#" onClick={this.showPackagesCreateModal}>
-                                            Add package
-                                        </a>
-                                    </li>
-                                    <li className="package-dropdown-item">
-                                        <Link
-                                            to="/packages">
-                                            View all
-                                        </Link>
-                                    </li>
-                                </Dropdown>
+                                {this.packageSubmenuShown ?
+                                    <Dropdown
+                                        hideSubmenu={this.hidePackageSubmenu}
+                                    >
+                                        <li className="package-dropdown-item">
+                                            <a className="package-dropdown-item" href="#" onClick={() => { console.log('click'); this.showPackagesCreateModal() }}>
+                                                Add package
+                                            </a>
+                                        </li>
+                                        <li className="package-dropdown-item">
+                                            <Link
+                                                to="/packages">
+                                                View all
+                                            </Link>
+                                        </li>
+                                    </Dropdown>
+                                :
+                                    null
+                                }
                             </div>
                         </div>
                         <div className="home__body home__body--right">
@@ -251,27 +260,30 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Failure rate
                             </div>
-                            <div className="dots" id="campaigns-menu" onClick={this.toggleCampaignSubmenu}>
+                            <div className="dots" id="campaigns-menu" onClick={this.showCampaignSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
 
-                                <Dropdown
-                                    show={this.campaignSubmenuShown}
-                                    hideSubmenu={this.hideSubmenus}
-                                >
-                                    <li className="campaign-dropdown-item">
-                                        <a className="campaign-dropdown-item" href="#" onClick={(e) => { e.preventDefault(); addNewWizard() }} >
-                                            Add campaign
-                                        </a>
-                                    </li>
-                                    <li className="campaign-dropdown-item">
-                                        <Link
-                                            to="/campaigns">
-                                            View all
-                                        </Link>
-                                    </li>
-                                </Dropdown>
+                                {this.campaignSubmenuShown ?
+                                    <Dropdown
+                                        hideSubmenu={this.hideCampaignSubmenu}
+                                    >
+                                        <li className="campaign-dropdown-item">
+                                            <a className="campaign-dropdown-item" href="#" onClick={(e) => { e.preventDefault(); addNewWizard() }} >
+                                                Add campaign
+                                            </a>
+                                        </li>
+                                        <li className="campaign-dropdown-item">
+                                            <Link
+                                                to="/campaigns">
+                                                View all
+                                            </Link>
+                                        </li>
+                                    </Dropdown>
+                                :
+                                    null
+                                }
                             </div>
                         </div>
                         <div className="home__body home__body--right">

@@ -47,7 +47,7 @@ class List extends Component {
 	}
     render() {
     	const { 
-    		installTufPackage
+    		installPackage
     	} = this.props;
     	const { packagesStore, devicesStore } = this.props.stores;
 
@@ -204,7 +204,7 @@ class List extends Component {
 										label="Install"
 										title="Install"
 										id={"button-install-package-" + expandedPackage.id.name + "-" + expandedPackage.id.version}
-										onClick={installTufPackage.bind(this, {
+										onClick={installPackage.bind(this, {
                                             target: expandedPackage.filepath,
                                             hash: expandedPackage.packageHash,
                                             targetLength: expandedPackage.targetLength,
@@ -256,7 +256,7 @@ class List extends Component {
 
 List.propTypes = {
     stores: PropTypes.object,
-    installTufPackage: PropTypes.func.isRequired,
+    installPackage: PropTypes.func.isRequired,
 }
 
 export default List;

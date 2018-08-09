@@ -42,9 +42,8 @@ export const API_GROUPS_DETAIL = '/api/v1/device_groups';
 export const API_GROUPS_ADD_DEVICE = '/api/v1/device_groups';
 export const API_GROUPS_REMOVE_DEVICE = '/api/v1/device_groups';
 
-export const API_PACKAGES = '/api/v1/packages';
-export const API_TUF_PACKAGES = '/api/v1/user_repo/targets.json';
-export const API_UPLOAD_TUF_PACKAGE = '/api/v1/user_repo/targets';
+export const API_PACKAGES = '/api/v1/user_repo/targets.json';
+export const API_UPLOAD_PACKAGE = '/api/v1/user_repo/targets';
 export const API_DELETE_PACKAGE = '/api/v1/user_repo/targets';
 export const API_PACKAGES_COUNT_VERSION_BY_NAME = '/api/v1/device_packages';
 export const API_PACKAGES_COUNT_DEVICE_AND_GROUP = '/api/v1/device_count';
@@ -66,11 +65,7 @@ export const API_PACKAGES_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
 export const API_PACKAGES_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
 
-export const API_CREATE_TUF_REPO = '/api/v1/user_repo';
 export const API_PACKAGES_COMMENTS = '/api/v1/user_repo/comments';
-export const API_CHECK_TUF_REPO = '/api/v1/user_repo/root.json';
-export const API_CREATE_DIRECTOR_REPO = '/api/v1/admin/repo';
-export const API_CHECK_DIRECTOR_REPO = '/api/v1/admin/repo/root.json';
 
 export const API_CAMPAIGNS_FETCH = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_FETCH = '/api/v1/campaigns';
