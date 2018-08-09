@@ -24,13 +24,14 @@
             overflow-y: auto;
         }
 
-        &__static-list {
+        &__classic-list {
             height: calc(100% - 495px);
             overflow-y: auto;
         }
 
-        &__automatic-list {
+        &__smart-list {
             height: 180px;
+            overflow-y: auto;
         }
 
         &__section-title {
@@ -95,7 +96,7 @@
                 background-size: cover;
             }
 
-            &--fleet, &--automatic {
+            &--fleet, &--smart {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -184,7 +185,7 @@
             padding: 0 30px;
             position: relative;
 
-            &--automatic {
+            &--smart {
                 height: calc(100% - 125px);
             }
         }

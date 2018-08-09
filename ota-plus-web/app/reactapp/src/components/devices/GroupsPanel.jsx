@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
-import { GroupsHeader, GroupsStaticList, GroupsAutomaticList, GroupsArtificialList, GroupsDefaultList } from '../groups';
+import { GroupsHeader, GroupsClassicList, GroupsSmartList, GroupsArtificialList, GroupsDefaultList } from '../groups';
 import { observer, inject } from 'mobx-react';
 
 const GroupsPanel = inject("stores")(observer(({ showCreateGroupModal, selectGroup, onDeviceDrop, stores }) => {
@@ -16,11 +16,11 @@ const GroupsPanel = inject("stores")(observer(({ showCreateGroupModal, selectGro
             />
             {alphaPlusEnabled ?
                 <span>
-                    <GroupsStaticList                  
+                    <GroupsClassicList                  
                         selectGroup={selectGroup}
                         onDeviceDrop={onDeviceDrop}
                     />
-                    <GroupsAutomaticList
+                    <GroupsSmartList
                         selectGroup={selectGroup}
                         onDeviceDrop={onDeviceDrop}
                     />
