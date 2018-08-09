@@ -4,14 +4,14 @@ import { map } from 'underscore';
 
 const options = [
     {
-        title: "Static group",
+        title: "Classic group",
         teaser: "drag and drop specific devices in this group",
-        alias: 'static'
+        alias: 'classic'
     },
     {
-        title: "Automatic group",
+        title: "Smart group",
         teaser: "filter devices based on multiple criteria, and get an up-to-date devices selection",
-        alias: 'automatic'
+        alias: 'smart'
     }
 ];
 

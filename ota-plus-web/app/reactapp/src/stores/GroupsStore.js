@@ -26,7 +26,7 @@ export default class GroupsStore {
     @observable groupsRenameAsync = {};
     @observable groupsAddDeviceAsync = {};
     @observable groupsRemoveDeviceAsync = {};
-    @observable automaticGroups = [];
+    @observable smartGroups = [];
     @observable groups = [];
     @observable wizardGroups = [];
     @observable filteredGroups = [];
@@ -87,8 +87,8 @@ export default class GroupsStore {
                 let groups = response.data.values;
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
-                        this.groups = groups;
-                        this.automaticGroups = groups.slice(1, 3);
+                        this.groups = _.filter(groups, group => group.groupType === 'static');
+                        this.smartGroups =_.filter(groups, group => group.groupType === 'dynamic');
                         this._prepareGroups(this.groups);
                         this._prepareGroupsWithFleets();
                         this[async] = handleAsyncSuccess(response);
@@ -216,9 +216,13 @@ export default class GroupsStore {
             }.bind(this));
     }
 
-    createGroup(name) {
+    createGroup(data) {
         resetAsync(this.groupsCreateAsync, true);
-        return axios.post(API_GROUPS_CREATE + '?groupName=' + name)
+        return axios.post(API_GROUPS_CREATE, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(function (response) {
                 this.latestCreatedGroupId = response.data;
                 this.fetchGroups('groupsCreateFetchAsync');
@@ -306,7 +310,7 @@ export default class GroupsStore {
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
-        this.automaticGroups = [];
+        this.smartGroups = [];
         this.groups = [];
         this.wizardGroups = [];
         this.filteredGroups = [];

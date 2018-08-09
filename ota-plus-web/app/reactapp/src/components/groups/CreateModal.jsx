@@ -51,7 +51,7 @@ class CreateModal extends Component {
         const { alphaPlusEnabled } = featuresStore;
         if(!alphaPlusEnabled) {
             this.currentStepId = 1;
-            this.groupType = 'static';
+            this.groupType = 'classic';
         }
     }
     markStepAsFinished() {
@@ -83,21 +83,31 @@ class CreateModal extends Component {
         this.createHandler();
     }
     createGroup() {
-        if(this.groupType === 'static') {
-            const { groupsStore } = this.props.stores;
-            let data = serialize(document.querySelector('#static-group-create-form'), { hash: true });
-            groupsStore.createGroup(data.groupName);
+        const { groupsStore } = this.props.stores;
+        if(this.groupType === 'classic') {
+            let data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
+            groupsStore.createGroup({
+                name: data.groupName,
+                groupType: "static",
+                expression: null
+            });
         } else {
-            console.log('CREATING AUTO GROUP');
+            let data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
+            const expression = (data.nameFilter + " " + data.expressionFilter + " " + (data.word ? data.word : " ")).toLowerCase(); 
+            groupsStore.createGroup({
+                name: data.groupName,
+                groupType: "dynamic",
+                expression: expression
+            });
         }
     }
     handleResponse() {
         const { groupsStore } = this.props.stores;
         let data = null;
-        if(this.groupType === 'static') {
-            data = serialize(document.querySelector('#static-group-create-form'), { hash: true });
+        if(this.groupType === 'classic') {
+            data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
         } else {
-            data = serialize(document.querySelector('#automatic-group-create-form'), { hash: true });
+            data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
         }
         this.props.selectGroup({type: 'real', groupName: data.groupName, id: groupsStore.latestCreatedGroupId});
         groupsStore._prepareGroups(groupsStore.groups);

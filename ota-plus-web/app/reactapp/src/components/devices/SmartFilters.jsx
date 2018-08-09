@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { SearchBar, FormInput, FormSelect } from '../../partials';
 import { Form } from 'formsy-react';
 
-const nameFilterOptions = ["Name", "Id"];
-const extraFilterOptions = ["begins with", "ends with", "matches", "contains", "is", "is not"];
+const nameFilterOptions = ["deviceid"];
+const extraFilterOptions = ["contains"];
 
-const AutomaticFilters = ({ devicesView = false, className, layout }) => {
+const SmartFilters = ({ devicesView = false, className, layout }) => {
     return (
         <div className={"filters " + (className ? className : '')}>
 			<div className="filters__block" style={{flex: layout[0]}} >
@@ -14,20 +14,22 @@ const AutomaticFilters = ({ devicesView = false, className, layout }) => {
                     appendMenuToBodyTag={true}
                     options={nameFilterOptions}
                     multiple={false}
-                    placeholder="Name"
                     visibleFieldsCount={5}
-                    onChange={(e) => { console.log(e) }}
+                    defaultValue="deviceid"
+                    name="nameFilter"
+                    onChange={() => {}}
                 />
         	</div>
         	<div className="filters__block" style={{flex: layout[1]}} >
 				<FormSelect
-                    id="extra-filter"
+                    id="expression-filter"
                     appendMenuToBodyTag={true}
                     options={extraFilterOptions}
                     multiple={false}
-                    placeholder="begins with"
+                    defaultValue="contains"
                     visibleFieldsCount={5}
-                    onChange={(e) => { console.log(e) }}
+                    name="expressionFilter"
+                    onChange={() => {}}
                 />
     		</div>
     		<div className="filters__block" style={{flex: layout[2]}} >
@@ -35,16 +37,17 @@ const AutomaticFilters = ({ devicesView = false, className, layout }) => {
                     <Form>
                         <SearchBar 
                             value={''}
-                            changeAction={() => { console.log('change aciton') }}
+                            changeAction={() => {}}
                             id="search-devices-input"
+                            name="word"
                         />
                     </Form>
                 :
                     <FormInput
-                        name="name-filter"
+                        id="word"
+                        name="word"
                         className="input-wrapper"
                         placeholder={"Type here"}
-                        onChange={(e) => { console.log(e.target.value) }}
                     />
                 }
     		</div>
@@ -58,4 +61,4 @@ const AutomaticFilters = ({ devicesView = false, className, layout }) => {
     );
 }
 
-export default AutomaticFilters;
+export default SmartFilters;

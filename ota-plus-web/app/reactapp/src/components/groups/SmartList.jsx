@@ -11,23 +11,23 @@ import { Loader } from '../../partials';
 
 @inject("stores")
 @observer
-class AutomaticList extends Component {
-    @observable automaticShown = true;
+class SmartList extends Component {
+    @observable smartShown = true;
 
     constructor(props) {
         super(props);
-        this.toggleAutomaticGroups = this.toggleAutomaticGroups.bind(this);
+        this.toggleSmartGroups = this.toggleSmartGroups.bind(this);
     }
-    toggleAutomaticGroups() {
-        this.automaticShown = !this.automaticShown;
+    toggleSmartGroups() {
+        this.smartShown = !this.smartShown;
     }
     render() {
         const { selectGroup, onDeviceDrop } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;
         return (
             <span>
-                <div className="groups-panel__section-title groups-panel__section-title--space-top" onClick={this.toggleAutomaticGroups}>
-                    Automatic Groups <i className={`fa ${this.automaticShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
+                <div className="groups-panel__section-title groups-panel__section-title--space-top" onClick={this.toggleSmartGroups}>
+                    Smart Groups <i className={`fa ${this.smartShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
                 </div>
                 <VelocityTransitionGroup 
                     enter={{
@@ -39,14 +39,14 @@ class AutomaticList extends Component {
                     }}
                     component="span"
                 >
-                    {this.automaticShown ?
-                        <div className="groups-panel__automatic-list">
+                    {this.smartShown ?
+                        <div className="groups-panel__smart-list">
                             {groupsStore.groupsFetchAsync.isFetching ?
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
-                            : groupsStore.automaticGroups.length ?
-                                _.map(groupsStore.automaticGroups, (group) => {
+                            : groupsStore.smartGroups.length ?
+                                _.map(groupsStore.smartGroups, (group) => {
                                     const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
                                     return (
                                         <ListItem 
@@ -54,7 +54,7 @@ class AutomaticList extends Component {
                                             selectGroup={selectGroup}
                                             isSelected={isSelected}
                                             onDeviceDrop={onDeviceDrop}
-                                            isAutomatic={true}
+                                            isSmart={true}
                                             key={group.groupName}
                                         />
                                     );
@@ -62,7 +62,7 @@ class AutomaticList extends Component {
                             :
                                 <div className="wrapper-center">
                                     <div className="groups-panel__section-title">
-                                        No automatic groups found.
+                                        No smart groups found.
                                     </div>
                                 </div>
                             }
@@ -76,8 +76,8 @@ class AutomaticList extends Component {
     }
 };
 
-AutomaticList.propTypes = {
+SmartList.propTypes = {
     stores: PropTypes.object,
 }
 
-export default AutomaticList;
+export default SmartList;

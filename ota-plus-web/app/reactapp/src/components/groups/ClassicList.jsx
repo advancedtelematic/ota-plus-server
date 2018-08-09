@@ -11,23 +11,23 @@ import { Loader } from '../../partials';
 
 @inject("stores")
 @observer
-class StaticList extends Component {
-    @observable staticShown = true;
+class ClassicList extends Component {
+    @observable classicShown = true;
 
     constructor(props) {
         super(props);
-        this.toggleStaticGroups = this.toggleStaticGroups.bind(this);
+        this.toggleClassicGroups = this.toggleClassicGroups.bind(this);
     }
-    toggleStaticGroups() {
-        this.staticShown = !this.staticShown;
+    toggleClassicGroups() {
+        this.classicShown = !this.classicShown;
     }
     render() {
         const { selectGroup, onDeviceDrop } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;
         return (
             <span>
-                <div className="groups-panel__section-title" onClick={this.toggleStaticGroups}>
-                    Static Groups <i className={`fa ${this.staticShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
+                <div className="groups-panel__section-title" onClick={this.toggleClassicGroups}>
+                    Classic Groups <i className={`fa ${this.classicShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
                 </div>
                 <VelocityTransitionGroup 
                     enter={{
@@ -39,8 +39,8 @@ class StaticList extends Component {
                     }}
                     component="span"
                 >
-                    {this.staticShown ?
-                        <div className="groups-panel__static-list">
+                    {this.classicShown ?
+                        <div className="groups-panel__classic-list">
                             {groupsStore.groupsFetchAsync.isFetching ?
                                 <div className="wrapper-center">
                                     <Loader />
@@ -51,6 +51,7 @@ class StaticList extends Component {
                                     hasMore={groupsStore.shouldLoadMore && groupsStore.hasMoreGroups}
                                     isLoading={groupsStore.groupsFetchAsync.isFetching}
                                     useWindow={false}
+                                    threshold={100}
                                     loadMore={() => {
                                         groupsStore.loadMoreGroups()
                                     }}>
@@ -72,7 +73,7 @@ class StaticList extends Component {
                                         :
                                             <div className="wrapper-center">
                                                 <div className="groups-panel__section-title">
-                                                    No static groups found.
+                                                    No classic groups found.
                                                 </div>
                                             </div>
                                         }
@@ -88,10 +89,10 @@ class StaticList extends Component {
     }
 };
 
-StaticList.propTypes = {
+ClassicList.propTypes = {
     stores: PropTypes.object,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,
 }
 
-export default StaticList;
+export default ClassicList;

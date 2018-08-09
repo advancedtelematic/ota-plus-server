@@ -1,11 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { Form, FormInput } from '../../../../partials';
-import { DevicesAutomaticFilters } from '../../../devices';
+import { AsyncResponse, Form, FormInput } from '../../../../partials';
+import { DevicesSmartFilters } from '../../../devices';
+import { observer, inject } from 'mobx-react';
 
-const CreateAutomaticGroup = ({markStepAsFinished, markStepAsNotFinished}) => {
+const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markStepAsNotFinished, stores}) => {
+    const { groupsStore } = stores;
     return (
 		<Form                
-            id="automatic-group-create-form">
+            id="smart-group-create-form">
+            <AsyncResponse 
+                handledStatus="error"
+                action={groupsStore.groupsCreateAsync}
+                errorMsg={(groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null)}
+            />
             <div className="wizard__row-wrapper">
 	            <div className="row">
 	                <div className="col-xs-10">
@@ -25,7 +32,7 @@ const CreateAutomaticGroup = ({markStepAsFinished, markStepAsNotFinished}) => {
             <div className="wizard__row-wrapper">
 	            <div className="row">
 		            <div className="col-xs-10">
-			            <DevicesAutomaticFilters 
+			            <DevicesSmartFilters 
 			            	layout={[1, 1, 3]}
 			            />
 		            </div>
@@ -47,6 +54,6 @@ const CreateAutomaticGroup = ({markStepAsFinished, markStepAsNotFinished}) => {
             </div>
         </Form>
     );
-}
+}))
 
-export default CreateAutomaticGroup;
+export default CreateSmartGroup;

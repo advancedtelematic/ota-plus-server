@@ -227,7 +227,7 @@ class Home extends Component {
                                         hideSubmenu={this.hidePackageSubmenu}
                                     >
                                         <li className="package-dropdown-item">
-                                            <a className="package-dropdown-item" href="#" onClick={() => { console.log('click'); this.showPackagesCreateModal() }}>
+                                            <a className="package-dropdown-item" href="#" onClick={() => { this.showPackagesCreateModal() }}>
                                                 Add package
                                             </a>
                                         </li>

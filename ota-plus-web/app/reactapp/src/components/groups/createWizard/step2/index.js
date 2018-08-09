@@ -1,8 +1,8 @@
-import Step2CreateStaticGroup from './CreateStaticGroup';
-import Step2CreateAutomaticGroup from './CreateAutomaticGroup';
+import Step2CreateClassicGroup from './CreateClassicGroup';
+import Step2CreateSmartGroup from './CreateSmartGroup';
 
 
 export {
-    Step2CreateStaticGroup,
-    Step2CreateAutomaticGroup
+    Step2CreateClassicGroup,
+    Step2CreateSmartGroup
 }
