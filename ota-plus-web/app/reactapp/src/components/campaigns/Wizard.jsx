@@ -15,6 +15,7 @@ import {
     WizardStep5,
     WizardStep6,
     WizardStep7,
+    WizardStep8,
 } from './wizardSteps';
 
 const initialCurrentStepId = 0;
@@ -66,20 +67,27 @@ const initialWizardStepForAlphaPlus = [
     },
     {
         class: WizardStep5,
+        title: "Distribution information",
+        name: "metadata",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep6,
         title: "Dependencies management",
         name: "dependencies-management",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep6,
+        class: WizardStep7,
         title: "Programming sequencer",
         name: "programming-sequencer",
         isFinished: true,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep7,
+        class: WizardStep8,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -118,7 +126,7 @@ const initialWizardStep = [
         isSearchBarShown: false,
     },
     {
-        class: WizardStep7,
+        class: WizardStep8,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -432,7 +440,13 @@ class Wizard extends Component {
             update: updateId,
             groups: _.map(this.wizardData[3].groups, (group, index) => {
                 return group.id
-            })
+            }),
+            // metadata: _.map(this.wizardData[4], (val, key) => {
+            //     return {
+            //         type: key,
+            //         value: val
+            //     }
+            // })
         };
         campaignsStore.createCampaign(createData);
     }
@@ -490,6 +504,7 @@ class Wizard extends Component {
                                     React.createElement(currentStep.class, {
                                         campaign: {},
                                         setWizardData: this.setWizardData,
+                                        currentStepId: this.currentStepId,
                                         wizardData: this.wizardData,
                                         markStepAsFinished: this.markStepAsFinished,
                                         markStepAsNotFinished: this.markStepAsNotFinished,
