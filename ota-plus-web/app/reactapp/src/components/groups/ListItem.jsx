@@ -54,7 +54,7 @@ class ListItem extends Component {
     }
 
     render() {
-        const { t, group, isSelected, isAutomatic, selectGroup, isOver, canDrop, connectDropTarget } = this.props;
+        const { t, group, isSelected, isSmart, selectGroup, isOver, canDrop, connectDropTarget } = this.props;
         const { groupsStore } = this.props.stores;
         return (
             connectDropTarget(
@@ -66,15 +66,15 @@ class ListItem extends Component {
                         <div className="groups-panel__item-icon groups-panel__item-icon--fleet">
                             {group.groupName.substring(0, 3)}
                         </div>
-                    : isAutomatic ?
-                        <div className="groups-panel__item-icon groups-panel__item-icon--automatic">
+                    : isSmart ?
+                        <div className="groups-panel__item-icon groups-panel__item-icon--smart">
                             AG
                         </div>
                     :
                         <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
                     }
                     <div className="groups-panel__item-desc" onClick={() => {
-                        selectGroup({type: 'real', groupName: group.groupName, id: group.id, isAutomatic: isAutomatic});
+                        selectGroup({type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart});
                     }}>
                         <div className="groups-panel__item-title">
                             <div className="groups-panel__item-title-value">
@@ -91,7 +91,7 @@ class ListItem extends Component {
                                         <a className="package-dropdown-item" href="#" id="edit-comment"
                                            onClick={(e) => {
                                                e.preventDefault();
-                                               selectGroup({type: 'real', groupName: group.groupName, id: group.id, isAutomatic: isAutomatic});
+                                               selectGroup({type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart});
                                                this.showRenameModal();
                                            }}>
                                             <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />

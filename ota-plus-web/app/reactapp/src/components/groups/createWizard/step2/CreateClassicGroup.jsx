@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import { AsyncResponse, Form, FormInput } from '../../../../partials';
 
-const CreateStaticGroup = inject("stores")(observer(({stores, markStepAsFinished, markStepAsNotFinished}) => {
+const CreateClassicGroup = inject("stores")(observer(({stores, markStepAsFinished, markStepAsNotFinished}) => {
     const { groupsStore } = stores;
     return (
 		<Form                
-            id="static-group-create-form">
+            id="classic-group-create-form">
             <AsyncResponse 
                 handledStatus="error"
                 action={groupsStore.groupsCreateAsync}
@@ -33,8 +33,8 @@ const CreateStaticGroup = inject("stores")(observer(({stores, markStepAsFinished
     );
 }));
 
-CreateStaticGroup.propTypes = {
+CreateClassicGroup.propTypes = {
 	stores: PropTypes.object
 }
 
-export default CreateStaticGroup;
+export default CreateClassicGroup;

@@ -1013,8 +1013,11 @@ input {
     }
 
     &__section-list {
-        margin-bottom: 10px;
         background-color: #fff;
+
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
 
         &--empty {
             height: 60px;

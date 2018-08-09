@@ -151,6 +151,8 @@ class FormSelect extends Component {
             defaultValue,
             appendMenuToBodyTag = false,
             visibleFieldsCount = options.length > 1 ? options.length : 2,
+            name = '',
+            onChange = null
         } = this.props;
 
         const {showDropDown, selectedOptions} = this.state;
@@ -174,8 +176,10 @@ class FormSelect extends Component {
                        value={inputValue}
                        placeholder={placeholder}
                        onClick={this.toggleMenu}
+                       onChange={onChange}
                        id={id}
-                       autoComplete="off"/>
+                       autoComplete="off"
+                       name={name}/>
                     {inputValue.length ?
                         <i className={`fa fa-check c-form__select-icon`}/>
                         :
