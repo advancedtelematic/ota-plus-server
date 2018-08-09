@@ -14,28 +14,37 @@ const title = "Devices";
 @inject("stores")
 @observer
 class Devices extends Component {
+    constructor(props) {
+        super(props);
+        const { groupsStore, devicesStore } = props.stores;
+        this.groupsFetchHandler = observe(groupsStore, (change) => {
+            if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
+                const { deviceFleets } = devicesStore;
+                if(deviceFleets.length) {
+                    const { activeFleet } = groupsStore;
+                    if(activeFleet) {
+                        props.toggleFleet(activeFleet);
+                    } else {
+                        props.toggleFleet(_.first(deviceFleets), true);
+                    }
+                }
+            }
+        });
+    }
     componentWillMount() {
         const { toggleFleet } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;
         const { selectedGroup } = groupsStore;
         const groupId = selectedGroup.id || null;
         devicesStore.fetchDevices('', groupId);
-        groupsStore.fetchGroups().then(() => {
-            if(devicesStore.deviceFleets.length) {
-                const { activeFleet } = groupsStore;
-                if(activeFleet) {
-                    toggleFleet(activeFleet);
-                } else {
-                    toggleFleet(_.first(devicesStore.deviceFleets), true);
-                }
-            }
-        });
+        groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         const { 
             devicesStore, 
             groupsStore,
         } = this.props.stores;
+        this.groupsFetchHandler();
         devicesStore._reset();
         groupsStore._reset();
     }

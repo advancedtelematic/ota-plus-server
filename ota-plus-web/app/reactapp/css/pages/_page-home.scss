@@ -21,6 +21,7 @@
 
     &__tutorial {
         background: #fff;
+        height: 100%;
     }
 
     &__heading {
@@ -189,7 +190,7 @@
     }
 
     &__list {
-        height: 33%;
+        height: calc((100% / 3) - (16 / 3)px);
         min-height: 215px;
 
         &:not(:last-child) {

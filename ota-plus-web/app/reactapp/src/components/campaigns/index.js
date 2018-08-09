@@ -1,7 +1,5 @@
-import CampaignsHeader from './Header';
-import CampaignsList from './List';
+import CampaignsContentPanel from './ContentPanel';
 
 export {
-    CampaignsHeader,
-    CampaignsList,
+    CampaignsContentPanel,
 }

@@ -99,8 +99,8 @@ class PackagesVersionList extends Component {
         const { pack, selectedVersions} = this.props;
         const { hardwareStore, packagesStore } = this.props.stores;
         let { hardwareIds } = hardwareStore;
-        let tufPackages = _.uniq(packagesStore.packages, (item) => { return item.id.name });
-        tufPackages = _.map(tufPackages, (item) => {
+        let packages = _.uniq(packagesStore.packages, (item) => { return item.id.name });
+        packages = _.map(packages, (item) => {
             return {
                 text: item.id.name,
                 id: item.id.name,
@@ -125,8 +125,8 @@ class PackagesVersionList extends Component {
                             >
                                 <div className="from">
                                     <FormSelect
-                                        id="available-tuf-packages"
-                                        options={tufPackages}
+                                        id="available-packages"
+                                        options={packages}
                                         label="From"
                                         multiple={false}
                                         wrapperWidth="100%"

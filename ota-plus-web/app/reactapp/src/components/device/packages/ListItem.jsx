@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 @observer
 class ListItem extends Component {
     render() {
-        const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleTufAutoInstall, showPackageDetails } = this.props;
+        const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleAutoInstall, showPackageDetails } = this.props;
         return (
             !pack.unmanaged ?
                 <span>
@@ -61,7 +61,7 @@ class ListItem extends Component {
                                 <div className="software-panel__auto-update">
                                     Automatic update
                                     <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={
-                                        toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
+                                        toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
                                     }>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@ ListItem.propTypes = {
     installedPackage: PropTypes.string,
     isSelected: PropTypes.bool.isRequired,
     togglePackage: PropTypes.func.isRequired,
-    toggleTufAutoInstall: PropTypes.func.isRequired,
+    toggleAutoInstall: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,
 }
 

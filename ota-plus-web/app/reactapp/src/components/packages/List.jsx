@@ -215,19 +215,24 @@ class List extends Component {
                                                                 <span></span>
                                                                 <span></span>
                                                                 <span></span>
-                                                                <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
-                                                                    <li className="package-dropdown-item">
-                                                                        <a className="package-dropdown-item" href="#" id="edit-comment"
-                                                                           onClick={(e) => {
-                                                                               e.preventDefault();
-                                                                               this.packVersions = pack.versions;
-                                                                               this.showDeleteModal()
-                                                                           }}>
-                                                                            <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
-                                                                            Delete
-                                                                        </a>
-                                                                    </li>
-                                                                </Dropdown>
+
+                                                                {this.submenuIsShown ?
+                                                                    <Dropdown hideSubmenu={this.hideSubmenu}>
+                                                                        <li className="package-dropdown-item">
+                                                                            <a className="package-dropdown-item" href="#" id="edit-comment"
+                                                                               onClick={(e) => {
+                                                                                   e.preventDefault();
+                                                                                   this.packVersions = pack.versions;
+                                                                                   this.showDeleteModal()
+                                                                               }}>
+                                                                                <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                                                                Delete
+                                                                            </a>
+                                                                        </li>
+                                                                    </Dropdown>
+                                                                :
+                                                                    null
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="c-package__versions-wrapper">

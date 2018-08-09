@@ -23,7 +23,7 @@ class Device extends Component {
         this.showPackageCreateModal = this.showPackageCreateModal.bind(this);
         this.hidePackageCreateModal = this.hidePackageCreateModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
-        this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
+        this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
     }
     showPackageCreateModal(files, e) {
@@ -39,7 +39,7 @@ class Device extends Component {
     onFileDrop(files) {
         this.showPackageCreateModal(files);
     }
-    toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled, e) {
+    togglePackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled, e) {
         if(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -76,7 +76,7 @@ class Device extends Component {
         const { 
             selectEcu,
             disableExpand,
-            installTufPackage
+            installPackage
         } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
@@ -94,13 +94,13 @@ class Device extends Component {
                                 onFileDrop={this.onFileDrop}
                             />
                             <DeviceSoftwarePanel
-                                toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
+                                togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
                                 disableExpand={disableExpand}
                             />
                             <DevicePropertiesPanel
-                                installTufPackage={installTufPackage}
+                                installPackage={installPackage}
                             />
                         </span>
                     :

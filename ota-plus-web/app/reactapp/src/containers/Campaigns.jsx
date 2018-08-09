@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react';
 import { Loader, DependenciesModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { 
-    CampaignsList,
+    CampaignsContentPanel,
 } from '../components/campaigns';
 import { 
     CampaignCancelCampaignModal,
@@ -101,7 +101,7 @@ class Campaigns extends Component {
                         <Loader />
                     </div>
                 : campaignsStore.overallCampaignsCount ?
-                    <CampaignsList
+                    <CampaignsContentPanel
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
                         highlightedCampaign={highlightedCampaign}

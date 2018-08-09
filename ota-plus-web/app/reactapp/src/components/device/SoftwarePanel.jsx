@@ -13,7 +13,7 @@ const noSearchResults = "No matching packages found.";
 @observer
 class SoftwarePanel extends Component {
     render() {
-        const { toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, disableExpand } = this.props;
+        const { togglePackageAutoUpdate, onFileDrop, showPackageDetails, disableExpand } = this.props;
         const { packagesStore } = this.props.stores;
         return (
             <div className="software-panel">
@@ -30,7 +30,7 @@ class SoftwarePanel extends Component {
                             Object.keys(packagesStore.preparedPackages).length ?                                
                                 <PackagesList
                                     onFileDrop={onFileDrop}
-                                    toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
+                                    togglePackageAutoUpdate={togglePackageAutoUpdate}
                                     showPackageDetails={showPackageDetails}
                                     disableExpand={disableExpand}
                                 />
@@ -48,7 +48,7 @@ class SoftwarePanel extends Component {
 
 SoftwarePanel.propTypes = {
     stores: PropTypes.object,
-    toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
+    togglePackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,
 }

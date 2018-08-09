@@ -42,12 +42,12 @@ class Item extends Component {
 
     constructor(props) {
         super(props);
-        this.toggleMenu = this.toggleMenu.bind(this);
+        this.showMenu = this.showMenu.bind(this);
         this.hideMenu = this.hideMenu.bind(this);
     }
-    toggleMenu(e) {
+    showMenu(e) {
         e.stopPropagation();
-        this.menuShown = !this.menuShown;
+        this.menuShown = true;
     }
     hideMenu(e) {
         this.menuShown = false;
@@ -86,31 +86,34 @@ class Item extends Component {
             connectDragSource(
                 <div className="devices-panel__device">
                     <div className="hover-area" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} />
-                    <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.toggleMenu}>
+                    <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.showMenu}>
                         <div className="dots__wrapper">
                             <span></span>
                             <span></span>
                             <span></span>
                         </div>
                     </div>
-                    <Dropdown
-                        show={this.menuShown}
-                        hideSubmenu={this.hideMenu}
-                        customClassName={"align"}
-                    >
-                        <li className="device-dropdown-item">
-                            <a className="device-dropdown-item" id="edit-device" onClick={showEditName.bind(this, device)} >
-                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                Edit device
-                            </a>
-                        </li>
-                        <li className="device-dropdown-item">
-                            <a className="device-dropdown-item" id="delete-device" onClick={showDeleteConfirmation.bind(this, device)} >
-                                <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
-                                Delete device
-                            </a>
-                        </li>
-                    </Dropdown>
+                    {this.menuShown ?
+                        <Dropdown
+                            hideSubmenu={this.hideMenu}
+                            customClassName={"align"}
+                        >
+                            <li className="device-dropdown-item">
+                                <a className="device-dropdown-item" id="edit-device" onClick={showEditName.bind(this, device)} >
+                                    <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                    Edit device
+                                </a>
+                            </li>
+                            <li className="device-dropdown-item">
+                                <a className="device-dropdown-item" id="delete-device" onClick={showDeleteConfirmation.bind(this, device)} >
+                                    <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                    Delete device
+                                </a>
+                            </li>
+                        </Dropdown>
+                    :
+                        null
+                    }
                     {alphaPlusEnabled && foundFleet ?
                         <div className={"devices-panel__device-icon devices-panel__device-icon--" + foundFleet}>
                             <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>

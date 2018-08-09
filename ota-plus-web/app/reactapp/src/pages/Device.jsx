@@ -28,7 +28,7 @@ class Device extends Component {
         this.showQueueModal = this.showQueueModal.bind(this);
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
-        this.installTufPackage = this.installTufPackage.bind(this);
+        this.installPackage = this.installPackage.bind(this);
 
         const { packagesStore } = props.stores;
 
@@ -105,7 +105,7 @@ class Device extends Component {
         packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
         this.disableExpand = false;
     }
-    installTufPackage(data) {
+    installPackage(data) {
         const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
         data.hardwareId = hardwareStore.activeEcu.hardwareId;
         devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
@@ -124,7 +124,7 @@ class Device extends Component {
                         <DeviceContainer 
                             selectEcu={this.selectEcu}
                             disableExpand={this.disableExpand}
-                            installTufPackage={this.installTufPackage}
+                            installPackage={this.installPackage}
                         />
                     </MetaData>
                     <DeviceQueueModal

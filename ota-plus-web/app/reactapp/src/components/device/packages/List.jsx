@@ -258,7 +258,7 @@ class List extends Component {
         return installedPackage;
     }
     render() {        
-        const { onFileDrop, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
+        const { onFileDrop, togglePackageAutoUpdate, showPackageDetails } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const preparedPackages = this.preparedPackages;
@@ -299,7 +299,7 @@ class List extends Component {
                                                 installedPackage={installedPackage}
                                                 isSelected={this.expandedPackageName === pack.packageName}
                                                 togglePackage={this.togglePackage}
-                                                toggleTufAutoInstall={toggleTufPackageAutoUpdate}
+                                                toggleAutoInstall={togglePackageAutoUpdate}
                                                 showPackageDetails={showPackageDetails}
                                             />
                                             <VelocityTransitionGroup
@@ -389,7 +389,7 @@ class List extends Component {
 List.propTypes = {
     stores: PropTypes.object,
     onFileDrop: PropTypes.func.isRequired,
-    toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
+    togglePackageAutoUpdate: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,
 }
 

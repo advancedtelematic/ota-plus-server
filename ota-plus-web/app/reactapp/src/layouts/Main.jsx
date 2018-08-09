@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import { observe, observable, extendObservable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { translate } from 'react-i18next';
 import { APP_LAYOUT } from '../config';
 import { 
     Navigation,
@@ -17,6 +16,7 @@ import _ from 'underscore';
 import Cookies from 'js-cookie';
 import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
+import { Minimized } from '../components/minimized';
 
 @inject('stores')
 @observer
@@ -230,49 +230,16 @@ class Main extends Component {
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />
                     {this.wizards}
-                    <div className="minimized">
-                        {this.uploadBoxMinimized ?
-                            <div className="minimized__box">
-                                <div className="minimized__name">
-                                    Uploading {this.props.t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                                </div>
-                                <div className="minimized__actions">
-                                    <a href="#" id="maximize-upload-box" title="Maximize upload box" onClick={this.toggleUploadBoxMode.bind(this)}>
-                                        <img src="/assets/img/icons/reopen.svg" alt="Icon" />
-                                    </a>
-                                </div>
-                            </div>
-                        :
-                            null
-                        }
-                        {_.map(this.minimizedWizards, (wizard, index) => {
-                            return (
-                                <div className="minimized__box" key={index}>
-                                    <div className="minimized__name">
-                                        {wizard.name ?
-                                            <span>
-                                                {wizard.name}
-                                            </span>
-                                        :
-                                            <span>
-                                                Choose name
-                                            </span>
-                                        }
-                                    </div>
-                                    <div className="minimized__actions">
-                                        <a href="#" id="maximize-wizard" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)} >
-                                            <img src="/assets/img/icons/reopen.svg" alt="Icon" />
-                                        </a>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <Minimized 
+                        uploadBoxMinimized={this.uploadBoxMinimized}
+                        toggleUploadBoxMode={this.toggleUploadBoxMode}
+                        minimizedWizards={this.minimizedWizards}
+                        toggleWizard={this.toggleWizard}
+                    />
                 </div>
             </span>
         );
     }
-    
 }
 
 Main.wrappedComponent.contextTypes = {
@@ -283,4 +250,4 @@ Main.propTypes = {
     children: PropTypes.object.isRequired
 }
 
-export default translate()(Main);
+export default Main;
