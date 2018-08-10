@@ -13,6 +13,7 @@ class ContentPanelSubheader extends Component {
                 	className="filters--dark"
                 	layout={[1, 1, 5]}
                 	devicesView={true}
+                    setFilter={() => {}}
                 />
             </SubHeader>
         );

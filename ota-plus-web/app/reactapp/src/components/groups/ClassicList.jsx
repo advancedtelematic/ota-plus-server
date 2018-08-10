@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
@@ -12,22 +11,14 @@ import { Loader } from '../../partials';
 @inject("stores")
 @observer
 class ClassicList extends Component {
-    @observable classicShown = true;
-
-    constructor(props) {
-        super(props);
-        this.toggleClassicGroups = this.toggleClassicGroups.bind(this);
-    }
-    toggleClassicGroups() {
-        this.classicShown = !this.classicShown;
-    }
     render() {
-        const { selectGroup, onDeviceDrop } = this.props;
+        const { selectGroup, onDeviceDrop, toggleSection, expandedSection } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;
+        const expanded = expandedSection === 'classic';
         return (
             <span>
-                <div className="groups-panel__section-title" onClick={this.toggleClassicGroups}>
-                    Classic Groups <i className={`fa ${this.classicShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
+                <div className="groups-panel__section-title" onClick={() => { toggleSection('classic') }}>
+                    Classic Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
                 </div>
                 <VelocityTransitionGroup 
                     enter={{
@@ -39,7 +30,7 @@ class ClassicList extends Component {
                     }}
                     component="span"
                 >
-                    {this.classicShown ?
+                    {expanded ?
                         <div className="groups-panel__classic-list">
                             {groupsStore.groupsFetchAsync.isFetching ?
                                 <div className="wrapper-center">
@@ -48,27 +39,24 @@ class ClassicList extends Component {
                             :
                                 <InfiniteScroll
                                     className="wrapper-infinite-scroll"
-                                    hasMore={groupsStore.shouldLoadMore && groupsStore.hasMoreGroups}
+                                    hasMore={groupsStore.hasMoreGroups}
                                     isLoading={groupsStore.groupsFetchAsync.isFetching}
                                     useWindow={false}
-                                    threshold={100}
                                     loadMore={() => {
                                         groupsStore.loadMoreGroups()
                                     }}>
-                                        {!_.isEmpty(groupsStore.preparedGroups) ?
-                                            _.map(groupsStore.preparedGroups, (groups) => {
-                                                return _.map(groups, (group, index) => {
-                                                    const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
-                                                    return (
-                                                        <ListItem 
-                                                            group={group}
-                                                            selectGroup={selectGroup}
-                                                            isSelected={isSelected}
-                                                            onDeviceDrop={onDeviceDrop}
-                                                            key={group.groupName}
-                                                        />
-                                                    );
-                                                });
+                                        {groupsStore.classicGroups.length ?
+                                           _.map(groupsStore.classicGroups, (group, index) => {
+                                                const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
+                                                return (
+                                                    <ListItem 
+                                                        group={group}
+                                                        selectGroup={selectGroup}
+                                                        isSelected={isSelected}
+                                                        onDeviceDrop={onDeviceDrop}
+                                                        key={group.groupName}
+                                                    />
+                                                );
                                             })
                                         :
                                             <div className="wrapper-center">

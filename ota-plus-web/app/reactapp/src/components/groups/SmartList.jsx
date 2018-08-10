@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
@@ -12,22 +11,14 @@ import { Loader } from '../../partials';
 @inject("stores")
 @observer
 class SmartList extends Component {
-    @observable smartShown = true;
-
-    constructor(props) {
-        super(props);
-        this.toggleSmartGroups = this.toggleSmartGroups.bind(this);
-    }
-    toggleSmartGroups() {
-        this.smartShown = !this.smartShown;
-    }
     render() {
-        const { selectGroup, onDeviceDrop } = this.props;
+        const { selectGroup, onDeviceDrop, toggleSection, expandedSection } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;
+        const expanded = expandedSection === 'smart';
         return (
             <span>
-                <div className="groups-panel__section-title groups-panel__section-title--space-top" onClick={this.toggleSmartGroups}>
-                    Smart Groups <i className={`fa ${this.smartShown ? 'fa-angle-up' : 'fa-angle-down'}`}/>
+                <div className="groups-panel__section-title groups-panel__section-title--space-top" onClick={() => { toggleSection('smart') }}>
+                    Smart Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
                 </div>
                 <VelocityTransitionGroup 
                     enter={{
@@ -39,7 +30,7 @@ class SmartList extends Component {
                     }}
                     component="span"
                 >
-                    {this.smartShown ?
+                    {expanded ?
                         <div className="groups-panel__smart-list">
                             {groupsStore.groupsFetchAsync.isFetching ?
                                 <div className="wrapper-center">
