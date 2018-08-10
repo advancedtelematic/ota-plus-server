@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { SearchBar, FormInput, FormSelect } from '../../partials';
 import { Form } from 'formsy-react';
 
-const nameFilterOptions = ["deviceid"];
+const nameFilterOptions = [{value: "deviceid", text: "VIN"}];
 const extraFilterOptions = ["contains"];
 
-const SmartFilters = ({ devicesView = false, className, layout }) => {
+const SmartFilters = ({ devicesView = false, className, layout, setFilter }) => {
     return (
         <div className={"filters " + (className ? className : '')}>
 			<div className="filters__block" style={{flex: layout[0]}} >
@@ -15,9 +15,8 @@ const SmartFilters = ({ devicesView = false, className, layout }) => {
                     options={nameFilterOptions}
                     multiple={false}
                     visibleFieldsCount={5}
-                    defaultValue="deviceid"
                     name="nameFilter"
-                    onChange={() => {}}
+                    onChange={(value) => { setFilter('name', value.value) }}
                 />
         	</div>
         	<div className="filters__block" style={{flex: layout[1]}} >
@@ -26,10 +25,9 @@ const SmartFilters = ({ devicesView = false, className, layout }) => {
                     appendMenuToBodyTag={true}
                     options={extraFilterOptions}
                     multiple={false}
-                    defaultValue="contains"
                     visibleFieldsCount={5}
                     name="expressionFilter"
-                    onChange={() => {}}
+                    onChange={(value) => { setFilter('expression', value) }}
                 />
     		</div>
     		<div className="filters__block" style={{flex: layout[2]}} >
@@ -48,6 +46,7 @@ const SmartFilters = ({ devicesView = false, className, layout }) => {
                         name="word"
                         className="input-wrapper"
                         placeholder={"Type here"}
+                        onChange={(e) => { setFilter('word', e.target.value) }}
                     />
                 }
     		</div>

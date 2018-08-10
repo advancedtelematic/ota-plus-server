@@ -33,6 +33,11 @@ class CreateModal extends Component {
     @observable currentStepId = initialCurrentStepId;
     @observable steps = wizardSteps;
     @observable groupType = '';
+    @observable groupFilters = {
+        name: null,
+        expression: null,
+        word: ''
+    };
 
     constructor(props) {
         super(props);
@@ -82,6 +87,9 @@ class CreateModal extends Component {
     componentWillUnmount() {
         this.createHandler();
     }
+    setFilter = (filter, name) => {
+        this.groupFilters[filter] = name;
+    }
     createGroup() {
         const { groupsStore } = this.props.stores;
         if(this.groupType === 'classic') {
@@ -93,7 +101,7 @@ class CreateModal extends Component {
             });
         } else {
             let data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
-            const expression = (data.nameFilter + " " + data.expressionFilter + " " + (data.word ? data.word : " ")).toLowerCase(); 
+            const expression = (this.groupFilters['name'] + " " + this.groupFilters['expression'] + " " + this.groupFilters['word']).toLowerCase(); 
             groupsStore.createGroup({
                 name: data.groupName,
                 groupType: "dynamic",
@@ -123,6 +131,7 @@ class CreateModal extends Component {
                     groupType: this.groupType,
                     markStepAsFinished: this.markStepAsFinished,
                     markStepAsNotFinished: this.markStepAsNotFinished,
+                    setFilter: this.setFilter,
                 })}
                 <div className="body-actions">
                     {this.isLastStep() ?

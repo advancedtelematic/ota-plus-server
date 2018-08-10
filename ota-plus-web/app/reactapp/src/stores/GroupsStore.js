@@ -27,6 +27,7 @@ export default class GroupsStore {
     @observable groupsAddDeviceAsync = {};
     @observable groupsRemoveDeviceAsync = {};
     @observable smartGroups = [];
+    @observable classicGroups = [];
     @observable groups = [];
     @observable wizardGroups = [];
     @observable filteredGroups = [];
@@ -41,7 +42,6 @@ export default class GroupsStore {
     @observable groupsLimit = 10;
 
     @observable activeFleet = null;
-    @observable shouldLoadMore = true;
 
     @observable groupsOffset = 0;
     @observable hasMoreGroups = false;
@@ -55,8 +55,7 @@ export default class GroupsStore {
         resetAsync(this.groupsLoadMoreFetchAsync);
         resetAsync(this.groupsCreateFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
-        resetAsync(this.groupsWizardLoadMoreFetchAsync
-            );
+        resetAsync(this.groupsWizardLoadMoreFetchAsync);
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
@@ -72,8 +71,6 @@ export default class GroupsStore {
 
     _filterGroups(fleetId) {
         this.filteredGroups = _.filter(this.groups, group => group.fleet_id === fleetId);
-        // In order to prevent infinite scroll
-        this.shouldLoadMore = false;
         this._prepareGroups(this.filteredGroups);
     }
 
@@ -87,7 +84,8 @@ export default class GroupsStore {
                 let groups = response.data.values;
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
-                        this.groups = _.filter(groups, group => group.groupType === 'static');
+                        this.groups = groups;
+                        this.classicGroups = _.filter(groups, group => group.groupType === 'static');
                         this.smartGroups =_.filter(groups, group => group.groupType === 'dynamic');
                         this._prepareGroups(this.groups);
                         this._prepareGroupsWithFleets();
@@ -122,6 +120,8 @@ export default class GroupsStore {
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
+                        this.classicGroups = _.uniq(_.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id);
+                        this.smartGroups = _.uniq(_.filter(this.smartGroups.concat(groups), group => group.groupType === 'dynamic'), group => group.id);
                         this._prepareGroups(this.groups);
                         this._prepareGroupsWithFleets();
                         this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
@@ -311,6 +311,7 @@ export default class GroupsStore {
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
         this.smartGroups = [];
+        this.classicGroups = [];
         this.groups = [];
         this.wizardGroups = [];
         this.filteredGroups = [];
@@ -323,8 +324,6 @@ export default class GroupsStore {
 
         this.groupsWizardOffset = 0;
         this.hasMoreWizardGroups = false;
-
-        this.shouldLoadMore = true;
     }
 
     _prepareGroups(groups) {
