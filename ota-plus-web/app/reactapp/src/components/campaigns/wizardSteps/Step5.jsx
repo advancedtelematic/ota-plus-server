@@ -3,6 +3,7 @@ import {FormTextarea, FormInput, TimePicker} from '../../../partials';
 import {observable} from "mobx"
 import {observer} from 'mobx-react';
 import moment from 'moment';
+import { FormsyText } from 'formsy-material-ui/lib';
 import _ from 'underscore';
 
 const metadataTypes = {
@@ -20,12 +21,14 @@ const driverActionTypes = {
 class WizardStep5 extends Component {
     @observable driverAction = '';
     @observable wizardMetadata = {};
+    @observable inputText = '';
     constructor() {
         super();
         this._parseTime = this._parseTime.bind(this);
         this._getTimeFromSeconds = this._getTimeFromSeconds.bind(this);
         this.getPreparationTime = this.getPreparationTime.bind(this);
         this.getInstallationTime = this.getInstallationTime.bind(this);
+        this.clearInput = this.clearInput.bind(this);
     }
 
     addToWizardData(type, value) {
@@ -41,7 +44,7 @@ class WizardStep5 extends Component {
     }
 
     chooseDriverAction(action) {
-        this.driverAction = action;
+        this.driverAction === action ? this.driverAction = '' : this.driverAction = action;
         this.addToWizardData('driverAction', action)
     }
 
@@ -67,17 +70,21 @@ class WizardStep5 extends Component {
         this.addToWizardData(metadataTypes.INSTALL_DUR, timeString)
     }
 
+    clearInput() {
+        this.inputRef.value = '';
+    }
+
     render() {
         const {wizardData, currentStepId} = this.props;
         const {description, estimatedPreparationDuration, estimatedInstallationDuration, driverAction} = wizardData[currentStepId];
         const checkActionType = (type) => {
-            return this.driverAction === type || driverAction === type
+            return this.driverAction === type && driverAction === type
         };
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
                     <div className="flex-row">
-                        <button className={`btn-checkbox ${checkActionType(driverActionTypes.NOTIFY) ? 'checked' : ''}`}
+                        <button className={`btn-checkbox ${checkActionType(driverActionTypes.NOTIFY) || checkActionType(driverActionTypes.APPROVE) ? 'checked' : ''}`}
                                 onClick={this.chooseDriverAction.bind(this, driverActionTypes.NOTIFY)}>
                             <i className="fa fa-check" aria-hidden="true"/>
                         </button>
@@ -92,11 +99,17 @@ class WizardStep5 extends Component {
                     </div>
                 </div>
                 <div className="description">
-                    <FormInput
-                        label="Internal description"
-                        placeholder="Re-use text from"
-                        wrapperWidth="50%"
-                    />
+                    <div className="search-box">
+                        <FormInput
+                            label="Internal description"
+                            placeholder="Re-use text from"
+                            getInputRef={(ref) => this.inputRef = ref}
+                            wrapperWidth="50%"
+                        >
+                            <i className="fa fa-search icon-search"/>
+                            <i className="fa fa-close icon-close" onClick={this.clearInput}/>
+                        </FormInput>
+                    </div>
                     <FormTextarea
                         rows="5"
                         defaultValue={description ? description : ''}

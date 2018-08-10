@@ -32,7 +32,9 @@ export default class FormInput extends Component {
             inputWidth = '100%',
             wrapperWidth = '100%',
             onChange = null,
-            statusIconShown = false
+            statusIconShown = false,
+            children,
+            getInputRef = () => {}
         } = this.props;
         return (
             <div className="c-form__relative-wrapper" style={{width: wrapperWidth}}>
@@ -46,7 +48,8 @@ export default class FormInput extends Component {
                 }
                 {showInput ?
                     <div className="c-form__input-wrapper">
-                        <input ref={(input) => this.input = input}
+                        {children}
+                        <input ref={(input) => {this.input = input; getInputRef(input)}}
                                name={name}
                                id={id}
                                style={{width: inputWidth}}
