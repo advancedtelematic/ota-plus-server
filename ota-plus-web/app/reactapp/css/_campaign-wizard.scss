@@ -160,6 +160,16 @@
         .distribution-info {
           padding: 15px 0;
 
+          .description {
+            .c-form__input {
+              padding: 10px 10px 10px 35px;
+            }
+            i.icon-search, .icon-close {
+              color: #000;
+              top: 15px;
+            }
+          }
+
           .flex-row {
             display: flex;
             flex-direction: row;
