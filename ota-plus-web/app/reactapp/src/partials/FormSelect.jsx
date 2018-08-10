@@ -159,6 +159,8 @@ class FormSelect extends Component {
         const inputValue =
             selectedOptions.id ?
                 selectedOptions.id
+                : selectedOptions.text ?
+                selectedOptions.text
                 : selectedOptions.length
                 ? selectedOptions
                 : defaultValue && defaultValue.length > 0 ? defaultValue : '';

@@ -3,7 +3,7 @@ import { AsyncResponse, Form, FormInput } from '../../../../partials';
 import { DevicesSmartFilters } from '../../../devices';
 import { observer, inject } from 'mobx-react';
 
-const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markStepAsNotFinished, stores}) => {
+const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markStepAsNotFinished, stores, setFilter}) => {
     const { groupsStore } = stores;
     return (
 		<Form                
@@ -33,7 +33,8 @@ const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markSte
 	            <div className="row">
 		            <div className="col-xs-10">
 			            <DevicesSmartFilters 
-			            	layout={[1, 1, 3]}
+                            layout={[1, 1, 3]}
+			            	setFilter={setFilter}
 			            />
 		            </div>
 	            </div>
