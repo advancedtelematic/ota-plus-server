@@ -35,7 +35,7 @@ class DefaultList extends Component {
                         :
                             <InfiniteScroll
                                 className="wrapper-infinite-scroll"
-                                hasMore={groupsStore.shouldLoadMore && groupsStore.hasMoreGroups}
+                                hasMore={groupsStore.hasMoreGroups}
                                 isLoading={groupsStore.groupsFetchAsync.isFetching}
                                 useWindow={false}
                                 loadMore={() => {
