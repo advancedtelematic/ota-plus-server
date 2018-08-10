@@ -67,7 +67,7 @@ class CreateModal extends Component {
                             id="add-new-key-valid-until﻿"
                             disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
                             minDate={moment().toDate()}
-                            maxDate={moment().add(4, 'year').toDate()}
+                            maxDate={moment().add(4, 'year').add(-2, 'days').toDate()}
                             defaultDate={moment().add(1, 'year').toDate()}
                             okLabel={"Save"}
                             required
