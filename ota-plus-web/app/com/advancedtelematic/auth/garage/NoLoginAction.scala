@@ -6,8 +6,8 @@ import java.util.Base64
 
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.auth.{AccessTokenBuilder, IdToken, SessionCodecs}
-import com.advancedtelematic.controllers.UserLogin
+import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityClaims, IdToken, SessionCodecs}
+import com.advancedtelematic.controllers.{UserLogin, UserId}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
@@ -42,7 +42,8 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
 
   override def apply(request: Request[AnyContent]) = {
     val fakeNamespace = namespace(request)
-    val idToken       = IdToken.from(fakeNamespace, "Guest User", "guest", "guest@advancedtelematic.com")
+    val email         = "guest@advancedtelematic.com"
+    val idToken       = IdToken.from(fakeNamespace, "Guest User", "guest", email)
     val accessToken =
       tokenBuilder.mkToken(fakeNamespace, Instant.now().plus(30, ChronoUnit.DAYS), Set(s"namespace.${fakeNamespace}"))
 
@@ -56,7 +57,10 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
 
     log.debug(s"Signed fake auth token for namespace $fakeNamespace")
 
-    messageBus.publishSafe(UserLogin(fakeNamespace, None, Instant.now()))
+    messageBus.publishSafe(UserLogin(
+        fakeNamespace,
+        Some(IdentityClaims(UserId(fakeNamespace), "guest", None, email)),
+        Instant.now()))
 
     Future.successful(result)
   }
