@@ -17,7 +17,7 @@ class ClassicList extends Component {
         const expanded = expandedSection === 'classic';
         return (
             <span>
-                <div className="groups-panel__section-title" onClick={() => { toggleSection('classic') }}>
+                <div id="groups-panel_classic-groups-title" className="groups-panel__section-title" onClick={() => { toggleSection('classic') }}>
                     Classic Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
                 </div>
                 <VelocityTransitionGroup 

@@ -17,8 +17,8 @@ class SmartList extends Component {
         const expanded = expandedSection === 'smart';
         return (
             <span>
-                <div className="groups-panel__section-title groups-panel__section-title--space-top" onClick={() => { toggleSection('smart') }}>
-                    Smart Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
+                <div id="groups-panel_smart-groups-title" className="groups-panel__section-title groups-panel__section-title--space-top" onClick={() => { toggleSection('smart') }}>
+                    Smart Groups <i id="groups-panel_smart-groups-icon" className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
                 </div>
                 <VelocityTransitionGroup 
                     enter={{
@@ -52,7 +52,7 @@ class SmartList extends Component {
                                 })
                             :
                                 <div className="wrapper-center">
-                                    <div className="groups-panel__section-title">
+                                    <div className="groups-panel__section-title" id="groups-panel-title__no-groups">
                                         No smart groups found.
                                     </div>
                                 </div>

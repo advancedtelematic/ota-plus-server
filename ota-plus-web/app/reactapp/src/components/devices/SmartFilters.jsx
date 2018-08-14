@@ -50,10 +50,10 @@ const SmartFilters = ({ devicesView = false, className, layout, setFilter }) => 
                     />
                 }
     		</div>
-    		<div className="filters__block filters__block--fake">
+    		<div className="filters__block filters__block--fake" id="filter-minus">
         		-
     		</div>
-    		<div className="filters__block filters__block--fake">
+    		<div className="filters__block filters__block--fake" id="filter-plus">
         		+
     		</div>
         </div>
