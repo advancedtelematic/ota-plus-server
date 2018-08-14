@@ -18,6 +18,7 @@ const CreateClassicGroup = inject("stores")(observer(({stores, markStepAsFinishe
                         <FormInput
                             name="groupName"
                             className="input-wrapper"
+                            id="classic-group-name"
                             isEditable={!groupsStore.groupsCreateAsync.isFetching}
                             title={"Group Name"}
                             label={"Group Name"}
