@@ -19,6 +19,7 @@ const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markSte
 						<FormInput
                             name="groupName"
                             className="input-wrapper"
+							id="smart-group-name"
                             title={"Name"}
                             label={"Name"}
                             placeholder={"Name"}
@@ -46,7 +47,7 @@ const CreateSmartGroup = inject("stores")(observer(({markStepAsFinished, markSte
 							<div className="wizard__adds-title">
 								Number of devices
 		                	</div>
-		                	<div className="wizard__adds-value">
+		                	<div className="wizard__adds-value" id="smart-group_device-count">
 		                		16 Devices
 		                	</div>
 	                	</div>
