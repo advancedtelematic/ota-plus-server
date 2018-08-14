@@ -86,14 +86,14 @@ class WizardStep5 extends Component {
                     <div className="flex-row">
                         <button className={`btn-checkbox ${checkActionType(driverActionTypes.NOTIFY) || checkActionType(driverActionTypes.APPROVE) ? 'checked' : ''}`}
                                 onClick={this.chooseDriverAction.bind(this, driverActionTypes.NOTIFY)}>
-                            <i className="fa fa-check" aria-hidden="true"/>
+                            <i id={`driver-${driverActionTypes.NOTIFY}`} className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <span>Notify driver</span>
                     </div>
                     <div className="flex-row">
                         <button className={`btn-checkbox ${checkActionType(driverActionTypes.APPROVE) ? 'checked' : ''}`}
                                 onClick={this.chooseDriverAction.bind(this, driverActionTypes.APPROVE)}>
-                            <i className="fa fa-check" aria-hidden="true"/>
+                            <i id={`driver-${driverActionTypes.APPROVE}`} className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <span>Request driver's approval</span>
                     </div>
@@ -102,6 +102,7 @@ class WizardStep5 extends Component {
                     <div className="search-box">
                         <FormInput
                             label="Internal description"
+                            id="internal_reuse-text"
                             placeholder="Re-use text from"
                             getInputRef={(ref) => this.inputRef = ref}
                             wrapperWidth="50%"
@@ -112,20 +113,22 @@ class WizardStep5 extends Component {
                     </div>
                     <FormTextarea
                         rows="5"
+                        id="internal_driver-description"
                         defaultValue={description ? description : ''}
                         onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
                     />
                 </div>
                 <div className="translations">
                     <div className="flex-row">
-                        <span className="bold">Approved translations: 0</span>
-                        <button className="btn-bordered">Translation view</button>
+                        <span className="bold" id="approved-translations-0">Approved translations: 0</span>
+                        <button className="btn-bordered" id="translations-view_button">Translation view</button>
                     </div>
                     <div className="estimations">
                         <div className="estimation">
                             <span className="title">Preparation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
+                                    id={`timepicker_${metadataTypes.PRE_DUR}`}
                                     onValid={this.getPreparationTime}
                                 />
                             </span>
@@ -134,6 +137,7 @@ class WizardStep5 extends Component {
                             <span className="title">Installation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
+                                    id={`timepicker_${metadataTypes.INSTALL_DUR}`}
                                     onValid={this.getInstallationTime}
                                 />
                             </span>
