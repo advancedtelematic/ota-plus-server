@@ -4,8 +4,8 @@ const Option = ({ selectOption, isSelected, title, teaser }) => {
     return (
         <div className="wizard__option">
         	<div className="wizard__select">
-        		<button className={"btn-radio" + (isSelected ? ' checked' : '')} onClick={() => { selectOption() }}/>
-        		<div className="wizard__select-title" id={`wizard__select-${title}`}>
+        		<button id={`wizard__${title}-checkbox`} className={"btn-radio" + (isSelected ? ' checked' : '')} onClick={() => { selectOption() }}/>
+        		<div className="wizard__select-title">
         			{title}
         		</div>
         	</div>
