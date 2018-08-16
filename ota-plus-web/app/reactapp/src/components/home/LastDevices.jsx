@@ -22,10 +22,11 @@ class LastDevices extends Component {
                     </div>
                 :
                     Object.keys(lastDevices).length ? 
-                        _.map(lastDevices, (device) => {
+                        _.map(lastDevices, (device, index) => {
                             return (
                                 <LastDevicesItem 
                                     key={device.uuid}
+                                    index={index}
                                     device={device}
                                 />
                             );

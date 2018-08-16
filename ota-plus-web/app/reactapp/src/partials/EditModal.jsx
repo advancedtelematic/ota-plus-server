@@ -46,6 +46,7 @@ class EditModal extends Component {
                 id="edit-name-form">
                 <AsyncResponse 
                     handledStatus="error"
+                    id="edit-device-name__alert"
                     action={devicesStore.devicesRenameAsync}
                     errorMsg={(devicesStore.devicesRenameAsync.data ? devicesStore.devicesRenameAsync.data.description : null)}
                 />

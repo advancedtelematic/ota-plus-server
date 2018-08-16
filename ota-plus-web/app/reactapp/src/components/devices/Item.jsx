@@ -124,7 +124,7 @@ class Item extends Component {
                         </div>
                     }
                     <div className="devices-panel__device-desc">
-                        <div className="devices-panel__device-title" title={device.deviceName}>
+                        <div className="devices-panel__device-title" title={device.deviceName} id={device.deviceName}>
                             {device.deviceName}
                         </div>
                         <div className="devices-panel__device-subtitle">

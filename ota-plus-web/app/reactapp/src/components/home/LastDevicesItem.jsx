@@ -6,7 +6,7 @@ import _ from 'underscore';
 @observer
 class LastDevicesItem extends Component {
     render() {
-        const { device } = this.props;
+        const { device, index } = this.props;
         const link = 'device/' + device.uuid;
         const lastSeenDate = new Date(device.lastSeen);
         let deviceStatus = 'Status unknown';
@@ -28,8 +28,8 @@ class LastDevicesItem extends Component {
                 to={`${link}`} 
                 className="home__list-item" 
                 title={device.deviceName}
-                id={"link-devicedetails-" + device.uuid}>
-                <div className="home__body-col">
+                id={"link-devicedetails-" + index}>
+                <div className="home__body-col" id={"link-devicedetails-" + device.uuid}>
                     {device.deviceName}
                 </div>
                 <div className="home__body-col">
