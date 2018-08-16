@@ -15,9 +15,10 @@ const title = "Device";
 class Device extends Component {
     queueAnchorEl = null;
     @observable sequencerShown = false;
-    @observable disableExpand = false;
     @observable queueModalShown = false;
+    @observable triggerPackages = false;
     @observable activeTabId = 0;
+    @observable expandedPackageName = null;
 
     constructor(props) {
         super(props);
@@ -29,15 +30,8 @@ class Device extends Component {
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.installPackage = this.installPackage.bind(this);
-
-        const { packagesStore } = props.stores;
-
-        this.autoInstallHandler = observe(packagesStore, (change) => {
-            if((change.name === 'packagesEnableAutoInstallAsync' || change.name === 'packagesDisableAutoInstallAsync') 
-                && !_.isMatch(change.oldValue, change.object[change.name])) {
-                    this.disableExpand = true;
-            }
-        });
+        this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
+        this.togglePackage = this.togglePackage.bind(this);
     }
     componentWillMount() {
         const { packagesStore, devicesStore } = this.props.stores;
@@ -49,7 +43,6 @@ class Device extends Component {
     }
     componentWillUnmount() {
         const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
-        this.autoInstallHandler();
         devicesStore._reset();
         packagesStore._reset();
         hardwareStore._reset();
@@ -99,17 +92,42 @@ class Device extends Component {
             packagesStore.expandedPackage = {
                 unmanaged: true
             };
+            this.expandedPackageName = null;
         } else {
-             packagesStore.expandedPackage = expandedPackage;
+            packagesStore.expandedPackage = expandedPackage;
+            this.expandedPackageName = expandedPackage.id.name;
         }
         packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
-        this.disableExpand = false;
+        this.triggerPackages = true;
     }
     installPackage(data) {
         const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
         data.hardwareId = hardwareStore.activeEcu.hardwareId;
         devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
         this.showQueueModal();
+    }
+    togglePackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled, e) {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const { packagesStore, hardwareStore } = this.props.stores;
+        let activeEcuSerial = hardwareStore.activeEcu.serial;
+        if(isAutoInstallEnabled)
+            packagesStore.disablePackageAutoInstall(
+                packageName,
+                deviceId, 
+                activeEcuSerial
+            );
+        else
+            packagesStore.enablePackageAutoInstall(
+                packageName, 
+                deviceId, 
+                activeEcuSerial
+            );
+    }
+    togglePackage(packageName) {
+        this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     render() {
         return (
@@ -123,8 +141,11 @@ class Device extends Component {
                         title={title}>
                         <DeviceContainer 
                             selectEcu={this.selectEcu}
-                            disableExpand={this.disableExpand}
                             installPackage={this.installPackage}
+                            triggerPackages={this.triggerPackages}
+                            togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                            expandedPackageName={this.expandedPackageName}
+                            togglePackage={this.togglePackage}
                         />
                     </MetaData>
                     <DeviceQueueModal
