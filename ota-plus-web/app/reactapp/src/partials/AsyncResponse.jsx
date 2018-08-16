@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
-const AsyncResponse = ({action, handledStatus, successMsg, errorMsg}) => {
+const AsyncResponse = ({action, handledStatus, successMsg, errorMsg, id}) => {
     return (
         <span>
             {action.status !== null && (handledStatus == "all" || handledStatus == action.status) ?
-                <div className={"alert " + (action.status == "success" ? "alert-success" : "alert-danger")}>
+                <div id={id} className={"alert " + (action.status == "success" ? "alert-success" : "alert-danger")}>
                     {action.status == "success" ? 
                         successMsg
                     : 
