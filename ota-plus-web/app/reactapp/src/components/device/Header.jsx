@@ -167,11 +167,12 @@ class Header extends Component {
                                             Delete device
                                         </div>
                                     }
+                                    id="delete-device-confirmation-modal"
                                     shown={this.deleteConfirmationShown}
                                     hide={this.hideDeleteConfirmation}
                                     deleteItem={this.deleteDevice}
                                     topText={
-                                        <div className="delete-modal-top-text">
+                                        <div className="delete-modal-top-text"  id="delete-device-confirmation-modal-text">
                                             Device will be removed.
                                         </div>
                                     }
