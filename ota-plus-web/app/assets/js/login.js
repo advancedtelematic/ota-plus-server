@@ -16,7 +16,8 @@ $(function () {
       audience: $('#auth0-token-audience').val(),
       params: {
         scope: 'openid profile email'
-      }
+      },
+      sso: false
     },
     container: 'widget-container',
     languageDictionary: {
