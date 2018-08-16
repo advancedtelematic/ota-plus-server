@@ -19,7 +19,6 @@ class List extends Component {
     @observable lastShownIndex = 50;
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
-    @observable expandedPackageName = null;
     @observable tmpIntervalId = null;
     @observable preparedPackages = {};
 
@@ -29,7 +28,6 @@ class List extends Component {
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.togglePackage = this.togglePackage.bind(this);
         this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -41,17 +39,10 @@ class List extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        const { disableExpand } = nextProps;
         const { packagesStore } = nextProps.stores;
-        this.selectPackagesToDisplay();
-        this.addUnmanagedPackage();
-        if(!disableExpand) {
-            if(packagesStore.expandedPackage && !packagesStore.expandedPackage.unmanaged) {
-                this.expandedPackageName = packagesStore.expandedPackage.id.name;
-            }
-            else {
-                this.expandedPackageName = null;
-            }
+        if(nextProps.triggerPackages) {
+            this.selectPackagesToDisplay();
+            this.addUnmanagedPackage();
         }
     }
     componentDidMount() {
@@ -128,9 +119,7 @@ class List extends Component {
             this.fakeHeaderTopPosition = scrollTop;
         }
     }
-    togglePackage(packageName) {
-        this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
-    }
+    
     startIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
         const that = this;
@@ -258,7 +247,7 @@ class List extends Component {
         return installedPackage;
     }
     render() {        
-        const { onFileDrop, togglePackageAutoUpdate, showPackageDetails } = this.props;
+        const { onFileDrop, togglePackageAutoUpdate, showPackageDetails, expandedPackageName, togglePackage, } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const preparedPackages = this.preparedPackages;
@@ -297,8 +286,8 @@ class List extends Component {
                                                 device={device}
                                                 queuedPackage={queuedPackage}
                                                 installedPackage={installedPackage}
-                                                isSelected={this.expandedPackageName === pack.packageName}
-                                                togglePackage={this.togglePackage}
+                                                isSelected={expandedPackageName === pack.packageName}
+                                                togglePackage={togglePackage}
                                                 toggleAutoInstall={togglePackageAutoUpdate}
                                                 showPackageDetails={showPackageDetails}
                                             />
@@ -321,7 +310,7 @@ class List extends Component {
                                                         that.stopIntervalListScroll()
                                                     }
                                                 }}>
-                                                {this.expandedPackageName === pack.packageName ?                                                    
+                                                {expandedPackageName === pack.packageName ?                                                    
                                                     <ul className="software-panel__details">
                                                         <li>
                                                             <VelocityTransitionGroup
