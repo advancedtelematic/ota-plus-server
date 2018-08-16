@@ -10,6 +10,7 @@ import $ from 'jquery';
 @observer
 class SettingsDropdown extends Component {
     render() {
+        const { uiCredentialsDownload } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -37,6 +38,7 @@ class SettingsDropdown extends Component {
                 <UserDropdown 
                     bsRole="menu"
                     settings={true}
+                    uiCredentialsDownload={uiCredentialsDownload}
                 />
             </Dropdown>
         );
