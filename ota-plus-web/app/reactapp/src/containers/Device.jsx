@@ -23,7 +23,6 @@ class Device extends Component {
         this.showPackageCreateModal = this.showPackageCreateModal.bind(this);
         this.hidePackageCreateModal = this.hidePackageCreateModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
-        this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
     }
     showPackageCreateModal(files, e) {
@@ -39,27 +38,6 @@ class Device extends Component {
     onFileDrop(files) {
         this.showPackageCreateModal(files);
     }
-    togglePackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled, e) {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        const { packagesStore, hardwareStore } = this.props.stores;
-        let activeEcuSerial = hardwareStore.activeEcu.serial;
-        if(isAutoInstallEnabled)
-            packagesStore.disablePackageAutoInstall(
-                packageName,
-                deviceId, 
-                activeEcuSerial
-            );
-        else
-            packagesStore.enablePackageAutoInstall(
-                packageName, 
-                deviceId, 
-                activeEcuSerial
-            );
-    }
-    
     showPackageDetails(pack, e) {
         if(e) e.preventDefault();
         const { packagesStore } = this.props.stores;
@@ -75,8 +53,11 @@ class Device extends Component {
     render() {
         const { 
             selectEcu,
-            disableExpand,
-            installPackage
+            installPackage,
+            triggerPackages,
+            togglePackageAutoUpdate,
+            expandedPackageName,
+            togglePackage,
         } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
@@ -94,10 +75,12 @@ class Device extends Component {
                                 onFileDrop={this.onFileDrop}
                             />
                             <DeviceSoftwarePanel
-                                togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                                togglePackageAutoUpdate={togglePackageAutoUpdate}
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
-                                disableExpand={disableExpand}
+                                triggerPackages={triggerPackages}
+                                expandedPackageName={expandedPackageName}
+                                togglePackage={togglePackage}
                             />
                             <DevicePropertiesPanel
                                 installPackage={installPackage}
