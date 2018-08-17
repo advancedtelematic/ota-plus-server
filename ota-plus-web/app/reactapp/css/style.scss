@@ -2520,11 +2520,49 @@ input {
 
     &__operation-info-block {
         @include textoverflowEllipsis;
+
+        &--more {
+            margin-top: 10px;
+        }
+    }
+
+    &__operation-info-failure {
+        margin: 10px 0;
     }
 
     &__operation-info-title {
-        width: 80px;
+        width: 100px;
         display: inline-block;
+    }
+
+    &__operation-info-ext-block {
+        display: flex;
+
+        div {
+            width: 50%;
+
+            &:first-child {
+
+                span {
+
+                    &:first-child {
+                        width: 100px;
+                        display: inline-block;
+                    }
+                }
+            }
+
+            &:last-child {
+
+                span {
+
+                    &:first-child {
+                        width: 130px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
     }
 
     &__status-code {

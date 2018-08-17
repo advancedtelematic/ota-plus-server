@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import InstallationEvents from '../InstallationEvents';
 
 @observer
 class MultiTargetITem extends Component {
@@ -66,6 +67,9 @@ class MultiTargetITem extends Component {
                                     {length}
                                 </span>
                             </div>
+                            <InstallationEvents 
+                                updateId={item.updateId}
+                            />
                         </div>
                     </div>
                 </div>

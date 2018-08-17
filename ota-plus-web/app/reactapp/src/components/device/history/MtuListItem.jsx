@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
 import moment from 'moment';
+import InstallationEvents from '../InstallationEvents';
 
 @observer
 class MtuListItem extends Component {
@@ -58,6 +59,9 @@ class MtuListItem extends Component {
 											{result.length}
 										</span>
 									</div>
+									<InstallationEvents 
+										updateId={item.updateId}
+									/>
 								</div>
 		    					<div className="queue-modal__operation-status">
 									<div className={`queue-modal__status-code ${result.resultCode <=1 ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
