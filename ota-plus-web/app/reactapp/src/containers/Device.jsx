@@ -59,7 +59,7 @@ class Device extends Component {
             expandedPackageName,
             togglePackage,
         } = this.props;
-        const { devicesStore } = this.props.stores;
+        const { devicesStore, packagesStore } = this.props.stores;
         const { device } = devicesStore;
         return (
             <span>
@@ -70,10 +70,16 @@ class Device extends Component {
                 :
                     device.lastSeen ?
                         <span>
-                            <DeviceHardwarePanel 
-                                selectEcu={selectEcu}
-                                onFileDrop={this.onFileDrop}
-                            />
+                            {packagesStore.packagesFetchAsync.isFetching ?
+                                <div className="wrapper-center">
+                                    <Loader />
+                                </div>
+                            :
+                                <DeviceHardwarePanel 
+                                    selectEcu={selectEcu}
+                                    onFileDrop={this.onFileDrop}
+                                />
+                            }
                             <DeviceSoftwarePanel
                                 togglePackageAutoUpdate={togglePackageAutoUpdate}
                                 onFileDrop={this.onFileDrop}
