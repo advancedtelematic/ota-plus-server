@@ -14,12 +14,12 @@ class Update extends Component {
     @observable createModalShown = false;
 
     showCreateModal = (e) => {
-        e.preventDefault();
+        if(e) e.preventDefault();
         this.createModalShown = true;
     }
 
     hideCreateModal = (e) => {
-        e.preventDefault();
+        if(e) e.preventDefault();
         this.createModalShown = false;
     }
 

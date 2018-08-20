@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Form } from 'formsy-react';
-import { FormInput, FormTextarea, FormSelect, Loader } from '../../../partials';
+import { FormInput, FormTextarea, FormSelect, Loader, AsyncResponse } from '../../../partials';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { observable } from 'mobx';
@@ -30,7 +30,8 @@ class Step2 extends Component {
             return {
                 text: `${version.id.version} Created at: ${moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}`,
                 id: version.id.version,
-                value: version.filepath
+                value: version.filepath,
+                version
             }
         });
         if(type === 'from') {
@@ -41,16 +42,22 @@ class Step2 extends Component {
     }
     render() {
         const { wizardData, onStep2DataSelect } = this.props;
-        const { packagesStore } = this.props.stores;
+        const { packagesStore, updateStore } = this.props.stores;
         const packages = _.map(packagesStore.packages, (item) => {
             return {
                 text: item.id.name,
                 id: item.id.name,
-                value: item.id.name
+                value: item.id.name,
+                item
             };
         });
         return (
             <div className="update-modal">
+                <AsyncResponse 
+                    handledStatus="error"
+                    action={updateStore.updatesCreateAsync}
+                    errorMsg={(updateStore.updatesCreateAsync.data ? updateStore.updatesCreateAsync.data.description : null)}
+                />
                 <div className="row name-container">
                     <div className="col-xs-6">
                         <FormInput
@@ -97,7 +104,7 @@ class Step2 extends Component {
                                             visibleFieldsCount={ 5 }
                                             appendMenuToBodyTag={ true }
                                             placeholder="Select from package"
-                                            onChange={(value) => { this.formatVersions('from', value.id); onStep2DataSelect('fromPack', value.id) }}
+                                            onChange={(value) => { this.formatVersions('from', value.id); onStep2DataSelect('fromPack', value.item) }}
                                         />
                                     </div>
                                     <div className="col-xs-6">
@@ -110,7 +117,7 @@ class Step2 extends Component {
                                             visibleFieldsCount={ 5 }
                                             appendMenuToBodyTag={ true }
                                             placeholder="Select to package"
-                                            onChange={(value) => { this.formatVersions('to', value.id); onStep2DataSelect('toPack', value.id) }}
+                                            onChange={(value) => { this.formatVersions('to', value.id); onStep2DataSelect('toPack', value.item) }}
                                         />
                                     </div>
                                 </Form>
@@ -126,7 +133,7 @@ class Step2 extends Component {
                                             multiple={ false }
                                             placeholder="Select from version"
                                             visibleFieldsCount={ 5 }
-                                            onChange={(value) => { onStep2DataSelect('fromVersion', value.id) }}
+                                            onChange={(value) => { onStep2DataSelect('fromVersion', value.version) }}
                                         />
                                     </div>
                                     <div className=" col-xs-6">
@@ -138,7 +145,7 @@ class Step2 extends Component {
                                             multiple={ false }
                                             placeholder="Select to version"
                                             visibleFieldsCount={ 5 }
-                                            onChange={(value) => { onStep2DataSelect('toVersion', value.id) }} 
+                                            onChange={(value) => { onStep2DataSelect('toVersion', value.version) }} 
                                         />
                                     </div>
                                 </Form>
