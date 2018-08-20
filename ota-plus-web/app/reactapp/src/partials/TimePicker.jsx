@@ -37,7 +37,8 @@ export default class TimePicker extends Component {
 
     render() {
         let {hours, minutes, seconds} = this.selectedTimeValue;
-        const {id} = this.props;
+        const {id, defaultValue} = this.props;
+        const times = defaultValue.split(':');
 
         const select = (type) => {
             return (
@@ -58,17 +59,17 @@ export default class TimePicker extends Component {
             <div className="c-time-picker" id={id}>
                 <div className="c-time-picker__time-value" id={`${id}-value`}>
                     <div className="c-time-picker__hours" onClick={this.showOptions.bind(this, 'hours')} id={`${id}-hours`}>
-                        {hours}
+                        {times[0] || hours}
                         :
                         {select('hours')}
                     </div>
                     <div className="c-time-picker__minutes" onClick={this.showOptions.bind(this, 'minutes')} id={`${id}-minutes`}>
-                        {minutes}
+                        {times[1] || minutes}
                         :
                         {select('minutes')}
                     </div>
                     <div className="c-time-picker__seconds" onClick={this.showOptions.bind(this, 'seconds')} id={`${id}-seconds`}>
-                        {seconds}
+                        {times[2] || seconds}
                         {select('seconds')}
                     </div>
                 </div>

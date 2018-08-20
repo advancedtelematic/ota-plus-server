@@ -41,7 +41,7 @@ export default class FormTextarea extends Component {
                         id={id} 
                         rows={rows}
                         ref={(input) => this.input = input}
-                        style={{width: inputWidth}}
+                        style={{width: inputWidth, paddingLeft: '10px'}}
                         className="c-form__input"
                         onKeyUp={this.validateInput.bind(this)}
                         placeholder={placeholder || ''}>
