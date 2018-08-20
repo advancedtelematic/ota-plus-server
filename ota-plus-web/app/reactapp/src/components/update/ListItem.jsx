@@ -13,7 +13,7 @@ class ListItem extends Component {
 		                    {update.name}
 		                </div>
 		                <div className="c-update__hash">
-		                   	{update.hash}
+		                   	{update.description}
 		                </div>
 		                <div className="c-update__edit">
 		                	<div className="c-update__edit-link">
