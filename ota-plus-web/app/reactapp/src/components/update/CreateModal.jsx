@@ -9,6 +9,7 @@ import serialize from 'form-serialize';
 import _ from 'underscore';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
+import { AsyncStatusCallbackHandler } from '../../utils';
 
 const wizardSteps = [
     {
@@ -44,6 +45,18 @@ class CreateModal extends Component {
     @observable steps = wizardSteps;
     @observable currentStepId = initialCurrentStepId;
 
+    constructor(props) {
+        super(props);
+        const { updateStore } = props.stores;
+        this.mtuCreatedHandler = new AsyncStatusCallbackHandler(updateStore, 'updatesMtuCreateAsync', this.handleMtuCreated.bind(this));
+        this.updateCreatedHandler = new AsyncStatusCallbackHandler(updateStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.mtuCreatedHandler();
+        this.updateCreatedHandler();
+    }
+
     markStepAsFinished = () => {
         this.steps[this.currentStepId].isFinished = true;
     }
@@ -70,8 +83,30 @@ class CreateModal extends Component {
         }
     }
 
-    createUpdate = () => {
-        console.log('createUpdate');
+    createMtu = () => {
+        const { updateStore } = this.props.stores;
+        updateStore.createMultiTargetUpdate({
+            hardwareIds: this.wizardData[0].hardwareIds,
+            packs: this.wizardData[1]
+        });
+    }
+
+    handleMtuCreated = () => {
+        const { updateStore } = this.props.stores;
+        const { lastCreatedMtuId } = updateStore;
+        const data = {
+            updateSource: {
+                id: lastCreatedMtuId,
+                sourceType: "multi_target"
+            },
+            name: this.wizardData[0].name,
+            description: this.wizardData[0].description,
+        }
+        updateStore.createUpdate(data);
+    }
+
+    handleUpdateCreated = () => {
+        this.props.hide();
     }
 
     onStep1DataSelect = (type, value) => {
@@ -135,7 +170,7 @@ class CreateModal extends Component {
                             className="btn-primary"
                             id="wizard-launch-button"
                             disabled={!currentStep.isFinished}
-                            onClick={this.createUpdate}
+                            onClick={this.createMtu}
                         >
                             Save
                         </button>

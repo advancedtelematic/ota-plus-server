@@ -11,7 +11,7 @@ const title = "Update";
 class Update extends Component {
   componentWillMount() {
     const { updateStore } = this.props.stores;
-    updateStore.fetchUpdates('');
+    updateStore.fetchUpdates();
   }
   componentWillUnmount() {
     const { updateStore } = this.props.stores;
