@@ -3,25 +3,21 @@ import {FormTextarea, FormInput, TimePicker} from '../../../partials';
 import {observable} from "mobx"
 import {observer} from 'mobx-react';
 import moment from 'moment';
-import { FormsyText } from 'formsy-material-ui/lib';
+import {FormsyText} from 'formsy-material-ui/lib';
 import _ from 'underscore';
 
 const metadataTypes = {
-    DESCRIPTION: 'description',
-    INSTALL_DUR: 'estimatedInstallationDuration',
-    PRE_DUR: 'estimatedPreparationDuration'
-};
-
-const driverActionTypes = {
-    NOTIFY: 'notified',
-    APPROVE: 'approved'
+    DESCRIPTION: 'DESCRIPTION',
+    INSTALL_DUR: 'ESTIMATED_INSTALLATION_DURATION',
+    PRE_DUR: 'ESTIMATED_PREPARATION_DURATION'
 };
 
 @observer
 class WizardStep5 extends Component {
-    @observable driverAction = '';
+    @observable notify = null;
+    @observable approvalNeeded = null;
     @observable wizardMetadata = {};
-    @observable inputText = '';
+
     constructor() {
         super();
         this._parseTime = this._parseTime.bind(this);
@@ -29,23 +25,30 @@ class WizardStep5 extends Component {
         this.getPreparationTime = this.getPreparationTime.bind(this);
         this.getInstallationTime = this.getInstallationTime.bind(this);
         this.clearInput = this.clearInput.bind(this);
+        this.toggleNotify = this.toggleNotify.bind(this);
+        this.toggleApprove = this.toggleApprove.bind(this);
     }
 
     addToWizardData(type, value) {
         const {setWizardData, markStepAsFinished, wizardData, currentStepId} = this.props;
-        if (_.isUndefined(wizardData[currentStepId].isActivated)) {
-            this.wizardMetadata = {
-                ...wizardData[currentStepId],
-                [type]: value
-            };
-        }
+        this.wizardMetadata = {
+            ..._.omit(wizardData[currentStepId], 'isActivated'),
+            [type]: value
+        };
         setWizardData(this.wizardMetadata);
         markStepAsFinished();
     }
 
-    chooseDriverAction(action) {
-        this.driverAction === action ? this.driverAction = '' : this.driverAction = action;
-        this.addToWizardData('driverAction', action)
+    toggleNotify() {
+        if (!this.approvalNeeded) {
+            this.notify = !this.notify;
+        }
+    }
+
+    toggleApprove() {
+        this.approvalNeeded = !this.approvalNeeded;
+        this.notify = true;
+        this.addToWizardData('approvalNeeded', this.approvalNeeded);
     }
 
     _parseTime(timeObject) {
@@ -57,7 +60,7 @@ class WizardStep5 extends Component {
     }
 
     _getTimeFromSeconds(seconds) {
-        return moment.utc(seconds*1000).format('HH:mm:ss')
+        return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
     }
 
     getPreparationTime(time) {
@@ -76,24 +79,29 @@ class WizardStep5 extends Component {
 
     render() {
         const {wizardData, currentStepId} = this.props;
-        const {description, estimatedPreparationDuration, estimatedInstallationDuration, driverAction} = wizardData[currentStepId];
-        const checkActionType = (type) => {
-            return this.driverAction === type && driverAction === type
-        };
+        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION, approvalNeeded} = wizardData[currentStepId];
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
                     <div className="flex-row">
-                        <button className={`btn-checkbox ${checkActionType(driverActionTypes.NOTIFY) || checkActionType(driverActionTypes.APPROVE) ? 'checked' : ''}`}
-                                onClick={this.chooseDriverAction.bind(this, driverActionTypes.NOTIFY)}>
-                            <i id={`driver-${driverActionTypes.NOTIFY}`} className="fa fa-check" aria-hidden="true"/>
+                        <button className={`btn-checkbox ${
+                            !_.isNull(this.notify)
+                                ? (this.notify ? 'checked' : '')
+                                : (_.isBoolean(approvalNeeded) ? 'checked' : '')
+                            }`}
+                                onClick={this.toggleNotify}>
+                            <i id='driver-notify' className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <span>Notify driver</span>
                     </div>
                     <div className="flex-row">
-                        <button className={`btn-checkbox ${checkActionType(driverActionTypes.APPROVE) ? 'checked' : ''}`}
-                                onClick={this.chooseDriverAction.bind(this, driverActionTypes.APPROVE)}>
-                            <i id={`driver-${driverActionTypes.APPROVE}`} className="fa fa-check" aria-hidden="true"/>
+                        <button className={`btn-checkbox ${
+                            !_.isNull(this.approvalNeeded)
+                                ? (this.approvalNeeded ? 'checked' : '')
+                                : (approvalNeeded ? 'checked' : '')
+                            }`}
+                                onClick={this.toggleApprove}>
+                            <i id='driver-approve' className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <span>Request driver's approval</span>
                     </div>
@@ -128,6 +136,7 @@ class WizardStep5 extends Component {
                             <span className="title">Preparation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
+                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00' )}
                                     id={`timepicker_${metadataTypes.PRE_DUR}`}
                                     onValid={this.getPreparationTime}
                                 />
@@ -137,6 +146,7 @@ class WizardStep5 extends Component {
                             <span className="title">Installation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
+                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
                                     id={`timepicker_${metadataTypes.INSTALL_DUR}`}
                                     onValid={this.getInstallationTime}
                                 />
