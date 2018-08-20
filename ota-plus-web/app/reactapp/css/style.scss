@@ -3,6 +3,7 @@
 @import 'global.scss';
 @import 'mixins.scss';
 @import 'pages.scss';
+@import 'react-vis.scss';
 @import 'common.scss';
 @import 'material-ui.scss';
 /*-----*/
@@ -10,6 +11,13 @@
 @import 'software_repo';
 
 $font: 'akkurat';
+
+.rect-series {
+    
+    rect {
+        height: 20px;
+    }
+}
 
 .rename-box {
     position: relative;
@@ -440,7 +448,7 @@ $font: 'akkurat';
             padding: 30px!important;
             border: 0!important;
 
-            input, textarea, label {
+            input, label {
                 font-size: 14px!important;
             }
 
@@ -2520,39 +2528,11 @@ input {
 
     &__operation-info-block {
         @include textoverflowEllipsis;
-
-        &--more {
-            margin-top: 10px;
-        }
-    }
-
-    &__operation-info-failure {
-        margin-top: 10px;
     }
 
     &__operation-info-title {
-        width: 100px;
+        width: 80px;
         display: inline-block;
-    }
-
-    &__operation-info-extended {
-        margin-bottom: 10px;
-        font-size: 11px;
-    }
-
-    &__operation-info-ext-block {
-        display: flex;
-
-        img {
-            width: 15px;
-            margin-right: 5px;
-        }
-    }
-
-    &__operation-wide {
-        width: 180px;
-        display: flex;
-        align-items: center;
     }
 
     &__status-code {
@@ -3088,5 +3068,56 @@ input {
             text-align: justify;
             width: 380px;
         }
+    }
+}
+
+.groups {
+    position: relative;
+    
+    &__actions {
+        position: absolute;
+        top: 30px;
+        bottom: 60px;
+        left: 25px;
+        right: 25px;
+    }
+
+    &__action-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+    }
+
+    &__action-bg {
+
+        &--odd {
+            position: absolute;
+            top: 0;
+            left: 75px;
+            right: 0;
+            bottom: 0;
+            background-color: grey;
+            opacity: 0.08;
+        }
+    }
+
+    &__action {
+        margin-right: 15px;
+    }
+
+    &__legend {
+        display: flex;
+        align-items: center;
+        font-size: 11px;
+        position: absolute;
+        bottom: 45px;
+    }
+
+    &__legend-color {
+        margin-right: 5px;
+        width: 12px;
+        height: 12px;
+        background-color: #d0021b;
     }
 }

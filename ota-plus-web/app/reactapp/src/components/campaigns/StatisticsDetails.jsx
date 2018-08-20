@@ -5,7 +5,7 @@ import _ from 'underscore';
 import { Doughnut } from 'react-chartjs';
 import { FlatButton } from 'material-ui';
 import { Loader } from '../../partials';
-import { CampaignGroupsList, CampaignSubHeader } from '../campaign';
+import { CampaignGroupsList, CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 
 const AUTO_REFRESH_TIME = 10000;
 const tooltipText = "Show dependencies";
@@ -31,7 +31,8 @@ class StatisticsDetails extends Component {
     }
     render() {
         const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
-        const { campaignsStore } = this.props.stores;
+        const { campaignsStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -166,7 +167,12 @@ class StatisticsDetails extends Component {
                             </div>                            
                                                    
                         </div>
-                        <CampaignGroupsList />                
+                        <CampaignGroupsList />
+                        {alphaPlusEnabled ?
+                            <CampaignInstallationReportView />
+                        :
+                            null
+                        }
                     </div>
                 </div>       
             </div>
