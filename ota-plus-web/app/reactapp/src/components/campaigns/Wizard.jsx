@@ -441,12 +441,12 @@ class Wizard extends Component {
             groups: _.map(this.wizardData[3].groups, (group, index) => {
                 return group.id
             }),
-            // metadata: _.map(this.wizardData[4], (val, key) => {
-            //     return {
-            //         type: key,
-            //         value: val
-            //     }
-            // })
+            metadata: _.map(this.wizardData[4], (val, key) => {
+                return {
+                    type: key,
+                    value: val
+                }
+            })
         };
         campaignsStore.createCampaign(createData);
     }
