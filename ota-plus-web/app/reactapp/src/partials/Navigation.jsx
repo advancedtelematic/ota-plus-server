@@ -22,6 +22,9 @@ class Navigation extends Component {
         const { alphaPlusEnabled } = featuresStore;
         return (
             <nav className="navbar navbar-inverse">
+                <div className="container maintenance">
+                    Planned outage: HERE OTA Connect will be offline for approximately 5 hours beginning on 23.08.2018 10:00 CEST
+                </div>
                   <div className="container">
                     <div className="navbar-header">
                         <div className="navbar-brand" id="logo"/>
