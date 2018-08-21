@@ -147,6 +147,7 @@ class Wizard extends Component {
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
     @observable rawSelectedPacks = [];
+    @observable approvalNeeded = false;
     versions = {};
 
     constructor(props) {
@@ -162,6 +163,7 @@ class Wizard extends Component {
         this.markStepAsFinished = this.markStepAsFinished.bind(this);
         this.markStepAsNotFinished = this.markStepAsNotFinished.bind(this);
         this.setWizardData = this.setWizardData.bind(this);
+        this.setApprove = this.setApprove.bind(this);
         this.launch = this.launch.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
         this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
@@ -384,6 +386,10 @@ class Wizard extends Component {
         this.wizardData[this.currentStepId] = data;
     }
 
+    setApprove(boolean) {
+        this.approvalNeeded = boolean;
+    }
+
     launch() {
         const { packagesStore, campaignsStore } = this.props.stores;
         const updates = this.wizardData[2].versions;
@@ -428,7 +434,7 @@ class Wizard extends Component {
     }
 
     handleMultiTargetUpdateCreated() {
-        const { campaignsStore } = this.props.stores;
+        const { campaignsStore, featuresStore } = this.props.stores;
         let updateId = campaignsStore.campaignData.mtuId;
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
@@ -441,13 +447,19 @@ class Wizard extends Component {
             groups: _.map(this.wizardData[3].groups, (group, index) => {
                 return group.id
             }),
-            metadata: _.map(this.wizardData[4], (val, key) => {
+            metadata: _.without(_.map(this.wizardData[4], (val, key) => {
                 return {
                     type: key,
                     value: val
                 }
-            })
+            }), undefined),
+            approvalNeeded: this.approvalNeeded
         };
+
+        if (!featuresStore.alphaPlusEnabled) {
+            createData = _.omit(createData, 'metadata', 'approvalNeeded')
+        }
+
         campaignsStore.createCampaign(createData);
     }
 
@@ -504,6 +516,7 @@ class Wizard extends Component {
                                     React.createElement(currentStep.class, {
                                         campaign: {},
                                         setWizardData: this.setWizardData,
+                                        setApprove: this.setApprove,
                                         currentStepId: this.currentStepId,
                                         wizardData: this.wizardData,
                                         markStepAsFinished: this.markStepAsFinished,
