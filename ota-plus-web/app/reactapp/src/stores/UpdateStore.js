@@ -56,17 +56,17 @@ export default class UpdateStore {
             targets[hwId] = {
                 from: {
                     target: packs.fromVersion.filepath,
-                    checksum: {  
-                       method:"sha256",
-                       hash: packs.fromVersion.packageHash
+                    checksum: {
+                        method:"sha256",
+                        hash: packs.fromVersion.packageHash
                     },
                     targetLength: packs.fromVersion.targetLength
                 },
                 to: {
                     target: packs.toVersion.filepath,
-                    checksum: {  
-                       method:"sha256",
-                       hash: packs.toVersion.packageHash
+                    checksum: {
+                        method:"sha256",
+                        hash: packs.toVersion.packageHash
                     },
                     targetLength: packs.toVersion.targetLength
                 },
@@ -96,19 +96,19 @@ export default class UpdateStore {
         this.updatesOffset = 0;
         let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimit}&offset=${this.updatesOffset}`;
         return axios.get(apiAddress)
-             .then((response) => {
-                 this.updates = response.data.values;
-                 this.updatesTotalCount = response.data.total;
+            .then((response) => {
+                this.updates = response.data.values;
+                this.updatesTotalCount = response.data.total;
 
-                 if (!this.updatesInitialTotalCount) {
-                     this.updatesInitialTotalCount = response.data.total;
-                 }
-                 this._prepareUpdates();
-                 this[async] = handleAsyncSuccess(response);
-             })
-             .catch((error) => {
-                 this[async] = handleAsyncError(error);
-             });
+                if (!this.updatesInitialTotalCount) {
+                    this.updatesInitialTotalCount = response.data.total;
+                }
+                this._prepareUpdates();
+                this[async] = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this[async] = handleAsyncError(error);
+            });
     }
 
     loadMoreUpdates() {
@@ -126,12 +126,18 @@ export default class UpdateStore {
             });
     }
 
+
+    sortUpdates(updates = this.updates, property = "name", order = "asc") {
+        return _.sortBy(updates, property, order);
+    }
+
     _prepareUpdates() {
-        let updates = this.updates;
+        let updates = this.sortUpdates();
         let sortedUpdates = {};
         let specialGroup = {
             '#': []
         };
+
         _.pluck(updates, 'name').forEach((name, key) => {
             let firstLetter = name.charAt(0).toUpperCase();
             firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
