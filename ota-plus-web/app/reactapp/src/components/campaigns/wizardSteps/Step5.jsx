@@ -48,7 +48,7 @@ class WizardStep5 extends Component {
     toggleApprove() {
         this.approvalNeeded = !this.approvalNeeded;
         this.notify = true;
-        this.addToWizardData('approvalNeeded', this.approvalNeeded);
+        this.props.setApprove(this.approvalNeeded);
     }
 
     _parseTime(timeObject) {
