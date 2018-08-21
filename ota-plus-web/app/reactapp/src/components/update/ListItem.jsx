@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 @observer
 class ListItem extends Component {
     render() {
-    	const { update } = this.props;
+    	const { update, showEditModal } = this.props;
         return (
            <div className="c-update">
             	<div className="c-update__item item">
@@ -16,9 +16,11 @@ class ListItem extends Component {
 		                   	{update.description}
 		                </div>
 		                <div className="c-update__edit">
-		                	<div className="c-update__edit-link">
-		                    	Edit
-		                	</div>
+		                	<a href="#" className="add-button" id={"edit-update-" + update.name} onClick={showEditModal.bind(this, update)}>
+                                <span>
+                                    Edit
+                                </span>
+                            </a>
 		                </div>
 		            </div>
             	</div>
