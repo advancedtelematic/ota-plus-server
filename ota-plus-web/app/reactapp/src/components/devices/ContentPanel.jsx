@@ -12,47 +12,47 @@ import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
 
 const connections = {
-  "live": {
-    "0": 560,
-    "1": 300,
-    "2": 245,
-    "3": 198,
-    "4": 237,
-    "5": 564,
-    "6": 2545,
-    "7": 3253,
-    "8": 5284,
-    "9": 4573,
-    "10": 3142,
-    "11": 2573,
-    "12": 1642,
-    "13": 3573,
-    "14": 3235,
-    "15": 3463,
-    "16": 4074,
-    "17": 5036,
-    "18": 4546,
-    "19": 4055,
-    "20": 2573,
-    "21": 2024,
-    "22": 944,
-    "23": 553
-  },
-  "limit": "6.000",
-  "max": "5.603",
-  "avg": "3.740",
-  "trend": "up"
+    "live": {
+        "0": 560,
+        "1": 300,
+        "2": 245,
+        "3": 198,
+        "4": 237,
+        "5": 564,
+        "6": 2545,
+        "7": 3253,
+        "8": 5284,
+        "9": 4573,
+        "10": 3142,
+        "11": 2573,
+        "12": 1642,
+        "13": 3573,
+        "14": 3235,
+        "15": 3463,
+        "16": 4074,
+        "17": 5036,
+        "18": 4546,
+        "19": 4055,
+        "20": 2573,
+        "21": 2024,
+        "22": 944,
+        "23": 553
+    },
+    "limit": "6.000",
+    "max": "5.603",
+    "avg": "3.740",
+    "trend": "up"
 };
 
 const certificateRolloverData = {
-  "rotation": "2 years",
-  "expireSoon": "0",
-  "expired": "0",
-  "stats": {
-    "valid": 100,
-    "soon expired": 54,
-    "expired": 54
-  }
+    "rotation": "2 years",
+    "expireSoon": "0",
+    "expired": "0",
+    "stats": {
+        "valid": 100,
+        "soon expired": 54,
+        "expired": 54
+    }
 };
 
 const connectionsData = {
@@ -62,9 +62,9 @@ const connectionsData = {
     "update": "200.463",
     "trend": "equal",
     "stats": {
-      "provisioning": 1,
-      "check": 87,
-      "update": 12
+        "provisioning": 1,
+        "check": 87,
+        "update": 12
     }
 };
 
@@ -77,7 +77,7 @@ export default class ContentPanel extends Component {
     }
 
     goToDetails(deviceId, e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.context.router.push(`/device/${deviceId}`);
     }
 
@@ -87,16 +87,23 @@ export default class ContentPanel extends Component {
         const { alphaPlusEnabled } = featuresStore;
         const { selectedGroup } = groupsStore;
         const { isSmart } = selectedGroup;
+
         return (
             <div className="devices-panel">
-                <ContentPanelHeader 
+                <ContentPanelHeader
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
                     addNewWizard={addNewWizard}
                 />
                 {isSmart ?
-                    <ContentPanelSubheader />
-                :
+                    (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ?
+                        <div className="wrapper-center">
+                            <Loader />
+                        </div>
+                        :
+                        <ContentPanelSubheader
+                        />)
+                    :
                     null
                 }
                 <div className={"devices-panel__wrapper " + (isSmart ? "devices-panel__wrapper--smart" : "")}>
@@ -115,29 +122,29 @@ export default class ContentPanel extends Component {
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
-                            : devicesStore.devices.length ?
-                                _.map(devicesStore.devices, (device) => {
-                                    return (
-                                        <DeviceItem
-                                            device={device}
-                                            goToDetails={this.goToDetails}
-                                            showDeleteConfirmation={showDeleteConfirmation}
-                                            showEditName={showEditName}
-                                            key={device.uuid}
-                                            stores={{
-                                                devicesStore: devicesStore, 
-                                                featuresStore: featuresStore,
-                                                groupsStore: groupsStore
-                                            }}
-                                        />
-                                    );
-                                })
-                            :
-                                <span className="devices-panel__list-empty">
-                                    <div className="wrapper-center">
-                                        This group is empty. Please, drag and drop devices here.
+                                : devicesStore.devices.length ?
+                                    _.map(devicesStore.devices, (device) => {
+                                        return (
+                                            <DeviceItem
+                                                device={device}
+                                                goToDetails={this.goToDetails}
+                                                showDeleteConfirmation={showDeleteConfirmation}
+                                                showEditName={showEditName}
+                                                key={device.uuid}
+                                                stores={{
+                                                    devicesStore: devicesStore,
+                                                    featuresStore: featuresStore,
+                                                    groupsStore: groupsStore
+                                                }}
+                                            />
+                                        );
+                                    })
+                                    :
+                                    <span className="devices-panel__list-empty">
+                                        <div className="wrapper-center">
+                                            This group is empty. Please, drag and drop devices here.
                                     </div>
-                                </span>
+                                    </span>
                             }
                         </InfiniteScroll>
                     </div>
@@ -174,7 +181,7 @@ export default class ContentPanel extends Component {
                                         Live connections
                                     </div>
                                     <div className="devices-panel__dashboard-data">
-                                        <BarChart 
+                                        <BarChart
                                             connections={connections}
                                         />
                                     </div>
@@ -184,7 +191,7 @@ export default class ContentPanel extends Component {
                                         Certificate rollover
                                     </div>
                                     <div className="devices-panel__dashboard-data">
-                                        <Stats 
+                                        <Stats
                                             data={certificateRolloverData.stats}
                                             indicatorColors={true}
                                         />
@@ -195,7 +202,7 @@ export default class ContentPanel extends Component {
                                         Connections
                                     </div>
                                     <div className="devices-panel__dashboard-data">
-                                        <Stats 
+                                        <Stats
                                             data={connectionsData.stats}
                                             indicatorColors={false}
                                         />
@@ -203,7 +210,7 @@ export default class ContentPanel extends Component {
                                 </div>
                             </div>
                         </div>
-                    :
+                        :
                         null
                     }
                 </div>

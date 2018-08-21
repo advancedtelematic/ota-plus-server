@@ -1,17 +1,17 @@
 import { observable, computed } from 'mobx';
 import axios from 'axios';
-import { 
-    API_GROUPS_FETCH, 
+import {
+    API_GROUPS_FETCH,
     API_GROUPS_CREATE,
     API_GROUPS_RENAME,
     API_GROUPS_DEVICES_FETCH,
     API_GROUPS_ADD_DEVICE,
     API_GROUPS_REMOVE_DEVICE,
 } from '../config';
-import { 
-    resetAsync, 
-    handleAsyncSuccess, 
-    handleAsyncError 
+import {
+    resetAsync,
+    handleAsyncSuccess,
+    handleAsyncError
 } from '../utils/Common';
 import _ from 'underscore';
 
@@ -22,6 +22,7 @@ export default class GroupsStore {
     @observable groupsCreateFetchAsync = {};
     @observable groupsWizardFetchAsync = {};
     @observable groupsWizardLoadMoreFetchAsync = {};
+    @observable expressionForSelectedGroupFetchAsync = {};
     @observable groupsCreateAsync = {};
     @observable groupsRenameAsync = {};
     @observable groupsAddDeviceAsync = {};
@@ -56,6 +57,7 @@ export default class GroupsStore {
         resetAsync(this.groupsCreateFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
         resetAsync(this.groupsWizardLoadMoreFetchAsync);
+        resetAsync(this.expressionForSelectedGroupFetchAsync);
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
@@ -66,7 +68,7 @@ export default class GroupsStore {
         this.selectedGroup = {
             type: 'artificial',
             groupName: 'all'
-        };   
+        };
     }
 
     _filterGroups(fleetId) {
@@ -82,22 +84,22 @@ export default class GroupsStore {
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsOffset)
             .then(function (response) {
                 let groups = response.data.values;
-                if(groups.length) {
+                if (groups.length) {
                     let after = _.after(groups.length, () => {
                         this.groups = groups;
                         this.classicGroups = _.filter(groups, group => group.groupType === 'static');
-                        this.smartGroups =_.filter(groups, group => group.groupType === 'dynamic');
+                        this.smartGroups = _.filter(groups, group => group.groupType === 'dynamic');
                         this._prepareGroups(this.groups);
                         this._prepareGroupsWithFleets();
                         this[async] = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
                         axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
-                            .then(function(resp) {
+                            .then(function (resp) {
                                 group.devices = resp.data;
                                 after();
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 after();
                             });
                     });
@@ -117,7 +119,7 @@ export default class GroupsStore {
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + (this.groupsOffset + this.groupsLimit))
             .then(function (response) {
                 let groups = response.data.values;
-                if(groups.length) {
+                if (groups.length) {
                     let after = _.after(groups.length, () => {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
                         this.classicGroups = _.uniq(_.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id);
@@ -128,11 +130,11 @@ export default class GroupsStore {
                     }, this);
                     _.each(groups, (group, index) => {
                         axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
-                            .then(function(resp) {
+                            .then(function (resp) {
                                 group.devices = resp.data;
                                 after();
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 after();
                             });
                     });
@@ -156,7 +158,7 @@ export default class GroupsStore {
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsWizardLimit + '&offset=' + this.groupsWizardOffset)
             .then(function (response) {
                 let groups = response.data.values;
-                if(groups.length) {
+                if (groups.length) {
                     let after = _.after(groups.length, () => {
                         this.wizardGroups = groups;
                         this._prepareWizardGroups();
@@ -164,11 +166,11 @@ export default class GroupsStore {
                     }, this);
                     _.each(groups, (group, index) => {
                         axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
-                            .then(function(resp) {
+                            .then(function (resp) {
                                 group.devices = resp.data;
                                 after();
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 after();
                             });
                     });
@@ -183,12 +185,12 @@ export default class GroupsStore {
             }.bind(this));
     }
 
-    loadMoreWizardGroups() {        
+    loadMoreWizardGroups() {
         resetAsync(this.groupsWizardLoadMoreFetchAsync, true);
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsWizardLimit + '&offset=' + (this.groupsWizardOffset + this.groupsWizardLimit))
             .then(function (response) {
                 let groups = response.data.values;
-                if(groups.length) {
+                if (groups.length) {
                     let after = _.after(groups.length, () => {
                         this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
                         this._prepareWizardGroups();
@@ -196,11 +198,11 @@ export default class GroupsStore {
                     }, this);
                     _.each(groups, (group, index) => {
                         axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
-                            .then(function(resp) {
+                            .then(function (resp) {
                                 group.devices = resp.data;
                                 after();
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 after();
                             });
                     });
@@ -238,12 +240,12 @@ export default class GroupsStore {
         return axios.put(API_GROUPS_RENAME + '/' + id + '/rename?groupName=' + name)
             .then(function (response) {
                 this.groupsRenameAsync = handleAsyncSuccess(response);
-                this._updateGroupData(id, {groupName: name});
+                this._updateGroupData(id, { groupName: name });
                 this.selectedGroup = {
                     type: 'real',
                     groupName: name
                 };
-                if(this.activeFleet) {
+                if (this.activeFleet) {
                     this._prepareGroupsWithFleets();
                     this._filterGroups(this.activeFleet.id);
                 } else {
@@ -281,24 +283,38 @@ export default class GroupsStore {
 
     fetchDevicesForGroup(groupId) {
         return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
-            .then(function(resp) {
+            .then(function (resp) {
                 const foundGroup = this._getGroup(groupId);
-                if(foundGroup) {
+                if (foundGroup) {
                     foundGroup.devices = resp.data;
                 }
             }.bind(this))
-            .catch(function() {
+            .catch(function () {
             });
     }
 
     fetchDevicesForSelectedGroup(groupId) {
         return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
-            .then(function(resp) {
+            .then(function (resp) {
                 this.selectedGroup.devices = resp.data;
             }.bind(this))
-            .catch(function() {
+            .catch(function () {
             });
     }
+
+    fetchExpressionForSelectedGroup(groupId) {
+        resetAsync(this.expressionForSelectedGroupFetchAsync, true);
+        return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId)
+            .then((response) => {
+                this.selectedGroup.expression = response.data.expression
+                this.expressionForSelectedGroupFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.expressionForSelectedGroupFetchAsync = handleAsyncError(error);
+            });
+    }
+
+
 
     _reset() {
         resetAsync(this.groupsFetchAsync);
@@ -306,6 +322,7 @@ export default class GroupsStore {
         resetAsync(this.groupsCreateFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
         resetAsync(this.groupsWizardLoadMoreFetchAsync);
+        resetAsync(this.expressionForSelectedGroupFetchAsync);
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
@@ -318,7 +335,7 @@ export default class GroupsStore {
         this.preparedGroups = {};
         this.preparedWizardGroups = {};
         this.latestCreatedGroupId = null;
-        
+
         this.groupsOffset = 0;
         this.hasMoreGroups = false;
 
@@ -336,7 +353,7 @@ export default class GroupsStore {
             let groupName = group.groupName;
             let firstLetter = groupName.charAt(0).toUpperCase();
             firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-            if(typeof preparedGroups[firstLetter] == 'undefined' || !preparedGroups[firstLetter] instanceof Array) {
+            if (typeof preparedGroups[firstLetter] == 'undefined' || !preparedGroups[firstLetter] instanceof Array) {
                 preparedGroups[firstLetter] = [];
             }
             preparedGroups[firstLetter].push(group);
@@ -355,7 +372,7 @@ export default class GroupsStore {
             let groupName = group.groupName;
             let firstLetter = groupName.charAt(0).toUpperCase();
             firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-            if(typeof preparedGroups[firstLetter] == 'undefined' || !preparedGroups[firstLetter] instanceof Array) {
+            if (typeof preparedGroups[firstLetter] == 'undefined' || !preparedGroups[firstLetter] instanceof Array) {
                 preparedGroups[firstLetter] = [];
             }
             preparedGroups[firstLetter].push(group);
@@ -366,7 +383,7 @@ export default class GroupsStore {
     _prepareGroupsWithFleets() {
         _.each(this.groups, group => {
             let groupLetters = group.groupName.substring(0, 3);
-            switch(groupLetters) {
+            switch (groupLetters) {
                 case 'H34':
                     group.fleet_id = 'sedan';
                     break;
@@ -387,7 +404,7 @@ export default class GroupsStore {
     }
 
     _getGroup(id) {
-        return _.findWhere(this.groups, {id: id});
+        return _.findWhere(this.groups, { id: id });
     }
 
     _updateGroupData(id, data) {

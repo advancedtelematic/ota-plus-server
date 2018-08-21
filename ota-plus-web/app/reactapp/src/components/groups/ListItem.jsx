@@ -36,12 +36,12 @@ class ListItem extends Component {
     }
 
     showRenameModal(e) {
-        if(e) e.stopPropagation();
+        if (e) e.stopPropagation();
         this.renameModalShown = true;
     }
 
     hideRenameModal(e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.renameModalShown = false;
     }
 
@@ -66,15 +66,15 @@ class ListItem extends Component {
                         <div className="groups-panel__item-icon groups-panel__item-icon--fleet">
                             {group.groupName.substring(0, 3)}
                         </div>
-                    : isSmart ?
-                        <div className="groups-panel__item-icon groups-panel__item-icon--smart">
-                            AG
+                        : isSmart ?
+                            <div className="groups-panel__item-icon groups-panel__item-icon--smart">
+                                AG
                         </div>
-                    :
-                        <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
+                            :
+                            <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
                     }
                     <div className="groups-panel__item-desc" onClick={() => {
-                        selectGroup({type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart});
+                        selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart });
                     }}>
                         <div className="groups-panel__item-title">
                             <div className="groups-panel__item-title-value">
@@ -89,22 +89,23 @@ class ListItem extends Component {
                                 <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
                                     <li className="package-dropdown-item">
                                         <a className="package-dropdown-item" href="#" id="edit-comment"
-                                           onClick={(e) => {
-                                               e.preventDefault();
-                                               selectGroup({type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart});
-                                               this.showRenameModal();
-                                           }}>
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart });
+                                                this.showRenameModal();
+                                            }}>
                                             <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
                                             Edit name
                                         </a>
                                     </li>
                                 </Dropdown>
-                            :
+                                :
                                 null
                             }
                         </div>
                         <div className="groups-panel__item-subtitle" id={"group-" + group.groupName + '-devices'}>
-                            {t('common.deviceWithCount', {count: group.devices.total})}
+                            {t('common.deviceWithCount', { count: group.devices.total })}
+
                         </div>
                     </div>
                     {this.renameModalShown ?
@@ -116,7 +117,7 @@ class ListItem extends Component {
                             modalTitle="Edit Group"
                             buttonText="Save"
                         />
-                    :
+                        :
                         null
                     }
                 </div>

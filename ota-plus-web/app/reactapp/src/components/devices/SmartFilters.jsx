@@ -1,63 +1,113 @@
 import React, { Component, PropTypes } from 'react';
 import { SearchBar, FormInput, FormSelect } from '../../partials';
 import { Form } from 'formsy-react';
+import { observer } from 'mobx-react';
+import { observable } from 'mobx';
+import mobx from 'mobx';
+import _ from 'underscore';
 
-const nameFilterOptions = [{value: "deviceid", text: "VIN"}];
+const nameFilterOptions = [{ value: "deviceid", text: "VIN" }];
 const extraFilterOptions = ["contains"];
 
-const SmartFilters = ({ devicesView = false, className, layout, setFilter }) => {
-    return (
-        <div className={"filters " + (className ? className : '')}>
-			<div className="filters__block" style={{flex: layout[0]}} >
-				<FormSelect
-                    id="name-filter"
-                    appendMenuToBodyTag={true}
-                    options={nameFilterOptions}
-                    multiple={false}
-                    visibleFieldsCount={5}
-                    name="nameFilter"
-                    onChange={(value) => { setFilter('name', value.value) }}
-                />
-        	</div>
-        	<div className="filters__block" style={{flex: layout[1]}} >
-				<FormSelect
-                    id="expression-filter"
-                    appendMenuToBodyTag={true}
-                    options={extraFilterOptions}
-                    multiple={false}
-                    visibleFieldsCount={5}
-                    name="expressionFilter"
-                    onChange={(value) => { setFilter('expression', value) }}
-                />
-    		</div>
-    		<div className="filters__block" style={{flex: layout[2]}} >
-                {devicesView ?
-                    <Form>
-                        <SearchBar 
-                            value={''}
-                            changeAction={() => {}}
-                            id="search-devices-input"
-                            name="word"
+let singleGroup = {
+    id: 1,
+    name: "VIN",
+    expression: "contains",
+    word: ''
+};
+
+
+@observer
+class SmartFilters extends Component {
+    @observable lastGivenId = 1;
+    @observable groups = [singleGroup];
+
+
+    addFilter = () => {
+        this.lastGivenId += 1;
+        singleGroup.id = this.lastGivenId;
+        this.groups.push(singleGroup)
+
+    }
+
+    removeFilter(id) {
+        if (this.groups.length > 1) {
+            this.groups = _.filter(this.groups, el => el.id !== id);
+        }
+    }
+
+    render() {
+        const { devicesView = false, className, layout, setFilter } = this.props;
+
+        const Filters = this.groups.map(group => {
+            return (
+                <div key={group.id} className={"filters " + (className ? className : '')} >
+                    <div className="filters__block" style={{ flex: layout[0] }} >
+                        <FormSelect
+                            id="name-filter"
+                            appendMenuToBodyTag={true}
+                            options={nameFilterOptions}
+                            defaultValue={nameFilterOptions[0].text}
+                            multiple={false}
+                            visibleFieldsCount={5}
+                            name="nameFilter"
+                            onChange={() => { }}
+
                         />
-                    </Form>
-                :
-                    <FormInput
-                        id="word"
-                        name="word"
-                        className="input-wrapper"
-                        placeholder={"Type here"}
-                        onChange={(e) => { setFilter('word', e.target.value) }}
-                    />
-                }
+                    </div>
+                    <div className="filters__block" style={{ flex: layout[1] }} >
+                        <FormSelect
+                            id="expression-filter"
+                            appendMenuToBodyTag={true}
+                            options={extraFilterOptions}
+                            defaultValue={extraFilterOptions[0]}
+                            multiple={false}
+                            visibleFieldsCount={5}
+                            name="expressionFilter"
+                            onChange={() => { }}
+                        />
+                    </div>
+                    <div className="filters__block" style={{ flex: layout[2] }} >
+                        {devicesView ?
+                            <Form>
+                                <SearchBar
+                                    value={''}
+                                    onChange={(e) => { setFilter('word', e.target.value) }}
+                                    id="search-devices-input"
+                                    name="word"
+                                />
+                            </Form>
+                            :
+                            <FormInput
+                                id="word"
+                                name="word"
+                                className="input-wrapper"
+                                placeholder={"Type here"}
+                                onChange={() => { }}
+
+                            />
+                        }
+                    </div>
+                    <div className="filters__block filters__block--fake" id="filter-minus" onClick={this.removeFilter.bind(this, group.id)}>
+                        -
     		</div>
-    		<div className="filters__block filters__block--fake" id="filter-minus">
-        		-
+                    <div className="filters__block filters__block--fake" id="filter-plus" onClick={this.addFilter}>
+                        +
     		</div>
-    		<div className="filters__block filters__block--fake" id="filter-plus">
-        		+
-    		</div>
-        </div>
-    );
+                </div>
+            )
+        })
+
+        return (
+            <div>
+                <span>{Filters}</span >
+            </div>
+
+
+        );
+    }
+
 }
+
 
 export default SmartFilters;

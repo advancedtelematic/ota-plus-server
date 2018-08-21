@@ -7,7 +7,7 @@ import { observable } from 'mobx';
 @inject("stores")
 @observer
 class GroupsPanel extends Component {
-    @observable expandedSection = 'classic';
+    @observable expandedSection = '';
 
     constructor(props) {
         super(props);
@@ -22,10 +22,10 @@ class GroupsPanel extends Component {
         const { alphaPlusEnabled } = featuresStore;
         return (
             <div className="groups-panel">
-                <GroupsHeader 
+                <GroupsHeader
                     showCreateGroupModal={showCreateGroupModal}
                 />
-                <GroupsArtificialList                  
+                <GroupsArtificialList
                     selectGroup={selectGroup}
                     onDeviceDrop={onDeviceDrop}
                 />
@@ -44,13 +44,13 @@ class GroupsPanel extends Component {
                             expandedSection={this.expandedSection}
                         />
                     </span>
-                :
-                    <GroupsDefaultList                  
+                    :
+                    <GroupsDefaultList
                         selectGroup={selectGroup}
                         onDeviceDrop={onDeviceDrop}
                     />
                 }
-                
+
             </div>
         );
     }

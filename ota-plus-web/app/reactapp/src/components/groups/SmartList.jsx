@@ -18,9 +18,9 @@ class SmartList extends Component {
         return (
             <span>
                 <div id="groups-panel_smart-groups-title" className="groups-panel__section-title groups-panel__section-title--space-top" onClick={() => { toggleSection('smart') }}>
-                    Smart Groups <i id="groups-panel_smart-groups-icon" className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
+                    Smart Groups <i id="groups-panel_smart-groups-icon" className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`} />
                 </div>
-                <VelocityTransitionGroup 
+                <VelocityTransitionGroup
                     enter={{
                         animation: "slideDown",
                     }}
@@ -36,29 +36,39 @@ class SmartList extends Component {
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
-                            : groupsStore.smartGroups.length ?
-                                _.map(groupsStore.smartGroups, (group) => {
-                                    const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
-                                    return (
-                                        <ListItem 
-                                            group={group}
-                                            selectGroup={selectGroup}
-                                            isSelected={isSelected}
-                                            onDeviceDrop={onDeviceDrop}
-                                            isSmart={true}
-                                            key={group.groupName}
-                                        />
-                                    );
-                                })
-                            :
-                                <div className="wrapper-center">
-                                    <div className="groups-panel__section-title" id="groups-panel-title__no-groups">
-                                        No smart groups found.
+                                : <InfiniteScroll
+                                    className="wrapper-infinite-scroll"
+                                    hasMore={groupsStore.hasMoreGroups}
+                                    isLoading={groupsStore.groupsFetchAsync.isFetching}
+                                    useWindow={false}
+                                    loadMore={() => {
+                                        groupsStore.loadMoreGroups()
+                                    }}>
+                                    {groupsStore.smartGroups.length ?
+                                        _.map(groupsStore.smartGroups, (group) => {
+                                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
+                                            return (
+                                                <ListItem
+                                                    group={group}
+                                                    selectGroup={selectGroup}
+                                                    isSelected={isSelected}
+                                                    onDeviceDrop={onDeviceDrop}
+                                                    isSmart={true}
+                                                    key={group.groupName}
+                                                />
+                                            );
+                                        })
+                                        :
+                                        <div className="wrapper-center">
+                                            <div className="groups-panel__section-title" id="groups-panel-title__no-groups">
+                                                No smart groups found.
                                     </div>
-                                </div>
+                                        </div>
+                                    }
+                                </InfiniteScroll>
                             }
                         </div>
-                    :
+                        :
                         null
                     }
                 </VelocityTransitionGroup>
