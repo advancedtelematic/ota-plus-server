@@ -52,6 +52,13 @@ class CreateModal extends Component {
         this.updateCreatedHandler = new AsyncStatusCallbackHandler(updateStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
     }
 
+    componentWillMount() {
+        const { editMode } = this.props;
+        if(editMode) {
+            this.currentStepId = 1;
+        }
+    }
+
     componentWillUnmount() {
         this.mtuCreatedHandler();
         this.updateCreatedHandler();
@@ -110,26 +117,27 @@ class CreateModal extends Component {
     }
 
     onStep1DataSelect = (type, value) => {
+        const stepData = this.wizardData[this.currentStepId];
         switch(type) {
             case 'hardwareId':
-                let hardwareIds = this.wizardData[this.currentStepId].hardwareIds;
+                let hardwareIds = stepData.hardwareIds;
                 if(_.includes(hardwareIds, value))
                     hardwareIds.splice(hardwareIds.indexOf(value), 1);
                 else
                     hardwareIds.push(value);
                 break;
             case 'name':
-                this.wizardData[this.currentStepId].name = value;
+                stepData.name = value;
                 break;
             case 'description':
-                this.wizardData[this.currentStepId].description = value;
+                stepData.description = value;
                 break;
             default:
                 break;
         }
-        if(this.wizardData[this.currentStepId].hardwareIds.length && 
-            this.wizardData[this.currentStepId].name !== '' && 
-            this.wizardData[this.currentStepId].description !== '') {
+        if(stepData.hardwareIds.length && 
+            stepData.name !== '' && 
+            stepData.description !== '') {
                 this.markStepAsFinished();
         } else {
             this.markStepAsNotFinished();
@@ -137,17 +145,20 @@ class CreateModal extends Component {
     }
 
     onStep2DataSelect = (type, value) => {
-        this.wizardData[this.currentStepId][type] = value;
+        const { editMode } = this.props;
+        const stepData = this.wizardData[this.currentStepId];
+        stepData[type] = value;
         if(type === 'fromPack') {
-            this.wizardData[this.currentStepId]['fromVersion'] = null;
+            stepData['fromVersion'] = null;
         }
         if(type === 'toPack') {
-            this.wizardData[this.currentStepId]['toVersion'] = null;
+            stepData['toVersion'] = null;
         }
-        if(this.wizardData[this.currentStepId].fromPack &&
-            this.wizardData[this.currentStepId].toPack &&
-            this.wizardData[this.currentStepId].fromVersion &&
-            this.wizardData[this.currentStepId].toVersion) {
+        if(stepData.fromPack &&
+            stepData.toPack &&
+            stepData.fromVersion &&
+            stepData.toVersion &&
+            !editMode) {
                 this.markStepAsFinished();
         } else {
             this.markStepAsNotFinished();
@@ -155,7 +166,7 @@ class CreateModal extends Component {
     }
 
     render() {
-        const { shown, hide } = this.props;
+        const { shown, hide, editMode } = this.props;
         const currentStep = this.steps[this.currentStepId];
         const step = (
             <span>
@@ -163,6 +174,7 @@ class CreateModal extends Component {
                     wizardData: this.wizardData,
                     onStep1DataSelect: this.onStep1DataSelect,
                     onStep2DataSelect: this.onStep2DataSelect,
+                    editMode: editMode
                 })}
                 <div className="body-actions" style={{margin: 0}}>
                     {this.isLastStep() ?
@@ -189,16 +201,16 @@ class CreateModal extends Component {
         );
         return (
             <Modal
-                title={ "Create new update" }
+                title={editMode ? "Edit update" : "Create new update"}
                 topActions={
                     <div className="top-actions flex-end">
-                        <div className="modal-close" onClick={ hide }>
+                        <div className="modal-close" onClick={hide}>
                             <img src="/assets/img/icons/close.svg" alt="Icon"/>
                         </div>
                     </div>
                 }
                 content={step}
-                shown={ shown }
+                shown={shown}
                 className="create-update-modal"
             />
         );

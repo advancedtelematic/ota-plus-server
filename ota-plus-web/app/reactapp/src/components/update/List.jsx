@@ -91,6 +91,7 @@ class List extends Component {
     }
 
     render() {
+        const { showEditModal } = this.props;
         const { updateStore } = this.props.stores;
         return (
             <div className="ios-list" ref="list">
@@ -107,6 +108,7 @@ class List extends Component {
                                     <ListItem
                                         key={index}
                                         update={update}
+                                        showEditModal={showEditModal}
                                     />
                                 );
                             })}
