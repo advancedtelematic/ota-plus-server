@@ -1,4 +1,4 @@
-import {observable, computed, extendObservable} from 'mobx';
+import { observable, computed, extendObservable } from 'mobx';
 import axios from 'axios';
 import {
     API_DEVICES_SEARCH,
@@ -24,6 +24,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesByFilterFetchAsync = {};
     @observable devicesLoadMoreAsync = {};
     @observable devicesDeleteAsync = {};
     @observable deviceFleetsFetchAsync = {};
@@ -60,6 +61,7 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesByFilterFetchAsync);
         resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
@@ -127,8 +129,8 @@ export default class DevicesStore {
         this.deviceFleetsFetchAsync = handleAsyncSuccess(this.deviceFleets);
     }
 
-    fetchDevices(filter = '', groupId) {
-        resetAsync(this.devicesFetchAsync, true);
+    fetchDevices(filter = '', groupId, async = 'devicesFetchAsync') {
+        resetAsync(this[async], true);
         filter = filter.toLowerCase();
         this.devicesOffset = 0;
         this.devicesCurrentPage = 1;
@@ -147,12 +149,29 @@ export default class DevicesStore {
                     this.devicesInitialTotalCount = response.data.total;
                 }
                 this._prepareDevices();
-                this.devicesFetchAsync = handleAsyncSuccess(response);
+                this[async] = handleAsyncSuccess(response);
             })
             .catch((error) => {
-                this.devicesFetchAsync = handleAsyncError(error);
+                this[async] = handleAsyncError(error);
             });
     }
+
+
+
+    fetchDevicesByFilter(filter = '', async = 'devicesFetchAsync') {
+        resetAsync(this.devicesByFilterFetchAsync, true);
+        filter = filter.toLowerCase();
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.filteredDevicesCount = response.data.total;
+                this.devicesByFilterFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesByFilterFetchAsync = handleAsyncError(error);
+            });
+    }
+
 
     loadMoreDevices(filter = '', groupId) {
         resetAsync(this.devicesLoadMoreAsync, true);
@@ -185,7 +204,7 @@ export default class DevicesStore {
             lastSeen: data.timestamp,
             uuid: data.uuid
         });
-        if(this.devicesInitialTotalCount === null) {
+        if (this.devicesInitialTotalCount === null) {
             this.devicesInitialTotalCount = 0;
         }
         this.devicesInitialTotalCount++;
@@ -226,7 +245,7 @@ export default class DevicesStore {
     }
 
     fetchDeviceNetworkInfo(id, isFromWs = false) {
-        if(this.device.uuid === id) {
+        if (this.device.uuid === id) {
             resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
             return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
                 .then((response) => {
@@ -246,17 +265,17 @@ export default class DevicesStore {
             .then((response) => {
                 let updateIdentifier = response.data;
                 let status = null;
-                if(updateIdentifier.length) {
+                if (updateIdentifier.length) {
                     let after = _.after(status === 'success', () => {
                         this.fetchMultiTargetUpdates(id);
                         this.mtuCreateAsync = handleAsyncSuccess(response);
                     }, this);
                     axios.put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
-                        .then(function(multiTargetResponse) {
+                        .then(function (multiTargetResponse) {
                             status = 'success';
                             after();
                         })
-                        .catch(function() {
+                        .catch(function () {
                             status = 'error';
                             after();
                         });
@@ -309,7 +328,7 @@ export default class DevicesStore {
     }
 
     _updateStatus(id, status) {
-        if(this.multiTargetUpdates.length) {
+        if (this.multiTargetUpdates.length) {
             const update = this._findMtu(id);
             update["status"] = status;
         }
@@ -318,13 +337,13 @@ export default class DevicesStore {
     cancelMtuUpdate(data) {
         resetAsync(this.mtuCancelAsync, true);
         return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
-            .then(function(response) {
+            .then(function (response) {
                 this.mtuCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
-            .catch(function(error) {
+            .catch(function (error) {
                 this.mtuCancelAsync = handleAsyncError(error);
             }.bind(this));
-    }    
+    }
 
     fetchDevicesCount() {
         resetAsync(this.devicesCountFetchAsync, true);
@@ -342,11 +361,11 @@ export default class DevicesStore {
             .catch((error) => {
                 that.devicesCountFetchAsync = handleAsyncError(error);
             });
-    }    
+    }
 
     fetchDirectorAttributes(id) {
         let device = this._getDevice(id);
-        if(!_.isEmpty(this.device) && this.device.uuid === id) {
+        if (!_.isEmpty(this.device) && this.device.uuid === id) {
             resetAsync(this.devicesDirectorAttributesFetchAsync, true);
             return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                 .then((response) => {
@@ -367,7 +386,7 @@ export default class DevicesStore {
                 .catch((error) => {
                     this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
                 });
-        } else if(device) {
+        } else if (device) {
             resetAsync(this.devicesDirectorAttributesFetchAsync, true);
             return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                 .then((response) => {
@@ -421,7 +440,7 @@ export default class DevicesStore {
     _getSecondaryFilepathsBySerial(serial) {
         let filepaths = [];
         _.map(this.device.directorAttributes.secondary, (secondary, index) => {
-            if(secondary.id === serial) {
+            if (secondary.id === serial) {
                 filepaths.push(secondary.image.filepath);
             }
         })
@@ -429,7 +448,7 @@ export default class DevicesStore {
     }
 
     _getPrimaryByHardwareId(hardwareId) {
-        if(this.device.directorAttributes.primary.hardwareId === hardwareId) {
+        if (this.device.directorAttributes.primary.hardwareId === hardwareId) {
             return this.device.directorAttributes.primary;
         }
         return null;
@@ -438,7 +457,7 @@ export default class DevicesStore {
     _getSecondaryBySerial(serial) {
         let secondaryObject = {};
         _.each(this.device.directorAttributes.secondary, (secondary, index) => {
-            if(secondary.id === serial) {
+            if (secondary.id === serial) {
                 secondaryObject = secondary;
             }
         });
@@ -461,7 +480,7 @@ export default class DevicesStore {
         return axios.put(API_DEVICES_RENAME + '/' + id, data)
             .then((response) => {
                 this.devicesRenameAsync = handleAsyncSuccess(response);
-                if(this.device.uuid === id) {
+                if (this.device.uuid === id) {
                     this.device.deviceName = data.deviceName;
                 } else {
                     let device = _.find(this.devices, device => device.uuid === id);
@@ -476,6 +495,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesByFilterFetchAsync);
         resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
@@ -508,7 +528,7 @@ export default class DevicesStore {
     }
 
     _getDevice(id) {
-        return _.findWhere(this.devices, {uuid: id});
+        return _.findWhere(this.devices, { uuid: id });
     }
 
     _updateDeviceData(id, data) {

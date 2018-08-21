@@ -34,22 +34,22 @@ class Devices extends Component {
         this.hideEditName = this.hideEditName.bind(this);
     }
     showCreateGroupModal(e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.createGroupModalShown = true;
     }
     hideCreateGroupModal(e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         const { groupsStore } = this.props.stores;
         this.createGroupModalShown = false;
         resetAsync(groupsStore.groupsCreateAsync);
     }
     showDeleteConfirmation(device, e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.itemToDelete = device;
         this.deleteConfirmationShown = true;
     }
     showEditName(device, e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.itemToEdit = device;
         this.editNameShown = true;
     }
@@ -57,14 +57,14 @@ class Devices extends Component {
         this.editNameShown = false;
     }
     deleteDevice(e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         const deviceUuid = this.itemToDelete.uuid;
         const { devicesStore, groupsStore } = this.props.stores;
         devicesStore.deleteDevice(deviceUuid).then(() => {
             const foundGroup = _.find(groupsStore.groups, (group) => {
                 return group.devices.values.indexOf(deviceUuid) > -1;
             });
-            if(foundGroup) {
+            if (foundGroup) {
                 foundGroup.devices.total--;
             }
             devicesStore.devicesInitialTotalCount--;
@@ -79,53 +79,55 @@ class Devices extends Component {
         groupsStore.selectedGroup = group;
         const groupId = group.id || null;
         devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);
+        groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id)
     }
     onDeviceDrop(device, groupId) {
         const { groupsStore } = this.props.stores;
-        if(device.groupId !== groupId && device.groupId) {
+        if (device.groupId !== groupId && device.groupId) {
             groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
         }
-        if(device.groupId !== groupId && groupId) {
+        if (device.groupId !== groupId && groupId) {
             groupsStore.addDeviceToGroup(groupId, device.uuid);
         }
     }
     changeSort(sort, e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         const { devicesStore } = this.props.stores;
         devicesStore._prepareDevices(sort);
     }
     changeFilter(filter, e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         const { devicesStore, groupsStore } = this.props.stores;
         let groupId = groupsStore.selectedGroup.id;
         devicesStore.fetchDevices(filter, groupId);
     }
+
     render() {
         const { addNewWizard } = this.props;
-        const { devicesStore } = this.props.stores;
+        const { devicesStore, groupsStore } = this.props.stores;
         return (
             <span>
                 {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
-                :
-                    devicesStore.devicesInitialTotalCount ?
-                            <span>
-                                <DevicesGroupsPanel 
-                                    showCreateGroupModal={this.showCreateGroupModal}
-                                    selectGroup={this.selectGroup}
-                                    onDeviceDrop={this.onDeviceDrop}
-                                />
-                                <DevicesContentPanel 
-                                    changeSort={this.changeSort}
-                                    changeFilter={this.changeFilter}
-                                    showDeleteConfirmation={this.showDeleteConfirmation}
-                                    showEditName={this.showEditName}
-                                    addNewWizard={addNewWizard}
-                                />
-                            </span>
                     :
+                    devicesStore.devicesInitialTotalCount ?
+                        <span>
+                            <DevicesGroupsPanel
+                                showCreateGroupModal={this.showCreateGroupModal}
+                                selectGroup={this.selectGroup}
+                                onDeviceDrop={this.onDeviceDrop}
+                            />
+                            <DevicesContentPanel
+                                changeSort={this.changeSort}
+                                changeFilter={this.changeFilter}
+                                showDeleteConfirmation={this.showDeleteConfirmation}
+                                showEditName={this.showEditName}
+                                addNewWizard={addNewWizard}
+                            />
+                        </span>
+                        :
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>
@@ -146,12 +148,12 @@ class Devices extends Component {
                         </div>
                 }
                 {this.createGroupModalShown ?
-                    <GroupsCreateModal 
+                    <GroupsCreateModal
                         shown={this.createGroupModalShown}
                         hide={this.hideCreateGroupModal}
                         selectGroup={this.selectGroup}
                     />
-                :
+                    :
                     null
                 }
                 {this.deleteConfirmationShown ?
@@ -170,7 +172,7 @@ class Devices extends Component {
                             </div>
                         }
                     />
-                :
+                    :
                     null
                 }
                 {this.editNameShown ?
@@ -184,7 +186,7 @@ class Devices extends Component {
                         hide={this.hideEditName}
                         device={this.itemToEdit}
                     />
-                :
+                    :
                     null
                 }
             </span>

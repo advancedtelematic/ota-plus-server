@@ -33,7 +33,7 @@ export default class FeaturesStore {
         return axios.get(API_FEATURES_FETCH)
             .then(function (response) {
                 this.features = response.data;
-                if(_.contains(response.data, 'alphaplus')) {
+                if (_.contains(response.data, 'alphaplus')) {
                     this.alphaPlusEnabled = true;
                 }
                 this.featuresFetchAsync = handleAsyncSuccess(response);
