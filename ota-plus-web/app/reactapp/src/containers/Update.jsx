@@ -12,18 +12,26 @@ import { Loader } from '../partials';
 @observer
 class Update extends Component {
     @observable createModalShown = false;
+    @observable editModalShown = false;
+    @observable selectedUpdate = null;
 
     showCreateModal = (e) => {
         if(e) e.preventDefault();
         this.createModalShown = true;
     }
-
     hideCreateModal = (e) => {
         if(e) e.preventDefault();
         this.createModalShown = false;
     }
-
-
+    showEditModal = (update, e) => {
+        if(e) e.preventDefault();
+        this.editModalShown = true;
+        this.selectedUpdate = update;
+    }
+    hideEditModal = (e) => {
+        if(e) e.preventDefault();
+        this.editModalShown = false;
+    }
     render() {
         const { updateStore } = this.props.stores;
         return (
@@ -38,7 +46,9 @@ class Update extends Component {
                                 <UpdateHeader
                                     showCreateModal={this.showCreateModal} 
                                 />
-                                <UpdateList />
+                                <UpdateList 
+                                    showEditModal={this.showEditModal}
+                                />
                             </span>
                         :
                             <div className="wrapper-center">
@@ -70,7 +80,16 @@ class Update extends Component {
                 :
                     null
                 }
-
+                {this.editModalShown ?
+                    <UpdateCreateModal
+                        shown={this.editModalShown}
+                        hide={this.hideEditModal}
+                        editMode={true}
+                        update={this.selectedUpdate}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

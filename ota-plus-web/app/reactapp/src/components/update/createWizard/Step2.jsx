@@ -41,7 +41,7 @@ class Step2 extends Component {
         }
     }
     render() {
-        const { wizardData, onStep2DataSelect } = this.props;
+        const { wizardData, onStep2DataSelect, editMode } = this.props;
         const { packagesStore, updateStore } = this.props.stores;
         const packages = _.map(packagesStore.packages, (item) => {
             return {
@@ -64,7 +64,7 @@ class Step2 extends Component {
                             label="Update Name"
                             defaultValue={wizardData[0].name}
                             name="updateName"
-                            isEditable={ false }
+                            isEditable={!editMode ? false : true}
                             id="create-new-update-name"
 
                         />
@@ -74,7 +74,7 @@ class Step2 extends Component {
                             label="Description"
                             defaultValue={wizardData[0].description}
                             rows={ 5 }
-                            isEditable={ false }
+                            isEditable={!editMode ? false : true}
                             name="updateDescription"
                             id="create-new-update-description"
                         />
