@@ -205,7 +205,7 @@ class Main extends Component {
                     toggleFleet={this.toggleFleet}
                 />
                 <div id={pageId} style={{
-                    height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 150px)' : 'calc(100vh - 100px)',
                     padding: !alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
                 }}>
                     <FadeAnimation>                    

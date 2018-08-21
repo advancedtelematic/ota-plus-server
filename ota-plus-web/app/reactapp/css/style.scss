@@ -585,7 +585,16 @@ input {
 
     .container {
         background: $devices-groups-bg;
-    }    
+    }
+
+    .maintenance {
+        min-height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        color: rgb(250, 157, 0);
+    }
 
     .alert {
         width: 400px;

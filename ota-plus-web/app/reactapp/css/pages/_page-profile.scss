@@ -61,7 +61,7 @@
     }
 
     .profile-container {
-        height: calc(100vh - 230px);
+        height: calc(100vh - 280px);
         background-color: #fff;
         padding: 40px;
         overflow-y: auto;
@@ -169,7 +169,6 @@
 
         &#provisioning {
             padding: 20px 40px;
-            height: calc(100vh - 230px);
            
            .subheader {
                 background-color: transparent;
