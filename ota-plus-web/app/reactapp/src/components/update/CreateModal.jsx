@@ -29,10 +29,7 @@ const data = [
         hardwareIds: [],
     },
     {
-        fromPack: null,
-        toPack: null,
-        fromVersion: null,
-        toVersion: null,
+        updates: {}        
     }
 ];
 
@@ -90,12 +87,15 @@ class CreateModal extends Component {
         }
     }
 
+    prevStep = () => {
+        if (this.currentStepId != 0) {
+            this.currentStepId = this.currentStepId - 1;
+        }
+    }
+
     createMtu = () => {
         const { updateStore } = this.props.stores;
-        updateStore.createMultiTargetUpdate({
-            hardwareIds: this.wizardData[0].hardwareIds,
-            packs: this.wizardData[1]
-        });
+        updateStore.createMultiTargetUpdate(this.wizardData[1].updates);
     }
 
     handleMtuCreated = () => {
@@ -144,25 +144,29 @@ class CreateModal extends Component {
         }
     }
 
-    onStep2DataSelect = (type, value) => {
+    onStep2DataSelect = (hardwareId, type, value) => {
         const { editMode } = this.props;
-        const stepData = this.wizardData[this.currentStepId];
-        stepData[type] = value;
+        const stepData = this.wizardData[this.currentStepId].updates;
+        stepData[hardwareId] = !_.isUndefined(stepData[hardwareId]) ? stepData[hardwareId] : {};
+        stepData[hardwareId][type] = value;
         if(type === 'fromPack') {
-            stepData['fromVersion'] = null;
+            stepData[hardwareId]['fromVersion'] = null;
         }
         if(type === 'toPack') {
-            stepData['toVersion'] = null;
+            stepData[hardwareId]['toVersion'] = null;
         }
-        if(stepData.fromPack &&
-            stepData.toPack &&
-            stepData.fromVersion &&
-            stepData.toVersion &&
-            !editMode) {
-                this.markStepAsFinished();
-        } else {
-            this.markStepAsNotFinished();
-        }
+        _.each(this.wizardData[0].hardwareIds, id => {
+            if(stepData[id] && 
+                stepData[id].fromPack &&
+                stepData[id].toPack &&
+                stepData[id].fromVersion &&
+                stepData[id].toVersion &&
+                !editMode) {
+                    this.markStepAsFinished();
+            } else {
+                this.markStepAsNotFinished();
+            }
+        });
     }
 
     render() {
@@ -174,18 +178,32 @@ class CreateModal extends Component {
                     wizardData: this.wizardData,
                     onStep1DataSelect: this.onStep1DataSelect,
                     onStep2DataSelect: this.onStep2DataSelect,
-                    editMode: editMode
                 })}
                 <div className="body-actions" style={{margin: 0}}>
                     {this.isLastStep() ?
-                        <button
-                            className="btn-primary"
-                            id="wizard-launch-button"
-                            disabled={!currentStep.isFinished}
-                            onClick={this.createMtu}
-                        >
-                            Save
-                        </button>
+                        <div style={{display: 'flex'}}>
+                            {!editMode ?
+                                <button
+                                    className="btn-primary"
+                                    id="wizard-back-button"
+                                    onClick={this.prevStep}
+                                    style={{marginRight: '10px'}}
+                                >
+                                    Back
+                                </button>
+                            :
+                                null
+                            }
+                            
+                            <button
+                                className="btn-primary"
+                                id="wizard-launch-button"
+                                disabled={!currentStep.isFinished}
+                                onClick={this.createMtu}
+                            >
+                                Save
+                            </button>
+                        </div>
                     :
                         <button
                             disabled={!currentStep.isFinished}

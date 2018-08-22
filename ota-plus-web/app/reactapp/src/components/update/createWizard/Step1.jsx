@@ -26,6 +26,7 @@ class Step1 extends Component {
                                 placeholder="Name"
                                 name="updateName"
                                 id="create-new-update-name"
+                                defaultValue={wizardData[0].name}
                                 onChange={(e) => { onStep1DataSelect('name', e.target.value) }}
                             />
                         </div>
@@ -36,6 +37,7 @@ class Step1 extends Component {
                                 rows={ 5 }
                                 name="updateDescription"
                                 id="create-new-update-description"
+                                defaultValue={wizardData[0].description}
                                 onChange={(e) => { onStep1DataSelect('description', e.target.value) }}
                             />
                         </div>

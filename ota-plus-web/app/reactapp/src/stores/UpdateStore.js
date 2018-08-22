@@ -49,28 +49,26 @@ export default class UpdateStore {
     }
 
     _prepareUpdateObject(data) {
-        const { packs } = data;
-        const { hardwareIds } = data;
         let targets = {};
-        _.each(hardwareIds, hwId => {
+        _.each(data, (values, hwId) => {
             targets[hwId] = {
                 from: {
-                    target: packs.fromVersion.filepath,
+                    target: values.fromVersion.filepath,
                     checksum: {
-                        method:"sha256",
-                        hash: packs.fromVersion.packageHash
+                        method: "sha256",
+                        hash: values.fromVersion.packageHash
                     },
-                    targetLength: packs.fromVersion.targetLength
+                    targetLength: values.fromVersion.targetLength
                 },
                 to: {
-                    target: packs.toVersion.filepath,
+                    target: values.toVersion.filepath,
                     checksum: {
-                        method:"sha256",
-                        hash: packs.toVersion.packageHash
+                        method: "sha256",
+                        hash: values.toVersion.packageHash
                     },
-                    targetLength: packs.toVersion.targetLength
+                    targetLength: values.toVersion.targetLength
                 },
-                targetFormat: packs.toVersion.targetFormat,
+                targetFormat: values.toVersion.targetFormat,
                 generateDiff: false
             }
         });
