@@ -40,6 +40,9 @@ project/plugins/project/
 /.idea
 .DS_Store
 
+# Visual Studio Code
+/.vscode
+
 # Ensime
 .ensime
 .ensime_cache
@@ -52,3 +55,9 @@ deploy/roles
 # Generated files in docs/
 /docs/**/*.pdf
 /docs/_site/
+
+# temporary + env
+/env
+*.env
+*.env.gpg
+/tmp

@@ -1,0 +1,94 @@
+#page-update {
+  background-color: $home-bg;
+  height: calc(100vh - 50px);
+  padding: 30px;
+
+  .c-update {
+
+    &__item {
+      cursor: default;
+      font-size: 12px;
+    }
+
+    &__teaser {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &__name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__hash {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__edit {
+      flex: 3;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.update-modal {
+
+  .updates-container {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .header {
+      color: #9B9B9B;
+      font-size: 14px;
+      padding-bottom: 10px;
+    }
+    .hardware-id {
+      font-size: 16px;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+    .packages {
+      padding-bottom: 20px;
+    }
+    .versions {
+      padding-bottom: 30px;
+    }
+  }
+
+  .hardware-container {
+    .ios-list {
+      height: 200px;
+
+      .item {
+        padding: 15px;
+        height: 50px;
+        justify-content: flex-start;
+        background-color: #fff;
+        @include textoverflowEllipsis;
+        border: none;
+
+        &:nth-child(even) {
+          background-color: #F3F3F4;
+        }
+
+        .btn-checkbox {
+          float: left;
+          margin: 0 10px 0 0;
+          i {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
+
