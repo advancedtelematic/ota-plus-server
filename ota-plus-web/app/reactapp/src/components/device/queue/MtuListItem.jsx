@@ -68,7 +68,8 @@ class MultiTargetITem extends Component {
                                 </span>
                             </div>
                             <InstallationEvents 
-                                updateId={item.updateId}
+                                updateId={updateId}
+                                error={null}
                             />
                         </div>
                     </div>
