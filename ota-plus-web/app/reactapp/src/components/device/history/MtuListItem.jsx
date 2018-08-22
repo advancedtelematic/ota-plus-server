@@ -32,6 +32,7 @@ class MtuListItem extends Component {
 				</div>
         		<div className="queue-modal__operations">
         			{_.map(item.operationResult, (result, ecuSerial) => {
+        				const error = result.resultCode > 1 ? result : null;
         				return (
         					<div className="queue-modal__operation" key={ecuSerial}>
 		    					<div className="queue-modal__operation-info">
@@ -61,10 +62,11 @@ class MtuListItem extends Component {
 									</div>
 									<InstallationEvents 
 										updateId={item.updateId}
+										error={error}
 									/>
 								</div>
 		    					<div className="queue-modal__operation-status">
-									<div className={`queue-modal__status-code ${result.resultCode <=1 ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
+									<div className={`queue-modal__status-code ${!error ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
 										<span>Result code</span> <span className="queue-modal__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
 									</div>
 									<div className="queue-modal__status-text">
