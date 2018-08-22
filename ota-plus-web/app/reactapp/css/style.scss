@@ -2527,7 +2527,7 @@ input {
     }
 
     &__operation-info-failure {
-        margin: 10px 0;
+        margin-top: 10px;
     }
 
     &__operation-info-title {
@@ -2535,19 +2535,48 @@ input {
         display: inline-block;
     }
 
+    &__operation-info-extended {
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+
     &__operation-info-ext-block {
         display: flex;
 
+        &:last-child {
+
+            div {
+                width: 100%;
+
+                &:first-child {
+
+                    span {
+
+                        &:first-child {
+                            width: 180px;
+                        }
+                    }
+                }
+            }
+        }
+
+        img {
+            width: 15px;
+            margin-right: 5px;
+        }
+
         div {
             width: 50%;
+            display: flex;
 
             &:first-child {
 
                 span {
 
                     &:first-child {
-                        width: 100px;
-                        display: inline-block;
+                        width: 125px;
+                        display: flex;
+                        align-items: center;
                     }
                 }
             }
@@ -2557,7 +2586,7 @@ input {
                 span {
 
                     &:first-child {
-                        width: 130px;
+                        width: 150px;
                         display: inline-block;
                     }
                 }
