@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import moment from 'moment';
 import InstallationEvents from '../InstallationEvents';
 
+@inject("stores")
 @observer
 class MtuListItem extends Component {
     render() {
     	const { item } = this.props;
+    	const { featuresStore } = this.props.stores;
+    	const { alphaPlusEnabled } = featuresStore;
         return (
     		<li className="queue-modal__item">
             	<div className="queue-modal__item-header">
@@ -60,11 +63,16 @@ class MtuListItem extends Component {
 											{result.length}
 										</span>
 									</div>
-									<InstallationEvents 
-										updateId={item.updateId}
-										error={error}
-										queue={false}
-									/>
+									{alphaPlusEnabled ?
+										<InstallationEvents 
+											updateId={item.updateId}
+											error={error}
+											queue={false}
+										/>
+									:
+										null
+									}
+									
 								</div>
 		    					<div className="queue-modal__operation-status">
 									<div className={`queue-modal__status-code ${!error ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
@@ -84,6 +92,7 @@ class MtuListItem extends Component {
 }
 
 MtuListItem.propTypes = {
+	stores: PropTypes.object
 }
 
 export default MtuListItem;
