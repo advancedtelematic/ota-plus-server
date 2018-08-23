@@ -13,7 +13,7 @@ class UpdateList extends Component {
     render() {
         const { wizardData, onStep2DataSelect } = this.props;
         const { packagesStore } = this.props.stores;
-        const hardwareIds = wizardData[0].hardwareIds;     
+        const selectedHardwares = wizardData[0].selectedHardwares;
         return (
             <span>
                 {packagesStore.packagesFetchAsync.isFetching ?
@@ -21,11 +21,11 @@ class UpdateList extends Component {
                         <Loader/>
                     </div>
                 :
-                    _.map(hardwareIds, item => {
+                    _.map(selectedHardwares, item => {
                         return (
                             <UpdateListItem
-                                key={item}
-                                item={item}
+                                key={item.name}
+                                item={item.name}
                                 wizardData={wizardData}
                                 onStep2DataSelect={onStep2DataSelect}
                             />
@@ -39,6 +39,6 @@ class UpdateList extends Component {
 
 UpdateList.propTypes = {
     stores: PropTypes.object,
-}
+};
 
 export default UpdateList;
