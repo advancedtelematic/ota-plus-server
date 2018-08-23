@@ -70,6 +70,7 @@ class MultiTargetITem extends Component {
                             <InstallationEvents 
                                 updateId={updateId}
                                 error={null}
+                                queue={true}
                             />
                         </div>
                     </div>
