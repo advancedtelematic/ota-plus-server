@@ -3,6 +3,7 @@ import { Form } from 'formsy-react';
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { observer, inject } from 'mobx-react';
 import { SelectableList } from '../../../partials/lists';
+import _ from 'underscore';
 
 @inject("stores")
 @observer
@@ -14,6 +15,15 @@ class Step1 extends Component {
     render() {
         const { hardwareStore } = this.props.stores;
         const { wizardData, onStep1DataSelect } = this.props;
+
+        let hardwareList = [];
+        _.each(hardwareStore.hardwareIds, id => {
+            hardwareList.push({
+                type: 'hardware',
+                name: id,
+            });
+        });
+
         return (
             <div className="update-modal">
                 <Form
@@ -53,8 +63,8 @@ class Step1 extends Component {
                                         </div>
                                     :
                                         <SelectableList
-                                            items={hardwareStore.hardwareIds}
-                                            selectedItems={wizardData[0].hardwareIds}
+                                            items={hardwareList}
+                                            selectedItems={wizardData[0].selectedHardwares}
                                             onItemSelect={(item) => { onStep1DataSelect('hardwareId', item) }}
                                         />
                                     }
