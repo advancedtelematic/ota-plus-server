@@ -2543,54 +2543,33 @@ input {
     &__operation-info-ext-block {
         display: flex;
 
-        &:last-child {
-
-            div {
-                width: 100%;
-
-                &:first-child {
-
-                    span {
-
-                        &:first-child {
-                            width: 180px;
-                        }
-                    }
-                }
-            }
-        }
-
         img {
             width: 15px;
             margin-right: 5px;
         }
+    }
 
-        div {
-            width: 50%;
-            display: flex;
+    &__operation-50 {
+        width: 50%;
+        display: flex;
+    }
 
-            &:first-child {
+    &__operation-100 {
+        width: 100%;
+        display: flex;
+    }
 
-                span {
+    &__operation-wide {
+        width: 125px;
+        display: flex;
+        align-items: center;
 
-                    &:first-child {
-                        width: 125px;
-                        display: flex;
-                        align-items: center;
-                    }
-                }
-            }
+        &--medium {
+            width: 150px;
+        }
 
-            &:last-child {
-
-                span {
-
-                    &:first-child {
-                        width: 150px;
-                        display: inline-block;
-                    }
-                }
-            }
+        &--long {
+            width: 180px;
         }
     }
 
