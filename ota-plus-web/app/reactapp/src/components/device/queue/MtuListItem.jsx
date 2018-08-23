@@ -1,11 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import InstallationEvents from '../InstallationEvents';
 
+@inject("stores")
 @observer
-class MultiTargetITem extends Component {
+class MtuListItem extends Component {
     render() {
         const { item, hardwareId, updateId, status, length, cancelMtuUpdate, showSequencer } = this.props;
+        const { featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         const hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className="queue-modal__item">
@@ -67,11 +70,16 @@ class MultiTargetITem extends Component {
                                     {length}
                                 </span>
                             </div>
-                            <InstallationEvents 
-                                updateId={updateId}
-                                error={null}
-                                queue={true}
-                            />
+                            {alphaPlusEnabled ?
+                                <InstallationEvents 
+                                    updateId={updateId}
+                                    error={null}
+                                    queue={true}
+                                />
+                            :
+                                null
+                            }
+                            
                         </div>
                     </div>
                 </div>
@@ -80,7 +88,8 @@ class MultiTargetITem extends Component {
     }
 }
 
-MultiTargetITem.propTypes = {
+MtuListItem.propTypes = {
+    stores: PropTypes.object
 }
 
-export default MultiTargetITem;
+export default MtuListItem;
