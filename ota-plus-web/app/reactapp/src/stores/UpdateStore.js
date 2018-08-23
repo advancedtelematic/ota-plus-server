@@ -19,7 +19,9 @@ export default class UpdateStore {
     @observable updatesMtuCreateAsync = {};
     @observable updatesCreateAsync = {};
 
+    @observable initialUpdates = [];
     @observable updates = [];
+    @observable updateFilter = '';
     @observable updatesLimit = 30;
     @observable updatesOffset = 0;
     @observable updatesTotalCount = 0;
@@ -96,6 +98,7 @@ export default class UpdateStore {
         return axios.get(apiAddress)
             .then((response) => {
                 this.updates = response.data.values;
+                this.initialUpdates = response.data.values;
                 this.updatesTotalCount = response.data.total;
 
                 if (!this.updatesInitialTotalCount) {
@@ -115,6 +118,7 @@ export default class UpdateStore {
         return axios.get(apiAddress)
             .then((response) => {
                 this.updates = _.uniq(this.updates.concat(response.data.values), item => item.uuid);
+                this.initialUpdates = _.uniq(this.initialUpdates.concat(response.data.values), item => item.uuid);
                 this.updatesOffset = response.data.offset;
                 this._prepareUpdates();
                 this.updatesLoadMoreAsync = handleAsyncSuccess(response);
@@ -123,7 +127,6 @@ export default class UpdateStore {
                 this.updatesLoadMoreAsync = handleAsyncError(error);
             });
     }
-
 
     sortUpdates(updates = this.updates, property = "name", order = "asc") {
         return _.sortBy(updates, property, order);
@@ -154,6 +157,16 @@ export default class UpdateStore {
         this.preparedUpdates = sortedUpdates;
     }
 
+    _filterUpdates(filter) {
+        filter = filter.toLowerCase();
+        this.updateFilter = filter;
+        let searchResults = _.filter(this.initialUpdates, update => {
+            return update.name.toLowerCase().indexOf(filter) >= 0;
+        });
+        this.updates = searchResults;
+        this._prepareUpdates();
+    }
+
     _reset() {
         resetAsync(this.updatesFetchAsync);
         resetAsync(this.updatesSafeFetchAsync);
@@ -162,6 +175,8 @@ export default class UpdateStore {
         resetAsync(this.updatesCreateAsync);
 
         this.updates = [];
+        this.initialUpdates = [];
+        this.updateFilter = '';
         this.updatesOffset = 0;
         this.updatesTotalCount = 0;
         this.updatesInitialTotalCount = 0;
