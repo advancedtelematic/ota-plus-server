@@ -26,7 +26,7 @@ class InstallationEvents extends Component {
                         </span> 
                     </div>
                     <div className="queue-modal__operation-50">
-                        <span className="queue-modal__operation-wide queue-modal__operation-wide---medium">
+                        <span className="queue-modal__operation-wide queue-modal__operation-wide--medium">
                             <img src="/assets/img/icons/orange_exclamation.svg" alt="Icon" />
                             Download completed:
                         </span>
@@ -46,7 +46,7 @@ class InstallationEvents extends Component {
                         </span> 
                     </div>
                     <div className="queue-modal__operation-50">
-                        <span className="queue-modal__operation-wide queue-modal__operation-wide---medium">
+                        <span className="queue-modal__operation-wide queue-modal__operation-wide--medium">
                             <img src="/assets/img/icons/orange_exclamation.svg" alt="Icon" />
                             Installation completed:
                         </span>
@@ -84,7 +84,7 @@ class InstallationEvents extends Component {
                         </span> 
                     </div>
                     <div className="queue-modal__operation-50">
-                        <span className="queue-modal__operation-wide queue-modal__operation-wide---medium">
+                        <span className="queue-modal__operation-wide queue-modal__operation-wide--medium">
                             <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                             Download completed:
                         </span>
