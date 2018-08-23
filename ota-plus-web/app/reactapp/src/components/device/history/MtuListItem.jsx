@@ -63,6 +63,7 @@ class MtuListItem extends Component {
 									<InstallationEvents 
 										updateId={item.updateId}
 										error={error}
+										queue={false}
 									/>
 								</div>
 		    					<div className="queue-modal__operation-status">
