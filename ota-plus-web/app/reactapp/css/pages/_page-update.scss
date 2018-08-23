@@ -37,6 +37,22 @@
       justify-content: flex-end;
     }
   }
+
+  .search-box {
+
+    input {
+      background: $device-hardware-header!important;
+      font-weight: normal!important;
+    }
+
+    hr {
+      display: none;
+    }
+  }
+
+  .fake-header, .header {
+    height: 45px;
+  }
 }
 
 .update-modal {

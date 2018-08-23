@@ -3,6 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { observable, observe } from 'mobx';
 import ListItem from './ListItem';
 import _ from 'underscore';
+import { Form } from 'formsy-react';
+import { SearchBar } from '../../partials';
 
 const headerHeight = 30;
 
@@ -90,31 +92,52 @@ class List extends Component {
         }
     }
 
+    changeFilter = (filter, e) => {
+        if(e) e.preventDefault();
+        const { updateStore } = this.props.stores;
+        updateStore._filterUpdates(filter);
+    }
+
     render() {
         const { showEditModal } = this.props;
         const { updateStore } = this.props.stores;
         return (
             <div className="ios-list" ref="list">
                 <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                    {this.fakeHeaderLetter}
+                    <div className="letter">
+                        {this.fakeHeaderLetter}
+                    </div>
+                    <Form>
+                        <SearchBar 
+                            value={updateStore.updateFilter}
+                            changeAction={this.changeFilter}
+                            id="search-updates-input"
+                        />
+                    </Form>
                 </div>
-                {_.map(updateStore.preparedUpdates, (updates, letter) => {
-                     return (
-                        <span key={letter}>
-                            <div className="header">{letter}</div>
-                            {_.map(updates, (update, index) => {
-                                const that = this;
-                                return (
-                                    <ListItem
-                                        key={index}
-                                        update={update}
-                                        showEditModal={showEditModal}
-                                    />
-                                );
-                            })}
-                        </span>
-                    );
-                })}
+                {!_.isEmpty(updateStore.preparedUpdates) ?
+                    _.map(updateStore.preparedUpdates, (updates, letter) => {
+                         return (
+                            <span key={letter}>
+                                <div className="header">{letter}</div>
+                                {_.map(updates, (update, index) => {
+                                    const that = this;
+                                    return (
+                                        <ListItem
+                                            key={index}
+                                            update={update}
+                                            showEditModal={showEditModal}
+                                        />
+                                    );
+                                })}
+                            </span>
+                        );
+                    })
+                :
+                    <div className="wrapper-center">
+                        No updates found.
+                    </div>
+                }
             </div>
         );
     }
