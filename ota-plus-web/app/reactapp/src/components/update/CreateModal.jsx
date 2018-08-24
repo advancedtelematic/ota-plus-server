@@ -170,19 +170,46 @@ class CreateModal extends Component {
     }
 
     render() {
-        const { shown, hide, editMode } = this.props;
+        const { shown, hide, editMode, update } = this.props;
         const currentStep = this.steps[this.currentStepId];
         const step = (
-            <span>
-                {React.createElement(currentStep.class, {
-                    wizardData: this.wizardData,
-                    onStep1DataSelect: this.onStep1DataSelect,
-                    onStep2DataSelect: this.onStep2DataSelect,
-                })}
-                <div className="body-actions" style={{margin: 0}}>
-                    {this.isLastStep() ?
-                        <div style={{display: 'flex'}}>
-                            {!editMode ?
+            editMode ?
+                <span>
+                    <div className="update" style={{marginBottom: '30px'}}>
+                        <div className="update__name">
+                            Name: {update.name}
+                        </div>
+                        <div className="update__description">
+                            Description: {update.description}
+                        </div>
+                        <div className="update__source-type">
+                            Source type: {update.source.sourceType}
+                        </div>
+                        <div className="update__source-id">
+                            Source id: {update.source.id}
+                        </div>
+                    </div>
+                    <div className="body-actions" style={{margin: 0}}>
+                        <button
+                            disabled={true}
+                            className="btn-primary"
+                            id="next"
+                            onClick={() => {}}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </span>
+            :
+                <span>
+                    {React.createElement(currentStep.class, {
+                        wizardData: this.wizardData,
+                        onStep1DataSelect: this.onStep1DataSelect,
+                        onStep2DataSelect: this.onStep2DataSelect,
+                    })}
+                    <div className="body-actions" style={{margin: 0}}>
+                        {this.isLastStep() ?
+                            <div style={{display: 'flex'}}>
                                 <button
                                     className="btn-primary"
                                     id="wizard-back-button"
@@ -191,31 +218,27 @@ class CreateModal extends Component {
                                 >
                                     Back
                                 </button>
-                            :
-                                null
-                            }
-                            
+                                <button
+                                    className="btn-primary"
+                                    id="wizard-launch-button"
+                                    disabled={!currentStep.isFinished}
+                                    onClick={this.createMtu}
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        :
                             <button
-                                className="btn-primary"
-                                id="wizard-launch-button"
                                 disabled={!currentStep.isFinished}
-                                onClick={this.createMtu}
+                                className="btn-primary"
+                                id="next"
+                                onClick={this.nextStep}
                             >
-                                Save
+                                Continue
                             </button>
-                        </div>
-                    :
-                        <button
-                            disabled={!currentStep.isFinished}
-                            className="btn-primary"
-                            id="next"
-                            onClick={this.nextStep}
-                        >
-                            Continue
-                        </button>
-                    }
-                </div>
-            </span>
+                        }
+                    </div>
+                </span>
         );
         return (
             <Modal

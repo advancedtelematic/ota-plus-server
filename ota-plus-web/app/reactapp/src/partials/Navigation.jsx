@@ -36,10 +36,15 @@ class Navigation extends Component {
                 <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
               </li>
               <li>
-                <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
-              <li>
-                <Link to="/update" activeClassName="active" id="link-update">Update</Link>
+                <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link>
               </li>
+              {alphaPlusEnabled ?
+                <li>
+                  <Link to="/update" activeClassName="active" id="link-update">Update</Link>
+                </li>
+              :
+                null
+              }
               <li>
                 <Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link>
               </li>

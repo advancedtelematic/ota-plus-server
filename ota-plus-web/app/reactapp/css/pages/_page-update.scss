@@ -3,6 +3,22 @@
   height: calc(100vh - 50px);
   padding: 30px;
 
+  .update-subheader {
+    justify-content: normal;
+
+    &__item {
+      flex-grow: 1;
+      color: $home-header-text;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    a {
+      flex-grow: 3;
+      text-align: right;
+    }
+  }
+
   .c-update {
 
     &__item {
