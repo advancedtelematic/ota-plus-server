@@ -126,6 +126,13 @@ const initialWizardStep = [
         isSearchBarShown: false,
     },
     {
+        class: WizardStep5,
+        title: "Distribution information",
+        name: "metadata",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
         class: WizardStep8,
         title: "Summary",
         name: "summary",
@@ -456,10 +463,6 @@ class Wizard extends Component {
             approvalNeeded: this.approvalNeeded
         };
 
-        if (!featuresStore.alphaPlusEnabled) {
-            createData = _.omit(createData, 'metadata', 'approvalNeeded')
-        }
-
         campaignsStore.createCampaign(createData);
     }
 
@@ -476,7 +479,7 @@ class Wizard extends Component {
 
     render() {
         const { wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
-        const { campaignsStore } = this.props.stores;
+        const { campaignsStore, featuresStore } = this.props.stores;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -530,6 +533,8 @@ class Wizard extends Component {
                                         rawSelectedPacks: this.rawSelectedPacks,
                                         removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
                                         addToCampaign: this.addToCampaign,
+                                        approvalNeeded: this.approvalNeeded,
+                                        alphaPlus: featuresStore.alphaPlusEnabled
                                     })
                                 }
                                 {currentStep.isSearchBarShown ?
