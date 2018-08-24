@@ -7,7 +7,13 @@ class Header extends Component {
     render() {
         const { showCreateModal } = this.props;
         return (
-            <SubHeader>
+            <SubHeader className="update-subheader">
+                <div className="update-subheader__item">
+                    Title
+                </div>
+                <div className="update-subheader__item">
+                    Internal description
+                </div>
                 <a href="#" className="add-button grey-button" id="add-new-update" onClick={showCreateModal}>
                     <span>
                         +
