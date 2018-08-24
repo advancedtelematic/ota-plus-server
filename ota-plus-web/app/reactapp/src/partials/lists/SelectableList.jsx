@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { VelocityTransitionGroup } from 'velocity-react';
+import { _contains } from "../../utils/Collection";
 import SelectableListItem from './SelectableListItem';
-import { Loader } from '../index';
 
 const headerHeight = 28;
 
@@ -14,13 +12,13 @@ class SelectableList extends Component {
         const {
             items,
             selectedItems,
-            onItemSelect
+            onItemSelect,
         } = this.props;
         return (
             <div className="ios-list" ref="list">
                 { items ?
                      _.map(items, item => {
-                        const isSelected = _.includes(selectedItems, item);
+                        const isSelected = _contains(selectedItems, item);
                         return (
                             <SelectableListItem
                                 key={item}
@@ -42,9 +40,16 @@ class SelectableList extends Component {
     }
 }
 
+/**
+ * takes array of objects to map them to be selectable items
+ * toDo: `selectedItems` actually are objects in an array but somehow component always detect an object has passed to
+ * @type {{items: React.Validator<any>, selectedItems: React.Validator<any>, onItemSelect: React.Validator<any>}}
+ */
+
 SelectableList.propTypes = {
-    items: PropTypes.object,
-    onItemSelect: PropTypes.func,
+    items: PropTypes.array.isRequired,
+    selectedItems: PropTypes.object.isRequired,
+    onItemSelect: PropTypes.func.isRequired,
 };
 
 export default SelectableList;
