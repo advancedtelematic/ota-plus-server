@@ -2549,28 +2549,10 @@ input {
         }
     }
 
-    &__operation-50 {
-        width: 50%;
-        display: flex;
-    }
-
-    &__operation-100 {
-        width: 100%;
-        display: flex;
-    }
-
     &__operation-wide {
-        width: 125px;
+        width: 180px;
         display: flex;
         align-items: center;
-
-        &--medium {
-            width: 150px;
-        }
-
-        &--long {
-            width: 180px;
-        }
     }
 
     &__status-code {
