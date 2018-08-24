@@ -40,14 +40,14 @@ class WizardStep5 extends Component {
     }
 
     toggleNotify() {
-        if (!this.approvalNeeded) {
-            this.notify = !this.notify;
-        }
+        this.notify = !this.notify;
+        this.approvalNeeded = false;
+        this.props.setApprove(false);
     }
 
     toggleApprove() {
         this.approvalNeeded = !this.approvalNeeded;
-        this.notify = true;
+        this.notify = false;
         this.props.setApprove(this.approvalNeeded);
     }
 
@@ -78,59 +78,54 @@ class WizardStep5 extends Component {
     }
 
     render() {
-        const {wizardData, currentStepId} = this.props;
-        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION, approvalNeeded} = wizardData[currentStepId];
+        const {wizardData, currentStepId, approvalNeeded, alphaPlus} = this.props;
+        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
                     <div className="flex-row">
-                        <button className={`btn-checkbox ${
-                            !_.isNull(this.notify)
-                                ? (this.notify ? 'checked' : '')
-                                : (_.isBoolean(approvalNeeded) ? 'checked' : '')
-                            }`}
+                        <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
                                 onClick={this.toggleNotify}>
-                            <i id='driver-notify' className="fa fa-check" aria-hidden="true"/>
                         </button>
-                        <span>Notify driver</span>
+                        <span>Silent Update</span>
                     </div>
                     <div className="flex-row">
-                        <button className={`btn-checkbox ${
-                            !_.isNull(this.approvalNeeded)
-                                ? (this.approvalNeeded ? 'checked' : '')
-                                : (approvalNeeded ? 'checked' : '')
-                            }`}
+                        <button className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
                                 onClick={this.toggleApprove}>
-                            <i id='driver-approve' className="fa fa-check" aria-hidden="true"/>
                         </button>
-                        <span>Request driver's approval</span>
+                        <span>Approval required</span>
                     </div>
                 </div>
                 <div className="description">
                     <div className="search-box">
-                        <FormInput
-                            label="Internal description"
-                            id="internal_reuse-text"
-                            placeholder="Re-use text from"
-                            getInputRef={(ref) => this.inputRef = ref}
-                            wrapperWidth="50%"
-                        >
-                            <i className="fa fa-search icon-search"/>
-                            <i className="fa fa-close icon-close" onClick={this.clearInput}/>
-                        </FormInput>
+                        {alphaPlus ?
+                            <FormInput
+                                label="Internal description"
+                                id="internal_reuse-text"
+                                placeholder="Re-use text from"
+                                getInputRef={(ref) => this.inputRef = ref}
+                                wrapperWidth="50%"
+                            >
+                                <i className="fa fa-search icon-search"/>
+                                <i className="fa fa-close icon-close" onClick={this.clearInput}/>
+                            </FormInput> : ''
+                        }
                     </div>
                     <FormTextarea
                         rows="5"
+                        label={!alphaPlus ? 'Internal description' : ''}
                         id="internal_driver-description"
                         defaultValue={description ? description : ''}
                         onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
                     />
                 </div>
                 <div className="translations">
-                    <div className="flex-row">
-                        <span className="bold" id="approved-translations-0">Approved translations: 0</span>
-                        <button className="btn-bordered" id="translations-view_button">Translation view</button>
-                    </div>
+                    {alphaPlus ?
+                        <div className="flex-row">
+                            <span className="bold" id="approved-translations-0">Approved translations: 0</span>
+                            <button className="btn-bordered" id="translations-view_button">Translation view</button>
+                        </div> : ''
+                    }
                     <div className="estimations">
                         <div className="estimation">
                             <span className="title">Preparation time estimation:</span>
