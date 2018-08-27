@@ -1,70 +1,72 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, observe } from "mobx"
 import { observer, inject } from 'mobx-react';
-import { WizardPackagesList } from './step2Files';
+import { SelectUpdateList } from './step2Files';
 import { Loader, Form, FormInput } from '../../../partials';
-import _ from 'underscore';
+import { _contains } from '../../../utils/Collection';
+import _ from "underscore";
 
 @inject("stores")
 @observer
 class WizardStep2 extends Component {
     constructor(props) {
         super(props);
-        this.setWizardData = this.setWizardData.bind(this);
-        this.togglePackage = this.togglePackage.bind(this);
-        this.toggleStep = this.toggleStep.bind(this);
+        this.validateStep = this.validateStep.bind(this);
+        this.changeUpdateSelection = this.changeUpdateSelection.bind(this);
+        this.showDetails = this.showDetails.bind(this);
     }
-    componentWillUnmount() {
-        this.props.setRawSelectedPacks(this.props.wizardData[1].packages);
-    }
-    togglePackage(chosenPackagesList, pack) {
-        let found = _.find(chosenPackagesList, {packageName: pack.packageName});
-        if(found) {
-            let index = chosenPackagesList.indexOf(pack);
-            chosenPackagesList.splice(index, 1);
-        } else {
-            chosenPackagesList.push(pack);
-        }
-    }
-    toggleStep(chosenPackagesList, pack) {
-        if(chosenPackagesList.length)
+
+    validateStep = (selectedUpdates) => {
+        if (selectedUpdates && selectedUpdates.length)
             this.props.markStepAsFinished();
         else
             this.props.markStepAsNotFinished();
-    }
-    setWizardData(pack) {
-        let chosenPackagesList = this.props.wizardData[1].packages;
-        this.togglePackage(chosenPackagesList, pack);
-        this.toggleStep(chosenPackagesList, pack);
-    }
+    };
+
+    changeUpdateSelection = (update) => {
+        const { wizardData, currentStepId } = this.props;
+        const stepData = wizardData[currentStepId];
+        let selectedUpdate = stepData.update;
+
+        if (!_.isEqual(selectedUpdate.pop(), update)) {
+            selectedUpdate.push(update);
+        }
+
+        this.validateStep(selectedUpdate);
+    };
+
+    showDetails = (update, e) => {
+        if (e) {
+            e.preventDefault();
+        }
+        this.props.showUpdateDetails(update);
+    };
+
     render() {
-        const { wizardData, wizardIdentifier } = this.props;
-        const { packagesStore } = this.props.stores;
-        let chosenPackagesList = wizardData[1].packages;
+        const { wizardData, currentStepId } = this.props;
+
         return (
-            packagesStore.packagesSafeFetchAsync.isFetching ? 
-                <div className="wrapper-center">
-                    <Loader />
-                </div>
-            :
-                <div>
-                    <Form>
-                        <label title="" className="c-form__label">Select package</label>
-                    </Form>
-                    <WizardPackagesList
-                        chosenPackagesList={chosenPackagesList}
-                        setWizardData={this.setWizardData}
-                        wizardIdentifier={wizardIdentifier}
-                    />
-                </div>
+            <div>
+                <Form>
+                    <label title="" className="c-form__label">{ "Select Updates" }</label>
+                </Form>
+                <SelectUpdateList
+                    wizardData={ wizardData }
+                    stepId={ currentStepId }
+                    stores={ this.props.stores }
+                    toggleSelection={ this.changeUpdateSelection }
+                    showUpdateDetails={ this.showDetails }
+                />
+            </div>
         );
     }
 }
 
 WizardStep2.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    stores: PropTypes.object
-}
+    currentStepId: PropTypes.number.isRequired,
+    setWizardData: PropTypes.func.isRequired,
+    stores: PropTypes.object,
+};
 
 export default WizardStep2;
 

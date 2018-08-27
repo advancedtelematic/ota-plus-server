@@ -1,161 +1,282 @@
-import React, {Component} from 'react';
-import {FormTextarea, FormInput, TimePicker} from '../../../partials';
-import {observable} from "mobx"
-import {observer} from 'mobx-react';
-import moment from 'moment';
-import {FormsyText} from 'formsy-material-ui/lib';
+import React, {Component, PropTypes} from 'react';
+import {observer, inject} from 'mobx-react';
+import {observable, extendObservable} from 'mobx';
 import _ from 'underscore';
+import {SelectField, MenuItem} from 'material-ui';
+import {Loader, Form, FormSelect, FormInput} from '../../../partials';
+import {FlatButton} from 'material-ui';
 
-const metadataTypes = {
-    DESCRIPTION: 'DESCRIPTION',
-    INSTALL_DUR: 'ESTIMATED_INSTALLATION_DURATION',
-    PRE_DUR: 'ESTIMATED_PREPARATION_DURATION'
-};
-
+@inject('stores')
 @observer
 class WizardStep5 extends Component {
-    @observable notify = null;
-    @observable approvalNeeded = null;
-    @observable wizardMetadata = {};
+    @observable blocks = [];
+    @observable isLoading = false;
 
-    constructor() {
-        super();
-        this._parseTime = this._parseTime.bind(this);
-        this._getTimeFromSeconds = this._getTimeFromSeconds.bind(this);
-        this.getPreparationTime = this.getPreparationTime.bind(this);
-        this.getInstallationTime = this.getInstallationTime.bind(this);
-        this.clearInput = this.clearInput.bind(this);
-        this.toggleNotify = this.toggleNotify.bind(this);
-        this.toggleApprove = this.toggleApprove.bind(this);
+    constructor(props) {
+        super(props);
+        this.addBlock = this.addBlock.bind(this);
+        this.formatVersions = this.formatVersions.bind(this);
+        this.getPackVersions = this.getPackVersions.bind(this);
+        this.onParentVersionChange = this.onParentVersionChange.bind(this);
     }
 
     componentWillMount() {
-        const {markStepAsFinished} = this.props;
-        markStepAsFinished();
-    }
-
-    addToWizardData(type, value) {
-        const {setWizardData, wizardData, currentStepId} = this.props;
-        this.wizardMetadata = {
-            ..._.omit(wizardData[currentStepId], 'isActivated'),
-            [type]: value
-        };
-        setWizardData(this.wizardMetadata);
-    }
-
-    toggleNotify() {
-        this.notify = !this.notify;
-        this.approvalNeeded = false;
-        this.props.setApprove(false);
-    }
-
-    toggleApprove() {
-        this.approvalNeeded = !this.approvalNeeded;
-        this.notify = false;
-        this.props.setApprove(this.approvalNeeded);
-    }
-
-    _parseTime(timeObject) {
-        let timeString = '';
-        _.each(timeObject, (value, key) => {
-            timeString = timeString + `${value}${key !== 'seconds' ? ':' : null}`
+        const {wizardData, markStepAsNotFinished} = this.props;
+        markStepAsNotFinished();
+        let chosenVersions = wizardData[2].versions;
+        _.each(chosenVersions, (values, packName) => {
+            let obj = {
+                packName: packName,
+                filepath: values.toFilepath
+            };
+            this.checkVersion(obj);
         });
-        return moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds') + '';
     }
 
-    _getTimeFromSeconds(seconds) {
-        return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+    checkVersion(data) {
+        const {wizardData} = this.props;
+        const {packagesStore} = this.props.stores;
+
+        let chosenVersions = wizardData[2].versions;
+        let objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
+        if (objWithRelations) {
+            let requiredPackages = objWithRelations.required;
+            let incompatiblePackages = objWithRelations.incompatibles;
+            if (requiredPackages) {
+                _.each(requiredPackages, (filepath, index) => {
+                    let skipAdd = false;
+                    _.each(chosenVersions, (values, pName) => {
+                        if (values.toFilepath === filepath) {
+                            skipAdd = true;
+                        }
+                    });
+                    if (!skipAdd) {
+                        let childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
+                        let obj = {
+                            parentPack: data.packName,
+                            parentFilepath: data.filepath,
+                            childPack: childPack.id.name,
+                            childRequiredVersion: childPack.id.version,
+                            isCompatible: true
+                        };
+                        this.addBlock(obj);
+                    }
+                });
+            }
+            if (incompatiblePackages) {
+                _.each(incompatiblePackages, (filepath, index) => {
+                    let isTryingToInstall = false;
+                    _.each(chosenVersions, (values, pName) => {
+                        if (values.toFilepath === filepath) {
+                            isTryingToInstall = true;
+                        }
+                    });
+                    if (isTryingToInstall) {
+                        let childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
+                        let obj = {
+                            parentPack: data.packName,
+                            parentFilepath: data.filepath,
+                            childPack: childPack.id.name,
+                            childRequiredVersion: childPack.id.version,
+                            isCompatible: false
+                        };
+                        this.addBlock(obj);
+                    }
+                });
+            }
+        }
+        if (!this.blocks.length) {
+            this.props.markStepAsFinished();
+        }
     }
 
-    getPreparationTime(time) {
-        const timeString = this._parseTime(time);
-        this.addToWizardData(metadataTypes.PRE_DUR, timeString)
+    addBlock(data) {
+        let shouldAdd = true;
+        _.each(this.blocks, block => {
+            if (block.parentPack === data.childPack) {
+                shouldAdd = false;
+            }
+        });
+        if (shouldAdd) {
+            this.blocks.push(data);
+        }
     }
 
-    getInstallationTime(time) {
-        const timeString = this._parseTime(time);
-        this.addToWizardData(metadataTypes.INSTALL_DUR, timeString)
+    getPackVersions(packName) {
+        const {packagesStore} = this.props.stores;
+        let versions = [];
+        _.each(packagesStore.preparedPackages, (packs, letter) => {
+            _.each(packs, (pack, i) => {
+                if (pack.packageName === packName) {
+                    versions = pack.versions;
+                }
+            });
+        });
+        return versions;
     }
 
-    clearInput() {
-        this.inputRef.value = '';
+    formatVersions(packName) {
+        let versions = this.getPackVersions(packName).map((version) => {
+            return {
+                id: version.id.version,
+                text: version.id.version,
+                value: version.filepath
+            }
+        });
+        return versions;
+    }
+
+    onParentVersionChange(data, event) {
+        const filepath = event.target.value;
+        data.filepath = filepath;
+        this.props.selectVersion(data);
+
+        let block = _.find(this.blocks, block => block.parentPack === data.packageName);
+        block.parentFilepath = filepath;
+
+        this.isLoading = true;
+        this.blocks = [];
+        let obj = {
+            packName: data.packageName,
+            filepath: filepath,
+        };
+        this.checkVersion(obj);
+
+        let that = this;
+        setTimeout(() => {
+            that.isLoading = false;
+        }, 500);
     }
 
     render() {
-        const {wizardData, currentStepId, approvalNeeded, alphaPlus} = this.props;
-        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
+        const {addToCampaign} = this.props;
+        let isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
         return (
-            <div className="distribution-info">
-                <div className="checkboxes">
-                    <div className="flex-row">
-                        <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
-                                onClick={this.toggleNotify}>
-                        </button>
-                        <span>Silent Update</span>
-                    </div>
-                    <div className="flex-row">
-                        <button className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
-                                onClick={this.toggleApprove}>
-                        </button>
-                        <span>Approval required</span>
-                    </div>
-                </div>
-                <div className="description">
-                    <div className="search-box">
-                        {alphaPlus ?
-                            <FormInput
-                                label="Internal description"
-                                id="internal_reuse-text"
-                                placeholder="Re-use text from"
-                                getInputRef={(ref) => this.inputRef = ref}
-                                wrapperWidth="50%"
-                            >
-                                <i className="fa fa-search icon-search"/>
-                                <i className="fa fa-close icon-close" onClick={this.clearInput}/>
-                            </FormInput> : ''
-                        }
-                    </div>
-                    <FormTextarea
-                        rows="5"
-                        label={!alphaPlus ? 'Internal description' : ''}
-                        id="internal_driver-description"
-                        defaultValue={description ? description : ''}
-                        onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
-                    />
-                </div>
-                <div className="translations">
-                    {alphaPlus ?
-                        <div className="flex-row">
-                            <span className="bold" id="approved-translations-0">Approved translations: 0</span>
-                            <button className="btn-bordered" id="translations-view_button">Translation view</button>
-                        </div> : ''
-                    }
-                    <div className="estimations">
-                        <div className="estimation">
-                            <span className="title">Preparation time estimation:</span>
-                            <span className="time-value">
-                                <TimePicker
-                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00' )}
-                                    id={`timepicker_${metadataTypes.PRE_DUR}`}
-                                    onValid={this.getPreparationTime}
-                                />
-                            </span>
+            <div className="content">
+                {this.blocks.length ?
+                    isOneIncompatible ?
+                        <div className="top-alert danger" id="compatibility-issue">
+                            <img src="/assets/img/icons/white/manager-danger.png" alt="Icon"/>
+                            Compatibility issue
                         </div>
-                        <div className="estimation">
-                            <span className="title">Installation time estimation:</span>
-                            <span className="time-value">
-                                <TimePicker
-                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
-                                    id={`timepicker_${metadataTypes.INSTALL_DUR}`}
-                                    onValid={this.getInstallationTime}
-                                />
-                            </span>
+                        :
+                        <div className="top-alert warning" id="missing-dependencies">
+                            <img src="/assets/img/icons/white/manager-warning.png" alt="Icon"/>
+                            Missing dependencies
                         </div>
+                    :
+                    <div className="top-alert success" id="success">
+                        <img src="/assets/img/icons/white/manager-success.png" alt="Icon"/>
+                        Dependencies check
                     </div>
-                </div>
+                }
+                {this.isLoading ?
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                    :
+                    this.blocks.length ?
+                        <span>                            
+                            {_.map(this.blocks, (block, index) => {
+                                return (
+                                    <section className="pair" key={index}>
+                                        <div className="item">
+                                            <Form
+                                                formWidth="100%"
+                                                flexDirection="row"
+                                                customStyles={{justifyContent: 'space-between'}}
+                                            >
+                                                <FormInput
+                                                    isEditable={false}
+                                                    defaultValue={block.parentPack}
+                                                    label="Package"
+                                                    wrapperWidth="49%"
+                                                />
+                                                <FormSelect
+                                                    id="from-pack-versions"
+                                                    options={this.formatVersions(block.parentPack)}
+                                                    visibleFieldsCount={this.formatVersions(block.parentPack).length}
+                                                    label="Version"
+                                                    wrapperWidth="49%"
+                                                    defaultValue={block.parentFilepath}
+                                                    onChange={this.onParentVersionChange.bind(this, {
+                                                        type: 'to',
+                                                        packageName: block.parentPack
+                                                    })}
+                                                />
+                                            </Form>
+                                        </div>
+                                        {block.isCompatible ?
+                                            <div className="status required" id="required">
+                                                Requires:
+                                            </div>
+                                            :
+                                            <div className="status incompatible" id="incompatible">
+                                                Not compatible with:
+                                            </div>
+                                        }
+
+                                        <div className="item">
+                                            <Form
+                                                formWidth="100%"
+                                                flexDirection="row"
+                                                customStyles={{justifyContent: 'space-between'}}
+                                            >
+                                                <FormInput
+                                                    isEditable={false}
+                                                    defaultValue={block.childPack}
+                                                    label="Package"
+                                                    wrapperWidth="49%"
+                                                />
+                                                <FormInput
+                                                    isEditable={false}
+                                                    defaultValue={block.childRequiredVersion}
+                                                    label="Version"
+                                                    wrapperWidth="49%"
+                                                />
+                                            </Form>
+                                        </div>
+                                        <div className="add">
+                                            {block.isCompatible ?
+                                                <a href="#" id="add-to-campaign" className="add-button light"
+                                                   onClick={addToCampaign.bind(this, block.childPack)}>
+                                                    <span>
+                                                    +
+                                                    </span>
+                                                    <span>
+                                                        Add to campaign
+                                                    </span>
+                                                </a>
+                                                :
+                                                <a href="#" id="change-version" className="add-button light"
+                                                   onClick={addToCampaign.bind(this, block.childPack)}>
+                                                    <span>
+                                                    +
+                                                    </span>
+                                                    <span>
+                                                        Change version
+                                                    </span>
+                                                </a>
+                                            }
+                                        </div>
+
+                                    </section>
+                                );
+                            })}
+                        </span>
+                        :
+                        <div className="wrapper-center">
+                            <div className="step-pass" id="step-pass">
+                                <img src="/assets/img/icons/manager-success.svg" alt="Icon"/>
+                                No dependency issues
+                            </div>
+                        </div>
+                }
             </div>
-        )
+        );
     }
 }
+
+WizardStep5.propTypes = {}
 
 export default WizardStep5;
