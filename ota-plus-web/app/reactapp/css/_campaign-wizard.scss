@@ -21,65 +21,7 @@
           margin-bottom: 0;
         }
 
-        &.step-versions {
-
-          .ios-list {
-
-            .header, .fake-header {
-              color: #464646;
-              background-color: #B7B9BC;
-            }
-
-            .key {
-              &:not(:last-child) {
-                .item {
-                  border-bottom: 1px solid #ddd;
-                }
-              }
-            }
-
-            .item {
-              height: auto;
-              background-color: #fff;
-              border-bottom: none;
-
-              .select-container {
-                width: 100%;
-                margin: 15px 0;
-
-                .packages {
-                  overflow: hidden;
-                }
-
-                .versions {
-                  margin: 15px 0;
-                }
-
-                .from, .to {
-                  position: relative;
-                }
-
-                .from {
-                  width: 46%;
-                  margin-right: 4%;
-                  float: left;
-                }
-
-                .to {
-                  width: 50%;
-                  float: left;
-                }
-
-                .hardware-id {
-                  width: 50%;
-                  float: right;
-                }
-              }
-            }
-          }
-        }
-
-        &.step-packages, &.step-groups {
+        &.step-updates, &.step-groups {
 
           .c-form {
             padding: 17px 0 7px;
@@ -108,6 +50,9 @@
               background-color: #fff;
               @include textoverflowEllipsis;
 
+              &__details {
+                justify-content: flex-end;
+              }
               .btn-checkbox {
                 float: left;
                 margin: 0 10px 0 0;

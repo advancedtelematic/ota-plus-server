@@ -6,6 +6,7 @@ import _ from 'underscore';
 import {Form} from 'formsy-react';
 import {AsyncStatusCallbackHandler} from '../../utils';
 import {Modal, Loader, SearchBar} from '../../partials';
+import { UpdateDetails } from './wizardSteps/step2Files';
 import Draggable from 'react-draggable';
 import {
     WizardStep1,
@@ -15,7 +16,6 @@ import {
     WizardStep5,
     WizardStep6,
     WizardStep7,
-    WizardStep8,
 } from './wizardSteps';
 
 const initialCurrentStepId = 0;
@@ -24,10 +24,7 @@ const initialWizardData = [
         name: '',
     },
     {
-        packages: [],
-    },
-    {
-        versions: {},
+        update: [],
     },
     {
         groups: [],
@@ -46,48 +43,41 @@ const initialWizardStepForAlphaPlus = [
     },
     {
         class: WizardStep2,
-        name: "packages",
-        title: "Select Package",
+        name: "updates",
+        title: "Select Update",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep3,
-        name: "versions",
-        title: "Select version",
-        isFinished: false,
-        isSearchBarShown: false,
-    },
-    {
-        class: WizardStep4,
         title: "Select Group(s)",
         name: "groups",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep5,
+        class: WizardStep4,
         title: "Distribution information",
         name: "metadata",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep6,
+        class: WizardStep5,
         title: "Dependencies management",
         name: "dependencies-management",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep7,
+        class: WizardStep6,
         title: "Programming sequencer",
         name: "programming-sequencer",
         isFinished: true,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep8,
+        class: WizardStep7,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -106,34 +96,27 @@ const initialWizardStep = [
     },
     {
         class: WizardStep2,
-        name: "packages",
-        title: "Select Package",
+        name: "updates",
+        title: "Select Update",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep3,
-        name: "versions",
-        title: "Select version",
-        isFinished: false,
-        isSearchBarShown: false,
-    },
-    {
-        class: WizardStep4,
         title: "Select Group(s)",
         name: "groups",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep5,
+        class: WizardStep4,
         title: "Distribution information",
         name: "metadata",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep8,
+        class: WizardStep7,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -153,6 +136,7 @@ class Wizard extends Component {
     @observable wizardSteps = (this.props.stores.featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep);
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
+    @observable currentDetails = null;
     @observable rawSelectedPacks = [];
     @observable approvalNeeded = false;
     versions = {};
@@ -175,10 +159,10 @@ class Wizard extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
         this.handleCampaignCreated = this.handleCampaignCreated.bind(this);
-        this.selectVersion = this.selectVersion.bind(this);
-        this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
-        this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
+
         this.toggleFullScreen = this.toggleFullScreen.bind(this);
+        this.showUpdateDetails = this.showUpdateDetails.bind(this);
+        this.hideUpdateDetails = this.hideUpdateDetails.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(campaignsStore, (change) => {
             if (change.name === 'campaignsMtuCreateAsync' && change.object[change.name].isFetching === false) {
@@ -206,7 +190,7 @@ class Wizard extends Component {
 
     componentWillMount() {
         const { skipStep } = this.props;
-        const { groupsStore, packagesStore } = this.props.stores;
+        const { groupsStore, updateStore } = this.props.stores;
 
         if(skipStep) {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
@@ -220,7 +204,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
-        packagesStore.fetchPackages('packagesSafeFetchAsync');
+        updateStore.fetchUpdates();
     }
 
     componentWillUnmount() {
@@ -239,127 +223,36 @@ class Wizard extends Component {
 
     addToCampaign(packName, e) {
         if (e) e.preventDefault();
-        const { packagesStore } = this.props.stores;
+        const { updateStore } = this.props.stores;
         this.currentStepId = 2;
-        let sortedPacks = packagesStore.preparedPackages;
-        _.each(sortedPacks, (packs, letter) => {
+        let sortedUpdates = updateStore.preparedUpdates;
+        _.each(sortedUpdates, (packs, letter) => {
             let pack = _.find(packs, pack => pack.packageName === packName);
             if (pack) {
-                if (this.wizardData[1].packages.indexOf(pack) === -1) {
-                    this.wizardData[1].packages.push(pack);
+                if (this.wizardData[1].update.indexOf(pack) === -1) {
+                    this.wizardData[1].update.push(pack);
                 }
             }
         });
-    }
-
-    setRawSelectedPacks(packs) {
-        this.rawSelectedPacks = [];
-        this.rawSelectedPacks = packs;
-    }
-
-    removeSelectedPacksByKeys(keys) {
-        _.each(keys, (key, i) => {
-            delete this.wizardData[2].versions[key];
-            delete this.versions[key];
-        });
-    }
-
-    selectVersion(data) {
-        const { packagesStore } = this.props.stores;
-        if (_.isUndefined(this.versions[data.packageName])) {
-            this.versions[data.packageName] = {};
-        }
-        let hash = data.filepath;
-        _.each(packagesStore.packages, (pack, index) => {
-            if (pack.filepath === data.filepath) {
-                hash = pack.packageHash;
-            }
-        });
-
-        let changedPackage = null;
-        _.each(packagesStore.preparedPackages, (packs, letter) => {
-            _.each(packs, (pack, index) => {
-                _.each(pack.versions, (version, i) => {
-                    if (version.id.name === data.filepath) {
-                        changedPackage = pack;
-                        this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from = null : null;
-                        this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath = null : null;
-                    }
-                })
-            });
-        });
-
-        switch (data.type) {
-            case 'from':
-                this.versions[data.packageName] = {
-                    from: hash,
-                    fromFilepath: data.filepath,
-                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
-                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
-                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
-                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
-                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
-                    disableValidation: false
-                }
-                break;
-            case 'to':
-                this.versions[data.packageName] = {
-                    to: hash,
-                    toFilepath: data.filepath,
-                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
-                    toPackageName: data.packageName,
-                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
-                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
-                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
-                    disableValidation: false
-                }
-                break;
-            case 'hardwareId':
-                this.versions[data.packageName] = {
-                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
-                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
-                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
-                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
-                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
-                    hardwareId: data.hardwareId,
-                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
-                    disableValidation: false
-                }
-                break;
-            case 'package':
-                this.versions[data.packageName] = {
-                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
-                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
-                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
-                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
-                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
-                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
-                    changedPackage: changedPackage,
-                    disableValidation: true
-                }
-            default:
-                break;
-        }
-        this.wizardData[2].versions = this.versions;
     }
 
     isFirstStep() {
-        return this.currentStepId == 0;
+        return this.currentStepId === 0;
     }
 
     isLastStep() {
-        return this.currentStepId == this.wizardSteps.length - 1;
+        return this.currentStepId === this.wizardSteps.length - 1;
     }
 
     prevStep() {
-        if (this.currentStepId != 0) {
-            currentStepId = this.currentStepId - 1;
+        if (this.currentStepId !== 0) {
+            this.currentStepId = this.currentStepId - 1;
             this.filterValue = initialFilterValue;
         }
     }
 
     nextStep() {
-        if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId != this.wizardSteps.length - 1) {
+        if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId !== this.wizardSteps.length - 1) {
             this.currentStepId = this.currentStepId + 1;
             this.filterValue = initialFilterValue;
         }
@@ -398,50 +291,12 @@ class Wizard extends Component {
     }
 
     launch() {
-        const { packagesStore, campaignsStore } = this.props.stores;
-        const updates = this.wizardData[2].versions;
-        let updateData = [];
-        _.each(updates, (update, packageName) => {
-            let fromHash = null;
-            let toHash = null;
-            let targetFormat = null;
-            let fromTargetLength = null;
-            let toTargetLength = null;
-            const packages = packagesStore.packages;
-            _.each(packages, (pack, index) => {
-                if (pack.filepath === update.fromFilepath) {
-                    fromTargetLength = pack.targetLength;
-                    fromHash = pack.packageHash;
-                }
-                if (pack.filepath === update.toFilepath) {
-                    toTargetLength = pack.targetLength;
-                    toHash = pack.packageHash;
-                }
-                if (pack.id.name === packageName) {
-                    targetFormat = pack.targetFormat;
-                }
-            });
-            updateData.push({
-                hardwareId: update.hardwareId,
-                from: {
-                    target: update.fromFilepath,
-                    targetLength: fromTargetLength,
-                    hash: fromHash
-                },
-                to: {
-                    target: update.toFilepath,
-                    targetLength: toTargetLength,
-                    hash: toHash
-                },
-                targetFormat: targetFormat,
-                generateDiff: false
-            });
-        });
-        campaignsStore.createMultiTargetUpdate(updateData);
+        const { campaignsStore } = this.props.stores;
+        campaignsStore.createMultiTargetUpdate(this.wizardData[1].update);
     }
 
     handleMultiTargetUpdateCreated() {
-        const { campaignsStore, featuresStore } = this.props.stores;
+        const { campaignsStore } = this.props.stores;
         let updateId = campaignsStore.campaignData.mtuId;
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
@@ -481,6 +336,14 @@ class Wizard extends Component {
         this.filterValue = filterValue;
     }
 
+    showUpdateDetails(update, e) {
+        this.currentDetails = update;
+    }
+
+    hideUpdateDetails() {
+        this.currentDetails = null;
+    }
+
     render() {
         const { wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
         const { campaignsStore, featuresStore } = this.props.stores;
@@ -491,6 +354,9 @@ class Wizard extends Component {
         });
 
         const modalContent = (
+            this.currentDetails ?
+                <UpdateDetails details={ this.currentDetails } isEditable={ false }/>
+            :
             <div
                 className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
                 <div className="draggable-content">                    
@@ -538,7 +404,8 @@ class Wizard extends Component {
                                         removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
                                         addToCampaign: this.addToCampaign,
                                         approvalNeeded: this.approvalNeeded,
-                                        alphaPlus: featuresStore.alphaPlusEnabled
+                                        alphaPlus: featuresStore.alphaPlusEnabled,
+                                        showUpdateDetails: this.showUpdateDetails,
                                     })
                                 }
                                 {currentStep.isSearchBarShown ?
@@ -579,23 +446,30 @@ class Wizard extends Component {
         );
         return (
             <Modal
-                title={"Add new campaign"}
+                title={ !this.currentDetails ? "Add new campaign" : "Campaign update details" }
                 topActions={
-                    <div className="top-actions">
-                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
-                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
-                        </div>                                
-                        <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
-                            {campaignsStore.fullScreenMode ? 
-                                <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
-                            :
-                                <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
-                            }
+                    this.currentDetails ?
+                        <div className="top-actions flex-end">
+                            <div className="wizard-close" onClick={ this.hideUpdateDetails } id="close-details">
+                                <img src="/assets/img/icons/close.svg" alt="Icon" />
+                            </div>
                         </div>
-                        <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
-                            <img src="/assets/img/icons/close.svg" alt="Icon" />
+                        :
+                        <div className="top-actions">
+                            <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
+                                <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+                            </div>
+                            <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
+                                {campaignsStore.fullScreenMode ?
+                                    <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
+                                :
+                                    <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
+                                }
+                            </div>
+                            <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
+                                <img src="/assets/img/icons/close.svg" alt="Icon" />
+                            </div>
                         </div>
-                    </div>
                 }
                 content={modalContent}
                 shown={!wizardMinimized}
@@ -608,7 +482,7 @@ class Wizard extends Component {
 
 Wizard.propTypes = {
     stores: PropTypes.object,
-}
+};
 
 export default Wizard;
 

@@ -5,7 +5,6 @@ import WizardStep4 from './Step4';
 import WizardStep5 from './Step5';
 import WizardStep6 from './Step6';
 import WizardStep7 from './Step7';
-import WizardStep8 from './Step8';
 
 export {
     WizardStep1,
@@ -15,5 +14,4 @@ export {
     WizardStep5,
     WizardStep6,
     WizardStep7,
-    WizardStep8,
 }

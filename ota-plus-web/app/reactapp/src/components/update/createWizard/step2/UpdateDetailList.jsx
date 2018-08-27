@@ -5,11 +5,11 @@ import _ from 'underscore';
 import { FormInput, FormTextarea, FormSelect, Loader, AsyncResponse } from '../../../../partials';
 import { Form } from 'formsy-react';
 import moment from 'moment';
-import UpdateListItem from './UpdateListItem'; 
+import UpdateDetailListItem from './UpdateDetailListItem';
 
 @inject("stores")
 @observer
-class UpdateList extends Component {
+class UpdateDetailList extends Component {
     render() {
         const { wizardData, onStep2DataSelect } = this.props;
         const { packagesStore } = this.props.stores;
@@ -23,7 +23,7 @@ class UpdateList extends Component {
                 :
                     _.map(selectedHardwares, item => {
                         return (
-                            <UpdateListItem
+                            <UpdateDetailListItem
                                 key={item.name}
                                 item={item.name}
                                 wizardData={wizardData}
@@ -37,8 +37,8 @@ class UpdateList extends Component {
     }
 }
 
-UpdateList.propTypes = {
+UpdateDetailList.propTypes = {
     stores: PropTypes.object,
 };
 
-export default UpdateList;
+export default UpdateDetailList;
