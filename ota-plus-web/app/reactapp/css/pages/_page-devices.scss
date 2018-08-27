@@ -168,7 +168,10 @@
             &--filters {
                 background: $fake-header-text;
                 margin: 0 35px 5px 30px;
-                padding: 0 15px;                
+                padding: 0 15px; 
+                display: block;
+                height: auto;
+                     
             }
         }
 
@@ -462,10 +465,19 @@
 
     &--dark {
 
+        &:last-child {
+            margin-bottom: 10px;
+        }   
+
         input {
             background: $devices-groups-bg;
             color: #fff;
             height: 38px;
+
+            &:disabled{
+                background: $devices-groups-bg;
+                color: #fff;
+            }
         }
 
         i {
@@ -504,6 +516,7 @@
         display: flex;
         align-items: center;
         height: 38px;
+        margin-top: 10px;
 
         &--fake {
             background-color: #ebebec;
