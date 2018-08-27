@@ -18,9 +18,9 @@ class ClassicList extends Component {
         return (
             <span>
                 <div id="groups-panel_classic-groups-title" className="groups-panel__section-title" onClick={() => { toggleSection('classic') }}>
-                    Classic Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`}/>
+                    Classic Groups <i className={`fa ${expanded ? 'fa-angle-down' : 'fa-angle-up'}`} />
                 </div>
-                <VelocityTransitionGroup 
+                <VelocityTransitionGroup
                     enter={{
                         animation: "slideDown",
                     }}
@@ -36,7 +36,7 @@ class ClassicList extends Component {
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
-                            :
+                                :
                                 <InfiniteScroll
                                     className="wrapper-infinite-scroll"
                                     hasMore={groupsStore.hasMoreGroups}
@@ -45,30 +45,30 @@ class ClassicList extends Component {
                                     loadMore={() => {
                                         groupsStore.loadMoreGroups()
                                     }}>
-                                        {groupsStore.classicGroups.length ?
-                                           _.map(groupsStore.classicGroups, (group, index) => {
-                                                const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
-                                                return (
-                                                    <ListItem 
-                                                        group={group}
-                                                        selectGroup={selectGroup}
-                                                        isSelected={isSelected}
-                                                        onDeviceDrop={onDeviceDrop}
-                                                        key={group.groupName}
-                                                    />
-                                                );
-                                            })
+                                    {groupsStore.classicGroups.length ?
+                                        _.map(groupsStore.classicGroups, (group, index) => {                                        
+                                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
+                                            return (
+                                                <ListItem
+                                                    group={group}
+                                                    selectGroup={selectGroup}
+                                                    isSelected={isSelected}
+                                                    onDeviceDrop={onDeviceDrop}
+                                                    key={group.groupName}
+                                                />
+                                            );
+                                        })
                                         :
-                                            <div className="wrapper-center">
-                                                <div className="groups-panel__section-title">
-                                                    No classic groups found.
+                                        <div className="wrapper-center">
+                                            <div className="groups-panel__section-title">
+                                                No classic groups found.
                                                 </div>
-                                            </div>
-                                        }
+                                        </div>
+                                    }
                                 </InfiniteScroll>
                             }
                         </div>
-                    :
+                        :
                         null
                     }
                 </VelocityTransitionGroup>
