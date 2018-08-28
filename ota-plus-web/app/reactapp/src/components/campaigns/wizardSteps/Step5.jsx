@@ -29,14 +29,18 @@ class WizardStep5 extends Component {
         this.toggleApprove = this.toggleApprove.bind(this);
     }
 
+    componentWillMount() {
+        const {markStepAsFinished} = this.props;
+        markStepAsFinished();
+    }
+
     addToWizardData(type, value) {
-        const {setWizardData, markStepAsFinished, wizardData, currentStepId} = this.props;
+        const {setWizardData, wizardData, currentStepId} = this.props;
         this.wizardMetadata = {
             ..._.omit(wizardData[currentStepId], 'isActivated'),
             [type]: value
         };
         setWizardData(this.wizardMetadata);
-        markStepAsFinished();
     }
 
     toggleNotify() {
