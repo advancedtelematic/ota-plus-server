@@ -167,11 +167,10 @@ class StatisticsDetails extends Component {
                             </div>                            
                                                    
                         </div>
-                        <CampaignGroupsList />
                         {alphaPlusEnabled ?
                             <CampaignInstallationReportView />
                         :
-                            null
+                            <CampaignGroupsList />
                         }
                     </div>
                 </div>       

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import GroupsListItem from './GroupsListItem';
 import {
   FlexibleWidthXYPlot,
   XAxis,
@@ -9,6 +8,7 @@ import {
   VerticalGridLines,
   HorizontalRectSeries,
 } from 'react-vis';
+import ReactTooltip from 'react-tooltip'
 
 @inject("stores")
 @observer
@@ -16,34 +16,60 @@ class InstallationReportView extends Component {
     render() {
         const { campaignsStore } = this.props.stores;
         const { campaign } = campaignsStore;
-        const groups = [
+        const failures = [
             {
-                name: "Test group 1",
+                name: "Failure 1",
                 devices: 2,
-                color: "#d0021b"
+                color: "#d0021b",
+                description: {
+                    ecuID: 12345,
+                    ecuType: "primary",
+                    reason: "Device broken"
+                }
             },
             {
-                name: "Test group 2",
+                name: "Failure 2",
                 devices: 3,
-                color: "#d0021b"
+                color: "#d0021b",
+                description: {
+                    ecuID: 45678,
+                    ecuType: "primary",
+                    reason: "Device broken"
+                }
             },
             {
-                name: "Test group 3",
+                name: "Failure 3",
                 devices: 3,
-                color: "#d0021b"
+                color: "#d0021b",
+                description: {
+                    ecuID: 112233,
+                    ecuType: "primary",
+                    reason: "Device broken"
+                }
             },
             {
-                name: "Test group 4",
+                name: "Failure 4",
                 devices: 3,
-                color: "#d0021b"
+                color: "#d0021b",
+                description: {
+                    ecuID: 111111,
+                    ecuType: "primary",
+                    reason: "Device broken"
+                }
             },
             {
-                name: "Test group 5",
+                name: "Failure 5",
                 devices: 16,
-                color: "#d0021b"
+                color: "#d0021b",
+                description: {
+                    ecuID: 444444,
+                    ecuType: "primary",
+                    reason: "Device broken"
+                }
             },
         ];
-        const { devices } = _.max(groups, _.property('devices'));
+        const { devices } = _.max(failures, _.property('devices'));
+        const devicesCount = _.reduce(_.pluck(failures, 'devices'), (prev, next) => { return prev + next });
         let xtickValues = [];
         for(let i = 0; i <= devices; i++) {
             if(i % 2 === 0) {
@@ -51,53 +77,80 @@ class InstallationReportView extends Component {
             }
         }
         let ytickValues = [];
-        for(let i = 0; i < groups.length; i++) {
+        for(let i = 0; i < failures.length; i++) {
             ytickValues.push(i);
         }
         return (
-            <div className="groups" style={{padding: "20px 25px", background: "#fff"}}>
-                <div className="groups__chart">
-                    <FlexibleWidthXYPlot
-                      height={75 * groups.length}
-                      margin={{left: 75, right: 150}}
-                      yType="ordinal">
-                      <VerticalGridLines />
-                      <XAxis tickTotal={devices} tickValues={xtickValues} tickFormat={v => v < 10 && v !== 0 ? ("0" + v) : v} />
-                      <YAxis orientation="left" tickTotal={groups.length} tickValues={ytickValues} tickFormat={v => groups[v].name} />
-                      {_.map(groups, (group, index) => {
-                        return (
-                           <HorizontalRectSeries
-                                key={group.name}
-                                animation
-                                data={[
-                                  {y0: index, y: index, x0: 0, x: group.devices},
-                                ]}
-                                color={group.color}
-                                className="rect-series"
-                                style={{transform: "translate(0px, -10px)"}}
-                            /> 
-                        );
-                      })}
-                    </FlexibleWidthXYPlot>
+            <div className="installation-report-view">
+                <div className="failure-data">
+                    <div className="failure-data__devices">
+                        Number of devices: {devicesCount}
+                    </div>
+                    <div className="failure-data__legend">
+                        <span className="failure-data__color"></span>
+                        Devices
+                    </div>
                 </div>
-                <div className="groups__actions">
-                    {_.map(groups, (group, index) => {
-                        return (
-                            <div key={group.name} className="groups__action-wrapper" style={{height: 'calc(75px - ' + 50 / groups.length + 'px)'}}>
-                                <div className={"groups__action-bg " + (index % 2 !== 0 ? 'groups__action-bg--odd' : '')}></div>
-                                <div className="groups__action">
-                                    Action1
+                <div className="failures">
+                    <div className="failures__chart">
+                        <FlexibleWidthXYPlot
+                          height={75 * failures.length}
+                          margin={{left: 75, right: 150}}
+                          yType="ordinal">
+                          <VerticalGridLines />
+                          <XAxis tickTotal={devices} tickValues={xtickValues} tickFormat={v => v < 10 && v !== 0 ? ("0" + v) : v} />
+                          <YAxis orientation="left" tickTotal={failures.length} tickValues={ytickValues} tickFormat={v => failures[v].name} />
+                          {_.map(failures, (group, index) => {
+                            return (
+                               <HorizontalRectSeries
+                                    key={group.name}
+                                    animation
+                                    data={[
+                                      {y0: index, y: index, x0: 0, x: group.devices},
+                                    ]}
+                                    color={group.color}
+                                    className="rect-series"
+                                    style={{transform: "translate(0px, -10px)"}}
+                                    onSeriesMouseOver={(e) => { console.log(e) }}
+                                    onValueMouseOver={(e) => { console.log(e) }}
+                                /> 
+                            );
+                          })}
+                        </FlexibleWidthXYPlot>
+                    </div>
+                    <div className="failures__actions">
+                        {_.map(failures, (group, index) => {
+                            return (
+                                <div key={group.name} className="failures__action-wrapper" style={{height: 'calc(75px - ' + 50 / failures.length + 'px)'}}>
+                                    <div className={"failures__action-bg " + (index % 2 !== 0 ? 'failures__action-bg--odd' : '')}></div>
+                                    <div className="failures__action-tip" data-tip data-for={group.name}></div>
+                                    <div className="failures__action" data-tip data-for="extract-vins">
+                                        <img src="/assets/img/icons/download.svg" alt="Icon" />
+                                    </div>
+                                    <div className="failures__action" data-tip data-for="relaunch-campaign">
+                                        <img src="/assets/img/icons/relaunch.svg" alt="Icon" />
+                                    </div>
+                                    <ReactTooltip id={group.name}>
+                                        <div>
+                                            Ecu id: {group.description.ecuID}
+                                        </div>
+                                        <div>
+                                            Ecu type: {group.description.ecuType}
+                                        </div>
+                                        <div>
+                                            Failure reason: {group.description.reason}
+                                        </div>
+                                    </ReactTooltip>
                                 </div>
-                                <div className="groups__action">
-                                    Action2
-                                </div>
-                            </div>
-                        );                        
-                    })}
-                </div>
-                <div className="groups__legend">
-                    <span className="groups__legend-color"></span>
-                    Devices
+                            );                        
+                        })}
+                        <ReactTooltip id="extract-vins">
+                            Extract VINs
+                        </ReactTooltip>
+                        <ReactTooltip id="relaunch-campaign">
+                            Relaunch campaign
+                        </ReactTooltip>
+                    </div>                
                 </div>
             </div>
         );
