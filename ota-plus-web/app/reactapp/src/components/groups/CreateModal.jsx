@@ -105,7 +105,7 @@ class CreateModal extends Component {
             const wordFilters = data.word;
             let expressionToSend = '';
             if (typeof wordFilters === 'string') {
-                if (nameFilters === 'VIN') {
+                if (nameFilters === 'device ID') {
                     nameFilters = 'deviceid';
                 }
                 expressionToSend += (nameFilters + ' ' + expressionFilters + ' ' + wordFilters).toLowerCase();
@@ -113,7 +113,7 @@ class CreateModal extends Component {
                 const filtersLength = wordFilters.length;
 
                 for (let i = 0; i < filtersLength; i++) {
-                    if (nameFilters[i] === 'VIN') {
+                    if (nameFilters[i] === 'device ID') {
                         nameFilters[i] = 'deviceid';
                     }
                     expressionToSend += ('(' + nameFilters[i] + ' ' + expressionFilters[i] + ' ' + wordFilters[i] + ')').toLowerCase();
