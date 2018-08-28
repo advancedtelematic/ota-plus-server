@@ -29,17 +29,17 @@ class MtuQueueList extends Component {
                     devicesStore.multiTargetUpdates.length ?
                         <ul className={"queue-modal__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
                             {_.map(devicesStore.multiTargetUpdates, (update, index) => {
-                                return _.map(update.targets, (target, hardwareId) => {
+                                return _.map(update.targets, (target, serial) => {
                                     return (
                                         <MtuListItem
                                             item={target}
-                                            hardwareId={hardwareId}
+                                            serial={serial}
                                             updateId={update.updateId}
                                             status={update.status}
                                             length={target.image.fileinfo.length}
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             showSequencer={showSequencer}
-                                            key={hardwareId}
+                                            key={serial}
                                         />
                                     );
                                 });
