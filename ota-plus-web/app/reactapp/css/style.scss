@@ -3100,8 +3100,15 @@ input {
     }
 }
 
-.groups {
+.installation-report-view {
+    background-color: #fff;
+    border-top: 1px solid $device-item-bg;
+    padding: 20px 25px;
+}
+
+.failures {
     position: relative;
+    padding: 20px 0;
     
     &__actions {
         position: absolute;
@@ -3118,12 +3125,12 @@ input {
         position: relative;
     }
 
-    &__action-bg {
+    &__action-bg {        
 
         &--odd {
             position: absolute;
             top: 0;
-            left: 75px;
+            left: 50px;
             right: 0;
             bottom: 0;
             background-color: grey;
@@ -3131,19 +3138,38 @@ input {
         }
     }
 
+    &__action-tip {
+        position: absolute;
+        left: 50px;
+        right: 125px;
+        top: 0;
+        bottom: 0;
+    }
+
     &__action {
-        margin-right: 15px;
+        margin-right: 25px;
+        cursor: pointer;
+        z-index: 1;
+    }    
+}
+
+.failure-data {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+    &__devices {
+        font-size: 11px;
+        margin-bottom: 10px;
     }
 
     &__legend {
         display: flex;
         align-items: center;
-        font-size: 11px;
-        position: absolute;
-        bottom: 45px;
+        font-size: 11px;       
     }
 
-    &__legend-color {
+    &__color {
         margin-right: 5px;
         width: 12px;
         height: 12px;
