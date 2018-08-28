@@ -79,7 +79,9 @@ class Devices extends Component {
         groupsStore.selectedGroup = group;
         const groupId = group.id || null;
         devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);
-        groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id)
+        if (group.isSmart) {
+            groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id)
+        }
     }
     onDeviceDrop(device, groupId) {
         const { groupsStore } = this.props.stores;

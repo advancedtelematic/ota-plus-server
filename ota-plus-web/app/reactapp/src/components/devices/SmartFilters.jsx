@@ -6,12 +6,12 @@ import { observable } from 'mobx';
 import mobx from 'mobx';
 import _ from 'underscore';
 
-const nameFilterOptions = [{ value: "deviceid", text: "VIN" }];
+const nameFilterOptions = ["device ID"];
 const extraFilterOptions = ["contains"];
 
 let singleGroup = {
     id: 1,
-    name: "VIN",
+    name: "deviceid",
     expression: "contains",
     word: ''
 };
@@ -47,7 +47,7 @@ class SmartFilters extends Component {
                             id="name-filter"
                             appendMenuToBodyTag={true}
                             options={nameFilterOptions}
-                            defaultValue={nameFilterOptions[0].text}
+                            defaultValue={nameFilterOptions[0]}
                             multiple={false}
                             visibleFieldsCount={5}
                             name="nameFilter"

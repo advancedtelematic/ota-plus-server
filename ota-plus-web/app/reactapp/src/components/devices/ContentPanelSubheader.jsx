@@ -15,9 +15,12 @@ class ContentPanelSubheader extends Component {
         if (expressionsArray.length > 1) {
             expressionsArray = expressionsArray.map(element => element.substring(0, element.length - 1).substring(1));
         }
-       
+
         const Filters = expressionsArray.map((singleFilter, index) => {
-            let singleFilterElements = singleFilter.split(' ')
+            let singleFilterElements = singleFilter.split(' ');
+            if (singleFilterElements[0] === 'deviceid') {
+                singleFilterElements[0] = 'device ID';
+            }
             return (
                 <div key={index} className={"filters filters--dark"}>
                     <div className="filters__block" style={{ flex: 1 }} >

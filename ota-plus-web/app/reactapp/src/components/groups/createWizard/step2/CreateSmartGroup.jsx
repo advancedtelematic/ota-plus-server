@@ -16,7 +16,7 @@ const CreateSmartGroup = inject("stores")(observer(({ markStepAsFinished, markSt
             />
             <div className="wizard__row-wrapper">
                 <div className="row">
-                    <div className="col-xs-10">
+                    <div className="col-xs-12">
                         <FormInput
                             name="groupName"
                             className="input-wrapper"
@@ -33,7 +33,7 @@ const CreateSmartGroup = inject("stores")(observer(({ markStepAsFinished, markSt
             </div>
             <div className="wizard__row-wrapper">
                 <div className="row">
-                    <div className="col-xs-10">
+                    <div className="col-xs-12">
                         <DevicesSmartFilters
                             layout={[1, 1, 3]}
                             setFilter={setFilter}
