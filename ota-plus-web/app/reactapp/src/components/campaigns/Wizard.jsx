@@ -463,6 +463,10 @@ class Wizard extends Component {
             approvalNeeded: this.approvalNeeded
         };
 
+        if (!this.wizardData[4].isActivated) {
+            createData = _.omit(createData, 'metadata')
+        }
+
         campaignsStore.createCampaign(createData);
     }
 
