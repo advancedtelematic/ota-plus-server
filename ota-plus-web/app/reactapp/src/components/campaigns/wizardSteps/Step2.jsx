@@ -15,11 +15,12 @@ class WizardStep2 extends Component {
         this.showDetails = this.showDetails.bind(this);
     }
 
-    validateStep = (selectedUpdates) => {
-        if (selectedUpdates && selectedUpdates.length)
+    validateStep = (selectedUpdate) => {
+        if (selectedUpdate && selectedUpdate.length) {
             this.props.markStepAsFinished();
-        else
+        } else {
             this.props.markStepAsNotFinished();
+        }
     };
 
     changeUpdateSelection = (update) => {
@@ -47,7 +48,7 @@ class WizardStep2 extends Component {
         return (
             <div>
                 <Form>
-                    <label title="" className="c-form__label">{ "Select Updates" }</label>
+                    <label title="" className="c-form__label">{ "Select Update" }</label>
                 </Form>
                 <SelectUpdateList
                     wizardData={ wizardData }

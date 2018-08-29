@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 @observer
 class ListItem extends Component {
     render() {
-        const { update, showEditModal } = this.props;
+        const { update, showUpdateDetails } = this.props;
         return (
             <div className="c-update">
                 <div className="c-update__item item">
@@ -17,10 +17,8 @@ class ListItem extends Component {
                         </div>
                         <div className="c-update__edit">
                             <a href="#" className="add-button" id={ "edit-update-" + update.name }
-                               onClick={ showEditModal.bind(this, update) }>
-                                <span>
-                                    Edit
-                                </span>
+                               onClick={ showUpdateDetails.bind(this, update) }>
+                                <span>{ "More details" }</span>
                             </a>
                         </div>
                     </div>
@@ -32,7 +30,7 @@ class ListItem extends Component {
 
 ListItem.propTypes = {
     update: PropTypes.object.isRequired,
-    showEditModal: PropTypes.func.isRequired,
+    showUpdateDetails: PropTypes.func.isRequired,
 };
 
 export default ListItem;

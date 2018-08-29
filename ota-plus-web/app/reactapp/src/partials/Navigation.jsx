@@ -40,7 +40,7 @@ class Navigation extends Component {
               </li>
               {alphaPlusEnabled ?
                 <li>
-                  <Link to="/update" activeClassName="active" id="link-update">Update</Link>
+                  <Link to="/updates" activeClassName="active" id="link-updates">Updates</Link>
                 </li>
               :
                 null

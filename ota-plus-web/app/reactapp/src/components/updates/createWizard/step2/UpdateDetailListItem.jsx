@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { FormInput, FormTextarea, FormSelect, Loader, AsyncResponse } from '../../../../partials';
+import { FormSelect } from '../../../../partials';
 import { Form } from 'formsy-react';
 import moment from 'moment';
 
@@ -18,7 +18,7 @@ class UpdateDetailListItem extends Component {
         let versions = null;
         _.each(preparedPackages, packs => {
             const found = _.find(packs, pack => pack.name === name);
-            if(found) {
+            if (found) {
                 versions = found.versions;
             }
         });
@@ -30,17 +30,19 @@ class UpdateDetailListItem extends Component {
                 version
             }
         });
-        if(type === 'from') {
+        if (type === 'from') {
             this.fromVersions = formattedData;
         } else {
             this.toVersions = formattedData;
         }
-    }
+    };
 
     render() {
         const { item, wizardData, onStep2DataSelect } = this.props;
-        const { packagesStore } = this.props.stores;        
-        let uniqPackages = _.uniq(packagesStore.packages, (item) => { return item.id.name });
+        const { packagesStore } = this.props.stores;
+        let uniqPackages = _.uniq(packagesStore.packages, (item) => {
+            return item.id.name
+        });
         const packages = _.map(uniqPackages, (item) => {
             return {
                 text: item.id.name,
@@ -53,7 +55,7 @@ class UpdateDetailListItem extends Component {
             <div className="update-block">
                 <div className="row hardware-id">
                     <div className="col-xs-12">
-                        {item}
+                        { item }
                     </div>
                 </div>
                 <div className='row header'>
@@ -64,30 +66,36 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className="col-xs-6">
                             <FormSelect
-                                id="available-packages"
-                                options={packages}
+                                id="select-package-from"
+                                options={ packages }
                                 label="Package"
                                 multiple={ false }
                                 wrapperWidth="100%"
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select from package"
-                                defaultValue={wizardData[1].updates[item] && wizardData[1].updates[item].fromPack ? wizardData[1].updates[item].fromPack.id.name : null}
-                                onChange={(value) => { this.formatVersions('from', value.id); onStep2DataSelect(item, 'fromPack', value.item) }}
+                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].fromPack ? wizardData[1].update[item].fromPack.id.name : null }
+                                onChange={ (value) => {
+                                    this.formatVersions('from', value.id);
+                                    onStep2DataSelect(item, 'fromPack', value.item)
+                                } }
                             />
                         </div>
                         <div className="col-xs-6">
                             <FormSelect
-                                id="available-packages"
-                                options={packages}
+                                id="select-package-to"
+                                options={ packages }
                                 label="Package"
                                 multiple={ false }
                                 wrapperWidth="100%"
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select to package"
-                                defaultValue={wizardData[1].updates[item] && wizardData[1].updates[item].toPack ? wizardData[1].updates[item].toPack.id.name : null}
-                                onChange={(value) => { this.formatVersions('to', value.id); onStep2DataSelect(item, 'toPack', value.item) }}
+                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].toPack ? wizardData[1].update[item].toPack.id.name : null }
+                                onChange={ (value) => {
+                                    this.formatVersions('to', value.id);
+                                    onStep2DataSelect(item, 'toPack', value.item)
+                                } }
                             />
                         </div>
                     </Form>
@@ -96,28 +104,32 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id="version-from"
-                                options={this.fromVersions}
+                                id="select-version-from"
+                                options={ this.fromVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
                                 multiple={ false }
                                 placeholder="Select from version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={wizardData[1].updates[item] && wizardData[1].updates[item].fromVersion ? wizardData[1].updates[item].fromVersion.id.name : null}
-                                onChange={(value) => { onStep2DataSelect(item, 'fromVersion', value.version) }}
+                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].fromVersion ? wizardData[1].update[item].fromVersion.id.name : null }
+                                onChange={ (value) => {
+                                    onStep2DataSelect(item, 'fromVersion', value.version)
+                                } }
                             />
                         </div>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id="version-to"
-                                options={this.toVersions}
+                                id="select-version-to"
+                                options={ this.toVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
                                 multiple={ false }
                                 placeholder="Select to version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={wizardData[1].updates[item] && wizardData[1].updates[item].toVersion ? wizardData[1].updates[item].toVersion.id.name : null}
-                                onChange={(value) => { onStep2DataSelect(item, 'toVersion', value.version) }} 
+                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].toVersion ? wizardData[1].update[item].toVersion.id.name : null }
+                                onChange={ (value) => {
+                                    onStep2DataSelect(item, 'toVersion', value.version)
+                                } }
                             />
                         </div>
                     </Form>

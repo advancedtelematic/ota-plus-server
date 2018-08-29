@@ -2,7 +2,7 @@ import HomeContainer from './Home';
 import DevicesContainer from './Devices';
 import DeviceContainer from './Device';
 import PackagesContainer from './Packages';
-import UpdateContainer from './Update';
+import UpdatesContainer from './Updates';
 import CampaignsContainer from './Campaigns';
 import ImpactAnalysisContainer from './ImpactAnalysis';
 import ProvisioningContainer from './Provisioning';
@@ -15,7 +15,7 @@ export {
     DevicesContainer,
     DeviceContainer,
     PackagesContainer,
-    UpdateContainer,
+    UpdatesContainer,
     CampaignsContainer,
     ImpactAnalysisContainer,
     ProvisioningContainer,

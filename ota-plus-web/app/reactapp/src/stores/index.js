@@ -7,7 +7,7 @@ import CampaignsStore from './CampaignsStore';
 import ImpactAnalysisStore from './ImpactAnalysisStore';
 import FeaturesStore from './FeaturesStore';
 import ProvisioningStore from './ProvisioningStore';
-import UpdateStore from './UpdateStore';
+import UpdatesStore from './UpdatesStore';
 
 export {
     UserStore,
@@ -19,5 +19,5 @@ export {
     ImpactAnalysisStore,
     FeaturesStore,
     ProvisioningStore,
-    UpdateStore,
-}
+    UpdatesStore,
+};
