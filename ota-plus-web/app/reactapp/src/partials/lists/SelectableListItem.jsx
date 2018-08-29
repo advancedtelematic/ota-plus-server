@@ -4,36 +4,43 @@ import { observer } from 'mobx-react';
 @observer
 class SelectableListItem extends Component {
     render() {
-        const { item, selected, onItemSelect } = this.props;
+        const { item, selected, onItemSelect, showDetails } = this.props;
         return (
             <div className="item"
                  id={ "button-select-" + item.type + '-' + item.name }
                  title={ item.name }
-                 onClick={ onItemSelect.bind(this, item) }
             >
                 <button className={ "btn-checkbox " + (selected ? "checked" : "") }
                         id={ "item-select-" + item.type + '-' + item.name }
+                        onClick={ onItemSelect.bind(this, item) }
                 >
                     <i className="fa fa-check" aria-hidden="true"/>
                 </button>
-                <div className="info">
+                <div className="item item__info"
+                     onClick={ onItemSelect.bind(this, item) }
+                >
                     <span className="name">{ item.name }</span>
+                    <span className="description">{ item.description }</span>
                 </div>
+                {
+                    showDetails &&
+                        <div className="item item__details">
+                            <a href="#" className="details-button" id={ "show-details-" + item.type + item.name }
+                               onClick={ showDetails.bind(this, item) }>
+                                <span>{ "Details" }</span>
+                            </a>
+                        </div>
+                }
             </div>
         );
     }
 }
 
-/**
- * takes item as object and make it selectable, item should contain `name` and `type` ('hardware'|'packages'|'update')
- * toDo: implements optional property 'details'
- * @type {{item: React.Validator<any>, selected: React.Validator<any>, onItemSelect: React.Validator<any>}}
- */
-
 SelectableListItem.propTypes = {
     item: PropTypes.object.isRequired,
     selected: PropTypes.bool.isRequired,
     onItemSelect: PropTypes.func.isRequired,
+    showDetails: PropTypes.func,
 };
 
 export default SelectableListItem;

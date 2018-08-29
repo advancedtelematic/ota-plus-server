@@ -1,5 +1,5 @@
-import Step2UpdateList from './UpdateList';
-import Step2UpdateListItem from './UpdateListItem';
+import Step2UpdateList from './UpdateDetailList';
+import Step2UpdateListItem from './UpdateDetailListItem';
 
 
 export {

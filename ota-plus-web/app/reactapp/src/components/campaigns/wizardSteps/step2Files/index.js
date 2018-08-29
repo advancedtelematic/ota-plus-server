@@ -1,7 +1,7 @@
-import WizardPackagesList from './PackagesList';
-import WizardPackagesListItem from './PackagesListItem';
+import SelectUpdateList from './SelectUpdateList';
+import UpdateDetails from './UpdateDetails';
 
 export {
-    WizardPackagesList,
-    WizardPackagesListItem
+    SelectUpdateList,
+    UpdateDetails,
 }
