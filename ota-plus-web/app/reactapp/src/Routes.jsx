@@ -6,7 +6,7 @@ import {
     DevicesPage,
     DevicePage,
     PackagesPage,
-    UpdatePage,
+    UpdatesPage,
     CampaignsPage,
     ImpactAnalysisPage,
     ProfilePage,
@@ -33,7 +33,7 @@ const Routes = () => {
                 <Route path="/devices" component={DevicesPage}/>
                 <Route path="/device/:id" component={DevicePage}/>
                 <Route path="/packages(/:packageName)" component={PackagesPage}/>
-                <Route path="/update(/:updateName)" component={UpdatePage}/>
+                <Route path="/updates(/:updateName)" component={UpdatesPage}/>
                 <Route path="/campaigns(/:campaignName)" component={CampaignsPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>

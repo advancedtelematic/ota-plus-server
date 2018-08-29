@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { FormInput, FormTextarea, FormSelect, Loader, AsyncResponse } from '../../../../partials';
-import { Form } from 'formsy-react';
-import moment from 'moment';
+import { Loader } from '../../../../partials';
 import UpdateDetailListItem from './UpdateDetailListItem';
 
 @inject("stores")

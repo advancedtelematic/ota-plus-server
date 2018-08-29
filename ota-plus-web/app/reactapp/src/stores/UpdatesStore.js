@@ -12,7 +12,7 @@ import {
     handleAsyncError
 } from '../utils/Common';
 
-export default class UpdateStore {
+export default class UpdatesStore {
     @observable updatesFetchAsync = {};
     @observable updatesSafeFetchAsync = {};
     @observable updatesLoadMoreAsync = {};
