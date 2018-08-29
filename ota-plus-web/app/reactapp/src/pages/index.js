@@ -2,7 +2,7 @@ import HomePage from './Home';
 import DevicesPage from './Devices';
 import DevicePage from './Device';
 import PackagesPage from './Packages';
-import UpdatePage from './Update';
+import UpdatesPage from './Updates';
 import CampaignsPage from './Campaigns';
 import ImpactAnalysisPage from './ImpactAnalysis';
 import ProfilePage from './Profile';
@@ -16,7 +16,7 @@ export {
   DevicesPage,
   DevicePage,
   PackagesPage,
-  UpdatePage,
+  UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
   ProfilePage,

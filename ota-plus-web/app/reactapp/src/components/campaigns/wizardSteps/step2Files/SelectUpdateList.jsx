@@ -14,8 +14,8 @@ class SelectUpdateList extends Component {
     }
 
     componentWillMount() {
-        const { updateStore } = this.props.stores;
-        updateStore.fetchUpdates();
+        const { updatesStore } = this.props.stores;
+        updatesStore.fetchUpdates();
     }
 
     onUpdateSelect = (update) => {
@@ -23,24 +23,24 @@ class SelectUpdateList extends Component {
     };
 
     render() {
-        const { updateStore } = this.props.stores;
+        const { updatesStore } = this.props.stores;
         const { wizardData, stepId, showUpdateDetails } = this.props;
 
-        const groupedUpdates = updateStore.preparedUpdates;
+        const groupedUpdates = updatesStore.preparedUpdates;
         const selectedUpdate = wizardData[stepId].update;
 
         return (
             <div className="row update-container">
                 <div className="col-xs-12">
                     <div className="ios-list">
-                        { updateStore.updatesFetchAsync.isFetching ?
+                        { updatesStore.updatesFetchAsync.isFetching ?
                             <div className="wrapper-center">
                                 <Loader/>
                             </div>
                             :
                             <div>
                                 {
-                                    updateStore.updatesTotalCount ?
+                                    updatesStore.updatesTotalCount ?
                                         _.map(groupedUpdates, (updates, firstLetter) => {
                                             return (
                                                 <div key={firstLetter}>

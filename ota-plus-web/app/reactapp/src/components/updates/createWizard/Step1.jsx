@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Form } from 'formsy-react';
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { observer, inject } from 'mobx-react';
@@ -12,6 +12,7 @@ class Step1 extends Component {
         const { hardwareStore } = this.props.stores;
         hardwareStore.fetchHardwareIds();
     }
+
     render() {
         const { hardwareStore } = this.props.stores;
         const { wizardData, onStep1DataSelect } = this.props;
@@ -36,8 +37,10 @@ class Step1 extends Component {
                                 placeholder="Name"
                                 name="updateName"
                                 id="create-new-update-name"
-                                defaultValue={wizardData[0].name}
-                                onChange={(e) => { onStep1DataSelect('name', e.target.value) }}
+                                defaultValue={ wizardData[0].name }
+                                onChange={ (e) => {
+                                    onStep1DataSelect('name', e.target.value)
+                                } }
                             />
                         </div>
                         <div className="col-xs-6">
@@ -47,8 +50,10 @@ class Step1 extends Component {
                                 rows={ 5 }
                                 name="updateDescription"
                                 id="create-new-update-description"
-                                defaultValue={wizardData[0].description}
-                                onChange={(e) => { onStep1DataSelect('description', e.target.value) }}
+                                defaultValue={ wizardData[0].description }
+                                onChange={ (e) => {
+                                    onStep1DataSelect('description', e.target.value)
+                                } }
                             />
                         </div>
                     </div>
@@ -57,17 +62,19 @@ class Step1 extends Component {
                         <div className="col-xs-12">
                             <div className="ids-list">
                                 <label className="c-form__label">{ "Select Hardware ids" }</label>
-                                    {hardwareStore.hardwareIdsFetchAsync.isFetching ?
-                                        <div className="wrapper-center">
-                                            <Loader/>
-                                        </div>
+                                { hardwareStore.hardwareIdsFetchAsync.isFetching ?
+                                    <div className="wrapper-center">
+                                        <Loader/>
+                                    </div>
                                     :
-                                        <SelectableList
-                                            items={hardwareList}
-                                            selectedItems={wizardData[0].selectedHardwares}
-                                            onItemSelect={(item) => { onStep1DataSelect('hardwareId', item) }}
-                                        />
-                                    }
+                                    <SelectableList
+                                        items={ hardwareList }
+                                        selectedItems={ wizardData[0].selectedHardwares }
+                                        onItemSelect={ (item) => {
+                                            onStep1DataSelect('hardwareId', item)
+                                        } }
+                                    />
+                                }
                             </div>
                         </div>
                     </div>

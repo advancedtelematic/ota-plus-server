@@ -14,7 +14,7 @@ class Header extends Component {
                 <div className="update-subheader__item">
                     Internal description
                 </div>
-                <a href="#" className="add-button grey-button" id="add-new-update" onClick={showCreateModal}>
+                <a href="#" className="add-button grey-button" id="add-new-update" onClick={ showCreateModal }>
                     <span>
                         +
                     </span>
@@ -29,6 +29,6 @@ class Header extends Component {
 
 Header.propTypes = {
     showCreateModal: PropTypes.func.isRequired,
-}
+};
 
 export default Header;

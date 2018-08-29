@@ -1,13 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal, AsyncResponse, Loader, FormSelect, FormInput, FormTextarea } from '../../partials';
-import { Form } from 'formsy-react';
-import { FormsyText } from 'formsy-material-ui/lib';
-import { FlatButton, SelectField, MenuItem } from 'material-ui';
-import serialize from 'form-serialize';
+import { Modal } from '../../partials';
 import _ from 'underscore';
-import { _contains }from '../../utils/Collection';
+import { _contains } from '../../utils/Collection';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';
@@ -30,7 +26,7 @@ const data = [
         selectedHardwares: [],
     },
     {
-        updates: {},
+        update: {},
     },
 ];
 
@@ -45,14 +41,14 @@ class CreateModal extends Component {
 
     constructor(props) {
         super(props);
-        const { updateStore } = props.stores;
-        this.mtuCreatedHandler = new AsyncStatusCallbackHandler(updateStore, 'updatesMtuCreateAsync', this.handleMtuCreated.bind(this));
-        this.updateCreatedHandler = new AsyncStatusCallbackHandler(updateStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
+        const { updatesStore } = props.stores;
+        this.mtuCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesMtuCreateAsync', this.handleMtuCreated.bind(this));
+        this.updateCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
     }
 
     componentWillMount() {
-        const { editMode } = this.props;
-        if (editMode) {
+        const { showDetails } = this.props;
+        if (showDetails) {
             this.currentStepId = 1;
         }
     }
@@ -95,13 +91,13 @@ class CreateModal extends Component {
     };
 
     createMtu = () => {
-        const { updateStore } = this.props.stores;
-        updateStore.createMultiTargetUpdate(this.wizardData[1].updates);
+        const { updatesStore } = this.props.stores;
+        updatesStore.createMultiTargetUpdate(this.wizardData[1].update);
     };
 
     handleMtuCreated = () => {
-        const { updateStore } = this.props.stores;
-        const { lastCreatedMtuId } = updateStore;
+        const { updatesStore } = this.props.stores;
+        const { lastCreatedMtuId } = updatesStore;
         const data = {
             updateSource: {
                 id: lastCreatedMtuId,
@@ -110,7 +106,7 @@ class CreateModal extends Component {
             name: this.wizardData[0].name,
             description: this.wizardData[0].description,
         };
-        updateStore.createUpdate(data);
+        updatesStore.createUpdate(data);
     };
 
     handleUpdateCreated = () => {
@@ -146,8 +142,8 @@ class CreateModal extends Component {
     };
 
     onStep2DataSelect = (hardwareId, type, value) => {
-        const { editMode } = this.props;
-        const stepData = this.wizardData[this.currentStepId].updates;
+        const { showDetails } = this.props;
+        const stepData = this.wizardData[this.currentStepId].update;
         stepData[hardwareId] = !_.isUndefined(stepData[hardwareId]) ? stepData[hardwareId] : {};
         stepData[hardwareId][type] = value;
         if (type === 'fromPack') {
@@ -162,7 +158,7 @@ class CreateModal extends Component {
                 stepData[item.name].toPack &&
                 stepData[item.name].fromVersion &&
                 stepData[item.name].toVersion &&
-                !editMode) {
+                !showDetails) {
                 this.markStepAsFinished();
             } else {
                 this.markStepAsNotFinished();
@@ -171,7 +167,7 @@ class CreateModal extends Component {
     };
 
     render() {
-        const { shown, hide, editMode } = this.props;
+        const { shown, hide, showDetails } = this.props;
         const currentStep = this.steps[this.currentStepId];
         const step = (
             <span>
@@ -179,31 +175,29 @@ class CreateModal extends Component {
                     wizardData: this.wizardData,
                     onStep1DataSelect: this.onStep1DataSelect,
                     onStep2DataSelect: this.onStep2DataSelect,
+                    showDetails: showDetails,
                 }) }
                 <div className="body-actions" style={ { margin: 0 } }>
                     { this.isLastStep() ?
                         <div style={ { display: 'flex' } }>
-                            { !editMode ?
-                                <button
-                                    className="btn-primary"
-                                    id="wizard-back-button"
-                                    onClick={ this.prevStep }
-                                    style={ { marginRight: '10px' } }
-                                >
-                                    Back
-                                </button>
+                            { !showDetails ?
+                                <span>
+                                    <button
+                                        className="btn-primary"
+                                        id="wizard-back-button"
+                                        onClick={ this.prevStep }
+                                        style={ { marginRight: '10px' } }
+                                    >{ "Back" }</button>
+                                    <button
+                                        className="btn-primary"
+                                        id="wizard-launch-button"
+                                        disabled={ !currentStep.isFinished }
+                                        onClick={ this.createMtu }
+                                    >{ "Save" }</button>
+                                </span>
                                 :
                                 null
                             }
-
-                            <button
-                                className="btn-primary"
-                                id="wizard-launch-button"
-                                disabled={ !currentStep.isFinished }
-                                onClick={ this.createMtu }
-                            >
-                                Save
-                            </button>
                         </div>
                         :
                         <button
@@ -212,7 +206,7 @@ class CreateModal extends Component {
                             id="next"
                             onClick={ this.nextStep }
                         >
-                            Continue
+                            { "Continue" }
                         </button>
                     }
                 </div>
@@ -220,10 +214,10 @@ class CreateModal extends Component {
         );
         return (
             <Modal
-                title={ editMode ? "Edit update" : "Create new update" }
+                title={ showDetails ? "Update details" : "Create new update" }
                 topActions={
                     <div className="top-actions flex-end">
-                        <div className="modal-close" onClick={ hide }>
+                        <div className="modal-close" id="close-update-modal" onClick={ hide }>
                             <img src="/assets/img/icons/close.svg" alt="Icon"/>
                         </div>
                     </div>
@@ -239,6 +233,7 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
+    showDetails: PropTypes.object,
     stores: PropTypes.object,
 };
 
