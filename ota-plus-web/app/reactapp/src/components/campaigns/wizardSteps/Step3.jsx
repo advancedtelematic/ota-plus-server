@@ -1,104 +1,69 @@
-import React, { Component, PropTypes } from 'react';
-import { observable, observe } from 'mobx';
-import { observer, inject } from 'mobx-react';
+import React, {Component, PropTypes} from 'react';
+import {observer, inject} from 'mobx-react';
+import {WizardGroupsList} from './step3Files';
+import {Loader, Form, FormInput} from '../../../partials';
 import _ from 'underscore';
-import { WizardPackagesVersionList } from './step3Files';
-import { VelocityTransitionGroup } from 'velocity-react';
-import { Loader } from '../../../partials';
-import { SelectField, MenuItem } from 'material-ui';
-
-const headerHeight = 28;
 
 @inject("stores")
 @observer
 class WizardStep3 extends Component {
-    @observable hardwareIdDuplicates = false;
-
     constructor(props) {
         super(props);
-        this.sortByFirstLetter = this.sortByFirstLetter.bind(this);
-        this.setHardwareIdDuplicates = this.setHardwareIdDuplicates.bind(this);
+        this.setWizardData = this.setWizardData.bind(this);
     }
+
     componentWillMount() {
-        const { hardwareStore } = this.props.stores;
-        hardwareStore.fetchHardwareIds();
+        const { groupsStore } = this.props.stores;
+        groupsStore.fetchWizardGroups();
     }
-    setHardwareIdDuplicates(value) {
-        if (value)
-            this.hardwareIdDuplicates = true;
+
+    setWizardData(groupId) {
+        const { groupsStore } = this.props.stores;
+        let stepWizardData = this.props.wizardData[3];
+        const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
+        const groupToAdd = _.findWhere(groupsStore.wizardGroups, {id: groupId});
+        if (foundGroup)
+            stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
         else
-            this.hardwareIdDuplicates = false;
+            stepWizardData.groups.push(groupToAdd);
+
+        if (stepWizardData.groups.length)
+            this.props.markStepAsFinished();
+        else
+            this.props.markStepAsNotFinished();
     }
-    sortByFirstLetter(packagesList) {
-        let sortedPackages = {};
-        _.each(packagesList, (pack, index) => {
-            let firstLetter = pack.packageName.charAt(0).toUpperCase();
-            firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-            if (_.isUndefined(sortedPackages[firstLetter])) {
-                sortedPackages[firstLetter] = [];
-            }
-            sortedPackages[firstLetter].push(pack);
-        });
-        return sortedPackages;
-    }
+
     render() {
-        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, rawSelectedPacks, removeSelectedPacksByKeys } = this.props;
-        const { hardwareStore } = this.props.stores;
-        let chosenPackagesList = this.sortByFirstLetter(wizardData[1].packages);
-        let selectedVersions = wizardData[2].versions;
+        const { wizardData } = this.props;
+        const { groupsStore } = this.props.stores;
+        const chosenGroups = wizardData[3].groups;
         return (
-            <div className="ios-list" ref="list">
+            groupsStore.groupsWizardFetchAsync.isFetching ?
+                <div className="wrapper-center">
+                    <Loader />
+                </div>
+                :
                 <span>
-                    {hardwareStore.hardwareIdsFetchAsync.isFetching ?
-                        <Loader />
-                        :
-                        <span>
-                            {this.hardwareIdDuplicates ?
-                                <div className="alert alert-danger" role="alert">
-                                    You can't select the same hardware ids
-                                </div>
-                                :
-                                null
-                            }
-                            {_.map(chosenPackagesList, (packages, letter) => {
-                                let packsCount = wizardData[1].packages.length;
-                                return (
-                                    <span key={letter}>
-                                        <div className="header">
-                                            {letter}
-                                        </div>
-                                        {_.map(packages, (pack, index) => {
-                                            return (
-                                                <span key={index} className="key">
-                                                    <WizardPackagesVersionList
-                                                        pack={pack}
-                                                        packsCount={packsCount}
-                                                        selectedVersions={selectedVersions}
-                                                        selectVersion={selectVersion}
-                                                        markStepAsFinished={markStepAsFinished}
-                                                        markStepAsNotFinished={markStepAsNotFinished}
-                                                        setHardwareIdDuplicates={this.setHardwareIdDuplicates}
-                                                        hardwareIdDuplicates={this.hardwareIdDuplicates}
-                                                        rawSelectedPacks={rawSelectedPacks}
-                                                        removeSelectedPacksByKeys={removeSelectedPacksByKeys}
-                                                    />
-                                                </span>
-                                            );
-                                        })}
-                                    </span>
-                                );
-                            })}
-                        </span>
-                    }
+                    <Form>
+                        <FormInput
+                            label="Select group(s)"
+                            showIcon={false}
+                            showInput={false}
+                        />
+                    </Form>
+                    <WizardGroupsList
+                        chosenGroups={chosenGroups}
+                        setWizardData={this.setWizardData.bind(this)}
+                    />
                 </span>
-            </div>
         );
     }
 }
 
 WizardStep3.propTypes = {
-    setWizardData: PropTypes.func.isRequired,
+    wizardData: PropTypes.object.isRequired,
     stores: PropTypes.object
 }
 
 export default WizardStep3;
+

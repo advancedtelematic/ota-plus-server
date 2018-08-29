@@ -1,69 +1,157 @@
-import React, {Component, PropTypes} from 'react';
-import {observer, inject} from 'mobx-react';
-import {WizardGroupsList} from './step4Files';
-import {Loader, Form, FormInput} from '../../../partials';
+import React, {Component} from 'react';
+import {FormTextarea, FormInput, TimePicker} from '../../../partials';
+import {observable} from "mobx"
+import {observer} from 'mobx-react';
+import moment from 'moment';
+import {FormsyText} from 'formsy-material-ui/lib';
 import _ from 'underscore';
 
-@inject("stores")
+const metadataTypes = {
+    DESCRIPTION: 'DESCRIPTION',
+    INSTALL_DUR: 'ESTIMATED_INSTALLATION_DURATION',
+    PRE_DUR: 'ESTIMATED_PREPARATION_DURATION'
+};
+
 @observer
 class WizardStep4 extends Component {
-    constructor(props) {
-        super(props);
-        this.setWizardData = this.setWizardData.bind(this);
+    @observable notify = null;
+    @observable approvalNeeded = null;
+    @observable wizardMetadata = {};
+
+    constructor() {
+        super();
+        this._parseTime = this._parseTime.bind(this);
+        this._getTimeFromSeconds = this._getTimeFromSeconds.bind(this);
+        this.getPreparationTime = this.getPreparationTime.bind(this);
+        this.getInstallationTime = this.getInstallationTime.bind(this);
+        this.clearInput = this.clearInput.bind(this);
+        this.toggleNotify = this.toggleNotify.bind(this);
+        this.toggleApprove = this.toggleApprove.bind(this);
     }
 
-    componentWillMount() {
-        const { groupsStore } = this.props.stores;
-        groupsStore.fetchWizardGroups();
+    addToWizardData(type, value) {
+        const {setWizardData, markStepAsFinished, wizardData, currentStepId} = this.props;
+        this.wizardMetadata = {
+            ..._.omit(wizardData[currentStepId], 'isActivated'),
+            [type]: value
+        };
+        setWizardData(this.wizardMetadata);
+        markStepAsFinished();
     }
 
-    setWizardData(groupId) {
-        const { groupsStore } = this.props.stores;
-        let stepWizardData = this.props.wizardData[3];
-        const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
-        const groupToAdd = _.findWhere(groupsStore.wizardGroups, {id: groupId});
-        if (foundGroup)
-            stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
-        else
-            stepWizardData.groups.push(groupToAdd);
+    toggleNotify() {
+        this.notify = !this.notify;
+        this.approvalNeeded = false;
+        this.props.setApprove(false);
+    }
 
-        if (stepWizardData.groups.length)
-            this.props.markStepAsFinished();
-        else
-            this.props.markStepAsNotFinished();
+    toggleApprove() {
+        this.approvalNeeded = !this.approvalNeeded;
+        this.notify = false;
+        this.props.setApprove(this.approvalNeeded);
+    }
+
+    _parseTime(timeObject) {
+        let timeString = '';
+        _.each(timeObject, (value, key) => {
+            timeString = timeString + `${value}${key !== 'seconds' ? ':' : null}`
+        });
+        return moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds') + '';
+    }
+
+    _getTimeFromSeconds(seconds) {
+        return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+    }
+
+    getPreparationTime(time) {
+        const timeString = this._parseTime(time);
+        this.addToWizardData(metadataTypes.PRE_DUR, timeString)
+    }
+
+    getInstallationTime(time) {
+        const timeString = this._parseTime(time);
+        this.addToWizardData(metadataTypes.INSTALL_DUR, timeString)
+    }
+
+    clearInput() {
+        this.inputRef.value = '';
     }
 
     render() {
-        const { wizardData } = this.props;
-        const { groupsStore } = this.props.stores;
-        const chosenGroups = wizardData[3].groups;
+        const {wizardData, currentStepId, approvalNeeded, alphaPlus} = this.props;
+        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
         return (
-            groupsStore.groupsWizardFetchAsync.isFetching ?
-                <div className="wrapper-center">
-                    <Loader />
+            <div className="distribution-info">
+                <div className="checkboxes">
+                    <div className="flex-row">
+                        <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
+                                onClick={this.toggleNotify}>
+                        </button>
+                        <span>Silent Update</span>
+                    </div>
+                    <div className="flex-row">
+                        <button className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
+                                onClick={this.toggleApprove}>
+                        </button>
+                        <span>Approval required</span>
+                    </div>
                 </div>
-                :
-                <span>
-                    <Form>
-                        <FormInput
-                            label="Select group(s)"
-                            showIcon={false}
-                            showInput={false}
-                        />
-                    </Form>
-                    <WizardGroupsList
-                        chosenGroups={chosenGroups}
-                        setWizardData={this.setWizardData.bind(this)}
+                <div className="description">
+                    <div className="search-box">
+                        {alphaPlus ?
+                            <FormInput
+                                label="Internal description"
+                                id="internal_reuse-text"
+                                placeholder="Re-use text from"
+                                getInputRef={(ref) => this.inputRef = ref}
+                                wrapperWidth="50%"
+                            >
+                                <i className="fa fa-search icon-search"/>
+                                <i className="fa fa-close icon-close" onClick={this.clearInput}/>
+                            </FormInput> : ''
+                        }
+                    </div>
+                    <FormTextarea
+                        rows="5"
+                        label={!alphaPlus ? 'Internal description' : ''}
+                        id="internal_driver-description"
+                        defaultValue={description ? description : ''}
+                        onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
                     />
-                </span>
-        );
+                </div>
+                <div className="translations">
+                    {alphaPlus ?
+                        <div className="flex-row">
+                            <span className="bold" id="approved-translations-0">Approved translations: 0</span>
+                            <button className="btn-bordered" id="translations-view_button">Translation view</button>
+                        </div> : ''
+                    }
+                    <div className="estimations">
+                        <div className="estimation">
+                            <span className="title">Preparation time estimation:</span>
+                            <span className="time-value">
+                                <TimePicker
+                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00' )}
+                                    id={`timepicker_${metadataTypes.PRE_DUR}`}
+                                    onValid={this.getPreparationTime}
+                                />
+                            </span>
+                        </div>
+                        <div className="estimation">
+                            <span className="title">Installation time estimation:</span>
+                            <span className="time-value">
+                                <TimePicker
+                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
+                                    id={`timepicker_${metadataTypes.INSTALL_DUR}`}
+                                    onValid={this.getInstallationTime}
+                                />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 }
 
-WizardStep4.propTypes = {
-    wizardData: PropTypes.object.isRequired,
-    stores: PropTypes.object
-}
-
 export default WizardStep4;
-

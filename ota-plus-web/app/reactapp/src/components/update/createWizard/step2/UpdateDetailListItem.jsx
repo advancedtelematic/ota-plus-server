@@ -8,7 +8,7 @@ import moment from 'moment';
 
 @inject("stores")
 @observer
-class UpdateListItem extends Component {
+class UpdateDetailListItem extends Component {
     @observable fromVersions = [];
     @observable toVersions = [];
 
@@ -127,8 +127,11 @@ class UpdateListItem extends Component {
     }
 }
 
-UpdateListItem.propTypes = {
+UpdateDetailListItem.propTypes = {
     stores: PropTypes.object,
-}
+    item: PropTypes.object,
+    wizardData: PropTypes.array,
+    onStep2DataSelect: PropTypes.func,
+};
 
-export default UpdateListItem;
+export default UpdateDetailListItem;
