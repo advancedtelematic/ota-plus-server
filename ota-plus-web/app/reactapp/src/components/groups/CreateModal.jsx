@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, intercept, ObservableMap } from 'mobx';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal, AsyncResponse, Form, FormInput } from '../../partials';
-import { FormsyText } from 'formsy-material-ui/lib';
-import { FlatButton } from 'material-ui';
+import { Modal } from '../../partials';
 import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import {
@@ -134,12 +132,16 @@ class CreateModal extends Component {
     handleResponse() {
         const { groupsStore } = this.props.stores;
         let data = null;
+        let isSmart = false;
         if (this.groupType === 'classic') {
             data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
         } else {
             data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
+            isSmart = true;
+            groupsStore.fetchExpressionForSelectedGroup(groupsStore.latestCreatedGroupId);
+
         }
-        this.props.selectGroup({ type: 'real', groupName: data.groupName, id: groupsStore.latestCreatedGroupId });
+        this.props.selectGroup({ type: 'real', groupName: data.groupName, id: groupsStore.latestCreatedGroupId, isSmart: isSmart });
         groupsStore._prepareGroups(groupsStore.groups);
         this.props.hide();
     }
