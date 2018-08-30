@@ -1,13 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import {observable, observe, extendObservable} from "mobx"
+import {observable, observe } from "mobx"
 import {observer, inject} from 'mobx-react';
-import {FlatButton} from 'material-ui';
 import _ from 'underscore';
 import {Form} from 'formsy-react';
-import {AsyncStatusCallbackHandler} from '../../utils';
 import {Modal, Loader, SearchBar} from '../../partials';
-import { UpdateDetails } from './wizardSteps/step2Files';
-import Draggable from 'react-draggable';
+import { UpdateDetails } from './wizardSteps/step3Files';
 import {
     WizardStep1,
     WizardStep2,
@@ -24,10 +21,10 @@ const initialWizardData = [
         name: '',
     },
     {
-        update: [],
+        groups: [],
     },
     {
-        groups: [],
+        update: [],
     },
     {
         isActivated: false,
@@ -43,15 +40,15 @@ const initialWizardStepForAlphaPlus = [
     },
     {
         class: WizardStep2,
-        name: "updates",
-        title: "Select Update",
+        title: "Select Group(s)",
+        name: "groups",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep3,
-        title: "Select Group(s)",
-        name: "groups",
+        name: "updates",
+        title: "Select Update",
         isFinished: false,
         isSearchBarShown: false,
     },
@@ -96,15 +93,15 @@ const initialWizardStep = [
     },
     {
         class: WizardStep2,
-        name: "updates",
-        title: "Select Update",
+        title: "Select Group(s)",
+        name: "groups",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep3,
-        title: "Select Group(s)",
-        name: "groups",
+        name: "updates",
+        title: "Select Update",
         isFinished: false,
         isSearchBarShown: false,
     },
@@ -190,7 +187,7 @@ class Wizard extends Component {
 
     componentWillMount() {
         const { skipStep } = this.props;
-        const { groupsStore, updateStore } = this.props.stores;
+        const { groupsStore, updatesStore } = this.props.stores;
 
         if(skipStep) {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
@@ -204,7 +201,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
-        updateStore.fetchUpdates();
+        updatesStore.fetchUpdates();
     }
 
     componentWillUnmount() {
@@ -223,9 +220,9 @@ class Wizard extends Component {
 
     addToCampaign(packName, e) {
         if (e) e.preventDefault();
-        const { updateStore } = this.props.stores;
+        const { updatesStore } = this.props.stores;
         this.currentStepId = 2;
-        let sortedUpdates = updateStore.preparedUpdates;
+        let sortedUpdates = updatesStore.preparedUpdates;
         _.each(sortedUpdates, (packs, letter) => {
             let pack = _.find(packs, pack => pack.packageName === packName);
             if (pack) {
@@ -267,11 +264,9 @@ class Wizard extends Component {
     }
 
     verifyIfPreviousStepsFinished(stepId) {
-        if (_.find(this.wizardSteps, function (step, index) {
+        return !(_.find(this.wizardSteps, function (step, index) {
                 return index <= stepId && step.isFinished === false;
-            }))
-            return false;
-        return true;
+            }));
     }
 
     markStepAsFinished() {
@@ -306,7 +301,7 @@ class Wizard extends Component {
         let createData = {
             name: this.wizardData[0].name,
             update: updateId,
-            groups: _.map(this.wizardData[3].groups, (group, index) => {
+            groups: _.map(this.wizardData[1].groups, (group, index) => {
                 return group.id
             }),
             metadata: _.without(_.map(this.wizardData[4], (val, key) => {
