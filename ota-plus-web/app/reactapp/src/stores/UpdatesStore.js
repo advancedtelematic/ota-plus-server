@@ -18,6 +18,7 @@ export default class UpdatesStore {
     @observable updatesLoadMoreAsync = {};
     @observable updatesMtuCreateAsync = {};
     @observable updatesCreateAsync = {};
+    @observable updatesFetchMtuIdAsync = {};
 
     @observable initialUpdates = [];
     @observable updates = [];
@@ -28,6 +29,7 @@ export default class UpdatesStore {
     @observable updatesInitialTotalCount = 0;
     @observable preparedUpdates = {};
     @observable lastCreatedMtuId = null;
+    @observable currentMtuData = null;
 
     constructor() {
         resetAsync(this.updatesFetchAsync);
@@ -125,6 +127,20 @@ export default class UpdatesStore {
             })
             .catch((error) => {
                 this.updatesLoadMoreAsync = handleAsyncError(error);
+            });
+    }
+
+    fetchUpdate(mtuId) {
+        resetAsync(this.updatesFetchMtuIdAsync, true);
+        let apiAddress = `${API_GET_MULTI_TARGET_UPDATE_INDENTIFIER}/${mtuId}`;
+
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.currentMtuData = response.data;
+                this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.updatesFetchMtuIdAsync = handleAsyncError(error);
             });
     }
 

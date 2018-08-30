@@ -79,7 +79,7 @@ class WizardStep4 extends Component {
 
     render() {
         const {wizardData, currentStepId, approvalNeeded, alphaPlus} = this.props;
-        const {description, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
+        const {DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
@@ -115,7 +115,7 @@ class WizardStep4 extends Component {
                         rows="5"
                         label={!alphaPlus ? 'Internal description' : ''}
                         id="internal_driver-description"
-                        defaultValue={description ? description : ''}
+                        defaultValue={DESCRIPTION ? DESCRIPTION : ''}
                         onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
                     />
                 </div>

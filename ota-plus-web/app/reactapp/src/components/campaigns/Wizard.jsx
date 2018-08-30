@@ -304,7 +304,7 @@ class Wizard extends Component {
             groups: _.map(this.wizardData[1].groups, (group, index) => {
                 return group.id
             }),
-            metadata: _.without(_.map(this.wizardData[4], (val, key) => {
+            metadata: _.without(_.map(this.wizardData[3], (val, key) => {
                 return {
                     type: key,
                     value: val
@@ -313,7 +313,7 @@ class Wizard extends Component {
             approvalNeeded: this.approvalNeeded
         };
 
-        if (!this.wizardData[4].isActivated) {
+        if (!this.wizardData[3].isActivated) {
             createData = _.omit(createData, 'metadata')
         }
 
@@ -332,6 +332,9 @@ class Wizard extends Component {
     }
 
     showUpdateDetails(update, e) {
+        if (e) {
+            e.preventDefault();
+        }
         this.currentDetails = update;
     }
 
@@ -350,7 +353,7 @@ class Wizard extends Component {
 
         const modalContent = (
             this.currentDetails ?
-                <UpdateDetails details={ this.currentDetails } isEditable={ false }/>
+                <UpdateDetails updateItem={ this.currentDetails } isEditable={ false }/>
             :
             <div
                 className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
