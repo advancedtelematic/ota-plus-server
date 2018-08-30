@@ -25,7 +25,7 @@ class Step2 extends Component {
                 <div className="updates-container clearfix">
                     {
                         showDetails ?
-                            <UpdateDetails details={ showDetails } isEditable={ false }/>
+                            <UpdateDetails updateItem={ showDetails } isEditable={ false }/>
                             :
                             <Step2UpdateList
                                 wizardData={ wizardData }
