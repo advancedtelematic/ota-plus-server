@@ -1,71 +1,68 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
-import { SelectUpdateList } from './step2Files';
+import { WizardGroupsList } from './step2Files';
 import { Loader, Form, FormInput } from '../../../partials';
-import { _contains } from '../../../utils/Collection';
-import _ from "underscore";
+import _ from 'underscore';
 
 @inject("stores")
 @observer
 class WizardStep2 extends Component {
     constructor(props) {
         super(props);
-        this.validateStep = this.validateStep.bind(this);
-        this.changeUpdateSelection = this.changeUpdateSelection.bind(this);
-        this.showDetails = this.showDetails.bind(this);
+        this.setWizardData = this.setWizardData.bind(this);
     }
 
-    validateStep = (selectedUpdate) => {
-        if (selectedUpdate && selectedUpdate.length) {
+    componentWillMount() {
+        const { groupsStore } = this.props.stores;
+        groupsStore.fetchWizardGroups();
+    }
+
+    setWizardData(groupId) {
+        const { groupsStore } = this.props.stores;
+        const { currentStepId } = this.props;
+        let stepWizardData = this.props.wizardData[currentStepId];
+        const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
+        const groupToAdd = _.findWhere(groupsStore.wizardGroups, { id: groupId });
+        if (foundGroup)
+            stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
+        else
+            stepWizardData.groups.push(groupToAdd);
+
+        if (stepWizardData.groups.length)
             this.props.markStepAsFinished();
-        } else {
+        else
             this.props.markStepAsNotFinished();
-        }
-    };
-
-    changeUpdateSelection = (update) => {
-        const { wizardData, currentStepId } = this.props;
-        const stepData = wizardData[currentStepId];
-        let selectedUpdate = stepData.update;
-
-        if (!_.isEqual(selectedUpdate.pop(), update)) {
-            selectedUpdate.push(update);
-        }
-
-        this.validateStep(selectedUpdate);
-    };
-
-    showDetails = (update, e) => {
-        if (e) {
-            e.preventDefault();
-        }
-        this.props.showUpdateDetails(update);
-    };
+    }
 
     render() {
         const { wizardData, currentStepId } = this.props;
-
+        const { groupsStore } = this.props.stores;
+        const chosenGroups = wizardData[currentStepId].groups;
         return (
-            <div>
-                <Form>
-                    <label title="" className="c-form__label">{ "Select Update" }</label>
-                </Form>
-                <SelectUpdateList
-                    wizardData={ wizardData }
-                    stepId={ currentStepId }
-                    stores={ this.props.stores }
-                    toggleSelection={ this.changeUpdateSelection }
-                    showUpdateDetails={ this.showDetails }
-                />
-            </div>
+            groupsStore.groupsWizardFetchAsync.isFetching ?
+                <div className="wrapper-center">
+                    <Loader/>
+                </div>
+                :
+                <span>
+                    <Form>
+                        <FormInput
+                            label="Select group(s)"
+                            showIcon={ false }
+                            showInput={ false }
+                        />
+                    </Form>
+                    <WizardGroupsList
+                        chosenGroups={ chosenGroups }
+                        setWizardData={ this.setWizardData.bind(this) }
+                    />
+                </span>
         );
     }
 }
 
 WizardStep2.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    currentStepId: PropTypes.number.isRequired,
-    setWizardData: PropTypes.func.isRequired,
     stores: PropTypes.object,
 };
 
