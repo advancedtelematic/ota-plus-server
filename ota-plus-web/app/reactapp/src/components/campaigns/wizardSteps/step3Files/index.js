@@ -1,7 +1,7 @@
-import WizardGroupsList from './GroupsList';
-import WizardGroupsListItem from './GroupsListItem';
+import SelectUpdateList from './SelectUpdateList';
+import UpdateDetails from '../../../updates/UpdateDetails';
 
 export {
-    WizardGroupsList,
-    WizardGroupsListItem
-}
+    SelectUpdateList,
+    UpdateDetails,
+};
