@@ -15,7 +15,7 @@ export default class FeaturesStore {
     @observable featuresFetchAsync = {};
     @observable features = [];
     @observable clientId = null;
-    @observable alphaPlusEnabled = true;
+    @observable alphaPlusEnabled = false;
 
     constructor() {
         resetAsync(this.featuresFetchAsync);
