@@ -29,7 +29,7 @@ export default class UpdatesStore {
     @observable updatesInitialTotalCount = 0;
     @observable preparedUpdates = {};
     @observable lastCreatedMtuId = null;
-    @observable currentMtuData = null;
+    @observable currentMtuData = {};
 
     constructor() {
         resetAsync(this.updatesFetchAsync);
@@ -134,12 +134,23 @@ export default class UpdatesStore {
         resetAsync(this.updatesFetchMtuIdAsync, true);
         let apiAddress = `${API_GET_MULTI_TARGET_UPDATE_INDENTIFIER}/${mtuId}`;
 
+        const { mtuId: currentMtuId } = this.currentMtuData;
+
+        if (currentMtuId === mtuId) {
+            resetAsync(this.updatesFetchMtuIdAsync, false);
+            return;
+        }
+
         return axios.get(apiAddress)
             .then((response) => {
-                this.currentMtuData = response.data;
+                this.currentMtuData = {
+                    mtuId: mtuId,
+                    data: response.data,
+                };
                 this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
+                this.currentMtuData = {};
                 this.updatesFetchMtuIdAsync = handleAsyncError(error);
             });
     }
