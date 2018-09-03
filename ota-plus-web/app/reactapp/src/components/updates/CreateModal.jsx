@@ -179,25 +179,20 @@ class CreateModal extends Component {
                 }) }
                 <div className="body-actions" style={ { margin: 0 } }>
                     { this.isLastStep() ?
+                        !showDetails &&
                         <div style={ { display: 'flex' } }>
-                            { !showDetails ?
-                                <span>
-                                    <button
-                                        className="btn-primary"
-                                        id="wizard-back-button"
-                                        onClick={ this.prevStep }
-                                        style={ { marginRight: '10px' } }
-                                    >{ "Back" }</button>
-                                    <button
-                                        className="btn-primary"
-                                        id="wizard-launch-button"
-                                        disabled={ !currentStep.isFinished }
-                                        onClick={ this.createMtu }
-                                    >{ "Save" }</button>
-                                </span>
-                                :
-                                null
-                            }
+                            <button
+                                className="btn-primary"
+                                id="wizard-back-button"
+                                onClick={ this.prevStep }
+                                style={ { marginRight: '10px' } }
+                            >{ "Back" }</button>
+                            <button
+                                className="btn-primary pull-right"
+                                id="wizard-launch-button"
+                                disabled={ !currentStep.isFinished }
+                                onClick={ this.createMtu }
+                            >{ "Save" }</button>
                         </div>
                         :
                         <button

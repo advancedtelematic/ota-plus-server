@@ -17,7 +17,7 @@ class UpdateDetails extends Component {
     render() {
         const { updatesStore } = this.props.stores;
         const { updateItem, isEditable } = this.props;
-        const mtuData = updatesStore.currentMtuData;
+        const mtuData = updatesStore.currentMtuData && updatesStore.currentMtuData.data;
 
         return (
             <div>
@@ -54,10 +54,8 @@ class UpdateDetails extends Component {
                         mtuData ?
                             _.map(mtuData, (target, hardwareId) => {
                                 const noInformation = "No information.";
-                                const fromPackage = target.from.target;
-                                const toPackage = target.to.target;
-                                const fromVersion = target.from.checksum.hash;
-                                const toVersion = target.to.checksum.hash;
+                                const { target: fromPackage, checksum: fromVersion } = target.from;
+                                const { target: toPackage, checksum: toVersion } = target.to;
 
                                 return (
                                     <div className="col-xs-12" key={ hardwareId }>
@@ -87,7 +85,7 @@ class UpdateDetails extends Component {
                                                 label="Version"
                                                 name="fromVersion"
                                                 id="from-version"
-                                                defaultValue={ fromVersion ? toVersion : noInformation }
+                                                defaultValue={ fromVersion ? fromVersion.hash : noInformation }
                                                 isEditable={ isEditable }
                                             />
                                         </div>
@@ -96,7 +94,7 @@ class UpdateDetails extends Component {
                                                 label="Package"
                                                 name="toVersion"
                                                 id="to-version"
-                                                defaultValue={ toVersion ? toVersion : noInformation }
+                                                defaultValue={ toVersion ? toVersion.hash : noInformation }
                                                 isEditable={ isEditable }
                                             />
                                         </div>
@@ -105,18 +103,16 @@ class UpdateDetails extends Component {
                             })
                             :
                             updateItem.source &&
-                            <div className="row source-container">
-                                <div className="col-xs-12">
-                                    <FormInput
-                                        label={ updateItem.source.id }
-                                        name="fromPackage"
-                                        id="from-package"
-                                        defaultValue={ updateItem.source.sourceType }
-                                        isEditable={ isEditable }
-                                    />
-                                    <div className="wrapper-center">
-                                        <p>{ "No further information available." }</p>
-                                    </div>
+                            <div className="col-xs-12">
+                                <FormInput
+                                    label={ updateItem.source.id }
+                                    name="fromPackage"
+                                    id="from-package"
+                                    defaultValue={ updateItem.source.sourceType }
+                                    isEditable={ isEditable }
+                                />
+                                <div className="wrapper-center">
+                                    <p>{ "No further information available." }</p>
                                 </div>
                             </div>
                 }
