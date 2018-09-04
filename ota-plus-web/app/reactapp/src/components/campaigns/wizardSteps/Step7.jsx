@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Loader, AsyncResponse } from '../../../partials';
+import { AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
 
@@ -12,7 +11,6 @@ class WizardStep7 extends Component {
         const { updatesStore } = this.props.stores;
         const { wizardData } = this.props;
         const currentUpdate = _.first(wizardData[2].update);
-        // toDo: to check if mtu data with current source id already is in store before fetch
         updatesStore.fetchUpdate(currentUpdate && currentUpdate.source.id);
     }
 
@@ -20,7 +18,7 @@ class WizardStep7 extends Component {
         const { t, wizardData } = this.props;
         const { campaignsStore, groupsStore, updatesStore } = this.props.stores;
 
-        const updateSummary = updatesStore.currentMtuData;
+        const updateSummary = updatesStore.currentMtuData && updatesStore.currentMtuData.data;
 
         return (
             <div className="step-inner">
@@ -35,10 +33,8 @@ class WizardStep7 extends Component {
                         {   updateSummary &&
                             _.map(updateSummary, (target, hardwareId) => {
                             const noInformation = "No information.";
-                            const fromPackage = target.from.target;
-                            const toPackage = target.to.target;
-                            const fromVersion = target.from.checksum.hash;
-                            const toVersion = target.to.checksum.hash;
+                            const { target: fromPackage, checksum: fromVersion } = target.from;
+                            const { target: toPackage, checksum: toVersion } = target.to;
 
                             return (
                                 <div className="package-container" key={ hardwareId }>
@@ -63,13 +59,13 @@ class WizardStep7 extends Component {
                                             <div className="update-from">
                                                 <div className="text">{ "Version:" }</div>
                                                 <div className="value" id={ "from-package-version-" + fromVersion }>
-                                                    { fromVersion ? fromVersion : noInformation }
+                                                    { fromVersion ? fromVersion.hash : noInformation }
                                                 </div>
                                             </div>
                                             <div className="update-to">
                                                 <div className="text">{ "Version:" }</div>
                                                 <div className="value" id={ "to-package-version-" + toVersion }>
-                                                    { toVersion ? toVersion : noInformation }
+                                                    { toVersion ? toVersion.hash : noInformation }
                                                 </div>
                                             </div>
                                         </span>
