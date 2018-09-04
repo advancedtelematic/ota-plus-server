@@ -353,31 +353,39 @@ class Wizard extends Component {
 
         const modalContent = (
             this.currentDetails ?
-                <UpdateDetails updateItem={ this.currentDetails } isEditable={ false }/>
-            :
-            <div
-                className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
-                <div className="draggable-content">                    
-                    <div className="internal-body">
-                        <div className="stepper">
-                            <div className="wrapper-steps-no">
-                                {_.map(this.wizardSteps, (step, index) => {
-                                    return (
-                                        <div
-                                            className={"step" + (this.currentStepId == index ? " active" : "")}
-                                            key={'wizard-step-' + index}>
-                                            <a href="#" className="dot"
-                                               onClick={this.jumpToStep.bind(this, index)}>
-                                                {index + 1}
-                                            </a>
-                                            <div className="stepnum">
-                                                {step.title}
-                                            </div>
-                                        </div>
-                                    );
-                                }, this)}
+                <div className="campaigns-wizard">
+                    <div className="draggable-content">
+                        <div className="internal-body">
+                            <div className="content-step">
+                                <UpdateDetails updateItem={ this.currentDetails } isEditable={ false }/>
                             </div>
                         </div>
+                    </div>
+                </div>
+                :
+                <div
+                    className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
+                    <div className="draggable-content">
+                        <div className="internal-body">
+                            <div className="stepper">
+                                <div className="wrapper-steps-no">
+                                    {_.map(this.wizardSteps, (step, index) => {
+                                        return (
+                                            <div
+                                                className={"step" + (this.currentStepId == index ? " active" : "")}
+                                                key={'wizard-step-' + index}>
+                                                <a href="#" className="dot"
+                                                   onClick={this.jumpToStep.bind(this, index)}>
+                                                    {index + 1}
+                                                </a>
+                                                <div className="stepnum">
+                                                    {step.title}
+                                                </div>
+                                            </div>
+                                        );
+                                    }, this)}
+                                </div>
+                            </div>
                             <div className={"content-step step-" + currentStep.name}>
                                 {campaignsStore.campaignsOneFetchAsync.isFetching ?
                                     <div className="wrapper-center">
@@ -437,37 +445,30 @@ class Wizard extends Component {
                                 }
                                 </div>
                             </div>
+                        </div>
                     </div>
+                    <div id="dropdown-render"></div>
                 </div>
-                <div id="dropdown-render"></div>
-            </div>
         );
         return (
             <Modal
                 title={ !this.currentDetails ? "Add new campaign" : "Campaign update details" }
                 topActions={
-                    this.currentDetails ?
-                        <div className="top-actions flex-end">
-                            <div className="wizard-close" onClick={ this.hideUpdateDetails } id="close-details">
-                                <img src="/assets/img/icons/close.svg" alt="Icon" />
-                            </div>
+                    <div className="top-actions">
+                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
+                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                         </div>
-                        :
-                        <div className="top-actions">
-                            <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
-                                <img src="/assets/img/icons/minimize.svg" alt="Icon" />
-                            </div>
-                            <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
-                                {campaignsStore.fullScreenMode ?
-                                    <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
-                                :
-                                    <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
-                                }
-                            </div>
-                            <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
-                                <img src="/assets/img/icons/close.svg" alt="Icon" />
-                            </div>
+                        <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
+                            {campaignsStore.fullScreenMode ?
+                                <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
+                            :
+                                <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
+                            }
                         </div>
+                        <div className="wizard-close" onClick={this.currentDetails ? this.hideUpdateDetails : hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
+                            <img src="/assets/img/icons/close.svg" alt="Icon" />
+                        </div>
+                    </div>
                 }
                 content={modalContent}
                 shown={!wizardMinimized}
