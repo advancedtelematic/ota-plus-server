@@ -96,7 +96,7 @@ class UpdateDetails extends Component {
                                             </div>
                                             <div className="col-xs-6">
                                                 <FormInput
-                                                    label="Package"
+                                                    label="Version"
                                                     name="toVersion"
                                                     id="to-version"
                                                     defaultValue={ toVersion ? toVersion.hash : noInformation }
