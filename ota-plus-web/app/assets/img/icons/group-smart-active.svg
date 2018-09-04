@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Smart Groups_active_Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Smart-Groups_active_Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M4,0 L46,0 C48.209139,-4.05812251e-16 50,1.790861 50,4 L50,46 C50,48.209139 48.209139,50 46,50 L4,50 C1.790861,50 2.705415e-16,48.209139 0,46 L0,4 C-2.705415e-16,1.790861 1.790861,4.05812251e-16 4,0 Z" id="Combined-Shape" fill-opacity="0.3" fill="#0F1621"></path>
+        <g id="Group" transform="translate(14.000000, 14.000000)" fill="#FFFFFF">
+            <rect id="Rectangle-6-Copy-3" fill-opacity="0.3" x="6" y="0" width="16" height="16" rx="1"></rect>
+            <rect id="Rectangle-6-Copy-4" fill-opacity="0.3" x="0" y="6" width="16" height="16" rx="1"></rect>
+            <path d="M6,6 L15,6 C15.5522847,6 16,6.44771525 16,7 L16,16 L7,16 C6.44771525,16 6,15.5522847 6,15 L6,6 Z" id="Rectangle-6-Copy-4"></path>
+        </g>
+    </g>
+</svg>

@@ -27,55 +27,43 @@ class ListItem extends Component {
     @observable renameModalShown = false;
     @observable showEdit = false;
 
-    constructor(props) {
-        super(props);
-        this.showRenameModal = this.showRenameModal.bind(this);
-        this.hideRenameModal = this.hideRenameModal.bind(this);
-        this.showDropdown = this.showDropdown.bind(this);
-        this.hideDropdown = this.hideDropdown.bind(this);
-    }
-
-    showRenameModal(e) {
+    showRenameModal = (e) => {
         if (e) e.stopPropagation();
         this.renameModalShown = true;
     }
 
-    hideRenameModal(e) {
+    hideRenameModal = (e) => {
         if (e) e.preventDefault();
         this.renameModalShown = false;
     }
 
-    showDropdown() {
+    showDropdown = () => {
         this.showEdit = true;
     }
 
-    hideDropdown() {
+    hideDropdown = () => {
         this.showEdit = false;
     }
 
     render() {
-        const { t, group, isSelected, isSmart, selectGroup, isOver, canDrop, connectDropTarget } = this.props;
+        const { t, group, isSelected, selectGroup, isOver, connectDropTarget, isSmart } = this.props;
         const { groupsStore } = this.props.stores;
         return (
             connectDropTarget(
                 <div
                     title={group.groupName}
                     className={"groups-panel__item" + (isSelected ? " groups-panel__item--selected" : "") + (isOver ? " groups-panel__item--active" : "")}
-                    id={"button-group-" + group.groupName}>
-                    {groupsStore.activeFleet ?
-                        <div className="groups-panel__item-icon groups-panel__item-icon--fleet">
-                            {group.groupName.substring(0, 3)}
-                        </div>
-                        : isSmart ?
-                            <div className="groups-panel__item-icon groups-panel__item-icon--smart">
-                                AG
-                        </div>
-                            :
-                            <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
-                    }
-                    <div className="groups-panel__item-desc" onClick={() => {
+                    id={"button-group-" + group.groupName}
+                    onClick={() => {
                         selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart });
-                    }}>
+                    }}
+                >
+                    {!isSmart ?
+                        <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? "-active" : "")}></div>
+                        :
+                        <div className={"groups-panel__item-icon groups-panel__item-icon--smart" + (isSelected ? "-active" : "")}></div>
+                    }
+                    <div className="groups-panel__item-desc" >
                         <div className="groups-panel__item-title">
                             <div className="groups-panel__item-title-value">
                                 {group.groupName}

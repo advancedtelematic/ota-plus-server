@@ -27,6 +27,7 @@ export default class GroupsStore {
     @observable groupsRenameAsync = {};
     @observable groupsAddDeviceAsync = {};
     @observable groupsRemoveDeviceAsync = {};
+    @observable groupsFetchDevicesAsync = {};
     @observable smartGroups = [];
     @observable classicGroups = [];
     @observable groups = [];
@@ -41,8 +42,6 @@ export default class GroupsStore {
     };
 
     @observable groupsLimit = 10;
-
-    @observable activeFleet = null;
 
     @observable groupsOffset = 0;
     @observable hasMoreGroups = false;
@@ -62,6 +61,7 @@ export default class GroupsStore {
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
+        resetAsync(this.groupsFetchDevicesAsync);
     }
 
     selectDefaultGroup() {
@@ -71,14 +71,9 @@ export default class GroupsStore {
         };
     }
 
-    _filterGroups(fleetId) {
-        this.filteredGroups = _.filter(this.groups, group => group.fleet_id === fleetId);
-        this._prepareGroups(this.filteredGroups);
-    }
 
     fetchGroups(async = 'groupsFetchAsync') {
         resetAsync(this[async], true);
-
         this.groupsOffset = 0;
 
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsOffset)
@@ -90,7 +85,6 @@ export default class GroupsStore {
                         this.classicGroups = _.filter(groups, group => group.groupType === 'static');
                         this.smartGroups = _.filter(groups, group => group.groupType === 'dynamic');
                         this._prepareGroups(this.groups);
-                        this._prepareGroupsWithFleets();
                         this[async] = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -114,6 +108,8 @@ export default class GroupsStore {
             }.bind(this));
     }
 
+
+
     loadMoreGroups() {
         resetAsync(this.groupsLoadMoreFetchAsync, true);
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + (this.groupsOffset + this.groupsLimit))
@@ -125,7 +121,6 @@ export default class GroupsStore {
                         this.classicGroups = _.uniq(_.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id);
                         this.smartGroups = _.uniq(_.filter(this.smartGroups.concat(groups), group => group.groupType === 'dynamic'), group => group.id);
                         this._prepareGroups(this.groups);
-                        this._prepareGroupsWithFleets();
                         this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -245,12 +240,9 @@ export default class GroupsStore {
                     type: 'real',
                     groupName: name
                 };
-                if (this.activeFleet) {
-                    this._prepareGroupsWithFleets();
-                    this._filterGroups(this.activeFleet.id);
-                } else {
-                    this._prepareGroups(this.groups);
-                }
+
+                this._prepareGroups(this.groups);
+
             }.bind(this))
             .catch(function (error) {
                 this.groupsRenameAsync = handleAsyncError(error);
@@ -282,15 +274,18 @@ export default class GroupsStore {
     }
 
     fetchDevicesForGroup(groupId) {
+        resetAsync(this.groupsFetchDevicesAsync, true);
         return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
             .then(function (resp) {
                 const foundGroup = this._getGroup(groupId);
                 if (foundGroup) {
                     foundGroup.devices = resp.data;
                 }
+                this.groupsFetchDevicesAsync = handleAsyncSuccess(response);
             }.bind(this))
-            .catch(function () {
-            });
+            .catch(function (error) {
+                this.groupsFetchDevicesAsync = handleAsyncError(error);
+            }.bind(this));
     }
 
     fetchDevicesForSelectedGroup(groupId) {
@@ -323,10 +318,12 @@ export default class GroupsStore {
         resetAsync(this.groupsWizardFetchAsync);
         resetAsync(this.groupsWizardLoadMoreFetchAsync);
         resetAsync(this.expressionForSelectedGroupFetchAsync);
+
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
+        resetAsync(this.groupsFetchDevicesAsync);
         this.smartGroups = [];
         this.classicGroups = [];
         this.groups = [];
@@ -380,28 +377,7 @@ export default class GroupsStore {
         this.preparedWizardGroups = preparedGroups;
     }
 
-    _prepareGroupsWithFleets() {
-        _.each(this.groups, group => {
-            let groupLetters = group.groupName.substring(0, 3);
-            switch (groupLetters) {
-                case 'H34':
-                    group.fleet_id = 'sedan';
-                    break;
-                case 'H35':
-                    group.fleet_id = 'hatchback';
-                    break;
-                case 'H5S':
-                    group.fleet_id = 'sport';
-                    break;
-                case 'H6W':
-                    group.fleet_id = 'sw';
-                    break;
-                default:
-                    group.fleet_id = 'eh0';
-                    break;
-            }
-        });
-    }
+
 
     _getGroup(id) {
         return _.findWhere(this.groups, { id: id });
