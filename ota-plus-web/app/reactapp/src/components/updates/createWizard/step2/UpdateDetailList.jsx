@@ -13,18 +13,18 @@ class UpdateDetailList extends Component {
         const selectedHardwares = wizardData[0].selectedHardwares;
         return (
             <span>
-                {packagesStore.packagesFetchAsync.isFetching ?
+                { packagesStore.packagesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader/>
                     </div>
-                :
+                    :
                     _.map(selectedHardwares, item => {
                         return (
                             <UpdateDetailListItem
-                                key={item.name}
-                                item={item.name}
-                                wizardData={wizardData}
-                                onStep2DataSelect={onStep2DataSelect}
+                                key={ item.name }
+                                item={ item }
+                                wizardData={ wizardData }
+                                onStep2DataSelect={ onStep2DataSelect }
                             />
                         );
                     })

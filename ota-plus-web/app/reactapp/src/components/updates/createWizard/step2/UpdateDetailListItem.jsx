@@ -51,11 +51,12 @@ class UpdateDetailListItem extends Component {
                 item
             };
         });
+
         return (
             <div className="update-block">
                 <div className="row hardware-id">
                     <div className="col-xs-12">
-                        { item }
+                        { item.name }
                     </div>
                 </div>
                 <div className='row header'>
@@ -142,7 +143,7 @@ class UpdateDetailListItem extends Component {
 UpdateDetailListItem.propTypes = {
     stores: PropTypes.object,
     item: PropTypes.object,
-    wizardData: PropTypes.array,
+    wizardData: PropTypes.object,
     onStep2DataSelect: PropTypes.func,
 };
 
