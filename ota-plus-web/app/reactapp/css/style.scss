@@ -781,49 +781,6 @@ input {
     }
 }
 
-.second-navigation {
-    background-color: #272D37;
-    height: 50px;
-
-    &__links {
-        height:100%;
-        padding-left: 125px;
-        margin: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    &__link {
-        font-size: 16px;
-        font-weight: 300;
-        color: #9FA2A6;
-        padding: 5px 25px 0;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        border-bottom: 4px solid transparent;
-        margin-left:37px;
-        @include transition;
-
-        &:first-child {
-            padding: 5px 20px 0;
-            margin-left: 0;
-        }
-
-        &:hover, &--active {
-            border-bottom: 4px solid $color-mint;
-            color: #fff;
-        }
-    }
-
-    &__icon {
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        width: 50px; 
-        height: 50px;
-    }
-}
 
 .container {
     width: 100%;

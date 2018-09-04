@@ -24,10 +24,10 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable ungroupedDevicesFetchAsync = {};
     @observable devicesByFilterFetchAsync = {};
     @observable devicesLoadMoreAsync = {};
     @observable devicesDeleteAsync = {};
-    @observable deviceFleetsFetchAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesOneNetworkInfoFetchAsync = {};
     @observable devicesCountFetchAsync = {};
@@ -38,10 +38,10 @@ export default class DevicesStore {
     @observable mtuCreateAsync = {};
     @observable mtuFetchAsync = {};
     @observable mtuCancelAsync = {};
-
     @observable devices = [];
     @observable devicesTotalCount = null;
     @observable devicesInitialTotalCount = null;
+    @observable ungroupedDevicesInitialTotalCount = 0;
     @observable devicesCurrentPage = 1;
     @observable devicesOffset = 0;
     @observable devicesFilter = '';
@@ -57,14 +57,14 @@ export default class DevicesStore {
     @observable multiTargetUpdatesSaved = [];
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
-    @observable deviceFleets = [];
+
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.ungroupedDevicesFetchAsync);
         resetAsync(this.devicesByFilterFetchAsync);
         resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
-        resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
@@ -92,43 +92,6 @@ export default class DevicesStore {
             });
     }
 
-    fetchDeviceFleets() {
-        resetAsync(this.deviceFleetsFetchAsync, true);
-        this.deviceFleets = [
-            {
-                id: 'sedan',
-                name: 'H3 Sedan',
-                icon_default: '/assets/img/icons/vehicle_01--default.svg',
-                icon_active: '/assets/img/icons/vehicle_01--active.svg',
-            },
-            {
-                id: 'hatchback',
-                name: 'H3 Hatchback',
-                icon_default: '/assets/img/icons/vehicle_02--default.svg',
-                icon_active: '/assets/img/icons/vehicle_02--active.svg',
-            },
-            {
-                id: 'eh0',
-                name: 'eH0',
-                icon_default: '/assets/img/icons/vehicle_03--default.svg',
-                icon_active: '/assets/img/icons/vehicle_03--active.svg',
-            },
-            {
-                id: 'sport',
-                name: 'H5 Sport',
-                icon_default: '/assets/img/icons/vehicle_04--default.svg',
-                icon_active: '/assets/img/icons/vehicle_04--active.svg',
-            },
-            {
-                id: 'sw',
-                name: 'H6 SW',
-                icon_default: '/assets/img/icons/vehicle_05--default.svg',
-                icon_active: '/assets/img/icons/vehicle_05--active.svg',
-            }
-        ];
-        this.deviceFleetsFetchAsync = handleAsyncSuccess(this.deviceFleets);
-    }
-
     fetchDevices(filter = '', groupId, async = 'devicesFetchAsync') {
         resetAsync(this[async], true);
         filter = filter.toLowerCase();
@@ -147,12 +110,25 @@ export default class DevicesStore {
                 this.devicesTotalCount = response.data.total;
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
+
                 }
                 this._prepareDevices();
                 this[async] = handleAsyncSuccess(response);
             })
             .catch((error) => {
                 this[async] = handleAsyncError(error);
+            });
+    }
+
+    fetchUngroupedDevices(filter = '') {
+        resetAsync(this.ungroupedDevicesFetchAsync, true);
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}&ungrouped=true`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.ungroupedDevicesInitialTotalCount = response.data.total;
+            })
+            .catch((error) => {
+                this.ungroupedDevicesFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -498,7 +474,6 @@ export default class DevicesStore {
         resetAsync(this.devicesByFilterFetchAsync);
         resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
-        resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesOneNetworkInfoFetchAsync);
         resetAsync(this.devicesCountFetchAsync);

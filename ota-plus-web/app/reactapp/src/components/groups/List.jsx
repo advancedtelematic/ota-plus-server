@@ -1,23 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 import ListItem from './ListItem';
-import ListItemArtificial from './ListItemArtificial';
 import { InfiniteScroll } from '../../utils';
 import { VelocityTransitionGroup } from 'velocity-react';
 import { Loader } from '../../partials';
 
 @inject("stores")
 @observer
-class DefaultList extends Component {
+class List extends Component {
     render() {
         const { selectGroup, onDeviceDrop } = this.props;
-        const { groupsStore } = this.props.stores;
+        const { groupsStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         return (
             <span>
-                <VelocityTransitionGroup 
+                <VelocityTransitionGroup
                     enter={{
                         animation: "slideDown",
                     }}
@@ -32,7 +30,7 @@ class DefaultList extends Component {
                             <div className="wrapper-center">
                                 <Loader />
                             </div>
-                        :
+                            :
                             <InfiniteScroll
                                 className="wrapper-infinite-scroll"
                                 hasMore={groupsStore.hasMoreGroups}
@@ -41,24 +39,31 @@ class DefaultList extends Component {
                                 loadMore={() => {
                                     groupsStore.loadMoreGroups()
                                 }}>
-                                    {!_.isEmpty(groupsStore.preparedGroups) ?
-                                        _.map(groupsStore.preparedGroups, (groups) => {
-                                            return _.map(groups, (group, index) => {
-                                                const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
-                                                return (
-                                                    <ListItem 
+                                {!_.isEmpty(groupsStore.preparedGroups) ?
+                                    _.map(groupsStore.preparedGroups, (groups) => {
+                                        return _.map(groups, (group, index) => {
+                                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
+                                            let isSmart = false;
+                                            if (group.groupType === 'dynamic' && alphaPlusEnabled) {
+                                                isSmart = true;
+                                            }
+                                            return (
+                                                <div>
+                                                    <ListItem
                                                         group={group}
                                                         selectGroup={selectGroup}
                                                         isSelected={isSelected}
                                                         onDeviceDrop={onDeviceDrop}
                                                         key={group.groupName}
+                                                        isSmart={isSmart}
                                                     />
-                                                );
-                                            });
-                                        })
+                                                </div>
+                                            );
+                                        });
+                                    })
                                     :
-                                        null
-                                    }
+                                    null
+                                }
                             </InfiniteScroll>
                         }
                     </div>
@@ -68,10 +73,10 @@ class DefaultList extends Component {
     }
 };
 
-DefaultList.propTypes = {
+List.propTypes = {
     stores: PropTypes.object,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,
 }
 
-export default DefaultList;
+export default List;
