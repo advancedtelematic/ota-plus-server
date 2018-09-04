@@ -17,6 +17,21 @@
         overflow-y: auto;
         height: 45vh;
 
+        .row {
+          margin: 10px 0;
+        }
+
+        .col-xs-12 {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .col-xs-6:nth-of-type(odd) {
+          padding-left: 0;
+        }
+        .col-xs-6:nth-of-type(even) {
+          padding-right: 0;
+        }
+
         .alert {
           margin-bottom: 0;
         }

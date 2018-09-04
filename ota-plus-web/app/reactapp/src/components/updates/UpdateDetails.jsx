@@ -60,43 +60,49 @@ class UpdateDetails extends Component {
                                 return (
                                     <div className="col-xs-12" key={ hardwareId }>
                                         <label className="c-form__label">{ hardwareId }</label>
-                                        <div className="col-xs-6">{ "From" }</div>
-                                        <div className="col-xs-6">{ "To" }</div>
-                                        <div className="col-xs-6">
-                                            <FormInput
-                                                label="Package"
-                                                name="fromPackage"
-                                                id="from-package"
-                                                defaultValue={ fromPackage ? fromPackage : noInformation }
-                                                isEditable={ isEditable }
-                                            />
+                                        <div className="row">
+                                            <div className="col-xs-6">{ "From" }</div>
+                                            <div className="col-xs-6">{ "To" }</div>
                                         </div>
-                                        <div className="col-xs-6">
-                                            <FormInput
-                                                label="Package"
-                                                name="toPackage"
-                                                id="to-package"
-                                                defaultValue={ toPackage ? toPackage : noInformation }
-                                                isEditable={ isEditable }
-                                            />
+                                        <div className="row">
+                                            <div className="col-xs-6">
+                                                <FormInput
+                                                    label="Package"
+                                                    name="fromPackage"
+                                                    id="from-package"
+                                                    defaultValue={ fromPackage ? fromPackage : noInformation }
+                                                    isEditable={ isEditable }
+                                                />
+                                            </div>
+                                            <div className="col-xs-6">
+                                                <FormInput
+                                                    label="Package"
+                                                    name="toPackage"
+                                                    id="to-package"
+                                                    defaultValue={ toPackage ? toPackage : noInformation }
+                                                    isEditable={ isEditable }
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="col-xs-6">
-                                            <FormInput
-                                                label="Version"
-                                                name="fromVersion"
-                                                id="from-version"
-                                                defaultValue={ fromVersion ? fromVersion.hash : noInformation }
-                                                isEditable={ isEditable }
-                                            />
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <FormInput
-                                                label="Package"
-                                                name="toVersion"
-                                                id="to-version"
-                                                defaultValue={ toVersion ? toVersion.hash : noInformation }
-                                                isEditable={ isEditable }
-                                            />
+                                        <div className="row">
+                                            <div className="col-xs-6">
+                                                <FormInput
+                                                    label="Version"
+                                                    name="fromVersion"
+                                                    id="from-version"
+                                                    defaultValue={ fromVersion ? fromVersion.hash : noInformation }
+                                                    isEditable={ isEditable }
+                                                />
+                                            </div>
+                                            <div className="col-xs-6">
+                                                <FormInput
+                                                    label="Package"
+                                                    name="toVersion"
+                                                    id="to-version"
+                                                    defaultValue={ toVersion ? toVersion.hash : noInformation }
+                                                    isEditable={ isEditable }
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 )
