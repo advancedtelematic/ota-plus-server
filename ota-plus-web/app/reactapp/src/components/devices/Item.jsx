@@ -18,10 +18,8 @@ const deviceSource = {
     },
     endDrag(props, monitor) {
         const { devicesStore, groupsStore } = props.stores;
-        const item = monitor.getItem();
-        const dropResult = monitor.getDropResult();
         let selectedGroup = groupsStore.selectedGroup;
-        if(selectedGroup.id) {
+        if (selectedGroup.id) {
             devicesStore.fetchDevices('', selectedGroup.id);
         } else {
             devicesStore.fetchDevices();
@@ -60,32 +58,30 @@ class Item extends Component {
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
         let deviceStatus = 'Status unknown';
-        switch(device.deviceStatus) {
+        switch (device.deviceStatus) {
             case 'UpToDate':
                 deviceStatus = 'Device synchronized';
-            break;
+                break;
             case 'Outdated':
                 deviceStatus = 'Device unsynchronized';
-            break;
+                break;
             case 'Error':
                 deviceStatus = 'Installation error';
-            break;
+                break;
             default:
-            break;
+                break;
         }
-        
+
         let foundGroup = null;
-        let foundFleet = null;
-        if(!groupsStore.groupsFetchAsync.isFetching) {
+        if (!groupsStore.groupsFetchAsync.isFetching) {
             foundGroup = _.find(groupsStore.groups, (group) => {
                 return group.devices.values.indexOf(device.uuid) > -1;
             });
-            foundFleet = foundGroup ? foundGroup.fleet_id : null;
         }
         return (
             connectDragSource(
                 <div className="devices-panel__device">
-                    <div className="hover-area" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} />
+                    <div className="hover-area" style={{ opacity }} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} />
                     <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.showMenu}>
                         <div className="dots__wrapper">
                             <span></span>
@@ -111,18 +107,13 @@ class Item extends Component {
                                 </a>
                             </li>
                         </Dropdown>
-                    :
+                        :
                         null
                     }
-                    {alphaPlusEnabled && foundFleet ?
-                        <div className={"devices-panel__device-icon devices-panel__device-icon--" + foundFleet}>
-                            <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
-                        </div>
-                    :
-                        <div className="devices-panel__device-icon">
-                            <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
-                        </div>
-                    }
+                    <div className="devices-panel__device-icon">
+                        <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
+                    </div>
+
                     <div className="devices-panel__device-desc">
                         <div className="devices-panel__device-title" title={device.deviceName} id={device.deviceName}>
                             {device.deviceName}
@@ -130,7 +121,7 @@ class Item extends Component {
                         <div className="devices-panel__device-subtitle">
                             {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
-                            :
+                                :
                                 <span>Never seen online</span>
                             }
                         </div>

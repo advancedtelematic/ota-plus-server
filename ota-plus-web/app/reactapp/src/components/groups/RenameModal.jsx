@@ -15,6 +15,7 @@ class RenameModal extends Component {
     constructor(props) {
         super(props);
         const { groupsStore } = props.stores;
+        
         this.renameHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsRenameAsync', this.handleRenameResponse.bind(this));
     }
     componentWillMount() {

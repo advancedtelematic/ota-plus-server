@@ -1,5 +1,5 @@
 #page-devices {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 50px);
     background: $home-bg;
 
     .groups-panel {
@@ -94,20 +94,16 @@
             &--default {
                 background: url($group-default-image-url) rgba(15,22,33,0.3) no-repeat;
                 background-size: cover;
+                &-active {
+                    background: url($group-active-image-url) rgba(15,22,33,0.3) no-repeat;
+                }
             }
-
-            &--fleet, &--smart {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: $fake-header-text;
-                font-size: 16px;
-                font-weight: 500;
-                text-transform: uppercase;
-            }
-
-            &--active {
-                background: url($group-active-image-url) rgba(15,22,33,0.3) no-repeat;
+            
+            &--smart {
+                background: url($group-smart-image-url) rgba(15,22,33,0.3) no-repeat;
+                &-active {
+                    background: url($group-smart-active-image-url) rgba(15,22,33,0.3) no-repeat;
+                }
             }
         }
 

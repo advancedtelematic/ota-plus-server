@@ -22,21 +22,18 @@ const groupsArtificial = [
     }
 ];
 
-const ArtificialList = inject("stores")(observer(({selectGroup, onDeviceDrop, stores}) => {
+const ArtificialList = inject("stores")(observer(({ selectGroup, onDeviceDrop, stores }) => {
     const { devicesStore, groupsStore } = stores;
+
     return (
         <div className="groups-panel__artificial-list">
             {_.map(groupsArtificial, (group) => {
                 const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.groupName === group.name);
                 let deviceCount = 0;
-                if(group.name === 'all') {
+                if (group.name === 'all') {
                     deviceCount = devicesStore.devicesInitialTotalCount;
-                } else if(group.name === 'ungrouped') {
-                    let groupedDevicesCount = 0;
-                    _.each(groupsStore.groups, (group, index) => {
-                        groupedDevicesCount += group.devices.total;
-                    });
-                    deviceCount = Math.max(0, devicesStore.devicesInitialTotalCount - groupedDevicesCount);
+                } else if (group.name === 'ungrouped') {
+                    deviceCount = devicesStore.ungroupedDevicesInitialTotalCount;
                 }
                 return (
                     <ListItemArtificial
