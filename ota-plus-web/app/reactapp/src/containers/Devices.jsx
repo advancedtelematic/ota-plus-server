@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import { Loader, ConfirmationModal, EditModal } from '../partials';
@@ -32,7 +32,17 @@ class Devices extends Component {
         this.deleteDevice = this.deleteDevice.bind(this);
         this.showEditName = this.showEditName.bind(this);
         this.hideEditName = this.hideEditName.bind(this);
+        const { groupsStore, devicesStore } = props.stores;
+        this.fetchUngroupedDevicesHandler = observe(groupsStore, (change) => {
+            if (change.name === 'groupsFetchDevicesAsync' && change.object[change.name].isFetching === false) {
+                devicesStore.fetchUngroupedDevices();
+            }
+        });
     }
+    componentWillUnmount() {
+        this.fetchUngroupedDevicesHandler();
+    }
+
     showCreateGroupModal(e) {
         if (e) e.preventDefault();
         this.createGroupModalShown = true;
@@ -84,7 +94,8 @@ class Devices extends Component {
         }
     }
     onDeviceDrop(device, groupId) {
-        const { groupsStore } = this.props.stores;
+        const { groupsStore, devicesStore } = this.props.stores;
+        devicesStore.fetchUngroupedDevices();
         if (device.groupId !== groupId && device.groupId) {
             groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
         }

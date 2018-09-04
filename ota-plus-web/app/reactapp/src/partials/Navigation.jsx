@@ -1,8 +1,7 @@
-import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
-import {observer, inject} from 'mobx-react';
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+import { observer, inject } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
-import SecondNavigation from './SecondNavigation';
 import SettingsDropdown from './SettingsDropdown';
 
 @inject("stores")
@@ -17,15 +16,14 @@ class Navigation extends Component {
       toggleSWRepo,
       switchToSWRepo,
       uiUserProfileEdit,
-      toggleFleet,
     } = this.props;
-    const {featuresStore} = this.props.stores;
-    const {alphaPlusEnabled} = featuresStore;
+    const { featuresStore } = this.props.stores;
+    const { alphaPlusEnabled } = featuresStore;
     return (
       <nav className="navbar navbar-inverse">
         <div className="container">
           <div className="navbar-header">
-            <div className="navbar-brand" id="logo"/>
+            <div className="navbar-brand" id="logo" />
           </div>
           <div id="navbar">
             <ul className="nav navbar-nav">
@@ -42,7 +40,7 @@ class Navigation extends Component {
                 <li>
                   <Link to="/updates" activeClassName="active" id="link-updates">Updates</Link>
                 </li>
-              :
+                :
                 null
               }
               <li>
@@ -82,16 +80,6 @@ class Navigation extends Component {
             }
           </ul>
         </div>
-        {alphaPlusEnabled && (location === 'page-packages' || location === 'page-devices') ?
-          <SecondNavigation
-            location={location}
-            toggleSWRepo={toggleSWRepo}
-            switchToSWRepo={switchToSWRepo}
-            toggleFleet={toggleFleet}
-          />
-          :
-          null
-        }
       </nav>
     );
   }
