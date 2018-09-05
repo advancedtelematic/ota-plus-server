@@ -3095,6 +3095,14 @@ input {
         }
     }
 
+    &__action-label {
+        position: absolute;
+        left: -30px;
+        width: 80px;
+        top: 0;
+        bottom: 0;
+    }
+
     &__action-tip {
         position: absolute;
         left: 50px;
@@ -3102,6 +3110,7 @@ input {
         top: 0;
         bottom: 0;
     }
+   
 
     &__action {
         margin-right: 25px;
