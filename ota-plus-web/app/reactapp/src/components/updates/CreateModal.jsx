@@ -67,11 +67,7 @@ class CreateModal extends Component {
     };
 
     verifyIfPreviousStepsFinished = (stepId) => {
-        if (_.find(this.steps, function (step, index) {
-            return index <= stepId && step.isFinished === false;
-        }))
-            return false;
-        return true;
+        return !(_.find(this.steps, (step, index) => { return index <= stepId && !step.isFinished; }));
     };
 
     isLastStep = () => {
@@ -141,11 +137,13 @@ class CreateModal extends Component {
         }
     };
 
-    onStep2DataSelect = (hardwareId, type, value) => {
+    onStep2DataSelect = (selected, type, value) => {
         const { showDetails } = this.props;
+        const { name: hardwareId } = selected;
         const stepData = this.wizardData[this.currentStepId].update;
-        stepData[hardwareId] = !_.isUndefined(stepData[hardwareId]) ? stepData[hardwareId] : {};
+        stepData[hardwareId] = _.isObject(stepData[hardwareId]) ? stepData[hardwareId] : {};
         stepData[hardwareId][type] = value;
+
         if (type === 'fromPack') {
             stepData[hardwareId]['fromVersion'] = null;
         }
