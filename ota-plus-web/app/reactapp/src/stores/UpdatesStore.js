@@ -155,8 +155,8 @@ export default class UpdatesStore {
             });
     }
 
-    sortUpdates(updates = this.updates, property = "name", order = "asc") {
-        return _.sortBy(updates, property, order);
+    sortUpdates(updates = this.updates) {
+        return _.sortBy(updates, function (update) { return update.name.toLowerCase() });
     }
 
     _prepareUpdates() {
