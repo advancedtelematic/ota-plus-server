@@ -279,20 +279,20 @@ class Sequencer extends Component {
                                                         selectAction={this.selectAction}
                                                         row={rowIndex}
                                                         column={columnIndex}
-                                                        key={columnIndex}
+                                                        key={rowIndex + '-' + columnIndex}
                                                         readOnly={readOnly}
                                                     />
                                                 )
                                             } else {
                                                 return <div className="c-sequencer__empty-node"
                                                             onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
-                                                            key={columnIndex} />
+                                                            key={rowIndex + '-' + columnIndex} />
                                             }
                                         })
                                         :   _.map(updatesArray, (value, columnIndex) => {
                                             return <div className="c-sequencer__empty-node"
                                                         onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
-                                                        key={rowIndex} />
+                                                        key={rowIndex + '-' + columnIndex} />
                                         })
                                     }
                                 </div>

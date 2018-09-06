@@ -23,9 +23,10 @@ class WizardStep3 extends Component {
     };
 
     changeUpdateSelection = (update) => {
-        const { wizardData, currentStepId } = this.props;
-        const stepData = wizardData[currentStepId];
+        const { wizardData } = this.props;
+        const stepData = wizardData[2];
         let selectedUpdate = stepData.update;
+
 
         if (!_.isEqual(selectedUpdate.pop(), update)) {
             selectedUpdate.push(update);
@@ -42,7 +43,7 @@ class WizardStep3 extends Component {
     };
 
     render() {
-        const { wizardData, currentStepId } = this.props;
+        const { wizardData } = this.props;
 
         return (
             <div>
@@ -51,7 +52,7 @@ class WizardStep3 extends Component {
                 </Form>
                 <SelectUpdateList
                     wizardData={ wizardData }
-                    stepId={ currentStepId }
+                    stepId={ 2 }
                     stores={ this.props.stores }
                     toggleSelection={ this.changeUpdateSelection }
                     showUpdateDetails={ this.showDetails }
