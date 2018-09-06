@@ -21,16 +21,16 @@ class WizardStep5 extends Component {
     }
 
     componentWillMount() {
-        const {wizardData, markStepAsNotFinished} = this.props;
-        markStepAsNotFinished();
-        let chosenVersions = wizardData[2].versions;
+        const {wizardData, markStepAsFinished} = this.props;
+        markStepAsFinished();
+        /*let chosenVersions = wizardData[2].versions;
         _.each(chosenVersions, (values, packName) => {
             let obj = {
                 packName: packName,
                 filepath: values.toFilepath
             };
             this.checkVersion(obj);
-        });
+        });*/
     }
 
     checkVersion(data) {

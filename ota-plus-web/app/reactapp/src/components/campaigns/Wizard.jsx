@@ -193,7 +193,7 @@ class Wizard extends Component {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
             const selectedGroup = groupsStore.selectedGroup;
             groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
-                this.wizardData[3].groups = this.wizardData[3].groups.concat(selectedGroup);
+                this.wizardData[1].groups = this.wizardData[1].groups.concat(selectedGroup);
             });
         }
         
