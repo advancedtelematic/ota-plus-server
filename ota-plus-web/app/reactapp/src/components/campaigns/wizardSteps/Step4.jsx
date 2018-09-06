@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
-import {FormTextarea, FormInput, TimePicker} from '../../../partials';
-import {observable} from "mobx"
-import {observer} from 'mobx-react';
+import React, { Component } from 'react';
+import { FormTextarea, FormInput, TimePicker } from '../../../partials';
+import { observable } from "mobx"
+import { observer } from 'mobx-react';
 import moment from 'moment';
-import {FormsyText} from 'formsy-material-ui/lib';
 import _ from 'underscore';
 
 const metadataTypes = {
@@ -29,14 +28,18 @@ class WizardStep4 extends Component {
         this.toggleApprove = this.toggleApprove.bind(this);
     }
 
+    componentWillMount() {
+        const { markStepAsFinished } = this.props;
+        markStepAsFinished();
+    }
+
     addToWizardData(type, value) {
-        const {setWizardData, markStepAsFinished, wizardData, currentStepId} = this.props;
+        const { setWizardData, wizardData, currentStepId } = this.props;
         this.wizardMetadata = {
             ..._.omit(wizardData[currentStepId], 'isActivated'),
             [type]: value
         };
         setWizardData(this.wizardMetadata);
-        markStepAsFinished();
     }
 
     toggleNotify() {
@@ -78,49 +81,49 @@ class WizardStep4 extends Component {
     }
 
     render() {
-        const {wizardData, currentStepId, approvalNeeded, alphaPlus} = this.props;
-        const {DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION} = wizardData[currentStepId];
+        const { wizardData, currentStepId, approvalNeeded, alphaPlus } = this.props;
+        const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = wizardData[currentStepId];
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
                     <div className="flex-row">
-                        <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
-                                onClick={this.toggleNotify}>
+                        <button className={ `btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}` }
+                                onClick={ this.toggleNotify }>
                         </button>
                         <span>Silent Update</span>
                     </div>
                     <div className="flex-row">
-                        <button className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
-                                onClick={this.toggleApprove}>
+                        <button className={ `btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}` }
+                                onClick={ this.toggleApprove }>
                         </button>
                         <span>Approval required</span>
                     </div>
                 </div>
                 <div className="description">
                     <div className="search-box">
-                        {alphaPlus ?
+                        { alphaPlus ?
                             <FormInput
                                 label="Internal description"
                                 id="internal_reuse-text"
                                 placeholder="Re-use text from"
-                                getInputRef={(ref) => this.inputRef = ref}
+                                getInputRef={ (ref) => this.inputRef = ref }
                                 wrapperWidth="50%"
                             >
                                 <i className="fa fa-search icon-search"/>
-                                <i className="fa fa-close icon-close" onClick={this.clearInput}/>
+                                <i className="fa fa-close icon-close" onClick={ this.clearInput }/>
                             </FormInput> : ''
                         }
                     </div>
                     <FormTextarea
                         rows="5"
-                        label={!alphaPlus ? 'Internal description' : ''}
+                        label={ !alphaPlus ? 'Internal description' : '' }
                         id="internal_driver-description"
-                        defaultValue={DESCRIPTION ? DESCRIPTION : ''}
-                        onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
+                        defaultValue={ DESCRIPTION ? DESCRIPTION : '' }
+                        onValid={ (e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value) }
                     />
                 </div>
                 <div className="translations">
-                    {alphaPlus ?
+                    { alphaPlus ?
                         <div className="flex-row">
                             <span className="bold" id="approved-translations-0">Approved translations: 0</span>
                             <button className="btn-bordered" id="translations-view_button">Translation view</button>
@@ -131,9 +134,9 @@ class WizardStep4 extends Component {
                             <span className="title">Preparation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
-                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00' )}
-                                    id={`timepicker_${metadataTypes.PRE_DUR}`}
-                                    onValid={this.getPreparationTime}
+                                    defaultValue={ this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00') }
+                                    id={ `timepicker_${metadataTypes.PRE_DUR}` }
+                                    onValid={ this.getPreparationTime }
                                 />
                             </span>
                         </div>
@@ -141,9 +144,9 @@ class WizardStep4 extends Component {
                             <span className="title">Installation time estimation:</span>
                             <span className="time-value">
                                 <TimePicker
-                                    defaultValue={this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
-                                    id={`timepicker_${metadataTypes.INSTALL_DUR}`}
-                                    onValid={this.getInstallationTime}
+                                    defaultValue={ this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00') }
+                                    id={ `timepicker_${metadataTypes.INSTALL_DUR}` }
+                                    onValid={ this.getInstallationTime }
                                 />
                             </span>
                         </div>

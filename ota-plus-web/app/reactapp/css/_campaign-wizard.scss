@@ -19,6 +19,9 @@
 
         .row {
           margin: 10px 0;
+          &:last-of-type {
+            margin-bottom: 0;
+          }
         }
 
         .col-xs-12 {
@@ -65,9 +68,16 @@
               background-color: #fff;
               @include textoverflowEllipsis;
 
+              &__info {
+                .name {
+                  margin-right: 20px;
+                }
+              }
+
               &__details {
                 justify-content: flex-end;
               }
+
               .btn-checkbox {
                 float: left;
                 margin: 0 10px 0 0;
