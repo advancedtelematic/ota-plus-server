@@ -154,26 +154,15 @@ class Wizard extends Component {
         this.setApprove = this.setApprove.bind(this);
         this.launch = this.launch.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-        this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
         this.handleCampaignCreated = this.handleCampaignCreated.bind(this);
 
         this.toggleFullScreen = this.toggleFullScreen.bind(this);
         this.showUpdateDetails = this.showUpdateDetails.bind(this);
         this.hideUpdateDetails = this.hideUpdateDetails.bind(this);
 
-        this.multiTargetUpdateCreatedHandler = observe(campaignsStore, (change) => {
-            if (change.name === 'campaignsMtuCreateAsync' && change.object[change.name].isFetching === false) {
-                let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
-                    return wizard.id === props.wizardIdentifier;
-                });
-                if (!wizardMinimized) {
-                    this.handleMultiTargetUpdateCreated();
-                }
-            }
-        });
         this.campaignCreatedHandler = observe(campaignsStore, (change) => {
             if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
-                let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                let wizardMinimized = _.find(props.minimizedWizards, (wizard) => {
                     return wizard.id === props.wizardIdentifier;
                 });
                 if (!wizardMinimized) {
@@ -205,7 +194,6 @@ class Wizard extends Component {
     }
 
     componentWillUnmount() {
-        this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
     }
 
@@ -287,12 +275,7 @@ class Wizard extends Component {
 
     launch() {
         const { campaignsStore } = this.props.stores;
-        campaignsStore.createMultiTargetUpdate(this.wizardData[1].update);
-    }
-
-    handleMultiTargetUpdateCreated() {
-        const { campaignsStore } = this.props.stores;
-        let updateId = campaignsStore.campaignData.mtuId;
+        const { uuid: updateId } = _.first(this.wizardData[2].update);
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
@@ -301,7 +284,7 @@ class Wizard extends Component {
         let createData = {
             name: this.wizardData[0].name,
             update: updateId,
-            groups: _.map(this.wizardData[1].groups, (group, index) => {
+            groups: _.map(this.wizardData[1].groups, (group) => {
                 return group.id
             }),
             metadata: _.without(_.map(this.wizardData[3], (val, key) => {

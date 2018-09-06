@@ -17,15 +17,16 @@ class WizardStep7 extends Component {
     render() {
         const { t, wizardData } = this.props;
         const { campaignsStore, groupsStore, updatesStore } = this.props.stores;
+        const { campaignsCreateAsync } = campaignsStore;
 
-        const updateSummary = updatesStore.currentMtuData && updatesStore.currentMtuData.data;
+        const { data: updateSummary } = updatesStore.currentMtuData;
 
         return (
             <div className="step-inner">
                 <AsyncResponse
                     handledStatus="error"
-                    action={ campaignsStore.campaignsCreateAsync }
-                    errorMsg={ (campaignsStore.campaignsCreateAsync.data ? campaignsStore.campaignsCreateAsync.data.description : null) }
+                    action={ campaignsCreateAsync }
+                    errorMsg={ (campaignsCreateAsync.status && campaignsCreateAsync.status !== 200 ? campaignsCreateAsync.data.description : null) }
                 />
                 <div className="box-summary">
                     <div className="title">{ "Software & Version" }</div>
