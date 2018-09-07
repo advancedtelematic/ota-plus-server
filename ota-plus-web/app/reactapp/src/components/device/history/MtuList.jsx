@@ -36,7 +36,7 @@ class MtuList extends Component {
                                 />
                             );
                         })
-                    :
+                        :
                         emptyHistory
                     }
                 </InfiniteScroll>
