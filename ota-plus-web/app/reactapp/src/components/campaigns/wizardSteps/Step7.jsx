@@ -10,7 +10,7 @@ class WizardStep7 extends Component {
     componentWillMount() {
         const { updatesStore } = this.props.stores;
         const { wizardData } = this.props;
-        const currentUpdate = _.first(wizardData[2].update);
+        const currentUpdate = _.first(wizardData.update);
         updatesStore.fetchUpdate(currentUpdate && currentUpdate.source.id);
     }
 
@@ -87,7 +87,7 @@ class WizardStep7 extends Component {
                     <div className="title">{ "Groups & Devices" }</div>
                     <div className="desc">
                         <div className="wrapper-groups">
-                            { _.map(wizardData[1].groups, (group, index) => {
+                            { _.map(wizardData.groups, (group, index) => {
                                 return (
                                     <div className="element-box group" key={ index }>
                                         <div className="icon" />
