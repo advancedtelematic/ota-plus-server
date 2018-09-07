@@ -19,25 +19,28 @@ class WizardStep2 extends Component {
 
     setWizardData(groupId) {
         const { groupsStore } = this.props.stores;
-        const { currentStepId } = this.props;
-        let stepWizardData = this.props.wizardData[currentStepId];
-        const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
-        const groupToAdd = _.findWhere(groupsStore.wizardGroups, { id: groupId });
-        if (foundGroup)
-            stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
-        else
-            stepWizardData.groups.push(groupToAdd);
+        const { groups } = this.props.wizardData;
 
-        if (stepWizardData.groups.length)
+        const foundGroup = _.find(groups, item => item.id === groupId);
+        const groupToAdd = _.findWhere(groupsStore.wizardGroups, { id: groupId });
+
+        if (foundGroup) {
+            groups.splice(groups.indexOf(foundGroup), 1);
+        } else {
+            groups.push(groupToAdd);
+        }
+
+        if (groups.length) {
             this.props.markStepAsFinished();
-        else
+        } else {
             this.props.markStepAsNotFinished();
+        }
     }
 
     render() {
-        const { wizardData, currentStepId } = this.props;
+        const { groups: chosenGroups} = this.props.wizardData;
         const { groupsStore } = this.props.stores;
-        const chosenGroups = wizardData[currentStepId].groups;
+
         return (
             groupsStore.groupsWizardFetchAsync.isFetching ?
                 <div className="wrapper-center">

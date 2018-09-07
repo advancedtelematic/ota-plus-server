@@ -34,11 +34,13 @@ class WizardStep4 extends Component {
     }
 
     addToWizardData(type, value) {
-        const { setWizardData, wizardData, currentStepId } = this.props;
-        this.wizardMetadata = {
-            ..._.omit(wizardData[currentStepId], 'isActivated'),
-            [type]: value
+        const { setWizardData, wizardData } = this.props;
+
+        this.wizardMetadata.metadata = {
+            ...wizardData.metadata,
+            [type]: value,
         };
+
         setWizardData(this.wizardMetadata);
     }
 
@@ -81,8 +83,10 @@ class WizardStep4 extends Component {
     }
 
     render() {
-        const { wizardData, currentStepId, approvalNeeded, alphaPlus } = this.props;
-        const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = wizardData[currentStepId];
+        const { wizardData, approvalNeeded, alphaPlus } = this.props;
+        const { metadata } = wizardData;
+        const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
+
         return (
             <div className="distribution-info">
                 <div className="checkboxes">
@@ -90,13 +94,13 @@ class WizardStep4 extends Component {
                         <button className={ `btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}` }
                                 onClick={ this.toggleNotify }>
                         </button>
-                        <span>Silent Update</span>
+                        <span>{ "Silent Update" }</span>
                     </div>
                     <div className="flex-row">
                         <button className={ `btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}` }
                                 onClick={ this.toggleApprove }>
                         </button>
-                        <span>Approval required</span>
+                        <span>{ "Approval required" }</span>
                     </div>
                 </div>
                 <div className="description">
@@ -116,22 +120,24 @@ class WizardStep4 extends Component {
                     </div>
                     <FormTextarea
                         rows="5"
-                        label={ !alphaPlus ? 'Internal description' : '' }
+                        label={ !alphaPlus && 'Internal description' }
                         id="internal_driver-description"
                         defaultValue={ DESCRIPTION ? DESCRIPTION : '' }
                         onValid={ (e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value) }
+                        onInvalid={ (e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value) }
                     />
                 </div>
                 <div className="translations">
-                    { alphaPlus ?
+                    {
+                        alphaPlus &&
                         <div className="flex-row">
-                            <span className="bold" id="approved-translations-0">Approved translations: 0</span>
-                            <button className="btn-bordered" id="translations-view_button">Translation view</button>
-                        </div> : ''
+                            <span className="bold" id="approved-translations-0">{ "Approved translations: 0" }</span>
+                            <button className="btn-bordered" id="translations-view_button">{ "Translation view" }</button>
+                        </div>
                     }
                     <div className="estimations">
                         <div className="estimation">
-                            <span className="title">Preparation time estimation:</span>
+                            <span className="title">{ "Preparation time estimation:" }</span>
                             <span className="time-value">
                                 <TimePicker
                                     defaultValue={ this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00') }
@@ -141,7 +147,7 @@ class WizardStep4 extends Component {
                             </span>
                         </div>
                         <div className="estimation">
-                            <span className="title">Installation time estimation:</span>
+                            <span className="title">{ "Installation time estimation:" }</span>
                             <span className="time-value">
                                 <TimePicker
                                     defaultValue={ this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00') }
