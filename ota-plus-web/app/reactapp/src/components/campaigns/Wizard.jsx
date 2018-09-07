@@ -282,7 +282,9 @@ class Wizard extends Component {
 
     launch() {
         const { campaignsStore } = this.props.stores;
-        const { uuid: updateId } = _.first(this.wizardData.update);
+        const { source } = _.first(this.wizardData.update);
+        // mtuId
+        const { id: updateId } = source;
 
         let metadata = this.getSanitizedMetadata();
 
