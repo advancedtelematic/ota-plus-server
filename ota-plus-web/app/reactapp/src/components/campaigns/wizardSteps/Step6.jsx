@@ -5,14 +5,17 @@ import { Sequencer } from '../../../partials';
 @observer
 class WizardStep6 extends Component {
     render() {
-        const { wizardIdentifier, wizardData } = this.props;
-        return (
-            <Sequencer
+        //const { wizardIdentifier, wizardData } = this.props;
+        {/*<Sequencer
                 wizardIdentifier={wizardIdentifier}
-                data={wizardData[2].versions}
+                data={wizardData.versions}
                 entity={"campaign"}
                 readOnly={false}
-            />
+            />*/}
+        return (
+            <div className="wrapper-center">
+                { "Currently no information available." }
+            </div>
         );
     }
 }

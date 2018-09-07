@@ -33,8 +33,8 @@ GroupsListItem.propTypes = {
     group: PropTypes.object.isRequired,
     setWizardData: PropTypes.func.isRequired,
     isChosen: PropTypes.bool.isRequired,
-    stores: PropTypes.object
-}
+    stores: PropTypes.object,
+};
 
 export default translate()(GroupsListItem);
 
