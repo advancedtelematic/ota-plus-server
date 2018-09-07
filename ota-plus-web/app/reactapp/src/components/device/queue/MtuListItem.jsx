@@ -46,12 +46,12 @@ class MtuListItem extends Component {
                     <div className="queue-modal__item-process-status">
                         {status === "waiting" ?
                             <span>Queued, waiting for device to connect</span>
-                        : status === "downloading" ?
-                            <span>Waiting for download to complete</span>
-                        : status === "installing" ?
-                            <span>Waiting for installation to complete</span>
-                        :
-                            null
+                            : status === "downloading" ?
+                                <span>Waiting for download to complete</span>
+                                : status === "installing" ?
+                                    <span>Waiting for installation to complete</span>
+                                    :
+                                    null
                         }
                         <img src="/assets/img/icons/points.gif" className="queue-modal__process-dots" alt="Icon" />
                     </div>
@@ -93,15 +93,15 @@ class MtuListItem extends Component {
                                 </span>
                             </div>
                             {alphaPlusEnabled ?
-                                <InstallationEvents 
+                                <InstallationEvents
                                     updateId={updateId}
                                     error={null}
                                     queue={true}
                                 />
-                            :
+                                :
                                 null
                             }
-                            
+
                         </div>
                     </div>
                 </div>
