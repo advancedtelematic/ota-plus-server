@@ -49,14 +49,7 @@ class CreateModal extends Component {
         this.createGroup = this.createGroup.bind(this);
         this.isLastStep = this.isLastStep.bind(this);
     }
-    componentWillMount() {
-        const { featuresStore, devicesStore } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
-        if (!alphaPlusEnabled) {
-            this.currentStepId = 1;
-            this.groupType = 'classic';
-        }
-    }
+
     markStepAsFinished() {
         this.steps[this.currentStepId].isFinished = true;
     }
@@ -146,7 +139,6 @@ class CreateModal extends Component {
         this.props.hide();
     }
     render() {
-        const { devicesStore } = this.props.stores;
         const { shown, hide } = this.props;
         const currentStep = this.steps[this.currentStepId];
         const step = (

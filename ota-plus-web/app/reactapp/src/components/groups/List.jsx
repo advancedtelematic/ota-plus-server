@@ -11,8 +11,7 @@ import { Loader } from '../../partials';
 class List extends Component {
     render() {
         const { selectGroup, onDeviceDrop } = this.props;
-        const { groupsStore, featuresStore } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
+        const { groupsStore } = this.props.stores;
         return (
             <span>
                 <VelocityTransitionGroup
@@ -44,7 +43,7 @@ class List extends Component {
                                         return _.map(groups, (group, index) => {
                                             const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
                                             let isSmart = false;
-                                            if (group.groupType === 'dynamic' && alphaPlusEnabled) {
+                                            if (group.groupType === 'dynamic') {
                                                 isSmart = true;
                                             }
                                             return (
