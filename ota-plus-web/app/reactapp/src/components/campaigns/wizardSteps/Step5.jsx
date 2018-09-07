@@ -1,10 +1,10 @@
-import React, {Component, PropTypes} from 'react';
-import {observer, inject} from 'mobx-react';
-import {observable, extendObservable} from 'mobx';
+import React, { Component, PropTypes } from 'react';
+import { observer, inject } from 'mobx-react';
+import { observable, extendObservable } from 'mobx';
 import _ from 'underscore';
-import {SelectField, MenuItem} from 'material-ui';
-import {Loader, Form, FormSelect, FormInput} from '../../../partials';
-import {FlatButton} from 'material-ui';
+import { SelectField, MenuItem } from 'material-ui';
+import { Loader, Form, FormSelect, FormInput } from '../../../partials';
+import { FlatButton } from 'material-ui';
 
 @inject('stores')
 @observer
@@ -21,7 +21,7 @@ class WizardStep5 extends Component {
     }
 
     componentWillMount() {
-        const {wizardData, markStepAsFinished} = this.props;
+        const { markStepAsFinished } = this.props;
         markStepAsFinished();
         /*let chosenVersions = wizardData[2].versions;
         _.each(chosenVersions, (values, packName) => {
@@ -34,8 +34,8 @@ class WizardStep5 extends Component {
     }
 
     checkVersion(data) {
-        const {wizardData} = this.props;
-        const {packagesStore} = this.props.stores;
+        const { wizardData } = this.props;
+        const { packagesStore } = this.props.stores;
 
         let chosenVersions = wizardData[2].versions;
         let objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
@@ -103,7 +103,7 @@ class WizardStep5 extends Component {
     }
 
     getPackVersions(packName) {
-        const {packagesStore} = this.props.stores;
+        const { packagesStore } = this.props.stores;
         let versions = [];
         _.each(packagesStore.preparedPackages, (packs, letter) => {
             _.each(packs, (pack, i) => {
@@ -149,11 +149,11 @@ class WizardStep5 extends Component {
     }
 
     render() {
-        const {addToCampaign} = this.props;
+        const { addToCampaign } = this.props;
         let isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
         return (
             <div className="content">
-                {this.blocks.length ?
+                { this.blocks.length ?
                     isOneIncompatible ?
                         <div className="top-alert danger" id="compatibility-issue">
                             <img src="/assets/img/icons/white/manager-danger.png" alt="Icon"/>
@@ -170,43 +170,43 @@ class WizardStep5 extends Component {
                         Dependencies check
                     </div>
                 }
-                {this.isLoading ?
+                { this.isLoading ?
                     <div className="wrapper-center">
-                        <Loader />
+                        <Loader/>
                     </div>
                     :
                     this.blocks.length ?
                         <span>                            
-                            {_.map(this.blocks, (block, index) => {
+                            { _.map(this.blocks, (block, index) => {
                                 return (
-                                    <section className="pair" key={index}>
+                                    <section className="pair" key={ index }>
                                         <div className="item">
                                             <Form
                                                 formWidth="100%"
                                                 flexDirection="row"
-                                                customStyles={{justifyContent: 'space-between'}}
+                                                customStyles={ { justifyContent: 'space-between' } }
                                             >
                                                 <FormInput
-                                                    isEditable={false}
-                                                    defaultValue={block.parentPack}
+                                                    isEditable={ false }
+                                                    defaultValue={ block.parentPack }
                                                     label="Package"
                                                     wrapperWidth="49%"
                                                 />
                                                 <FormSelect
                                                     id="from-pack-versions"
-                                                    options={this.formatVersions(block.parentPack)}
-                                                    visibleFieldsCount={this.formatVersions(block.parentPack).length}
+                                                    options={ this.formatVersions(block.parentPack) }
+                                                    visibleFieldsCount={ this.formatVersions(block.parentPack).length }
                                                     label="Version"
                                                     wrapperWidth="49%"
-                                                    defaultValue={block.parentFilepath}
-                                                    onChange={this.onParentVersionChange.bind(this, {
+                                                    defaultValue={ block.parentFilepath }
+                                                    onChange={ this.onParentVersionChange.bind(this, {
                                                         type: 'to',
                                                         packageName: block.parentPack
-                                                    })}
+                                                    }) }
                                                 />
                                             </Form>
                                         </div>
-                                        {block.isCompatible ?
+                                        { block.isCompatible ?
                                             <div className="status required" id="required">
                                                 Requires:
                                             </div>
@@ -220,26 +220,26 @@ class WizardStep5 extends Component {
                                             <Form
                                                 formWidth="100%"
                                                 flexDirection="row"
-                                                customStyles={{justifyContent: 'space-between'}}
+                                                customStyles={ { justifyContent: 'space-between' } }
                                             >
                                                 <FormInput
-                                                    isEditable={false}
-                                                    defaultValue={block.childPack}
+                                                    isEditable={ false }
+                                                    defaultValue={ block.childPack }
                                                     label="Package"
                                                     wrapperWidth="49%"
                                                 />
                                                 <FormInput
-                                                    isEditable={false}
-                                                    defaultValue={block.childRequiredVersion}
+                                                    isEditable={ false }
+                                                    defaultValue={ block.childRequiredVersion }
                                                     label="Version"
                                                     wrapperWidth="49%"
                                                 />
                                             </Form>
                                         </div>
                                         <div className="add">
-                                            {block.isCompatible ?
+                                            { block.isCompatible ?
                                                 <a href="#" id="add-to-campaign" className="add-button light"
-                                                   onClick={addToCampaign.bind(this, block.childPack)}>
+                                                   onClick={ addToCampaign.bind(this, block.childPack) }>
                                                     <span>
                                                     +
                                                     </span>
@@ -249,7 +249,7 @@ class WizardStep5 extends Component {
                                                 </a>
                                                 :
                                                 <a href="#" id="change-version" className="add-button light"
-                                                   onClick={addToCampaign.bind(this, block.childPack)}>
+                                                   onClick={ addToCampaign.bind(this, block.childPack) }>
                                                     <span>
                                                     +
                                                     </span>
@@ -262,7 +262,7 @@ class WizardStep5 extends Component {
 
                                     </section>
                                 );
-                            })}
+                            }) }
                         </span>
                         :
                         <div className="wrapper-center">
