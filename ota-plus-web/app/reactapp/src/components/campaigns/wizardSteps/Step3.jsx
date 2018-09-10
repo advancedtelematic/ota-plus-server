@@ -24,15 +24,12 @@ class WizardStep3 extends Component {
 
     changeUpdateSelection = (update) => {
         const { wizardData } = this.props;
-        const stepData = wizardData[2];
-        let selectedUpdate = stepData.update;
 
-
-        if (!_.isEqual(selectedUpdate.pop(), update)) {
-            selectedUpdate.push(update);
+        if (!_.isEqual(wizardData.update.pop(), update)) {
+            wizardData.update.push(update);
         }
 
-        this.validateStep(selectedUpdate);
+        this.validateStep(wizardData.update);
     };
 
     showDetails = (update, e) => {
