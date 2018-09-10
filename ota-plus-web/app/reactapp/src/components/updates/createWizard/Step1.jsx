@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Form } from 'formsy-react';
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { observer, inject } from 'mobx-react';
-import { SelectableList } from '../../../partials/lists';
+import { SelectableListItem } from '../../../partials/lists';
 import _ from 'underscore';
+import { _contains } from "../../../utils/Collection";
 
 @inject("stores")
 @observer
@@ -60,20 +61,27 @@ class Step1 extends Component {
 
                     <div className="row hardware-container">
                         <div className="col-xs-12">
-                            <div className="ids-list">
+                            <div className="ios-list">
                                 <label className="c-form__label">{ "Select Hardware ids" }</label>
                                 { hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                     <div className="wrapper-center">
                                         <Loader/>
                                     </div>
                                     :
-                                    <SelectableList
-                                        items={ hardwareList }
-                                        selectedItems={ wizardData[0].selectedHardwares }
-                                        onItemSelect={ (item) => {
-                                            onStep1DataSelect('hardwareId', item)
-                                        } }
-                                    />
+                                    _.map(hardwareList, item => {
+                                        const { selectedHardwares } = wizardData[0];
+                                        const selected = _contains(selectedHardwares, item);
+                                        return (
+                                            <SelectableListItem
+                                                key={ item.name }
+                                                item={ item }
+                                                selected={ selected }
+                                                onItemSelect={ (item) => {
+                                                    onStep1DataSelect('hardwareId', item)
+                                                } }
+                                            />
+                                        )
+                                    })
                                 }
                             </div>
                         </div>
