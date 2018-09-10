@@ -20,7 +20,7 @@ const initialWizardData = {
     name: '',
     groups: [],
     update: [],
-    metadata: {},
+    metadata: [],
 };
 const initialWizardStepForAlphaPlus = [
     {
@@ -266,25 +266,27 @@ class Wizard extends Component {
         this.approvalNeeded = boolean;
     }
 
-    getSanitizedMetadata() {
+    metadataAsArray() {
         const { metadata } = this.wizardData;
-        let sanitizedMetadata = {};
+        let currentMetadata = [];
 
-        // _.omit does not work properly
-        _.each(metadata, function(value, key) {
-            if (value !== "") {
-                sanitizedMetadata[key] = value;
+        _.each(metadata, (value, type) => {
+            if (!_.isEmpty(value) && value !== "" && value !== '00') {
+                currentMetadata.push({
+                    type: type,
+                    value: value,
+                });
             }
         });
 
-        return sanitizedMetadata;
+        return currentMetadata;
     }
 
     launch() {
         const { campaignsStore } = this.props.stores;
         const { uuid: updateId } = _.first(this.wizardData.update);
 
-        let metadata = this.getSanitizedMetadata();
+        let metadata = this.metadataAsArray();
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
