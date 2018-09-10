@@ -97,6 +97,9 @@
   }
 
   .hardware-container {
+    &:not(:last-of-type) {
+      margin-bottom: 40px;
+    }
     .ios-list {
       height: 200px;
 
