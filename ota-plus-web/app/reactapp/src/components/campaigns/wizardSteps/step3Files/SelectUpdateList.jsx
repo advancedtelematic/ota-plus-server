@@ -24,10 +24,10 @@ class SelectUpdateList extends Component {
 
     render() {
         const { updatesStore } = this.props.stores;
-        const { wizardData, stepId, showUpdateDetails } = this.props;
+        const { wizardData, showUpdateDetails } = this.props;
+        const { update: selectedUpdate } = wizardData;
 
         const groupedUpdates = updatesStore.preparedUpdates;
-        const selectedUpdate = wizardData[stepId].update;
 
         return (
             <div className="row update-container">

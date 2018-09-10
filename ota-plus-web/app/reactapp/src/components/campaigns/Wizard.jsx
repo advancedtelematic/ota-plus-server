@@ -16,20 +16,12 @@ import {
 } from './wizardSteps';
 
 const initialCurrentStepId = 0;
-const initialWizardData = [
-    {
-        name: '',
-    },
-    {
-        groups: [],
-    },
-    {
-        update: [],
-    },
-    {
-        isActivated: false,
-    },
-];
+const initialWizardData = {
+    name: '',
+    groups: [],
+    update: [],
+    metadata: {},
+};
 const initialWizardStepForAlphaPlus = [
     {
         class: WizardStep1,
@@ -182,7 +174,7 @@ class Wizard extends Component {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
             const selectedGroup = groupsStore.selectedGroup;
             groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
-                this.wizardData[1].groups = this.wizardData[1].groups.concat(selectedGroup);
+                this.wizardData.groups = this.wizardData.groups.concat(selectedGroup);
             });
         }
         
@@ -206,16 +198,17 @@ class Wizard extends Component {
             campaignsStore._hideFullScreen();
     }
 
+    // to be dropped
     addToCampaign(packName, e) {
         if (e) e.preventDefault();
         const { updatesStore } = this.props.stores;
         this.currentStepId = 2;
         let sortedUpdates = updatesStore.preparedUpdates;
-        _.each(sortedUpdates, (packs, letter) => {
+        _.each(sortedUpdates, (packs) => {
             let pack = _.find(packs, pack => pack.packageName === packName);
             if (pack) {
-                if (this.wizardData[1].update.indexOf(pack) === -1) {
-                    this.wizardData[1].update.push(pack);
+                if (this.wizardData.update.indexOf(pack) === -1) {
+                    this.wizardData.update.push(pack);
                 }
             }
         });
@@ -266,38 +259,48 @@ class Wizard extends Component {
     }
 
     setWizardData(data) {
-        this.wizardData[this.currentStepId] = data;
+        Object.assign(this.wizardData, data);
     }
 
     setApprove(boolean) {
         this.approvalNeeded = boolean;
     }
 
+    getSanitizedMetadata() {
+        const { metadata } = this.wizardData;
+        let sanitizedMetadata = {};
+
+        // _.omit does not work properly
+        _.each(metadata, function(value, key) {
+            if (value !== "") {
+                sanitizedMetadata[key] = value;
+            }
+        });
+
+        return sanitizedMetadata;
+    }
+
     launch() {
         const { campaignsStore } = this.props.stores;
-        const { uuid: updateId } = _.first(this.wizardData[2].update);
+        const { uuid: updateId } = _.first(this.wizardData.update);
+
+        let metadata = this.getSanitizedMetadata();
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         localStorage.setItem(`matrix-${updateId}`, JSON.stringify(matrixFromStorage));
 
         let createData = {
-            name: this.wizardData[0].name,
+            name: this.wizardData.name,
             update: updateId,
-            groups: _.map(this.wizardData[1].groups, (group) => {
+            groups: _.map(this.wizardData.groups, (group) => {
                 return group.id
             }),
-            metadata: _.without(_.map(this.wizardData[3], (val, key) => {
-                return {
-                    type: key,
-                    value: val
-                }
-            }), undefined),
             approvalNeeded: this.approvalNeeded
         };
 
-        if (!this.wizardData[3].isActivated) {
-            createData = _.omit(createData, 'metadata')
+        if (!_.isEmpty(metadata)) {
+            createData.metadata = metadata;
         }
 
         campaignsStore.createCampaign(createData);
@@ -330,7 +333,7 @@ class Wizard extends Component {
         const { campaignsStore, featuresStore } = this.props.stores;
         const currentStep = this.wizardSteps[this.currentStepId];
 
-        let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
+        let wizardMinimized = _.find(minimizedWizards, (wizard) => {
             return wizard.id === wizardIdentifier;
         });
 
@@ -438,7 +441,7 @@ class Wizard extends Component {
                 title={ !this.currentDetails ? "Add new campaign" : "Campaign update details" }
                 topActions={
                     <div className="top-actions">
-                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
+                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)} id="minimize-wizard">
                             <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                         </div>
                         <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
@@ -455,7 +458,7 @@ class Wizard extends Component {
                 }
                 content={modalContent}
                 shown={!wizardMinimized}
-                onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}
+                onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)}
                 className={"dialog-campaign-wizard " + (campaignsStore.fullScreenMode ? "full-screen" : "") + (campaignsStore.transitionsEnabled ? "" : " disable-transitions")}
             />
         );
