@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-const _contains = (collectionAsArray, item) => {
+const _contains = (objects, item) => {
     const { source, type } = item;
     let compare = {};
 
@@ -14,7 +14,7 @@ const _contains = (collectionAsArray, item) => {
         }
     }
 
-    return _.isObject(_.find(collectionAsArray, compare));
+    return _.isObject(_.find(objects, compare));
 };
 
 export {
