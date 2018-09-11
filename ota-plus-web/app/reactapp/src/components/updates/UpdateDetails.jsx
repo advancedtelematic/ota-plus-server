@@ -58,7 +58,7 @@ class UpdateDetails extends Component {
                                 const { target: toPackage, checksum: toVersion } = target.to;
 
                                 return (
-                                    <div className="col-xs-12" key={ hardwareId }>
+                                    <div className="col-xs-12 hardware-container" key={ hardwareId }>
                                         <label className="c-form__label">{ hardwareId }</label>
                                         <div className="row">
                                             <div className="col-xs-6">{ "From" }</div>
