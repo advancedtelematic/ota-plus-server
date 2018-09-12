@@ -38,7 +38,7 @@ class Step1 extends Component {
                                 placeholder="Name"
                                 name="updateName"
                                 id="create-new-update-name"
-                                defaultValue={ wizardData[0].name }
+                                defaultValue={ wizardData.name }
                                 onChange={ (e) => {
                                     onStep1DataSelect('name', e.target.value)
                                 } }
@@ -51,7 +51,7 @@ class Step1 extends Component {
                                 rows={ 5 }
                                 name="updateDescription"
                                 id="create-new-update-description"
-                                defaultValue={ wizardData[0].description }
+                                defaultValue={ wizardData.description }
                                 onChange={ (e) => {
                                     onStep1DataSelect('description', e.target.value)
                                 } }
@@ -68,7 +68,7 @@ class Step1 extends Component {
                                     </div>
                                     :
                                     _.map(hardwareList, item => {
-                                        const { selectedHardwares } = wizardData[0];
+                                        const { selectedHardwares } = wizardData;
                                         const selected = _contains(selectedHardwares, item);
                                         return (
                                             <SelectableListItem

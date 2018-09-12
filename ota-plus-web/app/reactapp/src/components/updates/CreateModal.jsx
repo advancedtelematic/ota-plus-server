@@ -19,16 +19,12 @@ const wizardSteps = [
     },
 ];
 
-const data = [
-    {
-        name: '',
-        description: '',
-        selectedHardwares: [],
-    },
-    {
-        update: {},
-    },
-];
+const data = {
+    name: '',
+    description: '',
+    selectedHardwares: [],
+    update: {},
+};
 
 const initialCurrentStepId = 0;
 
@@ -78,17 +74,19 @@ class CreateModal extends Component {
         if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId !== this.steps.length - 1) {
             this.currentStepId = this.currentStepId + 1;
         }
+        this.validateStep(this.currentStepId);
     };
 
     prevStep = () => {
         if (this.currentStepId !== 0) {
             this.currentStepId = this.currentStepId - 1;
         }
+        this.validateStep(this.currentStepId);
     };
 
     createMtu = () => {
         const { updatesStore } = this.props.stores;
-        updatesStore.createMultiTargetUpdate(this.wizardData[1].update);
+        updatesStore.createMultiTargetUpdate(this.wizardData.update);
     };
 
     handleMtuCreated = () => {
@@ -99,8 +97,8 @@ class CreateModal extends Component {
                 id: lastCreatedMtuId,
                 sourceType: "multi_target"
             },
-            name: this.wizardData[0].name,
-            description: this.wizardData[0].description,
+            name: this.wizardData.name,
+            description: this.wizardData.description,
         };
         updatesStore.createUpdate(data);
     };
@@ -109,59 +107,76 @@ class CreateModal extends Component {
         this.props.hide();
     };
 
-    onStep1DataSelect = (type, value) => {
-        const stepData = this.wizardData[this.currentStepId];
+    validateStep = (id) => {
+        const { showDetails } = this.props;
+        const { name, description, selectedHardwares, update } = this.wizardData;
+
+        switch (id) {
+            case 0:
+                if (selectedHardwares.length && name !== '' && description !== '') {
+                    this.markStepAsFinished();
+                } else {
+                    this.markStepAsNotFinished();
+                }
+                break;
+            case 1:
+                _.each(selectedHardwares, item => {
+                    if (!showDetails &&
+                        update && update[item.name] &&
+                        update[item.name].fromPack &&
+                        update[item.name].toPack &&
+                        update[item.name].fromVersion &&
+                        update[item.name].toVersion) {
+                        this.markStepAsFinished();
+                    } else {
+                        this.markStepAsNotFinished();
+                    }
+                });
+                break;
+            default: break;
+        }
+    };
+
+    onStep1DataSelect = (type, data) => {
+        const { name, description } = this.wizardData;
+        let hardwares = this.wizardData.selectedHardwares;
+        let update = this.wizardData.update;
         switch (type) {
             case 'hardwareId':
-                let selectedHardwares = stepData.selectedHardwares;
-                if (_contains(selectedHardwares, value))
-                    selectedHardwares.splice(_.indexOf(selectedHardwares, value), 1);
-                else
-                    selectedHardwares.push(value);
+                if (_contains(hardwares, data)) {
+                    this.wizardData.selectedHardwares = _.reject(hardwares, (item) => {
+                        return (item.name === data.name);
+                    });
+                    this.wizardData.update = _.omit(update, data.name);
+                } else {
+                    this.wizardData.selectedHardwares.push(data);
+                }
                 break;
             case 'name':
-                stepData.name = value;
+                this.wizardData.name = data;
                 break;
             case 'description':
-                stepData.description = value;
+                this.wizardData.description = data;
                 break;
             default:
                 break;
         }
-        if (stepData.selectedHardwares.length &&
-            stepData.name !== '' &&
-            stepData.description !== '') {
-            this.markStepAsFinished();
-        } else {
-            this.markStepAsNotFinished();
-        }
+        this.validateStep(this.currentStepId);
     };
 
     onStep2DataSelect = (selected, type, value) => {
-        const { showDetails } = this.props;
         const { name: hardwareId } = selected;
-        const stepData = this.wizardData[this.currentStepId].update;
-        stepData[hardwareId] = _.isObject(stepData[hardwareId]) ? stepData[hardwareId] : {};
-        stepData[hardwareId][type] = value;
+        const { update } = this.wizardData;
+        update[hardwareId] = _.isObject(update[hardwareId]) ? update[hardwareId] : {};
+        update[hardwareId][type] = value;
 
         if (type === 'fromPack') {
-            stepData[hardwareId]['fromVersion'] = null;
+            update[hardwareId]['fromVersion'] = null;
         }
         if (type === 'toPack') {
-            stepData[hardwareId]['toVersion'] = null;
+            update[hardwareId]['toVersion'] = null;
         }
-        _.each(this.wizardData[0].selectedHardwares, item => {
-            if (stepData[item.name] &&
-                stepData[item.name].fromPack &&
-                stepData[item.name].toPack &&
-                stepData[item.name].fromVersion &&
-                stepData[item.name].toVersion &&
-                !showDetails) {
-                this.markStepAsFinished();
-            } else {
-                this.markStepAsNotFinished();
-            }
-        });
+        this.validateStep(this.currentStepId);
     };
 
     render() {
