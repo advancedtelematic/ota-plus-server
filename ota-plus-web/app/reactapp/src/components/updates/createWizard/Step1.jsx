@@ -58,11 +58,10 @@ class Step1 extends Component {
                             />
                         </div>
                     </div>
-
+                    <label className="c-form__label">{ "Select Hardware ids" }</label>
                     <div className="row hardware-container">
                         <div className="col-xs-12">
                             <div className="ids-list">
-                                <label className="c-form__label">{ "Select Hardware ids" }</label>
                                 { hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                     <div className="wrapper-center">
                                         <Loader/>
