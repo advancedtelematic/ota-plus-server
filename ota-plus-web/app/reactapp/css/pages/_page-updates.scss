@@ -100,6 +100,8 @@
     &:not(:last-of-type) {
       margin-bottom: 40px;
     }
+    overflow-x: hidden;
+    overflow-y: auto;
 
     .c-form__label {
       margin-bottom: 20px;
@@ -107,6 +109,7 @@
 
     .ids-list {
       height: 200px;
+      padding-top: 20px;
 
       .item {
         padding: 0;
