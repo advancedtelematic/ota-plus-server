@@ -107,7 +107,7 @@ class List extends Component {
         const { showUpdateDetails } = this.props;
         const { updatesStore } = this.props.stores;
         return (
-            <div className="ios-list" ref="list">
+            <div className="ios-list" id="list-updates"  ref="list">
                 <div className="fake-header" style={ { top: this.fakeHeaderTopPosition } }>
                     <div className="letter">
                         { this.fakeHeaderLetter }

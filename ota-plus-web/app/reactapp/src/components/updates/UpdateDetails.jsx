@@ -27,7 +27,7 @@ class UpdateDetails extends Component {
                             label="Update Name"
                             placeholder="Name"
                             name="updateName"
-                            id={ "update-name-" + updateItem.name }
+                            id={ `update-name-${updateItem.name}` }
                             defaultValue={ updateItem.name }
                             isEditable={ isEditable }
                         />
@@ -38,7 +38,7 @@ class UpdateDetails extends Component {
                             placeholder="Type here"
                             rows={ 5 }
                             name="updateDescription"
-                            id={ "update-description" + updateItem.name }
+                            id={ `update-description-${updateItem.name}` }
                             defaultValue={ updateItem.description }
                             isEditable={ isEditable }
                         />
@@ -59,7 +59,7 @@ class UpdateDetails extends Component {
 
                                 return (
                                     <div className="col-xs-12 hardware-container" key={ hardwareId }>
-                                        <label className="c-form__label">{ hardwareId }</label>
+                                        <label className="c-form__label" id={ `label-hardware-${hardwareId}` }>{ hardwareId }</label>
                                         <div className="row">
                                             <div className="col-xs-6">{ "From" }</div>
                                             <div className="col-xs-6">{ "To" }</div>
@@ -69,7 +69,7 @@ class UpdateDetails extends Component {
                                                 <FormInput
                                                     label="Package"
                                                     name="fromPackage"
-                                                    id="from-package"
+                                                    id={ `${hardwareId}-from-package` }
                                                     defaultValue={ fromPackage ? fromPackage : noInformation }
                                                     isEditable={ isEditable }
                                                 />
@@ -78,7 +78,7 @@ class UpdateDetails extends Component {
                                                 <FormInput
                                                     label="Package"
                                                     name="toPackage"
-                                                    id="to-package"
+                                                    id={ `${hardwareId}-to-package` }
                                                     defaultValue={ toPackage ? toPackage : noInformation }
                                                     isEditable={ isEditable }
                                                 />
@@ -89,7 +89,7 @@ class UpdateDetails extends Component {
                                                 <FormInput
                                                     label="Version"
                                                     name="fromVersion"
-                                                    id="from-version"
+                                                    id={ `${hardwareId}-from-version` }
                                                     defaultValue={ fromVersion ? fromVersion.hash : noInformation }
                                                     isEditable={ isEditable }
                                                 />
@@ -98,7 +98,7 @@ class UpdateDetails extends Component {
                                                 <FormInput
                                                     label="Version"
                                                     name="toVersion"
-                                                    id="to-version"
+                                                    id={ `${hardwareId}-to-version` }
                                                     defaultValue={ toVersion ? toVersion.hash : noInformation }
                                                     isEditable={ isEditable }
                                                 />
@@ -112,8 +112,8 @@ class UpdateDetails extends Component {
                             <div className="col-xs-12">
                                 <FormInput
                                     label={ updateItem.source.id }
-                                    name="fromPackage"
-                                    id="from-package"
+                                    name="sourceId"
+                                    id={ `update-source-id-${updateItem.source.id}` }
                                     defaultValue={ updateItem.source.sourceType }
                                     isEditable={ isEditable }
                                 />
