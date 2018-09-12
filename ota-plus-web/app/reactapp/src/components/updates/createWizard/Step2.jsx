@@ -20,7 +20,11 @@ class Step2 extends Component {
                 <AsyncResponse
                     handledStatus="error"
                     action={ updatesStore.updatesCreateAsync }
-                    errorMsg={ (updatesStore.updatesCreateAsync.data ? updatesStore.updatesCreateAsync.data.description : null) }
+                    errorMsg={ (
+                        updatesStore.updatesCreateAsync.status !== 200 &&
+                        updatesStore.updatesCreateAsync.data &&
+                        updatesStore.updatesCreateAsync.data.description
+                    ) }
                 />
                 <div className="updates-container clearfix">
                     {

@@ -10,7 +10,7 @@ class UpdateDetailList extends Component {
     render() {
         const { wizardData, onStep2DataSelect } = this.props;
         const { packagesStore } = this.props.stores;
-        const selectedHardwares = wizardData[0].selectedHardwares;
+        const selectedHardwares = wizardData.selectedHardwares;
         return (
             <span>
                 { packagesStore.packagesFetchAsync.isFetching ?

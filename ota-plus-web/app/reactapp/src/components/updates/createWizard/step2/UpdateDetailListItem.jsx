@@ -22,7 +22,7 @@ class UpdateDetailListItem extends Component {
                 versions = found.versions;
             }
         });
-        const formattedData = versions.map((version) => {
+        const formattedData = versions && versions.map((version) => {
             return {
                 text: `${version.id.version} Created at: ${moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}`,
                 id: version.id.version,
@@ -40,6 +40,14 @@ class UpdateDetailListItem extends Component {
     render() {
         const { item, wizardData, onStep2DataSelect } = this.props;
         const { packagesStore } = this.props.stores;
+        const { update } = wizardData;
+        const {
+            fromPack,
+            toPack,
+            fromVersion,
+            toVersion,
+        } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
+
         let uniqPackages = _.uniq(packagesStore.packages, (item) => {
             return item.id.name
         });
@@ -48,7 +56,7 @@ class UpdateDetailListItem extends Component {
                 text: item.id.name,
                 id: item.id.name,
                 value: item.id.name,
-                item
+                item,
             };
         });
 
@@ -67,7 +75,7 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className="col-xs-6">
                             <FormSelect
-                                id="select-package-from"
+                                id={ `${item.name}_select_package_from` }
                                 options={ packages }
                                 label="Package"
                                 multiple={ false }
@@ -75,16 +83,18 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select from package"
-                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].fromPack ? wizardData[1].update[item].fromPack.id.name : null }
+                                defaultValue={ fromPack && fromPack.id.name }
                                 onChange={ (value) => {
-                                    this.formatVersions('from', value.id);
-                                    onStep2DataSelect(item, 'fromPack', value.item)
+                                    if (value && value.id) {
+                                        this.formatVersions('from', value.id);
+                                        onStep2DataSelect(item, 'fromPack', value.item);
+                                    }
                                 } }
                             />
                         </div>
                         <div className="col-xs-6">
                             <FormSelect
-                                id="select-package-to"
+                                id={ `${item.name}_select_package_to` }
                                 options={ packages }
                                 label="Package"
                                 multiple={ false }
@@ -92,10 +102,12 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select to package"
-                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].toPack ? wizardData[1].update[item].toPack.id.name : null }
+                                defaultValue={ toPack && toPack.id.name }
                                 onChange={ (value) => {
-                                    this.formatVersions('to', value.id);
-                                    onStep2DataSelect(item, 'toPack', value.item)
+                                    if (value && value.id) {
+                                        this.formatVersions('to', value.id);
+                                        onStep2DataSelect(item, 'toPack', value.item);
+                                    }
                                 } }
                             />
                         </div>
@@ -105,31 +117,35 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id="select-version-from"
+                                id={ `${item.name}_select_version_from` }
                                 options={ this.fromVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
                                 multiple={ false }
                                 placeholder="Select from version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].fromVersion ? wizardData[1].update[item].fromVersion.id.name : null }
+                                defaultValue={ fromVersion && fromVersion.id.name }
                                 onChange={ (value) => {
-                                    onStep2DataSelect(item, 'fromVersion', value.version)
+                                    if (value && value.version) {
+                                        onStep2DataSelect(item, 'fromVersion', value.version)
+                                    }
                                 } }
                             />
                         </div>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id="select-version-to"
+                                id={ `${item.name}_select_version_to` }
                                 options={ this.toVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
                                 multiple={ false }
                                 placeholder="Select to version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={ wizardData[1].update[item] && wizardData[1].update[item].toVersion ? wizardData[1].update[item].toVersion.id.name : null }
+                                defaultValue={ toVersion && toVersion.id.name }
                                 onChange={ (value) => {
-                                    onStep2DataSelect(item, 'toVersion', value.version)
+                                    if (value && value.version) {
+                                        onStep2DataSelect(item, 'toVersion', value.version)
+                                    }
                                 } }
                             />
                         </div>
