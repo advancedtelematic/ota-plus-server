@@ -1,4 +1,4 @@
-.campaigns-wizard {  
+.campaigns-wizard {
 
   .draggable-content {
 
@@ -37,6 +37,15 @@
 
         .alert {
           margin-bottom: 0;
+        }
+
+        .targets-container {
+          margin-top: 20px;
+          .hardware-container {
+            &:not(:last-of-type) {
+              margin-bottom: 30px;
+            }
+          }
         }
 
         &.step-updates, &.step-groups {
@@ -144,11 +153,11 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            padding:8px 0;
+            padding: 8px 0;
 
             .btn-bordered {
               width: 250px;
-              height:36px;
+              height: 36px;
               font-size: 14px;
             }
 
@@ -176,7 +185,7 @@
             }
 
             .estimation {
-              padding:5px 0;
+              padding: 5px 0;
               width: 40%;
               justify-content: space-between;
               align-items: center;
@@ -331,7 +340,7 @@
           align-items: center;
           justify-content: center;
           background-color: #fff;
-          
+
           .c-sequencer__end-point, .c-sequencer__starter-point {
             min-height: inherit;
           }
@@ -345,34 +354,33 @@
             height: 100%;
             padding: 8px;
 
-              .wrapper-groups {
-                height: 150px;
-                padding: 20px 0 20px 0;
-                position: relative;
-                overflow-y: auto;
-                flex-wrap: wrap;
-                display: flex;
+            .wrapper-groups {
+              padding: 20px 0 20px 0;
+              position: relative;
+              overflow-y: auto;
+              flex-wrap: wrap;
+              display: flex;
 
-                .element-box {
-                  width: 33.3333333%;
-                  height: 60px;
-                  padding: 0;
+              .element-box {
+                width: 33.3333333%;
+                height: 60px;
+                padding: 0;
 
-                  &.group {
-                    display: flex;
+                &.group {
+                  display: flex;
 
-                    .icon {
-                      width: 40px;
-                      height: 40px;
-                      display: inline-block;
-                    }
+                  .icon {
+                    width: 40px;
+                    height: 40px;
+                    display: inline-block;
                   }
                 }
               }
+            }
 
-              &.groups {
-                position: relative;
-              }
+            &.groups {
+              position: relative;
+            }
           }
         }
 
@@ -408,7 +416,8 @@
         }
 
         .box-summary {
-          padding: 20px;
+          margin-top: 20px;
+          padding: 0 20px;
 
           .title {
             font-weight: bold;

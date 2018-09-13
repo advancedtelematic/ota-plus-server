@@ -83,7 +83,7 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select from package"
-                                defaultValue={ fromPack && fromPack.id.name }
+                                defaultValue={ fromPack && fromPack.id && fromPack.id.name }
                                 onChange={ (value) => {
                                     if (value && value.id) {
                                         this.formatVersions('from', value.id);
@@ -102,7 +102,7 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select to package"
-                                defaultValue={ toPack && toPack.id.name }
+                                defaultValue={ toPack && toPack.id && toPack.id.name }
                                 onChange={ (value) => {
                                     if (value && value.id) {
                                         this.formatVersions('to', value.id);
@@ -124,7 +124,7 @@ class UpdateDetailListItem extends Component {
                                 multiple={ false }
                                 placeholder="Select from version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={ fromVersion && fromVersion.id.name }
+                                defaultValue={ fromVersion && fromVersion.id && fromVersion.id.version }
                                 onChange={ (value) => {
                                     if (value && value.version) {
                                         onStep2DataSelect(item, 'fromVersion', value.version)
@@ -141,7 +141,7 @@ class UpdateDetailListItem extends Component {
                                 multiple={ false }
                                 placeholder="Select to version"
                                 visibleFieldsCount={ 5 }
-                                defaultValue={ toVersion && toVersion.id.name }
+                                defaultValue={ toVersion && toVersion.id && toVersion.id.version }
                                 onChange={ (value) => {
                                     if (value && value.version) {
                                         onStep2DataSelect(item, 'toVersion', value.version)
