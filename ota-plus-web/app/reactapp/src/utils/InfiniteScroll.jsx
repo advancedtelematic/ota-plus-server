@@ -55,24 +55,25 @@ export default class InfiniteScroll extends Component {
     scrollListener() {
         const el = this.scrollComponent;
         const scrollEl = window;
-        let offset;
+        let scrollOffset;
+
         if (this.props.useWindow) {
             const scrollTop = (scrollEl.pageYOffset !== undefined) ?
                 scrollEl.pageYOffset
             :
                 (document.documentElement || document.body.parentNode || document.body).scrollTop;
             if (this.props.isReverse) {
-                offset = scrollTop;
+                scrollOffset = scrollTop;
             } else {
-                offset = (this.calculateTopPosition(el) + el.offsetHeight) -
+                scrollOffset = (this.calculateTopPosition(el) + el.offsetHeight) -
                 (scrollTop + window.innerHeight);
             }
         } else if (this.props.isReverse) {
-            offset = el.parentNode.scrollTop;
+            scrollOffset = el.parentNode.scrollTop;
         } else {
-            offset = el.scrollHeight - el.parentNode.scrollTop - el.parentNode.clientHeight;
+            scrollOffset = el.scrollHeight - el.parentNode.scrollTop - el.parentNode.clientHeight;
         }
-        if (offset < Number(this.props.threshold)) {
+        if (scrollOffset < Number(this.props.threshold)) {
             this.detachScrollListener();
             // Call loadMore after detachScrollListener to allow for non-async loadMore functions
             if (typeof this.props.loadMore === 'function' && !this.props.isLoading) {
@@ -80,6 +81,7 @@ export default class InfiniteScroll extends Component {
             }
         }
     }
+
     attachScrollListener() {
         if (!this.props.hasMore) {
             return;

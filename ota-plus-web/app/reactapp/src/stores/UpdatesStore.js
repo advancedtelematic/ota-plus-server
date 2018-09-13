@@ -24,13 +24,21 @@ export default class UpdatesStore {
     @observable initialUpdates = [];
     @observable updates = [];
     @observable updateFilter = '';
-    @observable updatesLimit = 30;
-    @observable updatesOffset = 0;
+    @observable updatesLimitPage = 30;
+    @observable updatesOffsetPage = 0;
     @observable updatesTotalCount = 0;
     @observable updatesInitialTotalCount = 0;
+    @observable currentPagesLoaded = 1;
+
     @observable preparedUpdates = {};
     @observable lastCreatedMtuId = null;
     @observable currentMtuData = {};
+
+    @observable updatesWizard = [];
+    @observable currentPagesLoadedWizard = 0;
+    @observable initialUpdatesWizard = [];
+    @observable updatesLimitWizard = 5;
+    @observable preparedUpdatesWizard = {};
 
     constructor() {
         resetAsync(this.updatesFetchAsync);
@@ -97,8 +105,8 @@ export default class UpdatesStore {
 
     fetchUpdates(async = 'updatesFetchAsync') {
         resetAsync(this[async], true);
-        this.updatesOffset = 0;
-        let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimit}&offset=${this.updatesOffset}`;
+        this.updatesOffsetPage = 0;
+        let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitPage}&offset=${this.updatesOffsetPage}`;
         return axios.get(apiAddress)
             .then((response) => {
                 this.updates = response.data.values;
@@ -116,15 +124,30 @@ export default class UpdatesStore {
             });
     }
 
-    loadMoreUpdates() {
+    loadMoreUpdates(target = 'wizard') {
         resetAsync(this.updatesLoadMoreAsync, true);
-        let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimit}&offset=${this.updatesOffset + this.updatesLimit}`;
+
+        let apiAddress = (target === 'wizard') ?
+            `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.currentPagesLoadedWizard * this.updatesLimitWizard}`
+            :
+            `${API_UPDATES_SEARCH}?limit=${this.updatesLimitPage}&offset=${this.updatesOffsetPage + this.updatesLimitPage}`;
+
         return axios.get(apiAddress)
             .then((response) => {
-                this.updates = _.uniq(this.updates.concat(response.data.values), item => item.uuid);
-                this.initialUpdates = _.uniq(this.initialUpdates.concat(response.data.values), item => item.uuid);
-                this.updatesOffset = response.data.offset;
-                this._prepareUpdates();
+
+                if (target === 'wizard') {
+                    this.updatesWizard = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
+                    this.initialUpdatesWizard = _.uniq(this.initialUpdatesWizard.concat(response.data.values), item => item.uuid);
+                    this.currentPagesLoadedWizard++;
+                } else {
+                    this.updates = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
+                    this.initialUpdates = _.uniq(this.initialUpdates.concat(response.data.values), item => item.uuid);
+                    this.updatesOffsetPage = response.data.offset;
+                    this.currentPagesLoadedWizard++;
+                }
+
+                this.updatesTotalCount = response.data.total;
+                this._prepareUpdates(target);
                 this.updatesLoadMoreAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
@@ -170,8 +193,8 @@ export default class UpdatesStore {
         return _.sortBy(updates, function (update) { return update.name.toLowerCase() });
     }
 
-    _prepareUpdates() {
-        let updates = this.sortUpdates();
+    _prepareUpdates(mode = null) {
+        let updates = this.sortUpdates(mode === 'wizard' ? this.updatesWizard : this.updates);
         let sortedUpdates = {};
         let specialGroup = {
             '#': []
@@ -192,7 +215,12 @@ export default class UpdatesStore {
         if (!_.isEmpty(specialGroup['#'])) {
             sortedUpdates = Object.assign(sortedUpdates, specialGroup);
         }
-        this.preparedUpdates = sortedUpdates;
+
+        if (mode === 'wizard') {
+            this.preparedUpdatesWizard = sortedUpdates;
+        } else {
+            this.preparedUpdates = sortedUpdates;
+        }
     }
 
     _filterUpdates(filter) {
@@ -216,10 +244,15 @@ export default class UpdatesStore {
         this.updates = [];
         this.initialUpdates = [];
         this.updateFilter = '';
-        this.updatesOffset = 0;
+        this.updatesOffsetPage = 0;
         this.updatesTotalCount = 0;
         this.updatesInitialTotalCount = 0;
         this.preparedUpdates = {};
         this.lastCreatedMtuId = null;
+        this.initialUpdatesWizard = [];
+        this.updatesWizard = [];
+        this.updatesLimitWizard = 10;
+        this.updatesOffsetWizard = 0;
+        this.preparedUpdatesWizard = {};
     }
 }

@@ -107,7 +107,6 @@ class WizardStep5 extends Component {
         }
 
         if (this.blocks.length <= 0) {
-            console.log('valid');
             this.props.markStepAsFinished();
         }
     }
