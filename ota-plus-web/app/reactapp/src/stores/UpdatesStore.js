@@ -1,6 +1,7 @@
 import { observable, computed } from 'mobx';
 import axios from 'axios';
 import _ from 'underscore';
+import { removeVersion } from "../utils/Transformers";
 import {
     API_UPDATES_SEARCH,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
@@ -147,6 +148,16 @@ export default class UpdatesStore {
                     mtuId: mtuId,
                     data: response.data,
                 };
+
+                _.mapObject(this.currentMtuData.data, (item, key) => {
+                    const { target: fromPackage, checksum: fromVersion } = item && item.from;
+                    const { target: toPackage, checksum: toVersion } = item && item.to;
+                    this.currentMtuData.data[key].from.target = removeVersion(fromPackage, fromVersion.hash);
+                    this.currentMtuData.data[key].to.target = removeVersion(toPackage, toVersion.hash);
+                });
+
+                console.log(this.currentMtuData.data);
+
                 this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
@@ -154,6 +165,7 @@ export default class UpdatesStore {
                 this.updatesFetchMtuIdAsync = handleAsyncError(error);
             });
     }
+
 
     sortUpdates(updates = this.updates) {
         return _.sortBy(updates, function (update) { return update.name.toLowerCase() });

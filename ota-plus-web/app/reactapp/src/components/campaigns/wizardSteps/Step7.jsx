@@ -39,7 +39,6 @@ class WizardStep7 extends Component {
 
                             return (
                                 <div className="package-container" key={ hardwareId }>
-                                    <label className="c-form__label">{ hardwareId }</label>
                                     <div className="update-container">
                                         <span className="director-updates">
                                             <div className="update-from">
@@ -75,7 +74,7 @@ class WizardStep7 extends Component {
                                         <div className="text">{ "On:" }</div>
                                         <div className="value app-label"
                                              id={ "package-version-" + hardwareId }>
-                                            { target.targetFormat }
+                                            { hardwareId }
                                         </div>
                                     </div>
                                 </div>
