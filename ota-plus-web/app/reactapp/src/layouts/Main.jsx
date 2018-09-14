@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
-import { observe, observable, extendObservable } from 'mobx';
+import { observe, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { APP_LAYOUT } from '../config';
 import {
     Navigation,
     SizeVerify,
@@ -13,7 +12,6 @@ import {
     WebsocketHandler,
 } from '../utils';
 import _ from 'underscore';
-import Cookies from 'js-cookie';
 import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
 import { Minimized } from '../components/minimized';
@@ -70,6 +68,7 @@ class Main extends Component {
             }
         });
     }
+
     toggleWizard(wizardId, wizardName, e) {
         if (e) e.preventDefault();
         const {
@@ -87,18 +86,20 @@ class Main extends Component {
         else
             this.minimizedWizards.push(minimizedWizard);
     }
+
     addNewWizard(skipStep = null) {
         const wizard =
             <Wizard
-                wizardIdentifier={this.wizards.length}
-                hideWizard={this.hideWizard}
-                toggleWizard={this.toggleWizard}
-                minimizedWizards={this.minimizedWizards}
-                skipStep={skipStep}
-                key={this.wizards.length}
+                wizardIdentifier={ this.wizards.length }
+                hideWizard={ this.hideWizard }
+                toggleWizard={ this.toggleWizard }
+                minimizedWizards={ this.minimizedWizards }
+                skipStep={ skipStep }
+                key={ this.wizards.length }
             />;
         this.wizards = this.wizards.concat(wizard);
     }
+
     hideWizard(wizardIdentifier, e) {
         const {
             campaignsStore
@@ -108,6 +109,7 @@ class Main extends Component {
         this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
         campaignsStore._resetFullScreen();
     }
+
     callFakeWsHandler() {
         const {
             devicesStore,
@@ -126,6 +128,7 @@ class Main extends Component {
         });
         this.fakeWebsocketHandler.init();
     }
+
     componentWillMount() {
         const {
             userStore,
@@ -140,6 +143,7 @@ class Main extends Component {
         window.atsGarageTheme = this.atsGarageTheme;
         this.context.router.listen(this.locationChange);
     }
+
     locationChange() {
         const {
             userStore,
@@ -148,13 +152,16 @@ class Main extends Component {
             this.context.router.push('/');
         }
     }
+
     toggleUploadBoxMode(e) {
         if (e) e.preventDefault();
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
     }
+
     toggleSWRepo() {
         this.switchToSWRepo = !this.switchToSWRepo;
     }
+
     componentWillUnmount() {
         this.logoutHandler();
     }
@@ -164,49 +171,49 @@ class Main extends Component {
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
         const {
             featuresStore,
-            packagesStore
         } = this.props.stores;
         const { alphaPlusEnabled } = featuresStore;
         return (
             <span>
                 <Navigation
-                    location={pageId}
-                    toggleSWRepo={this.toggleSWRepo}
-                    uiUserProfileEdit={this.uiUserProfileEdit}
-                    switchToSWRepo={this.switchToSWRepo}
-                    uiUserProfileMenu={this.uiUserProfileMenu}
-                    uiCredentialsDownload={this.uiCredentialsDownload}
+                    location={ pageId }
+                    toggleSWRepo={ this.toggleSWRepo }
+                    uiUserProfileEdit={ this.uiUserProfileEdit }
+                    switchToSWRepo={ this.switchToSWRepo }
+                    uiUserProfileMenu={ this.uiUserProfileMenu }
+                    uiCredentialsDownload={ this.uiCredentialsDownload }
+                    alphaPlusEnabled={ alphaPlusEnabled }
                 />
-                <div id={pageId} style={{
+                <div id={ pageId } style={ {
                     height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 50px)' : 'calc(100vh - 50px)',
                     padding: !alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
-                }}>
+                } }>
                     <FadeAnimation>
                         <children.type
-                            {...rest}
-                            children={children.props.children}
-                            addNewWizard={this.addNewWizard}
-                            uiUserProfileEdit={this.uiUserProfileEdit}
-                            switchToSWRepo={this.switchToSWRepo}
-                            uiAutoFeatureActivation={this.uiAutoFeatureActivation}
-                            uiUserProfileMenu={this.uiUserProfileMenu}
-                            uiCredentialsDownload={this.uiCredentialsDownload}
+                            { ...rest }
+                            children={ children.props.children }
+                            addNewWizard={ this.addNewWizard }
+                            uiUserProfileEdit={ this.uiUserProfileEdit }
+                            switchToSWRepo={ this.switchToSWRepo }
+                            uiAutoFeatureActivation={ this.uiAutoFeatureActivation }
+                            uiUserProfileMenu={ this.uiUserProfileMenu }
+                            uiCredentialsDownload={ this.uiCredentialsDownload }
                         />
                     </FadeAnimation>
                     <SizeVerify
-                        minWidth={1280}
-                        minHeight={768}
+                        minWidth={ 1280 }
+                        minHeight={ 768 }
                     />
                     <UploadBox
-                        minimized={this.uploadBoxMinimized}
-                        toggleUploadBoxMode={this.toggleUploadBoxMode}
+                        minimized={ this.uploadBoxMinimized }
+                        toggleUploadBoxMode={ this.toggleUploadBoxMode }
                     />
-                    {this.wizards}
+                    { this.wizards }
                     <Minimized
-                        uploadBoxMinimized={this.uploadBoxMinimized}
-                        toggleUploadBoxMode={this.toggleUploadBoxMode}
-                        minimizedWizards={this.minimizedWizards}
-                        toggleWizard={this.toggleWizard}
+                        uploadBoxMinimized={ this.uploadBoxMinimized }
+                        toggleUploadBoxMode={ this.toggleUploadBoxMode }
+                        minimizedWizards={ this.minimizedWizards }
+                        toggleWizard={ this.toggleWizard }
                     />
                 </div>
             </span>
@@ -215,11 +222,11 @@ class Main extends Component {
 }
 
 Main.wrappedComponent.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
+    router: React.PropTypes.object.isRequired,
+};
 
 Main.propTypes = {
-    children: PropTypes.object.isRequired
-}
+    children: PropTypes.object.isRequired,
+};
 
 export default Main;

@@ -1,4 +1,5 @@
 import Navigation from './Navigation';
+import TabNavigation from './TabNavigation';
 import UserDropdown from './UserDropdown';
 import SettingsDropdown from './SettingsDropdown';
 import Header from './Header';
@@ -24,6 +25,7 @@ import TimePicker from './TimePicker';
 
 export {
     Navigation,
+    TabNavigation,
     UserDropdown,
     SettingsDropdown,
     Header,
@@ -45,5 +47,5 @@ export {
     EditModal,
     EditCampaignModal,
     EditPackageModal,
-    TimePicker
+    TimePicker,
 }
