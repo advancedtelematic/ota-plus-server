@@ -83,7 +83,7 @@ class WizardStep4 extends Component {
     }
 
     render() {
-        const { wizardData, approvalNeeded, alphaPlus } = this.props;
+        const { wizardData, approvalNeeded, alphaTest } = this.props;
         const { metadata } = wizardData;
         const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
 
@@ -105,7 +105,7 @@ class WizardStep4 extends Component {
                 </div>
                 <div className="description">
                     <div className="search-box">
-                        { alphaPlus ?
+                        { alphaTest ?
                             <FormInput
                                 label="Internal description"
                                 id="internal_reuse-text"
@@ -120,7 +120,7 @@ class WizardStep4 extends Component {
                     </div>
                     <FormTextarea
                         rows="5"
-                        label={ !alphaPlus && 'Internal description' }
+                        label={ !alphaTest && 'Internal description' }
                         id="internal_driver-description"
                         defaultValue={ DESCRIPTION ? DESCRIPTION : '' }
                         onValid={ (e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value) }
@@ -129,7 +129,7 @@ class WizardStep4 extends Component {
                 </div>
                 <div className="translations">
                     {
-                        alphaPlus &&
+                        alphaTest &&
                         <div className="flex-row">
                             <span className="bold" id="approved-translations-0">{ "Approved translations: 0" }</span>
                             <button className="btn-bordered" id="translations-view_button">{ "Translation view" }</button>

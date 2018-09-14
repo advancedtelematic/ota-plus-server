@@ -9,7 +9,7 @@ class MtuListItem extends Component {
     render() {
         const { item, serial, updateId, status, length, cancelMtuUpdate, showSequencer } = this.props;
         const { featuresStore, devicesStore } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
+        const { alphaTestEnabled } = featuresStore;
         const { device } = devicesStore;
         const devicePrimaryEcu = device.directorAttributes.primary;
         const deviceSecondaryEcus = device.directorAttributes.secondary;
@@ -92,7 +92,7 @@ class MtuListItem extends Component {
                                     {length}
                                 </span>
                             </div>
-                            {alphaPlusEnabled ?
+                            {alphaTestEnabled ?
                                 <InstallationEvents
                                     updateId={updateId}
                                     error={null}

@@ -52,8 +52,7 @@ class Item extends Component {
     }
     render() {
         const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
-        const { groupsStore, featuresStore } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
+        const { groupsStore } = this.props.stores;
         const { isDragging, connectDragSource } = this.props;
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
