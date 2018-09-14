@@ -16,6 +16,7 @@ export default class FeaturesStore {
     @observable features = [];
     @observable clientId = null;
     @observable alphaPlusEnabled = false;
+    @observable alphaTestEnabled = false;
 
     constructor() {
         resetAsync(this.featuresFetchAsync);
@@ -35,6 +36,9 @@ export default class FeaturesStore {
                 this.features = response.data;
                 if (_.contains(response.data, 'alphaplus')) {
                     this.alphaPlusEnabled = true;
+                }
+                if (_.contains(response.data, 'alphatest')) {
+                    this.alphaTestEnabled = true;
                 }
                 this.featuresFetchAsync = handleAsyncSuccess(response);
             }.bind(this))

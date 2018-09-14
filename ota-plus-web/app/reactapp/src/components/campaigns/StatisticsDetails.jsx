@@ -32,7 +32,7 @@ class StatisticsDetails extends Component {
     render() {
         const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
         const { campaignsStore, featuresStore } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
+        const { alphaTestEnabled } = featuresStore;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -167,7 +167,7 @@ class StatisticsDetails extends Component {
                             </div>                            
                                                    
                         </div>
-                        {alphaPlusEnabled ?
+                        {alphaTestEnabled ?
                             <CampaignInstallationReportView />
                         :
                             <CampaignGroupsList />

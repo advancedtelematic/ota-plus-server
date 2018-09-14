@@ -399,6 +399,7 @@ class Wizard extends Component {
                                         addToCampaign: this.addToCampaign,
                                         approvalNeeded: this.approvalNeeded,
                                         alphaPlus: featuresStore.alphaPlusEnabled,
+                                        alphaTest: featuresStore.alphaTestEnabled,
                                         showUpdateDetails: this.showUpdateDetails,
                                     })
                                 }
