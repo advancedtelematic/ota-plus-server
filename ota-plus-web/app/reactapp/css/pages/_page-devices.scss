@@ -458,9 +458,10 @@
 .filters {
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
 
     &--dark {
-
+        display: flex;
         &:last-child {
             margin-bottom: 10px;
         }   
@@ -505,6 +506,15 @@
                     height: 100%!important;
                 }
             }
+        }
+    }
+
+    &:not(:last-child) {
+        &:after{
+            display: block;
+            content: 'AND:';
+            width: 100%;
+            padding-top: 10px;
         }
     }
 

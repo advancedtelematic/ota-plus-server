@@ -22,7 +22,7 @@ class ContentPanelSubheader extends Component {
                 singleFilterElements[0] = 'device ID';
             }
             return (
-                <div key={index} className={"filters filters--dark"}>
+                <div key={index} className={"filters--dark"}>
                     <div className="filters__block" style={{ flex: 1 }} >
                         <FormInput
                             id="name-filter"
