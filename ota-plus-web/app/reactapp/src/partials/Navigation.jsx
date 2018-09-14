@@ -17,8 +17,6 @@ class Navigation extends Component {
       switchToSWRepo,
       uiUserProfileEdit,
     } = this.props;
-    const { featuresStore } = this.props.stores;
-    const { alphaPlusEnabled } = featuresStore;
     return (
       <nav className="navbar navbar-inverse">
         <div className="container">
