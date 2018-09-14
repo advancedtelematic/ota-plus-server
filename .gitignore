@@ -57,6 +57,7 @@ deploy/roles
 /docs/_site/
 
 # temporary + env
+kube-env.sh
 /env
 *.env
 *.env.gpg
