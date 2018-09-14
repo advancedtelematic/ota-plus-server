@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { AsyncResponse, Form, FormInput } from '../../../../partials';
-import { DevicesSmartFilters } from '../../../devices';
+import SmartFilters from './SmartFilters';
 import { observer, inject } from 'mobx-react';
 
 const CreateSmartGroup = inject("stores")(observer(({ markStepAsFinished, markStepAsNotFinished, stores, setFilter }) => {
-    const { groupsStore, devicesStore } = stores;
+    const { groupsStore } = stores;
 
     return (
         <Form
@@ -34,7 +34,7 @@ const CreateSmartGroup = inject("stores")(observer(({ markStepAsFinished, markSt
             <div className="wizard__row-wrapper">
                 <div className="row">
                     <div className="col-xs-12">
-                        <DevicesSmartFilters
+                        <SmartFilters
                             layout={[1, 1, 3]}
                             setFilter={setFilter}
                         />

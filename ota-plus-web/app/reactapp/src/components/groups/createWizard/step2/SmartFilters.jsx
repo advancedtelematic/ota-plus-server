@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { SearchBar, FormInput, FormSelect } from '../../partials';
+import { SearchBar, FormInput, FormSelect } from '../../../../partials';
 import { Form } from 'formsy-react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
@@ -37,17 +37,17 @@ class SmartFilters extends Component {
     }
 
     render() {
-        const { devicesView = false, className, layout, setFilter } = this.props;
+        const { devicesView = false, layout, setFilter } = this.props;
 
         const Filters = this.groups.map(group => {
             return (
-                <div key={group.id} className={"filters " + (className ? className : '')} >
+                <div key={group.id} className={"filters"} >
                     <div className="filters__block" style={{ flex: layout[0] }} >
                         <FormSelect
                             id="name-filter"
+                            placeholder="Data"
                             appendMenuToBodyTag={true}
                             options={nameFilterOptions}
-                            defaultValue={nameFilterOptions[0]}
                             multiple={false}
                             visibleFieldsCount={5}
                             name="nameFilter"
@@ -58,9 +58,9 @@ class SmartFilters extends Component {
                     <div className="filters__block" style={{ flex: layout[1] }} >
                         <FormSelect
                             id="expression-filter"
+                            placeholder="Filter"
                             appendMenuToBodyTag={true}
                             options={extraFilterOptions}
-                            defaultValue={extraFilterOptions[0]}
                             multiple={false}
                             visibleFieldsCount={5}
                             name="expressionFilter"
