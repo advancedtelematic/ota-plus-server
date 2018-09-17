@@ -131,6 +131,50 @@
                     }
                   }
                 }
+                &.olpgroup {
+                  width: 100%;
+                  justify-content: space-between;
+
+                  .icon {
+                    background: url($olp-group-link ) 50% 50% no-repeat ;
+                    margin: 0;
+                
+                  }
+
+                  .desc {
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
+                
+                  .title {
+                      @include textoverflowEllipsis;
+                      font-weight: 500;
+                    }
+                  .subtitle {
+                    padding: 10px 0;
+
+                    &>* {
+                      box-sizing: border-box;
+                      padding: 3px 15px;
+                    }
+              
+                    & .layer {
+                      border-radius: 5px;
+                      color: white;
+                      background-color: $olp-group-layer;
+                    }
+                    & .versioned {
+                   
+                      color: $olp-group-layer;
+                      border: 1px solid $olp-group-layer;
+                      border-radius: 5px;
+                      margin-left: 10px
+                    }
+
+                  }
+                  }
+                  
+                }
               }
             }
           }

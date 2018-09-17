@@ -13,3 +13,31 @@
         }
     }    
 }
+
+.tab-item {
+    color: $color-lightgrey !important;
+    font-family:'Fira Sans', sans-serif !important;
+    width: 120px!important;
+    height: 60px;
+
+    &--active {
+        color: $olp-group-layer !important;
+        background: #F3F3F4 !important;
+        
+        &:after {
+            margin: 5px auto 0;
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: $switch-blue-color;
+        }
+    }
+
+    & > div {
+        & > div {
+            text-transform: none;
+            height: 30px !important;
+        }
+    }
+}
