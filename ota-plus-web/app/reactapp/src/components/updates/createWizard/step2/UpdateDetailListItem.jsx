@@ -75,7 +75,7 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className="col-xs-6">
                             <FormSelect
-                                id={ `${item.name}_select_package_from` }
+                                id={ `${item.name}-from-package` }
                                 options={ packages }
                                 label="Package"
                                 multiple={ false }
@@ -94,7 +94,7 @@ class UpdateDetailListItem extends Component {
                         </div>
                         <div className="col-xs-6">
                             <FormSelect
-                                id={ `${item.name}_select_package_to` }
+                                id={ `${item.name}-to-package` }
                                 options={ packages }
                                 label="Package"
                                 multiple={ false }
@@ -117,7 +117,7 @@ class UpdateDetailListItem extends Component {
                     <Form>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id={ `${item.name}_select_version_from` }
+                                id={ `${item.name}-from-version` }
                                 options={ this.fromVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
@@ -134,7 +134,7 @@ class UpdateDetailListItem extends Component {
                         </div>
                         <div className=" col-xs-6">
                             <FormSelect
-                                id={ `${item.name}_select_version_to` }
+                                id={ `${item.name}-to-version` }
                                 options={ this.toVersions }
                                 appendMenuToBodyTag={ true }
                                 label="Version"
