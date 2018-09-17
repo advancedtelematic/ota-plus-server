@@ -75,7 +75,7 @@ class FormSelect extends Component {
                         height: options.length > 1 ? 'auto' : '35px'
                     }}
                     className="c-form__select"
-                    multiple={multiple} id={id}>
+                    multiple={multiple} id="dropdown">
                 {options.map((value, index) => {
                     const selected = _.contains(selectedOptions, value);
                     if (_.isObject(value)) {
