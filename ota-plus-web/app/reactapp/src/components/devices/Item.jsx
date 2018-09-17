@@ -115,7 +115,10 @@ class Item extends Component {
 
                     <div className="devices-panel__device-desc">
                         <div className="devices-panel__device-title" title={device.deviceName} id={device.deviceName}>
-                            {device.deviceName}
+                            ID: {device.deviceId}
+                        </div>
+                        <div className="devices-panel__device-subtitle" title={device.deviceId} id={device.deviceId}>
+                            Name: {device.deviceName}
                         </div>
                         <div className="devices-panel__device-subtitle">
                             {deviceStatus !== 'Status unknown' ?
