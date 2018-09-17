@@ -88,8 +88,8 @@ class Sequencer extends Component {
     _createCampaignUpdates(data = null) {
         let updates = data ? data : this.props.data;
         let campaignUpdates = [];
-        _.mapObject(updates, (element, key) => {
-            campaignUpdates.push({...element, name: key});
+        _.mapObject(updates, (element) => {
+            campaignUpdates.push({...element});
         });
         this.campaignUpdates = campaignUpdates;
     }
@@ -252,55 +252,50 @@ class Sequencer extends Component {
             </div>
         );
         return (
-            !numberOfPhases ?
-                <div className="wrapper-center">
-                    Live installation progress is not available for this update.
-                </div>
-            :
-                <div className="c-sequencer">
-                    {initPhase}
-                    {_.map(updatesArray, (val, rowIndex) => {
-                        let rowIsEmpty = _.find(updatesMatrix[rowIndex], (obj) => { return !_.isEmpty(obj) });
-                        return (
-                            <div className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
-                                <span className="c-sequencer__phase">Phase {rowIndex + 2}</span>
-                                <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
-                                    {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0 ?
-                                        _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
-                                            if (!_.isEmpty(value)) {
-                                                return (
-                                                    <SequencerItem
-                                                        value={value}
-                                                        delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
-                                                        duration={PHASE_PROGRESS_TIME}
-                                                        selectSlot={this.selectSlot}
-                                                        selectedElement={this.selectedElement}
-                                                        deselectSlot={this.deselectSlot}
-                                                        selectAction={this.selectAction}
-                                                        row={rowIndex}
-                                                        column={columnIndex}
-                                                        key={rowIndex + '-' + columnIndex}
-                                                        readOnly={readOnly}
-                                                    />
-                                                )
-                                            } else {
-                                                return <div className="c-sequencer__empty-node"
-                                                            onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
-                                                            key={rowIndex + '-' + columnIndex} />
-                                            }
-                                        })
-                                        :   _.map(updatesArray, (value, columnIndex) => {
+            <div className="c-sequencer">
+                {initPhase}
+                {_.map(updatesArray, (val, rowIndex) => {
+                    let rowIsEmpty = _.find(updatesMatrix[rowIndex], (obj) => { return !_.isEmpty(obj) });
+                    return (
+                        <div className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
+                            <span className="c-sequencer__phase">Phase {rowIndex + 2}</span>
+                            <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
+                                {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0 ?
+                                    _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
+                                        if (!_.isEmpty(value)) {
+                                            return (
+                                                <SequencerItem
+                                                    value={value}
+                                                    delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
+                                                    duration={PHASE_PROGRESS_TIME}
+                                                    selectSlot={this.selectSlot}
+                                                    selectedElement={this.selectedElement}
+                                                    deselectSlot={this.deselectSlot}
+                                                    selectAction={this.selectAction}
+                                                    row={rowIndex}
+                                                    column={columnIndex}
+                                                    key={rowIndex + '-' + columnIndex}
+                                                    readOnly={readOnly}
+                                                />
+                                            )
+                                        } else {
                                             return <div className="c-sequencer__empty-node"
                                                         onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
                                                         key={rowIndex + '-' + columnIndex} />
-                                        })
-                                    }
-                                </div>
+                                        }
+                                    })
+                                    :   _.map(updatesArray, (value, columnIndex) => {
+                                        return <div className="c-sequencer__empty-node"
+                                                    onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
+                                                    key={rowIndex + '-' + columnIndex} />
+                                    })
+                                }
                             </div>
-                        )
-                    })}
-                    {terminationPhase}
-                </div>
+                        </div>
+                    )
+                })}
+                {terminationPhase}
+            </div>
         );
     }
 }

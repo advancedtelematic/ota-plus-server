@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable, extendObservable } from 'mobx';
+import { observable, observe } from 'mobx';
 import _ from 'underscore';
 import { SelectField, MenuItem } from 'material-ui';
 import { Loader, Form, FormSelect, FormInput } from '../../../partials';
@@ -11,6 +11,7 @@ import { FlatButton } from 'material-ui';
 class WizardStep5 extends Component {
     @observable blocks = [];
     @observable isLoading = false;
+    @observable selectedVersions = [];
 
     constructor(props) {
         super(props);
@@ -21,23 +22,42 @@ class WizardStep5 extends Component {
     }
 
     componentWillMount() {
-        const { markStepAsFinished } = this.props;
-        markStepAsFinished();
-        /*let chosenVersions = wizardData[2].versions;
-        _.each(chosenVersions, (values, packName) => {
-            let obj = {
-                packName: packName,
-                filepath: values.toFilepath
-            };
-            this.checkVersion(obj);
-        });*/
+        const { updatesStore } = this.props.stores;
+        const { wizardData } = this.props;
+        const { update } = wizardData;
+        const { source } = _.first(update);
+        updatesStore.fetchUpdate(source && source.id);
+        this.props.markStepAsFinished();
     }
 
-    checkVersion(data) {
-        const { wizardData } = this.props;
-        const { packagesStore } = this.props.stores;
+    fetchSelectedVersions = () => {
+        const { updatesStore} = this.props.stores;
+        const { currentMtuData: mtu } = updatesStore;
+        _.each(mtu.data, (data) => {
+            const { checksum: toVersion, target: toPackage } = data.to;
+            this.selectedVersions.push({
+                packName: toPackage,
+                filepath: `${toPackage}-${toVersion.hash}`,
+            });
+        });
+    };
 
-        let chosenVersions = wizardData[2].versions;
+    checkVersions = () => {
+        const { updatesStore} = this.props.stores;
+        const { currentMtuData: mtu } = updatesStore;
+        _.each(mtu.data, (data) => {
+            const { checksum: toVersion, target: toPackage } = data.to;
+            this.checkVersion({
+                packName: toPackage,
+                filepath: `${toPackage}-${toVersion.hash}`,
+            });
+        });
+    };
+
+    checkVersion(data) {
+        const { packagesStore } = this.props.stores;
+        this.fetchSelectedVersions();
+
         let objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
         if (objWithRelations) {
             let requiredPackages = objWithRelations.required;
@@ -45,8 +65,8 @@ class WizardStep5 extends Component {
             if (requiredPackages) {
                 _.each(requiredPackages, (filepath, index) => {
                     let skipAdd = false;
-                    _.each(chosenVersions, (values, pName) => {
-                        if (values.toFilepath === filepath) {
+                    _.each(this.selectedVersions, (data, index) => {
+                        if (data.filepath === filepath) {
                             skipAdd = true;
                         }
                     });
@@ -66,8 +86,8 @@ class WizardStep5 extends Component {
             if (incompatiblePackages) {
                 _.each(incompatiblePackages, (filepath, index) => {
                     let isTryingToInstall = false;
-                    _.each(chosenVersions, (values, pName) => {
-                        if (values.toFilepath === filepath) {
+                    _.each(this.selectedVersions, (values, pName) => {
+                        if (values.filepath === filepath) {
                             isTryingToInstall = true;
                         }
                     });
@@ -85,7 +105,9 @@ class WizardStep5 extends Component {
                 });
             }
         }
-        if (!this.blocks.length) {
+
+        if (this.blocks.length <= 0) {
+            console.log('valid');
             this.props.markStepAsFinished();
         }
     }
@@ -150,6 +172,7 @@ class WizardStep5 extends Component {
 
     render() {
         const { addToCampaign } = this.props;
+        // this.checkVersions();
         let isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
         return (
             <div className="content">
