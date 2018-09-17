@@ -9,20 +9,23 @@ const deviceSource = {
     beginDrag(props) {
         const { groupsStore } = props.stores;
         const foundGroup = _.find(groupsStore.groups, (group) => {
+
             return group.devices.values.indexOf(props.device.uuid) > -1;
         });
+
         return {
             uuid: props.device.uuid,
             groupId: foundGroup ? foundGroup.id : null,
         };
     },
-    endDrag(props, monitor) {
+    endDrag(props, monitor) {;
         const { devicesStore, groupsStore } = props.stores;
         let selectedGroup = groupsStore.selectedGroup;
         if (selectedGroup.id) {
             devicesStore.fetchDevices('', selectedGroup.id);
         } else {
             devicesStore.fetchDevices();
+
         }
     },
 };

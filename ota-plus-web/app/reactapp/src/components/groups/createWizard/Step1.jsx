@@ -4,13 +4,13 @@ import { map } from 'underscore';
 
 const options = [
     {
-        title: "Classic group",
-        teaser: "drag and drop specific devices in this group",
+        title: "Fixed group",
+        teaser: "A group that contains a fixed list of devices. To add devices, you drag and drop them from the device view.",
         alias: 'classic'
     },
     {
         title: "Smart group",
-        teaser: "filter devices based on multiple criteria, and get an up-to-date devices selection",
+        teaser: "A group that is based on a device filter. New devices are automatically added if they match the filter criteria.",
         alias: 'smart'
     }
 ];
@@ -20,7 +20,7 @@ const Step1 = ({ selectGroupType, groupType }) => {
         <div className="wizard__step1">
             {map(options, option => {
                 return (
-                    <Step1Option 
+                    <Step1Option
                         key={option.alias}
                         title={option.title}
                         teaser={option.teaser}
