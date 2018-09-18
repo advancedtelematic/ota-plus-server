@@ -182,7 +182,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
-        updatesStore.fetchUpdates();
+        // updatesStore.fetchUpdates();
     }
 
     componentWillUnmount() {

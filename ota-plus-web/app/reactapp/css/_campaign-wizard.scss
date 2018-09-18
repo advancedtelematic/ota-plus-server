@@ -49,7 +49,10 @@
         }
 
         &.step-updates, &.step-groups {
-
+          .wrapper-infinite-scroll {
+            height: calc(45vh - 60px);
+            max-height: 450px;
+          }
           .c-form {
             padding: 17px 0 7px;
           }
