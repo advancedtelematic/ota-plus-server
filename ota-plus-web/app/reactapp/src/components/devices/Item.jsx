@@ -8,14 +8,13 @@ import { Dropdown } from '../../partials';
 const deviceSource = {
     beginDrag(props) {
         const { groupsStore } = props.stores;
-        const foundGroup = _.find(groupsStore.groups, (group) => {
-
-            return group.devices.values.indexOf(props.device.uuid) > -1;
+        const foundClassicGroup = _.find(groupsStore.groups, (group) => {
+            return group.devices.values.indexOf(props.device.uuid) > -1 && group.groupType === 'static'
         });
 
         return {
             uuid: props.device.uuid,
-            groupId: foundGroup ? foundGroup.id : null,
+            groupId: foundClassicGroup ? foundClassicGroup.id : null,
         };
     },
     endDrag(props, monitor) {;

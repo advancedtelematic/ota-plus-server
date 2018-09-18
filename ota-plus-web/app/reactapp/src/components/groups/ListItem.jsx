@@ -9,7 +9,9 @@ import { Dropdown } from '../../partials';
 const groupTarget = {
     drop(props, monitor) {
         const device = monitor.getItem();
-        props.onDeviceDrop(device, props.group.id);
+        if (props.group.groupType === 'static') {
+            props.onDeviceDrop(device, props.group.id);
+        }
     },
 };
 
