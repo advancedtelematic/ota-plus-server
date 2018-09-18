@@ -38,6 +38,7 @@ export default class UpdatesStore {
         resetAsync(this.updatesLoadMoreAsync);
         resetAsync(this.updatesMtuCreateAsync);
         resetAsync(this.updatesCreateAsync);
+        resetAsync(this.updatesFetchMtuIdAsync);
     }
 
     createMultiTargetUpdate(data) {
@@ -133,7 +134,7 @@ export default class UpdatesStore {
 
     fetchUpdate(mtuId) {
         resetAsync(this.updatesFetchMtuIdAsync, true);
-        let apiAddress = `${API_GET_MULTI_TARGET_UPDATE_INDENTIFIER}/${mtuId}`;
+        const apiAddress = `${API_GET_MULTI_TARGET_UPDATE_INDENTIFIER}/${mtuId}`;
 
         const { mtuId: currentMtuId } = this.currentMtuData;
 
@@ -155,8 +156,6 @@ export default class UpdatesStore {
                     this.currentMtuData.data[key].from.target = removeVersion(fromPackage, fromVersion.hash);
                     this.currentMtuData.data[key].to.target = removeVersion(toPackage, toVersion.hash);
                 });
-
-                console.log(this.currentMtuData.data);
 
                 this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
             })
@@ -212,6 +211,7 @@ export default class UpdatesStore {
         resetAsync(this.updatesLoadMoreAsync);
         resetAsync(this.updatesMtuCreateAsync);
         resetAsync(this.updatesCreateAsync);
+        resetAsync(this.updatesFetchMtuIdAsync);
 
         this.updates = [];
         this.initialUpdates = [];
