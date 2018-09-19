@@ -460,11 +460,24 @@
     width: 100%;
     flex-wrap: wrap;
 
+    &:not(:last-child) {
+        &:after{
+            display: block;
+            content: 'AND';
+            width: 100%;
+            padding-top: 10px;
+        }
+    }
+
     &--dark {
-        display: flex;
         &:last-child {
             margin-bottom: 10px;
-        }   
+        } 
+        &:not(:last-child) {
+            &:after{
+                color: white;
+            }
+        }  
 
         input {
             background: $devices-groups-bg;
@@ -509,14 +522,7 @@
         }
     }
 
-    &:not(:last-child) {
-        &:after{
-            display: block;
-            content: 'AND:';
-            width: 100%;
-            padding-top: 10px;
-        }
-    }
+  
 
     &__block {
         display: flex;

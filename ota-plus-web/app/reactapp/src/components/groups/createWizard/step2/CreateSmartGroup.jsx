@@ -26,7 +26,6 @@ const CreateSmartGroup = inject("stores")(observer(({ markStepAsFinished, markSt
                             placeholder={"Name"}
                             onValid={() => { markStepAsFinished() }}
                             onInvalid={() => { markStepAsNotFinished() }}
-                            statusIconShown={true}
                         />
                     </div>
                 </div>
