@@ -18,6 +18,11 @@ class SelectUpdateList extends Component {
         this.loadMore();
     }
 
+    componentWillUnmount() {
+        const { updatesStore } = this.props.stores;
+        updatesStore._resetWizardData();
+    }
+
     onUpdateSelect = (update) => {
         this.props.toggleSelection(update);
     };

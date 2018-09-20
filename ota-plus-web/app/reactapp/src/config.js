@@ -96,3 +96,10 @@ export const API_PROVISIONING_ACTIVATE = '/api/v1/provisioning/activate';
 export const API_PROVISIONING_DETAILS = '/api/v1/provisioning';
 export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
+
+
+
+/* default values / limits */
+
+export const LIMIT_UPDATES_WIZARD = 5;
+export const LIMIT_UPDATES_MAIN = 30;
