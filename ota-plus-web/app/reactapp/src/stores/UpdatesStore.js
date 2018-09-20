@@ -5,6 +5,8 @@ import {
     API_UPDATES_SEARCH,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_UPDATES_CREATE,
+    LIMIT_UPDATES_WIZARD,
+    LIMIT_UPDATES_MAIN,
 } from '../config';
 import {
     resetAsync,
@@ -23,7 +25,7 @@ export default class UpdatesStore {
     @observable initialUpdates = [];
     @observable updates = [];
     @observable updateFilter = '';
-    @observable updatesLimitPage = 30;
+    @observable updatesLimitPage = LIMIT_UPDATES_MAIN; // 30
     @observable updatesOffsetPage = 0;
     @observable updatesTotalCount = 0;
     @observable updatesInitialTotalCount = 0;
@@ -36,7 +38,7 @@ export default class UpdatesStore {
     @observable updatesWizard = [];
     @observable currentPagesLoadedWizard = 0;
     @observable initialUpdatesWizard = [];
-    @observable updatesLimitWizard = 5;
+    @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD; // 5
     @observable preparedUpdatesWizard = {};
 
     constructor() {
@@ -231,7 +233,6 @@ export default class UpdatesStore {
         resetAsync(this.updatesLoadMoreAsync);
         resetAsync(this.updatesMtuCreateAsync);
         resetAsync(this.updatesCreateAsync);
-        resetAsync(this.updatesFetchMtuIdAsync);
 
         this.updates = [];
         this.initialUpdates = [];
@@ -241,10 +242,15 @@ export default class UpdatesStore {
         this.updatesInitialTotalCount = 0;
         this.preparedUpdates = {};
         this.lastCreatedMtuId = null;
-        this.initialUpdatesWizard = [];
+        this.updatesLimitPage = LIMIT_UPDATES_MAIN;
+    }
+
+    _resetWizardData() {
+        resetAsync(this.updatesFetchMtuIdAsync);
         this.updatesWizard = [];
-        this.updatesLimitWizard = 10;
-        this.updatesOffsetWizard = 0;
+        this.initialUpdatesWizard = [];
         this.preparedUpdatesWizard = {};
+        this.updatesLimitWizard = LIMIT_UPDATES_WIZARD;
+        this.currentPagesLoadedWizard = 0;
     }
 }
