@@ -1,7 +1,6 @@
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 import axios from 'axios';
 import _ from 'underscore';
-import { removeVersion } from "../utils/Transformers";
 import {
     API_UPDATES_SEARCH,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
@@ -172,13 +171,6 @@ export default class UpdatesStore {
                     mtuId: mtuId,
                     data: response.data,
                 };
-
-                _.mapObject(this.currentMtuData.data, (item, key) => {
-                    const { target: fromPackage, checksum: fromVersion } = item && item.from;
-                    const { target: toPackage, checksum: toVersion } = item && item.to;
-                    this.currentMtuData.data[key].from.target = removeVersion(fromPackage, fromVersion.hash);
-                    this.currentMtuData.data[key].to.target = removeVersion(toPackage, toVersion.hash);
-                });
 
                 this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
             })

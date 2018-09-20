@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { FormInput, FormTextarea, Loader } from '../../partials/index';
 import _ from 'underscore';
-
 
 @inject("stores")
 @observer
@@ -17,7 +15,7 @@ class UpdateDetails extends Component {
     render() {
         const { updatesStore } = this.props.stores;
         const { updateItem, isEditable } = this.props;
-        const mtuData = updatesStore.currentMtuData && updatesStore.currentMtuData.data;
+        const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
 
         return (
             <div>
