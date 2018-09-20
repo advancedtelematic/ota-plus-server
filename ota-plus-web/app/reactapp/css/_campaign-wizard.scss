@@ -181,6 +181,18 @@
               }
             }
           }
+          .automatic-campaign-tip {
+            color: #fff;
+            text-align: center;
+            background: $switch-blue-color;
+            padding: 10px 25px;
+          }
+        
+          .automatic-campaign {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
         }
 
         .distribution-info {
@@ -441,12 +453,19 @@
 
           &.group {
             .icon {
-              background: url($group-default-image-url) 50% 50%;
               border: 1px solid #B9B9B9;
               margin: 0;
               border-radius: 6px;
               width: 50px;
               height: 50px;
+                 
+              &--default {
+                background: url($group-default-image-url) 50% 50% no-repeat ;
+              }
+
+              &--smart {
+                background: url($group-smart-image-url) 50% 50% no-repeat ;
+              }
             }
 
             .desc {
