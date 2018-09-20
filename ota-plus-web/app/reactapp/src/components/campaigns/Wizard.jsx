@@ -168,7 +168,7 @@ class Wizard extends Component {
 
     componentWillMount() {
         const { skipStep } = this.props;
-        const { groupsStore, updatesStore } = this.props.stores;
+        const { groupsStore } = this.props.stores;
 
         if(skipStep) {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
@@ -182,7 +182,6 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
-        // updatesStore.fetchUpdates();
     }
 
     componentWillUnmount() {
