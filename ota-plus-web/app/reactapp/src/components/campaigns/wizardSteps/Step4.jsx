@@ -88,7 +88,7 @@ class WizardStep4 extends Component {
         const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
 
         return (
-            <div className="distribution-info">
+            <div className="distribution-settings">
                 <div className="checkboxes">
                     <div className="flex-row">
                         <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
@@ -107,7 +107,7 @@ class WizardStep4 extends Component {
                     <div className="search-box">
                         {alphaTest ?
                             <FormInput
-                                label="Internal description"
+                                label="Notification Text"
                                 id="internal_reuse-text"
                                 placeholder="Re-use text from"
                                 getInputRef={(ref) => this.inputRef = ref}
@@ -120,7 +120,7 @@ class WizardStep4 extends Component {
                     </div>
                     <FormTextarea
                         rows="5"
-                        label={!alphaTest && 'Internal description'}
+                        label={!alphaTest && 'Notification Text'}
                         id="internal_driver-description"
                         defaultValue={DESCRIPTION ? DESCRIPTION : ''}
                         onValid={(e) => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
