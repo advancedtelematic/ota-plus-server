@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import {observable, observe } from "mobx"
-import {observer, inject} from 'mobx-react';
+import React, { Component, PropTypes } from 'react';
+import { observable, observe } from "mobx"
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import {Form} from 'formsy-react';
-import {Modal, Loader, SearchBar} from '../../partials';
+import { Form } from 'formsy-react';
+import { Modal, Loader, SearchBar } from '../../partials';
 import { UpdateDetails } from './wizardSteps/step3Files';
 import {
     WizardStep1,
@@ -26,7 +26,7 @@ const initialWizardStepForAlphaPlus = [
     {
         class: WizardStep1,
         name: "name",
-        title: "Select name",
+        title: "Select Name",
         isFinished: false,
         isSearchBarShown: false,
     },
@@ -46,21 +46,21 @@ const initialWizardStepForAlphaPlus = [
     },
     {
         class: WizardStep4,
-        title: "Distribution information",
+        title: "Distribution Settings",
         name: "metadata",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep5,
-        title: "Dependencies management",
+        title: "Dependencies Management",
         name: "dependencies-management",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
         class: WizardStep6,
-        title: "Programming sequencer",
+        title: "Programming Sequencer",
         name: "programming-sequencer",
         isFinished: true,
         isSearchBarShown: false,
@@ -79,7 +79,7 @@ const initialWizardStep = [
     {
         class: WizardStep1,
         name: "name",
-        title: "Select name",
+        title: "Select Name",
         isFinished: false,
         isSearchBarShown: false,
     },
@@ -99,7 +99,7 @@ const initialWizardStep = [
     },
     {
         class: WizardStep4,
-        title: "Distribution information",
+        title: "Distribution Settings",
         name: "metadata",
         isFinished: false,
         isSearchBarShown: false,
@@ -170,14 +170,14 @@ class Wizard extends Component {
         const { skipStep } = this.props;
         const { groupsStore } = this.props.stores;
 
-        if(skipStep) {
+        if (skipStep) {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
             const selectedGroup = groupsStore.selectedGroup;
             groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
                 this.wizardData.groups = this.wizardData.groups.concat(selectedGroup);
             });
         }
-        
+
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
@@ -190,8 +190,8 @@ class Wizard extends Component {
 
     toggleFullScreen(e) {
         const { campaignsStore } = this.props.stores;
-        if(e) e.preventDefault();
-        if(!campaignsStore.fullScreenMode) 
+        if (e) e.preventDefault();
+        if (!campaignsStore.fullScreenMode)
             campaignsStore._showFullScreen();
         else
             campaignsStore._hideFullScreen();
@@ -245,8 +245,8 @@ class Wizard extends Component {
 
     verifyIfPreviousStepsFinished(stepId) {
         return !(_.find(this.wizardSteps, function (step, index) {
-                return index <= stepId && step.isFinished === false;
-            }));
+            return index <= stepId && step.isFinished === false;
+        }));
     }
 
     markStepAsFinished() {
@@ -330,7 +330,7 @@ class Wizard extends Component {
     }
 
     render() {
-        const { wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
+        const { wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
         const { campaignsStore, featuresStore } = this.props.stores;
         const currentStep = this.wizardSteps[this.currentStepId];
 
@@ -344,7 +344,7 @@ class Wizard extends Component {
                     <div className="draggable-content">
                         <div className="internal-body">
                             <div className="content-step">
-                                <UpdateDetails updateItem={ this.currentDetails } isEditable={ false }/>
+                                <UpdateDetails updateItem={this.currentDetails} isEditable={false} />
                             </div>
                         </div>
                     </div>
@@ -362,7 +362,7 @@ class Wizard extends Component {
                                                 className={"step" + (this.currentStepId == index ? " active" : "")}
                                                 key={'wizard-step-' + index}>
                                                 <a href="#" className="dot"
-                                                   onClick={this.jumpToStep.bind(this, index)}>
+                                                    onClick={this.jumpToStep.bind(this, index)}>
                                                     {index + 1}
                                                 </a>
                                                 <div className="stepnum">
@@ -416,21 +416,21 @@ class Wizard extends Component {
                             </div>
                             <div className="wizard-actions">
                                 <div className="wrapper-confirm">
-                                {this.isLastStep() ?
-                                    <button
-                                        className="btn-primary btn-red"
-                                        id="wizard-launch-button"
-                                        onClick={this.launch}
-                                        disabled={!currentStep.isFinished}
-                                    >Launch</button>
-                                    :
-                                    <button
-                                        className="btn-primary"
-                                        id="next-step"
-                                        onClick={this.nextStep}
-                                        disabled={!currentStep.isFinished}
-                                    >Next</button>
-                                }
+                                    {this.isLastStep() ?
+                                        <button
+                                            className="btn-primary btn-red"
+                                            id="wizard-launch-button"
+                                            onClick={this.launch}
+                                            disabled={!currentStep.isFinished}
+                                        >Launch</button>
+                                        :
+                                        <button
+                                            className="btn-primary"
+                                            id="next-step"
+                                            onClick={this.nextStep}
+                                            disabled={!currentStep.isFinished}
+                                        >Next</button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -440,7 +440,7 @@ class Wizard extends Component {
         );
         return (
             <Modal
-                title={ !this.currentDetails ? "Add new campaign" : "Campaign update details" }
+                title={!this.currentDetails ? "Add new campaign" : "Campaign update details"}
                 topActions={
                     <div className="top-actions">
                         <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)} id="minimize-wizard">
@@ -449,7 +449,7 @@ class Wizard extends Component {
                         <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
                             {campaignsStore.fullScreenMode ?
                                 <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
-                            :
+                                :
                                 <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
                             }
                         </div>

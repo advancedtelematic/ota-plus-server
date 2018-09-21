@@ -2,15 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { WizardGroupsList } from './step2Files';
+import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
 import { Loader, Form, FormInput } from '../../../partials';
 import _ from 'underscore';
 
-const fakeOLP = {
-    groupName: "VINs Dynamic Config Campaign UPD66371823-Overheat",
-    layerID: "lchu201808010911",
-    link: "https://platform.here.com/data/hrn:here:data:::chu2018080109505/lchu201808010911"
-}
 
 @inject("stores")
 @observer
@@ -50,56 +45,10 @@ class WizardStep2 extends Component {
     render() {
         const { groups: chosenGroups } = this.props.wizardData;
         const { groupsStore, featuresStore } = this.props.stores;
-        const { alphaTestEnabled } = featuresStore;
-        const groups = (
-            groupsStore.groupsWizardFetchAsync.isFetching ?
-                <div className="wrapper-center">
-                    <Loader />
-                </div>
-                :
-                <WizardGroupsList
-                    chosenGroups={chosenGroups}
-                    setWizardData={this.setWizardData.bind(this)}
-                />
-
-        )
-        const groupsOLP = (
-            <span>
-                <div className="ios-list" ref="list">
-                    <div className="fake-header">
-                        V
-                    </div>
-                    <div className="header"></div>
-                    <div className={"item "} >
-                        <div className={"btn-checkbox"}>
-                            <i className="fa fa-check" aria-hidden="true" />
-                        </div>
-                        <div className="element-box olpgroup">
-                            <div className="desc">
-                                <div className="title">
-                                    {fakeOLP.groupName}
-                                </div>
-                                <div className="subtitle">
-                                    <span className="layer">
-                                        Layer
-                                    </span>
-                                    <span className="versioned">
-                                        Versioned
-                                    </span>
-                                    <span>
-                                        Layer ID: {fakeOLP.layerID}
-                                    </span>
-                                </div>
-                            </div>
-                            <a href={fakeOLP.link} target="_blank"><div className="icon" /></a>
-                        </div>
-                    </div>
-                </div>
-            </span>
-        )
+        const { alphaPlusEnabled } = featuresStore;
 
         return (
-            !alphaTestEnabled ?
+            !alphaPlusEnabled ?
                 (
                     groupsStore.groupsWizardFetchAsync.isFetching ?
                         <div className="wrapper-center">
@@ -134,7 +83,16 @@ class WizardStep2 extends Component {
                                 data-id={0}
                                 onActive={this.setGroupsActiveTabId.bind(this, 0)}
                             >
-                                {groups}
+                                {groupsStore.groupsWizardFetchAsync.isFetching ?
+                                    <div className="wrapper-center">
+                                        <Loader />
+                                    </div>
+                                    :
+                                    <WizardGroupsList
+                                        chosenGroups={chosenGroups}
+                                        setWizardData={this.setWizardData.bind(this)}
+                                    />
+                                }
                             </Tab>
                             <Tab
                                 label="OLP"
@@ -142,7 +100,7 @@ class WizardStep2 extends Component {
                                 data-id={1}
                                 onActive={this.setGroupsActiveTabId.bind(this, 1)}
                             >
-                                {groupsOLP}
+                                <WizardOLPGroupsListItem />
                             </Tab>
                         </Tabs >
                     </span >
