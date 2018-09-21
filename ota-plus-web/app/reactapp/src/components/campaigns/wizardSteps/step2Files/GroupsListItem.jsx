@@ -16,7 +16,7 @@ class GroupsListItem extends Component {
     render() {
         const { t, group, setWizardData, isChosen } = this.props;
         const { groupsStore, featuresStore } = this.props.stores;
-        const { alphaTestEnabled } = featuresStore;
+        const { alphaPlusEnabled } = featuresStore;
         return (
             <div>
                 <div className={"item" + (isChosen ? " selected" : "")} id={"button-group-" + group.groupName}>
@@ -37,7 +37,7 @@ class GroupsListItem extends Component {
                             </div>
                         </div>
                     </div>
-                    {alphaTestEnabled &&
+                    {alphaPlusEnabled &&
                         (group.groupType === 'dynamic' &&
                             <div className="automatic-campaign" onClick={this.toggleAutomaticCampaign}>
                                 <div>
