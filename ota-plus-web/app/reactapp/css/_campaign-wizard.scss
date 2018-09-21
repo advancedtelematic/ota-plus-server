@@ -138,10 +138,11 @@
                   width: 100%;
                   justify-content: space-between;
 
-                  .icon {
-                    background: url($olp-group-link ) 50% 50% no-repeat ;
-                    margin: 0;
-                
+                  .link-icon {
+                    background: url($olp-group-link ) no-repeat ;
+                    width: 15px;
+                    height: 15px;
+                    margin-top: 3px;
                   }
 
                   .desc {
@@ -154,6 +155,7 @@
                       font-weight: 500;
                     }
                   .subtitle {
+                    display: flex;
                     padding: 10px 0;
 
                     &>* {
