@@ -22,13 +22,14 @@ class SmartFilters extends Component {
     @observable lastGivenId = 1;
     @observable groups = [singleGroup];
 
-
-    addFilter = () => {
+    addFilter = (event) => {
+        if (event) {
+            event.preventDefault();
+        }
         this.lastGivenId += 1;
         singleGroup.id = this.lastGivenId;
         this.groups.push(singleGroup)
-
-    }
+    };
 
     removeFilter(id) {
         if (this.groups.length > 1) {
@@ -41,38 +42,41 @@ class SmartFilters extends Component {
 
         const Filters = this.groups.map(group => {
             return (
-                <div key={group.id} className={"filters"} >
-                    <div className="filters__block" style={{ flex: layout[0] }} >
+                <div key={ group.id } className={ "filters" }>
+                    <div className="filters__block" style={ { flex: layout[0] } }>
                         <FormSelect
                             id="name-filter"
                             placeholder="Data"
-                            appendMenuToBodyTag={true}
-                            options={nameFilterOptions}
-                            multiple={false}
-                            visibleFieldsCount={5}
+                            appendMenuToBodyTag={ true }
+                            options={ nameFilterOptions }
+                            multiple={ true }
+                            visibleFieldsCount={ 5 }
                             name="nameFilter"
-                            onChange={() => { }}
-
+                            onChange={ () => {
+                            } }
                         />
                     </div>
-                    <div className="filters__block" style={{ flex: layout[1] }} >
+                    <div className="filters__block" style={ { flex: layout[1] } }>
                         <FormSelect
                             id="expression-filter"
                             placeholder="Filter"
-                            appendMenuToBodyTag={true}
-                            options={extraFilterOptions}
-                            multiple={false}
-                            visibleFieldsCount={5}
+                            appendMenuToBodyTag={ true }
+                            options={ extraFilterOptions }
+                            multiple={ true }
+                            visibleFieldsCount={ 5 }
                             name="expressionFilter"
-                            onChange={() => { }}
+                            onChange={ () => {
+                            } }
                         />
                     </div>
-                    <div className="filters__block" style={{ flex: layout[2] }} >
-                        {devicesView ?
+                    <div className="filters__block" style={ { flex: layout[2] } }>
+                        { devicesView ?
                             <Form>
                                 <SearchBar
-                                    value={''}
-                                    onChange={(e) => { setFilter('word', e.target.value) }}
+                                    value={ '' }
+                                    onChange={ (e) => {
+                                        setFilter('word', e.target.value)
+                                    } }
                                     id="search-devices-input"
                                     name="word"
                                 />
@@ -82,25 +86,24 @@ class SmartFilters extends Component {
                                 id="word"
                                 name="word"
                                 className="input-wrapper"
-                                placeholder={"Type here"}
-                                onChange={() => { }}
-
+                                placeholder={ "Type here" }
+                                onChange={ () => {
+                                } }
                             />
                         }
                     </div>
-                    <div className="filters__block filters__block--fake" id="filter-minus" onClick={this.removeFilter.bind(this, group.id)}>
-                        -
-    		</div>
-                    <div className="filters__block filters__block--fake" id="filter-plus" onClick={this.addFilter}>
-                        +
-    		</div>
+                    <button className="filters__block filters__block--fake btn-plain"
+                            id="filter-remove"
+                            onClick={ this.removeFilter.bind(this, group.id) }>{ "-" }</button>
+                    <button className="filters__block filters__block--fake btn-plain"
+                            id="filter-add" onClick={ this.addFilter }>{ "+" }</button>
                 </div>
             )
-        })
+        });
 
         return (
             <div>
-                <span>{Filters}</span >
+                <span>{ Filters }</span>
             </div>
 
 

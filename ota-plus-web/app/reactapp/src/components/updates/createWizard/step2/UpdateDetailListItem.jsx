@@ -24,9 +24,9 @@ class UpdateDetailListItem extends Component {
         });
         const formattedData = versions && versions.map((version) => {
             return {
-                text: `${version.id.version} Created at: ${moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}`,
+                text: version.id.version,
                 id: version.id.version,
-                value: version.filepath,
+                value: version.id.version,
                 version
             }
         });
@@ -83,11 +83,11 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select from package"
-                                defaultValue={ fromPack && fromPack.id && fromPack.id.name }
+                                defaultValue={ fromPack && fromPack.id }
                                 onChange={ (value) => {
-                                    if (value && value.id) {
-                                        this.formatVersions('from', value.id);
-                                        onStep2DataSelect(item, 'fromPack', value.item);
+                                    if (value) {
+                                        this.formatVersions('from', value);
+                                        onStep2DataSelect(item, 'fromPack', value);
                                     }
                                 } }
                             />
@@ -102,11 +102,11 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 appendMenuToBodyTag={ true }
                                 placeholder="Select to package"
-                                defaultValue={ toPack && toPack.id && toPack.id.name }
+                                defaultValue={ toPack && toPack.id }
                                 onChange={ (value) => {
-                                    if (value && value.id) {
-                                        this.formatVersions('to', value.id);
-                                        onStep2DataSelect(item, 'toPack', value.item);
+                                    if (value) {
+                                        this.formatVersions('to', value);
+                                        onStep2DataSelect(item, 'toPack', value);
                                     }
                                 } }
                             />
@@ -126,8 +126,8 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 defaultValue={ fromVersion && fromVersion.id && fromVersion.id.version }
                                 onChange={ (value) => {
-                                    if (value && value.version) {
-                                        onStep2DataSelect(item, 'fromVersion', value.version)
+                                    if (value) {
+                                        onStep2DataSelect(item, 'fromVersion', value)
                                     }
                                 } }
                             />
@@ -143,8 +143,8 @@ class UpdateDetailListItem extends Component {
                                 visibleFieldsCount={ 5 }
                                 defaultValue={ toVersion && toVersion.id && toVersion.id.version }
                                 onChange={ (value) => {
-                                    if (value && value.version) {
-                                        onStep2DataSelect(item, 'toVersion', value.version)
+                                    if (value) {
+                                        onStep2DataSelect(item, 'toVersion', value)
                                     }
                                 } }
                             />

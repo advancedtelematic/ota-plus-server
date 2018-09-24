@@ -74,6 +74,16 @@
   }
 }
 
+.btn-plain {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  &:hover {
+    background-color: darken(#ebebec, 15%);
+  }
+}
+
 .btn-bordered {
   background: transparent;
   border: 1px solid #48dad0;

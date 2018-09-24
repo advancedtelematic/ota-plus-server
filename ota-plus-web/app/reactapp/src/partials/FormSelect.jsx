@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
+import { createAttributeValue } from "../utils/Transformers";
 import $ from 'jquery';
 
 class FormSelect extends Component {
@@ -21,7 +22,7 @@ class FormSelect extends Component {
         const self = this;
         const body = $('body');
 
-        if ($._data( body[0], 'events' ) && $._data( body[0], 'events' ).click) {
+        if ($._data(body[0], 'events') && $._data(body[0], 'events').click) {
             self._detachEventListener();
         } else {
             body.on('click', (e) => {
@@ -36,8 +37,8 @@ class FormSelect extends Component {
         $('body').unbind('click');
     }
 
-    toggleMenu(e) {
-        const {appendMenuToBodyTag} = this.props;
+    toggleMenu = (e) => {
+        const { appendMenuToBodyTag } = this.props;
         const existContainer = document.getElementById('dropdown-render-container');
 
         if (existContainer) {
@@ -53,67 +54,46 @@ class FormSelect extends Component {
         if (appendMenuToBodyTag && e && e.target && e.target.className !== 'c-form__option') {
             this.appendSelectFieldsToBody(e);
         }
+    };
 
-    }
-
-    appendSelectFieldsToBody(e) {
-        const {multiple = true, options, id, visibleFieldsCount = options.length > 1 ? options.length : 2,} = this.props;
-        const {showDropDown, selectedOptions} = this.state;
+    appendSelectFieldsToBody = (e) => {
+        const { showDropDown } = this.state;
+        const { multiple = true, options, visibleFieldsCount = options.length > 1 ? options.length : 2, } = this.props;
         const renderContainer = document.createElement('div');
         const inputPosition = e.target.getBoundingClientRect();
+        const appendToBody = {
+            top: inputPosition.top + inputPosition.height,
+            left: inputPosition.left,
+            position: 'absolute',
+            width: inputPosition.width,
+            height: options.length > 1 ? 'auto' : '35px'
+        };
 
         renderContainer.setAttribute('id', 'dropdown-render-container');
         document.body.appendChild(renderContainer);
 
-        const selectFields =
-            <select size={visibleFieldsCount}
-                    style={{
-                        top: inputPosition.top + inputPosition.height,
-                        left: inputPosition.left,
-                        position: 'absolute',
-                        width: inputPosition.width,
-                        height: options.length > 1 ? 'auto' : '35px'
-                    }}
+        const selectFields = (
+            <select size={ visibleFieldsCount }
+                    style={ appendToBody }
+                    id="dropdown"
                     className="c-form__select"
-                    multiple={multiple} id="dropdown">
-                {options.map((value, index) => {
-                    const selected = _.contains(selectedOptions, value);
-                    if (_.isObject(value)) {
-                        const option = value;
-                        return (
-                            <option key={index}
-                                    onClick={this.selectOption.bind(this, option)}
-                                    id={`${id}-${option.id}`}
-                                    className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                    value={option.value}>
-                                {option.text}
-                            </option>
-                        )
-                    } else {
-                        return (
-                            <option key={index}
-                                    onClick={this.selectOption.bind(this, value)}
-                                    id={`${id}-${value}`}
-                                    className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                    value={value}>
-                                {value}
-                            </option>
-                        )
-                    }
-                })}
-            </select>;
+                    multiple={ multiple }
+            >
+                { this.createDropdown(options) }
+            </select>
+        );
 
         if (!showDropDown) {
             ReactDOM.render(selectFields, renderContainer)
         } else {
             renderContainer.innerHTML = '';
         }
-    }
+    };
 
-    selectOption(value, e) {
-        const {appendMenuToBodyTag, multiple} = this.props;
+    selectOption = (value, e) => {
+        const { appendMenuToBodyTag, multiple } = this.props;
 
-        if (appendMenuToBodyTag) {
+        if (appendMenuToBodyTag && multiple) {
             e.target.classList.toggle('c-form__option--selected')
         }
 
@@ -138,7 +118,39 @@ class FormSelect extends Component {
             });
             this.props.onChange(options);
         }
-    }
+    };
+
+
+    createDropdown = (options) => {
+        const { selectedOptions } = this.state;
+        const { id } = this.props;
+        return options.map((value, index) => {
+            if (_.isObject(value)) {
+                const option = value;
+                const selected = _.contains(selectedOptions, option.value);
+                return (
+                    <option key={ index }
+                            onClick={ this.selectOption.bind(this, option.value) }
+                            id={ `${createAttributeValue(id)}-${createAttributeValue(option.id)}` }
+                            className={ `c-form__option ${selected ? 'c-form__option--selected' : ''}` }
+                            value={ createAttributeValue(option.value) }>
+                        { option.text }
+                    </option>
+                )
+            } else {
+                const selected = _.contains(selectedOptions, value);
+                return (
+                    <option key={ index }
+                            onClick={ this.selectOption.bind(this, value) }
+                            id={ `${createAttributeValue(id)}-${createAttributeValue(value)}` }
+                            className={ `c-form__option ${selected ? 'c-form__option--selected' : ''}` }
+                            value={ createAttributeValue(value) }>
+                        { value }
+                    </option>
+                )
+            }
+        });
+    };
 
     render() {
         const {
@@ -155,72 +167,58 @@ class FormSelect extends Component {
             onChange = null
         } = this.props;
 
-        const {showDropDown, selectedOptions} = this.state;
+        const { showDropDown, selectedOptions } = this.state;
         const inputValue =
             selectedOptions.id ?
                 selectedOptions.id
                 : selectedOptions.text ?
                 selectedOptions.text
                 : selectedOptions.length
-                ? selectedOptions
-                : defaultValue && defaultValue.length > 0 ? defaultValue : '';
+                    ? selectedOptions
+                    : defaultValue && defaultValue.length > 0 ? defaultValue : '';
+        const defaultRendering = {
+            'top': '42px',
+            'left': '1px',
+            'height': options && (options.length > 1 ? 'auto' : '35px'),
+        };
+
         return (
-            <div className="c-form__wrapper" style={{width: wrapperWidth}}>
-                {label ?
-                    <label className="c-form__label">{label}</label>
-                :
+            <div className="c-form__wrapper" style={ { width: wrapperWidth } }>
+                { label ?
+                    <label className="c-form__label">{ label }</label>
+                    :
                     null
                 }
                 <div className="c-form__relative-input">
-                    <input className={`c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}`}
-                       type="text"
-                       style={{width: inputWidth}}
-                       value={inputValue}
-                       placeholder={placeholder}
-                       onClick={this.toggleMenu}
-                       onChange={onChange}
-                       id={id}
-                       autoComplete="off"
-                       name={name}/>
-                    {inputValue.length ?
-                        <i className={`fa fa-check c-form__select-icon`}/>
-                        :
-                        <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`}/>
+                    <input className={ `c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}` }
+                           type="text"
+                           style={ { width: inputWidth } }
+                           value={ inputValue }
+                           placeholder={ placeholder }
+                           onClick={ this.toggleMenu }
+                           onChange={ onChange }
+                           id={ createAttributeValue(id) }
+                           autoComplete="off"
+                           name={ name }
+                    />
+                    {
+                        !!inputValue.length ?
+                            <i className={ `fa fa-check c-form__select-icon` }/>
+                            :
+                            <i className={ `fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon` }/>
                     }
-                    {showDropDown && !appendMenuToBodyTag ?
-                        <select size={visibleFieldsCount}
-                                style={{
-                                    height: options.length > 1 ? 'auto' : '35px'
-                                }}
+                    {
+                        showDropDown && !appendMenuToBodyTag &&
+                        <select size={ visibleFieldsCount }
+                                style={ defaultRendering }
+                                id={ 'select-' + createAttributeValue(id) }
                                 className="c-form__select"
-                                multiple={multiple} id={'select-' + id}>
-                            {options.map((value, index) => {
-                                const selected = _.contains(selectedOptions, value);
-                                if (_.isObject(value)) {
-                                    const option = value;
-                                    return (
-                                        <option key={index}
-                                                onClick={this.selectOption.bind(this, option)}
-                                                id={`${id}-${option.id}`}
-                                                className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                                value={option.value}>
-                                            {option.text}
-                                        </option>
-                                    )
-                                } else {
-                                    return (
-                                        <option key={index}
-                                                onClick={this.selectOption.bind(this, value)}
-                                                id={`${id}-${value}`}
-                                                className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                                value={value}>
-                                            {value}
-                                        </option>
-                                    )
-                                }
-                            })}
+                                multiple={ multiple }
+                        >
+                            { this.createDropdown(options) }
                         </select>
-                        : ''}
+
+                    }
                 </div>
             </div>
         )
@@ -232,7 +230,7 @@ FormSelect.propTypes = {
     label: PropTypes.string,
     appendMenuToBodyTag: PropTypes.bool,
     placeholder: PropTypes.string,
-    visibleFieldsCount: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
+    visibleFieldsCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.string,
     options: PropTypes.oneOfType([
         PropTypes.array,
