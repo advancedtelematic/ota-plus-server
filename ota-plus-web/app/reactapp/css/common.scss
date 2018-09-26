@@ -1,3 +1,5 @@
+@import 'global.scss';
+
 @font-face {
   font-family: akkurat;
   src: url(/assets/fonts/Akkurat-Regular/AkkuratStd.eot?#iefix) format("embedded-opentype"),
@@ -43,12 +45,16 @@
   outline: none;
   height: 36px;
   border: none;
-  width: 126px;
   background-color: #48DAD0;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   cursor: pointer;
+
+  &:not([class*='col-']) {
+    width: 126px;
+  }
+
   &:hover {
     background-color: #48DAD0;
     border: none;
@@ -222,3 +228,203 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.text-link {
+  &.highlighted {
+    position: relative;
+    .whats-new-badge {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #48DAD0;
+      position: absolute;
+      top: 14px;
+      right: 6px;
+      &:after {
+        display: block;
+        content: "\0021";
+        position: absolute;
+        color: white;
+        font-size: 9px;
+        font-weight: 500;
+        left: 5px;
+      }
+    }
+  }
+}
+
+.whats-new-keynotes {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.3);
+  z-index: 900;
+  &__outer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__inner {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    height: 100vh;
+
+    .image-responsive {
+      width: 50vw;
+      max-width: 50vw;
+      height: auto;
+      transform: translateY(-50%);
+      top: 50%;
+      position: absolute;
+      padding-left: 5vw;
+
+    }
+
+    &-with-anchor {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100vh;
+    }
+  }
+  &__popover-anchor {
+    position: absolute;
+    width: 109px;
+    height: 49px;
+    top:0;
+    right: 222px;
+  }
+}
+
+.shadow {
+  box-shadow: 0 3px 4px 0 rgba(0,0,0,0.5);
+}
+
+.popover-modal {
+  border-radius: 6px !important;
+  z-index: 999 !important;
+  width: 476px;
+  margin-left: 50px;
+  overflow: visible !important;
+  background-color: #F7F7F7 !important;
+  right: 50px  !important;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  &.whats-new {
+    &.initial {
+      margin-top: 50px !important;
+      margin-left: auto;
+      margin-right: 50px;
+      top: 20px !important;
+      .popover-modal__body {
+        background: url($bell-icon) no-repeat;
+        background-size: 50px 50px;
+        background-position: 25px;
+
+        .content {
+          margin-left: 70px;
+          font-size: 12px;
+
+          .headline {
+            display: none;
+          }
+          p {
+            margin: 0;
+          }
+
+        }
+      }
+    }
+  }
+
+  &__triangle {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 15px solid #F7F7F7;
+    position: absolute;
+    right: 476px;
+    top: 40px;
+    z-index: 1;
+  }
+
+  &.initial &__triangle{
+    right: 150px;
+    top: -30px;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #F7F7F7;
+  }
+
+  &__headline {
+    top: 0;
+    right: 0;
+    left: 0;
+    font-size: 20px;
+    padding: 10px 20px;
+    &:after {
+      display: block;
+      border-bottom: 1px solid rgba(0,0,0,0.13);
+      content: '';
+    }
+  }
+
+  &__body {
+    padding: 30px 20px;
+    .headline {
+      font-size: 18px;
+      color: $color-lightgrey;
+      margin-top: 0;
+      margin-bottom: 20px
+    }
+    ul {
+      margin-top: 5px;
+      li {
+        list-style: disc outside;
+        margin-left: 15px;
+        padding: 5px 0;
+      }
+    }
+
+  }
+
+  &__actions {
+    right: 0;
+    bottom: 0px;
+    left: 0;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 0 0 6px 6px;
+
+    .btn-primary,
+    .btn-bordered {
+      height: 41px;
+      &:hover {
+        background-color: darken(#48DAD0, 15%);
+        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+        &__label {
+          transform: translateY(1px);
+        }
+      }
+    }
+
+    .btn-bordered {
+      color: $color-lightgrey;
+      border: 1px solid rgba(0,0,0,0.13);
+      &:hover {
+        border-bottom: transparent;
+        background-color: darken(#fff, 15%);
+      }
+    }
+  }
+}
+
+

@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { DevicesContainer } from '../containers';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import _ from 'underscore';
 
 const title = "Devices";
 

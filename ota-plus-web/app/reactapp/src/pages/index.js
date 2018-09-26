@@ -5,6 +5,7 @@ import PackagesPage from './Packages';
 import UpdatesPage from './Updates';
 import CampaignsPage from './Campaigns';
 import ImpactAnalysisPage from './ImpactAnalysis';
+import WhatsNewPage from './WhatsNew';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
 import FireworksPage from './Fireworks';
@@ -19,6 +20,7 @@ export {
   UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
+  WhatsNewPage,
   ProfilePage,
   NoMatchPage,
   FireworksPage,

@@ -2,19 +2,23 @@ import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import { observe, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import {
-    Navigation,
-    SizeVerify,
-    UploadBox
-} from '../partials';
+import _ from 'underscore';
+
 import {
     FadeAnimation,
     WebsocketHandler,
 } from '../utils';
-import _ from 'underscore';
-import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
+
+import {
+    Navigation,
+    SizeVerify,
+    UploadBox,
+} from '../partials';
+
+import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
+import { WhatsNewPopover } from "../components/whatsnew";
 
 @inject('stores')
 @observer
@@ -28,6 +32,7 @@ class Main extends Component {
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
     @observable switchToSWRepo = false;
+    @observable showWhatsNewPopover = false;
 
     constructor(props) {
         super(props);
@@ -142,6 +147,7 @@ class Main extends Component {
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
         this.context.router.listen(this.locationChange);
+        featuresStore.checkWhatsNewStatus();
     }
 
     locationChange() {
@@ -166,13 +172,24 @@ class Main extends Component {
         this.logoutHandler();
     }
 
+    showWhatsNew = () => {
+        this.showWhatsNewPopover = true;
+    };
+
+    hideWhatsNew = () => {
+        this.showWhatsNewPopover = false;
+    };
+
+
+    navigate = (path) => {
+        this.context.router.push(path);
+    };
+
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
-        const {
-            featuresStore,
-        } = this.props.stores;
-        const { alphaPlusEnabled } = featuresStore;
+        const { alphaPlusEnabled, whatsNewPopOver } = this.props.stores.featuresStore;
+
         return (
             <span>
                 <Navigation
@@ -183,6 +200,7 @@ class Main extends Component {
                     uiUserProfileMenu={ this.uiUserProfileMenu }
                     uiCredentialsDownload={ this.uiCredentialsDownload }
                     alphaPlusEnabled={ alphaPlusEnabled }
+                    startWhatsNewPopover={ this.showWhatsNew }
                 />
                 <div id={ pageId } style={ {
                     height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 50px)' : 'calc(100vh - 50px)',
@@ -216,6 +234,15 @@ class Main extends Component {
                         toggleWizard={ this.toggleWizard }
                     />
                 </div>
+                {
+                    (whatsNewPopOver || this.showWhatsNewPopover) &&
+                    <div className="whats-new-keynotes">
+                        <WhatsNewPopover
+                            hide={ this.hideWhatsNew }
+                            changeRoute={ this.navigate }
+                        />
+                    </div>
+                }
             </span>
         );
     }

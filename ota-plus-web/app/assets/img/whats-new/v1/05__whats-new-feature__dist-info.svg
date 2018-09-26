@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="785px" height="670px" viewBox="0 0 785 670" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Campaign List view -- Distribution Information notification (1) Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Campaign-List-view----Distribution-Information-notification-(1)-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Campaign-Wizard">
+            <g id="PopUp">
+                <rect id="Rectangle-2-Copy" fill="#FFFFFF" x="0" y="0" width="785" height="670"></rect>
+                <path d="M28.966066,59.6666667 L755.932398,59.6666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <path d="M28.966066,155.666667 L755.932398,155.666667" id="Line-Copy" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <path d="M28.966066,586.666667 L755.932398,586.666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <rect id="Rectangle-4" fill="#48DAD0" x="630" y="608" width="126" height="36"></rect>
+                <text id="Next" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#FFFFFF">
+                    <tspan x="678" y="632">Next</tspan>
+                </text>
+            </g>
+            <g id="Wizard-04----Distribution-information" transform="translate(0.000000, 61.000000)">
+                <g id="Group-7" transform="translate(682.000000, 12.000000)">
+                    <g id="Group-2" transform="translate(2.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="13.8" y="27">5</tspan>
+                        </text>
+                    </g>
+                    <text id="Summary" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="0.76" y="58">Summary</tspan>
+                    </text>
+                </g>
+                <g id="Group-8" transform="translate(372.000000, 12.000000)">
+                    <g id="Group-3">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.3" y="27">3</tspan>
+                        </text>
+                    </g>
+                    <text id="Select-group(s)" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="6.235" y="58">Select</tspan>
+                        <tspan x="1.17" y="70">group(s)</tspan>
+                    </text>
+                </g>
+                <g id="Group-8-Copy" transform="translate(520.000000, 12.000000)">
+                    <g id="Group-3" transform="translate(7.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#00AFAA"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#FFFFFF">
+                            <tspan x="14.3" y="27">4</tspan>
+                        </text>
+                    </g>
+                    <text id="Distribution-informa" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#00AFAA">
+                        <tspan x="0.115" y="58">Distribution</tspan>
+                        <tspan x="0.205" y="70">information</tspan>
+                    </text>
+                </g>
+                <g id="Group-9" transform="translate(217.000000, 12.000000)">
+                    <g id="Group-4">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.3" y="27">2</tspan>
+                        </text>
+                    </g>
+                    <text id="Select-update" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="6.235" y="58">Select</tspan>
+                        <tspan x="3.96" y="70">update</tspan>
+                    </text>
+                </g>
+                <g id="Group-10" transform="translate(56.000000, 12.000000)">
+                    <g id="Group-5" transform="translate(6.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.252381" y="27">1</tspan>
+                        </text>
+                    </g>
+                    <text id="Description" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="0.1" y="58">Description</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Notification" transform="translate(29.000000, 177.000000)">
+                <rect id="Rectangle-11-Copy-6" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="24.5" width="14" height="14"></rect>
+                <g id="Tick-green">
+                    <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                    <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                </g>
+                <text id="Notify-driver" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                    <tspan x="25" y="12">Notify driver</tspan>
+                </text>
+                <text id="request-driver´s-app" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                    <tspan x="25" y="35.5">request driver´s approval</tspan>
+                </text>
+            </g>
+            <text id="Add-new-campaign" font-family="FiraSans-Light, Fira Sans" font-size="16" font-weight="300" fill="#0F1621">
+                <tspan x="29" y="36">Add new campaign</tspan>
+            </text>
+            <g id="Titlebar-full" transform="translate(682.000000, 15.000000)" fill="#B7B9BC">
+                <g id="Group" transform="translate(15.000000, 8.000000)">
+                    <g id="Minimize" transform="translate(0.000000, 10.000000)">
+                        <path d="M0.5,0 L10.4528571,0 C10.7289995,-5.07265313e-17 10.9528571,0.223857625 10.9528571,0.5 L10.9528571,1.5 C10.9528571,1.77614237 10.7289995,2 10.4528571,2 L0.5,2 C0.223857625,2 3.38176876e-17,1.77614237 0,1.5 L-5.55111512e-17,0.5 C-8.93288388e-17,0.223857625 0.223857625,5.07265313e-17 0.5,0 Z" id="minimise"></path>
+                    </g>
+                    <g id="Maximize" transform="translate(24.545455, 0.909091)">
+                        <path d="M1.57131633,1.83241667 L9.42789801,1.83241667 L9.42789801,9.16666667 L1.57131633,9.16666667 L1.57131633,1.83241667 Z M0.5,11 L10.5,11 C10.7761424,11 11,10.7761424 11,10.5 L11,0.5 C11,0.223857625 10.7761424,-5.07265313e-17 10.5,0 L0.5,0 C0.223857625,5.07265313e-17 -3.38176876e-17,0.223857625 0,0.5 L0,10.5 C3.38176876e-17,10.7761424 0.223857625,11 0.5,11 Z" id="maximise-copy"></path>
+                    </g>
+                    <g id="Close" transform="translate(47.272727, 0.000000)">
+                        <g id="Group">
+                            <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                            <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) scale(-1, 1) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="From" transform="translate(28.000000, 231.000000)">
+                <g id="Time" transform="translate(0.000000, 277.000000)">
+                    <rect id="Rectangle" fill="#F3F3F4" x="244" y="16" width="61" height="24"></rect>
+                    <rect id="Rectangle-Copy" fill="#F3F3F4" x="244" y="42" width="61" height="24"></rect>
+                    <text id="00:00:00" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="252.4" y="32">00:00:00 </tspan>
+                    </text>
+                    <text id="00:00:00-copy" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="252.4" y="58">00:00:00 </tspan>
+                    </text>
+                    <text id="Preperation-time-est" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9B9DA2">
+                        <tspan x="0" y="32">Preperation time estimation</tspan>
+                    </text>
+                    <text id="Installation-time-es" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9B9DA2">
+                        <tspan x="0" y="58">Installation time estimation</tspan>
+                    </text>
+                    <path d="M0.5,1.5 L728.500684,1.5" id="Seperation" stroke="#EBEBEC" stroke-linecap="square"></path>
+                </g>
+                <g>
+                    <rect id="Rectangle-2" fill="#F3F3F4" x="0" y="30" width="728" height="195"></rect>
+                    <text id="Internal-description" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                        <tspan x="1" y="14">Internal description</tspan>
+                    </text>
+                    <text id="Approved-translattio" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                        <tspan x="0" y="255">Approved translattions: 0</tspan>
+                    </text>
+                    <path d="" id="Path-2" stroke="#979797" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
