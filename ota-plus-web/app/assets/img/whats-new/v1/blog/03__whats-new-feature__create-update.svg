@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="900px" viewBox="0 0 1440 900" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Campaign List view -- Updates worklfow Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="1380" height="52"></rect>
+        <filter x="-0.0%" y="-1.0%" width="100.1%" height="101.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-3" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-5" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-7" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-8">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-9" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-10">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-11" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-12">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-13" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-14">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-15" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-16">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-17" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-18">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-19" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-20">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-21" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-22">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-23" x="0" y="0" width="1380" height="60"></rect>
+        <filter x="-0.0%" y="-0.8%" width="100.1%" height="101.7%" filterUnits="objectBoundingBox" id="filter-24">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <polygon id="path-25" points="0 0.336134454 1441.67187 -1.04083409e-16 1441.67187 60 0 60"></polygon>
+        <rect id="path-27" x="0" y="0" width="729" height="40"></rect>
+        <path d="M0,0 L727,0 L727,40 L565.688434,40 L0,40 L0,0 Z" id="path-29"></path>
+        <rect id="path-31" x="0" y="0" width="72" height="190"></rect>
+        <rect id="path-33" x="0.782178218" y="0" width="12.2376238" height="488" rx="6"></rect>
+        <filter x="-16.3%" y="-0.4%" width="132.7%" height="100.8%" filterUnits="objectBoundingBox" id="filter-34">
+            <feGaussianBlur stdDeviation="1.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-35" x="3" y="2" width="8" height="60" rx="4"></rect>
+        <filter x="0.0%" y="0.0%" width="100.0%" height="100.0%" filterUnits="objectBoundingBox" id="filter-36">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Campaign-List-view----Updates-worklfow-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="BG" fill="#0F1621" points="0 -1 999.356099 -0.0092211207 1440 0.427640845 1440 900 0 900"></polygon>
+        <g id="Bottom-navigation" transform="translate(30.000000, 848.000000)">
+            <g id="Rectangle-10-Copy">
+                <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            </g>
+            <text id="1-11-of-30" opacity="0.540000021" font-family="FiraGO-Medium, FiraGO" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="1180" y="32">1-11 of 30</tspan>
+            </text>
+            <g id="ic_keyboard_arrow_right" transform="translate(1314.000000, 14.000000)">
+                <polygon id="Bounds" points="0 0 24 0 24 24 0 24"></polygon>
+                <polygon id="Icon" fill="#6A6D74" opacity="0.540000021" points="9 16.59 13.58 12 9 7.41 10.41 6 16.41 12 10.41 18"></polygon>
+            </g>
+            <g id="ic_keyboard_arrow_left" transform="translate(1270.000000, 14.000000)">
+                <polygon id="Bounds" points="0 0 24 0 24 24 0 24"></polygon>
+                <polygon id="Icon" fill="#6A6D74" opacity="0.540000021" points="15.41 16.59 10.83 12 15.41 7.41 14 6 8 12 14 18"></polygon>
+            </g>
+        </g>
+        <g id="Runining-campaigns" transform="translate(30.000000, 148.000000)">
+            <g id="Content" transform="translate(0.000000, 40.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy" transform="translate(0.000000, 100.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-5"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-2" transform="translate(0.000000, 160.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-7"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-3" transform="translate(0.000000, 220.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-9"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-10)" xlink:href="#path-9"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-4" transform="translate(0.000000, 280.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-11"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-12)" xlink:href="#path-11"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-5" transform="translate(0.000000, 340.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-13"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-14)" xlink:href="#path-13"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-6" transform="translate(0.000000, 400.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-15"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-16)" xlink:href="#path-15"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-7" transform="translate(0.000000, 460.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-17"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-18)" xlink:href="#path-17"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-8" transform="translate(0.000000, 520.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-19"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-20)" xlink:href="#path-19"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-9" transform="translate(0.000000, 580.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-21"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-22)" xlink:href="#path-21"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <g id="Content-Copy-10" transform="translate(0.000000, 640.000000)">
+                <g id="Rectangle-10-Copy">
+                    <use fill="#F3F3F4" fill-rule="evenodd" xlink:href="#path-23"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-24)" xlink:href="#path-23"></use>
+                </g>
+                <text id="27.02.2018" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="327" y="34">27.02.2018</tspan>
+                </text>
+                <text id="4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="518" y="34">4</tspan>
+                </text>
+                <text id="1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="684" y="34">1</tspan>
+                </text>
+                <text id="0/1" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="853" y="39">0/1</tspan>
+                </text>
+                <text id="0%" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="1027" y="34">0%</tspan>
+                </text>
+                <text id="4581-SFM92927-922" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="27" y="34">4581 SFM92927 922</tspan>
+                </text>
+                <text id="More-info-Copy" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#48DAD0">
+                    <tspan x="1277" y="36">More info</tspan>
+                </text>
+            </g>
+            <rect id="Rectangle-Copy" fill="#9B9DA2" x="0" y="0" width="1380" height="40"></rect>
+            <g id="+-Add-campaign-(grey)" transform="translate(1243.000000, 8.000000)">
+                <text id="Add-campaign" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#E7E7E8">
+                    <tspan x="21.8181818" y="17">Add campaign</tspan>
+                </text>
+                <g id="lui-icon-plus--grey" transform="translate(6.545455, 8.000000)" fill-rule="evenodd" stroke-width="1">
+                    <g id="lui-icon-plus--aqua">
+                        <rect id="20x20" x="0" y="0" width="11" height="10"></rect>
+                        <path d="M6.05,4.5 L6.05,1.2 C6.05,1.0895 5.95155,1 5.83,1 L5.17,1 C5.04845,1 4.95,1.0895 4.95,1.2 L4.95,4.5 L1.32,4.5 C1.19845,4.5 1.1,4.5895 1.1,4.7 L1.1,5.3 C1.1,5.4105 1.19845,5.5 1.32,5.5 L4.95,5.5 L4.95,8.8 C4.95,8.9105 5.04845,9 5.17,9 L5.83,9 C5.95155,9 6.05,8.9105 6.05,8.8 L6.05,5.5 L9.68,5.5 C9.80155,5.5 9.9,5.4105 9.9,5.3 L9.9,4.7 C9.9,4.5895 9.80155,4.5 9.68,4.5 L6.05,4.5 Z" id="Fill-1" fill="#E7E7E8"></path>
+                    </g>
+                </g>
+            </g>
+            <text id="Created-at" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="322" y="26">CREATED AT</tspan>
+            </text>
+            <text id="Processed" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="487" y="26">PROCESSED</tspan>
+            </text>
+            <text id="Affected" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="663" y="26">AFFECTED</tspan>
+            </text>
+            <text id="Finished" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="840" y="26">FINISHED</tspan>
+            </text>
+            <text id="Failure-rate" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#6A6D74">
+                <tspan x="1001" y="26">FAILURE RATE</tspan>
+            </text>
+        </g>
+        <g id="Desktop-secondary-navigation----Campaigns" transform="translate(0.000000, -1.000000)">
+            <g id="Second-navigation" stroke-width="1" transform="translate(0.000000, 60.000000)">
+                <polygon id="Header-secondary" fill="#272D37" points="0 0.280112045 1441.67187 -8.67361738e-17 1441.67187 50 0 50"></polygon>
+                <g id="Navigation" transform="translate(152.000000, 10.000000)">
+                    <g id="lui-desktopnavigation--tab:selected" transform="translate(158.000000, 0.000000)" fill="#48DAD0">
+                        <rect id="Highlight-" x="10" y="36" width="150" height="4"></rect>
+                    </g>
+                    <text id="In-Preparation" font-family="FiraSans-Book, Fira Sans" font-size="16" font-weight="300" letter-spacing="0.008888889" fill="#9FA2A6">
+                        <tspan x="0.113777777" y="21">In Preparation</tspan>
+                    </text>
+                    <text id="Finished-campaigns" font-family="FiraSans-Book, Fira Sans" font-size="16" font-weight="300" letter-spacing="0.008888889" fill="#9FA2A6">
+                        <tspan x="382" y="21">Finished campaigns</tspan>
+                    </text>
+                    <text id="Canceled-campaigns" font-family="FiraSans-Book, Fira Sans" font-size="16" font-weight="300" letter-spacing="0.008888889" fill="#9FA2A6">
+                        <tspan x="594" y="21">Canceled campaigns</tspan>
+                    </text>
+                    <text id="Running-campaigns" font-family="FiraSans-Book, Fira Sans" font-size="16" font-weight="300" fill="#FFFFFF">
+                        <tspan x="172.176" y="21">Running campaigns</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Top-navigation" stroke-width="1">
+                <mask id="mask-26" fill="white">
+                    <use xlink:href="#path-25"></use>
+                </mask>
+                <use id="Header-main" fill="#3F454D" xlink:href="#path-25"></use>
+                <g id="Navigation" transform="translate(150.000000, 21.000000)" font-family="FiraSans-Book, Fira Sans" font-size="16" font-weight="300">
+                    <text id="Campaigns" fill="#FFFFFF">
+                        <tspan x="411.02" y="15">Campaigns</tspan>
+                    </text>
+                    <text id="Impact-analysis" fill="#9FA2A6">
+                        <tspan x="560.196" y="15">Impact analysis</tspan>
+                    </text>
+                    <text id="Dashboard" fill="#9FA2A6">
+                        <tspan x="0.092" y="15">Dashboard</tspan>
+                    </text>
+                    <text id="Packages" fill="#9FA2A6">
+                        <tspan x="274.148" y="15">Packages</tspan>
+                    </text>
+                    <text id="Devices" fill="#9FA2A6">
+                        <tspan x="147.02" y="15">Devices</tspan>
+                    </text>
+                </g>
+                <g id="Info-&amp;-Profile-section" transform="translate(1163.000000, 0.000000)">
+                    <g id="context-chrome-&gt;-lui-overflow-green:default" transform="translate(246.000000, 10.000000)">
+                        <rect id="Safety-Zone" x="0" y="0" width="20" height="40"></rect>
+                        <g id="Dots" transform="translate(8.000000, 11.000000)" fill="#48DAD0">
+                            <circle id="Dot" cx="2" cy="2" r="2"></circle>
+                            <circle id="Dot" cx="2" cy="9" r="2"></circle>
+                            <circle id="Dot" cx="2" cy="16" r="2"></circle>
+                        </g>
+                    </g>
+                    <g id="DOCS-|-SUPPORT" transform="translate(-6.000000, 21.000000)" fill="#9FA2A6" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400">
+                        <text id="WHATS-NEW-|-DOCS-|-S">
+                            <tspan x="194" y="-4">	 </tspan>
+                            <tspan x="2.672" y="13">WHATS NEW   |   DOCS   |   SUPPORT</tspan>
+                        </text>
+                    </g>
+                    <g id="Group-15" transform="translate(207.000000, 15.000000)" stroke="#B9B9B9">
+                        <path d="M14.6946119,28.8892238 C22.5340796,28.8892238 28.8892238,22.5340796 28.8892238,14.6946119 C28.8892238,6.85514423 22.5340796,0.5 14.6946119,0.5 C6.85514423,0.5 0.5,6.85514423 0.5,14.6946119 C0.5,22.5340796 6.85514423,28.8892238 14.6946119,28.8892238 Z" id="Oval-3"></path>
+                        <g id="Page-1" transform="translate(4.838710, 4.838710)" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8">
+                            <path d="M8.62035326,13.0373641 C8.62035326,14.2634511 7.62660326,15.2572011 6.4005163,15.2572011 C5.17442935,15.2572011 4.17986413,14.2634511 4.17986413,13.0373641 C4.17986413,11.8112772 5.17442935,10.8175272 6.4005163,10.8175272 C7.62660326,10.8175272 8.62035326,11.8112772 8.62035326,13.0373641 Z" id="Stroke-1"></path>
+                            <path d="M10.7127717,14.0779891 L12.3366848,13.8652174 C12.4125,13.3149457 12.4157609,12.7817935 12.3366848,12.2095109 L10.7127717,11.9967391 C10.6035326,11.5410326 10.4241848,11.1146739 10.1861413,10.7258152 L11.1847826,9.4263587 C10.8505435,8.98369565 10.4559783,8.58994565 10.0141304,8.2548913 L8.71467391,9.25353261 C8.32581522,9.01467391 7.8986413,8.83532609 7.44293478,8.72527174 L7.23016304,7.1013587 C6.66603261,7.02309783 6.13451087,7.02391304 5.57445652,7.1013587 L5.3625,8.72445652 C4.90597826,8.83369565 4.47798913,9.01304348 4.08831522,9.25190217 L2.7888587,8.25326087 C2.36494565,8.57445652 1.95978261,8.97228261 1.61820652,9.42391304 L2.61684783,10.7225543 C2.37717391,11.1122283 2.19782609,11.5402174 2.08777174,11.9975543 L0.463858696,12.2095109 C0.391304348,12.7361413 0.386413043,13.2986413 0.463858696,13.8652174 L2.08777174,14.0771739 C2.19782609,14.5345109 2.37717391,14.9625 2.61684783,15.3521739 L1.61820652,16.6508152 C1.94266304,17.0796196 2.34130435,17.4831522 2.7888587,17.8214674 L4.08831522,16.8228261 C4.47798913,17.0608696 4.90597826,17.2410326 5.3625,17.3502717 L5.57445652,18.9733696 C6.13451087,19.0508152 6.66603261,19.0508152 7.23016304,18.9733696 L7.44293478,17.3494565 C7.8986413,17.2394022 8.32581522,17.0600543 8.71467391,16.8211957 L10.0141304,17.819837 C10.4559783,17.4847826 10.8505435,17.0902174 11.1847826,16.6483696 L10.1861413,15.348913 C10.4241848,14.9600543 10.6035326,14.5336957 10.7127717,14.0779891 Z" id="Stroke-3"></path>
+                            <path d="M16.1071467,5.14508152 C15.8055163,5.88203804 14.9633967,6.23502717 14.2264402,5.93339674 C13.4886685,5.6317663 13.1356793,4.78964674 13.438125,4.05269022 C13.7397554,3.31491848 14.581875,2.96192935 15.3188315,3.264375 C16.055788,3.56600543 16.4087772,4.408125 16.1071467,5.14508152 Z" id="Stroke-5"></path>
+                            <path d="M17.3685326,6.47307065 L18.5114674,6.77470109 C18.7128261,6.4282337 18.8603804,6.07279891 18.963913,5.66845109 L17.9375543,5.083125 C17.988913,4.74888587 17.9856522,4.41464674 17.9334783,4.089375 L18.9557609,3.49508152 C18.8530435,3.10785326 18.697337,2.73692935 18.4935326,2.39209239 L17.3530435,2.70432065 C17.1590217,2.43855978 16.9226087,2.20133152 16.6478804,2.0032337 L16.9503261,0.86111413 C16.5948913,0.654048913 16.2394565,0.508940217 15.8440761,0.407853261 L15.25875,1.43339674 C14.9236957,1.38203804 14.5886413,1.38529891 14.2633696,1.43747283 L13.6682609,0.415190217 C13.2997826,0.513016304 12.9207065,0.667907609 12.566087,0.877418478 L12.8783152,2.01790761 C12.6117391,2.21274457 12.3745109,2.44915761 12.176413,2.72470109 L11.0334783,2.42225543 C10.841087,2.75486413 10.68375,3.12904891 10.5810326,3.52850543 L11.6073913,4.11383152 C11.5560326,4.44970109 11.5592935,4.78475543 11.6122826,5.11002717 L10.59,5.70513587 C10.6886413,6.07605978 10.8435326,6.45513587 11.0522283,6.80649457 L12.1927174,6.49508152 C12.3875543,6.76084239 12.6247826,6.99807065 12.8995109,7.19616848 L12.5978804,8.33828804 C12.9500543,8.54290761 13.3054891,8.68883152 13.7041304,8.7907337 L14.2894565,7.764375 C14.6245109,7.81491848 14.95875,7.81247283 15.2840217,7.7594837 L15.8783152,8.78095109 C16.2655435,8.67904891 16.6364674,8.52334239 16.9804891,8.31872283 L16.6690761,7.1782337 C16.9340217,6.98339674 17.1704348,6.7469837 17.3685326,6.47307065 Z" id="Stroke-7"></path>
+                        </g>
+                    </g>
+                    <g id="lui-avatar--initials-medium" transform="translate(189.000000, 0.000000)">
+                        <g>
+                            <rect id="Safety-zone" x="0" y="0" width="60" height="60"></rect>
+                            <circle id="Circle" fill="#272D37" cx="30" cy="30" r="20"></circle>
+                            <text id="BG" font-family="FiraSans-Light, Fira Sans" font-size="18" font-weight="300" line-spacing="22" letter-spacing="0.01" fill="#9FA2A6">
+                                <tspan x="19.046" y="36">BG</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <g id="here-logo" transform="translate(30.000000, 14.000000)">
+                    <path d="M26.6306923,5.93977778 C25.9791538,5.18155556 25.959859,4.30511111 26.6306923,3.60511111 C27.2817821,2.94288889 28.1258205,2.92422222 28.9321667,3.60511111 L26.6306923,5.93977778 Z M16.0252436,16.7033333 C15.3728077,15.9442222 15.3539615,15.05 16.0252436,14.3673333 C16.6772308,13.706 17.5217179,13.6864444 18.3455641,14.3673333 L16.0252436,16.7033333 Z M24.5019744,16.5091111 L26.8810769,14.0957778 L24.3121667,11.4873333 C22.2215897,9.36555556 22.8354359,8.23755556 23.3160128,7.75044444 C23.6220385,7.43933333 23.9294103,7.206 24.1407564,7.08911111 C24.4288333,7.65355556 24.8120385,8.19888889 25.2908205,8.66555556 C27.7816538,11.2148889 30.5067179,10.8637778 32.5977436,8.72511111 C33.8442821,7.45844444 34.4397308,6.29177778 34.5918462,5.70688889 L32.5380641,4.55888889 C32.2899231,5.10333333 31.7137692,6.03844444 31.0631282,6.69977778 C29.9310128,7.86688889 28.8554359,7.86688889 28.1289615,7.26422222 L32.4074872,2.94288889 L31.8708205,2.39844444 C29.3553077,-0.170888889 27.0188333,-0.307333333 24.9076154,1.834 C23.5085128,3.254 23.3160128,5.006 23.9294103,6.602 L22.3562051,4.71488889 C22.2031923,4.77311111 21.9155641,5.00644444 21.6274872,5.29888889 C20.8027436,6.15533333 20.611141,7.478 20.8229359,8.354 L19.7662051,7.43977778 L17.6769744,9.56111111 L20.5519103,12.4806667 C18.2706282,10.5731111 16.2181923,10.6708889 14.3210128,12.5971111 C12.4027436,14.5428889 12.5171667,16.9184444 14.1092179,18.902 L13.8408846,18.6304444 C12.1339615,16.898 10.4849231,16.5264444 8.85383333,18.2011111 C7.89537179,19.1557778 7.74191026,20.0891111 7.8379359,20.9268889 L3.81024359,16.8584444 L1.46838462,19.2322222 L9.25364103,27.1553333 L14.0109487,27.1553333 L10.7317179,23.8264444 C9.58075641,22.6775556 9.23569231,21.8802222 9.94511538,21.1602222 C10.4629359,20.6157778 11.0574872,20.634 11.7862051,21.3735556 L15.7376154,25.4033333 L18.1153718,22.99 L15.1619103,19.9935556 C17.5010769,21.9593333 20.0524872,21.4735556 21.9896026,19.4886667 C23.0068462,18.4762222 23.5614615,17.5411111 23.8315897,16.8993333 L21.7410128,15.714 C21.4345385,16.258 20.9737051,16.9393333 20.4756282,17.4646667 C19.3242179,18.6317778 18.2508846,18.6313333 17.5235128,18.0277778 L21.7621026,13.7268889 L24.5019744,16.5091111 Z" id="Fill-5" fill="#FFFFFF"></path>
+                    <polygon id="Fill-7" fill="#48DAD0" points="0 27.1111111 0 27.1111111 4.77391026 31.956 9.54782051 27.1111111 9.54737179 27.1111111"></polygon>
+                </g>
+            </g>
+            <g id="lui-desktopnavigation--tab:selected" transform="translate(547.000000, 16.000000)" fill="#48DAD0">
+                <rect id="Highlight-" x="10" y="40" width="90" height="4"></rect>
+            </g>
+        </g>
+        <rect id="Combined-Shape" fill-opacity="0.6" fill="#0F1621" fill-rule="nonzero" x="0" y="0" width="1440" height="901"></rect>
+        <g id="Group-5" transform="translate(331.000000, 200.000000)">
+            <g id="Group-3">
+                <g id="Group-2">
+                    <g id="BG" fill="#FFFFFF">
+                        <rect id="Rectangle-10" x="0" y="0" width="770" height="500"></rect>
+                    </g>
+                    <g id="Overlay-Button" transform="translate(621.000000, 440.000000)">
+                        <rect id="Rectangle-4" fill="#48DAD0" fill-rule="evenodd" x="0" y="0" width="126" height="36"></rect>
+                        <text id="Add" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#FFFFFF">
+                            <tspan x="34.891" y="24">Continue</tspan>
+                        </text>
+                    </g>
+                    <g id="Content" transform="translate(21.000000, 418.163265)" stroke="#D7D8DA" stroke-linecap="square" stroke-opacity="0.5">
+                        <g id="From-Copy">
+                            <path d="M1.13686838e-13,1.46825397 L726.402763,1.46825397" id="Line"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Software-list" transform="translate(20.000000, 214.000000)">
+                <g id="third-raw" transform="translate(0.000000, 104.000000)">
+                    <rect id="Rectangle-15" fill="#F3F3F4" x="0" y="0" width="727" height="40"></rect>
+                    <rect id="Rectangle-15-Copy" fill="#FFFFFF" x="0" y="40" width="729" height="40"></rect>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="24">VCM</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="64">MM</tspan>
+                    </text>
+                </g>
+                <g id="second-raw" transform="translate(0.000000, 64.000000)">
+                    <mask id="mask-28" fill="white">
+                        <use xlink:href="#path-27"></use>
+                    </mask>
+                    <use id="Rectangle-15" fill="#FFFFFF" xlink:href="#path-27"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                        <tspan x="41" y="24">TCU</tspan>
+                    </text>
+                </g>
+                <g id="First-row" transform="translate(0.000000, 24.000000)">
+                    <mask id="mask-30" fill="white">
+                        <use xlink:href="#path-29"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#F3F3F4" xlink:href="#path-29"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#202020">
+                        <tspan x="41" y="26">ABS</tspan>
+                    </text>
+                </g>
+                <g id="Selection" transform="translate(12.000000, 37.000000)">
+                    <g id="Tick-selected">
+                        <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                        <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                    </g>
+                    <g id="Tick-selected" transform="translate(0.000000, 40.000000)">
+                        <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                        <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                    </g>
+                    <rect id="Rectangle-11" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="80.5" width="14" height="14"></rect>
+                    <rect id="Rectangle-11-Copy" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="120.5" width="14" height="14"></rect>
+                </g>
+                <text id="Select-Hardware-ids" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                    <tspan x="0" y="14">Select Hardware ids</tspan>
+                </text>
+            </g>
+            <g id="Group" transform="translate(706.000000, 229.000000)">
+                <mask id="mask-32" fill="white">
+                    <use xlink:href="#path-31"></use>
+                </mask>
+                <g id="Mask" fill-rule="nonzero" transform="translate(36.000000, 95.000000) scale(1, -1) translate(-36.000000, -95.000000) "></g>
+                <g mask="url(#mask-32)">
+                    <g transform="translate(28.000000, 8.000000)">
+                        <g id="Rectangle-23">
+                            <use fill="#F7F7F7" fill-rule="evenodd" xlink:href="#path-33"></use>
+                            <use fill="black" fill-opacity="1" filter="url(#filter-34)" xlink:href="#path-33"></use>
+                        </g>
+                        <g id="Rectangle-24">
+                            <use fill="#B9B9B9" fill-rule="evenodd" xlink:href="#path-35"></use>
+                            <use fill="black" fill-opacity="1" filter="url(#filter-36)" xlink:href="#path-35"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group-4" transform="translate(20.000000, 80.000000)">
+                <g id="From">
+                    <rect id="Rectangle-2" fill="#E7E7E8" x="0" y="24" width="350" height="30"></rect>
+                    <text id="Name" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                        <tspan x="10" y="44">Name</tspan>
+                    </text>
+                    <text id="Update-name" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                        <tspan x="0" y="14">Update name</tspan>
+                    </text>
+                </g>
+                <rect id="Rectangle-2" fill="#E7E7E8" x="377" y="24" width="350" height="100"></rect>
+                <text id="Type-here" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="387" y="44">Type here</tspan>
+                </text>
+                <text id="Description" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                    <tspan x="377" y="14">Description</tspan>
+                </text>
+            </g>
+            <g id="Heads" transform="translate(20.000000, 24.000000)">
+                <path d="M1.07902146,37.5555556 L726.500002,37.5555556" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <text id="Create-new-update" font-family="FiraSans-Light, Fira Sans" font-size="16" font-weight="300" fill="#0F1621">
+                    <tspan x="0" y="15">Create new update</tspan>
+                </text>
+            </g>
+            <g id="Close" transform="translate(734.000000, 27.000000)" fill="#B7B9BC">
+                <g id="Group">
+                    <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                    <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) scale(-1, 1) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

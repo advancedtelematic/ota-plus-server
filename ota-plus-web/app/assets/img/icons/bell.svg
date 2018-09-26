@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="148px" height="148px" viewBox="0 0 148 148" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="70" cy="70" r="70"></circle>
+        <filter x="-5.0%" y="-3.6%" width="110.0%" height="110.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="News-Blog" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whats-new-Blog" transform="translate(-201.000000, -134.000000)">
+            <g id="Head" transform="translate(205.000000, 136.000000)">
+                <g id="Icon">
+                    <g id="Oval-10" fill-rule="nonzero">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#48DAD0" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="ICON" transform="translate(42.000000, 39.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+                        <path d="M55.3910819,43.9937871 C52.2331871,40.6409099 45.3823099,31.6911556 45.9437135,17.6103836 C46.2748538,9.28833684 41.755117,4.87251228 37.1520468,2.5410269 C31.3428363,-0.40285614 24.3845029,-0.40285614 18.5752924,2.5410269 C13.9722222,4.87251228 9.45248538,9.28833684 9.78362573,17.6103836 C10.3428363,31.6911556 3.49415205,40.6409099 0.33625731,43.9937871" id="Stroke-1"></path>
+                        <path d="M55.3910819,43.9937871 C40.380117,56.1914363 15.3274854,56.1761263 0.33625731,43.9937871" id="Stroke-3"></path>
+                        <path d="M21.665424,57.3622094 C21.665424,60.0545719 24.4461257,62.2438936 27.8627924,62.2438936 C31.281652,62.2438936 34.0601608,60.0545719 34.0601608,57.3622094" id="Stroke-5"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

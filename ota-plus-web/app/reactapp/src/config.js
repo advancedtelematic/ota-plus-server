@@ -2,6 +2,7 @@
 
 export const APP_TITLE = 'HERE OTA Connect';
 export const APP_LAYOUT = 'atsgarage';
+export const APP_LOCALSTORAGE = 'HERE-OTAConnect';
 
 /* API end-points config */
 export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER='/api/v1/multi_target_updates';
@@ -97,9 +98,15 @@ export const API_PROVISIONING_DETAILS = '/api/v1/provisioning';
 export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
 
+/* default values and limits */
+/**
+ * what's new
+ */
+export const WHATS_NEW_INITIAL_STEP = 'introduction';
+export const WHATS_NEW_DEFAULT_ACTIONS = ["Back", "Close", "Next"];
 
-
-/* default values / limits */
-
+/**
+ * updates
+ */
 export const LIMIT_UPDATES_WIZARD = 5;
 export const LIMIT_UPDATES_MAIN = 30;

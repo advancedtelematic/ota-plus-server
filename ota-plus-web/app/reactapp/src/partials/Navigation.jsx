@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer, inject } from 'mobx-react';
+import _ from 'underscore';
 import NavigationDropdown from './NavigationDropdown';
 import SettingsDropdown from './SettingsDropdown';
 import TabNavigation from './TabNavigation';
@@ -8,6 +9,14 @@ import TabNavigation from './TabNavigation';
 @inject("stores")
 @observer
 class Navigation extends Component {
+
+    handleClick = (e) => {
+        const { startWhatsNewPopover } = this.props;
+        const newFeaturesAvailable = _.isFunction(startWhatsNewPopover);
+        e && e.preventDefault();
+        newFeaturesAvailable && startWhatsNewPopover();
+    };
+
 
     render() {
         const {
@@ -19,6 +28,9 @@ class Navigation extends Component {
             uiUserProfileEdit,
             alphaPlusEnabled,
         } = this.props;
+
+        const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = this.props.stores.featuresStore;
+
         return (
             <nav className="navbar navbar-inverse">
                 <div className="container">
@@ -52,6 +64,21 @@ class Navigation extends Component {
                         {
                             window.atsGarageTheme &&
                                 <span>
+                                    {
+                                        (whatsNewPostponed || whatsNewPopOver) &&
+                                            <li className="text-link highlighted" ref="linkWhatsNew">
+                                                <a href="#" onClick={ this.handleClick } target="_blank" id="whats-new-link">WHAT's NEW</a>
+                                                <span className="whats-new-badge"></span>
+                                            </li>
+
+                                    }
+                                    {
+                                        whatsNewShowPage &&
+                                            <li className="text-link highlighted" ref="linkWhatsNew">
+                                                <Link to="/whats-new" activeClassName="active" id="link-impactanalysis">WHAT's NEW</Link>
+                                            </li>
+                                    }
+                                    <li className={ 'separator' }>|</li>
                                     <li className="text-link">
                                       <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
                                     </li>
@@ -79,7 +106,7 @@ class Navigation extends Component {
                     </ul>
                 </div>
                 {
-                    (alphaPlusEnabled && (location === 'page-packages')) &&
+                    alphaPlusEnabled && (location === 'page-packages') &&
                         <TabNavigation
                             location={ location }
                             toggleSWRepo={ toggleSWRepo }

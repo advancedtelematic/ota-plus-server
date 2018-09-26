@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="770px" height="500px" viewBox="0 0 770 500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Campaign List view -- Updates worklfow Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="729" height="40"></rect>
+        <path d="M0,0 L727,0 L727,40 L565.688434,40 L0,40 L0,0 Z" id="path-3"></path>
+        <rect id="path-5" x="0" y="0" width="72" height="190"></rect>
+        <rect id="path-7" x="0.782178218" y="0" width="12.2376238" height="488" rx="6"></rect>
+        <filter x="-16.3%" y="-0.4%" width="132.7%" height="100.8%" filterUnits="objectBoundingBox" id="filter-8">
+            <feGaussianBlur stdDeviation="1.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <rect id="path-9" x="3" y="2" width="8" height="60" rx="4"></rect>
+        <filter x="0.0%" y="0.0%" width="100.0%" height="100.0%" filterUnits="objectBoundingBox" id="filter-10">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Campaign-List-view----Updates-worklfow-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-5">
+            <g id="Group-3">
+                <g id="Group-2">
+                    <g id="BG" fill="#FFFFFF">
+                        <rect id="Rectangle-10" x="0" y="0" width="770" height="500"></rect>
+                    </g>
+                    <g id="Overlay-Button" transform="translate(621.000000, 440.000000)">
+                        <rect id="Rectangle-4" fill="#48DAD0" fill-rule="evenodd" x="0" y="0" width="126" height="36"></rect>
+                        <text id="Add" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#FFFFFF">
+                            <tspan x="34.891" y="24">Continue</tspan>
+                        </text>
+                    </g>
+                    <g id="Content" transform="translate(21.000000, 418.163265)" stroke="#D7D8DA" stroke-linecap="square" stroke-opacity="0.5">
+                        <g id="From-Copy">
+                            <path d="M1.13686838e-13,1.46825397 L726.402763,1.46825397" id="Line"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Software-list" transform="translate(20.000000, 214.000000)">
+                <g id="third-raw" transform="translate(0.000000, 104.000000)">
+                    <rect id="Rectangle-15" fill="#F3F3F4" x="0" y="0" width="727" height="40"></rect>
+                    <rect id="Rectangle-15-Copy" fill="#FFFFFF" x="0" y="40" width="729" height="40"></rect>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="24">VCM</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="64">MM</tspan>
+                    </text>
+                </g>
+                <g id="second-raw" transform="translate(0.000000, 64.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Rectangle-15" fill="#FFFFFF" xlink:href="#path-1"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                        <tspan x="41" y="24">TCU</tspan>
+                    </text>
+                </g>
+                <g id="First-row" transform="translate(0.000000, 24.000000)">
+                    <mask id="mask-4" fill="white">
+                        <use xlink:href="#path-3"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#F3F3F4" xlink:href="#path-3"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#202020">
+                        <tspan x="41" y="26">ABS</tspan>
+                    </text>
+                </g>
+                <g id="Selection" transform="translate(12.000000, 37.000000)">
+                    <g id="Tick-selected">
+                        <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                        <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                    </g>
+                    <g id="Tick-selected" transform="translate(0.000000, 40.000000)">
+                        <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                        <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                    </g>
+                    <rect id="Rectangle-11" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="80.5" width="14" height="14"></rect>
+                    <rect id="Rectangle-11-Copy" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="120.5" width="14" height="14"></rect>
+                </g>
+                <text id="Select-Hardware-ids" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                    <tspan x="0" y="14">Select Hardware ids</tspan>
+                </text>
+            </g>
+            <g id="Group" transform="translate(706.000000, 229.000000)">
+                <mask id="mask-6" fill="white">
+                    <use xlink:href="#path-5"></use>
+                </mask>
+                <g id="Mask" fill-rule="nonzero" transform="translate(36.000000, 95.000000) scale(1, -1) translate(-36.000000, -95.000000) "></g>
+                <g mask="url(#mask-6)">
+                    <g transform="translate(28.000000, 8.000000)">
+                        <g id="Rectangle-23">
+                            <use fill="#F7F7F7" fill-rule="evenodd" xlink:href="#path-7"></use>
+                            <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                        </g>
+                        <g id="Rectangle-24">
+                            <use fill="#B9B9B9" fill-rule="evenodd" xlink:href="#path-9"></use>
+                            <use fill="black" fill-opacity="1" filter="url(#filter-10)" xlink:href="#path-9"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Group-4" transform="translate(20.000000, 80.000000)">
+                <g id="From">
+                    <rect id="Rectangle-2" fill="#E7E7E8" x="0" y="24" width="350" height="30"></rect>
+                    <text id="Name" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                        <tspan x="10" y="44">Name</tspan>
+                    </text>
+                    <text id="Update-name" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                        <tspan x="0" y="14">Update name</tspan>
+                    </text>
+                </g>
+                <rect id="Rectangle-2" fill="#E7E7E8" x="377" y="24" width="350" height="100"></rect>
+                <text id="Type-here" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                    <tspan x="387" y="44">Type here</tspan>
+                </text>
+                <text id="Description" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                    <tspan x="377" y="14">Description</tspan>
+                </text>
+            </g>
+            <g id="Heads" transform="translate(20.000000, 24.000000)">
+                <path d="M1.07902146,37.5555556 L726.500002,37.5555556" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <text id="Create-new-update" font-family="FiraSans-Light, Fira Sans" font-size="16" font-weight="300" fill="#0F1621">
+                    <tspan x="0" y="15">Create new update</tspan>
+                </text>
+            </g>
+            <g id="Close" transform="translate(734.000000, 27.000000)" fill="#B7B9BC">
+                <g id="Group">
+                    <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                    <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) scale(-1, 1) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

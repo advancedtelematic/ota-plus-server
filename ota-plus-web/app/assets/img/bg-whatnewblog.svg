@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="722px" viewBox="0 0 1440 722" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Grey/Complex 02</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="53.2054745%" y1="45.3237113%" x2="-31.0402676%" y2="167.949864%" id="linearGradient-1">
+            <stop stop-color="#383C45" offset="0%"></stop>
+            <stop stop-color="#363A43" offset="41.91%"></stop>
+            <stop stop-color="#2D323C" offset="65.93%"></stop>
+            <stop stop-color="#1F252F" offset="85.37%"></stop>
+            <stop stop-color="#0F1621" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-2" points="0 0 0 813 1445 813 1445 217.035269 1445 0"></polygon>
+        <linearGradient x1="6.91750335%" y1="60.8962018%" x2="90.1565596%" y2="-3.49310906%" id="linearGradient-4">
+            <stop stop-color="#0F1621" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#0F1621" stop-opacity="0.9" offset="80.29%"></stop>
+        </linearGradient>
+        <linearGradient x1="66.303255%" y1="75.9478065%" x2="22.5448065%" y2="7.81404626%" id="linearGradient-5">
+            <stop stop-color="#0F1621" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#0F1621" stop-opacity="0.9" offset="80.29%"></stop>
+        </linearGradient>
+        <linearGradient x1="14.2214717%" y1="60.2288628%" x2="179.83903%" y2="-49.9936428%" id="linearGradient-6">
+            <stop stop-color="#0F1621" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#0F1621" stop-opacity="0.9" offset="80.29%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="News-Blog" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Whats-new-Blog">
+            <g id="Grey/Complex-02" transform="translate(0.000000, -91.000000)">
+                <mask id="mask-3" fill="white">
+                    <use xlink:href="#path-2"></use>
+                </mask>
+                <use id="Shape" fill="url(#linearGradient-1)" fill-rule="nonzero" xlink:href="#path-2"></use>
+                <polygon id="Shape" fill="url(#linearGradient-4)" fill-rule="nonzero" mask="url(#mask-3)" points="2101 665.532827 789 219 1052.01473 1029"></polygon>
+                <path d="M1451,157.550173 C1366.25321,696.311419 629,753 629,753 L729.115385,109.650519 L1444.85256,-9 L1451,157.550173 Z" id="Shape" fill="url(#linearGradient-5)" fill-rule="nonzero" opacity="0.67" mask="url(#mask-3)"></path>
+                <polygon id="Shape" fill="url(#linearGradient-6)" fill-rule="nonzero" mask="url(#mask-3)" points="1 271.261682 233.741935 942 1444 2"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
