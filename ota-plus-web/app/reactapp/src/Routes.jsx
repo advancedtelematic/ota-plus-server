@@ -9,6 +9,7 @@ import {
     UpdatesPage,
     CampaignsPage,
     ImpactAnalysisPage,
+    WhatsNewPage,
     ProfilePage,
     NoMatchPage,
     FireworksPage,
@@ -36,6 +37,7 @@ const Routes = () => {
                 <Route path="/updates(/:updateName)" component={UpdatesPage}/>
                 <Route path="/campaigns(/:campaignName)" component={CampaignsPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
+                <Route path="/whats-new" component={WhatsNewPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>
                 <Route path="/policy" component={TermsAndConditions}/>
                 <Route path="/profile" component={ProfilePage}>

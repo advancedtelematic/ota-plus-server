@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="785px" height="374px" viewBox="0 0 785 374" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Update List view -- criteria smart group Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Update-List-view----criteria-smart-group-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-3">
+            <g id="Group">
+                <g id="PopUp">
+                    <rect id="Rectangle-2-Copy" fill="#FFFFFF" x="0" y="0" width="785" height="374"></rect>
+                    <path d="M28.966066,59.6666667 L755.932398,59.6666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                    <path d="M28.966066,290.666667 L755.932398,290.666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                    <rect id="Rectangle-4" fill="#48DAD0" x="630" y="313" width="126" height="36"></rect>
+                    <rect id="Rectangle-4-Copy" stroke="#48DAD0" x="498.5" y="313.5" width="125" height="35"></rect>
+                    <text id="Next" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#FFFFFF">
+                        <tspan x="678" y="337">Next</tspan>
+                    </text>
+                    <text id="Save" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#48DAD0">
+                        <tspan x="546" y="337">Save</tspan>
+                    </text>
+                </g>
+                <g id="Titlebar-full" transform="translate(681.000000, 14.000000)" fill="#B7B9BC">
+                    <g id="Group" transform="translate(15.000000, 8.000000)">
+                        <g id="Minimize" transform="translate(0.000000, 10.000000)">
+                            <path d="M0.5,0 L10.4528571,0 C10.7289995,-5.07265313e-17 10.9528571,0.223857625 10.9528571,0.5 L10.9528571,1.5 C10.9528571,1.77614237 10.7289995,2 10.4528571,2 L0.5,2 C0.223857625,2 3.38176876e-17,1.77614237 0,1.5 L-5.55111512e-17,0.5 C-8.93288388e-17,0.223857625 0.223857625,5.07265313e-17 0.5,0 Z" id="minimise"></path>
+                        </g>
+                        <g id="Maximize" transform="translate(24.545455, 0.909091)">
+                            <path d="M1.57131633,1.83241667 L9.42789801,1.83241667 L9.42789801,9.16666667 L1.57131633,9.16666667 L1.57131633,1.83241667 Z M0.5,11 L10.5,11 C10.7761424,11 11,10.7761424 11,10.5 L11,0.5 C11,0.223857625 10.7761424,-5.07265313e-17 10.5,0 L0.5,0 C0.223857625,5.07265313e-17 -3.38176876e-17,0.223857625 0,0.5 L0,10.5 C3.38176876e-17,10.7761424 0.223857625,11 0.5,11 Z" id="maximise-copy"></path>
+                        </g>
+                        <g id="Close" transform="translate(47.272727, 0.000000)">
+                            <g id="Group">
+                                <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                                <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) scale(-1, 1) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+                <text id="Create-new-group" font-family="FiraSans-Light, Fira Sans" font-size="16" font-weight="300" fill="#0F1621">
+                    <tspan x="28" y="35">Create new group</tspan>
+                </text>
+            </g>
+            <g id="Group-2" transform="translate(27.000000, 83.000000)">
+                <g id="Filter" transform="translate(0.000000, 75.000000)">
+                    <rect id="BTN" fill="#F3F3F4" x="528" y="24" width="30" height="30" rx="1"></rect>
+                    <rect id="BTN-Copy" fill="#F3F3F4" x="565" y="24" width="30" height="30" rx="1"></rect>
+                    <text id="+" font-family="FiraSans-Book, Fira Sans" font-size="32" font-weight="300" line-spacing="30" letter-spacing="0.02" fill="#9B9DA2">
+                        <tspan x="572" y="54">+</tspan>
+                    </text>
+                    <text id="-" font-family="FiraSans-Book, Fira Sans" font-size="32" font-weight="300" line-spacing="30" letter-spacing="0.02" fill="#9B9DA2">
+                        <tspan x="537" y="54">-</tspan>
+                    </text>
+                    <g id="Name" transform="translate(0.000000, 24.000000)">
+                        <rect id="Rectangle-2" fill="#F3F3F4" x="0" y="0" width="87" height="30"></rect>
+                        <g id="Icon/Dropdown-Mint" transform="translate(66.000000, 9.000000)" fill="#48DAD0" fill-rule="nonzero">
+                            <polygon id="ICon/Dropdown" points="12.1153846 3.94230769 11.1730769 3 6.05769231 8.11538462 0.942307692 3 2.98571493e-13 3.94230769 5.11538462 9.05769231 6.05769231 10 7 9.05769231"></polygon>
+                        </g>
+                        <text id="Device-ID" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                            <tspan x="10" y="19">Device ID</tspan>
+                        </text>
+                    </g>
+                    <g id="Name-Copy" transform="translate(94.000000, 24.000000)">
+                        <rect id="Rectangle-2" fill="#F3F3F4" x="0" y="0" width="136" height="30"></rect>
+                        <g id="Icon/Dropdown-Mint" transform="translate(115.000000, 9.000000)" fill="#48DAD0" fill-rule="nonzero">
+                            <polygon id="ICon/Dropdown" points="12.1153846 3.94230769 11.1730769 3 6.05769231 8.11538462 0.942307692 3 2.98571493e-13 3.94230769 5.11538462 9.05769231 6.05769231 10 7 9.05769231"></polygon>
+                        </g>
+                        <text id="contains" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                            <tspan x="12" y="19">contains</tspan>
+                        </text>
+                    </g>
+                    <g id="Type" transform="translate(237.000000, 24.000000)">
+                        <rect id="Rectangle-2-Copy-2" fill="#F3F3F4" x="0" y="0" width="284" height="30"></rect>
+                        <text id="Type-here" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#9FA2A6">
+                            <tspan x="13" y="19">Type here</tspan>
+                        </text>
+                    </g>
+                    <text font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#000000">
+                        <tspan x="0" y="14">Filter</tspan>
+                    </text>
+                </g>
+                <g id="Group-name">
+                    <rect id="Rectangle-2" fill="#F3F3F4" x="0" y="24" width="594" height="30"></rect>
+                    <text id="Market-DE" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#0F1621">
+                        <tspan x="10" y="44">Market DE</tspan>
+                    </text>
+                    <polygon id="Tick" stroke="#00AFAA" fill="#00AFAA" points="573.648438 41.8671875 582.476562 33 583.648438 34.171875 573.648438 44.171875 569 39.5234375 570.132812 38.3515625"></polygon>
+                    <text id="Name" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#0F1621">
+                        <tspan x="0" y="14">Name</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

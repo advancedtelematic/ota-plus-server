@@ -132,8 +132,8 @@
                     width: calc(100% - 80px);
 
                     .title {
-                      @include textoverflowEllipsis;
-                    }
+                         @include textoverflowEllipsis;
+                     }
                   }
                 }
                 &.olpgroup {

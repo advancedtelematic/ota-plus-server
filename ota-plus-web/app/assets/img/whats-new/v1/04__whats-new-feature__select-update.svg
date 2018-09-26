@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="785px" height="583px" viewBox="0 0 785 583" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Campaign List view -- Campaign creation Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="729" height="40"></rect>
+        <rect id="path-3" x="0" y="0" width="729" height="40"></rect>
+        <rect id="path-5" x="0" y="0" width="729" height="40"></rect>
+        <rect id="path-7" x="0" y="0" width="729" height="40"></rect>
+        <path d="M0,0 L729,0 L729,40 L567.244661,40 L0,40 L0,0 Z" id="path-9"></path>
+    </defs>
+    <g id="Campaign-List-view----Campaign-creation-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-1.000000, 0.000000)">
+            <g id="PopUp" transform="translate(1.000000, 0.000000)">
+                <rect id="Rectangle-2-Copy" fill="#FFFFFF" x="0" y="0" width="785" height="583"></rect>
+                <path d="M28.966066,59.6666667 L755.932398,59.6666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <path d="M28.966066,155.666667 L755.932398,155.666667" id="Line-Copy" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <path d="M28.966066,500.666667 L755.932398,500.666667" id="Line" stroke-opacity="0.5" stroke="#D7D8DA" stroke-linecap="square"></path>
+                <rect id="Rectangle-4" fill="#48DAD0" x="630" y="522" width="126" height="36"></rect>
+                <text id="Next" font-family="FiraSans-Medium, Fira Sans" font-size="14" font-weight="400" fill="#FFFFFF">
+                    <tspan x="678" y="546">Next</tspan>
+                </text>
+            </g>
+            <g id="content-chrome-grey-&gt;-lui-search--searchfield-typeahead-infield-small:focus_outline-copy" transform="translate(446.000000, 167.000000)">
+                <g id="content-chrome-grey-&gt;-lui-search--searchfield-typeahead-infield-small:focus">
+                    <rect id="Safety-Zone" x="0" y="0" width="320" height="50"></rect>
+                    <rect id="Search-field" stroke="#E7E7E8" fill="#FFFFFF" x="10" y="10" width="300" height="30" rx="1"></rect>
+                    <g id="lui-Icon--clear-dark-30x30" opacity="0.800000012" transform="translate(280.000000, 10.000000)">
+                        <g>
+                            <rect id="Margin" x="0" y="0" width="30" height="30"></rect>
+                            <rect id="20x20" x="5" y="5" width="20" height="20"></rect>
+                            <path d="M16.05075,14.99975 L17.89075,13.15975 C18.03575,13.01475 18.03575,12.77975 17.89075,12.63475 L17.36475,12.10875 C17.21975,11.96375 16.98475,11.96375 16.83975,12.10875 L14.99975,13.94875 L13.15975,12.10875 C13.01475,11.96375 12.77975,11.96375 12.63375,12.10875 L12.10875,12.63475 C11.96375,12.77975 11.96375,13.01475 12.10875,13.15975 L13.94775,14.99975 L12.10875,16.83975 C11.96375,16.98475 11.96375,17.21975 12.10875,17.36575 L12.63375,17.89075 C12.77975,18.03675 13.01475,18.03675 13.15975,17.89075 L14.99975,16.05075 L16.83975,17.89075 C16.98475,18.03675 17.21975,18.03675 17.36475,17.89075 L17.89075,17.36575 C18.03575,17.21975 18.03575,16.98475 17.89075,16.83975 L16.05075,14.99975 Z" id="X" fill="#0F1621"></path>
+                        </g>
+                    </g>
+                    <g id="lui-icon--search-dark-30x30" opacity="0.800000012" transform="translate(10.000000, 10.000000)">
+                        <g>
+                            <rect id="Margin" x="0" y="0" width="30" height="30"></rect>
+                            <rect id="20x20" x="5" y="5" width="20" height="20"></rect>
+                            <path d="M10.8326741,14.1636731 C10.8326741,12.3242959 12.3239935,10.8329765 14.1633707,10.8329765 C16.0027478,10.8329765 17.4940672,12.3242959 17.4940672,14.1636731 C17.4940672,16.0030502 16.0027478,17.4943696 14.1633707,17.4943696 C12.3239935,17.4943696 10.8326741,16.0030502 10.8326741,14.1636731 M19.9138182,18.7367194 L17.6331238,16.4560249 C18.069445,15.7973797 18.3267413,15.0105027 18.3267413,14.1636731 C18.3267413,11.8679905 16.4590532,10.0003024 14.1633707,10.0003024 C11.8676881,10.0003024 10,11.8679905 10,14.1636731 C10,16.4593556 11.8676881,18.3270437 14.1633707,18.3270437 C15.0102003,18.3270437 15.7970773,18.0697474 16.4557226,17.6334262 L18.736417,19.9141206 C18.8571548,20.0348584 19.0603272,20.0273643 19.1910571,19.8974671 L19.8971647,19.1913595 C20.0270619,19.0606296 20.034556,18.8574571 19.9138182,18.7367194" id="LUI-icon--search-dark-30x30" fill="#0F1621"></path>
+                        </g>
+                    </g>
+                    <text id="Re-use-text-from" font-family="FiraSans-Light, Fira Sans" font-size="13" font-weight="300" line-spacing="20" letter-spacing="0.0065" fill="#0F1621" fill-opacity="0.4">
+                        <tspan x="40" y="27">Search</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group-Copy" transform="translate(28.000000, 193.000000)" fill="#0F1621" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400">
+                <text id="Select-update">
+                    <tspan x="0" y="14">Select update</tspan>
+                </text>
+            </g>
+            <g id="Software-list" transform="translate(28.000000, 217.000000)">
+                <g id="fourth-raw" transform="translate(0.000000, 220.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#FFFFFF" xlink:href="#path-1"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="26">Update 06</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="178" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-7" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="651.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="fifth-raw" transform="translate(0.000000, 180.000000)">
+                    <mask id="mask-4" fill="white">
+                        <use xlink:href="#path-3"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#F3F3F4" xlink:href="#path-3"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="40" y="26">Update 05</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-2" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="177" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-8" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="650.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="fourth-raw" transform="translate(0.000000, 140.000000)">
+                    <mask id="mask-6" fill="white">
+                        <use xlink:href="#path-5"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#FFFFFF" xlink:href="#path-5"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="26">Update 04</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-3" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="178" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-9" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="651.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="third-raw" transform="translate(0.000000, 100.000000)">
+                    <rect id="Rectangle-15" fill="#F3F3F4" x="0" y="0" width="729" height="40"></rect>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="26">Update 03</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-4" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="178" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-10" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="651.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="second-raw" transform="translate(0.000000, 60.000000)">
+                    <mask id="mask-8" fill="white">
+                        <use xlink:href="#path-7"></use>
+                    </mask>
+                    <use id="Rectangle-15" fill="#FFFFFF" xlink:href="#path-7"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#898B91">
+                        <tspan x="41" y="26">Update 02</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-5" font-family="Helvetica" font-size="12" font-weight="normal" fill="#898B91">
+                        <tspan x="178" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-11" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="652.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="First-row" transform="translate(0.000000, 20.000000)">
+                    <mask id="mask-10" fill="white">
+                        <use xlink:href="#path-9"></use>
+                    </mask>
+                    <use id="Package_bg" fill="#F3F3F4" xlink:href="#path-9"></use>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                        <tspan x="41" y="26">Update 01 </tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-6" font-family="FiraSans-Book, Fira Sans" font-size="12" font-weight="300" fill="#000000">
+                        <tspan x="178" y="26">Description…</tspan>
+                    </text>
+                    <text id="Real-time-automatic-Multifunction-Sports-Suspension-Steering-Copy-12" font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#00AFAA">
+                        <tspan x="651.33" y="26">Detail</tspan>
+                    </text>
+                </g>
+                <g id="Selection" transform="translate(12.000000, 33.000000)">
+                    <g id="Tick-selected">
+                        <rect id="Rectangle-11" fill="#00AFAA" x="0" y="0" width="15" height="15"></rect>
+                        <polygon id="" fill="#FFFFFF" points="5.49066667 9.62933333 12.12 3 13 3.88 5.49066667 11.3893333 2 7.89866667 2.88 7.01866667"></polygon>
+                    </g>
+                    <g id="Tick-selected-Copy" transform="translate(0.000000, 40.000000)" fill="#FFFFFF" stroke="#E7E7E8">
+                        <rect id="Rectangle-11" x="0.5" y="0.5" width="14" height="14"></rect>
+                    </g>
+                    <rect id="Rectangle-11" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="80.5" width="14" height="14"></rect>
+                    <rect id="Rectangle-11-Copy-2" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="120.5" width="14" height="14"></rect>
+                    <rect id="Rectangle-11-Copy" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="160.5" width="14" height="14"></rect>
+                    <rect id="Rectangle-11-Copy-4" stroke="#D7D8DA" fill="#FFFFFF" opacity="0.5" x="0.5" y="200.5" width="14" height="14"></rect>
+                </g>
+                <g id="A">
+                    <rect id="Rectangle-Copy" fill="#B7B9BC" x="0" y="0" width="729" height="20"></rect>
+                    <text font-family="FiraSans-Medium, Fira Sans" font-size="12" font-weight="400" fill="#272D37">
+                        <tspan x="15" y="15">A</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Titlebar-full" transform="translate(683.000000, 15.000000)" fill="#B7B9BC">
+                <g id="Group" transform="translate(15.000000, 8.000000)">
+                    <g id="Minimize" transform="translate(0.000000, 10.000000)">
+                        <path d="M0.5,0 L10.4528571,0 C10.7289995,-5.07265313e-17 10.9528571,0.223857625 10.9528571,0.5 L10.9528571,1.5 C10.9528571,1.77614237 10.7289995,2 10.4528571,2 L0.5,2 C0.223857625,2 3.38176876e-17,1.77614237 0,1.5 L-5.55111512e-17,0.5 C-8.93288388e-17,0.223857625 0.223857625,5.07265313e-17 0.5,0 Z" id="minimise"></path>
+                    </g>
+                    <g id="Maximize" transform="translate(24.545455, 0.909091)">
+                        <path d="M1.57131633,1.83241667 L9.42789801,1.83241667 L9.42789801,9.16666667 L1.57131633,9.16666667 L1.57131633,1.83241667 Z M0.5,11 L10.5,11 C10.7761424,11 11,10.7761424 11,10.5 L11,0.5 C11,0.223857625 10.7761424,-5.07265313e-17 10.5,0 L0.5,0 C0.223857625,5.07265313e-17 -3.38176876e-17,0.223857625 0,0.5 L0,10.5 C3.38176876e-17,10.7761424 0.223857625,11 0.5,11 Z" id="maximise-copy"></path>
+                    </g>
+                    <g id="Close" transform="translate(47.272727, 0.000000)">
+                        <g id="Group">
+                            <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                            <rect id="Rectangle-7" transform="translate(5.946949, 5.946949) scale(-1, 1) rotate(45.000000) translate(-5.946949, -5.946949) " x="-1.43766605" y="4.92130831" width="14.7692308" height="2.05128205" rx="0.5"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <text id="Add-new-campaign" font-family="FiraSans-Light, Fira Sans" font-size="16" font-weight="300" fill="#0F1621">
+                <tspan x="30" y="36">Add new campaign</tspan>
+            </text>
+            <g id="Wizard-02----select-update" transform="translate(0.000000, 60.000000)">
+                <g id="Group-7" transform="translate(682.000000, 12.000000)">
+                    <g id="Group-2" transform="translate(2.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="13.8" y="27">5</tspan>
+                        </text>
+                    </g>
+                    <text id="Summary" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="0.76" y="58">Summary</tspan>
+                    </text>
+                </g>
+                <g id="Group-8" transform="translate(372.000000, 12.000000)">
+                    <g id="Group-3">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.3" y="27">3</tspan>
+                        </text>
+                    </g>
+                    <text id="Select-group(s)" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="6.235" y="58">Select</tspan>
+                        <tspan x="1.17" y="70">group(s)</tspan>
+                    </text>
+                </g>
+                <g id="Group-8-Copy" transform="translate(520.000000, 12.000000)">
+                    <g id="Group-3" transform="translate(7.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.3" y="27">4</tspan>
+                        </text>
+                    </g>
+                    <text id="Distribution-informa" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="0.115" y="58">Distribution</tspan>
+                        <tspan x="0.205" y="70">information</tspan>
+                    </text>
+                </g>
+                <g id="Group-9" transform="translate(217.000000, 12.000000)">
+                    <g id="Group-4">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#00AFAA"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#FFFFFF">
+                            <tspan x="14.3" y="27">2</tspan>
+                        </text>
+                    </g>
+                    <text id="Select-update" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#00AFAA">
+                        <tspan x="6.235" y="58">Select</tspan>
+                        <tspan x="3.96" y="70">update</tspan>
+                    </text>
+                </g>
+                <g id="Group-10" transform="translate(56.000000, 12.000000)">
+                    <g id="Group-5" transform="translate(6.000000, 0.000000)">
+                        <path d="M20,40 C31.045695,40 40,31.045695 40,20 C40,8.954305 31.045695,0 20,0 C8.954305,0 0,8.954305 0,20 C0,31.045695 8.954305,40 20,40 Z" id="Oval-59" fill="#E7E7E8"></path>
+                        <text id="Versions" font-family="AkkuratStd" font-size="20" font-weight="normal" fill="#B7B9BC">
+                            <tspan x="14.252381" y="27">1</tspan>
+                        </text>
+                    </g>
+                    <text id="Description" font-family="FiraSans-Book, Fira Sans" font-size="10" font-weight="300" fill="#CFD0D3">
+                        <tspan x="0.1" y="58">Description</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
