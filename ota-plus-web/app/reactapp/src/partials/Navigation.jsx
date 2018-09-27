@@ -57,7 +57,7 @@ class Navigation extends Component {
                                     </li>
                                     <li className="separator">|</li>
                                     <li className="text-link">
-                                      <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
+                                      <a href="mailto:otaconnect.support@here.com" id="support-link">SUPPORT</a>
                                     </li>
                                 </span>
                         }
