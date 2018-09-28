@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 @observer
 class SelectableListItem extends Component {
     render() {
-        const { item, selected, onItemSelect, showDetails } = this.props;
+        const { item, selected, onItemSelect, showDetails, sourceType } = this.props;
         return (
             <div className="item"
                  id={ "button-select-" + item.type + '-' + item.name }
@@ -18,7 +18,7 @@ class SelectableListItem extends Component {
                 </button>
                 <div className="item item__info"
                      onClick={ onItemSelect.bind(this, item) }
-                >
+                >   <span className={"icon " + (sourceType==="external" ? "icon--external" : "icon--internal")}></span>
                     <span className="name">{ item.name }</span>
                     <span className="description">{ item.description }</span>
                 </div>

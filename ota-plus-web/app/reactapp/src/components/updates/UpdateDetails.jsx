@@ -43,13 +43,12 @@ class UpdateDetails extends Component {
                     </div>
                 </div>
                 <div className="row targets-container">
-                {
-                    updatesStore.updatesFetchMtuIdAsync.isFetching ?
-                        <div className="wrapper-center">
-                            <Loader/>
-                        </div>
-                        :
-                        mtuData ?
+                    {
+                        updatesStore.updatesFetchMtuIdAsync.isFetching ?
+                            <div className="wrapper-center">
+                                <Loader/>
+                            </div>
+                        : mtuData ?
                             _.map(mtuData, (target, hardwareId) => {
                                 const noInformation = "No information.";
                                 const { target: fromPackage, checksum: fromVersion } = target.from;
@@ -105,21 +104,12 @@ class UpdateDetails extends Component {
                                     </div>
                                 )
                             })
-                            :
-                            updateItem.source &&
-                            <div className="col-xs-12">
-                                <FormInput
-                                    label={ updateItem.source.id }
-                                    name="sourceId"
-                                    id={ `update-source-id-${updateItem.source.id}` }
-                                    defaultValue={ updateItem.source.sourceType }
-                                    isEditable={ isEditable }
-                                />
-                                <div className="wrapper-center">
-                                    <p>{ "No further information available." }</p>
-                                </div>
+                        : updateItem.source.sourceType === 'external' &&
+                            <div className="col-xs-12 external-description">
+                                    <p>Your administrator has customized OTA Connect to work with your internal systems. This update definition was retrieved from your internal systems so we can’t display any details here.</p>
+                                    <p>To select this update for a campaign, your administrator must first map your updates to your devices.</p>
                             </div>
-                }
+                    }
                 </div>
             </div>
         );
