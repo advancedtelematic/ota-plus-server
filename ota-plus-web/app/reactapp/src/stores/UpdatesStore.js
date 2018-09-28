@@ -21,12 +21,14 @@ export default class UpdatesStore {
     @observable updatesMtuCreateAsync = {};
     @observable updatesCreateAsync = {};
     @observable updatesFetchMtuIdAsync = {};
+    @observable updatesWizardFetchAsync = {};
 
     @observable initialUpdates = [];
     @observable updates = [];
     @observable updateFilter = '';
     @observable updatesLimitPage = LIMIT_UPDATES_MAIN; // 30
     @observable updatesOffsetPage = 0;
+
     @observable updatesTotalCount = 0;
     @observable updatesInitialTotalCount = 0;
     @observable currentPagesLoaded = 1;
@@ -38,8 +40,10 @@ export default class UpdatesStore {
     @observable updatesWizard = [];
     @observable currentPagesLoadedWizard = 0;
     @observable initialUpdatesWizard = [];
-    @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD; // 5
     @observable preparedUpdatesWizard = {};
+    @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD; // 5
+    @observable updatesOffsetWizard = 0;
+    @observable hasMoreWizardUpdates = false;
 
     constructor() {
         resetAsync(this.updatesFetchAsync);
@@ -48,6 +52,7 @@ export default class UpdatesStore {
         resetAsync(this.updatesMtuCreateAsync);
         resetAsync(this.updatesCreateAsync);
         resetAsync(this.updatesFetchMtuIdAsync);
+        resetAsync(this.updatesWizardFetchAsync);
     }
 
     createMultiTargetUpdate(data) {
@@ -112,7 +117,6 @@ export default class UpdatesStore {
             .then((response) => {
                 this.updates = response.data.values;
                 this.initialUpdates = response.data.values;
-                this.updatesTotalCount = response.data.total;
 
                 if (!this.updatesInitialTotalCount) {
                     this.updatesInitialTotalCount = response.data.total;
@@ -124,32 +128,37 @@ export default class UpdatesStore {
                 this[async] = handleAsyncError(error);
             });
     }
+    
+    fetchWizardUpdates(selectedGroupIds, async = 'updatesWizardFetchAsync') {
+        resetAsync(this[async], true);
+        this.updatesOffsetPage = 0;
+        let groupApi = selectedGroupIds.map(groupId => (`&groupId=${groupId}`)).join("");
+        let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.updatesWizard = response.data.values;
+                this._prepareUpdates('wizard');
+                this[async] = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this[async] = handleAsyncError(error);
+            });
+    }
 
-    loadMoreUpdates(target = 'wizard') {
-        resetAsync(this.updatesLoadMoreAsync, true);
-
-        let apiAddress = (target === 'wizard') ?
-            `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.currentPagesLoadedWizard * this.updatesLimitWizard}`
-            :
-            `${API_UPDATES_SEARCH}?limit=${this.updatesLimitPage}&offset=${this.updatesOffsetPage + this.updatesLimitPage}`;
+    loadMoreWizardUpdates(async = 'updatesWizardLoadMoreAsync') {
+        resetAsync(this[async], true);
+        let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard + this.updatesLimitWizard}`
 
         return axios.get(apiAddress)
             .then((response) => {
 
-                if (target === 'wizard') {
-                    this.updatesWizard = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
-                    this.initialUpdatesWizard = _.uniq(this.initialUpdatesWizard.concat(response.data.values), item => item.uuid);
-                    this.currentPagesLoadedWizard++;
-                } else {
-                    this.updates = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
-                    this.initialUpdates = _.uniq(this.initialUpdates.concat(response.data.values), item => item.uuid);
-                    this.updatesOffsetPage = response.data.offset;
-                    this.currentPagesLoadedWizard++;
-                }
+                this.updatesWizard = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
+                this._prepareUpdates('wizard');
+                this[async] = handleAsyncSuccess(response);
 
-                this.updatesTotalCount = response.data.total;
-                this._prepareUpdates(target);
-                this.updatesLoadMoreAsync = handleAsyncSuccess(response);
+                this.updatesWizardOffset = response.data.offset;
+                this.hasMoreWizardUpdates = this.updatesWizardOffset < response.data.total;
+
             })
             .catch((error) => {
                 this.updatesLoadMoreAsync = handleAsyncError(error);
@@ -233,6 +242,8 @@ export default class UpdatesStore {
         resetAsync(this.updatesLoadMoreAsync);
         resetAsync(this.updatesMtuCreateAsync);
         resetAsync(this.updatesCreateAsync);
+        resetAsync(this.updatesCreateAsync);
+        resetAsync(this.updatesWizardFetchAsync);
 
         this.updates = [];
         this.initialUpdates = [];
