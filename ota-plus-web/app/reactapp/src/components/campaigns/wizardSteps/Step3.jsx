@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { SelectUpdateList } from './step3Files';
 import { Form } from '../../../partials';
 import _ from "underscore";
+import Loader from "../../../partials/Loader";
 
 @inject("stores")
 @observer
@@ -12,6 +13,13 @@ class WizardStep3 extends Component {
         this.validateStep = this.validateStep.bind(this);
         this.changeUpdateSelection = this.changeUpdateSelection.bind(this);
         this.showDetails = this.showDetails.bind(this);
+    }
+
+    componentWillMount() {
+        const { wizardData } = this.props;
+        let selectedGroupIds = wizardData.groups.map(group => (group.id));
+        const { updatesStore } = this.props.stores;
+        updatesStore.fetchWizardUpdates(selectedGroupIds);
     }
 
     validateStep = (selectedUpdate) => {
@@ -41,21 +49,27 @@ class WizardStep3 extends Component {
 
     render() {
         const { wizardData } = this.props;
+        const { updatesStore } = this.props.stores;
 
         return (
-            <div>
-                <Form>
-                    <label title="" className="c-form__label">{ "Select Update" }</label>
-                </Form>
-                <SelectUpdateList
-                    wizardData={ wizardData }
-                    stepId={ 2 }
-                    stores={ this.props.stores }
-                    toggleSelection={ this.changeUpdateSelection }
-                    showUpdateDetails={ this.showDetails }
-                />
-            </div>
-        );
+            updatesStore.updatesWizardFetchAsync.isFetching ?
+                <div className="wrapper-center">
+                    <Loader />
+                </div>
+                :
+                <div>
+                    <Form>
+                        <label title="" className="c-form__label">{ "Select Update" }</label>
+                    </Form>
+                    <SelectUpdateList
+                        wizardData={ wizardData }
+                        stepId={ 2 }
+                        stores={ this.props.stores }
+                        toggleSelection={ this.changeUpdateSelection }
+                        showUpdateDetails={ this.showDetails }
+                    />
+                </div>
+        )
     }
 }
 

@@ -24,6 +24,7 @@
     &__item {
       cursor: default;
       font-size: 12px;
+      padding-left: 15px;
     }
 
     &__teaser {
@@ -38,6 +39,20 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+    }
+
+    &__icon {
+      width: 30px;
+      height: 25px;
+      margin-right: 10px;
+      &--internal {
+        background: url($update-internal) 100% 100% no-repeat ;
+      }
+      &--external {
+        background: url($update-external) 100% 100% no-repeat ;
+      }
     }
 
     &__hash {
@@ -94,6 +109,10 @@
     .versions {
       padding-bottom: 30px;
     }
+  }
+
+  .external-description {
+    padding-top: 40px;
   }
 
   .hardware-container {

@@ -5,12 +5,14 @@ import { observer } from 'mobx-react';
 class ListItem extends Component {
     render() {
         const { update, showUpdateDetails } = this.props;
+        const { sourceType } = update.source;
         return (
             <div className="c-update">
                 <div className="c-update__item item">
                     <div className="c-update__teaser" id={ `update_item_${update.name}` }>
                         <div className="c-update__name">
-                            { update.name }
+                            <div className={"c-update__icon " + ( sourceType ==="external" ? "c-update__icon--external" : "c-update__icon--internal")}></div>
+                            <span>{ update.name }</span>
                         </div>
                         <div className="c-update__hash">
                             { update.description }

@@ -1010,8 +1010,11 @@ input {
 
     &--additional-info {
       text-align: right;
-      font-weight: 500;
-      color: $home-header-button;
+      * {
+        font-weight: 500;
+        color: $home-header-button!important;
+      }
+
     }
   }
 
