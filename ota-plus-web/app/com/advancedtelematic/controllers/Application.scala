@@ -169,7 +169,7 @@ class Application @Inject() (ws: WSClient,
     val wreq = ws.url(apiUri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
-      .withQueryStringParameters(req.queryString.mapValues(_.head).toSeq :_*)
+      .withQueryStringParameters(req.queryString.toArray.flatMap{ case (nm, xs) => xs.map(nm -> _) } :_*)
       .addHttpHeaders(passHeaders(req.headers).toSeq :_*)
       .addHttpHeaders(("Authorization", "Bearer " + req.accessToken.value))
       .withBody(req.body)
