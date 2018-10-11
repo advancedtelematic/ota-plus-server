@@ -16,7 +16,6 @@ class Home extends Component {
             provisioningStore, 
             devicesStore,
             packagesStore,
-            campaignsStore,
         } = this.props.stores;
         if (!uiAutoFeatureActivation) {
            provisioningStore.sanityCheckCompleted = true;
@@ -24,7 +23,6 @@ class Home extends Component {
         provisioningStore.namespaceSetup();
         devicesStore.fetchDevices();
         packagesStore.fetchPackages();
-        campaignsStore.fetchCampaigns();
     }
     componentWillUnmount() {
         const { 

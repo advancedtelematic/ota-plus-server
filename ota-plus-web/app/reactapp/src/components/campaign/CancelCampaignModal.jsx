@@ -9,6 +9,12 @@ import _ from 'underscore';
 @inject("stores")
 @observer
 class CancelCampaignModal extends Component {
+    static propTypes = {
+        shown: PropTypes.bool.isRequired,
+        hide: PropTypes.func.isRequired,
+        switchTab: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
         const { campaignsStore } = props.stores;
@@ -20,11 +26,11 @@ class CancelCampaignModal extends Component {
     cancelCampaign() {
         const { campaignsStore } = this.props.stores;
         const { campaign } = campaignsStore;
-        campaignsStore.cancelCampaign(campaign.id);        
+        const { switchTab } = this.props;
+        campaignsStore.cancelCampaign(campaign.id);
+        switchTab('cancelled');
     }
     handleResponse() {
-        const { campaignsStore } = this.props.stores;
-        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
         this.props.hide();
     }
     render() {
@@ -83,12 +89,6 @@ class CancelCampaignModal extends Component {
             />
         );
     }
-}
-
-CancelCampaignModal.propTypes = {
-    shown: PropTypes.bool.isRequired,
-    hide: PropTypes.func.isRequired,
-    stores: PropTypes.object
 }
 
 export default translate()(CancelCampaignModal);

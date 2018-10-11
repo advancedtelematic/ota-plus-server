@@ -1,10 +1,14 @@
 import _ from 'underscore';
 
 const _contains = (objects, item) => {
-    const { source, type } = item;
+    const { type } = item;
+    const useId = _.isUndefined(type);
+    // default compare
     let compare = {};
 
-    if (source && type === 'update') {
+    if (useId) {
+        compare = { id: item.id };
+    } else if (type === 'update') {
         compare = {
             uuid: item.uuid,
         }

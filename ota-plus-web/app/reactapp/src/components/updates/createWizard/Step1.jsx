@@ -70,6 +70,7 @@ class Step1 extends Component {
                                     _.map(hardwareList, item => {
                                         const { selectedHardwares } = wizardData;
                                         const selected = _contains(selectedHardwares, item);
+                                        item.type = 'hardware';
                                         return (
                                             <SelectableListItem
                                                 key={ item.name }

@@ -73,11 +73,9 @@ export const API_PACKAGES_COMMENTS = '/api/v1/user_repo/comments';
 
 export const API_DEVICE_APPROVAL_PENDING_CAMPAIGNS = '/api/v2/device';
 export const API_CAMPAIGNS_FETCH = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_FETCH = '/api/v1/campaigns';
-export const API_CAMPAIGNS_INDIVIDUAL_FETCH = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH = '/api/v1/campaigns';
+export const API_CAMPAIGNS_FETCH_SINGLE = '/api/v2/campaigns';
 export const API_CAMPAIGNS_CAMPAIGN_DETAILS = '/api/v1/campaigns';
-export const API_CAMPAIGNS_CAMPAIGN_STATISTICS = '/api/v2/campaigns';
+export const API_CAMPAIGNS_STATISTICS_SINGLE = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CREATE = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_CREATE = '/api/v1/campaigns';
@@ -99,7 +97,12 @@ export const API_PROVISIONING_DETAILS = '/api/v1/provisioning';
 export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
 
-/* default values and limits */
+/* default values, limits, definitions */
+/**
+ * global
+ */
+export const VIEWPORT_MIN_WIDTH = 1280;
+export const VIEWPORT_MIN_HEIGHT = 768;
 /**
  * what's new
  */
@@ -111,3 +114,10 @@ export const WHATS_NEW_DEFAULT_ACTIONS = ["Back", "Close", "Next"];
  */
 export const LIMIT_UPDATES_WIZARD = 5;
 export const LIMIT_UPDATES_MAIN = 30;
+
+/**
+ * campaigns
+ */
+
+export const LIMIT_CAMPAIGNS = 20;
+export const CAMPAIGNS_STATUSES = ["prepared", "launched", "finished", "cancelled"];
