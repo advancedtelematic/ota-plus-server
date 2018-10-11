@@ -13,7 +13,7 @@ import {
     API_CREATE_MULTI_TARGET_UPDATE,
     API_FETCH_MULTI_TARGET_UPDATES,
     API_CANCEL_MULTI_TARGET_UPDATE,
-    API_CAMPAIGNS_INDIVIDUAL_FETCH,
+    API_CAMPAIGNS_FETCH_SINGLE,
     API_UPDATES_SEARCH,
     API_DEVICE_APPROVAL_PENDING_CAMPAIGNS
 } from '../config';
@@ -325,7 +325,7 @@ export default class DevicesStore {
                                 });
                             }, this);
 
-                            axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                            axios.get(API_CAMPAIGNS_FETCH_SINGLE + '/' + campaignId)
                                 .then( (response) => {
                                     let campaign = response.data;
                                     item.campaign = {

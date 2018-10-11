@@ -5,26 +5,40 @@ import moment from 'moment';
 import _ from 'underscore';
 import { Loader } from '../../partials';
 import ListItem from './ListItem';
-import Statistics from './Statistics';
+import { _contains } from "../../utils/Collection";
 import { VelocityTransitionGroup } from 'velocity-react';
-
-const headerHeight = 40;
+import Statistics from "./Statistics";
+import InfiniteScroll from "../../utils/InfiniteScroll";
 
 @inject("stores")
 @observer
-class List extends Component {
+export default class List extends Component {
+
+    static propTypes = {
+        status: PropTypes.string.isRequired,
+        expandedCampaigns: PropTypes.object.isRequired,
+        focus: PropTypes.string,
+    };
+
     constructor(props) {
         super(props);
         this.scrollToElement = this.scrollToElement.bind(this);
     }
+
     componentDidMount() {
-        this.highlightCampaign(this.props.highlightedCampaign);
+        const { focus } = this.props;
+        this.highlightCampaign(focus);
     }
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.highlightedCampaign !== this.props.highlightedCampaign) {
-            this.highlightCampaign(nextProps.highlightedCampaign);
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        const { focus: prevFocus } = this.props;
+        const { focus: nextFocus } = nextProps;
+
+        if (prevFocus !== nextFocus) {
+            this.highlightCampaign(nextFocus);
         }
     }
+
     scrollToElement(id) {
         const wrapperPosition = this.refs.list.getBoundingClientRect();
         const elementCoords = document.getElementById("item-" + id).getBoundingClientRect();
@@ -34,9 +48,10 @@ class List extends Component {
             page.scrollTop = scrollTo;
         }, 1000);
     }
+
     highlightCampaign(id) {
         const { campaignsStore } = this.props.stores;
-        if(this.refs.list && id) {
+        if (this.refs.list && id) {
             const name = _.filter(campaignsStore.campaigns, (obj) => {
                 return obj.id === id;
             });
@@ -44,190 +59,74 @@ class List extends Component {
             this.scrollToElement(id);
         }
     }
+
     render() {
-        const { highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         const { campaignsStore } = this.props.stores;
+        const { campaigns } = campaignsStore;
+        const {
+            status,
+            expandedCampaigns,
+            showCancelCampaignModal,
+            showDependenciesModal,
+            toggleCampaign,
+        } = this.props;
+
+        const campaignsAvailable = !!campaigns.length;
+
         return (
-            <div className="campaigns__wrapper" ref="list">
-                <div className="campaigns__section-header section-header">
-                    <div className="campaigns__column">In preparation</div>
-                </div>
-                <div className="campaigns__section-list" id="in-preparation-campaigns">
-                    {campaignsStore.inPreparationCampaigns.length ?
-                        _.map(campaignsStore.inPreparationCampaigns, (campaign) => {
+            campaignsAvailable ?
+                <InfiniteScroll
+                    loadMore={ () => { campaignsStore.loadMoreCampaigns(status) } }
+                    className="campaigns__list"
+                    id={ `${status}-campaigns` } ref="list"
+                    hasMore={ campaignsStore.hasMoreCampaigns }
+                    isLoading={ campaignsStore.campaignsFetchAsync[status].isFetching }
+                    useWindow={ true }
+                    threshold={ 100 }
+                >
+                    {
+                        campaigns.map(campaign => {
+                            const isExpanded = _contains(expandedCampaigns, campaign);
+                            const isCancelable = status === 'launched';
                             return (
-                                <span key={campaign.id}>
-                                    <ListItem 
-                                        expandedCampaignName={expandedCampaignName}
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="inPreparation"
+                                <span key={ campaign.id }>
+                                    <ListItem
+                                        campaign={ campaign }
+                                        type={ status }
+                                        isExpanded={ isExpanded }
+                                        showCancelCampaignModal={ showCancelCampaignModal }
+                                        showDependenciesModal={ showDependenciesModal }
+                                        toggleCampaign={ toggleCampaign }
                                     />
-                                    <VelocityTransitionGroup 
-                                        enter={{
+                                    <VelocityTransitionGroup
+                                        enter={ {
                                             animation: "slideDown",
-                                        }}
-                                        leave={{
+                                        } }
+                                        leave={ {
                                             animation: "slideUp",
-                                            duration: 1000
-                                        }}
+                                        } }
                                     >
-                                        {expandedCampaignName === campaign.name ?
-                                            <Statistics 
-                                                campaignId={campaign.id}
-                                                showCancelCampaignModal={showCancelCampaignModal}
-                                                showDependenciesModal={showDependenciesModal}
-                                                key={campaign.id}
-                                                hideCancel={false}
+                                        {
+                                            isExpanded &&
+                                            <Statistics
+                                                showCancelCampaignModal={ showCancelCampaignModal }
+                                                showDependenciesModal={ showDependenciesModal }
+                                                campaignId={ campaign.id }
+                                                hideCancel={ !isCancelable }
                                             />
-                                        :
-                                            null
                                         }
                                     </VelocityTransitionGroup>
                                 </span>
                             );
                         })
-                    :
-                        <div className="campaigns__section-list--empty">
-                            No running campaigns.
-                        </div>
                     }
+                </InfiniteScroll>
+                :
+                <div className="campaigns__list--empty">
+                    { `Currently there are no ${status} campaigns.` }
                 </div>
-                <div className="campaigns__section-header section-header">
-                    <div className="campaigns__column">Running campaigns</div>
-                    <div className="campaigns__column">Created at</div>
-                    <div className="campaigns__column">Processed</div>
-                    <div className="campaigns__column">Affected</div>
-                    <div className="campaigns__column">Finished</div>
-                    <div className="campaigns__column">Failure rate</div>
-                </div>
-                <div className="campaigns__section-list" id="running-campaigns">
-                    {campaignsStore.runningCampaigns.length ?
-                        _.map(campaignsStore.runningCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <ListItem 
-                                        expandedCampaignName={expandedCampaignName}
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="running"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name?
-                                        <Statistics
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
-                                            hideCancel={false}
-                                        />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
-                    :
-                        <div className="campaigns__section-list--empty">
-                            No running campaigns.
-                        </div>
-                    }
-                </div>
-                <div className="campaigns__section-header section-header">
-                    <div className="campaigns__column">Finished campaigns</div>
-                </div>
-                <div className="campaigns__section-list" id="finished-campaigns">
-                    {campaignsStore.finishedCampaigns.length ?
-                        _.map(campaignsStore.finishedCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <ListItem 
-                                        expandedCampaignName={expandedCampaignName}
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="finished"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name ?
-                                        <Statistics
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
-                                        />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
-                    :
-                        <div className="campaigns__section-list--empty">
-                            No finished campaigns.
-                        </div>
-                    }
-                </div>
-                <div className="campaigns__section-header section-header">
-                    <div className="campaigns__column">Cancelled campaigns</div>
-                </div>
-                <div className="campaigns__section-list" id="cancelled-campaigns">
-                    {campaignsStore.cancelledCampaigns.length ?
-                        _.map(campaignsStore.cancelledCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <ListItem 
-                                        expandedCampaignName={expandedCampaignName}
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="cancelled"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name ?
-                                        <Statistics
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
-                                        />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
-                    :
-                        <div className="campaigns__section-list--empty">
-                            No cancelled campaigns.
-                        </div>
-                    }
-                </div>
-            </div>
+
         );
     }
 }
 
-List.propTypes = {
-}
-
-export default List;
