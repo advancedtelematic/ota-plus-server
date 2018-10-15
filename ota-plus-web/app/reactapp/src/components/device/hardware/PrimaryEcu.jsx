@@ -10,14 +10,14 @@ class PrimaryEcu extends Component {
         super(props);
         this.onEcuClick = this.onEcuClick.bind(this);
     }
-    onEcuClick(e) {
+    onEcuClick = (e) => {
         if(e) e.preventDefault();
         const { selectEcu, hidePopover } = this.props;
         const { devicesStore } = this.props.stores;
         selectEcu(
-            devicesStore._getPrimaryHardwareId(), 
-            devicesStore._getPrimarySerial(), 
-            devicesStore._getPrimaryFilepath(), 
+            devicesStore._getPrimaryHardwareId(),
+            devicesStore._getPrimarySerial(),
+            devicesStore._getPrimaryFilepath(),
             'primary'
         );
         hidePopover();

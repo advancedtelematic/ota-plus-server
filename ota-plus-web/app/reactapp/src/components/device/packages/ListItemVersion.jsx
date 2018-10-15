@@ -50,9 +50,11 @@ class ListItemVersion extends Component {
                         blacklistedPackage ?
                             <img className="software-panel__version-icon" src="/assets/img/icons/ban_red.png" id={"image-blacklisted-" + version.id.version.substring(0,8)} alt="Icon" />
                         : version.filepath === queuedPackage ?
-                            <i className="software-panel__version-icon software-panel__version-icon--queued fa fa-dot-circle-o fa-stack-2x" aria-hidden="true" id={"image-queued-" + version.id.version.substring(0,8)}></i>
+                            <div className="software-panel__labels">
+                                <div className="software-panel__label software-panel__label--queued">Queued</div>
+                            </div>
                         : version.id.version === installedPackage ?
-                            <img className="software-panel__version-icon" src="/assets/img/icons/green_tick.svg" id={"image-installed-" + version.id.version.substring(0,8)} alt="Icon" />
+                                <div className="software-panel__label software-panel__label--installed">Installed</div>
                         :
                             null
                     }

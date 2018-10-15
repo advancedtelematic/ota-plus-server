@@ -1,4 +1,4 @@
-import { observable, computed, extendObservable } from 'mobx';
+import {observable, computed, extendObservable} from 'mobx';
 import axios from 'axios';
 import {
     API_DEVICES_SEARCH,
@@ -53,10 +53,12 @@ export default class DevicesStore {
         mac: null,
         hostname: null
     };
+    @observable deviceCurrentStatusFetchAsync = {};
     @observable multiTargetUpdates = [];
     @observable multiTargetUpdatesSaved = [];
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
+    @observable currentDeviceStatus=null;
 
 
     constructor() {
@@ -131,7 +133,6 @@ export default class DevicesStore {
                 this.ungroupedDevicesFetchAsync = handleAsyncError(error);
             });
     }
-
 
 
     fetchDevicesByFilter(filter = '', async = 'devicesFetchAsync') {
@@ -221,17 +222,16 @@ export default class DevicesStore {
     }
 
     fetchDeviceNetworkInfo(id, isFromWs = false) {
-        if (this.device.uuid === id) {
-            resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
-            return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
-                .then((response) => {
-                    this.deviceNetworkInfo = response.data;
-                    this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
-                })
-                .catch((error) => {
-                    this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
-                });
-        }
+        resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
+        return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
+            .then((response) => {
+                this.deviceNetworkInfo = response.data;
+                this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
+            });
+
     }
 
     createMultiTargetUpdate(data, id) {
@@ -290,6 +290,7 @@ export default class DevicesStore {
                     item.device = id;
                     item.status = "waiting";
                 });
+                this._fetchCurrentStatus(id);
                 this.multiTargetUpdates = response.data;
                 this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
                 this.mtuFetchAsync = handleAsyncSuccess(response);
@@ -314,6 +315,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCancelAsync, true);
         return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
             .then(function (response) {
+                this.fetchMultiTargetUpdates(this.device.uuid);
                 this.mtuCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -336,6 +338,18 @@ export default class DevicesStore {
             }))
             .catch((error) => {
                 that.devicesCountFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    _fetchCurrentStatus(id) {
+        resetAsync(this.deviceCurrentStatusFetchAsync, true);
+        return axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id)
+            .then((response) => {
+                this.device.deviceStatus = response.data.deviceStatus;
+                this.deviceCurrentStatusFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.deviceCurrentStatusFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -484,6 +498,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
+        resetAsync(this.deviceCurrentStatusFetchAsync);
         this.devices = [];
         this.devicesTotalCount = null;
         this.devicesCurrentPage = 1;
