@@ -13,11 +13,11 @@ class MtuList extends Component {
         const { packagesStore } = this.props.stores;
         const emptyHistory = (
             <div className="wrapper-center">
-                Multi target update history is empty.
+                <span className={'overview-panel__empty'}>Multi target update history is empty.</span>
             </div>
         );
         return (
-            <ul className="queue-modal__list">
+            <ul className="overview-panel__list">
                 <InfiniteScroll
                     className="wrapper-infinite-scroll"
                     hasMore={packagesStore.packagesHistoryCurrentPage < packagesStore.packagesHistoryTotalCount / packagesStore.packagesHistoryLimit}

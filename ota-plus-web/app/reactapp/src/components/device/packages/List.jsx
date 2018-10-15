@@ -218,7 +218,7 @@ class List extends Component {
     checkQueued(version) {
         const { devicesStore, hardwareStore } = this.props.stores;
         let queuedPackage = null;
-        let serial = hardwareStore.activeEcu.serial;                                        
+        let serial = hardwareStore.activeEcu.serial;
         _.each(devicesStore.multiTargetUpdates, (update, i) => {
             if(!_.isEmpty(update.targets[serial])) {
                 if(update.targets[serial].image.filepath === version.filepath) {
@@ -238,15 +238,15 @@ class List extends Component {
             }
         } else {
             _.each(device.directorAttributes.secondary, (secondaryObj, ind) => {
-                if(secondaryObj.id === hardwareStore.activeEcu.serial && 
+                if(secondaryObj.id === hardwareStore.activeEcu.serial &&
                     version.filepath === secondaryObj.image.filepath) {
                         installedPackage = version.id.version;
-                }                                                       
+                }
             });
         }
         return installedPackage;
     }
-    render() {        
+    render() {
         const { onFileDrop, togglePackageAutoUpdate, showPackageDetails, expandedPackageName, togglePackage, } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
