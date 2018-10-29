@@ -1,44 +1,119 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, extendObservable, observe } from 'mobx';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
-import { 
+import {
+    DeviceHeader,
     DeviceHardwarePanel,
     DevicePropertiesPanel, 
     DeviceSoftwarePanel,
+    DeviceOverviewPanel
 } from '../components/device';
 import {
     PackagesCreateModal,
 } from '../components/packages';
-import _ from 'underscore';
 
 @inject("stores")
 @observer
 class Device extends Component {
     @observable packageCreateModalShown = false;
     @observable fileDropped = null;
-    
-    constructor(props) {
-        super(props);
-        this.showPackageCreateModal = this.showPackageCreateModal.bind(this);
-        this.hidePackageCreateModal = this.hidePackageCreateModal.bind(this);
-        this.onFileDrop = this.onFileDrop.bind(this);
-        this.showPackageDetails = this.showPackageDetails.bind(this);
+    @observable activeTabId = 0;
+    @observable ECUselected = false;
+    @observable triggerPackages = false;
+    @observable expandedPackageName = null;
+
+    componentWillUnmount = () => {
+        const { hardwareStore} = this.props.stores;
+        hardwareStore.activeEcu = {
+            hardwareId: null,
+            serial: null,
+            type: null
+        };
     }
-    showPackageCreateModal(files, e) {
+    cancelMtuUpdate = (updateId) => {
+        const {devicesStore} = this.props.stores;
+        let deviceId = devicesStore.device.uuid;
+        let data = {
+            update: updateId,
+            device: deviceId
+        };
+        devicesStore.cancelMtuUpdate(data);
+    }
+    selectEcu = (hardwareId, serial, filepath, type, e) => {
+        if (e) e.preventDefault();
+        const {packagesStore, devicesStore, hardwareStore} = this.props.stores;
+        hardwareStore.activeEcu = {
+            hardwareId: hardwareId,
+            serial: serial,
+            type: type
+        };
+        let expandedPackage = packagesStore._getInstalledPackage(filepath, hardwareId);
+        if (!expandedPackage) {
+            packagesStore.expandedPackage = {
+                unmanaged: true
+            };
+            this.expandedPackageName = null;
+        } else {
+            packagesStore.expandedPackage = expandedPackage;
+            this.expandedPackageName = expandedPackage.id.name;
+        }
+        packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
+        this.triggerPackages = true;
+
+        this.ECUselected = true;
+    }
+    selectQueue = () => {
+        this.ECUselected = false;
+        const { hardwareStore} = this.props.stores;
+        hardwareStore.activeEcu = {
+            hardwareId: null,
+            serial: null,
+            type: null,
+        };
+    }
+    installPackage = (data) => {
+        const {devicesStore, hardwareStore} = this.props.stores;
+        data.hardwareId = hardwareStore.activeEcu.hardwareId;
+        devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
+    }
+    togglePackageAutoUpdate = (packageName, deviceId, isAutoInstallEnabled, e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const {packagesStore, hardwareStore} = this.props.stores;
+        let activeEcuSerial = hardwareStore.activeEcu.serial;
+        if (isAutoInstallEnabled)
+            packagesStore.disablePackageAutoInstall(
+                packageName,
+                deviceId,
+                activeEcuSerial
+            );
+        else
+            packagesStore.enablePackageAutoInstall(
+                packageName,
+                deviceId,
+                activeEcuSerial
+            );
+    }
+    togglePackage = (packageName) => {
+        this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
+    }
+    showPackageCreateModal = (files, e) => {
         if(e) e.preventDefault();
         this.packageCreateModalShown = true;
         this.fileDropped = (files ? files[0] : null);
     }
-    hidePackageCreateModal(e) {
+    hidePackageCreateModal = (e) => {
         if(e) e.preventDefault();
         this.packageCreateModalShown = false;
         this.fileDropped = null;
     }
-    onFileDrop(files) {
+    onFileDrop = (files) => {
         this.showPackageCreateModal(files);
     }
-    showPackageDetails(pack, e) {
+    showPackageDetails = (pack, e) => {
         if(e) e.preventDefault();
         const { packagesStore } = this.props.stores;
         let isPackageUnmanaged = pack === 'unmanaged';
@@ -50,19 +125,20 @@ class Device extends Component {
             packagesStore.expandedPackage = pack;
         }
     }
+    setOverviewPanelActiveTabId = (tabId) => {
+        const {packagesStore, devicesStore} = this.props.stores;
+        this.activeTabId = tabId;
+        if (tabId === 1) {
+            packagesStore.fetchPackagesHistory(devicesStore.device.uuid, packagesStore.packagesHistoryFilter);
+        }
+    }
+
     render() {
-        const { 
-            selectEcu,
-            installPackage,
-            triggerPackages,
-            togglePackageAutoUpdate,
-            expandedPackageName,
-            togglePackage,
-        } = this.props;
         const { devicesStore, packagesStore } = this.props.stores;
         const { device } = devicesStore;
         return (
             <span>
+                <DeviceHeader/>
                 {devicesStore.devicesOneFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
@@ -76,21 +152,33 @@ class Device extends Component {
                                 </div>
                             :
                                 <DeviceHardwarePanel 
-                                    selectEcu={selectEcu}
+                                    selectEcu={this.selectEcu}
                                     onFileDrop={this.onFileDrop}
+                                    ECUselected={this.ECUselected}
+                                    selectQueue={this.selectQueue}
                                 />
                             }
-                            <DeviceSoftwarePanel
-                                togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                onFileDrop={this.onFileDrop}
-                                showPackageDetails={this.showPackageDetails}
-                                triggerPackages={triggerPackages}
-                                expandedPackageName={expandedPackageName}
-                                togglePackage={togglePackage}
-                            />
-                            <DevicePropertiesPanel
-                                installPackage={installPackage}
-                            />
+                            {!this.ECUselected ?
+                                <DeviceOverviewPanel
+                                    cancelMtuUpdate={this.cancelMtuUpdate}
+                                    activeTabId={this.activeTabId}
+                                    setOverviewPanelActiveTabId={this.setOverviewPanelActiveTabId}
+                                />
+                                :
+                                <span>
+                                    <DeviceSoftwarePanel
+                                        togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                                        onFileDrop={this.onFileDrop}
+                                        showPackageDetails={this.showPackageDetails}
+                                        triggerPackages={this.triggerPackages}
+                                        expandedPackageName={this.expandedPackageName}
+                                        togglePackage={this.togglePackage}
+                                    />
+                                    <DevicePropertiesPanel
+                                        installPackage={this.installPackage}
+                                    />
+                                </span>
+                            }
                         </span>
                     :
                         <div className="wrapper-center">
@@ -115,7 +203,6 @@ class Device extends Component {
 
 Device.propTypes = {
     stores: PropTypes.object,
-    selectEcu: PropTypes.func.isRequired,
 }
 
 export default Device;

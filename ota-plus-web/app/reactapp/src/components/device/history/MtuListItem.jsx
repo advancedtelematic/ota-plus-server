@@ -14,12 +14,13 @@ class MtuListItem extends Component {
 		const { device } = devicesStore;
 		const devicePrimaryEcu = device.directorAttributes.primary;
 		const deviceSecondaryEcus = device.directorAttributes.secondary;
-		return (
-			<li className="queue-modal__item">
-				<div className="queue-modal__item-header">
-					<div className="queue-modal__item-update">
+        const errorDevice = item.resultCode > 1 ? item : null;
+        return (
+			<li className="overview-panel__item">
+				<div className="overview-panel__item-header">
+					<div className="overview-panel__item-update">
 						<div>
-							<span id={"update-id-title-" + item.updateId} className="queue-modal__item-title">
+							<span id={"update-id-title-" + item.updateId} className="overview-panel__item-title">
 								Update ID
 		                    </span>
 							<span id={"update-id-" + item.updateId}>
@@ -27,18 +28,18 @@ class MtuListItem extends Component {
 							</span>
 						</div>
 					</div>
-					<div className="queue-modal__item-created">
-						<span id={"received-at-title-" + item.updateId} className="queue-modal__item-title">
+					<div className="overview-panel__item-created">
+						<span id={"received-at-title-" + item.updateId} className="overview-panel__item-title">
 							Received at:
 	                    </span>
 						<span id={"received-at-" + item.updateId}>
-							{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+							{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm A")}
 						</span>
 					</div>
 				</div>
-				<div className="queue-modal__operations">
+				<div className="overview-panel__operations">
 					{_.map(item.operationResult, (result, ecuSerial) => {
-						const error = result.resultCode > 1 ? result : null;
+						const errorECU = result.resultCode > 1 ? result : null;
 						let hardwareId = null;
 						if (devicePrimaryEcu.id === ecuSerial) {
 							hardwareId = devicePrimaryEcu.hardwareId;
@@ -49,44 +50,45 @@ class MtuListItem extends Component {
 						}
 
 						return (
-							<div className="queue-modal__operation" key={ecuSerial}>
-								<div className="queue-modal__operation-info">
-									<div className="queue-modal__operation-info-block">
-										<span id={"ecu-serial-title-" + item.updateId} className="queue-modal__operation-info-title">
+							<div className="overview-panel__operation" key={ecuSerial}>
+								<div className="overview-panel__operation-info">
+									<div className="overview-panel__operation-info-block">
+										<span id={"ecu-serial-title-" + item.updateId} className="overview-panel__operation-info-title">
 											ECU Serial:
 			                            </span>
 										<span id={"ecu-serial-" + item.updateId}>
 											{ecuSerial}
 										</span>
 									</div>
-									<div className="queue-modal__operation-info-block">
-										<span id={"hardwareId-title-" + hardwareId} className="queue-modal__operation-info-title">
+									<div className="overview-panel__operation-info-block">
+										<span id={"hardwareId-title-" + hardwareId} className="overview-panel__operation-info-title">
 											Hardware id:
                                 </span>
 										<span id={"hardwareId-" + hardwareId}>
 											{hardwareId}
 										</span>
 									</div>
-									<div className="queue-modal__operation-info-block">
-										<span id={"target-title-" + item.updateId} className="queue-modal__operation-info-title">
+									<div className="overview-panel__operation-info-block">
+										<span id={"target-title-" + item.updateId} className="overview-panel__operation-info-title">
 											Target:
 			                            </span>
 										<span id={"target-" + item.updateId}>
 											{result.target}
 										</span>
 									</div>
-									<div className="queue-modal__operation-info-block">
-										<span id={"length-title-" + item.updateId} className="queue-modal__operation-info-title">
-											Length:
-			                            </span>
-										<span id={"length-" + item.updateId}>
-											{result.length}
-										</span>
-									</div>
+                                    {/*hidden until result.length is available// hidden until result.length is available*/}
+									{/*<div className="overview-panel__operation-info-block">*/}
+										{/*<span id={"length-title-" + item.updateId} className="overview-panel__operation-info-title">*/}
+											{/*Length:*/}
+			                            {/*</span>*/}
+										{/*<span id={"length-" + item.updateId}>*/}
+											{/*{result.length}*/}
+										{/*</span>*/}
+									{/*</div>*/}
 									{alphaTestEnabled ?
 										<InstallationEvents
 											updateId={item.updateId}
-											error={error}
+											error={errorECU}
 											queue={false}
 										/>
 										:
@@ -94,11 +96,11 @@ class MtuListItem extends Component {
 									}
 
 								</div>
-								<div className="queue-modal__operation-status">
-									<div className={`queue-modal__status-code ${!error ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
-										<span>Result code</span> <span className="queue-modal__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
+								<div className="overview-panel__operation-status">
+									<div className={`overview-panel__status-code ${!errorECU ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
+										<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
 									</div>
-									<div className="queue-modal__status-text">
+									<div className="overview-panel__status-text">
 										<span id={"result-text-" + item.updateId}>{result.resultText}</span>
 									</div>
 								</div>
@@ -106,6 +108,14 @@ class MtuListItem extends Component {
 						);
 					})}
 				</div>
+                <div className="overview-panel__device-status">
+                    <div className={`overview-panel__status-code ${!errorDevice ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
+                        <span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{item.resultCode}</span>
+                    </div>
+                    <div className="overview-panel__status-text">
+                        <span id={"result-text-" + item.resultCode}>{!errorDevice && "Installation successful"}</span>
+                    </div>
+                </div>
 			</li>
 		);
 	}

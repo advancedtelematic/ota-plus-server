@@ -14,9 +14,9 @@ class InstallationEvents extends Component {
     render() {
         const { updateId, error, queue } = this.props;
         const queueInfo = (
-            <div className="queue-modal__operation-info-extended">
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+            <div className="overview-panel__operation-info-extended">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
                         Download start:
                     </span>
@@ -24,8 +24,8 @@ class InstallationEvents extends Component {
                         Pending
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
                         Download completed:
                     </span>
@@ -33,8 +33,8 @@ class InstallationEvents extends Component {
                         Pending
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
                         Installation start:
                     </span>
@@ -42,8 +42,8 @@ class InstallationEvents extends Component {
                         Pending
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
                         Installation completed:
                     </span>
@@ -51,8 +51,8 @@ class InstallationEvents extends Component {
                         Pending
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
                         Installation report available:
                     </span>
@@ -60,15 +60,15 @@ class InstallationEvents extends Component {
                         Pending
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-failure">
+                <div className="overview-panel__operation-info-failure">
                     Failure reason: device not connected
                 </div>
             </div>
         );
         const historyInfo = (
-            <div className="queue-modal__operation-info-extended">
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+            <div className="overview-panel__operation-info-extended">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                         Download start:
                     </span>
@@ -76,8 +76,8 @@ class InstallationEvents extends Component {
                         00:30:45 12/12/17
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                         Download completed:
                     </span>
@@ -85,8 +85,8 @@ class InstallationEvents extends Component {
                         00:40:30 12/12/17
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                         Installation start:
                     </span>
@@ -94,8 +94,8 @@ class InstallationEvents extends Component {
                         00:30:45 12/12/17
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                         Installation completed:
                     </span>
@@ -103,8 +103,8 @@ class InstallationEvents extends Component {
                         00:30:45 12/12/17
                     </span> 
                 </div>
-                <div className="queue-modal__operation-info-ext-block">
-                    <span className="queue-modal__operation-wide">
+                <div className="overview-panel__operation-info-ext-block">
+                    <span className="overview-panel__operation-wide">
                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                         Installation report available:
                     </span>
@@ -113,7 +113,7 @@ class InstallationEvents extends Component {
                     </span> 
                 </div>
                 {error ?
-                    <div className="queue-modal__operation-info-failure">
+                    <div className="overview-panel__operation-info-failure">
                         Failure reason: {error.resultText}
                     </div>
                 :
@@ -122,7 +122,7 @@ class InstallationEvents extends Component {
             </div>
         );
         return (
-            <div className="queue-modal__operation-info-block queue-modal__operation-info-block--more">
+            <div className="overview-panel__operation-info-block overview-panel__operation-info-block--more">
                 <VelocityTransitionGroup 
                     enter={{
                         animation: "slideDown",

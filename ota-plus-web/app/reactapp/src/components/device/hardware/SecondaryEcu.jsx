@@ -5,11 +5,7 @@ import _ from 'underscore';
 
 @observer
 class SecondaryEcu extends Component {
-    constructor(props) {
-        super(props);
-        this.onEcuClick = this.onEcuClick.bind(this);
-    }
-    onEcuClick(ecu, e) {
+    onEcuClick = (ecu, e) => {
         if(e) e.preventDefault();
         const { selectEcu, hideHardwareOverlay, hidePopover } = this.props;
         selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');

@@ -96,18 +96,6 @@
         &__network-info {
             display: flex;
         }
-
-        &__actions {
-            display: flex;
-            align-items: center;
-        }
-
-        &__queue-button {
-            background: transparent;
-            border: 1px solid $home-header-button;
-            color: $home-header-button;
-            padding: 5px 12px;
-        }
     }
 
     .hardware-panel {
@@ -118,6 +106,29 @@
         z-index: 121;
         border-right: 2px solid $panel-delimiter-color;
         background: $devices-groups-bg;
+
+        &__overview {
+            @include transition;
+            color: $devices-group-inactive;
+            padding: 15px;
+            border-left: 4px solid transparent;
+            margin-left: -10px;
+            border-bottom: 1px solid black;
+            color: $devices-group-text;
+            font-size: 14px;
+            cursor: pointer;
+            &--selected {
+                margin-left: 0;
+                border-left-color: $color-mint;
+                color: $color-mint;
+            }
+        }
+
+        &__overview-button {
+            background: transparent;
+            padding: 5px 15px;
+            border: none;
+        }
 
         &__header {
             font-weight: bold;
@@ -233,6 +244,244 @@
         &__no-ecus {
             padding: 10px 25px;
             color: $devices-group-text;
+        }
+    }
+
+    .overview-panel {
+        background: white;
+        height: calc(100% - 100px);
+        overflow-y: auto;
+
+        &__list {
+            height: calc(100vh - 240px);
+            line-height: 22px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        &__empty {
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        &__item {
+            margin: 15px;
+            padding-top: 15px;
+            border-bottom: 1px solid $device-active-item-bg;
+            position: relative;
+            background-color: #F3F3F4;
+        }
+
+        &__item-header {
+            font-size: 14px;
+            padding: 0 25px;
+        }
+
+        &__item-update {
+            font-weight: bold;
+            color: #494949;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &__item-process-status {
+            color: $home-header-button;
+            font-size: 14px;
+            margin-top: 8px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        &__process-dots {
+            width: 15px;
+            height: 10px;
+            margin-left: 2px;
+        }
+
+        &__item-created {
+            color: #888;
+            font-size: 12px;
+        }
+
+        &__item-title {
+            margin-right: 5px;
+        }
+
+        &__operations {
+            margin-top: 15px;
+        }
+
+        &__operation {
+            background-color: #fff;
+            box-shadow: 0 1px 7px #ccc;
+            border-radius: 5px;
+            margin: 15px;
+
+            &:last-child {
+                margin-bottom: 25px;
+            }
+        }
+
+        &__operation-info {
+            padding: 15px 25px;
+        }
+
+        &__operation-status {
+            display: flex;
+        }
+
+        &__pending-status {
+            background-color: $device-pack-queued-bg;
+            color: white;
+            padding: 5px 15px;
+        }
+
+
+        &__operation-info-block {
+            @include textoverflowEllipsis;
+
+            &--more {
+                margin-top: 10px;
+            }
+        }
+
+        &__operation-info-failure {
+            margin-top: 10px;
+        }
+
+        &__operation-info-title {
+            width: 100px;
+            display: inline-block;
+        }
+
+        &__operation-info-extended {
+            margin-bottom: 10px;
+            font-size: 11px;
+        }
+
+        &__operation-info-ext-block {
+            display: flex;
+
+            img {
+                width: 15px;
+                height: 100%;
+                margin-right: 5px;
+            }
+        }
+
+        &__operation-wide {
+            width: 180px;
+            display: flex;
+            align-items: center;
+        }
+
+        &__status-code {
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            border-bottom-left-radius: 5px;
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &--success {
+                background-color: $device-pack-installed-bg;
+            }
+
+            &--error {
+                background-color: $campaigns-cancel-color;
+            }
+        }
+
+        &__status-code-value {
+            padding-left: 10px;
+        }
+
+        &__status-text {
+            color: #fff;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            background-color: #4B4B4B;
+            border-bottom-right-radius: 5px;
+            width: calc(100% - 100px);
+        }
+
+        &__device-status {
+            display: flex;
+            height: 40px;
+        }
+
+        &__cancel-update, &__pending {
+            background: none;
+            border: 0;
+            border-radius: 0;
+            transition: all .2s ease-in;
+            color: $home-grey;
+            font-size: 12px;
+        }
+
+        &__cancel-update {
+            color: $campaigns-cancel-color;
+            font-weight: 400;
+        }
+
+        &__pending-dots {
+            width: 15px;
+        }
+
+        &__status {
+            color: #fff;
+            background: #ccc;
+            padding: 15px 25px;
+            height: 50px;
+            font-size: 14px;
+
+            &--success {
+                background-color: $device-pack-installed-bg;
+            }
+
+            &--pending {
+                background-color: $device-pack-queued-bg;
+            }
+
+            &--error {
+                background-color: $campaigns-cancel-color;
+            }
+        }
+
+        &__tab-item {
+            color: #898B91 !important;
+            font-family: 'Fira Sans', sans-serif !important;
+            width: 175px !important;
+            margin-top: 10px !important;
+
+            &:first-child {
+                margin-left: 10px !important;
+            }
+
+            &--active {
+                color: black !important;
+                background: white !important;
+
+                &:after {
+                    margin: 0 auto;
+                    content: "";
+                    display: block;
+                    width: 100px;
+                    height: 3px;
+                    background-color: $switch-blue-color;
+                }
+            }
+
+            & > div {
+                & > div {
+                    text-transform: none;
+                    height: 40px !important;
+                }
+            }
         }
     }
 
@@ -450,11 +699,12 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 30px;
+            height: 50px;
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
 
             &--green {
                 background-color: $device-pack-installed-bg;
@@ -475,7 +725,7 @@
 
         &__info {
              padding: 35px;
-            height: calc(100% - 30px);
+            height: calc(100% - 50px);
             position: relative;
             display: flex;
             flex-direction: column;
