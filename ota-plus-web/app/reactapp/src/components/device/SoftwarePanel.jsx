@@ -13,7 +13,7 @@ const noSearchResults = "No matching packages found.";
 @observer
 class SoftwarePanel extends Component {
     render() {
-        const { togglePackageAutoUpdate, onFileDrop, showPackageDetails, triggerPackages, expandedPackageName, togglePackage, } = this.props;
+        const { togglePackageAutoUpdate, onFileDrop, showPackageDetails, triggerPackages, expandedPackageName, togglePackage } = this.props;
         const { packagesStore } = this.props.stores;
         return (
             <div className="software-panel">

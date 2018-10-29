@@ -30,41 +30,22 @@ class HardwarePanel extends Component {
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
 
-    constructor(props) {
-        super(props);
-        this.showSecondaryDescription = this.showSecondaryDescription.bind(this);
-        this.hideSecondaryDescription = this.hideSecondaryDescription.bind(this);
-        this.showPopover = this.showPopover.bind(this);
-        this.hidePopover = this.hidePopover.bind(this);
-        this.copyPublicKey = this.copyPublicKey.bind(this);
-        this.resetCopyPublicKey = this.resetCopyPublicKey.bind(this);
-        this.showHardwareOverlay = this.showHardwareOverlay.bind(this);
-        this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);
-        this.showPackageBlacklistModal = this.showPackageBlacklistModal.bind(this);
-        this.hidePackageBlacklistModal = this.hidePackageBlacklistModal.bind(this);
+    onSelectQueue = () => {
+        const { selectQueue } = this.props;
+        selectQueue();
     }
-    componentWillMount() {
-        const { selectEcu } = this.props;
-        const { devicesStore } = this.props.stores;
-        selectEcu(
-            devicesStore._getPrimaryHardwareId(), 
-            devicesStore._getPrimarySerial(), 
-            devicesStore._getPrimaryFilepath(), 
-            'primary'
-        );
-    }
-    showSecondaryDescription(e) {
+    showSecondaryDescription = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.secondaryDescriptionShown = true;
         this.hideHardwareOverlay();
         this.hidePopover();
     }
-    hideSecondaryDescription(e) {
+    hideSecondaryDescription = (e) => {
         if (e) e.preventDefault();
         this.secondaryDescriptionShown = false;
     }
-    showPopover(id, e) {
+    showPopover = (id, e) => {
         e.preventDefault();
         e.stopPropagation();
         const { hideHardwareOverlay } = this.props;
@@ -72,28 +53,28 @@ class HardwarePanel extends Component {
         this.popoverShownFor = id;
         this.hideHardwareOverlay();
     }
-    hidePopover() {
+    hidePopover = () => {
         this.popoverShownFor = false;
         this.resetCopyPublicKey();
     }
-    copyPublicKey(id) {
+    copyPublicKey = (id) => {
         this.publicKeyCopiedFor = id;
     }
-    resetCopyPublicKey() {
+    resetCopyPublicKey = () => {
         this.publicKeyCopiedFor = false;
     }
-    showHardwareOverlay(e) {
+    showHardwareOverlay = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.hardwareOverlayShown = true;
         this.hardwareOverlayAnchor = e.currentTarget;
         this.hidePopover();
     }
-    hideHardwareOverlay(e) {
+    hideHardwareOverlay = (e) => {
         if(e) e.preventDefault();
         this.hardwareOverlayShown = false;        
     }
-    showPackageBlacklistModal(name, version, mode, e) {
+    showPackageBlacklistModal = (name, version, mode, e) => {
         if(e) e.preventDefault();
         this.packageBlacklistModalShown = true;
         this.packageBlacklistAction = {
@@ -103,17 +84,19 @@ class HardwarePanel extends Component {
         };
         this.hideHardwareOverlay();
     }
-    hidePackageBlacklistModal(e) {
+    hidePackageBlacklistModal = (e) => {
         const { packagesStore } = this.props.stores;
         if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
         packagesStore._resetBlacklistActions();
     }
+
     render() {
         const { 
             selectEcu, 
-            onFileDrop 
+            onFileDrop,
+            ECUselected,
         } = this.props;
         const { 
             devicesStore, 
@@ -181,6 +164,9 @@ class HardwarePanel extends Component {
         );
         return (
             <div className="hardware-panel">
+                <div className ={"hardware-panel__overview " + (!ECUselected ? "hardware-panel__overview--selected" : "")} onClick={this.onSelectQueue}>
+                    <button className={"hardware-panel__overview-button"}>OVERVIEW</button>
+                </div>
                 <div className="hardware-panel__header">
                     {title}
                 </div>

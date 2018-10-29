@@ -14,37 +14,27 @@ class Header extends Component {
     @observable editNameShown = false;
     @observable headerMenuShown = false;
 
-    constructor(props) {
-        super(props);
-        this.deleteDevice = this.deleteDevice.bind(this);
-        this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
-        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
-        this.showEditName = this.showEditName.bind(this);
-        this.hideEditName = this.hideEditName.bind(this);
-        this.hideHeaderMenu = this.hideHeaderMenu.bind(this);
-        this.toggleHeaderMenu = this.toggleHeaderMenu.bind(this);
-    }
-    showDeleteConfirmation(e) {
+    showDeleteConfirmation = (e) => {
         if(e) e.preventDefault();
         this.deleteConfirmationShown = true;
     }
-    hideDeleteConfirmation() {
+    hideDeleteConfirmation = () => {
         this.deleteConfirmationShown = false;
     }
-    showEditName(e) {
+    showEditName = (e) => {
         if(e) e.preventDefault();
         this.editNameShown = true;
     }
-    hideEditName() {
+    hideEditName = () => {
         this.editNameShown = false;
     }
-    hideHeaderMenu() {
+    hideHeaderMenu = () => {
         this.headerMenuShown = false;
     }
-    toggleHeaderMenu() {
+    toggleHeaderMenu = () => {
         this.headerMenuShown = true;
     }
-    deleteDevice(e) {
+    deleteDevice = (e) => {
         if(e) e.preventDefault();
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
@@ -53,7 +43,6 @@ class Header extends Component {
         });
     }
     render() {
-        const { showQueueModal, queueButtonRef } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const lastSeenDate = new Date(device.lastSeen);
@@ -128,9 +117,6 @@ class Header extends Component {
                                     </div>
                                 </div>
                                 <div className="page-header__actions">
-                                    <button className="page-header__queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
-                                        Queue
-                                    </button>
                                     <div className="dots relative" id="device-actions" onClick={this.toggleHeaderMenu}>
                                         <span></span>
                                         <span></span>
@@ -206,8 +192,6 @@ class Header extends Component {
 
 Header.propTypes = {
     stores: PropTypes.object,
-    showQueueModal: PropTypes.func.isRequired,
-    queueButtonRef: PropTypes.func.isRequired,
 }
 
 Header.wrappedComponent.contextTypes = {
