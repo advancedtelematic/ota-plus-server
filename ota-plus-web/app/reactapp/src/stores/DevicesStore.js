@@ -223,15 +223,16 @@ export default class DevicesStore {
 
     fetchDeviceNetworkInfo(id, isFromWs = false) {
         resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
-        return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
-            .then((response) => {
-                this.deviceNetworkInfo = response.data;
-                this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
-            });
-
+        if (!isFromWs || (isFromWs && this.device.uuid === id)) {
+            return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
+                .then((response) => {
+                    this.deviceNetworkInfo = response.data;
+                    this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
+                })
+                .catch((error) => {
+                    this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
+                });
+        }
     }
 
     createMultiTargetUpdate(data, id) {
