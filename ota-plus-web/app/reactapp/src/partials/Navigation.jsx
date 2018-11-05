@@ -8,7 +8,17 @@ import TabNavigation from './TabNavigation';
 
 @inject("stores")
 @observer
-class Navigation extends Component {
+export default class Navigation extends Component {
+    static propTypes = {
+        location: PropTypes.string.isRequired,
+        toggleSWRepo: PropTypes.func.isRequired,
+        uiUserProfileEdit: PropTypes.bool.isRequired,
+        switchToSWRepo: PropTypes.bool.isRequired,
+        uiUserProfileMenu: PropTypes.bool.isRequired,
+        uiCredentialsDownload: PropTypes.bool.isRequired,
+        alphaPlusEnabled: PropTypes.bool.isRequired,
+        startWhatsNewPopover: PropTypes.func.isRequired,
+    };
 
     handleClick = (e) => {
         const { startWhatsNewPopover } = this.props;
@@ -16,7 +26,6 @@ class Navigation extends Component {
         e && e.preventDefault();
         newFeaturesAvailable && startWhatsNewPopover();
     };
-
 
     render() {
         const {
@@ -67,15 +76,14 @@ class Navigation extends Component {
                                     {
                                         (whatsNewPostponed || whatsNewPopOver) &&
                                             <li className="text-link highlighted" ref="linkWhatsNew">
-                                                <a href="#" onClick={ this.handleClick } target="_blank" id="whats-new-link">WHAT's NEW</a>
+                                                <a href="#" onClick={ this.handleClick } target="_blank" id="whats-new-link">WHAT'S NEW</a>
                                                 <span className="whats-new-badge"></span>
                                             </li>
-
                                     }
                                     {
                                         whatsNewShowPage &&
                                             <li className="text-link highlighted" ref="linkWhatsNew">
-                                                <Link to="/whats-new" activeClassName="active" id="link-impactanalysis">WHAT's NEW</Link>
+                                                <Link to="/whats-new" activeClassName="active" id="whats-new-link">WHAT'S NEW</Link>
                                             </li>
                                     }
                                     <li className={ 'separator' }>|</li>
@@ -117,7 +125,3 @@ class Navigation extends Component {
         );
     }
 }
-
-Navigation.propTypes = {};
-
-export default Navigation;
