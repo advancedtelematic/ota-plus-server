@@ -52,7 +52,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     }
                     break;
                 case "DeviceSystemInfoChanged":
-                    stores.devicesStore.fetchDeviceNetworkInfo(data.uuid);
+                    stores.devicesStore.fetchDeviceNetworkInfo(data.uuid, {isFromWs: true});
                     break;
                 case "DeviceEventMessage":
                     stores.devicesStore._updateStatus(data.deviceUuid, "installing");
