@@ -10,7 +10,7 @@ import { InfiniteScroll } from '../../../utils';
 class MtuList extends Component {
     render() {
         const { device } = this.props;
-        const { packagesStore } = this.props.stores;
+        const { packagesStore, devicesStore } = this.props.stores;
         const emptyHistory = (
             <div className="wrapper-center">
                 <span className={'overview-panel__empty'}>Multi target update history is empty.</span>
@@ -29,10 +29,16 @@ class MtuList extends Component {
                 >
                     {packagesStore.packagesHistory.length ?
                         _.map(packagesStore.packagesHistory, (historyItem, index) => {
+                            let itemEvents = devicesStore.deviceEvents.filter(el => {
+                               if (el.payload.correlationId) {
+                                   return el.payload.correlationId.search(historyItem.updateId) >= 0
+                               }
+                            })
                             return (
                                 <MtuListItem
                                     item={historyItem}
                                     key={index}
+                                    events={itemEvents}
                                 />
                             );
                         })

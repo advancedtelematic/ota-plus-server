@@ -363,17 +363,31 @@
         &__operation-info-ext-block {
             display: flex;
 
-            img {
-                width: 15px;
-                height: 100%;
-                margin-right: 5px;
-            }
         }
 
         &__operation-wide {
-            width: 180px;
             display: flex;
             align-items: center;
+            width: 180px;;
+
+        }
+        &__operation-icon {
+            width: 14px;
+            height: 14px;
+            margin-right: 5px;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            &--Error {
+                background-image: url($device-status-error);
+            }
+
+            &--Pending {
+                background-image: url($device-status-unknown);
+            }
+
+            &--Success {
+                background-image: url($device-status-success);
+            }
         }
 
         &__status-code {

@@ -2,14 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import InstallationEvents from '../InstallationEvents';
 import _ from 'underscore';
+import Loader from "../../../partials/Loader";
 
 @inject("stores")
 @observer
 class MtuListItem extends Component {
+
     render() {
-        const { item, serial, updateId, status, length, cancelMtuUpdate, showSequencer } = this.props;
-        const { featuresStore, devicesStore } = this.props.stores;
-        const { alphaTestEnabled } = featuresStore;
+        const { item, serial, updateId, status, length, cancelMtuUpdate, showSequencer, events } = this.props;
+        const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const devicePrimaryEcu = device.directorAttributes.primary;
         const deviceSecondaryEcus = device.directorAttributes.secondary;
@@ -26,7 +27,6 @@ class MtuListItem extends Component {
         const hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className="overview-panel__item">
-
                 <div className="overview-panel__item-header">
                     <div className="overview-panel__item-update">
                         <div>
@@ -62,15 +62,15 @@ class MtuListItem extends Component {
                         <div className="overview-panel__operation-info">
                             <div className="overview-panel__operation-info-block">
                                 <span id={"ecu-serial-title-" + updateId} className="overview-panel__operation-info-title">
-                                    ECU Serial:
+                                    ECU serial:
                                 </span>
                                 <span id={"ecu-serial-" + updateId}>
-                                    {serial}
-                                </span>
+                            {serial}
+                        </span>
                             </div>
                             <div className="overview-panel__operation-info-block">
                                 <span id={"ecu-serial-title-" + updateId} className="overview-panel__operation-info-title">
-                                    Hardware id:
+                                    Hardware ID:
                                 </span>
                                 <span id={"ecu-serial-" + updateId}>
                                     {hardwareId}
@@ -84,21 +84,18 @@ class MtuListItem extends Component {
                                     {hash}
                                 </span>
                             </div>
-                            {/*hidden until result.length is available// hidden until result.length is available*/}
-                            {/*<div className="overview-panel__operation-info-block">*/}
-                                {/*<span id={"length-title-" + updateId} className="overview-panel__operation-info-title">*/}
-                                    {/*Length:*/}
-                                {/*</span>*/}
-                                {/*<span id={"length-" + updateId}>*/}
-                                    {/*{length}*/}
-                                {/*</span>*/}
-                            {/*</div>*/}
-                            {alphaTestEnabled ?
-                                <InstallationEvents
-                                    updateId={updateId}
-                                    error={null}
-                                    queue={true}
-                                />
+                            {events.length ?
+                                devicesStore.eventsFetchAsync.isFetching ?
+                                    <div className="wrapper-center">
+                                        <Loader/>
+                                    </div>
+                                    :
+                                    <InstallationEvents
+                                        updateId={updateId}
+                                        error={null}
+                                        queue={true}
+                                        events={events}
+                                    />
                                 :
                                 null
                             }

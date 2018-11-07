@@ -1,124 +1,99 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 import { observable } from 'mobx';
 import { VelocityTransitionGroup } from 'velocity-react';
+import moment from "moment";
+import Loader from "../../partials/Loader";
 
+@inject("stores")
 @observer
 class InstallationEvents extends Component {
     @observable showMore = false;
-    
     toggleMore = (e) => {
         e.preventDefault();
         this.showMore = !this.showMore;
     }
     render() {
-        const { updateId, error, queue } = this.props;
-        const queueInfo = (
+        const { updateId, events } = this.props;
+        let preparedEvents = {
+            ecuDownloadStarted: {
+                time: 'Pending',
+                status: 'Pending'
+            },
+            ecuDownloadCompleted: {
+                time: 'Pending',
+                status: 'Pending'
+            },
+            ecuInstallationStarted: {
+                time: 'Pending',
+                status: 'Pending'
+            },
+            ecuInstallationCompleted: {
+                time: 'Pending',
+                status: 'Pending'
+            },
+        };
+
+        events && events.map(el => {
+            let time = moment(el.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A");
+            switch (el.eventType.id) {
+                case 'EcuDownloadStarted':
+                    preparedEvents.ecuDownloadStarted.time = time;
+                    preparedEvents.ecuDownloadStarted.status = "Success";
+                    break;
+                case 'EcuDownloadCompleted':
+                    preparedEvents.ecuDownloadCompleted.time = time;
+                    preparedEvents.ecuDownloadCompleted.status = el.payload.success ? "Success" : 'Error';
+                    break;
+                case 'EcuInstallationStarted':
+                    preparedEvents.ecuInstallationStarted.time = time;
+                    preparedEvents.ecuInstallationStarted.status = "Success";
+                    break;
+                case 'EcuInstallationCompleted':
+                    preparedEvents.ecuInstallationCompleted.time = time;
+                    preparedEvents.ecuInstallationCompleted.status = el.payload.success ? "Success" : 'Error';
+                    break;
+            }
+        });
+
+        const eventsInfo = (
             <div className="overview-panel__operation-info-extended">
                 <div className="overview-panel__operation-info-ext-block">
                     <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
+                        <div className={"overview-panel__operation-icon overview-panel__operation-icon--" + preparedEvents.ecuDownloadStarted.status} id={"status-" + preparedEvents.ecuDownloadStarted.status}></div>
                         Download start:
                     </span>
                     <span id="download-start-time">
-                        Pending
+                        {preparedEvents.ecuDownloadStarted.time}
                     </span> 
                 </div>
                 <div className="overview-panel__operation-info-ext-block">
                     <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
-                        Download completed:
+                        <div className={"overview-panel__operation-icon overview-panel__operation-icon--" + preparedEvents.ecuDownloadCompleted.status} id={"status-" + preparedEvents.ecuDownloadCompleted.status}></div>
+                        {preparedEvents.ecuDownloadCompleted.status !== 'Error' ? "Download completed:" : "Download failed:"}
                     </span>
                     <span id="download-completed-time">
-                        Pending
+                       {preparedEvents.ecuDownloadCompleted.time}
                     </span> 
                 </div>
                 <div className="overview-panel__operation-info-ext-block">
                     <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
+                        <div className={"overview-panel__operation-icon overview-panel__operation-icon--" + preparedEvents.ecuInstallationStarted.status} id={"status-" + preparedEvents.ecuInstallationStarted.status}></div>
                         Installation start:
                     </span>
                     <span id="installation-start-time">
-                        Pending
-                    </span> 
+                        {preparedEvents.ecuInstallationStarted.time}
+                    </span>
                 </div>
                 <div className="overview-panel__operation-info-ext-block">
                     <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
-                        Installation completed:
+                        <div className={"overview-panel__operation-icon overview-panel__operation-icon--" + preparedEvents.ecuInstallationCompleted.status} id={"status-" + preparedEvents.ecuInstallationCompleted.status}></div>
+                        {preparedEvents.ecuInstallationCompleted.status !== 'Error' ? "Installation completed:" : "Installation failed:"}
                     </span>
                     <span id="installation-completed-time">
-                        Pending
-                    </span> 
-                </div>
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/grey_questionmark.svg" alt="Icon" />
-                        Installation report available:
+                        {preparedEvents.ecuInstallationCompleted.time}
                     </span>
-                    <span id="installation-report-time">
-                        Pending
-                    </span> 
                 </div>
-                <div className="overview-panel__operation-info-failure">
-                    Failure reason: device not connected
-                </div>
-            </div>
-        );
-        const historyInfo = (
-            <div className="overview-panel__operation-info-extended">
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
-                        Download start:
-                    </span>
-                    <span id="download-start-time">
-                        00:30:45 12/12/17
-                    </span> 
-                </div>
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
-                        Download completed:
-                    </span>
-                    <span id="download-completed-time">
-                        00:40:30 12/12/17
-                    </span> 
-                </div>
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
-                        Installation start:
-                    </span>
-                    <span id="installation-start-time">
-                        00:30:45 12/12/17
-                    </span> 
-                </div>
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
-                        Installation completed:
-                    </span>
-                    <span id="installation-completed-time">
-                        00:30:45 12/12/17
-                    </span> 
-                </div>
-                <div className="overview-panel__operation-info-ext-block">
-                    <span className="overview-panel__operation-wide">
-                        <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
-                        Installation report available:
-                    </span>
-                    <span id="installation-report-time">
-                        00:30:45 12/12/17
-                    </span> 
-                </div>
-                {error ?
-                    <div className="overview-panel__operation-info-failure">
-                        Failure reason: {error.resultText}
-                    </div>
-                :
-                    null
-                }
             </div>
         );
         return (
@@ -132,14 +107,7 @@ class InstallationEvents extends Component {
                         duration: 400
                     }}
                 >
-                    {this.showMore ?
-                        queue ?
-                            queueInfo
-                        :
-                            historyInfo
-                    :
-                        null
-                    }
+                    {this.showMore && eventsInfo}
                 </VelocityTransitionGroup>
                 <a href="#" className="add-button" id={"toggle-more-button-" + updateId} onClick={this.toggleMore}>
                     <span>
