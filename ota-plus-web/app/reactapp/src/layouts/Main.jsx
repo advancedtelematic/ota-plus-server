@@ -188,8 +188,8 @@ class Main extends Component {
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
-        const { alphaPlusEnabled, whatsNewPopOver } = this.props.stores.featuresStore;
-
+        const { userStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;
         return (
             <span>
                 <Navigation
@@ -235,7 +235,7 @@ class Main extends Component {
                     />
                 </div>
                 {
-                    (whatsNewPopOver || this.showWhatsNewPopover) &&
+                    (userStore._isTermsAccepted() && (whatsNewPopOver || this.showWhatsNewPopover)) &&
                     <div className="whats-new-keynotes">
                         <WhatsNewPopover
                             hide={ this.hideWhatsNew }
