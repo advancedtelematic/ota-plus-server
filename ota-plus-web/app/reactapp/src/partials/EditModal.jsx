@@ -31,7 +31,8 @@ class EditModal extends Component {
         const formData = serialize(document.querySelector('#edit-name-form'), { hash: true });
         devicesStore.renameDevice(this.props.device.uuid, {
             deviceName: formData.deviceName,
-            deviceType: "Other"
+            deviceType: "Other",
+            deviceId: this.props.device.deviceId,
         });
     }
     handleRenameResponse() {
