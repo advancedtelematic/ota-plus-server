@@ -53,15 +53,6 @@ class Overlay extends Component {
         const { hideHardwareOverlay, shown, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
         const { hardwareStore, packagesStore } = this.props.stores;
         let content = (
-            hardwareStore.hardwareFetchAsync.isFetching ?
-                <div className="wrapper-center">
-                    <Loader />
-                </div>
-            : (isObservableArray(hardwareStore.hardware) ? !hardwareStore.hardware.length : !Object.keys(hardwareStore.hardware).length) ?
-                <div className="wrapper-center">
-                    {noHardwareReported}
-                </div>
-            :
                 <div id="hardware-overlay">
                     <SubHeader>
                         <div className="nav">
@@ -95,7 +86,16 @@ class Overlay extends Component {
                             
                         </Form>
                     </SubHeader>
-                    {this.hardwareInfoShown ?                        
+                    {this.hardwareInfoShown ?
+                            hardwareStore.hardwareFetchAsync.isFetching ?
+                                <div className="wrapper-center">
+                                    <Loader />
+                                </div>
+                                : (isObservableArray(hardwareStore.hardware) ? !hardwareStore.hardware.length : !Object.keys(hardwareStore.hardware).length) ?
+                                <div className="wrapper-center">
+                                    {noHardwareReported}
+                                </div>
+                                :
                         <div className="hardware-details">
                             <DeviceHardwareReportedList
                                 hardware={hardwareStore.filteredHardware}
