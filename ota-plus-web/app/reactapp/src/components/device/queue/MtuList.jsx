@@ -30,6 +30,11 @@ class MtuQueueList extends Component {
                         <ul className={"overview-panel__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
                             {_.map(devicesStore.multiTargetUpdates, (update, index) => {
                                 return _.map(update.targets, (target, serial) => {
+                                let itemEvents = devicesStore.deviceEvents.filter(el => {
+                                    if (el.payload.correlationId) {
+                                        return el.payload.correlationId.search(update.updateId) >= 0
+                                    }
+                                });
                                     return (
                                         <MtuListItem
                                             item={target}
@@ -40,6 +45,7 @@ class MtuQueueList extends Component {
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             showSequencer={showSequencer}
                                             key={serial}
+                                            events={itemEvents}
                                         />
                                     );
                                 });

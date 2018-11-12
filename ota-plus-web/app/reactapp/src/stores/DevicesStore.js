@@ -38,6 +38,7 @@ export default class DevicesStore {
     @observable mtuCreateAsync = {};
     @observable mtuFetchAsync = {};
     @observable mtuCancelAsync = {};
+    @observable eventsFetchAsync = {};
     @observable devices = [];
     @observable devicesTotalCount = null;
     @observable devicesInitialTotalCount = null;
@@ -48,6 +49,7 @@ export default class DevicesStore {
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
     @observable device = {};
+    @observable deviceEvents = {};
     @observable deviceNetworkInfo = {
         local_ipv4: null,
         mac: null,
@@ -76,6 +78,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
+        resetAsync(this.eventsFetchAsync);
         this.devicesLimit = 30;
     }
 
@@ -301,6 +304,18 @@ export default class DevicesStore {
             });
     }
 
+    fetchEvents(id, async = 'eventsFetchAsync') {
+        resetAsync(this[async], true);
+        return axios.get(API_DEVICES_SEARCH + '/' + id + '/events')
+            .then((response) => {
+                this.deviceEvents = response.data;
+                this[async] = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this[async] = handleAsyncError(error);
+            });
+    }
+
     _findMtu(id) {
         return this.multiTargetUpdates.find(update => update.device === id);
     }
@@ -499,6 +514,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
+        resetAsync(this.eventsFetchAsync);
         resetAsync(this.deviceCurrentStatusFetchAsync);
         this.devices = [];
         this.devicesTotalCount = null;
