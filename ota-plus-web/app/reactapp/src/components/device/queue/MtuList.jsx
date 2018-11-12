@@ -19,7 +19,7 @@ class MtuQueueList extends Component {
         );
         return (
             <div>
-                {devicesStore.mtuFetchAsync.isFetching || devicesStore.mtuCreateAsync.isFetching ?
+                {devicesStore.mtuFetchAsync.isFetching || devicesStore.mtuCreateAsync.isFetching || devicesStore.eventsFetchAsync.isFetching ?
                     <ul className="overview-panel__list">
                         <div className="wrapper-center">
                             <Loader />
@@ -29,7 +29,6 @@ class MtuQueueList extends Component {
                     devicesStore.multiTargetUpdates.length ?
                         <ul className={"overview-panel__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
                             {_.map(devicesStore.multiTargetUpdates, (update, index) => {
-                                return _.map(update.targets, (target, serial) => {
                                 let itemEvents = devicesStore.deviceEvents.filter(el => {
                                     if (el.payload.correlationId) {
                                         return el.payload.correlationId.search(update.updateId) >= 0
@@ -37,18 +36,15 @@ class MtuQueueList extends Component {
                                 });
                                     return (
                                         <MtuListItem
-                                            item={target}
-                                            serial={serial}
+                                            key={index}
+                                            targets={update.targets}
                                             updateId={update.updateId}
                                             status={update.status}
-                                            length={target.image.fileinfo.length}
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             showSequencer={showSequencer}
-                                            key={serial}
                                             events={itemEvents}
                                         />
                                     );
-                                });
                             })}
                         </ul>
                 :
