@@ -92,28 +92,27 @@ class MtuListItem extends Component {
 										:
 										null
 									}
-
 								</div>
-								<div className="overview-panel__operation-status">
-									<div className={`overview-panel__status-code ${!errorECU ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
-										<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
-									</div>
-									<div className="overview-panel__status-text">
-										<span id={"result-text-" + item.updateId}>{result.resultText}</span>
-									</div>
-								</div>
-							</div>
-						);
-					})}
+							  	<div className="overview-panel__operation-status">
+								  	<div className={`overview-panel__status-code ${!errorECU ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
+									  	<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
+								  	</div>
+								  	<div className="overview-panel__status-text">
+									  	<span id={"result-text-" + item.updateId}>{result.resultText}</span>
+								  	</div>
+							  	</div>
+						  	</div>
+					  	);
+				  	})}
+			  	</div>
+				<div className="overview-panel__device-status">
+					<div className={`overview-panel__status-code ${!errorDevice ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
+						<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{item.resultCode}</span>
+					</div>
+					<div className="overview-panel__status-text">
+						<span id={"result-text-" + item.resultCode}>{!errorDevice && "Installation successful"}</span>
+					</div>
 				</div>
-                <div className="overview-panel__device-status">
-                    <div className={`overview-panel__status-code ${!errorDevice ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
-                        <span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{item.resultCode}</span>
-                    </div>
-                    <div className="overview-panel__status-text">
-                        <span id={"result-text-" + item.resultCode}>{!errorDevice && "Installation successful"}</span>
-                    </div>
-                </div>
 			</li>
 		);
 	}
