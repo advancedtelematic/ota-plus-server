@@ -19,6 +19,7 @@ class Device extends Component {
         packagesStore.fetchPackages();
         devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
         devicesStore.fetchMultiTargetUpdates(this.props.params.id);
+        devicesStore.fetchEvents(this.props.params.id);
     }
     componentWillUnmount() {
         const {packagesStore, devicesStore, hardwareStore} = this.props.stores;

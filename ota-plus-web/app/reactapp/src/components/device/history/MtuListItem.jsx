@@ -3,14 +3,14 @@ import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import moment from 'moment';
 import InstallationEvents from '../InstallationEvents';
+import Loader from "../../../partials/Loader";
 
 @inject("stores")
 @observer
 class MtuListItem extends Component {
 	render() {
-		const { item } = this.props;
-		const { featuresStore, devicesStore } = this.props.stores;
-		const { alphaTestEnabled } = featuresStore;
+		const { item, events } = this.props;
+		const { devicesStore } = this.props.stores;
 		const { device } = devicesStore;
 		const devicePrimaryEcu = device.directorAttributes.primary;
 		const deviceSecondaryEcus = device.directorAttributes.secondary;
@@ -54,7 +54,7 @@ class MtuListItem extends Component {
 								<div className="overview-panel__operation-info">
 									<div className="overview-panel__operation-info-block">
 										<span id={"ecu-serial-title-" + item.updateId} className="overview-panel__operation-info-title">
-											ECU Serial:
+											ECU serial:
 			                            </span>
 										<span id={"ecu-serial-" + item.updateId}>
 											{ecuSerial}
@@ -62,7 +62,7 @@ class MtuListItem extends Component {
 									</div>
 									<div className="overview-panel__operation-info-block">
 										<span id={"hardwareId-title-" + hardwareId} className="overview-panel__operation-info-title">
-											Hardware id:
+											Hardware ID:
                                 </span>
 										<span id={"hardwareId-" + hardwareId}>
 											{hardwareId}
@@ -76,20 +76,18 @@ class MtuListItem extends Component {
 											{result.target}
 										</span>
 									</div>
-                                    {/*hidden until result.length is available// hidden until result.length is available*/}
-									{/*<div className="overview-panel__operation-info-block">*/}
-										{/*<span id={"length-title-" + item.updateId} className="overview-panel__operation-info-title">*/}
-											{/*Length:*/}
-			                            {/*</span>*/}
-										{/*<span id={"length-" + item.updateId}>*/}
-											{/*{result.length}*/}
-										{/*</span>*/}
-									{/*</div>*/}
-									{alphaTestEnabled ?
+									{events.length ?
+                                        devicesStore.eventsFetchAsync.isFetching ?
+                                            <div className="wrapper-center">
+                                                <Loader/>
+                                            </div>
+                                            :
+
 										<InstallationEvents
 											updateId={item.updateId}
 											error={errorECU}
 											queue={false}
+											events={events}
 										/>
 										:
 										null
