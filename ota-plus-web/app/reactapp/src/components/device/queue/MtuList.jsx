@@ -5,7 +5,7 @@ import { Loader } from '../../../partials';
 import MtuListItem from './MtuListItem';
 
 @inject("stores")
-@observer    
+@observer
 class MtuQueueList extends Component {
     render() {
         const { cancelMtuUpdate, showSequencer } = this.props;
@@ -31,14 +31,14 @@ class MtuQueueList extends Component {
                             {_.map(devicesStore.multiTargetUpdates, (update, index) => {
                                 let itemEvents = devicesStore.deviceEvents.filter(el => {
                                     if (el.payload.correlationId) {
-                                        return el.payload.correlationId.search(update.updateId) >= 0
+                                        return el.payload.correlationId === update.correlationId
                                     }
                                 });
                                     return (
                                         <MtuListItem
                                             key={index}
                                             targets={update.targets}
-                                            updateId={update.updateId}
+                                            updateId={update.correlationId}
                                             status={update.status}
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             showSequencer={showSequencer}
@@ -47,8 +47,8 @@ class MtuQueueList extends Component {
                                     );
                             })}
                         </ul>
-                :
-                    emptyQueue
+                    :
+                        emptyQueue
                 }
             </div>
         );
