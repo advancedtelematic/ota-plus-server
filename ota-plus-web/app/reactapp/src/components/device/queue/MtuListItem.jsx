@@ -58,6 +58,7 @@ class MtuListItem extends Component {
                             hardwareId = serialFromSecondary.hardwareId;
                         }
                         const hash = target.image.fileinfo.hashes.sha256;
+                        const length = target.image.fileinfo.length;
                         return (
                             <div className="overview-panel__operation" key={hash}>
                                 <div className="overview-panel__operation-info">
@@ -88,6 +89,16 @@ class MtuListItem extends Component {
                                                 {hash}
                                             </span>
                                     </div>
+                                    {length !== 0 &&
+                                        <div className="overview-panel__operation-info-block">
+                                            <span id={"length-title-" + updateId} className="overview-panel__operation-info-title">
+                                                Length:
+                                            </span>
+                                            <span id={"length-" + updateId}>
+                                                {length}
+                                            </span>
+                                        </div>
+                                    }
                                     {events.length ?
                                         devicesStore.eventsFetchAsync.isFetching ?
                                             <div className="wrapper-center">
