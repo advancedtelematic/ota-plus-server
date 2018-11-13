@@ -76,6 +76,16 @@ class MtuListItem extends Component {
 											{result.target}
 										</span>
 									</div>
+                                    {result.length !== 0 &&
+										<div className="overview-panel__operation-info-block">
+											<span id={"length-title-" + item.updateId} className="overview-panel__operation-info-title">
+												Length:
+											</span>
+											<span id={"length-" + item.updateId}>
+												{result.length}
+											</span>
+										</div>
+                                    }
 									{events.length ?
                                         devicesStore.eventsFetchAsync.isFetching ?
                                             <div className="wrapper-center">
