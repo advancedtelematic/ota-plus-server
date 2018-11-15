@@ -33,7 +33,7 @@ class MtuList extends Component {
                                if (el.payload.correlationId) {
                                    return el.payload.correlationId.search(historyItem.updateId) >= 0
                                }
-                            })
+                            });
                             return (
                                 <MtuListItem
                                     item={historyItem}
