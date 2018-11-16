@@ -24,7 +24,9 @@ import {
     API_PACKAGES_COUNT_INSTALLED_ECUS,
     API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE,
     API_PACKAGES_COMMENTS,
-    API_DELETE_PACKAGE
+    API_DELETE_PACKAGE,
+    API_UPDATES_SEARCH,
+    API_CAMPAIGNS_INDIVIDUAL_FETCH
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -483,14 +485,55 @@ export default class PackagesStore {
             this.packagesHistoryCurrentPage = 0;
         }
         this.packagesHistoryFilter = filter;
-        return axios.get(API_PACKAGES_DIRECTOR_DEVICE_HISTORY + '/' + id + '?limit=' + this.packagesHistoryLimit + 
-            '&offset=' + this.packagesHistoryCurrentPage * this.packagesHistoryLimit)
+        return axios.get(API_PACKAGES_DEVICE_HISTORY + '/' + id + '/installation_history' + '?limit=' + this.packagesHistoryLimit )
             .then(function(response) {
                 let data = response.data.values;
-                this.packagesHistory = _.uniq(this.packagesHistory.concat(data), item => item.updateId);
-                this.packagesHistoryCurrentPage++;
-                this.packagesHistoryTotalCount = response.data.total;
-                this._preparePackagesHistory();
+                let after = _.after(data.length, () => {
+                    this.packagesHistoryCurrentPage++;
+                    this.packagesHistoryTotalCount = response.data.total;
+                    this.packagesHistory = _.uniq(this.packagesHistory.concat(data), item => item.correlationId);
+                    this._preparePackagesHistory();
+                }, this);
+                _.each(data, (item, index) => {
+                    if(item.correlationId && item.correlationId.search('urn:here-ota:campaign:')>=0) {
+                        let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
+                        let afterCampaign = _.after(data.values.length, () => {
+                            axios.get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
+                                .then( (response) => {
+                                    let update = response.data;
+                                    item.campaign = Object.assign(
+                                        item.campaign,
+                                        {update: {
+                                                id: update.uuid,
+                                                description: update.description,
+                                                name: update.name,
+                                            }}
+                                    );
+                                    after();
+                                }).catch( () => {
+                                    after();
+                            });
+                        }, this);
+
+                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                            .then( (response) => {
+                                let campaign = response.data;
+                                item.campaign = {
+                                    id: campaign.id,
+                                    name: campaign.name,
+                                    update: {
+                                        id: campaign.update
+                                    }
+                                };
+                                afterCampaign();
+                            }).catch( () => {
+                                afterCampaign();
+                        });
+                    }
+                    else {
+                        after();
+                    }
+                });
                 this.packagesHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
