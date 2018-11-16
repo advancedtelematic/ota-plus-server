@@ -37,9 +37,7 @@ class MtuQueueList extends Component {
                                     return (
                                         <MtuListItem
                                             key={index}
-                                            targets={update.targets}
-                                            updateId={update.correlationId}
-                                            status={update.status}
+                                            update={update}
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             showSequencer={showSequencer}
                                             events={itemEvents}
@@ -58,4 +56,5 @@ MtuQueueList.propTypes = {
     stores: PropTypes.object,
     cancelMtuUpdate: PropTypes.func.isRequired,
 }
+
 export default MtuQueueList;

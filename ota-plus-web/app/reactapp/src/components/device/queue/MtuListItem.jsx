@@ -3,102 +3,154 @@ import { observer, inject } from 'mobx-react';
 import InstallationEvents from '../InstallationEvents';
 import _ from 'underscore';
 import Loader from "../../../partials/Loader";
+import ReactTooltip from "react-tooltip";
 
 @inject("stores")
 @observer
 class MtuListItem extends Component {
 
     render() {
-        const { targets, updateId, status, cancelMtuUpdate, showSequencer, events } = this.props;
+        const { update, cancelMtuUpdate, showSequencer, events } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const devicePrimaryEcu = device.directorAttributes.primary;
         const deviceSecondaryEcus = device.directorAttributes.secondary;
+        const { correlationId, targets, campaign } = update;
+        let type = campaign ? 'campaign' : 'singleInstallation';
 
         return (
             <li className="overview-panel__item">
-                <div className="overview-panel__item-header">
-                    <div className="overview-panel__item-update">
-                        <div>
-                            <span id={"update-id-title-" + updateId} className="overview-panel__item-title">
-                                Update ID
-                            </span>
-                            <span id={"update-id-" + updateId}>
-                                {updateId}
-                            </span>
+                {!correlationId ?
+                    <div className="overview-panel__item-header">
+                        <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
+                            <div>
+                                <span data-tip data-for={"update-id-title-unknown-source"} data-place="left" data-offset="{'right': 40}" id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
+                                    Unknown source
+                                </span>
+                            </div>
+                            <div>
+                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, updateId)}>
-                                Cancel
-                            </button>
+                        <ReactTooltip id="update-id-title-unknown-source">
+                            Sorry, we can't tell if this update was initiated as part of a campaign or for this single device. <br/>
+                            This updated was initiated before we introduced update source information to OTA Connect.
+                        </ReactTooltip>
+                    </div>
+                    :
+                    type === 'campaign' ?
+                        <div className="overview-panel__item-header">
+                            <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
+                                <div>
+                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
+                                        Campaign:
+                                    </span>
+                                    <span id={"update-id-" + correlationId}>
+                                        {campaign.name}
+                                    </span>
+                                </div>
+                                <div>
+                                    <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="overview-panel__item-header--update">
+                                <div className="overview-panel__item-header--update__name">
+                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header__label">
+                                        Update&nbsp;name:
+                                    </span>
+                                    <span id={"update-id-" + correlationId}>
+                                        {campaign.update.name}
+                                    </span>
+                                </div>
+                                <div className="overview-panel__item-header--update__description">
+                                    <span id={"update-id-title-" + correlationId} className={'overview-panel__item-header__label'}>
+                                        Update&nbsp;description:
+                                    </span>
+                                    <span id={"update-id-" + correlationId}>
+                                        {campaign.update.description}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="overview-panel__item-process-status">
-                        {status === "waiting" ?
-                            <span>Queued, waiting for device to connect</span>
-                            : status === "downloading" ?
-                                <span>Waiting for download to complete</span>
-                                : status === "installing" ?
-                                    <span>Waiting for installation to complete</span>
-                                    :
-                                    null
-                        }
-                        <img src="/assets/img/icons/points.gif" className="overview-panel__process-dots" alt="Icon"/>
-                    </div>
-                </div>
-
+                        :
+                        <div className="overview-panel__item-header">
+                            <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
+                                <div>
+                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
+                                        Single-device update
+                                    </span>
+                                </div>
+                                <div>
+                                    <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                }
                 <div className="overview-panel__operations">
                     {_.map(targets, (target, serial) => {
                         let hardwareId = null;
                         if (devicePrimaryEcu.id === serial) {
                             hardwareId = devicePrimaryEcu.hardwareId;
                         }
-                        const serialFromSecondary = _.find(deviceSecondaryEcus, ecu => ecu.id === serial)
+                        const serialFromSecondary = _.find(deviceSecondaryEcus, ecu => ecu.id === serial);
                         if (serialFromSecondary) {
                             hardwareId = serialFromSecondary.hardwareId;
                         }
                         const hash = target.image.fileinfo.hashes.sha256;
+                        const filepath = target.image.filepath;
                         const length = target.image.fileinfo.length;
                         return (
-                            <div className="overview-panel__operation" key={hash}>
+                            <div className="overview-panel__operation overview-panel__operation__queued" key={hash}>
+                                <div className="overview-panel__label overview-panel__label--queued">Queued</div>
+
                                 <div className="overview-panel__operation-info">
-                                    <div className="overview-panel__operation-info-block">
-                                            <span id={"ecu-serial-title-" + updateId}
-                                                  className="overview-panel__operation-info-title">
-                                                ECU serial:
+                                    <div className="overview-panel__operation-info-line">
+                                        <div className="overview-panel__operation-info-block">
+                                            <span id={"ecu-serial-title-" + correlationId} className="overview-panel__operation-info--label">
+                                                ECU&nbsp;type:
                                             </span>
-                                        <span id={"ecu-serial-" + updateId}>
-                                                {serial}
-                                            </span>
-                                    </div>
-                                    <div className="overview-panel__operation-info-block">
-                                            <span id={"ecu-serial-title-" + updateId}
-                                                  className="overview-panel__operation-info-title">
-                                                Hardware ID:
-                                            </span>
-                                        <span id={"ecu-serial-" + updateId}>
+                                            <span id={"ecu-serial-" + correlationId}>
                                                 {hardwareId}
                                             </span>
-                                    </div>
-                                    <div className="overview-panel__operation-info-block">
-                                            <span id={"target-title-" + updateId}
-                                                  className="overview-panel__operation-info-title">
-                                                Target:
-                                            </span>
-                                        <span id={"target-" + updateId}>
-                                                {hash}
-                                            </span>
-                                    </div>
-                                    {length !== 0 &&
+                                        </div>
                                         <div className="overview-panel__operation-info-block">
-                                            <span id={"length-title-" + updateId} className="overview-panel__operation-info-title">
-                                                Length:
+                                             <span id={"ecu-serial-title-" + correlationId} className="overview-panel__operation-info--label">
+                                                ECU&nbsp;identifier:
                                             </span>
-                                            <span id={"length-" + updateId}>
-                                                {length}
+                                            <span id={"ecu-serial-" + correlationId}>
+                                                {serial}
                                             </span>
                                         </div>
-                                    }
+                                    </div>
+                                    <div className="overview-panel__operation-info-line">
+                                        <div className="overview-panel__operation-info-block">
+                                            <span id={"target-title-" + correlationId} className="overview-panel__operation-info--label">
+                                                Target:
+                                            </span>
+                                            <span id={"target-" + correlationId}>
+                                                {filepath}
+                                            </span>
+                                        </div>
+                                        {length !== 0 ?
+                                            <div className="overview-panel__operation-info-block">
+                                                <span id={"length-title-" + correlationId} className="overview-panel__operation-info--label">
+                                                    Length:
+                                                </span>
+                                                <span id={"length-" + correlationId}>
+                                                    {length}
+                                                </span>
+                                            </div>
+                                            :
+                                            <div className="overview-panel__operation-info-block">
+                                            </div>
+                                        }
+                                        </div>
                                     {events.length ?
                                         devicesStore.eventsFetchAsync.isFetching ?
                                             <div className="wrapper-center">
@@ -106,7 +158,7 @@ class MtuListItem extends Component {
                                             </div>
                                             :
                                             <InstallationEvents
-                                                updateId={updateId}
+                                                updateId={correlationId}
                                                 error={null}
                                                 queue={true}
                                                 events={events}
@@ -114,9 +166,6 @@ class MtuListItem extends Component {
                                         :
                                         null
                                     }
-                                </div>
-                                <div className="overview-panel__pending-status">
-                                    <span className="overview-panel__text">{"Installation pending"}</span>
                                 </div>
                             </div>
                         )
