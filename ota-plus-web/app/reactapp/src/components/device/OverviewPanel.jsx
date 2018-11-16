@@ -40,7 +40,7 @@ class OverviewPanel extends Component {
                     inkBarStyle={{display: 'none'}}
                 >
                     <Tab
-                        label="Queued"
+                        label="Queue"
                         className={"overview-panel__tab-item" + (activeTabId === 0 ? " overview-panel__tab-item--active" : "")}
                         id="queued-packages"
                         data-id={0}

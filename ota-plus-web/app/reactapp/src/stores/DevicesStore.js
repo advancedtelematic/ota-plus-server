@@ -12,7 +12,9 @@ import {
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_CREATE_MULTI_TARGET_UPDATE,
     API_FETCH_MULTI_TARGET_UPDATES,
-    API_CANCEL_MULTI_TARGET_UPDATE
+    API_CANCEL_MULTI_TARGET_UPDATE,
+    API_CAMPAIGNS_INDIVIDUAL_FETCH,
+    API_UPDATES_SEARCH
 } from '../config';
 import {
     resetAsync,
@@ -290,13 +292,54 @@ export default class DevicesStore {
         return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
             .then((response) => {
                 let data = response.data;
+                let after = _.after(data.length, () => {
+                        this._fetchCurrentStatus(id);
+                        this.multiTargetUpdates = response.data;
+                        this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
+                        this.mtuFetchAsync = handleAsyncSuccess(response);
+                    }, this);
                 _.each(data, (item, index) => {
                     item.device = id;
                     item.status = "waiting";
+                    if(item.correlationId && item.correlationId.search('here-ota:campaigns:')>=0) {
+                        let campaignId = item.correlationId.substring('here-ota:campaigns:'.length);
+                        let afterCampaign = _.after(data.length, () => {
+                            axios.get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
+                                .then( (response) => {
+                                    let update = response.data;
+                                    item.campaign = Object.assign(
+                                        item.campaign,
+                                        {update: {
+                                            id: update.uuid,
+                                            description: update.description,
+                                            name: update.name,
+                                        }}
+                                    );
+                                    after();
+                                }).catch( (error) => {
+                                console.log(error);
+                            });
+                        }, this);
+
+                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                            .then( (response) => {
+                                let campaign = response.data;
+                                item.campaign = {
+                                    id: campaign.id,
+                                    name: campaign.name,
+                                    update: {
+                                        id: campaign.update
+                                    }
+                                };
+                                afterCampaign();
+                        }).catch( (error) => {
+                            console.log(error);
+                        });
+                    }
+                    else {
+                        after();
+                    }
                 });
-                this._fetchCurrentStatus(id);
-                this.multiTargetUpdates = response.data;
-                this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
                 this.mtuFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
