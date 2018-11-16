@@ -31,11 +31,11 @@ class Device extends Component {
             type: null
         };
     }
-    cancelMtuUpdate = (updateId) => {
+    cancelMtuUpdate = (correlationId) => {
         const {devicesStore} = this.props.stores;
         let deviceId = devicesStore.device.uuid;
         let data = {
-            update: updateId,
+            correlationId: correlationId,
             device: deviceId
         };
         devicesStore.cancelMtuUpdate(data);
