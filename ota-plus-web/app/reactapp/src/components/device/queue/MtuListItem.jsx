@@ -20,12 +20,15 @@ class MtuListItem extends Component {
 
         return (
             <li className="overview-panel__item">
-                {!correlationId ?
+                {type === 'campaign' ?
                     <div className="overview-panel__item-header">
                         <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
                             <div>
-                                <span data-tip data-for={"update-id-title-unknown-source"} data-place="left" data-offset="{'right': 40}" id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
-                                    Unknown source
+                                <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
+                                    Campaign:
+                                </span>
+                                <span id={"update-id-" + correlationId}>
+                                    {campaign.name}
                                 </span>
                             </div>
                             <div>
@@ -34,63 +37,40 @@ class MtuListItem extends Component {
                                 </button>
                             </div>
                         </div>
-                        <ReactTooltip id="update-id-title-unknown-source">
-                            Sorry, we can't tell if this update was initiated as part of a campaign or for this single device. <br/>
-                            This updated was initiated before we introduced update source information to OTA Connect.
-                        </ReactTooltip>
+                        <div className="overview-panel__item-header--update">
+                            <div className="overview-panel__item-header--update__name">
+                                <span id={"update-id-title-" + correlationId} className="overview-panel__item-header__label">
+                                    Update&nbsp;name:
+                                </span>
+                                <span id={"update-id-" + correlationId}>
+                                    {campaign.update.name}
+                                </span>
+                            </div>
+                            <div className="overview-panel__item-header--update__description">
+                                <span id={"update-id-title-" + correlationId} className={'overview-panel__item-header__label'}>
+                                    Update&nbsp;description:
+                                </span>
+                                <span id={"update-id-" + correlationId}>
+                                    {campaign.update.description}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     :
-                    type === 'campaign' ?
-                        <div className="overview-panel__item-header">
-                            <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
-                                <div>
-                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
-                                        Campaign:
-                                    </span>
-                                    <span id={"update-id-" + correlationId}>
-                                        {campaign.name}
-                                    </span>
-                                </div>
-                                <div>
-                                    <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
-                                        Cancel
-                                    </button>
-                                </div>
+                    <div className="overview-panel__item-header">
+                        <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
+                            <div>
+                                <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
+                                    Single-device update
+                                </span>
                             </div>
-                            <div className="overview-panel__item-header--update">
-                                <div className="overview-panel__item-header--update__name">
-                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header__label">
-                                        Update&nbsp;name:
-                                    </span>
-                                    <span id={"update-id-" + correlationId}>
-                                        {campaign.update.name}
-                                    </span>
-                                </div>
-                                <div className="overview-panel__item-header--update__description">
-                                    <span id={"update-id-title-" + correlationId} className={'overview-panel__item-header__label'}>
-                                        Update&nbsp;description:
-                                    </span>
-                                    <span id={"update-id-" + correlationId}>
-                                        {campaign.update.description}
-                                    </span>
-                                </div>
+                            <div>
+                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                    Cancel
+                                </button>
                             </div>
                         </div>
-                        :
-                        <div className="overview-panel__item-header">
-                            <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
-                                <div>
-                                    <span id={"update-id-title-" + correlationId} className="overview-panel__item-header--title__label">
-                                        Single-device update
-                                    </span>
-                                </div>
-                                <div>
-                                    <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                 }
                 <div className="overview-panel__operations">
                     {_.map(targets, (target, serial) => {
@@ -108,7 +88,6 @@ class MtuListItem extends Component {
                         return (
                             <div className="overview-panel__operation overview-panel__operation__queued" key={hash}>
                                 <div className="overview-panel__label overview-panel__label--queued">Queued</div>
-
                                 <div className="overview-panel__operation-info">
                                     <div className="overview-panel__operation-info-line">
                                         <div className="overview-panel__operation-info-block">
@@ -147,8 +126,7 @@ class MtuListItem extends Component {
                                                 </span>
                                             </div>
                                             :
-                                            <div className="overview-panel__operation-info-block">
-                                            </div>
+                                            <div className="overview-panel__operation-info-block"></div>
                                         }
                                         </div>
                                     {events.length ?
@@ -158,9 +136,6 @@ class MtuListItem extends Component {
                                             </div>
                                             :
                                             <InstallationEvents
-                                                updateId={correlationId}
-                                                error={null}
-                                                queue={true}
                                                 events={events}
                                             />
                                         :
