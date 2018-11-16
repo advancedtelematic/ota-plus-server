@@ -301,8 +301,8 @@ export default class DevicesStore {
                 _.each(data, (item, index) => {
                     item.device = id;
                     item.status = "waiting";
-                    if(item.correlationId && item.correlationId.search('here-ota:campaigns:')>=0) {
-                        let campaignId = item.correlationId.substring('here-ota:campaigns:'.length);
+                    if(item.correlationId && item.correlationId.search('urn:here-ota:campaign:')>=0) {
+                        let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
                         let afterCampaign = _.after(data.length, () => {
                             axios.get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
                                 .then( (response) => {
@@ -316,8 +316,8 @@ export default class DevicesStore {
                                         }}
                                     );
                                     after();
-                                }).catch( (error) => {
-                                console.log(error);
+                                }).catch( () => {
+                                    after();
                             });
                         }, this);
 
@@ -332,8 +332,8 @@ export default class DevicesStore {
                                     }
                                 };
                                 afterCampaign();
-                        }).catch( (error) => {
-                            console.log(error);
+                        }).catch( () => {
+                            afterCampaign();
                         });
                     }
                     else {
