@@ -127,10 +127,10 @@ class MtuListItem extends Component {
 								</div>
 							  	<div className="overview-panel__operation-status">
 								  	<div className={`overview-panel__status-code ${ecuReport.result.success ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
-									  	<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{ecuReport.result.code}</span>
+									  	<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.correlationId}>{ecuReport.result.code}</span>
 								  	</div>
 								  	<div className="overview-panel__status-text">
-									  	<span id={"result-text-" + item.updateId}>{ecuReport.result.description}</span>
+									  	<span id={"result-text-" + item.correlationId}>{ecuReport.result.description}</span>
 								  	</div>
 							  	</div>
 						  	</div>
@@ -139,7 +139,7 @@ class MtuListItem extends Component {
 			  	</div>
 				<div className="overview-panel__device-status">
 					<div className={`overview-panel__status-code ${item.result.success ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
-						<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.updateId}>{item.result.code}</span>
+						<span>Result code</span> <span className="overview-panel__status-code-value" id={"result-code-" + item.correlationId}>{item.result.code}</span>
 					</div>
 					<div className="overview-panel__status-text">
 						<span id={"result-text-" + item.result.code}>{item.result.description}</span>
