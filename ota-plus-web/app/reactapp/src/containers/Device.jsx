@@ -5,7 +5,7 @@ import { Loader } from '../partials';
 import {
     DeviceHeader,
     DeviceHardwarePanel,
-    DevicePropertiesPanel, 
+    DevicePropertiesPanel,
     DeviceSoftwarePanel,
     DeviceOverviewPanel
 } from '../components/device';
@@ -24,21 +24,31 @@ class Device extends Component {
     @observable expandedPackageName = null;
 
     componentWillUnmount = () => {
-        const { hardwareStore} = this.props.stores;
+        const {hardwareStore} = this.props.stores;
         hardwareStore.activeEcu = {
             hardwareId: null,
             serial: null,
             type: null
         };
     }
-    cancelMtuUpdate = (updateId) => {
+    cancelMtuUpdate = (correlationId) => {
         const {devicesStore} = this.props.stores;
         let deviceId = devicesStore.device.uuid;
         let data = {
-            update: updateId,
+            correlationId: correlationId,
             device: deviceId
         };
         devicesStore.cancelMtuUpdate(data);
+    }
+    cancelApprovalPendingCampaign = (campaignId) => {
+        let campaignCorrelationId = 'urn:here-ota:campaign:' + campaignId;
+        const {devicesStore} = this.props.stores;
+        let deviceId = devicesStore.device.uuid;
+        let data = {
+            correlationId: campaignCorrelationId,
+            device: deviceId
+        };
+        devicesStore.cancelApprovalPendingCampaingPerDevice(data);
     }
     selectEcu = (hardwareId, serial, filepath, type, e) => {
         if (e) e.preventDefault();
@@ -65,7 +75,7 @@ class Device extends Component {
     }
     selectQueue = () => {
         this.ECUselected = false;
-        const { hardwareStore} = this.props.stores;
+        const {hardwareStore} = this.props.stores;
         hardwareStore.activeEcu = {
             hardwareId: null,
             serial: null,
@@ -76,6 +86,9 @@ class Device extends Component {
         const {devicesStore, hardwareStore} = this.props.stores;
         data.hardwareId = hardwareStore.activeEcu.hardwareId;
         devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
+        this.selectQueue();
+        this.setOverviewPanelActiveTabId(1)
+
     }
     togglePackageAutoUpdate = (packageName, deviceId, isAutoInstallEnabled, e) => {
         if (e) {
@@ -101,12 +114,12 @@ class Device extends Component {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     showPackageCreateModal = (files, e) => {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.packageCreateModalShown = true;
         this.fileDropped = (files ? files[0] : null);
     }
     hidePackageCreateModal = (e) => {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.packageCreateModalShown = false;
         this.fileDropped = null;
     }
@@ -114,10 +127,10 @@ class Device extends Component {
         this.showPackageCreateModal(files);
     }
     showPackageDetails = (pack, e) => {
-        if(e) e.preventDefault();
-        const { packagesStore } = this.props.stores;
+        if (e) e.preventDefault();
+        const {packagesStore} = this.props.stores;
         let isPackageUnmanaged = pack === 'unmanaged';
-        if(isPackageUnmanaged) {
+        if (isPackageUnmanaged) {
             packagesStore.expandedPackage = {
                 unmanaged: true
             };
@@ -126,11 +139,7 @@ class Device extends Component {
         }
     }
     setOverviewPanelActiveTabId = (tabId) => {
-        const {packagesStore, devicesStore} = this.props.stores;
         this.activeTabId = tabId;
-        if (tabId === 1) {
-            packagesStore.fetchPackagesHistory(devicesStore.device.uuid, packagesStore.packagesHistoryFilter);
-        }
     }
 
     render() {
@@ -141,17 +150,17 @@ class Device extends Component {
                 <DeviceHeader/>
                 {devicesStore.devicesOneFetchAsync.isFetching ?
                     <div className="wrapper-center">
-                        <Loader />
+                        <Loader/>
                     </div>
-                :
+                    :
                     device.lastSeen ?
                         <span>
                             {packagesStore.packagesFetchAsync.isFetching ?
                                 <div className="wrapper-center">
-                                    <Loader />
+                                    <Loader/>
                                 </div>
-                            :
-                                <DeviceHardwarePanel 
+                                :
+                                <DeviceHardwarePanel
                                     selectEcu={this.selectEcu}
                                     onFileDrop={this.onFileDrop}
                                     ECUselected={this.ECUselected}
@@ -161,6 +170,7 @@ class Device extends Component {
                             {!this.ECUselected ?
                                 <DeviceOverviewPanel
                                     cancelMtuUpdate={this.cancelMtuUpdate}
+                                    cancelApprovalPendingCampaign={this.cancelApprovalPendingCampaign}
                                     activeTabId={this.activeTabId}
                                     setOverviewPanelActiveTabId={this.setOverviewPanelActiveTabId}
                                 />
@@ -180,7 +190,7 @@ class Device extends Component {
                                 </span>
                             }
                         </span>
-                    :
+                        :
                         <div className="wrapper-center">
                             <div className="device-offline-title">
                                 Device never seen online.
@@ -188,12 +198,12 @@ class Device extends Component {
                         </div>
                 }
                 {this.packageCreateModalShown ?
-                    <PackagesCreateModal 
+                    <PackagesCreateModal
                         shown={this.packageCreateModalShown}
                         hide={this.hidePackageCreateModal}
                         fileDropped={this.fileDropped}
                     />
-                :
+                    :
                     null
                 }                
             </span>

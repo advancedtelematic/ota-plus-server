@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { Loader } from '../../../partials';
 import MtuListItem from './MtuListItem';
 
 @inject("stores")
@@ -18,37 +17,28 @@ class MtuQueueList extends Component {
             </div>
         );
         return (
-            <div>
-                {devicesStore.mtuFetchAsync.isFetching || devicesStore.mtuCreateAsync.isFetching || devicesStore.eventsFetchAsync.isFetching ?
-                    <ul className="overview-panel__list">
-                        <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                    </ul>
-                :
-                    devicesStore.multiTargetUpdates.length ?
-                        <ul className={"overview-panel__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
-                            {_.map(devicesStore.multiTargetUpdates, (update, index) => {
-                                let itemEvents = devicesStore.deviceEvents.filter(el => {
-                                    if (el.payload.correlationId) {
-                                        return el.payload.correlationId === update.correlationId
-                                    }
-                                });
-                                    return (
-                                        <MtuListItem
-                                            key={index}
-                                            update={update}
-                                            cancelMtuUpdate={cancelMtuUpdate}
-                                            showSequencer={showSequencer}
-                                            events={itemEvents}
-                                        />
-                                    );
-                            })}
-                        </ul>
+            <ul className={"overview-panel__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
+                {devicesStore.multiTargetUpdates.length ?
+                    _.map(devicesStore.multiTargetUpdates, (update, index) => {
+                    let itemEvents = devicesStore.deviceEvents.filter(el => {
+                        if (el.payload.correlationId) {
+                            return el.payload.correlationId === update.correlationId
+                        }
+                    });
+                        return (
+                            <MtuListItem
+                                key={index}
+                                update={update}
+                                cancelMtuUpdate={cancelMtuUpdate}
+                                showSequencer={showSequencer}
+                                events={itemEvents}
+                            />
+                        );
+                    })
                     :
-                        emptyQueue
+                    emptyQueue
                 }
-            </div>
+            </ul>
         );
     }
 }

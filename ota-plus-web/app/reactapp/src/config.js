@@ -71,6 +71,7 @@ export const API_PACKAGES_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed
 
 export const API_PACKAGES_COMMENTS = '/api/v1/user_repo/comments';
 
+export const API_DEVICE_APPROVAL_PENDING_CAMPAIGNS = '/api/v2/device';
 export const API_CAMPAIGNS_FETCH = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_FETCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_INDIVIDUAL_FETCH = '/api/v2/campaigns';
