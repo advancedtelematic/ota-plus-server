@@ -480,6 +480,20 @@
                 margin-left: 10px !important;
             }
 
+            &--pending {
+                &:before {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    width: 18px;
+                    height: 18px;
+                    background: url($device-status-pending) no-repeat;
+                    background-size: cover;
+                }
+            }
+
             &--active {
                 color: black !important;
                 background: white !important;
@@ -491,6 +505,9 @@
                     width: 100px;
                     height: 3px;
                     background-color: $switch-blue-color;
+                    position: absolute;
+                    right: 0;
+                    left: 0;
                 }
             }
 
@@ -498,6 +515,8 @@
                 & > div {
                     text-transform: none;
                     height: 40px !important;
+                    border: 1px solid lightgray;
+                    border-bottom: none;
                 }
             }
         }

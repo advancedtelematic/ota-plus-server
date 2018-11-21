@@ -14,7 +14,8 @@ import {
     API_FETCH_MULTI_TARGET_UPDATES,
     API_CANCEL_MULTI_TARGET_UPDATE,
     API_CAMPAIGNS_INDIVIDUAL_FETCH,
-    API_UPDATES_SEARCH
+    API_UPDATES_SEARCH,
+    API_DEVICE_APPROVAL_PENDING_CAMPAIGNS
 } from '../config';
 import {
     resetAsync,
@@ -41,6 +42,7 @@ export default class DevicesStore {
     @observable mtuFetchAsync = {};
     @observable mtuCancelAsync = {};
     @observable eventsFetchAsync = {};
+    @observable approvalPendingCampaignsFetchAsync = {};
     @observable devices = [];
     @observable devicesTotalCount = null;
     @observable devicesInitialTotalCount = null;
@@ -81,6 +83,7 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         resetAsync(this.eventsFetchAsync);
+        resetAsync(this.approvalPendingCampaignsFetchAsync);
         this.devicesLimit = 30;
     }
 
@@ -298,49 +301,53 @@ export default class DevicesStore {
                         this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
                         this.mtuFetchAsync = handleAsyncSuccess(response);
                     }, this);
-                _.each(data, (item, index) => {
-                    item.device = id;
-                    item.status = "waiting";
-                    if(item.correlationId && item.correlationId.search('urn:here-ota:campaign:')>=0) {
-                        let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
-                        let afterCampaign = _.after(data.length, () => {
-                            axios.get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
-                                .then( (response) => {
-                                    let update = response.data;
-                                    item.campaign = Object.assign(
-                                        item.campaign,
-                                        {update: {
-                                            id: update.uuid,
-                                            description: update.description,
-                                            name: update.name,
-                                        }}
-                                    );
+                if (data.length) {
+                    _.each(data, (item, index) => {
+                        item.device = id;
+                        item.status = "waiting";
+                        if(item.correlationId && item.correlationId.search('urn:here-ota:campaign:')>=0) {
+                            let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
+                            let afterCampaign = _.after(data.length, () => {
+                                axios.get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
+                                    .then( (response) => {
+                                        let update = response.data;
+                                        item.campaign = Object.assign(
+                                            item.campaign,
+                                            {update: {
+                                                    id: update.uuid,
+                                                    description: update.description,
+                                                    name: update.name,
+                                                }}
+                                        );
+                                        after();
+                                    }).catch( () => {
                                     after();
-                                }).catch( () => {
-                                    after();
-                            });
-                        }, this);
+                                });
+                            }, this);
 
-                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
-                            .then( (response) => {
-                                let campaign = response.data;
-                                item.campaign = {
-                                    id: campaign.id,
-                                    name: campaign.name,
-                                    update: {
-                                        id: campaign.update
-                                    }
-                                };
+                            axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                                .then( (response) => {
+                                    let campaign = response.data;
+                                    item.campaign = {
+                                        id: campaign.id,
+                                        name: campaign.name,
+                                        update: {
+                                            id: campaign.update
+                                        }
+                                    };
+                                    afterCampaign();
+                                }).catch( () => {
                                 afterCampaign();
-                        }).catch( () => {
-                            afterCampaign();
-                        });
-                    }
-                    else {
-                        after();
-                    }
-                });
-                this.mtuFetchAsync = handleAsyncSuccess(response);
+                            });
+                        }
+                        else {
+                            after();
+                        }
+                    });
+                }
+                else {
+                    after();
+                }
             })
             .catch((error) => {
                 this.mtuFetchAsync = handleAsyncError(error);
@@ -354,6 +361,57 @@ export default class DevicesStore {
                 this.deviceEvents = response.data;
                 this[async] = handleAsyncSuccess(response);
             })
+            .catch((error) => {
+                this[async] = handleAsyncError(error);
+            });
+    }
+
+    fetchApprovalPendingCampaigns(id, async = 'approvalPendingCampaignsFetchAsync') {
+        resetAsync(this[async], true);
+        return axios.get(API_DEVICE_APPROVAL_PENDING_CAMPAIGNS + '/' + id + '/campaigns')
+            .then((response) => {
+                let data = response.data;
+                let after = _.after(data.campaigns.length, () => {
+                    this.deviceAprrovalPendingCampaigns = response.data;
+                    this[async] = handleAsyncSuccess(response);
+                        }, this);
+                if (data.campaigns.length) {
+                    _.each(data.campaigns, (item, index) => {
+                        let status = null;
+                        let afterCampaign = _.after(status === 'success', () => {
+                            axios.get(API_UPDATES_SEARCH + '/' + item.update.id)
+                                .then((response) => {
+                                    let update = response.data;
+                                    item.update =  {
+                                                id: update.uuid,
+                                                description: update.description,
+                                                name: update.name,
+                                            }
+                                    after();
+                                }).catch(() => {
+                                    after();
+                            });
+                        }, this);
+
+                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + item.id)
+                            .then((response) => {
+                                let campaign = response.data;
+                                item.update = {
+                                        id: campaign.update
+                                    }
+                                status = 'success';
+                                afterCampaign();
+                            }).catch(() => {
+                                status = 'error';
+                                afterCampaign();
+                        });
+                    })
+                }
+                else {
+                    after();
+                }
+
+                })
             .catch((error) => {
                 this[async] = handleAsyncError(error);
             });
@@ -375,6 +433,17 @@ export default class DevicesStore {
         return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
             .then(function (response) {
                 this.fetchMultiTargetUpdates(this.device.uuid);
+                this.mtuCancelAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.mtuCancelAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    cancelApprovalPendingCampaingPerDevice(data) {
+        resetAsync(this.mtuCancelAsync, true);
+        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+            .then(function (response) {
                 this.mtuCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -558,6 +627,7 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         resetAsync(this.eventsFetchAsync);
+        resetAsync(this.approvalPendingCampaignsFetchAsync);
         resetAsync(this.deviceCurrentStatusFetchAsync);
         this.devices = [];
         this.devicesTotalCount = null;
