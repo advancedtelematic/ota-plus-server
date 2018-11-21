@@ -10,41 +10,58 @@ class InstallationEvents extends Component {
         const { events } = this.props;
         let preparedEvents = {
             ecuDownloadStarted: {
+                receivedAt: moment(),
                 time: 'Pending',
                 status: 'Pending'
             },
             ecuDownloadCompleted: {
+                receivedAt: moment.unix(0),
                 time: 'Pending',
                 status: 'Pending'
             },
             ecuInstallationStarted: {
+                receivedAt: moment(),
                 time: 'Pending',
                 status: 'Pending'
             },
             ecuInstallationCompleted: {
+                receivedAt: moment.unix(0),
                 time: 'Pending',
                 status: 'Pending'
             },
         };
 
         events && events.map(el => {
-            let time = moment(el.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A");
+            let receivedAt = moment(el.receivedAt);
+            let time = receivedAt.format("ddd MMM DD YYYY, h:mm:ss A");
             switch (el.eventType.id) {
                 case 'EcuDownloadStarted':
-                    preparedEvents.ecuDownloadStarted.time = time;
-                    preparedEvents.ecuDownloadStarted.status = "Success";
+                    if (preparedEvents.ecuDownloadStarted.receivedAt.isAfter(receivedAt)) {
+                        preparedEvents.ecuDownloadStarted.receivedAt = receivedAt;
+                        preparedEvents.ecuDownloadStarted.time = time;
+                        preparedEvents.ecuDownloadStarted.status = "Success";
+                    }
                     break;
                 case 'EcuDownloadCompleted':
-                    preparedEvents.ecuDownloadCompleted.time = time;
-                    preparedEvents.ecuDownloadCompleted.status = el.payload.success ? "Success" : 'Error';
+                    if (preparedEvents.ecuDownloadCompleted.receivedAt.isBefore(receivedAt)) {
+                        preparedEvents.ecuDownloadCompleted.receivedAt = receivedAt;
+                        preparedEvents.ecuDownloadCompleted.time = time;
+                        preparedEvents.ecuDownloadCompleted.status = el.payload.success ? "Success" : 'Error';
+                    }
                     break;
                 case 'EcuInstallationStarted':
-                    preparedEvents.ecuInstallationStarted.time = time;
-                    preparedEvents.ecuInstallationStarted.status = "Success";
+                    if (preparedEvents.ecuInstallationStarted.receivedAt.isAfter(receivedAt)) {
+                        preparedEvents.ecuInstallationStarted.receivedAt = receivedAt;
+                        preparedEvents.ecuInstallationStarted.time = time;
+                        preparedEvents.ecuInstallationStarted.status = "Success";
+                    }
                     break;
                 case 'EcuInstallationCompleted':
-                    preparedEvents.ecuInstallationCompleted.time = time;
-                    preparedEvents.ecuInstallationCompleted.status = el.payload.success ? "Success" : 'Error';
+                    if (preparedEvents.ecuInstallationCompleted.receivedAt.isBefore(receivedAt)) {
+                        preparedEvents.ecuInstallationCompleted.receivedAt = receivedAt;
+                        preparedEvents.ecuInstallationCompleted.time = time;
+                        preparedEvents.ecuInstallationCompleted.status = el.payload.success ? "Success" : 'Error';
+                    }
                     break;
             }
         });
