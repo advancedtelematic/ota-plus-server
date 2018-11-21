@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react';
 import InstallationEvents from '../InstallationEvents';
 import _ from 'underscore';
 import Loader from "../../../partials/Loader";
-import ReactTooltip from "react-tooltip";
 
 @inject("stores")
 @observer
@@ -122,7 +121,7 @@ class MtuListItem extends Component {
                                                     Length:
                                                 </span>
                                                 <span id={"length-" + correlationId}>
-                                                    {length}
+                                                    {length.toLocaleString()} bytes
                                                 </span>
                                             </div>
                                             :

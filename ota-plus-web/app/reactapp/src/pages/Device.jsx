@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import {observable} from 'mobx';
 import {observer, inject} from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
@@ -13,13 +13,15 @@ class Device extends Component {
     @observable sequencerShown = false;
 
     componentWillMount() {
-        const {packagesStore, devicesStore} = this.props.stores;
+        const { packagesStore, devicesStore } = this.props.stores;
         packagesStore.page = 'device';
         devicesStore.fetchDevice(this.props.params.id);
         packagesStore.fetchPackages();
+        packagesStore.fetchPackagesHistory(this.props.params.id, packagesStore.packagesHistoryFilter);
         devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
         devicesStore.fetchMultiTargetUpdates(this.props.params.id);
         devicesStore.fetchEvents(this.props.params.id);
+        devicesStore.fetchApprovalPendingCampaigns(this.props.params.id);
     }
     componentWillUnmount() {
         const {packagesStore, devicesStore, hardwareStore} = this.props.stores;

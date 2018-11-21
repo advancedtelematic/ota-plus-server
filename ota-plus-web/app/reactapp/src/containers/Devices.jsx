@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { FlatButton } from 'material-ui';
 import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { DevicesCreateModal } from '../components/devices';
@@ -114,7 +113,6 @@ class Devices extends Component {
         let groupId = groupsStore.selectedGroup.id;
         devicesStore.fetchDevices(filter, groupId);
     }
-
     render() {
         const { addNewWizard } = this.props;
         const { devicesStore, groupsStore } = this.props.stores;

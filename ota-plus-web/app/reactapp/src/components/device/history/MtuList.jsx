@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { Loader } from '../../../partials';
 import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
@@ -30,9 +29,9 @@ class MtuList extends Component {
                     {packagesStore.packagesHistory.length ?
                         _.map(packagesStore.packagesHistory, (historyItem, index) => {
                             let itemEvents = devicesStore.deviceEvents.filter(el => {
-                               if (el.payload.correlationId) {
-                                   return el.payload.correlationId.search(historyItem.updateId) >= 0
-                               }
+                                if (el.payload.correlationId) {
+                                    return el.payload.correlationId.search(historyItem.updateId) >= 0
+                                }
                             });
                             return (
                                 <MtuListItem
