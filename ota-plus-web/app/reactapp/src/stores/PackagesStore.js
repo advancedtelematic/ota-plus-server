@@ -485,7 +485,7 @@ export default class PackagesStore {
             this.packagesHistoryCurrentPage = 0;
         }
         this.packagesHistoryFilter = filter;
-        return axios.get(API_PACKAGES_DEVICE_HISTORY + '/' + id + '/installation_history' + '?limit=' + this.packagesHistoryLimit )
+        return axios.get(API_PACKAGES_DEVICE_HISTORY + '/' + id + '/installation_history' + '?limit=1000' )
             .then(function(response) {
                 let data = response.data.values;
                 let after = _.after(data.length, () => {
