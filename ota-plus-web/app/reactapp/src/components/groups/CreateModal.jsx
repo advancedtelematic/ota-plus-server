@@ -143,13 +143,12 @@ class CreateModal extends Component {
         const currentStep = this.steps[this.currentStepId];
         const step = (
             <span>
-                {React.createElement(currentStep.class, {
-                    selectGroupType: this.selectGroupType,
-                    groupType: this.groupType,
-                    markStepAsFinished: this.markStepAsFinished,
-                    markStepAsNotFinished: this.markStepAsNotFinished,
-                    setFilter: this.setFilter,
-                })}
+                {<currentStep.class
+                    selectGroupType={this.selectGroupType}
+                    groupType={this.groupType}
+                    markStepAsFinished={this.markStepAsFinished}
+                    markStepAsNotFinished={this.markStepAsNotFinished}
+                    setFilter={this.setFilter} />}
                 <div className="body-actions">
                     {this.isLastStep() ?
                         <button

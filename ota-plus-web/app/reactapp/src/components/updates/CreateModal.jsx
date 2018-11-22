@@ -184,12 +184,11 @@ class CreateModal extends Component {
         const currentStep = this.steps[this.currentStepId];
         const step = (
             <span>
-                { React.createElement(currentStep.class, {
-                    wizardData: this.wizardData,
-                    onStep1DataSelect: this.onStep1DataSelect,
-                    onStep2DataSelect: this.onStep2DataSelect,
-                    showDetails: showDetails,
-                }) }
+                { <currentStep.class
+                    wizardData={this.wizardData}
+                    onStep1DataSelect={this.onStep1DataSelect}
+                    onStep2DataSelect={this.onStep2DataSelect}
+                    showDetails={showDetails} /> }
                 <div className="body-actions" style={ { margin: 0 } }>
                     { this.isLastStep() ?
                         !showDetails &&

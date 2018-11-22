@@ -379,28 +379,27 @@ class Wizard extends Component {
                                         <Loader />
                                     </div>
                                     :
-                                    React.createElement(currentStep.class, {
-                                        campaign: {},
-                                        setWizardData: this.setWizardData,
-                                        setApprove: this.setApprove,
-                                        currentStepId: this.currentStepId,
-                                        wizardData: this.wizardData,
-                                        markStepAsFinished: this.markStepAsFinished,
-                                        markStepAsNotFinished: this.markStepAsNotFinished,
-                                        filterValue: this.filterValue,
-                                        selectFromVersion: this.selectFromVersion,
-                                        selectedFromVersion: this.selectedFromVersion,
-                                        selectVersion: this.selectVersion,
-                                        wizardIdentifier: wizardIdentifier,
-                                        setRawSelectedPacks: this.setRawSelectedPacks,
-                                        rawSelectedPacks: this.rawSelectedPacks,
-                                        removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
-                                        addToCampaign: this.addToCampaign,
-                                        approvalNeeded: this.approvalNeeded,
-                                        alphaPlus: featuresStore.alphaPlusEnabled,
-                                        alphaTest: featuresStore.alphaTestEnabled,
-                                        showUpdateDetails: this.showUpdateDetails,
-                                    })
+                                    <currentStep.class
+                                        campaign={{}}
+                                        setWizardData={this.setWizardData}
+                                        setApprove={this.setApprove}
+                                        currentStepId={this.currentStepId}
+                                        wizardData={this.wizardData}
+                                        markStepAsFinished={this.markStepAsFinished}
+                                        markStepAsNotFinished={this.markStepAsNotFinished}
+                                        filterValue={this.filterValue}
+                                        selectFromVersion={this.selectFromVersion}
+                                        selectedFromVersion={this.selectedFromVersion}
+                                        selectVersion={this.selectVersion}
+                                        wizardIdentifier={wizardIdentifier}
+                                        setRawSelectedPacks={this.setRawSelectedPacks}
+                                        rawSelectedPacks={this.rawSelectedPacks}
+                                        removeSelectedPacksByKeys={this.removeSelectedPacksByKeys}
+                                        addToCampaign={this.addToCampaign}
+                                        approvalNeeded={this.approvalNeeded}
+                                        alphaPlus={featuresStore.alphaPlusEnabled}
+                                        alphaTest={featuresStore.alphaTestEnabled}
+                                        showUpdateDetails={this.showUpdateDetails} />
                                 }
                                 {currentStep.isSearchBarShown ?
                                     <Form>
