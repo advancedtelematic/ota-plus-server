@@ -30,7 +30,7 @@ class MtuList extends Component {
                         _.map(packagesStore.packagesHistory, (historyItem, index) => {
                             let itemEvents = devicesStore.deviceEvents.filter(el => {
                                 if (el.payload.correlationId) {
-                                    return el.payload.correlationId.search(historyItem.updateId) >= 0
+                                    return el.payload.correlationId === historyItem.correlationId
                                 }
                             });
                             return (
