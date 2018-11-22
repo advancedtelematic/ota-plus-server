@@ -22,7 +22,7 @@ class ActiveCampaigns extends Component {
         const { campaignsStore } = this.props.stores;
         return (
             <span style={{height: '100%'}}>
-                {campaignsStore.campaignsFetchAsync.isFetching ?
+                {campaignsStore.campaignsFetchAsyncAll.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>

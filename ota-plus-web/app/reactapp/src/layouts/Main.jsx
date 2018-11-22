@@ -9,7 +9,10 @@ import {
     WebsocketHandler,
 } from '../utils';
 import { doLogout } from '../utils/Common';
-
+import {
+    VIEWPORT_MIN_WIDTH,
+    VIEWPORT_MIN_HEIGHT,
+} from "../config";
 import {
     Navigation,
     SizeVerify,
@@ -31,8 +34,11 @@ class Main extends Component {
     @observable uiUserProfileEdit = document.getElementById('toggle-userProfileEdit').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
-    @observable switchToSWRepo = false;
     @observable showWhatsNewPopover = false;
+    @observable activeTab = {
+        campaigns: 'prepared',
+        packages: 'compact',
+    };
 
     constructor(props) {
         super(props);
@@ -95,12 +101,15 @@ class Main extends Component {
     addNewWizard(skipStep = null) {
         const wizard =
             <Wizard
+                location={ this.currentLocation() }
                 wizardIdentifier={ this.wizards.length }
                 hideWizard={ this.hideWizard }
                 toggleWizard={ this.toggleWizard }
                 minimizedWizards={ this.minimizedWizards }
                 skipStep={ skipStep }
                 key={ this.wizards.length }
+                activeTab={ this.getActiveTab() }
+                switchTab={ this.switchTab }
             />;
         this.wizards = this.wizards.concat(wizard);
     }
@@ -157,7 +166,17 @@ class Main extends Component {
         if (!userStore._isTermsAccepted() && !this.context.router.isActive('/')) {
             this.context.router.push('/');
         }
+        this.updateCampaignsView();
     }
+
+    updateCampaignsView = () => {
+        const { campaignsStore } = this.props.stores;
+        if (this.currentLocation() === 'campaigns' &&
+            !campaignsStore.campaignsFetchAsync[this.getActiveTab()].isFetching) {
+            campaignsStore.fetchStatusCounts();
+            campaignsStore.fetchCampaigns(this.getActiveTab());
+        }
+    };
 
     toggleUploadBoxMode(e) {
         if (e) e.preventDefault();
@@ -180,16 +199,46 @@ class Main extends Component {
         this.showWhatsNewPopover = false;
     };
 
-
     navigate = (path) => {
         this.context.router.push(path);
     };
 
+    switchTab = (identifier) => {
+        const location = this.currentLocation();
+        this.activeTab[location] = identifier;
+        this.switchToSWRepo = (this.activeTab[location] === 'advanced');
+        this.updateCampaignsView();
+    };
+
+    currentLocation = () => {
+        return this.props.location.pathname.toLowerCase().split('/')[1];
+    };
+
+    getActiveTab = () => {
+        const location = this.currentLocation();
+        const locationHasTabs = (location === 'packages' || location === 'campaigns');
+        if (locationHasTabs) {
+            return this.activeTab[location];
+        } else {
+            return '';
+        }
+    };
+
+    calcHeight = () => {
+        const currentLocation = this.currentLocation();
+        if (currentLocation === 'campaigns') {
+            return 'calc(100vh - 100px)';
+        } else {
+            return 'calc(100vh - 50px)';
+        }
+    };
+
     render() {
         const { children, ...rest } = this.props;
-        const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
+        const pageId = "page-" + (this.currentLocation() || "home");
         const { userStore, featuresStore } = this.props.stores;
-        const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;
+        const { alphaPlusEnabled, whatsNewPopOver } =featuresStore;
+        const activeTab = this.getActiveTab();
         return (
             <span>
                 <Navigation
@@ -201,9 +250,11 @@ class Main extends Component {
                     uiCredentialsDownload={ this.uiCredentialsDownload }
                     alphaPlusEnabled={ alphaPlusEnabled }
                     startWhatsNewPopover={ this.showWhatsNew }
+                    switchTab={ this.switchTab }
+                    activeTab={ activeTab }
                 />
                 <div id={ pageId } style={ {
-                    height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 50px)' : 'calc(100vh - 50px)',
+                    height: this.calcHeight(),
                     padding: !alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
                 } }>
                     <FadeAnimation>
@@ -216,11 +267,13 @@ class Main extends Component {
                             uiAutoFeatureActivation={ this.uiAutoFeatureActivation }
                             uiUserProfileMenu={ this.uiUserProfileMenu }
                             uiCredentialsDownload={ this.uiCredentialsDownload }
+                            activeTab={ activeTab }
+                            switchTab={ this.switchTab }
                         />
                     </FadeAnimation>
                     <SizeVerify
-                        minWidth={ 1280 }
-                        minHeight={ 768 }
+                        minWidth={ VIEWPORT_MIN_WIDTH }
+                        minHeight={ VIEWPORT_MIN_HEIGHT }
                     />
                     <UploadBox
                         minimized={ this.uploadBoxMinimized }

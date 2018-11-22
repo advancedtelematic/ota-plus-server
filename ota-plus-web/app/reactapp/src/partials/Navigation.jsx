@@ -11,13 +11,15 @@ import TabNavigation from './TabNavigation';
 export default class Navigation extends Component {
     static propTypes = {
         location: PropTypes.string.isRequired,
-        toggleSWRepo: PropTypes.func.isRequired,
         uiUserProfileEdit: PropTypes.bool.isRequired,
-        switchToSWRepo: PropTypes.bool.isRequired,
+        toggleSWRepo: PropTypes.func.isRequired,
+        switchToSWRepo: PropTypes.bool,
         uiUserProfileMenu: PropTypes.bool.isRequired,
         uiCredentialsDownload: PropTypes.bool.isRequired,
         alphaPlusEnabled: PropTypes.bool.isRequired,
-        startWhatsNewPopover: PropTypes.func.isRequired,
+        startWhatsNewPopover: PropTypes.func,
+        switchTab: PropTypes.func,
+        activeTab: PropTypes.string,
     };
 
     handleClick = (e) => {
@@ -36,6 +38,8 @@ export default class Navigation extends Component {
             switchToSWRepo,
             uiUserProfileEdit,
             alphaPlusEnabled,
+            switchTab,
+            activeTab,
         } = this.props;
 
         const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = this.props.stores.featuresStore;
@@ -117,8 +121,16 @@ export default class Navigation extends Component {
                     alphaPlusEnabled && (location === 'page-packages') &&
                         <TabNavigation
                             location={ location }
-                            toggleSWRepo={ toggleSWRepo }
-                            switchToSWRepo={ switchToSWRepo }
+                            switchTab={ switchTab }
+                            activeTab={ activeTab }
+                        />
+                }
+                {
+                    (location === 'page-campaigns') &&
+                        <TabNavigation
+                            location={ location }
+                            switchTab={ switchTab }
+                            activeTab={ activeTab }
                         />
                 }
             </nav>
