@@ -4,32 +4,41 @@ const { resolve } = require('path');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const jsOutput = 'assets/js';
-const cssOutput = 'assets/css';
+const mainEntry = resolve(__dirname, 'src/main.jsx');
+const styleEntry = resolve(__dirname, 'styles/style.scss');
+const unloggedCSS = resolve(__dirname, 'styles/unlogged.scss');
+const jsTarget = resolve(__dirname, '..', 'assets/js');
+const styleTarget = resolve(__dirname, '..', 'assets/css');
+const styleSource = resolve(__dirname, 'styles/');
 
-const isProduction = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV !== 'development';
 /** must be the file containing ant.design's variables */
-const themeColors = './css/ota-default/variables-ant.scss';
+const antDesignThemeColors = './css/ota-default/theme.scss';
 
 const cleaningOptions = {
   root: path.resolve(__dirname, '..'),
   verbose: true,
   exclude: ['jquery-3.3.1.min.js', 'lock-9.2.min.js', 'login.js', 'privay-notification.js'],
+  watch: true,
 };
 
-const foldersToClean = [jsOutput, cssOutput];
+const targets = [jsTarget, styleTarget];
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  entry: [resolve(__dirname, 'src/main.jsx'), resolve(__dirname, 'style/style.scss'), resolve(__dirname, 'style/unlogged.scss')],
+  entry: {
+    main: mainEntry,
+    styles: styleEntry,
+    unlogged: unloggedCSS,
+  },
   output: {
-    path: resolve(__dirname, '..', jsOutput),
+    path: jsTarget,
     filename: 'app.js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  plugins: [new CleanWebpackPlugin(foldersToClean, cleaningOptions)],
+  plugins: [new CleanWebpackPlugin(targets, cleaningOptions)],
   devtool: 'source-map',
   module: {
     rules: [
@@ -40,25 +49,22 @@ module.exports = {
                 loader: "eslint-loader",
             },*/
       {
-        test: /.(js|jsx)?$/,
+        test: /.(jsx)?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
       {
+        test: /\.less$/,
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }, { loader: 'less-loader', options: { javascriptEnabled: true } }],
+      },
+      {
         test: /\.scss$/,
+        issuer: {
+          exclude: /\.less$/,
+        },
         use: [
           {
-            loader: 'file-loader',
-            options: {
-              context: './style/',
-              //  output path referring to assets/css
-              outputPath: '../css/' /* path must be relative to app.js */,
-              publicPath: '../',
-              name: '[name].css',
-            },
-          },
-          {
-            loader: 'extract-loader',
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
@@ -78,6 +84,14 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        // This rule will only be used for converting our sass-variables to less-variables
+        test: /\.scss$/,
+        issuer: /\.less$/,
+        use: {
+          loader: './styles/helpers/sassVarsToLess.js',
+        },
       },
       {
         test: /\.(html)$/,
