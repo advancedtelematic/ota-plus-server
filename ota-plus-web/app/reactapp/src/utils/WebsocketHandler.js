@@ -48,7 +48,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                             let campaignId = stores.campaignsStore.campaign.id;
                             stores.campaignsStore.fetchCampaign(campaignId);
                         }
-                        stores.campaignsStore.fetchCampaigns();
+                        stores.campaignsStore.fetchCampaigns('finished');
                     }
                     break;
                 case "DeviceSystemInfoChanged":

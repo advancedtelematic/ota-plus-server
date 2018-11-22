@@ -1,102 +1,84 @@
 import React, { PropTypes, Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable } from 'mobx';
 import List from './List';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import _ from 'underscore';
-import ReactDOM from 'react-dom';
-
-const headerHeight = 28;
+import Loader from "../../partials/Loader";
 
 @inject("stores")
 @observer
-class ContentPanel extends Component {
-    @observable fakeHeaderLetter = '';
-    @observable fakeHeaderTopPosition = 0;
+export default class ContentPanel extends Component {
+    static propTypes = {
+        status: PropTypes.string.isRequired,
+        expandedCampaigns: PropTypes.object.isRequired,
+        highlight: PropTypes.string,
+        addNewWizard: PropTypes.func,
+        showWizard: PropTypes.func,
+        showCancelCampaignModal: PropTypes.func,
+        showDependenciesModal: PropTypes.func,
+        toggleCampaign: PropTypes.func,
+    };
 
-    constructor(props) {
-        super(props);
-        this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-        this.listScroll = this.listScroll.bind(this);
-    }
-    componentDidMount() {
-        this.refs.list.addEventListener('scroll', this.listScroll);
-        this.listScroll();
-    }
-    componentWillUnmount(){
-        this.refs.list.removeEventListener('scroll', this.listScroll);
-    }
-    generateHeadersPositions() {
-        const headers = this.refs.list.querySelectorAll('.section-header');
-        const wrapperPosition = this.refs.list.getBoundingClientRect();
-        let positions = [];
-        _.each(headers, (header) => {
-            let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
-            positions.push(position);
-        }, this);
-        return positions;
-    }
+    renderHeader = (status) => {
+        const { addNewWizard } = this.props;
+        const headline = {
+            prepared: 'In preparation',
+            launched: 'running',
+            finished: 'finished',
+            cancelled: 'canceled',
+        };
+        const showColumns = (status !== 'prepared');
 
-    listScroll() {
-        const headers = this.refs.list.querySelectorAll('.section-header');
-        if(this.refs.list) {
-            const headersPositions = this.generateHeadersPositions();
-            let scrollTop = this.refs.list.scrollTop;
-            let newFakeHeaderLetter = this.fakeHeaderLetter;
-            _.each(headersPositions, (position, index) => {
-                if(scrollTop >= position) {
-                    newFakeHeaderLetter = headers[index].innerHTML;
-                    return true;
-                } else if(scrollTop >= position - headerHeight) {
-                    scrollTop -= scrollTop - (position - headerHeight);
-                    return true;
-                }
-            }, this);
-            this.fakeHeaderLetter = newFakeHeaderLetter;
-            this.fakeHeaderTopPosition = scrollTop;
-        }
-    }
+        return (
+            <div className="campaigns__header">
+                <div className="campaigns__column">{ headline[status] }</div>
+                { showColumns && <div className="campaigns__column">{ "Created at" }</div> }
+                { showColumns && <div className="campaigns__column">{ "Processed" }</div> }
+                { showColumns && <div className="campaigns__column">{ "Affected" }</div> }
+                { showColumns && <div className="campaigns__column">{ "Finished" }</div> }
+                { showColumns && <div className="campaigns__column">{ "Failure rate" }</div> }
+                <div className="campaigns__header-link">
+                    <a href="#" className="add-button grey-button" id="add-new-campaign"
+                       onClick={ (e) => {
+                           e.preventDefault();
+                           addNewWizard();
+                       } }>
+                        <span>{ "+ Add campaign" }</span>
+                    </a>
+                </div>
+            </div>
+        )
+    };
+
     render() {
-        const { highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign, addNewWizard } = this.props;
         const { campaignsStore } = this.props.stores;
+        const { campaignsFetchAsync } = campaignsStore;
+        const {
+            status,
+            highlight,
+            showCancelCampaignModal,
+            showDependenciesModal,
+            expandedCampaigns,
+            toggleCampaign,
+        } = this.props;
+
         return (
             <div className="campaigns" ref="list">
-                {campaignsStore.preparedCampaigns.length ?
-                    <span>
-                        <div className="campaigns__fake-header-link" style={{top: this.fakeHeaderTopPosition + 10}}>
-                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={(e) => { e.preventDefault(); addNewWizard() }} >
-                                <span>
-                                    +
-                                </span>
-                                <span>
-                                    Add campaign
-                                </span>
-                            </a>
+                { this.renderHeader(status) }
+                {
+                    campaignsFetchAsync[status].isFetching ?
+                        <div className="wrapper-center">
+                            <Loader/>
                         </div>
-                        {this.fakeHeaderLetter.length ?
-                            <div className="campaigns__fake-header" style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
-                            </div>
                         :
-                            null
-                        }
                         <List
-                            highlightedCampaign={highlightedCampaign}
-                            showCancelCampaignModal={showCancelCampaignModal}
-                            showDependenciesModal={showDependenciesModal}
-                            expandedCampaignName={expandedCampaignName}
-                            toggleCampaign={toggleCampaign}
+                            status={ status }
+                            focus={ highlight }
+                            expandedCampaigns={ expandedCampaigns }
+                            showCancelCampaignModal={ showCancelCampaignModal }
+                            showDependenciesModal={ showDependenciesModal }
+                            toggleCampaign={ toggleCampaign }
                         />
-                    </span>
-                :
-                    null
                 }
             </div>
         );
     }
 }
-
-ContentPanel.propTypes = {
-    stores: PropTypes.object
-}
-
-export default ContentPanel;

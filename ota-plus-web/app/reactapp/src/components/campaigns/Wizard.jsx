@@ -309,9 +309,10 @@ class Wizard extends Component {
 
     handleCampaignCreated() {
         const { campaignsStore } = this.props.stores;
+        const { switchTab } = this.props;
         campaignsStore.launchCampaign(campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
-        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+        switchTab('launched');
     }
 
     changeFilter(filterValue) {
@@ -374,7 +375,7 @@ class Wizard extends Component {
                                 </div>
                             </div>
                             <div className={"content-step step-" + currentStep.name}>
-                                {campaignsStore.campaignsOneFetchAsync.isFetching ?
+                                {campaignsStore.campaignsSingleFetchAsync.isFetching ?
                                     <div className="wrapper-center">
                                         <Loader />
                                     </div>

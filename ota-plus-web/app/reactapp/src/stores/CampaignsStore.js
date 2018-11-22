@@ -1,10 +1,10 @@
 import { observable, computed } from 'mobx';
 import axios from 'axios';
-import { 
+import {
     CSRF_TOKEN,
-    API_CAMPAIGNS_FETCH, 
-    API_CAMPAIGNS_CAMPAIGN_DETAILS,
-    API_CAMPAIGNS_CAMPAIGN_STATISTICS,
+    API_CAMPAIGNS_FETCH,
+    API_CAMPAIGNS_FETCH_SINGLE,
+    API_CAMPAIGNS_STATISTICS_SINGLE,
     API_CAMPAIGNS_CREATE,
     API_CAMPAIGNS_PACKAGE_SAVE,
     API_CAMPAIGNS_GROUPS_SAVE,
@@ -13,7 +13,6 @@ import {
     API_CAMPAIGNS_CANCEL,
     API_CAMPAIGNS_CANCEL_REQUEST,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
-    API_CAMPAIGNS_INDIVIDUAL_FETCH,
     API_CAMPAIGNS_LEGACY_CREATE,
     API_CAMPAIGNS_LEGACY_LAUNCH,
     API_CAMPAIGNS_LEGACY_FETCH,
@@ -22,24 +21,39 @@ import {
     API_CAMPAIGNS_LEGACY_RENAME,
     API_CAMPAIGNS_LEGACY_CANCEL,
     API_GROUPS_DEVICES_FETCH,
-    API_GROUPS_DETAIL
+    API_GROUPS_DETAIL,
+    CAMPAIGNS_STATUSES,
+    LIMIT_CAMPAIGNS,
 } from '../config';
-import { 
-    resetAsync, 
-    handleAsyncSuccess, 
-    handleAsyncError 
+import {
+    resetAll,
+    resetAsync,
+    handleAsyncSuccess,
+    handleAsyncError
 } from '../utils/Common';
 import Wizard from '../components/campaigns/Wizard';
 import _ from 'underscore';
+import { _contains } from "../utils/Collection";
 
 export default class CampaignsStore {
-
-    @observable campaignsFetchAsync = {};
+    @observable campaignsFetchAsyncAll = {};
+    @observable campaignsFetchAsync = {
+        prepared: {},
+        launched: {},
+        finished: {},
+        cancelled: {},
+    };
+    @observable count = {
+        prepared: 0,
+        launched: 0,
+        finished: 0,
+        cancelled: 0,
+    };
     @observable campaignsSafeFetchAsync = {};
-    @observable campaignsOneFetchAsync = {};
-    @observable campaignsOneSafeFetchAsync = {};
-    @observable campaignsOneStatisticsFetchAsync = {};
-    @observable campaignsOneSafeStatisticsFetchAsync = {};
+    @observable campaignsSingleFetchAsync = {};
+    @observable campaignsSingleSafeFetchAsync = {};
+    @observable campaignsSingleStatisticsFetchAsync = {};
+    @observable campaignsSingleSafeStatisticsFetchAsync = {};
     @observable campaignsCreateAsync = {};
     @observable campaignsLaunchAsync = {};
     @observable campaignsRenameAsync = {};
@@ -57,13 +71,19 @@ export default class CampaignsStore {
     @observable fullScreenMode = false;
     @observable transitionsEnabled = true;
 
+    @observable limitCampaigns = LIMIT_CAMPAIGNS;
+    @observable hasMoreCampaigns = false;
+    @observable currentDataOffset = 0;
+
     constructor() {
-        resetAsync(this.campaignsFetchAsync);
+        CAMPAIGNS_STATUSES.forEach(status => {
+            resetAsync(this.campaignsFetchAsync[status]);
+        });
         resetAsync(this.campaignsSafeFetchAsync);
-        resetAsync(this.campaignsOneFetchAsync);
-        resetAsync(this.campaignsOneSafeFetchAsync);
-        resetAsync(this.campaignsOneStatisticsFetchAsync);
-        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleFetchAsync);
+        resetAsync(this.campaignsSingleSafeFetchAsync);
+        resetAsync(this.campaignsSingleStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
         resetAsync(this.campaignsLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
@@ -85,7 +105,7 @@ export default class CampaignsStore {
             });
     }
 
-     _prepareUpdateObject(data) {
+    _prepareUpdateObject(data) {
         let targets = {};
         _.each(data, (item, index) => {
             targets[item.hardwareId] = {
@@ -114,58 +134,105 @@ export default class CampaignsStore {
         };
     }
 
-    fetchCampaigns(async = 'campaignsFetchAsync') {
-        resetAsync(this[async], true);
-        return axios.get(API_CAMPAIGNS_FETCH)
-            .then(function (response) {
-                let campaignIds = response.data.values;
-                let that = this;
-                if(campaignIds.length) {
-                    let after = _.after(campaignIds.length, () => {
-                        let afterStats = _.after(this.campaigns.length, () => {
-                            this.overallCampaignsCount = response.data.total;
-                            this._prepareCampaigns();
-                            this[async] = handleAsyncSuccess(response);
-                        });
-                        _.each(this.campaigns, (campaign, index) => {
-                            axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/stats')
-                                .then(function(resp) {
-                                    let stats = resp.data;
-                                    campaign.summary = stats;
-                                    afterStats();
-                                })
-                                .catch(function() {
-                                    afterStats();
-                                });
-                        });
-                    }, this);
-                    _.each(campaignIds, (campaignId, index) => {
-                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
-                        .then(function(resp) {
-                            that.campaigns = _.uniq(that.campaigns.concat(resp.data), campaign => campaign.id);
-                            after();
-                        })
-                        .catch(function() {
-                            after();
-                        });
-                  });
-
-                } else {
-                    this.campaigns = [];
-                    this[async] = handleAsyncSuccess(response);
-                }
-            }.bind(this))
-            .catch(function (error) {
-                this[async] = handleAsyncError(error);
-            }.bind(this));    
+    _fetch(status, offset=0) {
+        return axios.get(API_CAMPAIGNS_FETCH + `?status=${status}&limit=${this.limitCampaigns}&offset=${offset}`);
     }
 
-    fetchCampaign(id, mainAsync = 'campaignsOneFetchAsync', statsAsync = 'campaignsOneStatisticsFetchAsync') {
+    _fetchCampaign(id) {
+        return axios.get(API_CAMPAIGNS_FETCH_SINGLE + '/' + id);
+    }
+
+    _fetchCampaignStatistics(id) {
+        return axios.get(API_CAMPAIGNS_STATISTICS_SINGLE + '/' + id + '/stats');
+    }
+
+    fetchStatusCounts() {
+        const isFetching = true;
+        CAMPAIGNS_STATUSES.forEach(status => {
+            resetAsync(this.campaignsFetchAsync[status], isFetching);
+
+            this._fetch(status)
+                .then(response => {
+                    this.count[status] = response.data.total;
+                    this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
+                })
+                .catch(error => {
+                    this.campaignsFetchAsync[status] = handleAsyncError(error);
+                });
+        });
+    }
+
+    _fetchDetails(response, status) {
+        const campaignIds = response && response.data && response.data.values;
+
+        if (!_.isEmpty(campaignIds)) {
+            campaignIds.forEach((id, index) => {
+                const progressDone = (index === campaignIds.length - 1);
+                axios.all([
+                    this._fetchCampaign(id),
+                    this._fetchCampaignStatistics(id),
+                ]).then(axios.spread((campaign, statistics) => {
+                    const isNewItem = !_contains(this.campaigns, campaign.data);
+
+                    if (isNewItem) {
+                        const newItem = {
+                            ...campaign.data,
+                            summary: statistics.data,
+                        };
+                        this.campaigns.push(newItem);
+                    }
+                }));
+
+                if (progressDone) {
+                    this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
+                }
+            });
+        } else {
+            this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
+        }
+    }
+
+    loadMoreCampaigns(status='prepared') {
+        const newDataOffset = this.limitCampaigns + this.currentDataOffset;
+        const $this = this;
+        resetAll($this.campaignsFetchAsync);
+        resetAsync($this.campaignsFetchAsync[status], true);
+
+        return this._fetch(status, newDataOffset)
+            .then(function (response) {
+                $this._fetchDetails(response, status);
+                $this.currentDataOffset = response.data.offset;
+                $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
+            }.bind($this))
+            .catch(function (error) {
+                $this.campaignsFetchAsync[status] = handleAsyncError(error);
+            }.bind($this));
+    }
+
+    fetchCampaigns(status = 'prepared') {
+        const $this = this;
+        this.campaigns = [];
+        this.currentDataOffset = 0;
+        // first reset all possible active asyncs
+        resetAll($this.campaignsFetchAsync);
+        resetAsync($this.campaignsFetchAsync[status], true);
+
+        return this._fetch(status)
+            .then(function (response) {
+                $this._fetchDetails(response, status);
+                $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
+            }.bind($this))
+            .catch(function (error) {
+                $this.campaignsFetchAsync[status] = handleAsyncError(error);
+            }.bind($this));
+    }
+
+    fetchCampaign(id, mainAsync = 'campaignsSingleFetchAsync', statsAsync = 'campaignsSingleStatisticsFetchAsync') {
         resetAsync(this[mainAsync], true);
-        return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
+        return this._fetchCampaign(id)
             .then(function (response) {
                 resetAsync(this[statsAsync], true);
-                axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
+                axios.get(API_CAMPAIGNS_STATISTICS_SINGLE + '/' + id + '/stats')
                     .then(function (statsResponse) {
                         let data = response.data;
                         data.statistics = statsResponse.data;
@@ -183,7 +250,7 @@ export default class CampaignsStore {
                             results = _.pluck(results, 'data');
                             const chunks = _.chunk(results, 2);
                             data.groups = _.map(chunks, chunk => {
-                                return {...chunk[0], ...chunk[1]};
+                                return { ...chunk[0], ...chunk[1] };
                             });
                             this.campaign = data;
                             this[statsAsync] = handleAsyncSuccess(statsResponse);
@@ -210,7 +277,7 @@ export default class CampaignsStore {
             .catch(function (error) {
                 this.campaignsCreateAsync = handleAsyncError(error);
             }.bind(this));
-    }    
+    }
 
     launchCampaign(id) {
         resetAsync(this.campaignsLaunchAsync, true);
@@ -226,7 +293,7 @@ export default class CampaignsStore {
     renameCampaign(id, data) {
         resetAsync(this.campaignsRenameAsync, true);
         return axios.put(API_CAMPAIGNS_RENAME + '/' + id, data)
-            .then(function (response) {                
+            .then(function (response) {
                 let campaign = _.find(this.campaigns, campaign => {
                     return campaign.id === id;
                 });
@@ -263,14 +330,14 @@ export default class CampaignsStore {
     _prepareCampaigns() {
         let campaigns = this.campaigns;
         this.preparedCampaigns = campaigns.sort((a, b) => {
-          let aName = a.name;
-          let bName = b.name;
+            let aName = a.name;
+            let bName = b.name;
             return aName.localeCompare(bName);
         });
     }
 
     _getCampaign(id) {
-        return _.findWhere(this.campaigns, {id: id});
+        return _.findWhere(this.campaigns, { id: id });
     }
 
     _showFullScreen() {
@@ -287,10 +354,10 @@ export default class CampaignsStore {
     }
 
     _resetWizard() {
-        resetAsync(this.campaignsOneFetchAsync);
-        resetAsync(this.campaignsOneSafeFetchAsync);
-        resetAsync(this.campaignsOneStatisticsFetchAsync);
-        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleFetchAsync);
+        resetAsync(this.campaignsSingleSafeFetchAsync);
+        resetAsync(this.campaignsSingleStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleSafeStatisticsFetchAsync);
         resetAsync(this.campaignsLaunchAsync);
         this.campaign = {};
     }
@@ -301,12 +368,12 @@ export default class CampaignsStore {
     }
 
     _reset() {
-        resetAsync(this.campaignsFetchAsync);
+        resetAsync(this.campaignsFetchAsyncAll);
         resetAsync(this.campaignsSafeFetchAsync);
-        resetAsync(this.campaignsOneFetchAsync);
-        resetAsync(this.campaignsOneSafeFetchAsync);
-        resetAsync(this.campaignsOneStatisticsFetchAsync);
-        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleFetchAsync);
+        resetAsync(this.campaignsSingleSafeFetchAsync);
+        resetAsync(this.campaignsSingleStatisticsFetchAsync);
+        resetAsync(this.campaignsSingleSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
         resetAsync(this.campaignsLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
@@ -320,15 +387,14 @@ export default class CampaignsStore {
         this.campaignsSort = 'asc';
         this.campaign = {};
         this.campaignData = {};
-        this.camapignMultiTargetUpdateIdentifier = null;
         this.fullScreenMode = false;
         this.transitionsEnabled = true;
     }
 
     @computed get inPreparationCampaigns() {
         let campaigns = this.preparedCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
+        campaigns = _.sortBy(campaigns, function (campaign) {
+            return campaign.createdAt;
         }).reverse();
         return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "scheduled";
@@ -337,8 +403,8 @@ export default class CampaignsStore {
 
     @computed get cancelledCampaigns() {
         let campaigns = this.preparedCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
+        campaigns = _.sortBy(campaigns, function (campaign) {
+            return campaign.createdAt;
         }).reverse();
         return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "cancelled";
@@ -347,8 +413,8 @@ export default class CampaignsStore {
 
     @computed get runningCampaigns() {
         let campaigns = this.preparedCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
+        campaigns = _.sortBy(campaigns, function (campaign) {
+            return campaign.createdAt;
         });
         return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "launched";
@@ -357,8 +423,8 @@ export default class CampaignsStore {
 
     @computed get finishedCampaigns() {
         let campaigns = this.preparedCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
+        campaigns = _.sortBy(campaigns, function (campaign) {
+            return campaign.createdAt;
         }).reverse();
         return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished");
@@ -367,8 +433,8 @@ export default class CampaignsStore {
 
     @computed get lastActiveCampaigns() {
         let campaigns = this.runningCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
+        campaigns = _.sortBy(campaigns, function (campaign) {
+            return campaign.createdAt;
         }).reverse();
         return campaigns.slice(0, 10);
     }

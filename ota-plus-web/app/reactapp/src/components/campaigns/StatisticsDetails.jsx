@@ -23,7 +23,7 @@ class StatisticsDetails extends Component {
     autoRefresh() {
         const { campaignsStore } = this.props.stores;
         if(campaignsStore.campaign.statistics.status === "prepared" || campaignsStore.campaign.statistics.status === "scheduled") {
-            campaignsStore.fetchCampaign(campaignsStore.campaign.id, 'campaignsOneSafeFetchAsync' ,'campaignsOneSafeStatisticsFetchAsync');
+            campaignsStore.fetchCampaign(campaignsStore.campaign.id);
         }
     }
     componentWillUnmount() {

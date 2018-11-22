@@ -11,30 +11,32 @@ import StatisticsDetails from './StatisticsDetails';
 class Statistics extends Component {
     componentWillMount() {
         const { campaignsStore } = this.props.stores;
-    	campaignsStore.fetchCampaign(this.props.campaignId);
+        campaignsStore.fetchCampaign(this.props.campaignId);
     }
+
     render() {
         const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
         const { campaignsStore } = this.props.stores;
         return (
             <div>
-            	{campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
-    	        	<div className="wrapper-center wrapper-center--dark">
-    	        		<Loader />
-    	        	</div>
-            	:
-            		<StatisticsDetails
-                        showCancelCampaignModal={showCancelCampaignModal}
-                        showDependenciesModal={showDependenciesModal}
-                        hideCancel={hideCancel}
-                    />
+                {
+                    campaignsStore.campaignsSingleFetchAsync.isFetching ||
+                    campaignsStore.campaignsSingleStatisticsFetchAsync.isFetching ?
+                        <div className="wrapper-center wrapper-center--dark">
+                            <Loader/>
+                        </div>
+                        :
+                        <StatisticsDetails
+                            showCancelCampaignModal={ showCancelCampaignModal }
+                            showDependenciesModal={ showDependenciesModal }
+                            hideCancel={ hideCancel }
+                        />
                 }
             </div>
-    	);
-	}
+        );
+    }
 }
 
-Statistics.propTypes = {
-}
+Statistics.propTypes = {}
 
 export default Statistics;

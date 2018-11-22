@@ -26,7 +26,7 @@ import {
     API_PACKAGES_COMMENTS,
     API_DELETE_PACKAGE,
     API_UPDATES_SEARCH,
-    API_CAMPAIGNS_INDIVIDUAL_FETCH
+    API_CAMPAIGNS_FETCH_SINGLE,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
