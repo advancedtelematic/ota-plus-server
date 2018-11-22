@@ -168,12 +168,19 @@ class Device extends Component {
                                 />
                             }
                             {!this.ECUselected ?
-                                <DeviceOverviewPanel
-                                    cancelMtuUpdate={this.cancelMtuUpdate}
-                                    cancelApprovalPendingCampaign={this.cancelApprovalPendingCampaign}
-                                    activeTabId={this.activeTabId}
-                                    setOverviewPanelActiveTabId={this.setOverviewPanelActiveTabId}
-                                />
+                                devicesStore.approvalPendingCampaignsFetchAsync.isFetching || devicesStore.mtuFetchAsync.isFetching || devicesStore.eventsFetchAsync.isFetching || packagesStore.packagesHistoryFetchAsync.isFetching ?
+                                    <ul className="overview-panel__list">
+                                        <div className="wrapper-center">
+                                            <Loader/>
+                                        </div>
+                                    </ul>
+                                    :
+                                    <DeviceOverviewPanel
+                                        cancelMtuUpdate={this.cancelMtuUpdate}
+                                        cancelApprovalPendingCampaign={this.cancelApprovalPendingCampaign}
+                                        activeTabId={this.activeTabId}
+                                        setOverviewPanelActiveTabId={this.setOverviewPanelActiveTabId}
+                                    />
                                 :
                                 <span>
                                     <DeviceSoftwarePanel
