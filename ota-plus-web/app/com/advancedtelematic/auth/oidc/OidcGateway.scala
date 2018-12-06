@@ -18,7 +18,7 @@ import play.api.{Configuration, Logger}
 import play.api.cache.AsyncCacheApi
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{Format, JsError, JsLookupResult, JsPath, JsResult, JsSuccess, JsValue}
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc.{Result, Results}
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
@@ -63,6 +63,7 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   private[this] val staticProviderMeta    = ProviderMetadata.fromConfig(config.get[Configuration]("oidc.fallback"))
   private[this] val metadataTtl           = config.get[FiniteDuration]("oidc.configurationTtl")
   private[this] val jwksTtl               = config.get[FiniteDuration]("oidc.keysTtl")
+  private[this] val basicAuthHeader       = config.get[Boolean]("oidc.basicAuthHeader")
 
   def redirectToAuthorize()(implicit executionContext: ExecutionContext): Future[Result] = providerMeta().map { meta =>
     Results.Redirect(
@@ -146,6 +147,11 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   }
 
   def exchangeCodeForTokens(code: String)(implicit executionContext: ExecutionContext): Future[Tokens] = {
+    def requestBody(): Map[String,Seq[String]] = Map(
+      "redirect_uri" -> Seq(oauthConfig.callbackURL),
+      "code"         -> Seq(code),
+      "grant_type"   -> Seq("authorization_code")
+    )
     def verifyToken(lookup: JsLookupResult): Future[String] = {
       lookup.validate[String] match {
         case JsSuccess(x, _) =>
@@ -169,18 +175,21 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
 
     for {
       provMeta <- providerMeta()
-      response <- wsClient
-        .url(provMeta.tokenEndpoint)
-        .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
-        .post(
-          Map(
-            "client_id"     -> Seq(oauthConfig.clientId),
-            "client_secret" -> Seq(oauthConfig.secret),
-            "redirect_uri"  -> Seq(oauthConfig.callbackURL),
-            "code"          -> Seq(code),
-            "grant_type"    -> Seq("authorization_code")
-          )
-        )
+      response <- if (basicAuthHeader) {
+        wsClient
+          .url(provMeta.tokenEndpoint)
+          .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+          .withHttpHeaders(HeaderNames.CONTENT_TYPE -> MimeTypes.FORM)
+          .withAuth(oauthConfig.clientId, oauthConfig.secret, WSAuthScheme.BASIC)
+          .post(requestBody())
+      } else {
+        wsClient
+          .url(provMeta.tokenEndpoint)
+          .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+          .withHttpHeaders(HeaderNames.CONTENT_TYPE -> MimeTypes.FORM)
+          .post(requestBody() ++ Map("client_id"     -> Seq(oauthConfig.clientId),
+                                     "client_secret" -> Seq(oauthConfig.secret)))
+      }
       tokens <- extractTokens(response)
     } yield tokens
   }
@@ -245,7 +254,8 @@ object OidcConfiguration {
   def load(wSClient: WSClient, configUrl: Url, issuerUrl: Url, log: Logger)(
       implicit ec: ExecutionContext
   ): Future[ProviderMetadata] = {
-    val uri = Uri(configUrl).withPath(OidcConfigurationPath)
+    val root = Uri(configUrl)
+    val uri  = root.withPath(root.path ++ OidcConfigurationPath)
     log.info(s"Loading OIDC provider configuration from ${uri}")
     wSClient.url(uri.toString()).withFollowRedirects(true).get().flatMap { response =>
       response.status match {
@@ -267,5 +277,4 @@ object OidcConfiguration {
       }
     }
   }
-
 }
