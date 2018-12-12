@@ -31,14 +31,10 @@ class Device extends Component {
             type: null
         };
     }
-    cancelMtuUpdate = (correlationId) => {
+    cancelUpdateAssignment = (correlationId) => {
         const {devicesStore} = this.props.stores;
         let deviceId = devicesStore.device.uuid;
-        let data = {
-            correlationId: correlationId,
-            device: deviceId
-        };
-        devicesStore.cancelMtuUpdate(data);
+        devicesStore.cancelAssignment(deviceId, correlationId);
     }
     cancelApprovalPendingCampaign = (campaignId) => {
         let campaignCorrelationId = 'urn:here-ota:campaign:' + campaignId;
@@ -176,7 +172,7 @@ class Device extends Component {
                                     </ul>
                                     :
                                     <DeviceOverviewPanel
-                                        cancelMtuUpdate={this.cancelMtuUpdate}
+                                        cancelUpdateAssignment={this.cancelUpdateAssignment}
                                         cancelApprovalPendingCampaign={this.cancelApprovalPendingCampaign}
                                         activeTabId={this.activeTabId}
                                         setOverviewPanelActiveTabId={this.setOverviewPanelActiveTabId}
@@ -222,4 +218,4 @@ Device.propTypes = {
     stores: PropTypes.object,
 }
 
-export default Device;
+export default Device; 

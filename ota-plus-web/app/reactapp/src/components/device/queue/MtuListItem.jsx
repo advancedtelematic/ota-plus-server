@@ -9,7 +9,7 @@ import Loader from "../../../partials/Loader";
 class MtuListItem extends Component {
 
     render() {
-        const { update, cancelMtuUpdate, showSequencer, events } = this.props;
+        const { update, cancelUpdateAssignment, showSequencer, events } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const devicePrimaryEcu = device.directorAttributes.primary;
@@ -31,7 +31,7 @@ class MtuListItem extends Component {
                                 </span>
                             </div>
                             <div>
-                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelUpdateAssignment.bind(this, correlationId)}>
                                     Cancel
                                 </button>
                             </div>
@@ -64,7 +64,7 @@ class MtuListItem extends Component {
                                 </span>
                             </div>
                             <div>
-                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelMtuUpdate.bind(this, correlationId)}>
+                                <button id="cancel-mtu" className="overview-panel__cancel-update" onClick={cancelUpdateAssignment.bind(this, correlationId)}>
                                     Cancel
                                 </button>
                             </div>

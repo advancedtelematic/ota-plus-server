@@ -24,7 +24,7 @@ class OverviewPanel extends Component {
     }
 
     render() {
-        const { cancelMtuUpdate, activeTabId, setOverviewPanelActiveTabId, showSequencer, cancelApprovalPendingCampaign } = this.props;
+        const { cancelUpdateAssignment, activeTabId, setOverviewPanelActiveTabId, showSequencer, cancelApprovalPendingCampaign } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         return (
@@ -68,7 +68,7 @@ class OverviewPanel extends Component {
                 {
                     activeTabId === 1 &&
                     <QueueMtuList
-                        cancelMtuUpdate={cancelMtuUpdate}
+                        cancelUpdateAssignment={cancelUpdateAssignment}
                         showSequencer={showSequencer}
                     />
                 }

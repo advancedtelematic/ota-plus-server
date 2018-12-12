@@ -39,7 +39,7 @@ export default class DevicesStore {
     @observable devicesRenameAsync = {};
     @observable mtuCreateAsync = {};
     @observable mtuFetchAsync = {};
-    @observable mtuCancelAsync = {};
+    @observable assignmentCancelAsync = {};
     @observable eventsFetchAsync = {};
     @observable approvalPendingCampaignsFetchAsync = {};
     @observable devices = [];
@@ -80,7 +80,7 @@ export default class DevicesStore {
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
-        resetAsync(this.mtuCancelAsync);
+        resetAsync(this.assignmentCancelAsync);
         resetAsync(this.eventsFetchAsync);
         resetAsync(this.approvalPendingCampaignsFetchAsync);
         this.devicesLimit = 30;
@@ -432,26 +432,26 @@ export default class DevicesStore {
         }
     }
 
-    cancelMtuUpdate(data) {
-        resetAsync(this.mtuCancelAsync, true);
-        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+    cancelAssignment(deviceId, correlationId) {
+        resetAsync(this.assignmentCancelAsync, true);
+        return axios.delet(API_ASSIGNMENTS + '/' + deviceId)
             .then(function (response) {
                 this.fetchAssignments(this.device.uuid);
-                this.mtuCancelAsync = handleAsyncSuccess(response);
+                this.assignmentCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
-                this.mtuCancelAsync = handleAsyncError(error);
+                this.assignmentCancelAsync = handleAsyncError(error);
             }.bind(this));
     }
 
     cancelApprovalPendingCampaingPerDevice(data) {
-        resetAsync(this.mtuCancelAsync, true);
+        resetAsync(this.assignmentCancelAsync, true);
         return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
             .then(function (response) {
-                this.mtuCancelAsync = handleAsyncSuccess(response);
+                this.assignmentCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
-                this.mtuCancelAsync = handleAsyncError(error);
+                this.assignmentCancelAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -629,7 +629,7 @@ export default class DevicesStore {
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
-        resetAsync(this.mtuCancelAsync);
+        resetAsync(this.assignmentCancelAsync);
         resetAsync(this.eventsFetchAsync);
         resetAsync(this.approvalPendingCampaignsFetchAsync);
         resetAsync(this.deviceCurrentStatusFetchAsync);

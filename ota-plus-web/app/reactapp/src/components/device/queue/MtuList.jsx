@@ -7,7 +7,7 @@ import MtuListItem from './MtuListItem';
 @observer
 class MtuQueueList extends Component {
     render() {
-        const { cancelMtuUpdate, showSequencer } = this.props;
+        const { cancelUpdateAssignment, showSequencer } = this.props;
         const { devicesStore } = this.props.stores;
         const emptyQueue = (
             <div className="overview-panel__list">
@@ -29,7 +29,7 @@ class MtuQueueList extends Component {
                             <MtuListItem
                                 key={index}
                                 update={update}
-                                cancelMtuUpdate={cancelMtuUpdate}
+                                cancelUpdateAssignment={cancelUpdateAssignment}
                                 showSequencer={showSequencer}
                                 events={itemEvents}
                             />
@@ -44,7 +44,7 @@ class MtuQueueList extends Component {
 }
 MtuQueueList.propTypes = {
     stores: PropTypes.object,
-    cancelMtuUpdate: PropTypes.func.isRequired,
+    cancelUpdateAssignment: PropTypes.func.isRequired,
 }
 
 export default MtuQueueList;
