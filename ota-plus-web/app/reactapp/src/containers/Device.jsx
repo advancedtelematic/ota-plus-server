@@ -85,7 +85,7 @@ class Device extends Component {
     installPackage = (data) => {
         const {devicesStore, hardwareStore} = this.props.stores;
         data.hardwareId = hardwareStore.activeEcu.hardwareId;
-        devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
+        devicesStore.createMtuAssignment(data, devicesStore.device.uuid);
         this.selectQueue();
         this.setOverviewPanelActiveTabId(1)
 

@@ -19,7 +19,7 @@ class Device extends Component {
         packagesStore.fetchPackages();
         packagesStore.fetchPackagesHistory(this.props.params.id, packagesStore.packagesHistoryFilter);
         devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
-        devicesStore.fetchMultiTargetUpdates(this.props.params.id);
+        devicesStore.fetchAssignments(this.props.params.id);
         devicesStore.fetchEvents(this.props.params.id);
         devicesStore.fetchApprovalPendingCampaigns(this.props.params.id);
     }

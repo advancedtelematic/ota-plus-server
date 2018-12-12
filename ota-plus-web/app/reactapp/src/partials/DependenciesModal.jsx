@@ -148,7 +148,7 @@ class DependenciesModal extends Component {
     devicesFetched() {
         const { devicesStore } = this.props.stores;
         _.each(devicesStore.devices, (device, index) => {
-            devicesStore.fetchMultiTargetUpdates(device.uuid);
+            devicesStore.fetchAssignments(device.uuid);
             devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then((filepaths) => {
                 device.installedFilepaths = filepaths;
             });

@@ -10,8 +10,7 @@ import {
     API_DEVICES_RENAME,
     API_DEVICES_DELETE,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
-    API_CREATE_MULTI_TARGET_UPDATE,
-    API_FETCH_MULTI_TARGET_UPDATES,
+    API_ASSIGNMENTS,
     API_CANCEL_MULTI_TARGET_UPDATE,
     API_CAMPAIGNS_FETCH_SINGLE,
     API_UPDATES_SEARCH,
@@ -243,7 +242,7 @@ export default class DevicesStore {
         }
     }
 
-    createMultiTargetUpdate(data, id) {
+    createMtuAssignment(data, id) {
         let updateObject = this._prepareUpdateObject(data);
         resetAsync(this.mtuCreateAsync, true);
         return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
@@ -252,11 +251,16 @@ export default class DevicesStore {
                 let status = null;
                 if (updateIdentifier.length) {
                     let after = _.after(status === 'success', () => {
-                        this.fetchMultiTargetUpdates(id);
+                        this.fetchAssignments(id);
                         this.mtuCreateAsync = handleAsyncSuccess(response);
                     }, this);
-                    axios.put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
-                        .then(function (multiTargetResponse) {
+                    let updateAssignment = {
+                        mtuId: updateIdentifier,
+                        correlationId: 'urn:here-ota:mtu:' + updateIdentifier,
+                        devices: [id]
+                    };
+                    axios.post(API_ASSIGNMENTS, updateAssignment)
+                        .then(function (assignmentResponse) {
                             status = 'success';
                             after();
                         })
@@ -290,9 +294,9 @@ export default class DevicesStore {
         }
     }
 
-    fetchMultiTargetUpdates(id) {
+    fetchAssignments(id) {
         resetAsync(this.mtuFetchAsync, true);
-        return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
+        return axios.get(API_ASSIGNMENTS + '/' + id)
             .then((response) => {
                 let data = response.data;
                 let after = _.after(data.length, () => {
@@ -432,7 +436,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCancelAsync, true);
         return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
             .then(function (response) {
-                this.fetchMultiTargetUpdates(this.device.uuid);
+                this.fetchAssignments(this.device.uuid);
                 this.mtuCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
