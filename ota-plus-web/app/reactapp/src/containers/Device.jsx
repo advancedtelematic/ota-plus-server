@@ -37,14 +37,9 @@ class Device extends Component {
         devicesStore.cancelAssignment(deviceId, correlationId);
     }
     cancelApprovalPendingCampaign = (campaignId) => {
-        let campaignCorrelationId = 'urn:here-ota:campaign:' + campaignId;
         const {devicesStore} = this.props.stores;
         let deviceId = devicesStore.device.uuid;
-        let data = {
-            correlationId: campaignCorrelationId,
-            device: deviceId
-        };
-        devicesStore.cancelApprovalPendingCampaingPerDevice(data);
+        devicesStore.cancelApprovalPendingCampaign(deviceId, campaignId);
     }
     selectEcu = (hardwareId, serial, filepath, type, e) => {
         if (e) e.preventDefault();

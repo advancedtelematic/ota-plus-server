@@ -11,7 +11,6 @@ import {
     API_DEVICES_DELETE,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_ASSIGNMENTS,
-    API_CANCEL_MULTI_TARGET_UPDATE,
     API_CAMPAIGNS_FETCH_SINGLE,
     API_UPDATES_SEARCH,
     API_DEVICE_APPROVAL_PENDING_CAMPAIGNS
@@ -444,9 +443,12 @@ export default class DevicesStore {
             }.bind(this));
     }
 
-    cancelApprovalPendingCampaingPerDevice(data) {
+    cancelApprovalPendingCampaign(deviceId, campaignId) {
         resetAsync(this.assignmentCancelAsync, true);
-        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+        let data = {
+            canceledDevices: [deviceId]
+        };
+        return axios.patch(API_CAMPAIGNS_CANCEL + '/' + campaignId, data)
             .then(function (response) {
                 this.assignmentCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
