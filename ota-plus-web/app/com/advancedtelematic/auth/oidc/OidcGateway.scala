@@ -18,7 +18,7 @@ import play.api.{Configuration, Logger}
 import play.api.cache.AsyncCacheApi
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{Format, JsError, JsLookupResult, JsPath, JsResult, JsSuccess, JsValue}
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc.{Result, Results}
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
@@ -44,6 +44,17 @@ object ProviderMetadata {
   }
 }
 
+private[oidc] sealed trait ClientAuthentication
+final case object PasswordBasicAuth extends ClientAuthentication
+final case object PasswordRequestBody extends ClientAuthentication
+
+object ClientAuthentication {
+  def fromString(s: String): ClientAuthentication = s match {
+    case "PasswordBasicAuth" => PasswordBasicAuth
+    case _                   => PasswordRequestBody
+  }
+}
+
 private[oidc] case class HereKeyPair(publicKey: PublicKey, secretKey: SecretKey)
 
 object OidcGateway {
@@ -63,6 +74,8 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   private[this] val staticProviderMeta    = ProviderMetadata.fromConfig(config.get[Configuration]("oidc.fallback"))
   private[this] val metadataTtl           = config.get[FiniteDuration]("oidc.configurationTtl")
   private[this] val jwksTtl               = config.get[FiniteDuration]("oidc.keysTtl")
+  private[this] val clientAuthentication  = ClientAuthentication.fromString(
+    config.get[String]("oidc.clientAuthentication"))
 
   def redirectToAuthorize()(implicit executionContext: ExecutionContext): Future[Result] = providerMeta().map { meta =>
     Results.Redirect(
@@ -167,20 +180,28 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
       } yield Tokens(accessToken, idToken)
     }
 
+    val requestBody: Map[String, Seq[String]] = Map(
+      "redirect_uri" -> Seq(oauthConfig.callbackURL),
+      "code"         -> Seq(code),
+      "grant_type"   -> Seq("authorization_code"))
+
     for {
       provMeta <- providerMeta()
-      response <- wsClient
-        .url(provMeta.tokenEndpoint)
-        .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
-        .post(
-          Map(
-            "client_id"     -> Seq(oauthConfig.clientId),
-            "client_secret" -> Seq(oauthConfig.secret),
-            "redirect_uri"  -> Seq(oauthConfig.callbackURL),
-            "code"          -> Seq(code),
-            "grant_type"    -> Seq("authorization_code")
-          )
-        )
+      response <- clientAuthentication match {
+        case PasswordBasicAuth => wsClient
+          .url(provMeta.tokenEndpoint)
+          .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+          .withHttpHeaders(HeaderNames.CONTENT_TYPE -> MimeTypes.FORM)
+          .withAuth(oauthConfig.clientId, oauthConfig.secret, WSAuthScheme.BASIC)
+          .post(requestBody)
+
+        case PasswordRequestBody => wsClient
+          .url(provMeta.tokenEndpoint)
+          .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+          .withHttpHeaders(HeaderNames.CONTENT_TYPE -> MimeTypes.FORM)
+          .post(requestBody ++ Map("client_id"     -> Seq(oauthConfig.clientId),
+                                   "client_secret" -> Seq(oauthConfig.secret)))
+      }
       tokens <- extractTokens(response)
     } yield tokens
   }
@@ -240,12 +261,14 @@ object OidcConfiguration {
     )(ProviderMetadata.apply _)
   }
 
-  val OidcConfigurationPath = Uri.Path("/.well-known/openid-configuration")
+  val OidcConfigurationPath = Uri.Path(".well-known/openid-configuration")
 
   def load(wSClient: WSClient, configUrl: Url, issuerUrl: Url, log: Logger)(
       implicit ec: ExecutionContext
   ): Future[ProviderMetadata] = {
-    val uri = Uri(configUrl).withPath(OidcConfigurationPath)
+    val root = Uri(configUrl)
+    val path = if (root.path.endsWithSlash) root.path else root.path ++ Uri.Path("/")
+    val uri  = root.withPath(path ++ OidcConfigurationPath)
     log.info(s"Loading OIDC provider configuration from ${uri}")
     wSClient.url(uri.toString()).withFollowRedirects(true).get().flatMap { response =>
       response.status match {
