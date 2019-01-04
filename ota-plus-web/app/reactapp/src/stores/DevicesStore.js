@@ -111,7 +111,7 @@ export default class DevicesStore {
         this.devicesGroupFilter = groupId;
         let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}`;
         if (groupId && groupId === 'ungrouped')
-            apiAddress += `&ungrouped=true`;
+            apiAddress += `&grouped=false`;
         else if (groupId)
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
@@ -132,7 +132,7 @@ export default class DevicesStore {
 
     fetchUngroupedDevices(filter = '') {
         resetAsync(this.ungroupedDevicesFetchAsync, true);
-        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}&ungrouped=true`;
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}&grouped=false`;
         return axios.get(apiAddress)
             .then((response) => {
                 this.ungroupedDevicesInitialTotalCount = response.data.total;
@@ -162,7 +162,7 @@ export default class DevicesStore {
         resetAsync(this.devicesLoadMoreAsync, true);
         let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
         if (groupId && groupId === 'ungrouped')
-            apiAddress += `&ungrouped=true`;
+            apiAddress += `&grouped=false`;
         else if (groupId)
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
