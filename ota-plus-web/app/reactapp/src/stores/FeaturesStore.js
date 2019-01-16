@@ -2,11 +2,11 @@
 
 import { observable } from 'mobx';
 import axios from 'axios';
+import _ from 'lodash';
+import Cookies from 'js-cookie';
 import { API_FEATURES_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'underscore';
 import { whatsNew } from './data/newFeatures';
-import Cookies from 'js-cookie';
 
 export default class FeaturesStore {
   @observable featuresFetchAsync = {};
@@ -26,7 +26,7 @@ export default class FeaturesStore {
 
   resetFeaturesFetchAsync(isFetching = false) {
     this.featuresFetchAsync = {
-      isFetching: isFetching,
+      isFetching,
       status: null,
     };
   }
@@ -35,24 +35,20 @@ export default class FeaturesStore {
     resetAsync(this.featuresFetchAsync, true);
     return axios
       .get(API_FEATURES_FETCH)
-      .then(
-        function(response) {
-          this.features = response.data;
-          if (_.contains(response.data, 'alphaplus')) {
-            this.alphaPlusEnabled = true;
-          }
-          if (_.contains(response.data, 'alphatest')) {
-            this.alphaTestEnabled = true;
-          }
+      .then(response => {
+        this.features = response.data;
+        if (_.includes(response.data, 'alphaplus')) {
+          this.alphaPlusEnabled = true;
+        }
+        if (_.includes(response.data, 'alphatest')) {
+          this.alphaTestEnabled = true;
+        }
 
-          this.featuresFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.featuresFetchAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+        this.featuresFetchAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.featuresFetchAsync = handleAsyncError(error);
+      });
   }
 
   checkWhatsNewStatus() {
@@ -63,12 +59,10 @@ export default class FeaturesStore {
 
     if (currentVersion === WHATS_NEW_HIDE_VERSION) {
       this.whatsNewShowPage = true;
-    } else {
-      if (WHATS_NEW_HIDE) {
-        Cookies.set('WHATS_NEW_HIDE', 'false');
-        Cookies.remove('WHATS_NEW_HIDE_VERSION');
-        this.whatsNewPopOver = true;
-      }
+    } else if (WHATS_NEW_HIDE) {
+      Cookies.set('WHATS_NEW_HIDE', 'false');
+      Cookies.remove('WHATS_NEW_HIDE_VERSION');
+      this.whatsNewPopOver = true;
     }
 
     if (WHATS_NEW_DELAY && !WHATS_NEW_HIDE) {

@@ -1,12 +1,13 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { SearchBar, FormInput, FormSelect } from '../../../../partials';
 import { Form } from 'formsy-react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import mobx from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const nameFilterOptions = ['device ID'];
 const extraFilterOptions = ['contains'];

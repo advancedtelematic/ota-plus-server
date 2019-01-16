@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import VersionsItem from './VersionsItem';
 
 @observer
@@ -22,7 +23,7 @@ class Versions extends Component {
 }
 
 Versions.propTypes = {
-  versions: PropTypes.object.isRequired,
+  // versions: PropTypes.object.isRequired,
 };
 
 export default Versions;

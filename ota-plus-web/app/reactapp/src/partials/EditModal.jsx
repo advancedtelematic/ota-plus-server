@@ -1,15 +1,16 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import Modal from './Modal';
+import OTAModal from './OTAModal';
 import AsyncResponse from './AsyncResponse';
-import { Form } from './Form';
+import { OTAForm } from './OTAForm';
 import FormInput from './FormInput';
 import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../utils';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @inject('stores')
 @observer
@@ -43,7 +44,7 @@ class EditModal extends Component {
     const { shown, hide, modalTitle, device } = this.props;
     const { devicesStore } = this.props.stores;
     const form = (
-      <Form onSubmit={this.submitForm.bind(this)} id='edit-name-form'>
+      <OTAForm onSubmit={this.submitForm.bind(this)} id='edit-name-form'>
         <AsyncResponse
           handledStatus='error'
           id='edit-device-name__alert'
@@ -75,10 +76,10 @@ class EditModal extends Component {
             </div>
           </div>
         </div>
-      </Form>
+      </OTAForm>
     );
     return (
-      <Modal
+      <OTAModal
         title={modalTitle}
         topActions={
           <div className='top-actions flex-end'>
@@ -89,7 +90,7 @@ class EditModal extends Component {
         }
         className='edit-name-modal'
         content={form}
-        shown={shown}
+        visible={shown}
       />
     );
   }

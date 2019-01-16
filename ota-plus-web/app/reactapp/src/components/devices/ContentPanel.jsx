@@ -1,10 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { SubHeader } from '../../partials';
-import _ from 'underscore';
+import _ from 'lodash';
 import DeviceItem from './Item';
 import BarChart from './BarChart';
 import Stats from './Stats';
@@ -72,20 +71,24 @@ const connectionsData = {
 
 @inject('stores')
 @observer
-export default class ContentPanel extends Component {
-  constructor(props) {
-    super(props);
-    this.goToDetails = this.goToDetails.bind(this);
-  }
+class ContentPanel extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+    changeFilter: PropTypes.func.isRequired,
+    showDeleteConfirmation: PropTypes.func,
+    showEditName: PropTypes.func,
+    addNewWizard: PropTypes.func,
+  };
 
-  goToDetails(deviceId, e) {
+  goToDetails = (deviceId, e) => {
+    const { router } = this.context;
     if (e) e.preventDefault();
-    this.context.router.push(`/device/${deviceId}`);
-  }
+    router.history.push(`/device/${deviceId}`);
+  };
 
   render() {
-    const { changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
-    const { devicesStore, featuresStore, groupsStore } = this.props.stores;
+    const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
+    const { devicesStore, featuresStore, groupsStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const { selectedGroup } = groupsStore;
     const { isSmart } = selectedGroup;
@@ -93,17 +96,16 @@ export default class ContentPanel extends Component {
     return (
       <div className='devices-panel'>
         <ContentPanelHeader devicesFilter={devicesStore.devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
-        {isSmart ? (
-          groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
+        {isSmart &&
+          (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
             <div className='wrapper-center'>
               <Loader />
             </div>
           ) : (
             <ContentPanelSubheader />
-          )
-        ) : null}
-        <div className={'devices-panel__wrapper ' + (isSmart ? 'devices-panel__wrapper--smart' : '')}>
-          <div className={'devices-panel__list' + (alphaPlusEnabled ? ' devices-panel__list--alpha' : '')}>
+          ))}
+        <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
+          <div className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}>
             <InfiniteScroll
               className='wrapper-infinite-scroll'
               hasMore={devicesStore.devicesCurrentPage < devicesStore.devicesTotalCount / devicesStore.devicesLimit}
@@ -114,75 +116,74 @@ export default class ContentPanel extends Component {
               }}
               threshold={100}
             >
-              {devicesStore.devicesFetchAsync.isFetching ? (
+              {devicesStore.devicesFetchAsync.isFetching && (
                 <div className='wrapper-center'>
                   <Loader />
                 </div>
-              ) : devicesStore.devices.length ? (
-                _.map(devicesStore.devices, device => {
-                  return (
-                    <DeviceItem
-                      device={device}
-                      goToDetails={this.goToDetails}
-                      showDeleteConfirmation={showDeleteConfirmation}
-                      showEditName={showEditName}
-                      key={device.uuid}
-                      stores={{
-                        devicesStore: devicesStore,
-                        featuresStore: featuresStore,
-                        groupsStore: groupsStore,
-                      }}
-                    />
-                  );
-                })
+              )}
+              {devicesStore.devices.length ? (
+                _.map(devicesStore.devices, device => (
+                  <DeviceItem
+                    device={device}
+                    goToDetails={this.goToDetails}
+                    showDeleteConfirmation={showDeleteConfirmation}
+                    showEditName={showEditName}
+                    key={device.uuid}
+                    stores={{
+                      devicesStore,
+                      featuresStore,
+                      groupsStore,
+                    }}
+                  />
+                ))
               ) : (
                 <span className='devices-panel__list-empty'>
-                  <div className='wrapper-center'>This group is empty. Please, drag and drop devices here.</div>
+                  <div className='wrapper-center'>{'This group is empty. Please, drag and drop devices here.'}</div>
                 </span>
               )}
             </InfiniteScroll>
           </div>
-          {alphaPlusEnabled ? (
+          {alphaPlusEnabled && (
             <div className='devices-panel__dashboard'>
-              <div className='devices-panel__title devices-panel__title--margin'>Dashboard (BETA)</div>
+              <div className='devices-panel__title devices-panel__title--margin'>{'Dashboard (BETA)'}</div>
               <div className='devices-panel__top-wrapper'>
                 <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>Simultaneous connections</div>
-                  560/600
+                  <div className='devices-panel__title'>{'Simultaneous connections'}</div>
+                  {'560/600'}
                   <div className='devices-panel__dashboard-top-icon' />
                 </div>
                 <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>Total devices</div>
-                  134.000
+                  <div className='devices-panel__title'>{'Total devices'}</div>
+                  {'134.000'}
                 </div>
                 <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>Total connections</div>
-                  69.000
+                  <div className='devices-panel__title'>{'Total connections'}</div>
+                  {'69.000'}
                   <div className='devices-panel__dashboard-top-icon' />
                 </div>
               </div>
               <div className='devices-panel__dashboard-bottom'>
                 <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>Live connections</div>
+                  <div className='devices-panel__title'>{'Live connections'}</div>
                   <div className='devices-panel__dashboard-data'>
                     <BarChart connections={connections} />
                   </div>
                 </div>
                 <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>Certificate rollover</div>
+                  <div className='devices-panel__title'>{'Certificate rollover'}</div>
                   <div className='devices-panel__dashboard-data'>
-                    <Stats data={certificateRolloverData.stats} indicatorColors={true} />
+                    <Stats data={certificateRolloverData.stats} indicatorColors />
                   </div>
                 </div>
                 <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>Connections</div>
+                  <div className='devices-panel__title'>{'Connections'}</div>
                   <div className='devices-panel__dashboard-data'>
                     <Stats data={connectionsData.stats} indicatorColors={false} />
                   </div>
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
         </div>
       </div>
     );
@@ -190,10 +191,7 @@ export default class ContentPanel extends Component {
 }
 
 ContentPanel.wrappedComponent.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
-ContentPanel.propTypes = {
-  stores: PropTypes.object,
-  changeFilter: PropTypes.func.isRequired,
-};
+export default ContentPanel;

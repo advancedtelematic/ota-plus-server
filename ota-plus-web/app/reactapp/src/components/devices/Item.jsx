@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { DragSource } from 'react-dnd';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 import { Dropdown } from '../../partials';
 
 const deviceSource = {
@@ -41,18 +42,15 @@ function collect(connect, monitor) {
 class Item extends Component {
   @observable menuShown = false;
 
-  constructor(props) {
-    super(props);
-    this.showMenu = this.showMenu.bind(this);
-    this.hideMenu = this.hideMenu.bind(this);
-  }
-  showMenu(e) {
+  showMenu = e => {
     e.stopPropagation();
     this.menuShown = true;
-  }
-  hideMenu(e) {
+  };
+
+  hideMenu = e => {
     this.menuShown = false;
-  }
+  };
+
   render() {
     const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
     const { groupsStore } = this.props.stores;

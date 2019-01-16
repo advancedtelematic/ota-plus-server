@@ -1,24 +1,31 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
-import { Doughnut } from 'react-chartjs';
-import { FlatButton } from 'material-ui';
 import { Loader } from '../../partials';
 import StatisticsDetails from './StatisticsDetails';
 
 @inject('stores')
 @observer
 class Statistics extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+    campaignId: PropTypes.string,
+    showCancelCampaignModal: PropTypes.func,
+    showDependenciesModal: PropTypes.func,
+    hideCancel: PropTypes.bool,
+  };
+
   componentWillMount() {
-    const { campaignsStore } = this.props.stores;
-    campaignsStore.fetchCampaign(this.props.campaignId);
+    const { stores, campaignId } = this.props;
+    const { campaignsStore } = stores;
+    campaignsStore.fetchCampaign(campaignId);
   }
 
   render() {
-    const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
-    const { campaignsStore } = this.props.stores;
+    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+    const { campaignsStore } = stores;
     return (
       <div>
         {campaignsStore.campaignsSingleFetchAsync.isFetching || campaignsStore.campaignsSingleStatisticsFetchAsync.isFetching ? (
@@ -32,7 +39,5 @@ class Statistics extends Component {
     );
   }
 }
-
-Statistics.propTypes = {};
 
 export default Statistics;

@@ -1,0 +1,91 @@
+/** @format */
+
+@import '../variables-ota';
+@import '../mixins';
+
+#page-updates {
+  background-color: $home-bg;
+  height: calc(100vh - 50px);
+  padding: 30px;
+
+  .update-subheader {
+    justify-content: normal;
+
+    &__item {
+      flex-grow: 1;
+      color: $home-header-text;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    a {
+      flex-grow: 3;
+      text-align: right;
+    }
+  }
+
+  .c-update {
+    &__item {
+      cursor: default;
+      font-size: 12px;
+      padding-left: 15px;
+    }
+
+    &__teaser {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &__name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+    }
+
+    &__icon {
+      width: 30px;
+      height: 25px;
+      margin-right: 10px;
+      &--internal {
+        background: url($update-internal) 100% 100% no-repeat;
+      }
+      &--external {
+        background: url($update-external) 100% 100% no-repeat;
+      }
+    }
+
+    &__hash {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__edit {
+      flex: 3;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .search-box {
+    input {
+      background: $device-hardware-header !important;
+      font-weight: normal !important;
+    }
+
+    hr {
+      display: none;
+    }
+  }
+
+  .fake-header,
+  .header {
+    height: 45px;
+  }
+}

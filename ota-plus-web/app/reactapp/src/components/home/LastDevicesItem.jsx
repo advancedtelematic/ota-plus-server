@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @observer
 class LastDevicesItem extends Component {

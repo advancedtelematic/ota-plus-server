@@ -2,50 +2,42 @@
 
 import { observable, computed } from 'mobx';
 import axios from 'axios';
+import _ from 'lodash';
 import {
-  CSRF_TOKEN,
   API_CAMPAIGNS_FETCH,
   API_CAMPAIGNS_FETCH_SINGLE,
   API_CAMPAIGNS_STATISTICS_SINGLE,
   API_CAMPAIGNS_CREATE,
-  API_CAMPAIGNS_PACKAGE_SAVE,
-  API_CAMPAIGNS_GROUPS_SAVE,
   API_CAMPAIGNS_LAUNCH,
   API_CAMPAIGNS_RENAME,
   API_CAMPAIGNS_CANCEL,
   API_CAMPAIGNS_CANCEL_REQUEST,
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
-  API_CAMPAIGNS_LEGACY_CREATE,
-  API_CAMPAIGNS_LEGACY_LAUNCH,
-  API_CAMPAIGNS_LEGACY_FETCH,
-  API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS,
-  API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH,
-  API_CAMPAIGNS_LEGACY_RENAME,
-  API_CAMPAIGNS_LEGACY_CANCEL,
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_DETAIL,
   CAMPAIGNS_STATUSES,
   LIMIT_CAMPAIGNS,
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import Wizard from '../components/campaigns/Wizard';
-import _ from 'underscore';
-import { _contains } from '../utils/Collection';
+import { contains, prepareUpdateObject } from '../utils/Collection';
 
 export default class CampaignsStore {
   @observable campaignsFetchAsyncAll = {};
+
   @observable campaignsFetchAsync = {
     prepared: {},
     launched: {},
     finished: {},
     cancelled: {},
   };
+
   @observable count = {
     prepared: 0,
     launched: 0,
     finished: 0,
     cancelled: 0,
   };
+
   @observable campaignsSafeFetchAsync = {};
   @observable campaignsSingleFetchAsync = {};
   @observable campaignsSingleSafeFetchAsync = {};
@@ -57,7 +49,6 @@ export default class CampaignsStore {
   @observable campaignsCancelAsync = {};
   @observable campaignsCancelRequestAsync = {};
   @observable campaignsMtuCreateAsync = {};
-
   @observable campaigns = [];
   @observable preparedCampaigns = [];
   @observable overallCampaignsCount = null;
@@ -65,11 +56,12 @@ export default class CampaignsStore {
   @observable campaignsSort = 'asc';
   @observable campaign = {};
   @observable campaignData = {};
+
   @observable fullScreenMode = false;
   @observable transitionsEnabled = true;
-
   @observable limitCampaigns = LIMIT_CAMPAIGNS;
   @observable hasMoreCampaigns = false;
+
   @observable currentDataOffset = 0;
 
   constructor() {
@@ -90,7 +82,7 @@ export default class CampaignsStore {
   }
 
   createMultiTargetUpdate(data) {
-    let updateObject = this._prepareUpdateObject(data);
+    const updateObject = prepareUpdateObject(data);
     resetAsync(this.campaignsMtuCreateAsync, true);
     return axios
       .post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
@@ -103,45 +95,16 @@ export default class CampaignsStore {
       });
   }
 
-  _prepareUpdateObject(data) {
-    let targets = {};
-    _.each(data, (item, index) => {
-      targets[item.hardwareId] = {
-        from: {
-          target: item.from.target,
-          checksum: {
-            method: 'sha256',
-            hash: item.from.hash,
-          },
-          targetLength: item.from.targetLength,
-        },
-        to: {
-          target: item.to.target,
-          checksum: {
-            method: 'sha256',
-            hash: item.to.hash,
-          },
-          targetLength: item.to.targetLength,
-        },
-        targetFormat: item.targetFormat,
-        generateDiff: item.generateDiff,
-      };
-    });
-    return {
-      targets,
-    };
-  }
-
   _fetch(status, offset = 0) {
-    return axios.get(API_CAMPAIGNS_FETCH + `?status=${status}&limit=${this.limitCampaigns}&offset=${offset}`);
+    return axios.get(`${API_CAMPAIGNS_FETCH}?status=${status}&limit=${this.limitCampaigns}&offset=${offset}`);
   }
 
   _fetchCampaign(id) {
-    return axios.get(API_CAMPAIGNS_FETCH_SINGLE + '/' + id);
+    return axios.get(`${API_CAMPAIGNS_FETCH_SINGLE}/${id}`);
   }
 
   _fetchCampaignStatistics(id) {
-    return axios.get(API_CAMPAIGNS_STATISTICS_SINGLE + '/' + id + '/stats');
+    return axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`);
   }
 
   fetchStatusCounts() {
@@ -168,7 +131,7 @@ export default class CampaignsStore {
         const progressDone = index === campaignIds.length - 1;
         axios.all([this._fetchCampaign(id), this._fetchCampaignStatistics(id)]).then(
           axios.spread((campaign, statistics) => {
-            const isNewItem = !_contains(this.campaigns, campaign.data);
+            const isNewItem = !contains(this.campaigns, campaign.data);
 
             if (isNewItem) {
               const newItem = {
@@ -196,18 +159,14 @@ export default class CampaignsStore {
     resetAsync($this.campaignsFetchAsync[status], true);
 
     return this._fetch(status, newDataOffset)
-      .then(
-        function(response) {
-          $this._fetchDetails(response, status);
-          $this.currentDataOffset = response.data.offset;
-          $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
-        }.bind($this),
-      )
-      .catch(
-        function(error) {
-          $this.campaignsFetchAsync[status] = handleAsyncError(error);
-        }.bind($this),
-      );
+      .then(response => {
+        $this._fetchDetails(response, status);
+        $this.currentDataOffset = response.data.offset;
+        $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
+      })
+      .catch(error => {
+        $this.campaignsFetchAsync[status] = handleAsyncError(error);
+      });
   }
 
   fetchCampaigns(status = 'prepared') {
@@ -219,160 +178,122 @@ export default class CampaignsStore {
     resetAsync($this.campaignsFetchAsync[status], true);
 
     return this._fetch(status)
-      .then(
-        function(response) {
-          $this._fetchDetails(response, status);
-          $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
-        }.bind($this),
-      )
-      .catch(
-        function(error) {
-          $this.campaignsFetchAsync[status] = handleAsyncError(error);
-        }.bind($this),
-      );
+      .then(response => {
+        $this._fetchDetails(response, status);
+        $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
+      })
+      .catch(error => {
+        $this.campaignsFetchAsync[status] = handleAsyncError(error);
+      });
   }
 
   fetchCampaign(id, mainAsync = 'campaignsSingleFetchAsync', statsAsync = 'campaignsSingleStatisticsFetchAsync') {
     resetAsync(this[mainAsync], true);
     return this._fetchCampaign(id)
-      .then(
-        function(response) {
-          resetAsync(this[statsAsync], true);
-          axios
-            .get(API_CAMPAIGNS_STATISTICS_SINGLE + '/' + id + '/stats')
-            .then(
-              function(statsResponse) {
-                let data = response.data;
-                data.statistics = statsResponse.data;
+      .then(response => {
+        resetAsync(this[statsAsync], true);
+        axios
+          .get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`)
+          .then(statsResponse => {
+            const { data } = response;
+            const promises = [];
+            data.statistics = statsResponse.data;
 
-                let promises = [];
+            _.each(data.groups, groupId => {
+              promises.push(axios.get(`${API_GROUPS_DEVICES_FETCH}/${groupId}/devices`), axios.get(`${API_GROUPS_DETAIL}/${groupId}`));
+            });
 
-                _.each(data.groups, groupId => {
-                  promises.push(axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices'), axios.get(API_GROUPS_DETAIL + '/' + groupId));
-                });
-
-                axios.all(promises).then(results => {
-                  results = _.pluck(results, 'data');
-                  const chunks = _.chunk(results, 2);
-                  data.groups = _.map(chunks, chunk => {
-                    return { ...chunk[0], ...chunk[1] };
-                  });
-                  this.campaign = data;
-                  this[statsAsync] = handleAsyncSuccess(statsResponse);
-                });
-              }.bind(this),
-            )
-            .catch(
-              function(statsError) {
-                this[statsAsync] = handleAsyncError(statsError);
-              }.bind(this),
-            );
-          this[mainAsync] = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this[mainAsync] = handleAsyncError(error);
-        }.bind(this),
-      );
+            axios.all(promises).then(responseSet => {
+              const results = _.map(responseSet, singleResponse => singleResponse.data);
+              const chunks = _.chunk(results, 2);
+              data.groups = _.map(chunks, chunk => ({ ...chunk[0], ...chunk[1] }));
+              this.campaign = data;
+              this[statsAsync] = handleAsyncSuccess(statsResponse);
+            });
+          })
+          .catch(statsError => {
+            this[statsAsync] = handleAsyncError(statsError);
+          });
+        this[mainAsync] = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this[mainAsync] = handleAsyncError(error);
+      });
   }
 
   createCampaign(data) {
     resetAsync(this.campaignsCreateAsync, true);
     return axios
       .post(API_CAMPAIGNS_CREATE, data)
-      .then(
-        function(response) {
-          this.campaignData.campaignId = response.data;
-          this.campaignsCreateAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.campaignsCreateAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+      .then(response => {
+        this.campaignData.campaignId = response.data;
+        this.campaignsCreateAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsCreateAsync = handleAsyncError(error);
+      });
   }
 
   launchCampaign(id) {
     resetAsync(this.campaignsLaunchAsync, true);
     return axios
-      .post(API_CAMPAIGNS_LAUNCH + '/' + id + '/launch')
-      .then(
-        function(response) {
-          this.campaignsLaunchAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.campaignsLaunchAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+      .post(`${API_CAMPAIGNS_LAUNCH}/${id}/launch`)
+      .then(response => {
+        this.campaignsLaunchAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsLaunchAsync = handleAsyncError(error);
+      });
   }
 
   renameCampaign(id, data) {
     resetAsync(this.campaignsRenameAsync, true);
     return axios
-      .put(API_CAMPAIGNS_RENAME + '/' + id, data)
-      .then(
-        function(response) {
-          let campaign = _.find(this.campaigns, campaign => {
-            return campaign.id === id;
-          });
-          campaign.name = data.name;
-          this.campaignsRenameAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.campaignsRenameAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+      .put(`${API_CAMPAIGNS_RENAME}/${id}`, data)
+      .then(response => {
+        const campaign = _.find(this.campaigns, singleCampaign => singleCampaign.id === id);
+        campaign.name = data.name;
+        this.campaignsRenameAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsRenameAsync = handleAsyncError(error);
+      });
   }
 
   cancelCampaign(id) {
     resetAsync(this.campaignsCancelAsync, true);
     return axios
-      .post(API_CAMPAIGNS_CANCEL + '/' + id + '/cancel')
-      .then(
-        function(response) {
-          this.campaignsCancelAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.campaignsCancelAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+      .post(`${API_CAMPAIGNS_CANCEL}/${id}/cancel`)
+      .then(response => {
+        this.campaignsCancelAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsCancelAsync = handleAsyncError(error);
+      });
   }
 
   cancelCampaignRequest(id) {
     resetAsync(this.campaignsCancelRequestAsync, true);
     return axios
-      .put(API_CAMPAIGNS_CANCEL_REQUEST + '/' + id + '/cancel')
-      .then(
-        function(response) {
-          this.campaignsCancelRequestAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.campaignsCancelRequestAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+      .put(`${API_CAMPAIGNS_CANCEL_REQUEST}/${id}/cancel`)
+      .then(response => {
+        this.campaignsCancelRequestAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsCancelRequestAsync = handleAsyncError(error);
+      });
   }
 
   _prepareCampaigns() {
-    let campaigns = this.campaigns;
-    this.preparedCampaigns = campaigns.sort((a, b) => {
-      let aName = a.name;
-      let bName = b.name;
+    this.preparedCampaigns = this.campaigns.sort((a, b) => {
+      const aName = a.name;
+      const bName = b.name;
       return aName.localeCompare(bName);
     });
   }
 
   _getCampaign(id) {
-    return _.findWhere(this.campaigns, { id: id });
+    return _.find(this.campaigns, { id });
   }
 
   _showFullScreen() {
@@ -382,7 +303,7 @@ export default class CampaignsStore {
 
   _hideFullScreen() {
     this.fullScreenMode = false;
-    let that = this;
+    const that = this;
     setTimeout(() => {
       that.transitionsEnabled = true;
     });
@@ -428,54 +349,36 @@ export default class CampaignsStore {
 
   @computed get inPreparationCampaigns() {
     let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, function(campaign) {
-      return campaign.createdAt;
-    }).reverse();
-    return _.filter(campaigns, campaign => {
-      return !_.isUndefined(campaign.summary) && campaign.summary.status === 'scheduled';
-    });
+    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
+    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'scheduled');
   }
 
   @computed get cancelledCampaigns() {
     let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, function(campaign) {
-      return campaign.createdAt;
-    }).reverse();
-    return _.filter(campaigns, campaign => {
-      return !_.isUndefined(campaign.summary) && campaign.summary.status === 'cancelled';
-    });
+    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
+    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'cancelled');
   }
 
   @computed get runningCampaigns() {
     let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, function(campaign) {
-      return campaign.createdAt;
-    });
-    return _.filter(campaigns, campaign => {
-      return !_.isUndefined(campaign.summary) && campaign.summary.status === 'launched';
-    });
+    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt);
+    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'launched');
   }
 
   @computed get finishedCampaigns() {
     let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, function(campaign) {
-      return campaign.createdAt;
-    }).reverse();
-    return _.filter(campaigns, campaign => {
-      return !_.isUndefined(campaign.summary) && campaign.summary.status === 'finished';
-    });
+    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
+    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'finished');
   }
 
   @computed get lastActiveCampaigns() {
     let campaigns = this.runningCampaigns;
-    campaigns = _.sortBy(campaigns, function(campaign) {
-      return campaign.createdAt;
-    }).reverse();
+    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
     return campaigns.slice(0, 10);
   }
 
   @computed get overallCampaignStatistics() {
-    let stats = {
+    const stats = {
       processed: 0,
       affected: 0,
       finished: 0,

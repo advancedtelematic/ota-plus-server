@@ -1,9 +1,8 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { observe, observable } from 'mobx';
-import { FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Loader } from '../../partials';
 import { PropertiesList } from './properties';
 
@@ -13,8 +12,8 @@ const title = 'Properties';
 @observer
 class PropertiesPanel extends Component {
   render() {
-    const { installPackage, packagesReady } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { stores, installPackage } = this.props;
+    const { packagesStore } = stores;
     return (
       <div className='properties-panel'>
         <div className='properties-panel__header darkgrey-header'>{title}</div>
@@ -33,6 +32,7 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
+  stores: PropTypes.object,
   installPackage: PropTypes.func.isRequired,
 };
 

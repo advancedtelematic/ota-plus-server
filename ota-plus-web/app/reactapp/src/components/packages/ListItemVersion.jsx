@@ -1,11 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import _ from 'underscore';
-import { FlatButton } from 'material-ui';
+import _ from 'lodash';
 import { Dropdown } from '../../partials';
 
 @inject('stores')
@@ -13,19 +13,13 @@ import { Dropdown } from '../../partials';
 class ListItemVersion extends Component {
   @observable isShown = false;
 
-  constructor(props) {
-    super(props);
-    this.hideSubmenu = this.hideSubmenu.bind(this);
-    this.showSubmenu = this.showSubmenu.bind(this);
-  }
-
-  hideSubmenu() {
+  hideSubmenu = () => {
     this.isShown = false;
-  }
+  };
 
-  showSubmenu() {
+  showSubmenu = () => {
     this.isShown = true;
-  }
+  };
 
   render() {
     const { version, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;

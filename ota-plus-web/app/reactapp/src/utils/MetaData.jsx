@@ -1,5 +1,6 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { APP_TITLE } from '../config';
 
@@ -18,10 +19,10 @@ class MetaData extends Component {
 }
 
 MetaData.propTypes = {
-  title: React.PropTypes.string.isRequired,
-  keywords: React.PropTypes.string,
-  description: React.PropTypes.string,
-  className: React.PropTypes.string,
+  title: PropTypes.string.isRequired,
+  keywords: PropTypes.string,
+  description: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default MetaData;

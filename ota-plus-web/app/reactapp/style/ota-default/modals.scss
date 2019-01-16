@@ -1,0 +1,719 @@
+.ant-modal {
+  font-family: 'Fira Sans', sans-serif !important;
+  .ant-modal-content {
+    border-radius: 0;
+    .ant-modal-header {
+      margin: 0 24px;
+      padding: 20px 0;
+      .heading {
+        font-weight: 300 !important;
+        color: $home-bg;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+
+        .top-actions {
+          display: flex;
+          width: 60px;
+          align-items: center;
+          justify-content: space-between;
+          height: 15px;
+
+          &.flex-end {
+            justify-content: flex-end;
+
+            div:not(:last-child) {
+              margin-right: 10px;
+            }
+          }
+
+          div {
+            display: flex;
+            cursor: pointer;
+            height: 100%;
+            align-items: flex-end;
+
+            img {
+              width: 12px;
+            }
+
+            &.toggle-fullscreen.on {
+              img {
+                width: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .ant-modal-body {
+      font-size: 12px !important;
+      border: 0 !important;
+      input,
+      label {
+        font-size: 14px !important;
+      }
+
+      .desc {
+        padding-bottom: 24px;
+      }
+
+      .ios-list {
+        span,
+        div {
+          font-size: 14px !important;
+        }
+
+        div.subtitle {
+          font-size: 12px !important;
+        }
+        .step-summary {
+          .title {
+            font-size: 21px !important;
+          }
+        }
+      }
+      .body-actions {
+        padding: 20px 0 0;
+        // is this margin ok?
+        margin: 30px 0 0;
+        border-top: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+.dialog {
+  width: 75vw !important;
+  max-width: 768px;
+
+  .row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .content {
+
+    .heading {
+      background: #fff !important;
+      color: #0f1621 !important;
+      font-size: 16px !important;
+      font-weight: 300 !important;
+      height: 60px !important;
+      padding: 0 30px !important;
+      color: $home-bg;
+
+    }
+    .body {
+      font-size: 12px !important;
+      padding: 30px !important;
+      border: 0 !important;
+
+      input,
+      label {
+        font-size: 14px !important;
+      }
+
+      .hardware-ids-select#hardware-ids-select {
+        & > div {
+          font-size: 14px !important;
+        }
+      }
+
+      .ios-list {
+        span,
+        div {
+          font-size: 14px !important;
+        }
+
+        div.subtitle {
+          font-size: 12px !important;
+        }
+        .step-summary {
+          .title {
+            font-size: 21px !important;
+          }
+        }
+      }
+    }
+
+    .link-cancel {
+      line-height: 15px;
+      color: #95979c;
+      font-size: 14px;
+      font-weight: 300;
+      margin-right: 22px;
+    }
+  }
+}
+
+.size-verify-modal {
+  width: 550px !important;
+
+  .body-actions {
+    justify-content: space-between !important;
+
+    .wrapper-checkbox {
+      display: flex;
+      align-items: center;
+    }
+
+    input[type='checkbox'] {
+      margin: 0;
+    }
+  }
+}
+
+.create-group-modal {
+  .group-name-input {
+    margin-bottom: 75px;
+  }
+}
+
+.dependencies-modal {
+  .wrapper-center {
+    height: 250px;
+  }
+
+  .content {
+    width: 85% !important;
+    max-width: 1250px !important;
+
+    .sankey-minimized {
+      margin: 75px auto;
+    }
+  }
+
+  .rv-sankey {
+    margin: auto;
+  }
+}
+
+.manager-modal {
+  &__pack {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 15px 0;
+    display: flex;
+
+    &--selected {
+      font-size: 16px;
+      font-weight: 500;
+      padding: 0 0 30px 0;
+      color: #202020;
+    }
+  }
+
+  &__pack-name {
+    width: 40%;
+    font-weight: 500;
+    @include textoverflowEllipsis;
+
+    &--in-list {
+      color: #202020;
+      padding: 8px 0;
+    }
+  }
+
+  &__pack-versions,
+  &__pack-version {
+    width: 60%;
+    @include textoverflowEllipsis;
+  }
+
+  &__pack-value {
+    color: #202020;
+    @include textoverflowEllipsis;
+    width: 50%;
+    font-size: 12px;
+  }
+
+  &__pack-list {
+    overflow-y: auto;
+    max-height: 400px;
+  }
+
+  &__pack-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    color: #9b9da2;
+    justify-content: space-between;
+
+    &--odd {
+      background-color: #f3f3f4;
+    }
+  }
+
+  &__pack-status-title {
+    display: flex;
+    padding-right: 15px;
+    align-items: center;
+    font-size: 10px;
+  }
+
+  &__pack-status {
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+    cursor: pointer;
+
+    &--orange {
+      background: #f4a623;
+      border: none;
+    }
+
+    &--red {
+      background: red;
+      border: none;
+    }
+
+    &--green {
+      background: #84cf61;
+      border: none;
+    }
+
+    &--white {
+      background: #f3f3f4;
+      border: 1px solid #d7d8da;
+    }
+  }
+}
+
+.blacklist-modal {
+  .subactions {
+    text-align: left;
+    margin-top: 20px;
+  }
+
+  .body-actions {
+    margin: 20px 0 0;
+  }
+
+  .top-text {
+    margin-bottom: 20px;
+  }
+
+  .bottom-text {
+    margin-bottom: 30px;
+  }
+}
+
+.cancel-campaign-modal {
+  width: 550px !important;
+
+    .ant-modal-body {
+      text-align: center;
+
+      .element-box {
+        display: block;
+        margin: 0 0 30px 0;
+
+        &.campaign {
+          .icon {
+            border: 2px solid #ddd;
+            margin: 0;
+            float: none;
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .desc {
+            text-align: left;
+            width: auto;
+            margin: 0 0 0 15px;
+            float: none;
+            display: inline-block;
+            vertical-align: middle;
+
+            .title {
+              font-size: 14px;
+              font-weight: normal;
+            }
+          }
+        }
+
+        &.campaign {
+          .icon {
+            background-image: url($campaign-icon);
+          }
+        }
+      }
+    }
+}
+
+.dialog-campaign-wizard {
+  max-width: 1000px !important;
+
+  &.disable-transitions {
+    .content {
+      transition: none !important;
+
+      > div {
+        transition: none !important;
+      }
+    }
+  }
+
+  //ToDO: correct the fullscreen  step6 of campaigns wizard, temporarly commented
+  //&.full-screen {
+  //  padding-top: 50px !important;
+  //
+  //  .body {
+  //    padding: 0 !important;
+  //  }
+  //
+  //  .step-programming-sequencer {
+  //    padding: 30px 15px;
+  //    background-color: #f7f7f7;
+  //
+  //    .c-sequencer {
+  //      background-color: #fff;
+  //    }
+  //  }
+  //
+  //  > div {
+  //    height: 100%;
+  //  }
+  //
+  //  .content {
+  //    height: 100%;
+  //    width: 100% !important;
+  //    max-width: 100% !important;
+  //    transform: none !important;
+  //    transition: none !important;
+  //
+  //    > div {
+  //      transition: none !important;
+  //    }
+  //  }
+  //
+  //  .campaigns-wizard {
+  //    position: absolute;
+  //    top: 60px;
+  //    right: 0;
+  //    bottom: 0;
+  //    width: 100% !important;
+  //    left: 50%;
+  //    margin-left: -50vw;
+  //    padding: 30px;
+  //    background-color: #fff;
+  //    margin-top: 0 !important;
+  //
+  //    .draggable-content {
+  //      height: 100%;
+  //
+  //      .internal-body {
+  //        height: 100%;
+  //
+  //        .content-step {
+  //          height: calc(100% - 170px);
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
+}
+
+.hardware-overlay-modal {
+  left: 19% !important;
+  top: 225px !important;
+  overflow-y: visible !important;
+  width: 70% !important;
+  max-width: 768px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 45px, rgba(0, 0, 0, 0.22) 0px 10px 18px !important;
+
+  .ant-popover-inner {
+    background: $device-item-bg !important;
+  }
+
+  .ant-popover-arrow {
+    background: $device-item-bg !important;
+  }
+  .ios-list {
+    background: transparent;
+  }
+
+  .triangle {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 25px solid $device-item-bg;
+    position: absolute;
+    left: -15px;
+    top: 5px;
+  }
+
+  .content {
+    .heading {
+      background: $device-item-bg;
+      color: $home-bg;
+      height: 60px;
+      padding: 0 30px;
+      font-size: 14px;
+
+      .internal {
+        border-bottom: 1px solid rgba(215, 216, 218, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+      }
+    }
+
+    .body {
+      height: 50vh;
+      background: $device-item-bg;
+      padding: 0 30px;
+
+      .wrapper-center {
+        height: calc(100% - 75px);
+      }
+
+      #hardware-overlay {
+        height: calc(100% - 75px);
+        padding-bottom: 15px;
+        border-bottom: 1px solid $hardware-overlay-underline;
+
+        .nav {
+          display: flex;
+          height: 75%;
+          font-size: 14px;
+          margin-top: 12px;
+
+          .item {
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: $hardware-overlay-menu-inactive;
+
+            &:not(:last-child) {
+              margin-right: 15px;
+            }
+
+            span {
+              border-bottom: 3px solid transparent;
+            }
+
+            &.active {
+              background: #fff;
+              color: $hardware-overlay-menu-active;
+              border-radius: 3px 3px 0 0;
+
+              span {
+                border-bottom: 3px solid $switch-blue-color;
+              }
+            }
+          }
+        }
+      }
+
+      .subheader {
+        justify-content: space-between;
+        background-color: $device-item-bg;
+        padding: 0;
+        height: 45px;
+        border: 0;
+      }
+
+      .hardware-details {
+        height: calc(100% - 45px);
+        font-size: 10px;
+
+        .table {
+          margin-bottom: 0;
+        }
+
+        .item {
+          height: 30px;
+          color: $hardware-overlay-item-color;
+          padding: 0 20px;
+          justify-content: flex-start;
+          background-color: #fff;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid $hardware-overlay-border;
+          }
+
+          th {
+            width: 175px;
+            border: 0;
+            padding: 0;
+          }
+
+          td {
+            border: 0;
+            padding: 0;
+          }
+        }
+      }
+
+      .body-actions {
+        padding: 25px 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        background-color: $device-item-bg;
+        height: 75px;
+
+        .btn-main {
+          float: right;
+        }
+      }
+
+      .header,
+      .fake-header {
+        height: 20px;
+        text-transform: capitalize;
+        padding: 0 15px;
+        color: $fake-header-text;
+        border: 0;
+        font-size: 10px;
+      }
+
+      .packages-details {
+        height: calc(100% - 45px);
+        font-size: 10px;
+
+        .item {
+          height: 30px;
+          color: $hardware-overlay-item-color;
+          padding: 0 20px;
+          background-color: #fff;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid $hardware-overlay-border;
+          }
+
+          .version {
+            color: $home-grey;
+          }
+        }
+
+        .ios-list {
+          .dnd-zone {
+            position: relative;
+          }
+
+          .item {
+            &.ondevice {
+              .name {
+                width: calc(100% - 250px);
+                @include textoverflowEllipsis;
+              }
+
+              .actions {
+                text-align: right;
+                width: 250px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                .version {
+                  width: 170px;
+                  display: inline-block;
+                  @include textoverflowEllipsis;
+                }
+
+                .btn-blacklist {
+                  height: 28px;
+                  margin: 0 -17px 0 15px;
+                  border-right: 0;
+                  background-size: 20px 20px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.create-update-modal {
+  .updates-container {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .header {
+      color: #9b9b9b;
+      font-size: 14px;
+      padding-bottom: 10px;
+    }
+    .hardware-id {
+      font-size: 16px;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+    .packages {
+      padding-bottom: 20px;
+    }
+    .versions {
+      padding-bottom: 30px;
+    }
+  }
+
+  .external-description {
+    padding-top: 40px;
+  }
+
+  .hardware-container {
+    .ant-checkbox-wrapper {
+      height: 50px;
+    }
+    &:not(:last-of-type) {
+      margin-bottom: 30px;
+    }
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .c-form__label {
+      margin-bottom: 20px;
+    }
+
+    .ids-list {
+      height: 200px;
+      padding-top: 20px;
+    }
+  }
+}
+
+.add-package-modal {
+  .hardware-ids-select {
+    margin-top: 10px;
+  }
+
+  .upload-wrapper {
+    margin: 20px 0 0 0;
+
+    .file {
+      height: 0;
+      opacity: 0;
+    }
+
+    .file-name {
+      margin: 0 0 0 20px;
+      display: inline-block;
+    }
+  }
+}
+
+.create-provisioning-key-modal {
+  width: 550px !important;
+}
+
+.cancel-upload-modal {
+  width: 550px !important;
+
+  .ant-modal-body {
+    text-align: center;
+  }
+}

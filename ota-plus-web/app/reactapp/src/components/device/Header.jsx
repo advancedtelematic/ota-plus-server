@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { browserHistory } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 import { Header as BaseHeader, Loader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
 import NetworkInfo from './NetworkInfo';
@@ -40,9 +41,11 @@ class Header extends Component {
     if (e) e.preventDefault();
     const { devicesStore } = this.props.stores;
     const { device } = devicesStore;
+    const { history } = this.context.router;
     devicesStore.deleteDevice(device.uuid).then(() => {
-      this.context.router.push('/devices');
+      history.push('/devices');
     });
+
   };
   render() {
     const { devicesStore } = this.props.stores;
@@ -154,7 +157,7 @@ Header.propTypes = {
 };
 
 Header.wrappedComponent.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 export default Header;

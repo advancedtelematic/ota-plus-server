@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import SequencerProgress from './SequencerProgress';
@@ -10,16 +10,11 @@ import SequencerProgress from './SequencerProgress';
 class SequencerItem extends Component {
   @observable showDropDown = false;
 
-  constructor(props) {
-    super(props);
-    this.toggleDropDown = this.toggleDropDown.bind(this);
-  }
-
-  toggleDropDown(e) {
+  toggleDropDown = e => {
     e.preventDefault();
     e.stopPropagation();
     this.showDropDown = !this.showDropDown;
-  }
+  };
 
   render() {
     const { value, delay, duration, selectSlot, selectedElement, column, row, deselectSlot, readOnly, selectAction } = this.props;

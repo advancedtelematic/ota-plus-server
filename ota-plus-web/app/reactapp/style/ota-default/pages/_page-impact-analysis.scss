@@ -1,0 +1,98 @@
+/** @format */
+
+@import '../variables-ota';
+@import '../mixins';
+
+#page-impact-analysis {
+  padding: 30px;
+  background-color: $home-bg;
+  height: calc(100vh - 50px);
+
+  .content {
+    position: relative;
+
+    .blacklisted-packages-panel {
+      background: #fff;
+      width: 400px;
+      height: 100%;
+      float: left;
+      border-right: 1px solid $panel-delimiter-color;
+      position: relative;
+      z-index: 10;
+      font-size: 12px;
+
+      .ios-list {
+        height: calc(100% - 40px);
+
+        span.key {
+          &:last-child {
+            .item {
+              border-bottom: none;
+            }
+          }
+        }
+
+        .fake-header {
+          border-bottom: none;
+        }
+
+        .item {
+          border-left: 4px solid transparent;
+          border-bottom: 1px solid transparent;
+        }
+
+        .selected {
+          background-color: #fff;
+          border-left: 4px solid $color-mint;
+          border-bottom: none;
+          color: $device-properties-text;
+          font-weight: 400;
+
+          & + span {
+            transition: all 0.2s ease-in;
+            display: block;
+            border-left: 4px solid #48dad0;
+            overflow: hidden;
+          }
+        }
+
+        & + span {
+          border-left: 4px solid transparent;
+        }
+
+        span:not(:first-child) {
+          .header {
+            border-bottom: none;
+            .right-box {
+              display: none;
+            }
+          }
+        }
+
+        ul {
+          margin-bottom: 0;
+
+          .version-item {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(243, 243, 244, 0.5);
+            margin: 0 12px 14px 15px;
+            align-items: center;
+            height: 50px;
+            padding: 0 11px;
+            color: $device-properties-text;
+            font-weight: 400;
+
+            &:not(:first-child) {
+              margin-top: 14px;
+            }
+          }
+        }
+      }
+    }
+
+    .chart-panel {
+      margin-left: 400px;
+    }
+  }
+}

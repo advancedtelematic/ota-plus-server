@@ -1,7 +1,7 @@
 /** @format */
 
 import HomeContainer from './Home';
-import Popover from '../components/whatsnew/Popover';
+import WhatsNew from '../components/whatsnew/WhatsNew';
 import DevicesContainer from './Devices';
 import DeviceContainer from './Device';
 import PackagesContainer from './Packages';
@@ -16,7 +16,7 @@ import Terms from './Terms';
 
 export {
   HomeContainer,
-  Popover,
+  WhatsNew,
   DevicesContainer,
   DeviceContainer,
   PackagesContainer,

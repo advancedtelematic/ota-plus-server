@@ -1,0 +1,47 @@
+/** @format */
+@import 'variables-ant';
+@import 'mixins';
+
+/* headlines */
+h3 {
+}
+
+/* components */
+.ant-modal {
+  .ant-tabs,
+  .ant-tabs-content {
+    height: 100%;
+  }
+}
+
+.ant-checkbox-input,
+.ant-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  .ant-checkbox-inner {
+    border-radius: 0;
+  }
+
+  &:focus,
+  &:hover {
+    + .ant-checkbox-inner, // explicit override
+    .ant-checkbox-inner {
+      border-color: $primary-color;
+      outline: none;
+    }
+  }
+}
+
+[class*='-checked'] {
+  .ant-checkbox-inner {
+    background: $primary-color;
+    border-color: $primary-color;
+  }
+}
+
+[class^="ant-col-"] {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+

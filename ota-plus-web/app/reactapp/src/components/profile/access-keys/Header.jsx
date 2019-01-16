@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { SubHeader, SearchBar } from '../../../partials';
-import { FlatButton } from 'material-ui';
-import { Form } from 'formsy-react';
+import { Form } from 'formsy-antd';
 
 @observer
 class Header extends Component {

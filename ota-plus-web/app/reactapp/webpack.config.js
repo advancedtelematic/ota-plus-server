@@ -1,114 +1,93 @@
-const { join, resolve } = require('path');
-const webpack = require('webpack');
+/** @format */
 
-process.traceDeprecation = true
+const { resolve } = require('path');
+const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const optimize = new webpack.optimize.UglifyJsPlugin({
-  compress: {
-    warnings: false,
-    screw_ie8: true,
-    conditionals: true,
-    unused: true,
-    comparisons: true,
-    sequences: true,
-    dead_code: true,
-    evaluate: true,
-    if_return: true,
-    join_vars: true,
-  },
-  output: {
-    comments: false,
-  },
-});
-const prod = process.argv.indexOf('-p') !== -1;
+const jsOutput = 'assets/js';
+const cssOutput = 'assets/css';
+
+const isProduction = process.env.NODE_ENV === 'development';
+/** must be the file containing ant.design's variables */
+const themeColors = './css/ota-default/variables-ant.scss';
+
+const cleaningOptions = {
+  root: path.resolve(__dirname, '..'),
+  verbose: true,
+  exclude: ['jquery-3.3.1.min.js', 'lock-9.2.min.js', 'login.js', 'privay-notification.js'],
+};
+
+const foldersToClean = [jsOutput, cssOutput];
+
 module.exports = {
-  entry: [
-    join(__dirname, 'src/main.jsx'),
-    join(__dirname, 'css/style.scss'),
-    join(__dirname, 'css/unlogged.scss'),
-  ],
+  mode: isProduction ? 'production' : 'development',
+  entry: [resolve(__dirname, 'src/main.jsx'), resolve(__dirname, 'style/style.scss'), resolve(__dirname, 'style/unlogged.scss')],
   output: {
-    path: join(__dirname, '../assets/js'),
-    filename: "app.js"
+    path: resolve(__dirname, '..', jsOutput),
+    filename: 'app.js',
   },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [new CleanWebpackPlugin(foldersToClean, cleaningOptions)],
+  devtool: 'source-map',
   module: {
     rules: [
+      /*{
+                enforce: "pre",
+                test: /.(js|jsx)?$/,
+                exclude: /node_modules/,
+                loader: "eslint-loader",
+            },*/
       {
-        test: /.jsx?$/,
+        test: /.(js|jsx)?$/,
         exclude: /node_modules/,
-        include: join(__dirname, 'src'),
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              babelrc: false,
-              plugins: [
-                'transform-decorators-legacy',
-              ],
-              presets: [
-                ['es2015', { modules: false }],
-                'react',
-                'stage-1'
-              ],
-            }
-          },
-        ]
+        loader: 'babel-loader',
       },
       {
         test: /\.scss$/,
         use: [
           {
             loader: 'file-loader',
-              options: {
-                name: '[name].css',
-                context: './css/',
-                outputPath: '../css/',
-                publicPath: '../'
-              }
+            options: {
+              context: './style/',
+              //  output path referring to assets/css
+              outputPath: '../css/' /* path must be relative to app.js */,
+              publicPath: '../',
+              name: '[name].css',
+            },
           },
           {
-            loader: 'extract-loader'
+            loader: 'extract-loader',
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: false,
-              minimize: true,
-            }
+              sourceMap: !isProduction,
+              minimize: isProduction,
+            },
           },
           {
-            loader: 'resolve-url-loader'
+            loader: 'resolve-url-loader',
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: false,
-              minimize: true,
-            }
-          }
-        ]
+              sourceMap: !isProduction,
+              minimize: isProduction,
+            },
+          },
+        ],
       },
-        {
-          test: /\.(html)$/,
-          use: {
-            loader: 'html-loader',
-            options: {
-                attrs: [':data-src']
-            }
-          }
-        }
-    ]
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':data-src'],
+          },
+        },
+      },
+    ],
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      process: {
-        env: {
-          NODE_ENV: prod ? `"production"`: '"development"'
-        }
-      }
-    }),
-  ]
 };

@@ -1,12 +1,17 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { WhatsNewHeader, WhatsNewList } from '../components/whatsnew';
 
 @inject('stores')
 @observer
 class WhatsNew extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+  };
+
   componentWillMount() {
     const { featuresStore } = this.props.stores;
     this.features = featuresStore.whatsNew;
@@ -21,9 +26,5 @@ class WhatsNew extends Component {
     );
   }
 }
-
-WhatsNew.propTypes = {
-  stores: PropTypes.object,
-};
 
 export default WhatsNew;

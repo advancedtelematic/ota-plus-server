@@ -3,7 +3,7 @@
 import { observable, computed } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
-import _ from 'underscore';
+import _ from 'lodash';
 import { API_USER_DETAILS, API_USER_UPDATE, API_USER_CHANGE_PASSWORD, API_USER_ACTIVE_DEVICE_COUNT, API_USER_DEVICES_SEEN, API_USER_CONTRACTS } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts/';

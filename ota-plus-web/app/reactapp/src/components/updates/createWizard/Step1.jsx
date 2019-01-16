@@ -1,12 +1,13 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { Form } from 'formsy-react';
+import { Form } from 'formsy-antd';
+import { Row, Col } from 'antd';
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { observer, inject } from 'mobx-react';
 import { SelectableListItem } from '../../../partials/lists';
-import _ from 'underscore';
-import { _contains } from '../../../utils/Collection';
+import _ from 'lodash';
+import { contains } from '../../../utils/Collection';
 
 @inject('stores')
 @observer
@@ -29,10 +30,9 @@ class Step1 extends Component {
     });
 
     return (
-      <div className='update-modal'>
         <Form id='update-create-form'>
-          <div className='row name-container'>
-            <div className='col-xs-6'>
+          <Row className='row name-container'>
+            <Col span={12}>
               <FormInput
                 label='Update Name'
                 placeholder='Name'
@@ -43,8 +43,8 @@ class Step1 extends Component {
                   onStep1DataSelect('name', e.target.value);
                 }}
               />
-            </div>
-            <div className='col-xs-6'>
+            </Col>
+            <Col span={12}>
               <FormTextarea
                 label='Description'
                 placeholder='Type here'
@@ -56,38 +56,37 @@ class Step1 extends Component {
                   onStep1DataSelect('description', e.target.value);
                 }}
               />
-            </div>
-          </div>
+            </Col>
+          </Row>
           <label className='c-form__label'>{'Select Hardware ids'}</label>
-          <div className='row hardware-container'>
-            <div className='col-xs-12'>
+          <Row className='row hardware-container'>
+            <Col span={12}>
               <div className='ids-list'>
                 {hardwareStore.hardwareIdsFetchAsync.isFetching ? (
                   <div className='wrapper-center'>
-                    <Loader />
+                    <Loader/>
                   </div>
                 ) : (
                   _.map(hardwareList, item => {
                     const { selectedHardwares } = wizardData;
-                    const selected = _contains(selectedHardwares, item);
+                    const selected = contains(selectedHardwares, item, 'hardware');
                     item.type = 'hardware';
                     return (
                       <SelectableListItem
                         key={item.name}
                         item={item}
                         selected={selected}
-                        onItemSelect={item => {
-                          onStep1DataSelect('hardwareId', item);
-                        }}
+                        onChange={ (item) => {
+                        onStep1DataSelect('hardwareId', item)
+                      } }
                       />
                     );
                   })
                 )}
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </Form>
-      </div>
     );
   }
 }

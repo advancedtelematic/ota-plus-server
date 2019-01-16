@@ -1,30 +1,29 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { BlacklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip } from '../components/impactanalysis';
-import { FlatButton } from 'material-ui';
+import { FlatButton } from 'antd';
 
 @inject('stores')
 @observer
 class ImpactAnalysis extends Component {
-  @observable tooltipShown = false;
+  @observable
+  tooltipShown = false;
 
-  constructor(props) {
-    super(props);
-    this.showTooltip = this.showTooltip.bind(this);
-    this.hideTooltip = this.hideTooltip.bind(this);
-  }
-  showTooltip(e) {
+  showTooltip = e => {
     if (e) e.preventDefault();
     this.tooltipShown = true;
-  }
-  hideTooltip(e) {
+  };
+
+  hideTooltip = e => {
     if (e) e.preventDefault();
     this.tooltipShown = false;
-  }
+  };
+
   render() {
     const { packagesStore, impactAnalysisStore } = this.props.stores;
     return (
@@ -41,7 +40,7 @@ class ImpactAnalysis extends Component {
         ) : (
           <div className='wrapper-center'>
             <div className='page-intro'>
-              <div>You don't have any blacklisted packages..</div>
+              <div>{"You don't have any blacklisted packages."}</div>
               <a href='#' id='impact-analysis-what-is-this' onClick={this.showTooltip}>
                 What is this?
               </a>

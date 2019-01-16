@@ -1,8 +1,8 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Pie } from 'react-chartjs';
 import { translate } from 'react-i18next';
 
 @observer

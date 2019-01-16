@@ -1,0 +1,58 @@
+/** @format */
+
+@import '../variables-ota';
+@import '../mixins';
+
+#page-fireworks {
+  height: calc(100vh - 50px);
+  background-color: #3e454d;
+
+  .fireworks {
+    text-align: center;
+    background-color: #fff;
+    height: auto;
+    width: 485px;
+
+    &__title {
+      color: #b7b9bc;
+      padding: 20px;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    &__body {
+      padding: 70px 40px;
+    }
+
+    &__subtitle {
+      margin-bottom: 10px;
+      color: #4b4b4b;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    &__icon {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 40px;
+    }
+
+    &__text {
+      color: #0f1621;
+      line-height: 21px;
+      padding: 0 60px;
+    }
+
+    &__action {
+      border-top: 1px solid rgba(215, 216, 218, 0.5);
+      justify-content: flex-end;
+      display: flex;
+      margin: 0 20px;
+      padding: 20px 0;
+    }
+
+    &__button {
+      font-size: 14px;
+    }
+  }
+}

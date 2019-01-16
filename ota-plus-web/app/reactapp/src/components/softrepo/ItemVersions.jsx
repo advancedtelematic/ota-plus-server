@@ -3,7 +3,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
+import { Row, Col } from 'antd';
+import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 import StatsBlock from '../packages/stats/StatsBlock';
 
@@ -11,14 +12,14 @@ export default class ItemVersions extends Component {
   render() {
     const { groupItem } = this.props;
     return (
-      <div
+      <Row
         className='row versions-details'
         onClick={e => {
           e.stopPropagation();
         }}
       >
         {(groupItem.warnings && groupItem.warnings.length > 0) || (groupItem.errors && groupItem.errors.length > 0) ? (
-          <div className='col-xs-12'>
+          <Col span={24}>
             <div className='warnings'>
               {_.map(groupItem.warnings, (warning, key) => {
                 return (
@@ -37,35 +38,35 @@ export default class ItemVersions extends Component {
                 );
               })}
             </div>
-          </div>
+          </Col>
         ) : (
           ''
         )}
-        <div className='director-details col-xs-12'>
-          <div className='row'>
-            <div className='col-xs-4'>
+        <Col span={24} className='director-details'>
+          <Row className='row'>
+            <Col span={8}>
               <p>Distribution by devices</p>
               {groupItem.versions ? <StatsBlock type='devices' size={{ width: '120', height: '120' }} pack={groupItem} /> : ''}
-            </div>
-            <div className='col-xs-4'>
+            </Col>
+            <Col span={8}>
               <p>Distribution by group</p>
               {groupItem.stats && groupItem.stats.groups ? <StatsBlock type='groups' size={{ width: '120', height: '120' }} pack={groupItem} /> : ''}
-            </div>
-            <div className='col-xs-4'>
+            </Col>
+            <Col span={8}>
               <p>Failure rate</p>
               {groupItem.stats && groupItem.stats.installationResults ? <StatsBlock type='results' size={{ width: '120', height: '120' }} pack={groupItem} /> : ''}
-            </div>
-          </div>
-        </div>
-        <div className='col-xs-12'>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={24}>
           <ul className='versions'>
             {groupItem.versions &&
               Object.keys(groupItem.versions).map((version, versionKey) => {
                 const versionItem = groupItem.versions[version];
                 return (
                   <li key={versionKey}>
-                    <div className='row'>
-                      <div className='col-xs-6'>
+                    <Row className='row'>
+                      <Col span={12}>
                         <div className='left-box'>
                           <div className='version-info'>
                             <span className='light'>Version: {version}</span>
@@ -74,8 +75,8 @@ export default class ItemVersions extends Component {
                             <span className='light'>Hash: {versionItem.hash}</span>
                           </div>
                         </div>
-                      </div>
-                      <div className='col-xs-6'>
+                      </Col>
+                      <Col span={12}>
                         <div className='right-box'>
                           <span className='light'>Length: {versionItem.length}</span>
                           <span className='light'>Installed on {versionItem.installedOnEcus} ECU(s)</span>
@@ -90,14 +91,14 @@ export default class ItemVersions extends Component {
                             })}
                           </span>
                         </div>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                   </li>
                 );
               })}
           </ul>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

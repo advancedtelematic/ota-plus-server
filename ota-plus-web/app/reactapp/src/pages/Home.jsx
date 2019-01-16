@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observe, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation, AsyncStatusCallbackHandler } from '../utils';
