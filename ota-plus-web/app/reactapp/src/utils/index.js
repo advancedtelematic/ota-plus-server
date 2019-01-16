@@ -1,3 +1,5 @@
+/** @format */
+
 import FadeAnimation from './FadeAnimation';
 import SlideAnimation from './SlideAnimation';
 import MetaData from './MetaData';
@@ -8,14 +10,4 @@ import ConvertTime from './ConvertTime';
 import ConvertBytes from './ConvertBytes';
 import InfiniteScroll from './InfiniteScroll';
 
-export {
-    FadeAnimation,
-    SlideAnimation,
-    MetaData,
-    AsyncStatusCallbackHandler,
-    WebsocketHandler,
-    LinkWrapper,
-    ConvertTime,
-    ConvertBytes,
-    InfiniteScroll
-}
+export { FadeAnimation, SlideAnimation, MetaData, AsyncStatusCallbackHandler, WebsocketHandler, LinkWrapper, ConvertTime, ConvertBytes, InfiniteScroll };
