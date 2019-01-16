@@ -1,11 +1,13 @@
+/** @format */
+
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { UpdatesContainer } from '../containers';
 
-const title = "Updates";
+const title = 'Updates';
 
-@inject("stores")
+@inject('stores')
 @observer
 class Updates extends Component {
   componentWillMount() {
@@ -19,8 +21,7 @@ class Updates extends Component {
   render() {
     return (
       <FadeAnimation>
-        <MetaData
-          title={title}>
+        <MetaData title={title}>
           <UpdatesContainer />
         </MetaData>
       </FadeAnimation>

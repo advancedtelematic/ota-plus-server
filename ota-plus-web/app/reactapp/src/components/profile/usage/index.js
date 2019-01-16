@@ -1,5 +1,5 @@
+/** @format */
+
 import Items from './Items';
 
-export {
-    Items
-}
+export { Items };

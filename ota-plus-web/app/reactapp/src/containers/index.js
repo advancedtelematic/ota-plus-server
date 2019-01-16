@@ -1,3 +1,5 @@
+/** @format */
+
 import HomeContainer from './Home';
 import Popover from '../components/whatsnew/Popover';
 import DevicesContainer from './Devices';
@@ -13,17 +15,17 @@ import SanityCheckContainer from './SanityCheck';
 import Terms from './Terms';
 
 export {
-    HomeContainer,
-    Popover,
-    DevicesContainer,
-    DeviceContainer,
-    PackagesContainer,
-    UpdatesContainer,
-    CampaignsContainer,
-    ImpactAnalysisContainer,
-    WhatsNewContainer,
-    ProvisioningContainer,
-    NoMatchContainer,
-    SanityCheckContainer,
-    Terms,
-}
+  HomeContainer,
+  Popover,
+  DevicesContainer,
+  DeviceContainer,
+  PackagesContainer,
+  UpdatesContainer,
+  CampaignsContainer,
+  ImpactAnalysisContainer,
+  WhatsNewContainer,
+  ProvisioningContainer,
+  NoMatchContainer,
+  SanityCheckContainer,
+  Terms,
+};

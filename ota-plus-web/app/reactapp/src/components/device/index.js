@@ -1,3 +1,5 @@
+/** @format */
+
 import DeviceHeader from './Header';
 import DeviceHardwarePanel from './HardwarePanel';
 import DevicePropertiesPanel from './PropertiesPanel';
@@ -6,12 +8,4 @@ import DeviceOverviewPanel from './OverviewPanel';
 import DeviceSequencerModal from './SequencerModal';
 import DeviceNetworkInfo from './NetworkInfo';
 
-export {
-    DeviceHeader,
-    DeviceHardwarePanel,
-    DevicePropertiesPanel,
-    DeviceSoftwarePanel,
-    DeviceOverviewPanel,
-    DeviceSequencerModal,
-    DeviceNetworkInfo,
-}
+export { DeviceHeader, DeviceHardwarePanel, DevicePropertiesPanel, DeviceSoftwarePanel, DeviceOverviewPanel, DeviceSequencerModal, DeviceNetworkInfo };
