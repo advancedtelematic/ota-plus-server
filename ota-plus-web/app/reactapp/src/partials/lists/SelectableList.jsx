@@ -1,43 +1,32 @@
+/** @format */
+
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
-import { _contains } from "../../utils/Collection";
+import { _contains } from '../../utils/Collection';
 import SelectableListItem from './SelectableListItem';
 
 const headerHeight = 28;
 
 @observer
 class SelectableList extends Component {
-    render() {
-        const {
-            items,
-            selectedItems,
-            onItemSelect,
-        } = this.props;
-        return (
-            <div className="ios-list" ref="list">
-                { items ?
-                     _.map(items, item => {
-                        const isSelected = _contains(selectedItems, item);
-                        return (
-                            <SelectableListItem
-                                key={item}
-                                item={item}
-                                onItemSelect={onItemSelect}
-                                selected={isSelected}
-                            />
-                        );
-                    })
-                :
-                    <span className="content-empty">
-                        <div className="wrapper-center">
-                            { "No matching items found." }
-                        </div>
-                    </span>
-                }
-            </div>
-        );
-    }
+  render() {
+    const { items, selectedItems, onItemSelect } = this.props;
+    return (
+      <div className='ios-list' ref='list'>
+        {items ? (
+          _.map(items, item => {
+            const isSelected = _contains(selectedItems, item);
+            return <SelectableListItem key={item} item={item} onItemSelect={onItemSelect} selected={isSelected} />;
+          })
+        ) : (
+          <span className='content-empty'>
+            <div className='wrapper-center'>{'No matching items found.'}</div>
+          </span>
+        )}
+      </div>
+    );
+  }
 }
 
 /**
@@ -47,9 +36,9 @@ class SelectableList extends Component {
  */
 
 SelectableList.propTypes = {
-    items: PropTypes.array.isRequired,
-    selectedItems: PropTypes.object.isRequired,
-    onItemSelect: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
+  selectedItems: PropTypes.object.isRequired,
+  onItemSelect: PropTypes.func.isRequired,
 };
 
 export default SelectableList;

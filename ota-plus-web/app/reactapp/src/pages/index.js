@@ -1,3 +1,5 @@
+/** @format */
+
 import HomePage from './Home';
 import DevicesPage from './Devices';
 import DevicePage from './Device';
@@ -25,5 +27,5 @@ export {
   NoMatchPage,
   FireworksPage,
   SoftwareRepository,
-  TermsAndConditions
-}
+  TermsAndConditions,
+};
