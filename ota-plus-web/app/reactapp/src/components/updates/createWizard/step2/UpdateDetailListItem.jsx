@@ -1,12 +1,14 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { observable, toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { FormSelect } from '../../../../partials';
-import { Form } from 'formsy-react';
+import { Form } from 'formsy-antd';
 import moment from 'moment';
+import { Row, Col } from 'antd';
 
 @inject('stores')
 @observer
@@ -39,6 +41,8 @@ class UpdateDetailListItem extends Component {
     } else {
       this.toVersions = formattedData;
     }
+    console.log(toJS(this.fromVersions), 'this.fromVersions');
+    console.log(toJS(this.toVersions), 'this.toVersions');
   };
 
   render() {
@@ -46,10 +50,13 @@ class UpdateDetailListItem extends Component {
     const { packagesStore } = this.props.stores;
     const { update } = wizardData;
     const { fromPack, toPack, fromVersion, toVersion } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
-
-    let uniqPackages = _.uniq(packagesStore.packages, item => {
+console.log(toJS(packagesStore.packages));
+    let uniqPackages = _.uniqBy(packagesStore.packages, item => {
+      console.log('item', item.id.name);
       return item.id.name;
     });
+    
+    console.log(uniqPackages, 'uniqPackages');
     const packages = _.map(uniqPackages, item => {
       return {
         text: item.id.name,
@@ -58,19 +65,21 @@ class UpdateDetailListItem extends Component {
         item,
       };
     });
+    
+    console.log(packages, 'packages');
 
     return (
       <div className='update-block'>
-        <div className='row hardware-id'>
-          <div className='col-xs-12'>{item.name}</div>
-        </div>
-        <div className='row header'>
-          <div className=' col-xs-6'>From</div>
-          <div className=' col-xs-6'>To</div>
-        </div>
-        <div className='row packages'>
+        <Row className='hardware-id'>
+          <Col span={24}>{item.name}</Col>
+        </Row>
+        <Row className='header'>
+          <Col span={12}>From</Col>
+          <Col span={12}>To</Col>
+        </Row>
+        <Row className='packages'>
           <Form>
-            <div className='col-xs-6'>
+            <Col span={12}>
               <FormSelect
                 id={`${item.name}-from-package`}
                 options={packages}
@@ -88,8 +97,8 @@ class UpdateDetailListItem extends Component {
                   }
                 }}
               />
-            </div>
-            <div className='col-xs-6'>
+            </Col>
+            <Col span={12}>
               <FormSelect
                 id={`${item.name}-to-package`}
                 options={packages}
@@ -107,12 +116,12 @@ class UpdateDetailListItem extends Component {
                   }
                 }}
               />
-            </div>
+            </Col>
           </Form>
-        </div>
-        <div className='row versions'>
+        </Row>
+        <Row className='versions'>
           <Form>
-            <div className=' col-xs-6'>
+            <Col span={12}>
               <FormSelect
                 id={`${item.name}-from-version`}
                 options={this.fromVersions}
@@ -128,8 +137,8 @@ class UpdateDetailListItem extends Component {
                   }
                 }}
               />
-            </div>
-            <div className=' col-xs-6'>
+            </Col>
+            <Col span={12}>
               <FormSelect
                 id={`${item.name}-to-version`}
                 options={this.toVersions}
@@ -145,9 +154,9 @@ class UpdateDetailListItem extends Component {
                   }
                 }}
               />
-            </div>
+            </Col>
           </Form>
-        </div>
+        </Row>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
@@ -9,23 +10,29 @@ import { Loader } from '../partials';
 @inject('stores')
 @observer
 class Updates extends Component {
-  @observable createModalShown = false;
-  @observable updateDetailsShown = false;
-  @observable selectedUpdate = null;
+  @observable
+  createModalShown = false;
+  @observable
+  updateDetailsShown = false;
+  @observable
+  selectedUpdate = null;
 
   showCreateModal = e => {
     if (e) e.preventDefault();
     this.createModalShown = true;
   };
+
   hideCreateModal = e => {
     if (e) e.preventDefault();
     this.createModalShown = false;
   };
+
   showUpdateDetails = (update, e) => {
     if (e) e.preventDefault();
     this.updateDetailsShown = true;
     this.selectedUpdate = update;
   };
+
   hideUpdateDetails = e => {
     if (e) e.preventDefault();
     this.updateDetailsShown = false;

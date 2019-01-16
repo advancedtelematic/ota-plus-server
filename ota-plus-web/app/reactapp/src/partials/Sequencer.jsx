@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, toJS, extendObservable } from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 import $ from 'jquery';
 import SequencerItem from './SequencerItem';
 import SequencerProgress from './SequencerProgress';
@@ -32,22 +33,17 @@ class Sequencer extends Component {
   @observable campaignUpdates = [];
   @observable updateMatrix = [];
 
-  constructor(props) {
-    super(props);
-    this._createCampaignUpdates = this._createCampaignUpdates.bind(this);
-    this._createMatrix = this._createMatrix.bind(this);
-    this.handleMove = this.handleMove.bind(this);
-    this.highlightAvailableSpaces = this.highlightAvailableSpaces.bind(this);
-    this.resetHighlightedSpaces = this.resetHighlightedSpaces.bind(this);
-    this.selectSlot = this.selectSlot.bind(this);
-    this.moveElement = this.moveElement.bind(this);
-    this.deselectSlot = this.deselectSlot.bind(this);
-    this.showFullScreen = this.showFullScreen.bind(this);
-    this.hideFullScreen = this.hideFullScreen.bind(this);
-    this.selectAction = this.selectAction.bind(this);
-  }
+  static propTypes = {
+    stores: PropTypes.object,
+    wizardIdentifier: PropTypes.string,
+    entity: PropTypes.string,
+    data: PropTypes.string,
+    readOnly: PropTypes.bool,
+  };
+
   componentWillMount() {
-    let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
+    const { wizardIdentifier } = this.props;
+    const matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${wizardIdentifier}`));
     if (_.isEmpty(matrixFromStorage)) {
       this._createCampaignUpdates();
       this._createMatrix();
@@ -60,44 +56,49 @@ class Sequencer extends Component {
     }
   }
 
-  selectAction(actionType, value) {
+  componentWillUnmount() {
+    const { entity, wizardIdentifier } = this.props;
+
+    if (entity === 'campaign') {
+      localStorage.setItem(`matrix-${wizardIdentifier}`, JSON.stringify(this.updateMatrix));
+    }
+  }
+
+  selectAction = (actionType, value) => {
     _.each(this.campaignUpdates, version => {
       if (version.name === value.name) {
         extendObservable(version, { selectedAction: actionType });
         extendObservable(value, { selectedAction: actionType });
       }
     });
-  }
+  };
 
-  showFullScreen(e) {
+  showFullScreen = e => {
     if (e) e.preventDefault();
-    const { campaignsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
     campaignsStore._showFullScreen();
-  }
+  };
 
-  hideFullScreen(e) {
+  hideFullScreen = e => {
     if (e) e.preventDefault();
-    const { campaignsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
     campaignsStore._hideFullScreen();
-  }
+  };
 
-  componentWillUnmount() {
-    if (this.props.entity === 'campaign') {
-      localStorage.setItem(`matrix-${this.props.wizardIdentifier}`, JSON.stringify(this.updateMatrix));
-    }
-  }
-
-  _createCampaignUpdates(data = null) {
-    let updates = data ? data : this.props.data;
-    let campaignUpdates = [];
-    _.mapObject(updates, element => {
+  _createCampaignUpdates = (data = null) => {
+    const { data: propsData } = this.props;
+    const updates = data || propsData;
+    const campaignUpdates = [];
+    _.map(updates, element => {
       campaignUpdates.push({ ...element });
     });
     this.campaignUpdates = campaignUpdates;
-  }
+  };
 
-  _createMatrix() {
-    let campaignUpdates = this.campaignUpdates;
+  _createMatrix = () => {
+    const { campaignUpdates } = this;
     let alreadyCreated = false;
 
     const updatesMatrix = new Array(campaignUpdates.length);
@@ -130,9 +131,9 @@ class Sequencer extends Component {
     }
     this.campaignUpdates = campaignUpdates;
     this.updateMatrix = updatesMatrix;
-  }
+  };
 
-  moveElement(item, e) {
+  moveElement = (item, e) => {
     if (e.target.className.indexOf(EMPTY_NODE_HIGHLIGHTED) !== -1) {
       this.destinationElement = item;
       this.handleMove();
@@ -140,52 +141,52 @@ class Sequencer extends Component {
       this.selectedElement = null;
       this.destinationElement = null;
     }
-  }
+  };
 
-  highlightAvailableSpaces(selectedElementRow) {
-    let nextRow = $('.' + FLEX_ROW + '--' + (selectedElementRow + 1));
-    let prevRow = $('.' + FLEX_ROW + '--' + (selectedElementRow - 1));
+  highlightAvailableSpaces = selectedElementRow => {
+    const nextRow = $(`.${  FLEX_ROW  }--${  selectedElementRow + 1}`);
+    const prevRow = $(`.${  FLEX_ROW  }--${  selectedElementRow - 1}`);
 
-    let nextRowNode = nextRow.children.length ? _.first(nextRow.children('.' + EMPTY_NODE)) : null;
-    let prevRowNode = prevRow.children.length ? _.first(prevRow.children('.' + EMPTY_NODE)) : null;
+    const nextRowNode = nextRow.children.length ? _.first(nextRow.children(`.${  EMPTY_NODE}`)) : null;
+    const prevRowNode = prevRow.children.length ? _.first(prevRow.children(`.${  EMPTY_NODE}`)) : null;
 
-    nextRowNode ? nextRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED) : null;
-    prevRowNode ? prevRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED) : null;
-  }
+    if (nextRowNode) nextRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED);
+    if (prevRowNode) prevRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED);
+  };
 
-  resetHighlightedSpaces() {
-    let emptyNodes = $('.' + EMPTY_NODE);
+  resetHighlightedSpaces = () => {
+    const emptyNodes = $(`.${  EMPTY_NODE}`);
 
     _.each(emptyNodes, val => {
       val.classList.remove(EMPTY_NODE_HIGHLIGHTED);
     });
-  }
+  };
 
-  selectSlot(item, e) {
+  selectSlot = (item, e) => {
     if (e) e.preventDefault();
     this.selectedElement = item;
     if (item.value.name) {
       this.resetHighlightedSpaces();
       this.highlightAvailableSpaces(item.row);
     }
-  }
+  };
 
-  deselectSlot() {
+  deselectSlot = () => {
     this.selectedElement = null;
     this.resetHighlightedSpaces();
-  }
+  };
 
-  handleMove() {
+  handleMove = () => {
     const updatesMatrix = toJS(this.updateMatrix);
 
-    let source = { ...this.selectedElement };
-    let destination = { ...this.destinationElement };
-    let initialTargetColumn = destination.column;
-    let initialTargetRow = destination.row;
-    let initialSourceColumn = source.column;
-    let initialSourceRow = source.row;
+    const source = { ...this.selectedElement };
+    const destination = { ...this.destinationElement };
+    const initialTargetColumn = destination.column;
+    const initialTargetRow = destination.row;
+    const initialSourceColumn = source.column;
+    const initialSourceRow = source.row;
     let targetColumn = initialTargetColumn;
-    let targetRow = initialTargetRow;
+    const targetRow = initialTargetRow;
     for (let i = 0; i < updatesMatrix.length; i++) {
       if (_.isEmpty(updatesMatrix[targetRow][i])) {
         targetColumn = i;
@@ -194,7 +195,7 @@ class Sequencer extends Component {
     }
     this.updateMatrix[initialSourceRow][initialSourceColumn] = [];
     this.updateMatrix[targetRow][targetColumn] = source.value;
-  }
+  };
 
   render() {
     const { readOnly } = this.props;
@@ -210,7 +211,7 @@ class Sequencer extends Component {
             onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, { column: -1, row: -1, value: {} }) : null}
           >
             <div className='c-sequencer__text'>Init</div>
-            {readOnly ? <SequencerProgress delay={0} duration={INIT_PROGRESS_TIME} className={'c-sequencer__progress c-sequencer__progress--default-phase'} /> : null}
+            {readOnly ? <SequencerProgress delay={0} duration={INIT_PROGRESS_TIME} className="c-sequencer__progress c-sequencer__progress--default-phase" /> : null}
           </div>
           <div className='c-sequencer__init' style={{ visibility: 'hidden' }}>
             Phase 1
@@ -228,7 +229,7 @@ class Sequencer extends Component {
               <SequencerProgress
                 delay={INIT_PROGRESS_TIME + PHASE_PROGRESS_TIME * numberOfPhases}
                 duration={TERMINATION_PROGRESS_TIME}
-                className={'c-sequencer__progress c-sequencer__progress--default-phase'}
+                className="c-sequencer__progress c-sequencer__progress--default-phase"
               />
             ) : null}
           </div>
@@ -242,9 +243,7 @@ class Sequencer extends Component {
       <div className='c-sequencer'>
         {initPhase}
         {_.map(updatesArray, (val, rowIndex) => {
-          let rowIsEmpty = _.find(updatesMatrix[rowIndex], obj => {
-            return !_.isEmpty(obj);
-          });
+          const rowIsEmpty = _.find(updatesMatrix[rowIndex], obj => !_.isEmpty(obj));
           return (
             <div className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
               <span className='c-sequencer__phase'>Phase {rowIndex + 2}</span>
@@ -263,29 +262,27 @@ class Sequencer extends Component {
                             selectAction={this.selectAction}
                             row={rowIndex}
                             column={columnIndex}
-                            key={rowIndex + '-' + columnIndex}
+                            key={`${rowIndex  }-${  columnIndex}`}
                             readOnly={readOnly}
                           />
                         );
-                      } else {
+                      } 
                         return (
                           <div
                             className='c-sequencer__empty-node'
                             onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
-                            key={rowIndex + '-' + columnIndex}
+                            key={`${rowIndex  }-${  columnIndex}`}
                           />
                         );
-                      }
+                      
                     })
-                  : _.map(updatesArray, (value, columnIndex) => {
-                      return (
+                  : _.map(updatesArray, (value, columnIndex) => (
                         <div
                           className='c-sequencer__empty-node'
                           onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
-                          key={rowIndex + '-' + columnIndex}
+                          key={`${rowIndex  }-${  columnIndex}`}
                         />
-                      );
-                    })}
+                      ))}
               </div>
             </div>
           );

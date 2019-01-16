@@ -1,24 +1,22 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
-import _ from 'underscore';
+import _ from 'lodash';
 import ActiveCampaignItem from './ActiveCampaignItem';
 import NoItems from './NoItems';
 
 @inject('stores')
 @observer
 class ActiveCampaigns extends Component {
-  constructor(props) {
-    super(props);
-    this.createCampaign = this.createCampaign.bind(this);
-  }
-  createCampaign(e) {
+  createCampaign = e => {
     e.preventDefault();
     const { addNewWizard } = this.props;
     addNewWizard();
-  }
+  };
+
   render() {
     const { addNewWizard } = this.props;
     const { campaignsStore } = this.props.stores;

@@ -1,16 +1,21 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import UserDropdown from './UserDropdown';
-import { Avatar } from 'material-ui';
-import { Dropdown, Button } from 'react-bootstrap';
+import { Avatar } from 'antd';
+import { Dropdown, Button } from 'antd';
 import onClickOutside from 'react-onclickoutside';
-import { LinkWrapper } from '../utils';
 import $ from 'jquery';
+import { LinkWrapper } from '../utils';
+import NavigationProfile from './NavigationProfile';
 
 @observer
 class SettingsDropdown extends Component {
+  static propTypes = {
+    uiCredentialsDownload: PropTypes.bool,
+  };
+
   render() {
     const { uiCredentialsDownload } = this.props;
     return (
@@ -28,7 +33,7 @@ class SettingsDropdown extends Component {
             <span />
           </div>
         </LinkWrapper>
-        <UserDropdown bsRole='menu' settings={true} uiCredentialsDownload={uiCredentialsDownload} />
+        <NavigationProfile bsRole='menu' settings uiCredentialsDownload={uiCredentialsDownload} />
       </Dropdown>
     );
   }
@@ -37,9 +42,7 @@ class SettingsDropdown extends Component {
 SettingsDropdown.propTypes = {};
 
 export default onClickOutside(SettingsDropdown, {
-  handleClickOutside: e => {
-    return () => {
-      if ($('#menu-login .dropdown').hasClass('open')) document.getElementById('profile-dropdown').click();
-    };
+  handleClickOutside: e => () => {
+    if ($('#menu-login .dropdown').hasClass('open')) document.getElementById('profile-dropdown').click();
   },
 });

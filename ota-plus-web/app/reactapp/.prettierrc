@@ -1,5 +1,5 @@
 {
-  "requirePragma": false,
+  "requirePragma": true,
   "arrowParens": "avoid",
   "bracketSpacing": true,
   "insertPragma": true,

@@ -4,7 +4,7 @@ import { observable, computed } from 'mobx';
 import axios from 'axios';
 import { API_IMPACT_ANALYSIS_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'underscore';
+import _ from 'lodash';
 
 export default class ImpactAnalysisStore {
   @observable impactAnalysisFetchAsync = {};

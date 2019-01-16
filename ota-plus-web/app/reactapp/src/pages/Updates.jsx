@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import PropTypes from 'prop-types';
+
 import { MetaData, FadeAnimation } from '../utils';
 import { UpdatesContainer } from '../containers';
 
@@ -10,14 +12,22 @@ const title = 'Updates';
 @inject('stores')
 @observer
 class Updates extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+  };
+
   componentWillMount() {
-    const { updatesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { updatesStore } = stores;
     updatesStore.fetchUpdates();
   }
+
   componentWillUnmount() {
-    const { updatesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { updatesStore } = stores;
     updatesStore._reset();
   }
+
   render() {
     return (
       <FadeAnimation>

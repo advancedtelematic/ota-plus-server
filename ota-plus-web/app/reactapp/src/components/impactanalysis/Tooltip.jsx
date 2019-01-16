@@ -1,7 +1,8 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { Modal } from '../../partials';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { OTAModal } from '../../partials';
 
 class Tooltip extends Component {
   render() {
@@ -29,14 +30,14 @@ class Tooltip extends Component {
     );
 
     return (
-      <Modal
+      <OTAModal
         title={
           <div className='heading'>
             <div className='internal'>Blacklist</div>
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
       />
     );
   }

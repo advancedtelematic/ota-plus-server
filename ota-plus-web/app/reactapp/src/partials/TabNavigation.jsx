@@ -1,16 +1,24 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 
 @inject('stores')
 @observer
 class TabNavigation extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+    location: PropTypes.string.isRequired,
+    switchTab: PropTypes.func.isRequired,
+    activeTab: PropTypes.string.isRequired,
+  };
+
   componentWillMount() {
-    const { location } = this.props;
-    const { campaignsStore } = this.props.stores;
+    const { stores, location } = this.props;
+    const { campaignsStore } = stores;
     const isCampaignsPage = location === 'page-campaigns';
-    isCampaignsPage && campaignsStore.fetchStatusCounts();
+    if (isCampaignsPage) campaignsStore.fetchStatusCounts();
   }
 
   isActive = tab => {
@@ -24,17 +32,21 @@ class TabNavigation extends Component {
   };
 
   render() {
-    const { location } = this.props;
-    let tabs;
-    switch (location) {
-      case 'page-packages':
-        tabs = (
+    const { stores, location } = this.props;
+    const { campaignsStore } = stores;
+    const { prepared, launched, finished, cancelled } = campaignsStore.count;
+    const packagesTabsActive = location === 'page-packages';
+    const campaignsTabsActive = location === 'page-campaigns';
+
+    return (
+      <div className='tab-navigation'>
+        {packagesTabsActive && (
           <ul className='tab-navigation__links'>
             <li
               onClick={() => {
                 this.switchTo('compact');
               }}
-              className={'tab-navigation__link ' + this.isActive('compact')}
+              className={`tab-navigation__link ${this.isActive('compact')}`}
             >
               <span>{'Compact'}</span>
             </li>
@@ -42,22 +54,19 @@ class TabNavigation extends Component {
               onClick={() => {
                 this.switchTo('advanced');
               }}
-              className={'tab-navigation__link ' + this.isActive('advanced')}
+              className={`tab-navigation__link ${this.isActive('advanced')}`}
             >
               <span>{'Advanced (BETA)'}</span>
             </li>
           </ul>
-        );
-        break;
-      case 'page-campaigns':
-        const { prepared, launched, finished, cancelled } = this.props.stores.campaignsStore.count;
-        tabs = (
+        )}
+        {campaignsTabsActive && (
           <ul className='tab-navigation__links'>
             <li
               onClick={() => {
                 this.switchTo('prepared');
               }}
-              className={'tab-navigation__link ' + this.isActive('prepared')}
+              className={`tab-navigation__link ${this.isActive('prepared')}`}
             >
               <span>{`${prepared} In Preparation`}</span>
             </li>
@@ -65,7 +74,7 @@ class TabNavigation extends Component {
               onClick={() => {
                 this.switchTo('launched');
               }}
-              className={'tab-navigation__link ' + this.isActive('launched')}
+              className={`tab-navigation__link ${this.isActive('launched')}`}
             >
               <span>{`${launched} Running`}</span>
             </li>
@@ -73,7 +82,7 @@ class TabNavigation extends Component {
               onClick={() => {
                 this.switchTo('finished');
               }}
-              className={'tab-navigation__link ' + this.isActive('finished')}
+              className={`tab-navigation__link ${this.isActive('finished')}`}
             >
               <span>{`${finished} Finished`}</span>
             </li>
@@ -81,25 +90,15 @@ class TabNavigation extends Component {
               onClick={() => {
                 this.switchTo('cancelled');
               }}
-              className={'tab-navigation__link ' + this.isActive('cancelled')}
+              className={`tab-navigation__link ${this.isActive('cancelled')}`}
             >
               <span>{`${cancelled} Canceled`}</span>
             </li>
           </ul>
-        );
-        break;
-      default:
-        break;
-    }
-
-    return <div className='tab-navigation'>{tabs}</div>;
+        )}
+      </div>
+    );
   }
 }
-
-TabNavigation.propTypes = {
-  location: PropTypes.string.isRequired,
-  switchTab: PropTypes.func.isRequired,
-  activeTab: PropTypes.string.isRequired,
-};
 
 export default TabNavigation;

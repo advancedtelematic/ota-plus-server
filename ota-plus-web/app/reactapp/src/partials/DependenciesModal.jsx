@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, toJS, observe } from 'mobx';
-import _ from 'underscore';
-import Modal from './Modal';
+import _ from 'lodash';
+import OTAModal from './OTAModal';
 import Loader from './Loader';
 import { Sankey } from 'react-vis';
 import { AsyncStatusCallbackHandler } from '../utils';
@@ -27,41 +28,7 @@ class DependenciesModal extends Component {
   @observable showOnlyActive = true;
   @observable sankeyWidth = 1000;
   @observable sankeyHeight = 700;
-
-  constructor(props) {
-    super(props);
-    const { devicesStore, packagesStore, campaignsStore } = props.stores;
-    this.devicesFetchHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
-    this.campaignsFetchHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
-    this.packagesFetchHandler = new AsyncStatusCallbackHandler(packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
-    this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
-    this.onLinkClick = this.onLinkClick.bind(this);
-    this.getCampaignStatus = this.getCampaignStatus.bind(this);
-    this.resizeSankey = this.resizeSankey.bind(this);
-
-    this.sankeyModeHandler = observe(this, change => {
-      if (change['object'].showOnlyActive === false) {
-        this.formatData(true);
-      }
-    });
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.resizeSankey);
-  }
-
-  componentWillMount() {
-    const { devicesStore, campaignsStore, packagesStore } = this.props.stores;
-    devicesStore.fetchDevices().then(() => {
-      if (window.location.href.indexOf('/packages') > -1) {
-        // campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
-      } else {
-        packagesStore.fetchPackages();
-      }
-    });
-  }
-
-  resizeSankey() {
+  resizeSankey = () => {
     if (window.innerHeight >= 1000) {
       this.sankeyHeight = 700;
     } else if (window.innerHeight < 1000 && window.innerHeight > 870) {
@@ -69,22 +36,8 @@ class DependenciesModal extends Component {
     } else {
       this.sankeyHeight = 500;
     }
-  }
-
-  componentWillUnmount() {
-    const { devicesStore } = this.props.stores;
-    this.devicesFetchHandler();
-    this.campaignsFetchHandler();
-    this.packagesFetchHandler();
-    devicesStore._reset();
-    window.removeEventListener('resize', this.resizeSankey);
-  }
-
-  showFullGraph() {
-    this.showOnlyActive = false;
-  }
-
-  onLinkMouseAction(actionType, linkdata, event) {
+  };
+  onLinkMouseAction = (actionType, linkdata, event) => {
     let opacity = defaultOpacity;
     if (actionType === 'in') {
       opacity = highlightedOpacity;
@@ -92,31 +45,8 @@ class DependenciesModal extends Component {
     event.target.setAttribute('opacity', opacity);
     this.highlightTargets(linkdata.target.sourceLinks, opacity);
     this.highlightSources(linkdata.source.targetLinks, opacity);
-  }
-
-  highlightTargets(data, opacity) {
-    let paths = document.querySelectorAll('path');
-    _.each(data, (link, index) => {
-      let ix = link.index;
-      paths[ix].setAttribute('opacity', opacity);
-      if (link.target.sourceLinks) {
-        this.highlightTargets(link.target.sourceLinks, opacity);
-      }
-    });
-  }
-
-  highlightSources(data, opacity) {
-    let paths = document.querySelectorAll('path');
-    _.each(data, (link, index) => {
-      let ix = link.index;
-      paths[ix].setAttribute('opacity', opacity);
-      if (link.source.targetLinks) {
-        this.highlightSources(link.source.targetLinks, opacity);
-      }
-    });
-  }
-
-  onLinkClick(linkdata, event) {
+  };
+  onLinkClick = (linkdata, event) => {
     const { hide } = this.props;
     const { campaignsStore } = this.props.stores;
     let clickedItemType = linkdata.target.type;
@@ -141,10 +71,73 @@ class DependenciesModal extends Component {
       default:
         break;
     }
+  };
+  getCampaignStatus = campaign => {
+    return campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other';
+  };
+
+  constructor(props) {
+    super(props);
+    const { devicesStore, packagesStore, campaignsStore } = props.stores;
+    this.devicesFetchHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
+    this.campaignsFetchHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
+    this.packagesFetchHandler = new AsyncStatusCallbackHandler(packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
+
+    this.sankeyModeHandler = observe(this, change => {
+      if (change['object'].showOnlyActive === false) {
+        this.formatData(true);
+      }
+    });
   }
 
-  getCampaignStatus(campaign) {
-    return campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other';
+  componentDidMount() {
+    window.addEventListener('resize', this.resizeSankey);
+  }
+
+  componentWillMount() {
+    const { devicesStore, campaignsStore, packagesStore } = this.props.stores;
+    devicesStore.fetchDevices().then(() => {
+      if (window.location.href.indexOf('/packages') > -1) {
+        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+      } else {
+        packagesStore.fetchPackages();
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    const { devicesStore } = this.props.stores;
+    this.devicesFetchHandler();
+    this.campaignsFetchHandler();
+    this.packagesFetchHandler();
+    devicesStore._reset();
+    window.removeEventListener('resize', this.resizeSankey);
+  }
+
+  showFullGraph() {
+    this.showOnlyActive = false;
+  }
+
+  highlightTargets(data, opacity) {
+    let paths = document.querySelectorAll('path');
+    _.each(data, (link, index) => {
+      let ix = link.index;
+      paths[ix].setAttribute('opacity', opacity);
+      if (link.target.sourceLinks) {
+        this.highlightTargets(link.target.sourceLinks, opacity);
+      }
+    });
+  }
+
+  highlightSources(data, opacity) {
+    let paths = document.querySelectorAll('path');
+    _.each(data, (link, index) => {
+      let ix = link.index;
+      paths[ix].setAttribute('opacity', opacity);
+      if (link.source.targetLinks) {
+        this.highlightSources(link.source.targetLinks, opacity);
+      }
+    });
   }
 
   devicesFetched() {
@@ -182,7 +175,7 @@ class DependenciesModal extends Component {
         }
       });
     });
-    this.packages = _.uniq(this.packages, pack => pack.filepath);
+    this.packages = _.uniqBy(this.packages, pack => pack.filepath);
     this.packages = _.sortBy(this.packages, pack => pack.id.name);
     this.formatData();
   }
@@ -247,8 +240,8 @@ class DependenciesModal extends Component {
       });
     });
 
-    devicesWithQueue = _.uniq(devicesWithQueue, device => device.uuid);
-    devicesWithInstalled = _.uniq(devicesWithInstalled, device => device.uuid);
+    devicesWithQueue = _.uniqBy(devicesWithQueue, device => device.uuid);
+    devicesWithInstalled = _.uniqBy(devicesWithInstalled, device => device.uuid);
     let localDevices = [];
 
     _.each(devicesWithQueue, (device, index) => {
@@ -301,8 +294,8 @@ class DependenciesModal extends Component {
           packObj.campaign = campaign;
         });
       });
-      packObj.queuedOn = _.uniq(packObj.queuedOn, device => device.uuid);
-      packObj.installedOn = _.uniq(packObj.installedOn, device => device.uuid);
+      packObj.queuedOn = _.uniqBy(packObj.queuedOn, device => device.uuid);
+      packObj.installedOn = _.uniqBy(packObj.installedOn, device => device.uuid);
       nodes.push(packObj);
     });
     _.map(this.devices, (device, index) => {
@@ -451,13 +444,13 @@ class DependenciesModal extends Component {
     });
     _.each(allTextElements, (item, index) => {
       item.style.transition = 'transform 0.5s';
-      if (_.contains(packs, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(packs, this.unescapeHTML(item.innerHTML))) {
         item.style.transform = 'translate(-30px)';
       }
-      if (_.contains(campaigns, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(campaigns, this.unescapeHTML(item.innerHTML))) {
         item.style.transform = 'translate(-5px)';
       }
-      if (_.contains(devices, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(devices, this.unescapeHTML(item.innerHTML))) {
         item.style.transform = 'translate(-5px)';
       }
       if (item.innerHTML === 'targets.json') {
@@ -545,7 +538,7 @@ class DependenciesModal extends Component {
 
     let allTextElements = document.querySelectorAll('text');
     _.each(allTextElements, (item, index) => {
-      if (_.contains(dataToFind, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(dataToFind, this.unescapeHTML(item.innerHTML))) {
         item.style.fontSize = '21px';
       } else if (dataToFind.length) {
         item.style.opacity = 0.5;
@@ -562,28 +555,29 @@ class DependenciesModal extends Component {
 
   render() {
     const { shown, hide } = this.props;
+
     const content = this.loaded ? (
       <span>
         {this.nodes.length && this.links.length ? (
           <div className={this.nodes.length <= 3 ? 'sankey-minimized' : ''}>
-            <Sankey
-              align={sankeyAlign}
-              nodes={toJS(this.nodes)}
-              links={toJS(this.links)}
-              width={this.sankeyWidth}
-              height={this.sankeyHeight}
-              onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
-              onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
-              onLinkClick={this.onLinkClick.bind(this)}
-              layout={1000}
-              style={{
-                labels: {},
-                links: {},
-                rects: {
-                  width: '15px',
-                },
-              }}
-            />
+         <Sankey
+                          align={ sankeyAlign }
+                          nodes={ toJS(this.nodes) }
+                          links={ toJS(this.links) }
+                          width={ this.sankeyWidth }
+                          height={ this.sankeyHeight }
+                          onLinkMouseOver={ this.onLinkMouseAction.bind(this, 'in') }
+                          onLinkMouseOut={ this.onLinkMouseAction.bind(this, 'out') }
+                          onLinkClick={ this.onLinkClick.bind(this) }
+                          layout={ 1000 }
+                          style={ {
+                              labels: {},
+                              links: {},
+                              rects: {
+                                  width: '15px',
+                              }
+                          } }
+                      />
           </div>
         ) : (
           <div className='wrapper-center'>This item is not on the chart.</div>
@@ -602,8 +596,9 @@ class DependenciesModal extends Component {
         <Loader />
       </div>
     );
+
     return (
-      <Modal
+      <OTAModal
         title={'Dependencies'}
         topActions={
           <div className='top-actions flex-end'>
@@ -613,7 +608,7 @@ class DependenciesModal extends Component {
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
         className='dependencies-modal'
         hideOnClickOutside={true}
         onRequestClose={hide}
@@ -627,7 +622,7 @@ DependenciesModal.propTypes = {
 };
 
 DependenciesModal.wrappedComponent.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 export default DependenciesModal;

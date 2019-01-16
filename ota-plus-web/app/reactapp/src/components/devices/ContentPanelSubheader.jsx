@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { SubHeader, SearchBar } from '../../partials';
 import { observer, inject } from 'mobx-react';
-import { Form } from 'formsy-react';
-import { FlatButton } from 'material-ui';
+import { Form } from 'formsy-antd';
 import { FormInput, FormSelect } from '../../partials';
 
 @inject('stores')

@@ -1,72 +1,53 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import { toJS } from 'mobx';
+import { Tabs } from 'antd';
 import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
 import { ApprovalPendingMtuList } from './approvalPending';
 
+const { TabPane } = Tabs;
+
 @inject('stores')
 @observer
 class OverviewPanel extends Component {
-  componentWillUnmount() {
-    const { setOverviewPanelActiveTabId } = this.props;
-    setOverviewPanelActiveTabId(0);
+  componentDidMount() {
+    const { stores, setOverviewPanelActiveTabId } = this.props;
+    const { devicesStore } = stores;
+    if (devicesStore.deviceApprovalPendingCampaigns.campaigns.length) {
+      setOverviewPanelActiveTabId('2');
+    } else if (devicesStore.multiTargetUpdates.length) {
+      setOverviewPanelActiveTabId('1');
+    } else {
+      setOverviewPanelActiveTabId('0');
+    }
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     const { setOverviewPanelActiveTabId } = this.props;
-    const { devicesStore } = this.props.stores;
-    devicesStore.deviceAprrovalPendingCampaigns.campaigns.length
-      ? setOverviewPanelActiveTabId(2)
-      : devicesStore.multiTargetUpdates.length
-      ? setOverviewPanelActiveTabId(1)
-      : setOverviewPanelActiveTabId(0);
+    setOverviewPanelActiveTabId('0');
   }
 
   render() {
-    const { cancelMtuUpdate, activeTabId, setOverviewPanelActiveTabId, showSequencer, cancelApprovalPendingCampaign } = this.props;
-    const { devicesStore } = this.props.stores;
+    const { stores, cancelMtuUpdate, activeTabId, setOverviewPanelActiveTabId, cancelApprovalPendingCampaign } = this.props;
+    const { devicesStore } = stores;
     const { device } = devicesStore;
     return (
-      <div className={'overview-panel'}>
-        <Tabs tabItemContainerStyle={{ backgroundColor: '#E7E7E8' }} className='tabs' inkBarStyle={{ display: 'none' }} value={activeTabId}>
-          <Tab
-            label='History'
-            className={'overview-panel__tab-item' + (activeTabId === 0 ? ' overview-panel__tab-item--active' : '')}
-            id='installation-history'
-            value={0}
-            onActive={setOverviewPanelActiveTabId.bind(this, 0)}
-          />
-          <Tab
-            label='Queue'
-            className={
-              'overview-panel__tab-item' + (devicesStore.multiTargetUpdates.length ? ' overview-panel__tab-item--pending' : '') + (activeTabId === 1 ? ' overview-panel__tab-item--active' : '')
-            }
-            id='queued-packages'
-            value={1}
-            onActive={setOverviewPanelActiveTabId.bind(this, 1)}
-          />
-          <Tab
-            label='Approval pending'
-            className={
-              'overview-panel__tab-item' +
-              (devicesStore.deviceAprrovalPendingCampaigns.campaigns.length ? ' overview-panel__tab-item--pending' : '') +
-              (activeTabId === 2 ? ' overview-panel__tab-item--active' : '')
-            }
-            id='approval-pending-campaigns'
-            value={2}
-            onActive={setOverviewPanelActiveTabId.bind(this, 2)}
-          />
-        </Tabs>
-        {activeTabId === 0 && (
-          <div>
+      <div className='overview-panel'>
+        <Tabs type={'card'} onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
+          <TabPane tab='History' id='installation-history' key={'0'}>
             <HistoryMtuList device={device} />
-          </div>
-        )}
-        {activeTabId === 1 && <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} showSequencer={showSequencer} />}
-        {activeTabId === 2 && <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />}
+          </TabPane>
+          <TabPane tab='Queue' id='queued-packages' key={'1'}>
+            <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
+          </TabPane>
+          <TabPane tab='Approval pending' id='approval-pending-campaigns' key={'2'}>
+            <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />
+          </TabPane>
+        </Tabs>
       </div>
     );
   }
@@ -74,7 +55,7 @@ class OverviewPanel extends Component {
 
 OverviewPanel.propTypes = {
   stores: PropTypes.object,
-  activeTabId: PropTypes.number.isRequired,
+  activeTabId: PropTypes.string.isRequired,
   setOverviewPanelActiveTabId: PropTypes.func.isRequired,
 };
 

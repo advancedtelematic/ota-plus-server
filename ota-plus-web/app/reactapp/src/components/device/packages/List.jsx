@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
@@ -27,9 +28,6 @@ class List extends Component {
   constructor(props) {
     super(props);
     const { packagesStore } = props.stores;
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
     this.packagesChangeHandler = observe(packagesStore, change => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
@@ -70,7 +68,8 @@ class List extends Component {
       animatedScroll(list, scrollTo, 800);
     }
   }
-  generateHeadersPositions() {
+
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -83,8 +82,9 @@ class List extends Component {
       this,
     );
     return positions;
-  }
-  generateItemsPositions() {
+  };
+
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -97,8 +97,9 @@ class List extends Component {
       this,
     );
     return positions;
-  }
-  listScroll() {
+  };
+
+  listScroll = () => {
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
@@ -136,7 +137,7 @@ class List extends Component {
       this.fakeHeaderLetter = newFakeHeaderLetter;
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
+  };
 
   startIntervalListScroll() {
     clearInterval(this.tmpIntervalId);

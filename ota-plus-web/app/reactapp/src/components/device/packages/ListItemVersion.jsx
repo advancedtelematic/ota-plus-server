@@ -1,22 +1,20 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @inject('stores')
 @observer
 class ListItemVersion extends Component {
-  constructor(props) {
-    super(props);
-    this.handlePackageVersionClick = this.handlePackageVersionClick.bind(this);
-  }
-  handlePackageVersionClick() {
+  handlePackageVersionClick = () => {
     const { showPackageDetails, version } = this.props;
     showPackageDetails(version);
-  }
+  };
+
   isPackageBlacklisted(version) {
     const { packagesStore } = this.props.stores;
     let isPackageBlacklisted = _.find(packagesStore.blacklist, dev => {

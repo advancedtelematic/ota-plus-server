@@ -1,15 +1,15 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import { SubHeader, SearchBar, Loader } from '../../../../partials';
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../../../utils';
-import { Form } from 'formsy-react';
 
 const headerHeight = 28;
 const noSearchResults = 'No matching packages found.';
@@ -27,9 +27,6 @@ class InstalledList extends Component {
   constructor(props) {
     super(props);
     const { packagesStore } = this.props.stores;
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
     this.packagesChangeHandler = observe(packagesStore, change => {
       if (change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
@@ -47,7 +44,8 @@ class InstalledList extends Component {
     this.packagesChangeHandler();
     this.refs.list.removeEventListener('scroll', this.listScroll);
   }
-  generateHeadersPositions() {
+
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -60,8 +58,9 @@ class InstalledList extends Component {
       this,
     );
     return positions;
-  }
-  generateItemsPositions() {
+  };
+
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -74,8 +73,9 @@ class InstalledList extends Component {
       this,
     );
     return positions;
-  }
-  listScroll() {
+  };
+
+  listScroll = () => {
     const { packagesStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
@@ -114,7 +114,8 @@ class InstalledList extends Component {
       this.fakeHeaderLetter = newFakeHeaderLetter;
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
+  };
+
   startIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
     const that = this;

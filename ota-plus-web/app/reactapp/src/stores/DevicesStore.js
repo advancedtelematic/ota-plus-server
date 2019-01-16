@@ -1,6 +1,6 @@
 /** @format */
 
-import { observable, computed, extendObservable } from 'mobx';
+import { observable, computed, extendObservable, toJS } from 'mobx';
 import axios from 'axios';
 import {
   API_DEVICES_SEARCH,
@@ -17,10 +17,11 @@ import {
   API_CANCEL_MULTI_TARGET_UPDATE,
   API_CAMPAIGNS_FETCH_SINGLE,
   API_UPDATES_SEARCH,
-  API_DEVICE_APPROVAL_PENDING_CAMPAIGNS,
+  API_DEVICE_APPROVAL_PENDING_CAMPAIGNS
+
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'underscore';
+import _ from 'lodash';
 
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
@@ -50,6 +51,9 @@ export default class DevicesStore {
   @observable devicesGroupFilter = null;
   @observable devicesSort = 'asc';
   @observable device = {};
+  @observable deviceApprovalPendingCampaigns = {
+    campaigns:[]
+  };
   @observable deviceEvents = {};
   @observable deviceNetworkInfo = {
     local_ipv4: null,
@@ -83,6 +87,14 @@ export default class DevicesStore {
     this.devicesLimit = 30;
   }
 
+  @computed get lastDevices() {
+    return _.sortBy(this.devices, device => {
+      return device.createdAt;
+    })
+      .reverse()
+      .slice(0, 10);
+  }
+
   deleteDevice(id) {
     resetAsync(this.devicesDeleteAsync, true);
     return axios
@@ -90,7 +102,7 @@ export default class DevicesStore {
       .then(response => {
         this.devices = _.without(
           this.devices,
-          _.findWhere(this.devices, {
+          _.find(this.devices, {
             uuid: id,
           }),
         );
@@ -164,7 +176,7 @@ export default class DevicesStore {
     return axios
       .get(apiAddress)
       .then(response => {
-        this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
+        this.devices = _.uniqBy(this.devices.concat(response.data.values), item => item.uuid);
         this.devicesOffset = response.data.offset;
         this._prepareDevices();
         this.devicesCurrentPage++;
@@ -308,7 +320,7 @@ export default class DevicesStore {
           () => {
             this._fetchCurrentStatus(id);
             this.multiTargetUpdates = response.data;
-            this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
+            this.multiTargetUpdatesSaved = _.uniqBy(this.multiTargetUpdates.concat(response.data), item => item.device);
             this.mtuFetchAsync = handleAsyncSuccess(response);
           },
           this,
@@ -393,13 +405,13 @@ export default class DevicesStore {
         let after = _.after(
           data.campaigns.length,
           () => {
-            this.deviceAprrovalPendingCampaigns = response.data;
+            this.deviceApprovalPendingCampaigns = response.data;
             this[async] = handleAsyncSuccess(response);
           },
           this,
         );
         if (data.campaigns.length) {
-          _.each(data.campaigns, (item, index) => {
+          _.each(data.campaigns, (item) => {
             let status = null;
             let afterCampaign = _.after(
               status === 'success',
@@ -414,6 +426,7 @@ export default class DevicesStore {
                       name: update.name,
                     };
                     after();
+                   
                   })
                   .catch(() => {
                     after();
@@ -421,9 +434,8 @@ export default class DevicesStore {
               },
               this,
             );
-
             axios
-              .get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + item.id)
+              .get(API_CAMPAIGNS_FETCH_SINGLE + '/' + item.id)
               .then(response => {
                 let campaign = response.data;
                 item.update = {
@@ -431,6 +443,7 @@ export default class DevicesStore {
                 };
                 status = 'success';
                 afterCampaign();
+                
               })
               .catch(() => {
                 status = 'error';
@@ -491,6 +504,7 @@ export default class DevicesStore {
   }
 
   fetchDevicesCount() {
+    console.log("fetchDevicesCount");
     resetAsync(this.devicesCountFetchAsync, true);
     let that = this;
     return axios
@@ -693,7 +707,7 @@ export default class DevicesStore {
   }
 
   _getDevice(id) {
-    return _.findWhere(this.devices, { uuid: id });
+    return _.find(this.devices, { uuid: id });
   }
 
   _updateDeviceData(id, data) {
@@ -713,19 +727,11 @@ export default class DevicesStore {
 
   _prepareDevices(devicesSort = this.devicesSort) {
     this.devicesSort = devicesSort;
-    this.devices = this.devices.sort((a, b) => {
+    this.devices = this.devices.slice().sort((a, b) => {
       let aName = a.deviceName;
       let bName = b.deviceName;
       if (devicesSort !== 'undefined' && devicesSort == 'desc') return bName.localeCompare(aName);
       else return aName.localeCompare(bName);
     });
-  }
-
-  @computed get lastDevices() {
-    return _.sortBy(this.devices, device => {
-      return device.createdAt;
-    })
-      .reverse()
-      .slice(0, 10);
   }
 }
