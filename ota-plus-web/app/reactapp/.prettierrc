@@ -1,0 +1,15 @@
+{
+  "requirePragma": false,
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "insertPragma": true,
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": true,
+  "printWidth": 200,
+  "proseWrap": "never",
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false
+}

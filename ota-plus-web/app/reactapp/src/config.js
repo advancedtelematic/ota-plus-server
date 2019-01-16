@@ -1,13 +1,17 @@
-/* Main config */
+/**
+ * /* Main config
+ *
+ * @format
+ */
 
 export const APP_TITLE = 'HERE OTA Connect';
 export const APP_LAYOUT = 'atsgarage';
 export const APP_LOCALSTORAGE = 'HERE-OTAConnect';
 
 /* API end-points config */
-export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER='/api/v1/multi_target_updates';
-export const API_CREATE_MULTI_TARGET_UPDATE='/api/v1/admin/devices';
-export const API_FETCH_MULTI_TARGET_UPDATES='/api/v1/admin/devices';
+export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER = '/api/v1/multi_target_updates';
+export const API_CREATE_MULTI_TARGET_UPDATE = '/api/v1/admin/devices';
+export const API_FETCH_MULTI_TARGET_UPDATES = '/api/v1/admin/devices';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v2/cancel_device_update_campaign';
 
 export const API_NAMESPACE_SETUP_STEPS = '/user/setup';
@@ -107,7 +111,7 @@ export const VIEWPORT_MIN_HEIGHT = 768;
  * what's new
  */
 export const WHATS_NEW_INITIAL_STEP = 'introduction';
-export const WHATS_NEW_DEFAULT_ACTIONS = ["Back", "Close", "Next"];
+export const WHATS_NEW_DEFAULT_ACTIONS = ['Back', 'Close', 'Next'];
 
 /**
  * updates
@@ -120,4 +124,4 @@ export const LIMIT_UPDATES_MAIN = 30;
  */
 
 export const LIMIT_CAMPAIGNS = 20;
-export const CAMPAIGNS_STATUSES = ["prepared", "launched", "finished", "cancelled"];
+export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];

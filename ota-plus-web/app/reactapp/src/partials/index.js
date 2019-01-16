@@ -1,3 +1,5 @@
+/** @format */
+
 import Navigation from './Navigation';
 import TabNavigation from './TabNavigation';
 import UserDropdown from './UserDropdown';
@@ -12,7 +14,7 @@ import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
-import {Form} from './Form';
+import { Form } from './Form';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
@@ -24,28 +26,28 @@ import EditPackageModal from './EditPackageModal';
 import TimePicker from './TimePicker';
 
 export {
-    Navigation,
-    TabNavigation,
-    UserDropdown,
-    SettingsDropdown,
-    Header,
-    SubHeader,
-    Modal,
-    Loader,
-    AsyncResponse,
-    SearchBar,
-    SizeVerify,
-    UploadBox,
-    DependenciesModal,
-    Sequencer,
-    Form,
-    FormInput,
-    FormSelect,
-    FormTextarea,
-    Dropdown,
-    ConfirmationModal,
-    EditModal,
-    EditCampaignModal,
-    EditPackageModal,
-    TimePicker,
-}
+  Navigation,
+  TabNavigation,
+  UserDropdown,
+  SettingsDropdown,
+  Header,
+  SubHeader,
+  Modal,
+  Loader,
+  AsyncResponse,
+  SearchBar,
+  SizeVerify,
+  UploadBox,
+  DependenciesModal,
+  Sequencer,
+  Form,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+  Dropdown,
+  ConfirmationModal,
+  EditModal,
+  EditCampaignModal,
+  EditPackageModal,
+  TimePicker,
+};

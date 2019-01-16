@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { Component, PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
@@ -6,46 +8,39 @@ import { DevicesContainer } from '../containers';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-const title = "Devices";
+const title = 'Devices';
 
 @DragDropContext(HTML5Backend)
-@inject("stores")
+@inject('stores')
 @observer
 class Devices extends Component {
-
-    componentWillMount() {
-        const { devicesStore, groupsStore } = this.props.stores;
-        const { selectedGroup } = groupsStore;
-        const groupId = selectedGroup.id || null;
-        devicesStore.fetchDevices('', groupId);
-        groupsStore.fetchGroups();
-        devicesStore.fetchUngroupedDevices();
-    }
-    componentWillUnmount() {
-        const {
-            devicesStore,
-            groupsStore,
-        } = this.props.stores;
-        devicesStore._reset();
-        groupsStore._reset();
-    }
-    render() {
-        const { addNewWizard } = this.props;
-        return (
-            <FadeAnimation>
-                <MetaData
-                    title={title}>
-                    <DevicesContainer
-                        addNewWizard={addNewWizard}
-                    />
-                </MetaData>
-            </FadeAnimation>
-        );
-    }
+  componentWillMount() {
+    const { devicesStore, groupsStore } = this.props.stores;
+    const { selectedGroup } = groupsStore;
+    const groupId = selectedGroup.id || null;
+    devicesStore.fetchDevices('', groupId);
+    groupsStore.fetchGroups();
+    devicesStore.fetchUngroupedDevices();
+  }
+  componentWillUnmount() {
+    const { devicesStore, groupsStore } = this.props.stores;
+    devicesStore._reset();
+    groupsStore._reset();
+  }
+  render() {
+    const { addNewWizard } = this.props;
+    return (
+      <FadeAnimation>
+        <MetaData title={title}>
+          <DevicesContainer addNewWizard={addNewWizard} />
+        </MetaData>
+      </FadeAnimation>
+    );
+  }
 }
 
 Devices.propTypes = {
-    stores: PropTypes.object,
-}
+  stores: PropTypes.object,
+};
 
 export default Devices;
