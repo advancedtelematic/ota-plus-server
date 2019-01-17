@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'underscore';
+import _ from 'lodash';
 import $ from 'jquery';
 
 class FormSelect extends Component {
@@ -12,14 +13,9 @@ class FormSelect extends Component {
       showDropDown: false,
       selectedOptions: [],
     };
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.selectOption = this.selectOption.bind(this);
-    this.appendSelectFieldsToBody = this.appendSelectFieldsToBody.bind(this);
-    this._attachEventListener = this._attachEventListener.bind(this);
-    this._detachEventListener = this._detachEventListener.bind(this);
   }
 
-  _attachEventListener() {
+  _attachEventListener = () => {
     const self = this;
     const body = $('body');
 
@@ -32,13 +28,13 @@ class FormSelect extends Component {
         }
       });
     }
-  }
+  };
 
-  _detachEventListener() {
+  _detachEventListener = () => {
     $('body').unbind('click');
-  }
+  };
 
-  toggleMenu(e) {
+  toggleMenu = e => {
     const { appendMenuToBodyTag } = this.props;
     const existContainer = document.getElementById('dropdown-render-container');
 
@@ -58,9 +54,9 @@ class FormSelect extends Component {
     if (appendMenuToBodyTag && e && e.target && e.target.className !== 'c-form__option') {
       this.appendSelectFieldsToBody(e);
     }
-  }
+  };
 
-  appendSelectFieldsToBody(e) {
+  appendSelectFieldsToBody = e => {
     const { multiple = true, options, id, visibleFieldsCount = options.length > 1 ? options.length : 2 } = this.props;
     const { showDropDown, selectedOptions } = this.state;
     const renderContainer = document.createElement('div');
@@ -84,7 +80,7 @@ class FormSelect extends Component {
         id='dropdown'
       >
         {options.map((value, index) => {
-          const selected = _.contains(selectedOptions, value);
+          const selected = _.includes(selectedOptions, value);
           if (_.isObject(value)) {
             const option = value;
             return (
@@ -114,9 +110,9 @@ class FormSelect extends Component {
     } else {
       renderContainer.innerHTML = '';
     }
-  }
+  };
 
-  selectOption(value, e) {
+  selectOption = (value, e) => {
     const { appendMenuToBodyTag, multiple } = this.props;
 
     if (appendMenuToBodyTag) {
@@ -125,7 +121,7 @@ class FormSelect extends Component {
 
     let options = this.state.selectedOptions;
     if (_.isArray(options)) {
-      if (_.contains(options, value)) {
+      if (_.includes(options, value)) {
         options = _.without(options, value);
       } else {
         options.push(value);
@@ -144,7 +140,7 @@ class FormSelect extends Component {
       });
       this.props.onChange(options);
     }
-  }
+  };
 
   render() {
     const {
@@ -200,7 +196,7 @@ class FormSelect extends Component {
               id={'select-' + id}
             >
               {options.map((value, index) => {
-                const selected = _.contains(selectedOptions, value);
+                const selected = _.includes(selectedOptions, value);
                 if (_.isObject(value)) {
                   const option = value;
                   return (

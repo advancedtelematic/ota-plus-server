@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 import moment from 'moment';

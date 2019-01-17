@@ -1,5 +1,6 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -19,7 +20,7 @@ const timeArrays = {
 };
 
 @observer
-export default class TimePicker extends Component {
+class TimePicker extends Component {
   @observable selectedType = null;
   @observable selectedTimeValue = {
     hours: '00',
@@ -27,34 +28,39 @@ export default class TimePicker extends Component {
     seconds: '00',
   };
 
-  showOptions(type) {
-    this.selectedType = type;
-  }
+  static propTypes = {
+    id: PropTypes.string,
+    defaultValue: PropTypes.string,
+    onValid: PropTypes.func,
+  };
 
-  selectOption(type, e) {
+  showOptions = type => {
+    this.selectedType = type;
+  };
+
+  selectOption = (type, e) => {
+    const { onValid } = this.props;
     this.selectedTimeValue[type] = e.target.value;
     this.selectedType = null;
-    this.props.onValid(this.selectedTimeValue);
-  }
+
+    onValid(this.selectedTimeValue);
+  };
 
   render() {
-    let { hours, minutes, seconds } = this.selectedTimeValue;
+    const { hours, minutes, seconds } = this.selectedTimeValue;
     const { id, defaultValue } = this.props;
     const times = defaultValue.split(':');
 
-    const select = type => {
-      return type === this.selectedType ? (
+    const select = type =>
+      type === this.selectedType ? (
         <select className={`c-time-picker_${this.selectedType}`} onChange={this.selectOption.bind(this, this.selectedType)}>
-          {timeArrays[this.selectedType].map((value, key) => {
-            return (
-              <option value={value} key={key}>
-                {value}
-              </option>
-            );
-          })}
+          {timeArrays[this.selectedType].map((value, key) => (
+            <option value={value} key={key}>
+              {value}
+            </option>
+          ))}
         </select>
       ) : null;
-    };
 
     return (
       <div className='c-time-picker' id={id}>
@@ -74,3 +80,5 @@ export default class TimePicker extends Component {
     );
   }
 }
+
+export default TimePicker;

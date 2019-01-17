@@ -1,17 +1,19 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { AsyncResponse, Form, FormInput } from '../../../../partials';
+import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
+import { Row, Col } from 'antd';
 
 const CreateClassicGroup = inject('stores')(
   observer(({ stores, markStepAsFinished, markStepAsNotFinished }) => {
     const { groupsStore } = stores;
     return (
-      <Form id='classic-group-create-form'>
+      <OTAForm id='classic-group-create-form'>
         <AsyncResponse handledStatus='error' action={groupsStore.groupsCreateAsync} errorMsg={groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null} />
-        <div className='row'>
-          <div className='col-xs-10'>
+        <Row className='row'>
+          <Col span={20}>
             <div className='group-name-input'>
               <FormInput
                 name='groupName'
@@ -30,9 +32,9 @@ const CreateClassicGroup = inject('stores')(
                 statusIconShown={true}
               />
             </div>
-          </div>
-        </div>
-      </Form>
+          </Col>
+        </Row>
+      </OTAForm>
     );
   }),
 );

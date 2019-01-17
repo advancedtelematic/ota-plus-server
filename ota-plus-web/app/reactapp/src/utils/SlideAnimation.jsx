@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes, defaultProps } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component, defaultProps } from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
 
 class SlideAnimation extends Component {

@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { observe } from 'mobx';
 import { PropTypes as MobxPropTypes } from 'mobx-react';
 

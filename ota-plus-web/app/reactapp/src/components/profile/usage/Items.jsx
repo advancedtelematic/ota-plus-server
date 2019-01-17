@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { observable, toJS } from 'mobx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import _ from 'underscore';
+import _ from 'lodash';
 import moment from 'moment';
 import Item from './Item';
 import NoHistoryItem from './NoHistoryItem';
@@ -51,11 +51,7 @@ class Items extends Component {
     return elements;
   }
   render() {
-    return (
-      <ReactCSSTransitionGroup transitionName={this.direction} transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
-        {this.generateElements()}
-      </ReactCSSTransitionGroup>
-    );
+    return <div>{this.generateElements()}</div>;
   }
 }
 

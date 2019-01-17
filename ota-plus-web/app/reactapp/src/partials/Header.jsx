@@ -1,22 +1,18 @@
 /** @format */
 
-import React, { PropTypes, defaultProps, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { defaultProps, Component } from 'react';
+
+import { Link } from 'react-router-dom';
 
 const Header = ({ title, subtitle, backButtonShown, children, device }) => {
   return (
     <div className='page-header'>
       <div className='page-header__left'>
         {backButtonShown ? (
-          <a
-            href='#'
-            id='back-button'
-            className='page-header__back'
-            onClick={() => {
-              window.history.go(-1);
-            }}
-          >
+          <Link href='#' id='back-button' className='page-header__back' to='/devices'>
             <i className='fa fa-angle-left' />
-          </a>
+          </Link>
         ) : null}
         <div className='page-header__icon'>{device ? <div className={'device-status device-status--' + device.deviceStatus} id={'status-' + device.deviceStatus} /> : ''}</div>
         <div className='page-header__text'>

@@ -1,31 +1,35 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, FormInput } from '../../../partials';
-import _ from 'underscore';
+import _ from 'lodash';
 import serialize from 'form-serialize';
+import { OTAForm, FormInput } from '../../../partials';
 
 @observer
 class WizardStep1 extends Component {
-  constructor(props) {
-    super(props);
-    this.changeCampaignName = this.changeCampaignName.bind(this);
-  }
+  static propTypes = {
+    wizardData: PropTypes.object.isRequired,
+    markStepAsFinished: PropTypes.func.isRequired,
+    markStepAsNotFinished: PropTypes.func.isRequired,
+  };
 
-  changeCampaignName() {
-    let data = serialize(document.querySelector('#add-campaign-name-form'), { hash: true });
-    this.props.wizardData.name = data.name;
-    if (!_.isEmpty(this.props.wizardData.name)) this.props.markStepAsFinished();
-    else this.props.markStepAsNotFinished();
-  }
+  changeCampaignName = () => {
+    const { wizardData, markStepAsFinished, markStepAsNotFinished } = this.props;
+    const data = serialize(document.querySelector('#add-campaign-name-form'), { hash: true });
+    wizardData.name = data.name;
+    if (!_.isEmpty(wizardData.name)) markStepAsFinished();
+    else markStepAsNotFinished();
+  };
 
   render() {
-    const { name: campaignName } = this.props.wizardData;
+    const { wizardData } = this.props;
+    const { name: campaignName } = wizardData;
     return (
       <div className='step-wrapper'>
         <div>
-          <Form formWidth='60%' id='add-campaign-name-form' onSubmit={e => e.preventDefault()}>
+          <OTAForm formWidth='60%' id='add-campaign-name-form' onSubmit={ e => e.preventDefault()}>
             <FormInput
               label='Name'
               name='name'
@@ -34,18 +38,14 @@ class WizardStep1 extends Component {
               showIcon={false}
               title='Select campaign name'
               previousValue={campaignName}
-              onValid={this.changeCampaignName.bind(this)}
-              onInvalid={this.changeCampaignName.bind(this)}
+              onValid={this.changeCampaignName}
+              onInvalid={this.changeCampaignName}
             />
-          </Form>
+          </OTAForm>
         </div>
       </div>
     );
   }
 }
-
-WizardStep1.propTypes = {
-  wizardData: PropTypes.object.isRequired,
-};
 
 export default WizardStep1;

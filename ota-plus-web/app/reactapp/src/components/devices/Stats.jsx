@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
-import { Doughnut } from 'react-chartjs';
+import _ from 'lodash';
+import { Doughnut } from 'react-chartjs-2';
 
 @observer
 class Stats extends Component {
@@ -16,44 +17,57 @@ class Stats extends Component {
     const colors = indicatorColors ? customColors : defaultColors;
 
     let colorIndex = -1;
-    let stats = [];
+    let stats = {
+      datasets: [
+        {
+          data: [],
+          label: [],
+          backgroundColor: [],
+          hoverBackgroundColor: [],
+          borderWidth: 0,
+        },
+      ],
+    };
+
     _.each(data, (item, name) => {
       colorIndex++;
-      stats.push({
-        value: item,
-        color: colors[colorIndex],
-        highlight: colors[colorIndex],
-        label: name,
-      });
+      stats.datasets[0].data.push(item);
+      stats.datasets[0].label.push(name);
+      stats.datasets[0].backgroundColor.push(colors[colorIndex]);
+      stats.datasets[0].hoverBackgroundColor.push(colors[colorIndex]);
     });
-    const legend = _.map(stats, stat => {
+
+    const values = _.map(stats.datasets[0].label, (label, index) => {
       return (
-        <li className='devices-panel__stats-item' key={'color-' + stat.label + '-' + stat.color}>
-          <div className='title-box'>{stat.label}</div>
-          <div className='color-box' style={{ backgroundColor: stat.color }} />
+        <li className='devices-panel__stats-item' key={'color-' + label + '-' + stats.datasets[0].backgroundColor[index]}>
+          <div className='title-box'>{label}</div>
+          <div>{stats.datasets[0].data[index]}</div>
         </li>
       );
     });
-    const values = _.map(stats, stat => {
+
+    const legend = _.map(stats.datasets[0].label, (label, index) => {
       return (
-        <li className='devices-panel__stats-item' key={'color-' + stat.label + '-' + stat.color}>
-          <div className='title-box'>{stat.label}</div>
-          <div>{stat.value}</div>
+        <li className='devices-panel__stats-item' key={'color-' + label + '-' + stats.datasets[0].backgroundColor[index]}>
+          <div className='title-box'>{label}</div>
+          <div className='color-box' style={{ backgroundColor: stats.datasets[0].backgroundColor[index] }} />
         </li>
       );
     });
+
     const content = (
       <div className='devices-panel__chart-wrapper'>
-        <Doughnut
-          data={stats}
-          width='100'
-          height='100'
-          options={{
-            percentageInnerCutout: 75,
-            segmentStrokeWidth: 0,
-            segmentShowStroke: false,
-          }}
-        />
+        <div>
+          <Doughnut
+            data={stats}
+            width={120}
+            height={120}
+            options={{
+              cutoutPercentage: 75,
+            }}
+          />
+        </div>
+
         <div>
           <ul className='devices-panel__legend-values'>{values}</ul>
           <ul className='devices-panel__legend-colors'>{legend}</ul>

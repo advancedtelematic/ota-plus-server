@@ -1,10 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Loader } from '../../partials';
-import { Avatar } from 'material-ui';
 
 @observer
 class Header extends Component {
@@ -13,51 +12,51 @@ class Header extends Component {
     const fullNavigation = (
       <div className='profile-nav__list'>
         {uiUserProfileEdit ? (
-          <Link to='/profile/edit' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='edit-profile-link'>
+          <NavLink to='/profile/edit' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='edit-profile-link'>
             <div>
               Edit profile
               <span className='profile-nav__bottom-line' />
             </div>
-          </Link>
+          </NavLink>
         ) : null}
-        <Link to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
+        <NavLink to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
           <div>
             Usage
             <span className='profile-nav__bottom-line' />
           </div>
-        </Link>
-        <Link to='/profile/access-keys' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='provisioning-keys-link'>
+        </NavLink>
+        <NavLink to='/profile/access-keys' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='provisioning-keys-link'>
           <div>
             Provisioning keys
             <span className='profile-nav__bottom-line' />
           </div>
-        </Link>
+        </NavLink>
       </div>
     );
     const fullNavigationWithoutProvisioningKeys = (
       <div className='profile-nav__list'>
-        <Link to='/profile/edit' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='edit-profile-link'>
+        <NavLink to='/profile/edit' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='edit-profile-link'>
           <div>
             Edit profile
             <span className='profile-nav__bottom-line' />
           </div>
-        </Link>
-        <Link to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
+        </NavLink>
+        <NavLink to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
           <div>
             Usage
             <span className='profile-nav__bottom-line' />
           </div>
-        </Link>
+        </NavLink>
       </div>
     );
     const onlyProvisioningKeys = (
       <div className='profile-nav__list'>
-        <Link to='/profile/access-keys' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='provisioning-keys-link'>
+        <NavLink to='/profile/access-keys' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='provisioning-keys-link'>
           <div>
             Provisioning keys
             <span className='profile-nav__bottom-line' />
           </div>
-        </Link>
+        </NavLink>
       </div>
     );
     return (

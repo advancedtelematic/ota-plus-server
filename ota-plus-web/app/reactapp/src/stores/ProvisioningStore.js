@@ -2,11 +2,9 @@
 
 import { observable } from 'mobx';
 import axios from 'axios';
-import FileSaver from 'file-saver';
-import JSZip from 'jszip';
 import { API_PROVISIONING_STATUS, API_PROVISIONING_ACTIVATE, API_PROVISIONING_DETAILS, API_PROVISIONING_KEYS_FETCH, API_PROVISIONING_KEY_CREATE, API_NAMESPACE_SETUP_STEPS } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'underscore';
+import _ from 'lodash';
 
 export default class ProvisioningStore {
   @observable provisioningStatusFetchAsync = {};

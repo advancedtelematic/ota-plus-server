@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import moment from 'moment';
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';

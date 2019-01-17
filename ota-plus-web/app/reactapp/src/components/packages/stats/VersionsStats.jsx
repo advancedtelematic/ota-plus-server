@@ -1,12 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
-import _ from 'underscore';
-import { Doughnut } from 'react-chartjs';
-import { Loader } from '../../../partials';
-import { FadeAnimation } from '../../../utils';
+import _ from 'lodash';
+import { Doughnut } from 'react-chartjs-2';
 
 @observer
 class VersionsStats extends Component {
@@ -16,21 +14,30 @@ class VersionsStats extends Component {
     const availableColors = [mainColor, '#069F71', '#660195', '#B8B9BE'];
     let colorIndex = -1;
     let statsPackIndex = 0;
-    let stats = [];
+    let stats = {
+      datasets: [
+        {
+          data: [],
+          label: [],
+          backgroundColor: [],
+          hoverBackgroundColor: [],
+          borderWidth: 0,
+          hoverBorderWidth: 0,
+        },
+      ],
+    };
     let installedOnEcusTotal = 0;
     _.each(pack.versions, (version, index) => {
       if (version.installedOnEcus > 0) {
         if (statsPackIndex < availableColors.length) {
           colorIndex++;
           statsPackIndex++;
-          stats.push({
-            value: version.installedOnEcus,
-            color: availableColors[colorIndex],
-            highlight: availableColors[colorIndex],
-            label: statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version,
-          });
+          stats.datasets[0].data.push(version.installedOnEcus);
+          stats.datasets[0].label.push(statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version);
+          stats.datasets[0].backgroundColor.push(availableColors[colorIndex]);
+          stats.datasets[0].hoverBackgroundColor.push(availableColors[colorIndex]);
         } else if (statsPackIndex >= availableColors.length) {
-          stats[availableColors.length - 1].value = version.installedOnEcus + stats[availableColors.length - 1].value;
+          stats.datasets[0].data[availableColors.length - 1] = version.installedOnEcus + stats.datasets[0].data[availableColors.length - 1];
         }
         version.color = availableColors[colorIndex];
       }
@@ -41,17 +48,14 @@ class VersionsStats extends Component {
         <div id='target_chart_device_count' className={installedOnEcusTotal ? 'c-package__chart-total' : 'hide'}>
           {installedOnEcusTotal}
         </div>
-        {stats.length ? (
-          <div className='c-package__chart-wrapper'>
+        {stats.datasets[0].data.length ? (
+          <div>
             <Doughnut
               data={stats}
-              width='175'
-              height='175'
+              width={175}
+              height={175}
               options={{
-                percentageInnerCutout: 75,
-                segmentStrokeWidth: 0,
-                showTooltips: true,
-                segmentShowStroke: false,
+                cutoutPercentage: 75,
               }}
             />
           </div>

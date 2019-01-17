@@ -1,36 +1,43 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal, AsyncResponse, Loader, FormTextarea, Form } from '../../partials';
-import { AsyncStatusCallback, AsyncStatusCallbackHandler } from '../../utils';
-import { FormsyText } from 'formsy-material-ui/lib';
-import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
-import _ from 'underscore';
+import _ from 'lodash';
+
+import { Button } from 'antd';
+import { AsyncStatusCallbackHandler } from '../../utils';
+import { OTAModal, AsyncResponse, Loader, FormTextarea, OTAForm } from '../../partials';
 
 @inject('stores')
 @observer
 class BlacklistModal extends Component {
   @observable submitButtonDisabled = true;
 
-  constructor(props) {
-    super(props);
-    this.removeFromBlacklist = this.removeFromBlacklist.bind(this);
-  }
+  static propTypes = {
+    shown: PropTypes.bool.isRequired,
+    hide: PropTypes.func.isRequired,
+    blacklistAction: PropTypes.object.isRequired,
+    stores: PropTypes.object,
+  };
+
   componentDidMount() {
-    const { packagesStore } = this.props.stores;
-    this.blacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesBlacklistAsync', this.props.hide);
-    this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesUpdateBlacklistedAsync', this.props.hide);
-    this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesRemoveFromBlacklistAsync', this.props.hide);
+    const { stores, hide } = this.props;
+    const { packagesStore } = stores;
+    this.blacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesBlacklistAsync', hide);
+    this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesUpdateBlacklistedAsync', hide);
+    this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesRemoveFromBlacklistAsync', hide);
   }
+
   componentWillReceiveProps(nextProps) {
-    const { packagesStore } = this.props.stores;
+    const { stores, blacklistAction } = this.props;
+    const { packagesStore } = stores;
     if (
       nextProps.blacklistAction.name &&
       nextProps.blacklistAction.version &&
-      (nextProps.blacklistAction.name !== this.props.blacklistAction.name || nextProps.blacklistAction.version !== this.props.blacklistAction.version)
+      (nextProps.blacklistAction.name !== blacklistAction.name || nextProps.blacklistAction.version !== blacklistAction.version)
     ) {
       const data = {
         name: nextProps.blacklistAction.name,
@@ -44,70 +51,67 @@ class BlacklistModal extends Component {
       }
     }
   }
+
   componentWillUnmount() {
     this.blacklistHandler();
     this.updateBlacklistedPackageHandler();
     this.removePackageFromBlacklistHandler();
   }
-  enableButton() {
+
+  enableButton = () => {
     this.submitButtonDisabled = false;
-  }
-  disableButton() {
+  };
+
+  disableButton = () => {
     this.submitButtonDisabled = true;
-  }
-  submitForm(e) {
-    const { packagesStore } = this.props.stores;
+  };
+
+  submitForm = e => {
+    const { stores, blacklistAction } = this.props;
+    const { packagesStore } = stores;
     if (e) e.preventDefault();
     const formData = serialize(document.querySelector('#blacklist-form'), { hash: true });
     const data = {
       packageId: {
-        name: this.props.blacklistAction.name,
-        version: this.props.blacklistAction.version,
+        name: blacklistAction.name,
+        version: blacklistAction.version,
       },
       comment: formData.comment,
     };
-    if (this.props.blacklistAction.mode === 'edit') {
+    if (blacklistAction.mode === 'edit') {
       packagesStore.updateBlacklistedPackage(data);
     } else {
       packagesStore.blacklistPackage(data);
     }
-  }
-  removeFromBlacklist(e) {
+  };
+
+  removeFromBlacklist = e => {
     if (e) e.preventDefault();
-    const { packagesStore } = this.props.stores;
+    const { stores, blacklistAction } = this.props;
+    const { packagesStore } = stores;
     const data = {
-      name: this.props.blacklistAction.name,
-      version: this.props.blacklistAction.version,
+      name: blacklistAction.name,
+      version: blacklistAction.version,
     };
     packagesStore.removePackageFromBlacklist(data);
-  }
+  };
+
   render() {
-    const { shown, hide, blacklistAction } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { stores, shown, hide, blacklistAction } = this.props;
+    const { packagesStore } = stores;
+    const { packagesUpdateBlacklistedAsync, packagesRemoveFromBlacklistAsync, packagesBlacklistAsync } = packagesStore;
     const content = (
-      <Form onSubmit={this.submitForm.bind(this)} id='blacklist-form'>
+      <OTAForm onSubmit={this.submitForm} id='blacklist-form'>
         {blacklistAction.mode === 'edit' ? (
-          <span>
-            <AsyncResponse
-              handledStatus='error'
-              action={packagesStore.packagesUpdateBlacklistedAsync}
-              errorMsg={packagesStore.packagesUpdateBlacklistedAsync.data ? packagesStore.packagesUpdateBlacklistedAsync.data.description : null}
-            />
-            <AsyncResponse
-              handledStatus='error'
-              action={packagesStore.packagesRemoveFromBlacklistAsync}
-              errorMsg={packagesStore.packagesRemoveFromBlacklistAsync.data ? packagesStore.packagesRemoveFromBlacklistAsync.data.description : null}
-            />
-          </span>
+          <div>
+            <AsyncResponse handledStatus='error' action={packagesUpdateBlacklistedAsync} errorMsg={packagesUpdateBlacklistedAsync.data && packagesUpdateBlacklistedAsync.data.description} />
+            <AsyncResponse handledStatus='error' action={packagesRemoveFromBlacklistAsync} errorMsg={packagesRemoveFromBlacklistAsync.data && packagesRemoveFromBlacklistAsync.data.description} />
+          </div>
         ) : (
-          <AsyncResponse
-            handledStatus='error'
-            action={packagesStore.packagesBlacklistAsync}
-            errorMsg={packagesStore.packagesBlacklistAsync.data ? packagesStore.packagesBlacklistAsync.data.description : null}
-          />
+          <AsyncResponse handledStatus='error' action={packagesBlacklistAsync} errorMsg={packagesBlacklistAsync.data && packagesBlacklistAsync.data.description} />
         )}
-        {blacklistAction.mode === 'add' ? (
-          <span>
+        {blacklistAction.mode === 'add' && (
+          <div>
             <div className='top-text'>
               With HERE OTA Connect, you can <strong>blacklist</strong> problem packages, ensuring they won’t get installed on any of your devices.
             </div>
@@ -115,8 +119,8 @@ class BlacklistModal extends Component {
               On the <strong>Impact analysis tab</strong>, you can view which of your devices already have the blacklisted version of the package installed, letting you proactivly troubleshoot and
               update those devices to a fixed version, or roll them back to an older version.
             </div>
-          </span>
-        ) : null}
+          </div>
+        )}
 
         <div className='row'>
           <div className='col-xs-12'>
@@ -129,13 +133,13 @@ class BlacklistModal extends Component {
                   defaultValue={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
                   label='Comment'
                   id='blacklist-comment'
-                  onValid={this.enableButton.bind(this)}
-                  onInvalid={this.disableButton.bind(this)}
+                  onValid={this.enableButton}
+                  onInvalid={this.disableButton}
                   rows={5}
                 />
                 {blacklistAction.mode === 'edit' ? (
                   <div className='subactions'>
-                    <a href='#' className='add-button' onClick={this.removeFromBlacklist}>
+                    <a className='add-button' onClick={this.removeFromBlacklist}>
                       Remove from Blacklist
                     </a>
                   </div>
@@ -149,22 +153,17 @@ class BlacklistModal extends Component {
             <div className='body-actions'>
               <button
                 className='btn-primary'
-                disabled={
-                  this.submitButtonDisabled ||
-                  packagesStore.packagesBlacklistAsync.isFetching ||
-                  packagesStore.packagesUpdateBlacklistedAsync.isFetching ||
-                  packagesStore.packagesRemoveFromBlacklistAsync.isFetching
-                }
+                disabled={this.submitButtonDisabled || packagesBlacklistAsync.isFetching || packagesUpdateBlacklistedAsync.isFetching || packagesRemoveFromBlacklistAsync.isFetching}
               >
                 {blacklistAction.mode === 'edit' ? 'Save Comment' : 'Confirm'}
               </button>
             </div>
           </div>
         </div>
-      </Form>
+      </OTAForm>
     );
     return (
-      <Modal
+      <OTAModal
         title={blacklistAction.mode === 'edit' ? 'Edit blacklisted package' : 'Blacklist'}
         topActions={
           <div className='top-actions flex-end'>
@@ -174,18 +173,11 @@ class BlacklistModal extends Component {
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
         className='blacklist-modal'
       />
     );
   }
 }
-
-BlacklistModal.propTypes = {
-  shown: PropTypes.bool.isRequired,
-  hide: PropTypes.func.isRequired,
-  blacklistAction: PropTypes.object.isRequired,
-  stores: PropTypes.object,
-};
 
 export default BlacklistModal;

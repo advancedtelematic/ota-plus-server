@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import MinimizedBox from './MinimizedBox';
-import { map } from 'underscore';
+import { map } from 'lodash';
 import { observer } from 'mobx-react';
 
 const MinimizedWizards = observer(({ minimizedWizards, toggleWizard }) => {

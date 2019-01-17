@@ -1,44 +1,47 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { DeviceContainer } from '../containers';
-import { DeviceSequencerModal } from '../components/device';
 
 const title = 'Device';
 
 @inject('stores')
 @observer
 class Device extends Component {
-  @observable sequencerShown = false;
+  @observable
+  sequencerShown = false;
 
-  componentWillMount() {
+  static propTypes = {
+    stores: PropTypes.object,
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  };
+
+  componentDidMount() {
     const { packagesStore, devicesStore } = this.props.stores;
+    const { params } = this.props.match;
     packagesStore.page = 'device';
-    devicesStore.fetchDevice(this.props.params.id);
+    devicesStore.fetchDevice(params.id);
     packagesStore.fetchPackages();
-    packagesStore.fetchPackagesHistory(this.props.params.id, packagesStore.packagesHistoryFilter);
-    devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
-    devicesStore.fetchMultiTargetUpdates(this.props.params.id);
-    devicesStore.fetchEvents(this.props.params.id);
-    devicesStore.fetchApprovalPendingCampaigns(this.props.params.id);
+    packagesStore.fetchPackagesHistory(params.id, packagesStore.packagesHistoryFilter);
+    devicesStore.fetchDeviceNetworkInfo(params.id);
+    devicesStore.fetchMultiTargetUpdates(params.id);
+    devicesStore.fetchEvents(params.id);
+    devicesStore.fetchApprovalPendingCampaigns(params.id);
   }
+
   componentWillUnmount() {
     const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
     devicesStore._reset();
     packagesStore._reset();
     hardwareStore._reset();
   }
-  showSequencer = e => {
-    if (e) e.preventDefault();
-    this.sequencerShown = true;
-  };
-  hideSequencer = e => {
-    if (e) e.preventDefault();
-    this.sequencerShown = false;
-  };
+
   render() {
     return (
       <FadeAnimation>
@@ -46,15 +49,10 @@ class Device extends Component {
           <MetaData title={title}>
             <DeviceContainer />
           </MetaData>
-          {this.sequencerShown ? <DeviceSequencerModal shown={this.sequencerShown} hide={this.hideSequencer} /> : null}
         </span>
       </FadeAnimation>
     );
   }
 }
-
-Device.propTypes = {
-  stores: PropTypes.object,
-};
 
 export default Device;

@@ -1,11 +1,15 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { observable, toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal } from '../../partials';
-import _ from 'underscore';
-import { _contains } from '../../utils/Collection';
+import _ from 'lodash';
+
+import { Button } from 'antd';
+import { OTAModal } from '../../partials';
+
+import { contains } from '../../utils/Collection';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';
@@ -21,7 +25,7 @@ const wizardSteps = [
   },
 ];
 
-const data = {
+const initialData = {
   name: '',
   description: '',
   selectedHardwares: [],
@@ -33,70 +37,40 @@ const initialCurrentStepId = 0;
 @inject('stores')
 @observer
 class CreateModal extends Component {
-  @observable wizardData = data;
+  @observable wizardData = initialData;
   @observable steps = wizardSteps;
   @observable currentStepId = initialCurrentStepId;
-
-  constructor(props) {
-    super(props);
-    const { updatesStore } = props.stores;
-    this.mtuCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesMtuCreateAsync', this.handleMtuCreated.bind(this));
-    this.updateCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
-  }
-
-  componentWillMount() {
-    const { showDetails } = this.props;
-    if (showDetails) {
-      this.currentStepId = 1;
-    }
-  }
-
-  componentWillUnmount() {
-    this.mtuCreatedHandler();
-    this.updateCreatedHandler();
-  }
-
   markStepAsFinished = () => {
     this.steps[this.currentStepId].isFinished = true;
   };
-
   markStepAsNotFinished = () => {
     this.steps[this.currentStepId].isFinished = false;
   };
-
-  verifyIfPreviousStepsFinished = stepId => {
-    return !_.find(this.steps, (step, index) => {
-      return index <= stepId && !step.isFinished;
-    });
-  };
-
-  isLastStep = () => {
-    return this.currentStepId === this.steps.length - 1;
-  };
-
+  verifyIfPreviousStepsFinished = stepId => !_.find(this.steps, (step, index) => index <= stepId && !step.isFinished);
+  isLastStep = () => this.currentStepId === this.steps.length - 1;
   nextStep = () => {
     if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId !== this.steps.length - 1) {
       this.currentStepId = this.currentStepId + 1;
     }
     this.validateStep(this.currentStepId);
   };
-
   prevStep = () => {
     if (this.currentStepId !== 0) {
       this.currentStepId = this.currentStepId - 1;
     }
     this.validateStep(this.currentStepId);
   };
-
   createMtu = () => {
-    const { updatesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { updatesStore } = stores;
     updatesStore.createMultiTargetUpdate(this.wizardData.update);
   };
-
   handleMtuCreated = () => {
-    const { updatesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { updatesStore } = stores;
     const { lastCreatedMtuId } = updatesStore;
-    const data = {
+
+    const updateData = {
       updateSource: {
         id: lastCreatedMtuId,
         sourceType: 'multi_target',
@@ -104,13 +78,12 @@ class CreateModal extends Component {
       name: this.wizardData.name,
       description: this.wizardData.description,
     };
-    updatesStore.createUpdate(data);
+    updatesStore.createUpdate(updateData);
   };
-
   handleUpdateCreated = () => {
-    this.props.hide();
+    const { hide } = this.props;
+    hide();
   };
-
   validateStep = id => {
     const { showDetails } = this.props;
     const { name, description, selectedHardwares, update } = this.wizardData;
@@ -136,17 +109,13 @@ class CreateModal extends Component {
         break;
     }
   };
-
   onStep1DataSelect = (type, data) => {
-    const { name, description } = this.wizardData;
-    let hardwares = this.wizardData.selectedHardwares;
-    let update = this.wizardData.update;
+    const hardwares = this.wizardData.selectedHardwares;
+    const { update } = this.wizardData;
     switch (type) {
       case 'hardwareId':
-        if (_contains(hardwares, data)) {
-          this.wizardData.selectedHardwares = _.reject(hardwares, item => {
-            return item.name === data.name;
-          });
+        if (contains(hardwares, data, 'hardware')) {
+          this.wizardData.selectedHardwares = _.reject(hardwares, item => item.name === data.name);
           this.wizardData.update = _.omit(update, data.name);
         } else {
           this.wizardData.selectedHardwares.push(data);
@@ -161,67 +130,92 @@ class CreateModal extends Component {
       default:
         break;
     }
+    // console.log(toJS(this.wizardData), 'o firtst step');
     this.validateStep(this.currentStepId);
   };
-
   onStep2DataSelect = (selected, type, value) => {
+    // console.log(toJS(selected), 'selected');
+    // console.log(type, 'type');
+    // console.log(toJS(value), 'value');
     const { name: hardwareId } = selected;
     const { update } = this.wizardData;
+    console.log(toJS(this.wizardData));
     update[hardwareId] = _.isObject(update[hardwareId]) ? update[hardwareId] : {};
     update[hardwareId][type] = value;
 
     if (type === 'fromPack') {
-      update[hardwareId]['fromVersion'] = null;
+      console.log('fromPack');
+      update[hardwareId].fromVersion = null;
     }
     if (type === 'toPack') {
-      update[hardwareId]['toVersion'] = null;
+      console.log('toPack');
+      update[hardwareId].toVersion = null;
     }
+    console.log(toJS(this.wizardData));
     this.validateStep(this.currentStepId);
   };
+
+  constructor(props) {
+    super(props);
+    const { updatesStore } = props.stores;
+    this.mtuCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesMtuCreateAsync', this.handleMtuCreated.bind(this));
+    this.updateCreatedHandler = new AsyncStatusCallbackHandler(updatesStore, 'updatesCreateAsync', this.handleUpdateCreated.bind(this));
+  }
+
+  componentWillMount() {
+    const { showDetails } = this.props;
+    if (showDetails) {
+      this.currentStepId = 1;
+    }
+  }
+
+  componentWillUnmount() {
+    this.mtuCreatedHandler();
+    this.updateCreatedHandler();
+  }
 
   render() {
     const { shown, hide, showDetails } = this.props;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {React.createElement(currentStep.class, {
-          wizardData: this.wizardData,
-          onStep1DataSelect: this.onStep1DataSelect,
-          onStep2DataSelect: this.onStep2DataSelect,
-          showDetails: showDetails,
-        })}
+        {<currentStep.class wizardData={this.wizardData} onStep1DataSelect={this.onStep1DataSelect}
+                            onStep2DataSelect={this.onStep2DataSelect} showDetails={showDetails}/>}
         <div className='body-actions' style={{ margin: 0 }}>
           {this.isLastStep() ? (
             !showDetails && (
               <div style={{ display: 'flex' }}>
-                <button className='btn-primary' id='wizard-back-button' onClick={this.prevStep} style={{ marginRight: '10px' }}>
+                <Button htmlType='button' className='btn-primary' id='wizard-back-button' onClick={this.prevStep}
+                        style={{ marginRight: '10px' }}>
                   {'Back'}
-                </button>
-                <button className='btn-primary pull-right' id='wizard-launch-button' disabled={!currentStep.isFinished} onClick={this.createMtu}>
+                </Button>
+                <Button htmlType='button' className='btn-primary pull-right' id='wizard-launch-button'
+                        disabled={!currentStep.isFinished} onClick={this.createMtu}>
                   {'Save'}
-                </button>
+                </Button>
               </div>
             )
           ) : (
-            <button disabled={!currentStep.isFinished} className='btn-primary' id='next' onClick={this.nextStep}>
+            <Button htmlType='button' disabled={!currentStep.isFinished} className='btn-primary' id='next'
+                    onClick={this.nextStep}>
               {'Continue'}
-            </button>
+            </Button>
           )}
         </div>
       </span>
     );
     return (
-      <Modal
+      <OTAModal
         title={showDetails ? 'Update details' : 'Create new update'}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' id='close-update-modal' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+              <img src='/assets/img/icons/close.svg' alt='Icon'/>
             </div>
           </div>
         }
         content={step}
-        shown={shown}
+        visible={shown}
         className='create-update-modal'
       />
     );

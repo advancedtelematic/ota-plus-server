@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
 
@@ -22,10 +23,6 @@ class BlacklistedPackages extends Component {
   constructor(props) {
     super(props);
     const { packagesStore } = props.stores;
-    this.togglePackage = this.togglePackage.bind(this);
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
     this.packagesChangeHandler = observe(packagesStore, change => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
@@ -43,7 +40,8 @@ class BlacklistedPackages extends Component {
     this.packagesChangeHandler();
     this.refs.list.removeEventListener('scroll', this.listScroll);
   }
-  generateHeadersPositions() {
+
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -56,8 +54,9 @@ class BlacklistedPackages extends Component {
       this,
     );
     return positions;
-  }
-  generateItemsPositions() {
+  };
+
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -70,8 +69,9 @@ class BlacklistedPackages extends Component {
       this,
     );
     return positions;
-  }
-  listScroll() {
+  };
+
+  listScroll = () => {
     const { packagesStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
@@ -110,10 +110,12 @@ class BlacklistedPackages extends Component {
       this.fakeHeaderLetter = newFakeHeaderLetter;
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
-  togglePackage(name) {
+  };
+
+  togglePackage = name => {
     this.expandedPackage = this.expandedPackage !== name ? name : null;
-  }
+  };
+
   render() {
     const { packagesStore } = this.props.stores;
     const blacklist = packagesStore.preparedBlacklist;

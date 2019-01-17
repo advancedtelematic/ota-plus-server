@@ -1,12 +1,12 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Modal, AsyncResponse } from '../../partials';
-import { AsyncStatusCallbackHandler } from '../../utils';
-import { FlatButton } from 'material-ui';
 import { translate } from 'react-i18next';
-import _ from 'underscore';
+import _ from 'lodash';
+import { AsyncStatusCallbackHandler } from '../../utils';
+import { OTAModal, AsyncResponse } from '../../partials';
 
 @inject('stores')
 @observer
@@ -69,7 +69,7 @@ class CancelCampaignModal extends Component {
       <span />
     );
     return (
-      <Modal
+      <OTAModal
         title={"You're about to cancel a campaign"}
         topActions={
           <div className='top-actions flex-end'>
@@ -79,7 +79,7 @@ class CancelCampaignModal extends Component {
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
         className='cancel-campaign-modal'
       />
     );

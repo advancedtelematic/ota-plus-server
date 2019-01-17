@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
@@ -26,49 +27,13 @@ class List extends Component {
   @observable editModal = false;
   @observable deleteModal = false;
   @observable packVersions = [];
-
-  constructor(props) {
-    super(props);
-    const { packagesStore } = props.stores;
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
-    this.highlightPackage = this.highlightPackage.bind(this);
-    this.togglePackage = this.togglePackage.bind(this);
-    this.showSubmenu = this.showSubmenu.bind(this);
-    this.hideSubmenu = this.hideSubmenu.bind(this);
-    this.hideEditModal = this.hideEditModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
-    this.showDeleteModal = this.showDeleteModal.bind(this);
-    this.hideDeleteModal = this.hideDeleteModal.bind(this);
-    this.packagesChangeHandler = observe(packagesStore, change => {
-      if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
-        const that = this;
-        setTimeout(() => {
-          that.listScroll();
-        }, 50);
-      }
-    });
-  }
-  componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
-    this.listScroll();
-    this.highlightPackage(this.props.highlightedPackage);
-  }
-  componentWillUnmount() {
-    this.packagesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
-  }
-
-  hideEditModal() {
+  hideEditModal = () => {
     this.editModal = false;
-  }
-
-  showEditModal() {
+  };
+  showEditModal = () => {
     this.editModal = true;
-  }
-
-  generateHeadersPositions() {
+  };
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -81,8 +46,8 @@ class List extends Component {
       this,
     );
     return positions;
-  }
-  generateItemsPositions() {
+  };
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -95,8 +60,8 @@ class List extends Component {
       this,
     );
     return positions;
-  }
-  listScroll() {
+  };
+  listScroll = () => {
     const { packagesStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
@@ -135,8 +100,8 @@ class List extends Component {
       this.fakeHeaderLetter = newFakeHeaderLetter;
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
-  highlightPackage(pack) {
+  };
+  highlightPackage = pack => {
     const { animatedScroll, setExpandedPackageName } = this.props;
     if (this.refs.list && pack) {
       setExpandedPackageName(pack);
@@ -147,19 +112,57 @@ class List extends Component {
         animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
       }, 400);
     }
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.highlightedPackage !== this.props.highlightedPackage) {
-      this.highlightPackage(nextProps.highlightedPackage);
-    }
-  }
-  togglePackage(packageName, e) {
+  };
+  togglePackage = (packageName, e) => {
     const { expandedPackageName, setExpandedPackageName } = this.props;
     const { packagesStore } = this.props.stores;
     if (e) e.preventDefault();
     packagesStore._handleCompatibles();
     setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
+  };
+  hideSubmenu = () => {
+    this.submenuIsShown = false;
+  };
+  showSubmenu = versions => {
+    this.submenuIsShown = true;
+  };
+  showDeleteModal = () => {
+    this.deleteModal = true;
+  };
+  hideDeleteModal = () => {
+    this.deleteModal = false;
+  };
+
+  constructor(props) {
+    super(props);
+    const { packagesStore } = props.stores;
+    this.packagesChangeHandler = observe(packagesStore, change => {
+      if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
+        const that = this;
+        setTimeout(() => {
+          that.listScroll();
+        }, 50);
+      }
+    });
   }
+
+  componentDidMount() {
+    this.refs.list.addEventListener('scroll', this.listScroll);
+    this.listScroll();
+    this.highlightPackage(this.props.highlightedPackage);
+  }
+
+  componentWillUnmount() {
+    this.packagesChangeHandler();
+    this.refs.list.removeEventListener('scroll', this.listScroll);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.highlightedPackage !== this.props.highlightedPackage) {
+      this.highlightPackage(nextProps.highlightedPackage);
+    }
+  }
+
   startIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
     let intervalId = setInterval(() => {
@@ -167,22 +170,12 @@ class List extends Component {
     }, 10);
     this.tmpIntervalId = intervalId;
   }
+
   stopIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
     this.tmpIntervalId = null;
   }
-  hideSubmenu() {
-    this.submenuIsShown = false;
-  }
-  showSubmenu(versions) {
-    this.submenuIsShown = true;
-  }
-  showDeleteModal() {
-    this.deleteModal = true;
-  }
-  hideDeleteModal() {
-    this.deleteModal = false;
-  }
+
   render() {
     const { onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
     const { packagesStore } = this.props.stores;

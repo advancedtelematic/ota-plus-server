@@ -1,41 +1,44 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { FormsyText } from 'formsy-material-ui/lib';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Input } from 'formsy-antd';
+import { Icon } from 'antd';
 
 class SearchBar extends Component {
-  constructor(props) {
-    super(props);
-    this.clearInput = this.clearInput.bind(this);
-  }
-  clearInput() {
+  clearInput = () => {
     this.props.changeAction('');
-  }
-  render() {
-    let timeout = undefined;
-    const { value, changeAction, disabled, id, additionalClassName } = this.props;
-    return (
-      <div className={'search-box ' + (additionalClassName ? additionalClassName : '')}>
-        <FormsyText
-          name='filterValue'
-          value={value}
-          id={id}
-          className='input-wrapper search'
-          disabled={disabled}
-          onChange={e => {
-            const filter = e.target.value;
-            if (timeout != undefined) {
+  };
+
+  onChange = (value) => {
+      let timeout = undefined;
+      const {changeAction} = this.props;
+          const filter = value;
+          if (timeout != undefined) {
               clearTimeout(timeout);
-            }
-            timeout = setTimeout(() => {
+          }
+          timeout = setTimeout(() => {
               timeout = undefined;
               changeAction(filter);
-            }, 500);
-          }}
-          updateImmediately
+          }, 500);
+      }
+
+
+  render() {
+
+    const { value, disabled, id, additionalClassName } = this.props;
+    return (
+      <div className={'search-box ' + (additionalClassName ? additionalClassName : '')}>
+        <Input
+          name="filterValue"
+          value={value}
+          id={id}
+          className="input-wrapper search"
+          disabled={disabled}
+          onChange={this.onChange}
+          prefix={<Icon type="search" />}
+          suffix={<Icon type="close" onClick={this.clearInput} />}
         />
-        <i className='fa fa-search icon-search' />
-        <i className='fa fa-close icon-close' onClick={this.clearInput} />
       </div>
     );
   }

@@ -1,15 +1,16 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import MtuListItem from './MtuListItem';
 
 @inject('stores')
 @observer
 class MtuQueueList extends Component {
   render() {
-    const { cancelMtuUpdate, showSequencer } = this.props;
+    const { cancelMtuUpdate } = this.props;
     const { devicesStore } = this.props.stores;
     const emptyQueue = (
       <div className='overview-panel__list'>
@@ -27,7 +28,7 @@ class MtuQueueList extends Component {
                   return el.payload.correlationId === update.correlationId;
                 }
               });
-              return <MtuListItem key={index} update={update} cancelMtuUpdate={cancelMtuUpdate} showSequencer={showSequencer} events={itemEvents} />;
+              return <MtuListItem key={index} update={update} cancelMtuUpdate={cancelMtuUpdate} events={itemEvents} />;
             })
           : emptyQueue}
       </ul>

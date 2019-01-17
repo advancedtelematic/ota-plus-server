@@ -1,6 +1,6 @@
 /** @format */
-
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 export default class InfiniteScroll extends Component {
   static propTypes = {
@@ -17,6 +17,7 @@ export default class InfiniteScroll extends Component {
     isReverse: PropTypes.bool,
     loader: PropTypes.node,
   };
+
   static defaultProps = {
     element: 'div',
     hasMore: false,
@@ -27,14 +28,12 @@ export default class InfiniteScroll extends Component {
     useWindow: true,
     isReverse: false,
   };
-  constructor(props) {
-    super(props);
-    this.scrollListener = this.scrollListener.bind(this);
-  }
+
   componentDidMount() {
     this.pageLoaded = this.props.pageStart;
     this.attachScrollListener();
   }
+
   componentDidUpdate() {
     if (this.props.hasMore) {
       this.attachScrollListener();
@@ -42,19 +41,23 @@ export default class InfiniteScroll extends Component {
       this.detachScrollListener();
     }
   }
+
   componentWillUnmount() {
     this.detachScrollListener();
   }
+
   setDefaultLoader(loader) {
     this._defaultLoader = loader;
   }
+
   calculateTopPosition(el) {
     if (!el) {
       return 0;
     }
     return el.offsetTop + this.calculateTopPosition(el.offsetParent);
   }
-  scrollListener() {
+
+  scrollListener = () => {
     const el = this.scrollComponent;
     const scrollEl = window;
     let scrollOffset;
@@ -80,7 +83,7 @@ export default class InfiniteScroll extends Component {
         }
       }
     }
-  }
+  };
 
   attachScrollListener() {
     if (!this.props.hasMore) {
@@ -96,6 +99,7 @@ export default class InfiniteScroll extends Component {
       this.scrollListener();
     }
   }
+
   detachScrollListener() {
     let scrollEl = window;
     if (this.props.useWindow === false) {
@@ -104,6 +108,7 @@ export default class InfiniteScroll extends Component {
     scrollEl.removeEventListener('scroll', this.scrollListener);
     scrollEl.removeEventListener('resize', this.scrollListener);
   }
+
   render() {
     const { children, hasMore, useWindow, pageStart, loadMore, initialLoad, threshold, isReverse, element, isLoading, loader, ...props } = this.props;
     props.ref = node => {

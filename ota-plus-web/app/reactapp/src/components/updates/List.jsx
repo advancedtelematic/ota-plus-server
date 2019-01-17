@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, observe } from 'mobx';
 import ListItem from './ListItem';
-import _ from 'underscore';
-import { Form } from 'formsy-react';
+import _ from 'lodash';
+// import { Form } from 'formsy-react';
 import { SearchBar } from '../../partials';
 
 const headerHeight = 30;
@@ -21,9 +21,6 @@ class List extends Component {
   constructor(props) {
     super(props);
     const { updatesStore } = props.stores;
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
     this.updatesChangeHandler = observe(updatesStore, change => {
       if (change.name === 'preparedUpdates' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
@@ -44,7 +41,7 @@ class List extends Component {
     this.refs.list.removeEventListener('scroll', this.listScroll);
   }
 
-  generateHeadersPositions() {
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -57,9 +54,9 @@ class List extends Component {
       this,
     );
     return positions;
-  }
+  };
 
-  generateItemsPositions() {
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -72,9 +69,9 @@ class List extends Component {
       this,
     );
     return positions;
-  }
+  };
 
-  listScroll() {
+  listScroll = () => {
     const { updatesStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
@@ -113,7 +110,7 @@ class List extends Component {
       this.fakeHeaderLetter = newFakeHeaderLetter;
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
+  };
 
   changeFilter = (filter, e) => {
     if (e) e.preventDefault();
@@ -128,9 +125,9 @@ class List extends Component {
       <div className='ios-list' id='list-updates' ref='list'>
         <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
           <div className='letter'>{this.fakeHeaderLetter}</div>
-          <Form>
-            <SearchBar value={updatesStore.updateFilter} changeAction={this.changeFilter} id='search-updates-input' />
-          </Form>
+          {/*<Form>*/}
+          <SearchBar value={updatesStore.updateFilter} changeAction={this.changeFilter} id='search-updates-input' />
+          {/*</Form>*/}
         </div>
         {!_.isEmpty(updatesStore.preparedUpdates) ? (
           _.map(updatesStore.preparedUpdates, (updates, letter) => {

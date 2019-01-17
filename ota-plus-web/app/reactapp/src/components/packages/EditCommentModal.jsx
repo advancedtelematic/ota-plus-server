@@ -1,64 +1,76 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal, Form, FormTextarea } from '../../partials';
 import serialize from 'form-serialize';
+
+import { Row, Col } from 'antd';
+import { OTAModal, OTAForm, FormTextarea } from '../../partials';
 
 @inject('stores')
 @observer
 class EditCommentModal extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+    filepath: PropTypes.string,
+    hide: PropTypes.func,
+    comment: PropTypes.string,
+    shown: PropTypes.bool,
+  };
   @observable submitButtonDisabled = false;
-
-  submitForm(e) {
-    const { filepath, hide } = this.props;
-    const { packagesStore } = this.props.stores;
+  submitForm = e => {
+    const { stores, filepath, hide } = this.props;
+    const { packagesStore } = stores;
     if (e) e.preventDefault();
     const data = serialize(document.querySelector('#comment-edit-form'), { hash: true });
     packagesStore.updateComment(filepath, data.comment);
     hide();
-  }
-  enableButton() {
+  };
+
+  enableButton = () => {
     this.submitButtonDisabled = false;
-  }
-  disableButton() {
+  };
+
+  disableButton = () => {
     this.submitButtonDisabled = true;
-  }
+  };
+
   render() {
     const { comment, hide, shown } = this.props;
     const form = (
-      <Form onSubmit={this.submitForm.bind(this)} id='comment-edit-form'>
-        <div className='row'>
-          <div className='col-xs-12'>
+      <OTAForm onSubmit={this.submitForm} id='comment-edit-form'>
+        <Row className='row'>
+          <Col span={24}>
             <FormTextarea
-              onValid={this.enableButton.bind(this)}
-              onInvalid={this.disableButton.bind(this)}
+              onValid={this.enableButton}
+              onInvalid={this.disableButton}
               name='comment'
               className='input-wrapper'
-              isEditable={true}
-              title={'Comment'}
-              label={'Comment'}
-              placeholder={'Comment'}
+              isEditable
+              title='Comment'
+              label='Comment'
+              placeholder='Comment'
               defaultValue={comment}
               rows={5}
             />
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-xs-12'>
+          </Col>
+        </Row>
+        <Row className='row'>
+          <Col span={24}>
             <div className='body-actions'>
               <button disabled={this.submitButtonDisabled} className='btn-primary' id='add'>
                 Save Comment
               </button>
             </div>
-          </div>
-        </div>
-      </Form>
+          </Col>
+        </Row>
+      </OTAForm>
     );
     return (
-      <Modal
-        title={'Edit comment'}
+      <OTAModal
+        title='Edit comment'
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
@@ -68,7 +80,7 @@ class EditCommentModal extends Component {
         }
         className='edit-comment-modal'
         content={form}
-        shown={shown}
+        visible={shown}
       />
     );
   }

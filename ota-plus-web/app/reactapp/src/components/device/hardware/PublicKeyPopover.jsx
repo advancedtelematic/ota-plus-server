@@ -1,11 +1,12 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { FlatButton, Popover } from 'material-ui';
+import { Popover } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { VelocityTransitionGroup } from 'velocity-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { Loader } from '../../../partials';
 
 @inject('stores')
@@ -21,21 +22,12 @@ class PublicKeyPopover extends Component {
     hardwareStore._resetPublicKey();
   }
   render() {
-    const { handleCopy, handleRequestClose, popoverShown, anchorEl, copied, serial } = this.props;
+    const { changePopoverVisibility, handleCopy, popoverShown, copied, serial, active } = this.props;
     const { hardwareStore } = this.props.stores;
-    return (
-      <Popover
-        className='hardware-pk-popover'
-        open={popoverShown}
-        anchorEl={anchorEl}
-        onRequestClose={handleRequestClose}
-        useLayerForClickAway={false}
-        animated={false}
-        style={{ marginTop: '-32px', marginLeft: '35px' }}
-      >
+    const content = (
+      <div>
         {!hardwareStore.hardwarePublicKeyFetchAsync.isFetching && hardwareStore.publicKey.keyval ? (
           <span>
-            <div className='triangle' />
             <div className='heading'>
               <div className='internal'>Public key</div>
             </div>
@@ -60,6 +52,15 @@ class PublicKeyPopover extends Component {
           </span>
         ) : null}
         {hardwareStore.hardwarePublicKeyFetchAsync.isFetching ? <Loader /> : null}
+      </div>
+    );
+    return (
+      <Popover trigger='click' placement='rightTop' overlayClassName='hardware-pk-popover' visible={popoverShown} content={content} onVisibleChange={changePopoverVisibility.bind(this, serial)}>
+        {active ? (
+          <img src='/assets/img/icons/white/key.svg' className='hardware-panel__ecu-action--key-size' alt='Icon' />
+        ) : (
+          <img src='/assets/img/icons/black/key.svg' className='hardware-panel__ecu-action--key-size' alt='Icon' />
+        )}
       </Popover>
     );
   }
@@ -67,9 +68,7 @@ class PublicKeyPopover extends Component {
 
 PublicKeyPopover.propTypes = {
   stores: PropTypes.object,
-  handleRequestClose: PropTypes.func.isRequired,
   popoverShown: PropTypes.bool.isRequired,
-  anchorEl: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
   copied: PropTypes.bool.isRequired,
 };
 

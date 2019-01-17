@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 import { Dropdown, EditCampaignModal } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 
@@ -14,13 +15,6 @@ class SubHeader extends Component {
   @observable submenuIsShown = false;
   @observable editModal = false;
 
-  constructor(props) {
-    super(props);
-    this.showSubmenu = this.showSubmenu.bind(this);
-    this.hideSubmenu = this.hideSubmenu.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
-    this.hideEditModal = this.hideEditModal.bind(this);
-  }
   componentWillMount() {
     this.oldCampaignName = this.props.campaign.name;
     this.newCampaignName = this.props.campaign.name;
@@ -33,19 +27,24 @@ class SubHeader extends Component {
       this.newCampaignNameLength = nextProps.campaign.name.length;
     }
   }
-  showEditModal(e) {
+
+  showEditModal = e => {
     e.preventDefault();
     this.editModal = true;
-  }
-  hideEditModal() {
+  };
+
+  hideEditModal = () => {
     this.editModal = false;
-  }
-  hideSubmenu() {
+  };
+
+  hideSubmenu = () => {
     this.submenuIsShown = false;
-  }
-  showSubmenu() {
+  };
+
+  showSubmenu = () => {
     this.submenuIsShown = true;
-  }
+  };
+
   render() {
     const { campaign, showCancelCampaignModal, hideCancel = true } = this.props;
     return (
@@ -76,7 +75,16 @@ class SubHeader extends Component {
             ) : null}
           </div>
         </div>
-        <EditCampaignModal modalTitle={<div className='title'>Edit name</div>} shown={this.editModal} hide={this.hideEditModal} defaultValue={this.newCampaignName} />
+        <EditCampaignModal
+                    modalTitle={(
+                        <div className="title">
+                            Edit name
+                        </div>
+                    )}
+                    shown={this.editModal}
+                    hide={this.hideEditModal}
+                    defaultValue={this.newCampaignName}
+                />
       </div>
     );
   }

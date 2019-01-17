@@ -1,51 +1,64 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import _ from 'lodash';
+import { Tabs } from 'antd';
 import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
-import { Loader, Form, FormInput } from '../../../partials';
-import _ from 'underscore';
+import { Loader } from '../../../partials';
+
+const { TabPane } = Tabs;
 
 @inject('stores')
 @observer
 class WizardStep2 extends Component {
   @observable activeTabId = 0;
 
-  setGroupsActiveTabId = tabId => {
-    this.activeTabId = tabId;
+  static propTypes = {
+    stores: PropTypes.object,
+    wizardData: PropTypes.object,
+    markStepAsFinished: PropTypes.func.isRequired,
+    markStepAsNotFinished: PropTypes.func.isRequired,
   };
 
-  componentWillMount() {
-    const { groupsStore } = this.props.stores;
+  componentDidMount() {
+    const { stores } = this.props;
+    const { groupsStore } = stores;
     groupsStore.fetchWizardGroups();
-    this.setGroupsActiveTabId(0);
+    this.setActiveTab(0);
   }
 
+  setActiveTab = id => {
+    this.activeTabId = id;
+  };
+
   setWizardData = groupId => {
-    const { groupsStore } = this.props.stores;
-    const { groups } = this.props.wizardData;
+    const { stores, wizardData, markStepAsFinished, markStepAsNotFinished } = this.props;
+    const { groupsStore } = stores;
+    const { groups } = wizardData;
 
-    const foundGroup = _.find(groups, item => item.id === groupId);
-    const groupToAdd = _.findWhere(groupsStore.wizardGroups, { id: groupId });
+    const groupsIndex = _.findIndex(groups, item => item.id === groupId);
+    const groupToAdd = _.find(groupsStore.wizardGroups, { id: groupId });
 
-    if (foundGroup) {
-      groups.splice(groups.indexOf(foundGroup), 1);
+    if (groupsIndex >= 0) {
+      groups.splice(groupsIndex, 1);
     } else {
       groups.push(groupToAdd);
     }
 
     if (groups.length) {
-      this.props.markStepAsFinished();
+      markStepAsFinished();
     } else {
-      this.props.markStepAsNotFinished();
+      markStepAsNotFinished();
     }
   };
 
   render() {
-    const { groups: chosenGroups } = this.props.wizardData;
-    const { groupsStore, featuresStore } = this.props.stores;
+    const { stores, wizardData } = this.props;
+    const { groups: chosenGroups } = wizardData;
+    const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
 
     return !alphaPlusEnabled ? (
@@ -54,37 +67,28 @@ class WizardStep2 extends Component {
           <Loader />
         </div>
       ) : (
-        <span>
-          <Form>
-            <FormInput label='Select group(s)' showIcon={false} showInput={false} />
-          </Form>
-          <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData.bind(this)} />
-        </span>
+        <div>
+          <h3>{'Select group(s)'}</h3>
+          <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
+        </div>
       )
     ) : (
-      <span>
-        <Tabs tabItemContainerStyle={{ backgroundColor: 'transparent' }} inkBarStyle={{ display: 'none' }}>
-          <Tab label='Select group(s)' className={'tab-item' + (this.activeTabId === 0 ? ' tab-item--active' : '')} data-id={0} onActive={this.setGroupsActiveTabId.bind(this, 0)}>
-            {groupsStore.groupsWizardFetchAsync.isFetching ? (
-              <div className='wrapper-center'>
-                <Loader />
-              </div>
-            ) : (
-              <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData.bind(this)} />
-            )}
-          </Tab>
-          <Tab label='OLP' className={'tab-item' + (this.activeTabId === 1 ? ' tab-item--active' : '')} data-id={1} onActive={this.setGroupsActiveTabId.bind(this, 1)}>
-            <WizardOLPGroupsListItem />
-          </Tab>
-        </Tabs>
-      </span>
+      <Tabs onChange={this.setActiveTab}>
+        <TabPane key='0' tab='Select group(s)'>
+          {groupsStore.groupsWizardFetchAsync.isFetching ? (
+            <div className='wrapper-center'>
+              <Loader />
+            </div>
+          ) : (
+            <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
+          )}
+        </TabPane>
+        <TabPane key='1' tab='OLP'>
+          <WizardOLPGroupsListItem />
+        </TabPane>
+      </Tabs>
     );
   }
 }
-
-WizardStep2.propTypes = {
-  wizardData: PropTypes.object.isRequired,
-  stores: PropTypes.object,
-};
 
 export default WizardStep2;

@@ -2,7 +2,7 @@
 
 import { observable, isObservableArray } from 'mobx';
 import axios from 'axios';
-import _ from 'underscore';
+import _ from 'lodash';
 import { API_ECUS_FETCH, API_ECUS_PUBLIC_KEY_FETCH, API_HARDWARE_IDS_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 

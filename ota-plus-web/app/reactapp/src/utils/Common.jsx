@@ -1,6 +1,6 @@
 /** @format */
 
-import _ from 'underscore';
+import _ from 'lodash';
 
 const doLogout = () => {
   document.getElementById('logout').submit();

@@ -1,12 +1,12 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Form } from 'formsy-react';
-import { SubHeader, SearchBar, Loader } from '../../partials';
+import { Loader } from '../../partials';
 import { PackagesList } from './packages';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const title = 'Software';
 const noSearchResults = 'No matching packages found.';

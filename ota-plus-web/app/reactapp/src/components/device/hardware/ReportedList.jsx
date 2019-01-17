@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable, observe } from 'mobx';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const headerHeight = 28;
 const noSearchResults = 'No search results';
@@ -17,12 +18,6 @@ class ReportedList extends Component {
   @observable expandedPackageName = null;
   @observable tmpIntervalId = null;
 
-  constructor(props) {
-    super(props);
-    this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
-    this.generateItemsPositions = this.generateItemsPositions.bind(this);
-    this.listScroll = this.listScroll.bind(this);
-  }
   componentDidMount() {
     if (this.refs.list) {
       this.refs.list.addEventListener('scroll', this.listScroll);
@@ -34,7 +29,8 @@ class ReportedList extends Component {
       this.refs.list.removeEventListener('scroll', this.listScroll);
     }
   }
-  generateHeadersPositions() {
+
+  generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -47,8 +43,9 @@ class ReportedList extends Component {
       this,
     );
     return positions;
-  }
-  generateItemsPositions() {
+  };
+
+  generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
     let positions = [];
@@ -61,8 +58,9 @@ class ReportedList extends Component {
       this,
     );
     return positions;
-  }
-  listScroll() {
+  };
+
+  listScroll = () => {
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
@@ -100,7 +98,8 @@ class ReportedList extends Component {
       this.fakeHeaderText = newFakeHeaderText.toLowerCase();
       this.fakeHeaderTopPosition = scrollTop;
     }
-  }
+  };
+
   componentWillReceiveProps(nextProps) {
     const that = this;
     setTimeout(() => {
