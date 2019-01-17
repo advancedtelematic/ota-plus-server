@@ -1,8 +1,9 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import MainLayout from './layouts/Main';
+import { Route, Switch } from 'react-router-dom';
+
 import {
   HomePage,
   DevicesPage,
@@ -22,32 +23,45 @@ import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './component
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
-const Routes = () => {
-  return (
-    <Router history={hashHistory}>
-      <Route component={MainLayout}>
-        <IndexRoute component={HomePage} />
-        <Route path='/' component={HomePage} />
-        <Route path='/fireworks' component={FireworksPage} />
-        <Route path='/devices' component={DevicesPage} />
-        <Route path='/device/:id' component={DevicePage} />
-        <Route path='/packages(/:packageName)' component={PackagesPage} />
-        <Route path='/updates(/:updateName)' component={UpdatesPage} />
-        <Route path='/campaigns(/:campaignId)' component={CampaignsPage} />
-        <Route path='/impact-analysis' component={ImpactAnalysisPage} />
-        <Route path='/whats-new' component={WhatsNewPage} />
-        <Route path='/software-repository' component={SoftwareRepository} />
-        <Route path='/policy' component={TermsAndConditions} />
-        <Route path='/profile' component={ProfilePage}>
-          <IndexRoute component={ProfileEditProfile} />
-          <Route path='edit' component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-          <Route path='usage' component={ProfileUsage} />
-          <Route path='access-keys' component={ProfileAccessKeys} />
-        </Route>
-        <Route path='*' component={NoMatchPage} />
-      </Route>
-    </Router>
-  );
+const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiAutoFeatureActivation, uiUserProfileMenu, uiCredentialsDownload, activeTab, switchTab }) => (
+  <Switch>
+    <Route exact path='/' component={HomePage} />
+    <Route path='/fireworks' component={FireworksPage} />
+    <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
+    <Route path='/device/:id' component={DevicePage} />
+    <Route path='/packages/:packageName?' render={props => <PackagesPage {...props} switchToSWRepo={switchToSWRepo} />} />
+    <Route path='/updates/:updateName?' component={UpdatesPage} />
+    <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} activeTab={activeTab} addNewWizard={addNewWizard} switchTab={switchTab} />} />
+    <Route path='/impact-analysis' component={ImpactAnalysisPage} />
+    <Route path='/whats-new' component={WhatsNewPage} />
+    <Route path='/software-repository' component={SoftwareRepository} />
+    <Route path='/policy' component={TermsAndConditions} />
+    <Route
+      path='/profile'
+      render={props => (
+        <ProfilePage {...props} uiUserProfileMenu={uiUserProfileMenu} uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload}>
+          <Switch>
+            <Route path={`/profile/edit`} component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
+            <Route path={`/profile/usage`} component={ProfileUsage} />
+            <Route path={`/profile/access-keys`} render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
+          </Switch>
+        </ProfilePage>
+      )}
+    />
+
+    <Route path='*' component={NoMatchPage} />
+  </Switch>
+);
+
+Routes.propTypes = {
+  addNewWizard: PropTypes.func,
+  uiUserProfileEdit: PropTypes.bool,
+  switchToSWRepo: PropTypes.bool,
+  uiAutoFeatureActivation: PropTypes.bool,
+  uiUserProfileMenu: PropTypes.bool,
+  uiCredentialsDownload: PropTypes.bool,
+  activeTab: PropTypes.string,
+  switchTab: PropTypes.func,
 };
 
 export default Routes;

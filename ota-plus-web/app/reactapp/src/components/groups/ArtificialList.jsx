@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import ListItemArtificial from './ListItemArtificial';
 
 const groupsArtificial = [

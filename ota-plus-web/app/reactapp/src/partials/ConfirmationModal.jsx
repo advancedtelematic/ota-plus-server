@@ -1,16 +1,14 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import Modal from './Modal';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import OTAModal from './OTAModal';
 
 class ConfirmationModal extends Component {
-  constructor(props) {
-    super(props);
-    this.continue = this.continue.bind(this);
-  }
-  continue() {
+  continue = () => {
     this.props.deleteItem();
-  }
+  };
+
   render() {
     const { shown, hide, topText, bottomText, modalTitle, showDetailedInfo } = this.props;
     const content = (
@@ -35,7 +33,7 @@ class ConfirmationModal extends Component {
     );
 
     return (
-      <Modal
+      <OTAModal
         title={modalTitle}
         topActions={
           <div className='top-actions flex-end' id='confirmation-modal-top-actions'>
@@ -45,7 +43,7 @@ class ConfirmationModal extends Component {
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
         className='secondary-ecu-details-modal'
         hideOnClickOutside={true}
         onRequestClose={hide}

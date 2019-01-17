@@ -1,0 +1,33 @@
+/** @format */
+
+//@import '~font-awesome/css/font-awesome.min.css';
+
+@font-face {
+  font-family: akkurat;
+  src: url(/assets/fonts/Akkurat-Regular/AkkuratStd.eot?#iefix) format('embedded-opentype'), url(/assets/fonts/Akkurat-Regular/AkkuratStd.otf) format('opentype'),
+    url(/assets/fonts/Akkurat-Regular/AkkuratStd.woff) format('woff'), url(/assets/fonts/Akkurat-Regular/AkkuratStd.ttf) format('truetype'),
+    url(/assets/fonts/Akkurat-Regular/AkkuratStd.svg#AkkuratStd) format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans/FiraSans-Light.ttf) format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans/FiraSans-Regular.ttf) format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans/FiraSans-Medium.ttf) format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}

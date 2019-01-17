@@ -1,0 +1,99 @@
+/** @format */
+
+@import 'variables-ant';
+
+/* Color variables */
+$color-mint: #48dad0;
+$color-mint2: #7de9da;
+$color-lightgrey: #888;
+$color-darkgrey: #444;
+$color-orange: #fa9872;
+$color-grey: #eee;
+$color-white: #fff;
+
+/* colors extended */
+$home-bg: #0f1621;
+$home-grey: #9b9da2;
+$home-header-text: #6a6d74;
+$home-header-button: $primary-color;
+
+$devices-groups-bg: #3f454d;
+$devices-group-inactive: #b7b9bc;
+$devices-group-text: #9fa2a6;
+$device-hardware-header: #898b91;
+$fake-header-text: #272d37;
+$switch-blue-color: #00afaa;
+$device-item-bg: #f3f3f4;
+$device-active-item-bg: #cfd0d3;
+$device-properties-text: #202020;
+$device-pack-installed-bg: $success-color;
+$device-pack-queued-bg: $warning-color;
+$device-pack-auto-update: #00a19d;
+$campaigns-cancel-color: $error-color;
+$campaign-details-text: #707070;
+$progress-default-color: #44ca9d;
+$panel-delimiter-color: $home-bg;
+$section-header-border-color: #8a8b90;
+$add-button-grey: #e7e7e8;
+$edit-profile-border: #ebebeb;
+$hardware-overlay-item-color: #4a4a4a;
+$hardware-overlay-underline: rgba(215, 216, 218, 0.5);
+$hardware-overlay-menu-active: rgba(15, 22, 33, 0.8);
+$hardware-overlay-menu-inactive: rgba(15, 22, 33, 0.4);
+$home-heading-bg: #d7d8da;
+$home-step-bg: rgba(243, 243, 243, 0.5);
+$page-title-color: rgba(15, 22, 33, 0.8);
+$edit-profile-section-header: #e4e6e9;
+$edit-profile-section-border: rgba(215, 216, 218, 0.5);
+$hardware-overlay-border: rgba(15, 22, 33, 0.1);
+$sw-repo-border-color: #cfd0d3;
+$confirm-modal-title: #d0021b;
+$olp-group-layer: $warning-color;
+
+/* Application icons */
+$here-logo: '/assets/img/HERE_Logo_2016.png';
+
+$car-image-url: '/assets/img/icons/car.svg';
+$sedan-image-url: '/assets/img/icons/vehicle_01--active.svg';
+$hatchback-image-url: '/assets/img/icons/vehicle_02--active.svg';
+$eh0-image-url: '/assets/img/icons/vehicle_03--active.svg';
+$sport-image-url: '/assets/img/icons/vehicle_04--active.svg';
+$sw-image-url: '/assets/img/icons/vehicle_05--active.svg';
+$group-default-image-url: '/assets/img/icons/group-default.svg';
+$group-active-image-url: '/assets/img/icons/group-active.svg';
+$group-smart-image-url: '/assets/img/icons/group-smart.svg';
+$group-smart-active-image-url: '/assets/img/icons/group-smart-active.svg';
+$olp-group-link: '/assets/img/icons/Link_Icon.svg';
+
+$device-status-error: '/assets/img/icons/red_cross.svg';
+$device-status-success: '/assets/img/icons/green_tick.svg';
+$device-status-pending: '/assets/img/icons/orange_exclamation.svg';
+$device-status-unknown: '/assets/img/icons/grey_questionmark.svg';
+$device-queue-icon: '/assets/img/icons/queue_icon.svg';
+$device-secondary-questionmark-active: '/assets/img/icons/white/questionmark.svg';
+
+$sequencer-rollback-item: '/assets/img/icons/white/rollback_sequencer.svg';
+$sequencer-rollback-all: '/assets/img/icons/white/rollback_all_sequencer.svg';
+$sequencer-skip-item: '/assets/img/icons/white/skip_sequencer.svg';
+$sequencer-cancel-all: '/assets/img/icons/white/cancel_sequencer.svg';
+
+$sw-repo-preson-default: '/assets/img/icons/sw_person.svg';
+$sw-repo-preson-active: '/assets/img/icons/sw_person_active.svg';
+$sw-repo-preson-hover: '/assets/img/icons/person-hover.png';
+$sw-repo-error: '/assets/img/icons/error.svg';
+$sw-repo-warning: '/assets/img/icons/warning.svg';
+$sw-repo-exclamation-triangle: '/assets/img/icons/exclamation_triangle.png';
+$sw-repo-error-square: '/assets/img/icons/error_square.png';
+
+$blacklist-default: '/assets/img/icons/ban_grey.png';
+$blacklist-active: '/assets/img/icons/ban_red.png';
+
+$campaign-icon: '/assets/img/icons/black/campaigns.png';
+$dropdown-trash: '/assets/img/icons/dropdown_trash.svg';
+$dropdown-edit: '/assets/img/icons/dropdown_edit.svg';
+$dropdown-dependencies: '/assets/img/icons/dropdown_depdendencies.svg';
+$update-external: '/assets/img/icons/update-external.svg';
+$update-internal: '/assets/img/icons/update-internal.svg';
+$bell-icon: '/assets/img/icons/bell.svg';
+
+$background-whats-new-blog: '/assets/img/bg-whatnewblog.svg';

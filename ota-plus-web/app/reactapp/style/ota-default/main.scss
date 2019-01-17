@@ -1,0 +1,21 @@
+/** @format */
+
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import '~normalize.css/normalize.css';
+@import '~antd/dist/antd.min.css';
+@import 'react-vis';
+
+/* ota custom */
+@import 'fonts';
+@import 'variables-ant';
+@import 'variables-ota';
+@import 'mixins';
+
+@import 'common';
+@import 'modals';
+@import 'pages';
+@import 'campaign-wizard';
+@import 'software_repo';
+
+@import 'override-ant';
+/*-----*/

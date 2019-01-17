@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import _ from 'underscore';
+import _ from 'lodash';
 
 class List extends Component {
   render() {

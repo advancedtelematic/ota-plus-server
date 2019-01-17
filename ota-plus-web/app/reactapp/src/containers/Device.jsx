@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
@@ -12,7 +13,7 @@ import { PackagesCreateModal } from '../components/packages';
 class Device extends Component {
   @observable packageCreateModalShown = false;
   @observable fileDropped = null;
-  @observable activeTabId = 0;
+  @observable activeTabId = '0';
   @observable ECUselected = false;
   @observable triggerPackages = false;
   @observable expandedPackageName = null;
@@ -81,7 +82,7 @@ class Device extends Component {
     data.hardwareId = hardwareStore.activeEcu.hardwareId;
     devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
     this.selectQueue();
-    this.setOverviewPanelActiveTabId(1);
+    this.setOverviewPanelActiveTabId('1');
   };
   togglePackageAutoUpdate = (packageName, deviceId, isAutoInstallEnabled, e) => {
     if (e) {

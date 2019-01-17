@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
 const MinimizedBox = observer(({ name, actions }) => {

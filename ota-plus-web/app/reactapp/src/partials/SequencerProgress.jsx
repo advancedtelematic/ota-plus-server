@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import _ from 'underscore';
+import _ from 'lodash';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
@@ -12,11 +12,10 @@ class SequencerProgress extends Component {
 
   constructor(props) {
     super(props);
-    this.startProgress = this.startProgress.bind(this);
     setTimeout(this.startProgress, props.delay * 1000);
   }
 
-  startProgress() {
+  startProgress = () => {
     const that = this;
     this.tmpIntervalId = setInterval(() => {
       if (that.progress < 100) {
@@ -25,7 +24,7 @@ class SequencerProgress extends Component {
         clearInterval(that.tmpIntervalId);
       }
     }, 100 / this.props.duration);
-  }
+  };
 
   render() {
     const { className } = this.props;

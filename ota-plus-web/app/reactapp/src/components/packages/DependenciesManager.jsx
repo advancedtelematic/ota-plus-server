@@ -1,25 +1,36 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'underscore';
-import { Modal } from '../../partials';
+import _ from 'lodash';
+import { OTAModal } from '../../partials';
 
 @inject('stores')
 @observer
 class DependenciesManager extends Component {
   @observable obj = {};
 
+  static propTypes = {
+    stores: PropTypes.object,
+    activePackage: PropTypes.object,
+    packages: PropTypes.object,
+    shown: PropTypes.bool,
+    hide: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
+    const { activePackage } = props;
     this.obj = {
-      name: props.activePackage.filepath,
+      name: activePackage.filepath,
       required: [],
       incompatibles: [],
       requiredBy: [],
     };
   }
+
   componentWillMount() {
     const { activePackage } = this.props;
     let pack = localStorage.getItem(activePackage.filepath);
@@ -28,14 +39,14 @@ class DependenciesManager extends Component {
       this.obj = pack;
     }
   }
-  getItemFromStorage(version) {
-    return JSON.parse(localStorage.getItem(version));
-  }
-  addVersion(version) {
-    const { activePackage } = this.props;
-    const { packagesStore } = this.props.stores;
 
-    let relatedItem = {
+  getItemFromStorage = version => JSON.parse(localStorage.getItem(version));
+
+  addVersion = version => {
+    const { stores, activePackage } = this.props;
+    const { packagesStore } = stores;
+
+    const relatedItem = {
       name: version,
       required: [],
       incompatibles: [],
@@ -46,7 +57,7 @@ class DependenciesManager extends Component {
       this.obj.incompatibles.push(version);
       this.obj.required.splice(_.indexOf(this.obj.required, version), 1);
 
-      let itemFromStorage = this.getItemFromStorage(version);
+      const itemFromStorage = this.getItemFromStorage(version);
 
       if (itemFromStorage) {
         itemFromStorage.incompatibles.push(activePackage.filepath);
@@ -62,7 +73,7 @@ class DependenciesManager extends Component {
     } else if (_.indexOf(this.obj.incompatibles, version) > -1) {
       this.obj.incompatibles.splice(_.indexOf(this.obj.incompatibles, version), 1);
 
-      let itemFromStorage = this.getItemFromStorage(version);
+      const itemFromStorage = this.getItemFromStorage(version);
       if (itemFromStorage) {
         itemFromStorage.incompatibles.splice(_.indexOf(itemFromStorage.incompatibles, activePackage.filepath), 1);
         localStorage.setItem(version, JSON.stringify(itemFromStorage));
@@ -89,7 +100,7 @@ class DependenciesManager extends Component {
     } else {
       this.obj.required.push(version);
 
-      let itemFromStorage = this.getItemFromStorage(version);
+      const itemFromStorage = this.getItemFromStorage(version);
       if (itemFromStorage) {
         itemFromStorage.requiredBy.push(activePackage.filepath);
         localStorage.setItem(version, JSON.stringify(itemFromStorage));
@@ -102,14 +113,15 @@ class DependenciesManager extends Component {
     }
 
     packagesStore._handleCompatibles();
-  }
-  render() {
-    const { shown, hide, packages, activePackage } = this.props;
-    const { packagesStore } = this.props.stores;
+  };
 
-    let requiredBy = [];
-    _.each(packagesStore.compatibilityData, (data, index) => {
-      let found = _.find(data.required, item => item === activePackage.filepath);
+  render() {
+    const { stores, shown, hide, packages, activePackage } = this.props;
+    const { packagesStore } = stores;
+
+    const requiredBy = [];
+    _.each(packagesStore.compatibilityData, data => {
+      const found = _.find(data.required, item => item === activePackage.filepath);
       if (found) {
         requiredBy.push(data.name);
       }
@@ -118,46 +130,46 @@ class DependenciesManager extends Component {
     const content = (
       <span>
         <div className='manager-modal__pack manager-modal__pack--selected' id='current-pack'>
-          <div className='manager-modal__pack-name' id={'current-pack-' + activePackage.id.name}>
+          <div className='manager-modal__pack-name' id={`current-pack-${activePackage.id.name}`}>
             {activePackage.id.name}
           </div>
-          <div className='manager-modal__pack-version' id={'current-pack-' + activePackage.id.version}>
+          <div className='manager-modal__pack-version' id={`current-pack-${activePackage.id.version}`}>
             {activePackage.id.version}
           </div>
         </div>
         <div className='manager-modal__pack-list' id='other-packs-list'>
-          {_.map(packages, (packs, letter) => {
-            return _.map(packs, (pack, i) => {
-              return pack.packageName !== activePackage.id.name ? (
+          {_.map(packages, packs =>
+            _.map(packs, (pack, i) =>
+              pack.packageName !== activePackage.id.name ? (
                 <div className='manager-modal__pack' key={i}>
-                  <div className='manager-modal__pack-name manager-modal__pack-name--in-list' id={'other-pack-' + pack.packageName}>
+                  <div className='manager-modal__pack-name manager-modal__pack-name--in-list' id={`other-pack-${pack.packageName}`}>
                     {pack.packageName}
                   </div>
                   <div className='manager-modal__pack-versions'>
                     {_.map(pack.versions, (version, index) => {
-                      let versionString = version.filepath;
+                      const versionString = version.filepath;
                       return version.id.version !== activePackage.id.version ? (
                         <span className={`manager-modal__pack-item ${index % 2 === 0 ? '' : 'manager-modal__pack-item--odd'}`} key={index}>
-                          <span className='manager-modal__pack-value' id={'other-pack-' + version.id.version}>
+                          <span className='manager-modal__pack-value' id={`other-pack-${version.id.version}`}>
                             {version.id.version}
                           </span>
                           {this.obj.required.indexOf(versionString) > -1 ? (
-                            <span className='manager-modal__pack-status-title' id={'other-pack-mandatory-' + version.id.version} onClick={this.addVersion.bind(this, versionString)}>
+                            <span className='manager-modal__pack-status-title' id={`other-pack-mandatory-${version.id.version}`} onClick={this.addVersion.bind(this, versionString)}>
                               Mandatory
                               <span className='manager-modal__pack-status manager-modal__pack-status--orange' />
                             </span>
                           ) : this.obj.incompatibles.indexOf(versionString) > -1 ? (
-                            <span className='manager-modal__pack-status-title' id={'other-pack-incompatible-' + version.id.version} onClick={this.addVersion.bind(this, versionString)}>
+                            <span className='manager-modal__pack-status-title' id={`other-pack-incompatible-${version.id.version}`} onClick={this.addVersion.bind(this, versionString)}>
                               Not compatible
                               <span className='manager-modal__pack-status manager-modal__pack-status--red' />
                             </span>
                           ) : requiredBy.indexOf(versionString) > -1 ? (
-                            <span className='manager-modal__pack-status-title' id={'other-pack-required-by-' + version.id.version}>
+                            <span className='manager-modal__pack-status-title' id={`other-pack-required-by-${version.id.version}`}>
                               Required by
                               <span className='manager-modal__pack-status manager-modal__pack-status--green' />
                             </span>
                           ) : (
-                            <span className='manager-modal__pack-status-title' id={'other-pack-not-selected-' + version.id.version} onClick={this.addVersion.bind(this, versionString)}>
+                            <span className='manager-modal__pack-status-title' id={`other-pack-not-selected-${version.id.version}`} onClick={this.addVersion.bind(this, versionString)}>
                               Edit
                               <span className='manager-modal__pack-status manager-modal__pack-status--white' />
                             </span>
@@ -167,15 +179,15 @@ class DependenciesManager extends Component {
                     })}
                   </div>
                 </div>
-              ) : null;
-            });
-          })}
+              ) : null,
+            ),
+          )}
         </div>
       </span>
     );
     return (
-      <Modal
-        title={'Dependencies management'}
+      <OTAModal
+        title='Dependencies management'
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
@@ -184,9 +196,9 @@ class DependenciesManager extends Component {
           </div>
         }
         content={content}
-        shown={shown}
+        visible={shown}
         className='manager-modal'
-        hideOnClickOutside={true}
+        hideOnClickOutside
         onRequestClose={hide}
       />
     );

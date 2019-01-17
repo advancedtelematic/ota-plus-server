@@ -1,11 +1,13 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { FormTextarea, FormInput, TimePicker } from '../../../partials';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import _ from 'underscore';
+import _ from 'lodash';
+
+import { FormTextarea, FormInput, TimePicker } from '../../../partials';
 
 const metadataTypes = {
   DESCRIPTION: 'DESCRIPTION',
@@ -19,23 +21,21 @@ class WizardStep4 extends Component {
   @observable approvalNeeded = null;
   @observable wizardMetadata = {};
 
-  constructor() {
-    super();
-    this._parseTime = this._parseTime.bind(this);
-    this._getTimeFromSeconds = this._getTimeFromSeconds.bind(this);
-    this.getPreparationTime = this.getPreparationTime.bind(this);
-    this.getInstallationTime = this.getInstallationTime.bind(this);
-    this.clearInput = this.clearInput.bind(this);
-    this.toggleNotify = this.toggleNotify.bind(this);
-    this.toggleApprove = this.toggleApprove.bind(this);
-  }
+  static propTypes = {
+    wizardData: PropTypes.object.isRequired,
+    setWizardData: PropTypes.func.isRequired,
+    markStepAsFinished: PropTypes.func.isRequired,
+    setApprove: PropTypes.func.isRequired,
+    approvalNeeded: PropTypes.bool.isRequired,
+    alphaTest: PropTypes.bool.isRequired,
+  };
 
   componentWillMount() {
     const { markStepAsFinished } = this.props;
     markStepAsFinished();
   }
 
-  addToWizardData(type, value) {
+  addToWizardData = (type, value) => {
     const { setWizardData, wizardData } = this.props;
 
     this.wizardMetadata.metadata = {
@@ -44,45 +44,45 @@ class WizardStep4 extends Component {
     };
 
     setWizardData(this.wizardMetadata);
-  }
+  };
 
-  toggleNotify() {
+  toggleNotify = () => {
+    const { setApprove } = this.props;
     this.notify = !this.notify;
     this.approvalNeeded = false;
-    this.props.setApprove(false);
-  }
+    setApprove(this.approvalNeeded);
+  };
 
-  toggleApprove() {
-    this.approvalNeeded = !this.approvalNeeded;
+  toggleApprove = () => {
+    const { setApprove } = this.props;
     this.notify = false;
-    this.props.setApprove(this.approvalNeeded);
-  }
+    this.approvalNeeded = !this.approvalNeeded;
+    setApprove(this.approvalNeeded);
+  };
 
-  _parseTime(timeObject) {
+  _parseTime = timeObject => {
     let timeString = '';
     _.each(timeObject, (value, key) => {
-      timeString = timeString + `${value}${key !== 'seconds' ? ':' : null}`;
+      timeString += `${value}${key !== 'seconds' ? ':' : null}`;
     });
-    return moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds') + '';
-  }
+    return `${moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds')}`;
+  };
 
-  _getTimeFromSeconds(seconds) {
-    return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
-  }
+  _getTimeFromSeconds = seconds => new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
 
-  getPreparationTime(time) {
+  getPreparationTime = time => {
     const timeString = this._parseTime(time);
     this.addToWizardData(metadataTypes.PRE_DUR, timeString);
-  }
+  };
 
-  getInstallationTime(time) {
+  getInstallationTime = time => {
     const timeString = this._parseTime(time);
     this.addToWizardData(metadataTypes.INSTALL_DUR, timeString);
-  }
+  };
 
-  clearInput() {
+  clearInput = () => {
     this.inputRef.value = '';
-  }
+  };
 
   render() {
     const { wizardData, approvalNeeded, alphaTest } = this.props;
@@ -93,30 +93,36 @@ class WizardStep4 extends Component {
       <div className='distribution-settings'>
         <div className='checkboxes'>
           <div className='flex-row'>
-            <button className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`} onClick={this.toggleNotify} />
+            <button type='button' className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`} onClick={this.toggleNotify} />
             <span>{'Update automatically'}</span>
           </div>
           <div className='flex-row'>
-            <button className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`} onClick={this.toggleApprove} />
+            <button type='button' className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`} onClick={this.toggleApprove} />
             <span>{"Require OTA client's approval before installation"}</span>
           </div>
         </div>
         <div className='description'>
           <div className='search-box'>
-            {alphaTest ? (
-              <FormInput label='Notification Text' id='internal_reuse-text' placeholder='Re-use text from' getInputRef={ref => (this.inputRef = ref)} wrapperWidth='50%'>
+            {alphaTest && (
+              <FormInput
+                label='Notification Text'
+                id='internal_reuse-text'
+                placeholder='Re-use text from'
+                getInputRef={ref => {
+                  this.inputRef = ref;
+                }}
+                wrapperWidth='50%'
+              >
                 <i className='fa fa-search icon-search' />
                 <i className='fa fa-close icon-close' onClick={this.clearInput} />
               </FormInput>
-            ) : (
-              ''
             )}
           </div>
           <FormTextarea
             rows='5'
             label={!alphaTest && 'Notification Text'}
             id='internal_driver-description'
-            defaultValue={DESCRIPTION ? DESCRIPTION : ''}
+            defaultValue={DESCRIPTION || ''}
             onValid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
             onInvalid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
           />
@@ -127,7 +133,7 @@ class WizardStep4 extends Component {
               <span className='bold' id='approved-translations-0'>
                 {'Approved translations: 0'}
               </span>
-              <button className='btn-bordered' id='translations-view_button'>
+              <button type='button' className='btn-bordered' id='translations-view_button'>
                 {'Translation view'}
               </button>
             </div>

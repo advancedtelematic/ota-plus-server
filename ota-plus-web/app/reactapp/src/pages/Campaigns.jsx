@@ -1,11 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { MetaData, FadeAnimation } from '../utils';
+import { MetaData } from '../utils';
 import { CampaignsContainer } from '../containers';
-import { translate } from 'react-i18next';
+import FadeAnimation from '../utils/FadeAnimation';
 
 const title = 'Campaigns';
 
@@ -13,34 +13,39 @@ const title = 'Campaigns';
 @observer
 class Campaigns extends Component {
   static propTypes = {
-    addNewWizard: PropTypes.func.isRequired,
-    activeTab: PropTypes.string.isRequired,
-    switchTab: PropTypes.func.isRequired,
+    stores: PropTypes.object,
+    addNewWizard: PropTypes.func,
+    activeTab: PropTypes.string,
+    switchTab: PropTypes.func,
+    match: PropTypes.object,
   };
 
   componentWillMount() {
-    const { groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { groupsStore } = stores;
     groupsStore.fetchGroups();
   }
 
   componentWillUnmount() {
-    const { campaignsStore, packagesStore, groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { campaignsStore, packagesStore, groupsStore } = stores;
     campaignsStore._reset();
     packagesStore._reset();
     groupsStore._reset();
   }
 
   render() {
-    const { addNewWizard, activeTab, switchTab } = this.props;
-    const { campaignId } = this.props.params;
+    const { match, addNewWizard, activeTab, switchTab } = this.props;
+    const { params } = match;
+
     return (
       <FadeAnimation>
         <MetaData title={title}>
-          <CampaignsContainer higlight={campaignId} activeTab={activeTab} switchTab={switchTab} addNewWizard={addNewWizard} />
+          <CampaignsContainer highlight={params.campaignId} activeTab={activeTab} switchTab={switchTab} addNewWizard={addNewWizard} />
         </MetaData>
       </FadeAnimation>
     );
   }
 }
 
-export default translate()(Campaigns);
+export default Campaigns;

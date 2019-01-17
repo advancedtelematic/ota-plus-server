@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @inject('stores')
 @observer

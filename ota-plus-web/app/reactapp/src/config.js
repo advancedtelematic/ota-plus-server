@@ -103,7 +103,22 @@ export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/reg
 
 /* default values, limits, definitions */
 /**
- * global
+ * ant design config
+ */
+export const DEFAULT_THEME_CONFIG = {
+  palette: {
+    primary1Color: '#9ce2d8',
+  },
+  datePicker: {
+    selectColor: '#48DAD0',
+  },
+  flatButton: {
+    primaryTextColor: '#4B5151',
+  },
+};
+
+/**
+ * minimum recommended viewport
  */
 export const VIEWPORT_MIN_WIDTH = 1280;
 export const VIEWPORT_MIN_HEIGHT = 768;
@@ -125,3 +140,18 @@ export const LIMIT_UPDATES_MAIN = 30;
 
 export const LIMIT_CAMPAIGNS = 20;
 export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
+
+/**
+ * default relative paths used in app
+ */
+
+export const assets = {
+  DEFAULT_PROFILE_PICTURE: '/assets/img/icons/profile.png',
+  DEFAULT_SETTINGS_ICON: '/assets/img/icons/Settings_Icon_small.svg',
+  DEFAULT_EDIT_ICON: '/assets/img/icons/edit_icon.svg',
+  DEFAULT_USAGE_ICON: '/assets/img/icons/dropdown_usage.svg',
+  DEFAULT_PROVISIONING_ICON: '/assets/img/icons/dropdown_key.svg',
+  DEFAULT_TERMS_ICON: '/assets/img/icons/dropdown_terms.svg',
+  DEFAULT_CLEAR_STORAGE_ICON: '/assets/img/icons/dropdown_reset_demo.svg',
+  DEFAULT_LOGOUT_ICON: '/assets/img/icons/dropdown_logout.svg',
+};

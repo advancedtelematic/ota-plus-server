@@ -31,7 +31,7 @@ import {
   API_CAMPAIGNS_FETCH_SINGLE,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'underscore';
+import _ from 'lodash';
 
 export default class PackagesStore {
   @observable packagesDeleteAsync = {};
@@ -273,7 +273,7 @@ export default class PackagesStore {
 
     let deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
     let deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
-    this.packages = _.filter(packs, pack => !_.contains(deletedPackageNames, pack.id.name) && !_.contains(deletedVersions, pack.id.version));
+    this.packages = _.filter(packs, pack => !_.includes(deletedPackageNames, pack.id.name) && !_.includes(deletedVersions, pack.id.version));
   }
 
   _updatePackageComment(filepath, comment) {
@@ -511,7 +511,7 @@ export default class PackagesStore {
       )
       .then(
         function(response) {
-          this.ondevicePackages = _.uniq(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
+          this.ondevicePackages = _.uniqBy(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
           switch (this.page) {
             case 'device':
               this._prepareOndevicePackages();
@@ -572,7 +572,7 @@ export default class PackagesStore {
             () => {
               this.packagesHistoryCurrentPage++;
               this.packagesHistoryTotalCount = response.data.total;
-              this.packagesHistory = _.uniq(this.packagesHistory.concat(data), item => item.correlationId);
+              this.packagesHistory = _.uniqBy(this.packagesHistory.concat(data), item => item.correlationId);
               this._preparePackagesHistory();
             },
             this,
@@ -604,7 +604,7 @@ export default class PackagesStore {
               );
 
               axios
-                .get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                .get(API_CAMPAIGNS_FETCH_SINGLE  + '/' + campaignId)
                 .then(response => {
                   let campaign = response.data;
                   item.campaign = {
@@ -681,7 +681,7 @@ export default class PackagesStore {
 
   _getInstalledPackage(filepath, hardwareId) {
     let filteredPacks = _.filter(this.packages, pack => {
-      return _.contains(pack.hardwareIds, hardwareId) ? pack : null;
+      return _.includes(pack.hardwareIds, hardwareId) ? pack : null;
     });
     let result = _.find(filteredPacks, pack => {
       return pack.filepath === filepath;

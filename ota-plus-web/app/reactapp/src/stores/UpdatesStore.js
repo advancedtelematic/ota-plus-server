@@ -2,7 +2,7 @@
 
 import { observable } from 'mobx';
 import axios from 'axios';
-import _ from 'underscore';
+import _ from 'lodash';
 import { API_UPDATES_SEARCH, API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, API_UPDATES_CREATE, LIMIT_UPDATES_WIZARD, LIMIT_UPDATES_MAIN } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
@@ -127,8 +127,8 @@ export default class UpdatesStore {
   fetchWizardUpdates(selectedGroupIds, async = 'updatesWizardFetchAsync') {
     resetAsync(this[async], true);
     this.updatesOffsetPage = 0;
-    let groupApi = selectedGroupIds.map(groupId => `&groupId=${groupId}`).join('');
-    let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
+    const groupApi = selectedGroupIds.map(groupId => `&groupId=${groupId}`).join('');
+    const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
     return axios
       .get(apiAddress)
       .then(response => {
@@ -148,7 +148,7 @@ export default class UpdatesStore {
     return axios
       .get(apiAddress)
       .then(response => {
-        this.updatesWizard = _.uniq(this.updatesWizard.concat(response.data.values), item => item.uuid);
+        this.updatesWizard = _.uniqBy(this.updatesWizard.concat(response.data.values), item => item.uuid);
         this._prepareUpdates('wizard');
         this[async] = handleAsyncSuccess(response);
 
@@ -188,28 +188,26 @@ export default class UpdatesStore {
   }
 
   sortUpdates(updates = this.updates) {
-    return _.sortBy(updates, function(update) {
-      return update.name.toLowerCase();
-    });
+    return _.sortBy(updates, update => update.name.toLowerCase());
   }
 
   _prepareUpdates(mode = null) {
-    let updates = this.sortUpdates(mode === 'wizard' ? this.updatesWizard : this.updates);
-    let sortedUpdates = {};
-    let specialGroup = {
+    const updates = this.sortUpdates(mode === 'wizard' ? this.updatesWizard : this.updates);
+    const specialGroup = {
       '#': [],
     };
+    let sortedUpdates = {};
 
-    _.pluck(updates, 'name').forEach((name, key) => {
-      let firstLetter = name.charAt(0).toUpperCase();
+    updates.forEach((update, index) => {
+      let firstLetter = update.name.charAt(0).toUpperCase();
       firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-      if ((firstLetter != '#' && _.isUndefined(sortedUpdates[firstLetter])) || !sortedUpdates[firstLetter] instanceof Array) {
+      if ((firstLetter !== '#' && _.isUndefined(sortedUpdates[firstLetter])) || !Array.isArray(sortedUpdates[firstLetter])) {
         sortedUpdates[firstLetter] = [];
       }
-      if (firstLetter != '#') {
-        sortedUpdates[firstLetter].push(updates[key]);
+      if (firstLetter !== '#') {
+        sortedUpdates[firstLetter].push(updates[index]);
       } else {
-        specialGroup['#'].push(updates[key]);
+        specialGroup['#'].push(updates[index]);
       }
     });
     if (!_.isEmpty(specialGroup['#'])) {
@@ -224,12 +222,9 @@ export default class UpdatesStore {
   }
 
   _filterUpdates(filter) {
-    filter = filter.toLowerCase();
-    this.updateFilter = filter;
-    let searchResults = _.filter(this.initialUpdates, update => {
-      return update.name.toLowerCase().indexOf(filter) >= 0;
-    });
-    this.updates = searchResults;
+    const lowCaseFilter = filter.toLowerCase();
+    this.updateFilter = lowCaseFilter;
+    this.updates = _.filter(this.initialUpdates, update => update.name.toLowerCase().indexOf(lowCaseFilter) >= 0);
     this._prepareUpdates();
   }
 

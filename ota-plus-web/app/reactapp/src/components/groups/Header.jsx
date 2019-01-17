@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const Header = ({ showCreateGroupModal }) => {
   return (

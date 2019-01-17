@@ -1,18 +1,36 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Modal, AsyncResponse, Form, FormInput } from '../../partials';
-import { FormsyText } from 'formsy-material-ui/lib';
-import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
+import { Row, Col } from 'antd';
+
 import { AsyncStatusCallbackHandler } from '../../utils';
+import { OTAModal, AsyncResponse, OTAForm, FormInput } from '../../partials';
 
 @inject('stores')
 @observer
 class RenameModal extends Component {
   @observable submitButtonDisabled = true;
+  enableButton = () => {
+    this.submitButtonDisabled = false;
+  };
+  disableButton = () => {
+    this.submitButtonDisabled = true;
+  };
+  submitForm = e => {
+    if (e) e.preventDefault();
+    const { stores } = this.props;
+    const { groupsStore } = stores;
+    const data = serialize(document.querySelector('#group-rename-form'), { hash: true });
+    groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
+  };
+  handleRenameResponse = () => {
+    const { hide } = this.props;
+    hide();
+  };
 
   constructor(props) {
     super(props);
@@ -20,63 +38,51 @@ class RenameModal extends Component {
 
     this.renameHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsRenameAsync', this.handleRenameResponse.bind(this));
   }
+
   componentWillMount() {
     this.enableButton();
   }
+
   componentWillUnmount() {
     this.renameHandler();
   }
-  enableButton() {
-    this.submitButtonDisabled = false;
-  }
-  disableButton() {
-    this.submitButtonDisabled = true;
-  }
-  submitForm(e) {
-    if (e) e.preventDefault();
-    const { groupsStore } = this.props.stores;
-    let data = serialize(document.querySelector('#group-rename-form'), { hash: true });
-    groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
-  }
-  handleRenameResponse() {
-    this.props.hide();
-  }
+
   render() {
-    const { action, shown, hide } = this.props;
-    const { groupsStore } = this.props.stores;
+    const { stores, shown, hide } = this.props;
+    const { groupsStore } = stores;
     const form = (
-      <Form onSubmit={this.submitForm.bind(this)} id='group-rename-form'>
+      <OTAForm onSubmit={this.submitForm} id='group-rename-form'>
         <AsyncResponse handledStatus='error' action={groupsStore.groupsRenameAsync} errorMsg={groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null} />
-        <div className='row'>
-          <div className='col-xs-8'>
+        <Row className='row'>
+          <Col span={16}>
             <div className='group-name-input'>
               <FormInput
-                onValid={this.enableButton.bind(this)}
-                onInvalid={this.disableButton.bind(this)}
+                onValid={this.enableButton}
+                onInvalid={this.disableButton}
                 name='groupName'
                 className='input-wrapper'
                 isEditable={!groupsStore.groupsRenameAsync.isFetching}
-                title={'Group Name'}
-                label={'Group Name'}
-                placeholder={'Name'}
+                title='Group Name'
+                label='Group Name'
+                placeholder='Name'
                 defaultValue={groupsStore.selectedGroup.groupName}
               />
             </div>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-xs-12'>
+          </Col>
+        </Row>
+        <Row className='row'>
+          <Col span={24}>
             <div className='body-actions'>
               <button disabled={this.submitButtonDisabled || groupsStore.groupsRenameAsync.isFetching} className='btn-primary' id='add'>
                 Edit
               </button>
             </div>
-          </div>
-        </div>
-      </Form>
+          </Col>
+        </Row>
+      </OTAForm>
     );
     return (
-      <Modal
+      <OTAModal
         title={<div>Edit name</div>}
         topActions={
           <div className='top-actions flex-end'>
@@ -87,7 +93,7 @@ class RenameModal extends Component {
         }
         className='create-group-modal'
         content={form}
-        shown={shown}
+        visible={shown}
       />
     );
   }

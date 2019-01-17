@@ -1,11 +1,12 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
+import { VelocityTransitionGroup } from 'velocity-react';
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../utils';
-import { VelocityTransitionGroup } from 'velocity-react';
 import { Loader } from '../../partials';
 
 @inject('stores')
@@ -49,11 +50,7 @@ class List extends Component {
                         if (group.groupType === 'dynamic') {
                           isSmart = true;
                         }
-                        return (
-                          <div>
-                            <ListItem group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} key={group.groupName} isSmart={isSmart} />
-                          </div>
-                        );
+                        return <ListItem group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} key={group.groupName} isSmart={isSmart} />;
                       });
                     })
                   : null}

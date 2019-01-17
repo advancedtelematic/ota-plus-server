@@ -2,11 +2,10 @@
 
 import Navigation from './Navigation';
 import TabNavigation from './TabNavigation';
-import UserDropdown from './UserDropdown';
-import SettingsDropdown from './SettingsDropdown';
+import NavigationProfile from './NavigationProfile';
 import Header from './Header';
 import SubHeader from './SubHeader';
-import Modal from './Modal';
+import OTAModal from './OTAModal';
 import Loader from './Loader';
 import AsyncResponse from './AsyncResponse';
 import SearchBar from './SearchBar';
@@ -14,7 +13,7 @@ import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
-import { Form } from './Form';
+import { OTAForm } from './OTAForm';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
@@ -28,11 +27,10 @@ import TimePicker from './TimePicker';
 export {
   Navigation,
   TabNavigation,
-  UserDropdown,
-  SettingsDropdown,
+  NavigationProfile,
   Header,
   SubHeader,
-  Modal,
+  OTAModal,
   Loader,
   AsyncResponse,
   SearchBar,
@@ -40,7 +38,7 @@ export {
   UploadBox,
   DependenciesModal,
   Sequencer,
-  Form,
+  OTAForm,
   FormInput,
   FormSelect,
   FormTextarea,

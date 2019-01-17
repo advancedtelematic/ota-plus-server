@@ -1,45 +1,56 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router';
-import { Modal } from '../partials';
-import _ from 'underscore';
+import _ from 'lodash';
 import moment from 'moment';
-import * as contracts from '../../../assets/contracts/';
+
+import { Button } from 'antd';
+import { OTAModal } from '../partials';
+import * as contracts from '../../../assets/contracts';
 
 @inject('stores')
 @observer
-export default class Terms extends Component {
+class Terms extends Component {
   @observable termsAccepted = false;
   @observable showModal = false;
 
-  toggleModal(e) {
+  static propTypes = {
+    stores: PropTypes.object,
+    goBackAllowed: PropTypes.bool,
+    checked: PropTypes.bool,
+  };
+
+  toggleModal = e => {
     e.preventDefault();
     this.showModal = !this.showModal;
-  }
-  goBack(e) {
+  };
+
+  goBack = e => {
     e.preventDefault();
-    window.history.go(-1);
-  }
+    const { goBackAllowed } = this.props;
+    if (goBackAllowed) window.history.go(-1);
+  };
+
   render() {
-    const { goBack, checked } = this.props;
-    const { userStore } = this.props.stores;
+    const { stores, checked } = this.props;
+    const { userStore } = stores;
     let terms = _.find(userStore.contracts, obj => contracts.default[obj.contract]);
-    let agreedDate = terms && terms.accepted;
-    !terms ? (terms = { contract: contracts.defaultName }) : terms;
+    const agreedDate = terms && terms.accepted;
+    terms = terms || { contract: contracts.defaultName };
     const htmlDoc = terms && terms.contract ? { __html: contracts.default[terms.contract] } : null;
     const contractModalContent = (
       <div className='modal-wrapper'>
         <div className='overflow' dangerouslySetInnerHTML={htmlDoc} />
         <div className='body-actions' style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button className='back btn-primary' id='modal-back-button' onClick={this.toggleModal.bind(this)}>
-            Back
-          </button>
-          <button className='btn-primary' id='modal-accept-button' onClick={() => userStore.acceptContract(terms.contract)}>
-            I agree
-          </button>
+          <Button htmlType='button' type='primary' className='back' id='modal-back-button' onClick={this.toggleModal}>
+            {'Back'}
+          </Button>
+          <Button htmlType='button' type='primary' id='modal-accept-button' onClick={() => userStore.acceptContract(terms.contract)}>
+            {'I agree'}
+          </Button>
         </div>
       </div>
     );
@@ -54,41 +65,36 @@ export default class Terms extends Component {
             The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for the purposes of allowing you to test the service internally during the Trial Period.
           </p>
           <div className='checkbox-wrapper'>
-            <button
+            <Button
+              htmlType='button'
               className={`btn-checkbox ${this.termsAccepted || checked ? 'checked' : ''}`}
               onClick={() => {
-                !checked ? (this.termsAccepted = !this.termsAccepted) : null;
+                this.termsAccepted = !this.termsAccepted;
               }}
-              id={'terms-checkbox' + (this.termsAccepted ? '-checked' : '')}
+              id={`terms-checkbox${this.termsAccepted && '-checked'}`}
             >
               <i className='fa fa-check' aria-hidden='true' />
-            </button>
-            <p>
+            </Button>
+            <div>
               I agree to HERE Location Platform Services Online
-              <a id='service-terms-link' target='_blank' href='https://developer.here.com/terms-and-conditions'>
+              <a id='service-terms-link' rel='noopener noreferrer' target='_blank' href='https://developer.here.com/terms-and-conditions'>
                 {' '}
                 terms and conditions{' '}
               </a>
               and{' '}
-              <a target='_blank' id='privacy-policy-link' href='https://legal.here.com/en-gb/privacy'>
+              <a rel='noopener noreferrer' target='_blank' id='privacy-policy-link' href='https://legal.here.com/en-gb/privacy'>
                 privacy policy
               </a>
               <div className='agreed--terms'>{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
-            </p>
+            </div>
           </div>
           <div className='steps'>
-            <a
-              href='/login'
-              className='back btn-primary'
-              id='terms-btn-back'
-              onClick={e => {
-                goBack ? this.goBack(e) : null;
-              }}
-            >
+            <a href='/login' className='back btn-primary' id='terms-btn-back' onClick={this.goBack}>
               Back
             </a>
             {this.termsAccepted ? (
-              <button
+              <Button
+                htmlType='button'
                 className='next btn-primary'
                 id='terms-btn-continue'
                 onClick={() => {
@@ -96,16 +102,18 @@ export default class Terms extends Component {
                 }}
               >
                 Continue
-              </button>
+              </Button>
             ) : (
-              <button className='next btn-primary' id='terms-btn-continue_disabled' disabled>
+              <Button htmlType='button' type='primary' className='next' id='terms-btn-continue_disabled' disabled>
                 Continue
-              </button>
+              </Button>
             )}
           </div>
         </div>
-        <Modal content={contractModalContent} shown={this.showModal} />
+        <OTAModal content={contractModalContent} visible={this.showModal} />
       </div>
     );
   }
 }
+
+export default Terms;

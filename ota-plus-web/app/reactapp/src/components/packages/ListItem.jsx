@@ -1,26 +1,24 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @observer
 class ListItem extends Component {
-  constructor(props) {
-    super(props);
-    this.countInstalledOnEcus = this.countInstalledOnEcus.bind(this);
-    this.countPackVersionsNumber = this.countPackVersionsNumber.bind(this);
-  }
-  countInstalledOnEcus() {
+  countInstalledOnEcus = () => {
     let installedOnEcus = 0;
     _.each(this.props.pack.versions, (version, index) => {
       installedOnEcus += version.installedOnEcus;
     });
     return installedOnEcus;
-  }
-  countPackVersionsNumber() {
+  };
+
+  countPackVersionsNumber = () => {
     return this.props.pack.versions.length;
-  }
+  };
+
   render() {
     const { pack, togglePackage, expandedPackageName } = this.props;
     let installedOnEcus = this.countInstalledOnEcus();

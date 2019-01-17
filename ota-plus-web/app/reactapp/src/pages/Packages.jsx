@@ -1,9 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
-import { Loader } from '../partials';
 import { PackagesContainer } from '../containers';
 
 const title = 'Packages';
@@ -11,29 +11,36 @@ const title = 'Packages';
 @inject('stores')
 @observer
 class Packages extends Component {
+  static propTypes = {
+    stores: PropTypes.object.isRequired,
+    switchToSWRepo: PropTypes.bool.isRequired,
+    match: PropTypes.object,
+  };
+
   componentWillMount() {
-    const { packagesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { packagesStore } = stores;
     packagesStore.page = 'packages';
     packagesStore.fetchPackages();
   }
+
   componentWillUnmount() {
-    const { packagesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { packagesStore } = stores;
     packagesStore._reset();
   }
+
   render() {
-    const { switchToSWRepo } = this.props;
+    const { switchToSWRepo, match } = this.props;
+    const { params } = match;
     return (
       <FadeAnimation>
         <MetaData title={title}>
-          <PackagesContainer switchToSWRepo={switchToSWRepo} highlightedPackage={this.props.params.packageName} />
+          <PackagesContainer switchToSWRepo={switchToSWRepo} highlightedPackage={params.packageName} />
         </MetaData>
       </FadeAnimation>
     );
   }
 }
-
-Packages.propTypes = {
-  stores: PropTypes.object,
-};
 
 export default Packages;

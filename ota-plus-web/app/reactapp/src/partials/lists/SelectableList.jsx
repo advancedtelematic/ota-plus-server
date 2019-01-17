@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
-import { _contains } from '../../utils/Collection';
+import _ from 'lodash';
+import { contains } from '../../utils/Collection';
 import SelectableListItem from './SelectableListItem';
 
 const headerHeight = 28;
@@ -16,7 +17,7 @@ class SelectableList extends Component {
       <div className='ios-list' ref='list'>
         {items ? (
           _.map(items, item => {
-            const isSelected = _contains(selectedItems, item);
+            const isSelected = contains(selectedItems, item);
             return <SelectableListItem key={item} item={item} onItemSelect={onItemSelect} selected={isSelected} />;
           })
         ) : (

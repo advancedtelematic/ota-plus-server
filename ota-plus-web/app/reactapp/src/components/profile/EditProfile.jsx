@@ -1,11 +1,12 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { FlatButton, Avatar } from 'material-ui';
-import serialize from 'form-serialize';
-import { Loader, AsyncResponse, Form, FormInput } from '../../partials';
+import { Avatar, Button } from 'antd';
+
+import { Loader, AsyncResponse } from '../../partials';
 import { resetAsync } from '../../utils/Common';
 import { AsyncStatusCallbackHandler } from '../../utils';
 
@@ -20,13 +21,6 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
     const { userStore } = props.stores;
-    this.changePassword = this.changePassword.bind(this);
-    this.enableRename = this.enableRename.bind(this);
-    this.cancelRename = this.cancelRename.bind(this);
-    this.rename = this.rename.bind(this);
-    this.focusTextInput = this.focusTextInput.bind(this);
-    this.userTypesName = this.userTypesName.bind(this);
-    this.keyPressed = this.keyPressed.bind(this);
     this.renameHandler = new AsyncStatusCallbackHandler(userStore, 'userUpdateAsync', this.handleResponse.bind(this));
   }
   componentWillReceiveProps(nextProps) {
@@ -44,55 +38,67 @@ class EditProfile extends Component {
     resetAsync(userStore.userChangePasswordAsync);
     this.renameHandler();
   }
-  changePassword(e) {
+
+  changePassword = e => {
     if (e) e.preventDefault();
-    const { userStore } = this.props.stores;
+    const { stores } = this.props;
+    const { userStore } = stores;
     userStore.changePassword();
-  }
-  enableRename(e) {
+  };
+
+  enableRename = e => {
     if (this.renameDisabled) {
       this.renameDisabled = false;
       this.focusTextInput();
       e.target.classList.add('hide');
     }
-  }
-  cancelRename() {
+  };
+
+  cancelRename = () => {
     this.renameDisabled = true;
     this.newName = this.oldName;
     this.newNameLength = this.oldName.length;
     this.focusTextInput();
     this.clickableArea.classList.remove('hide');
-  }
-  userTypesName(e) {
+  };
+
+  userTypesName = e => {
     this.newName = e.target.value;
     this.newNameLength = e.target.value.length;
-  }
-  keyPressed(e) {
+  };
+
+  keyPressed = e => {
     if (e.key === 'Enter') {
       this.rename();
     }
-  }
-  rename() {
-    const { userStore } = this.props.stores;
+  };
+
+  rename = () => {
+    const { stores } = this.props;
+    const { userStore } = stores;
     this.clickableArea.classList.remove('hide');
-    let data = { name: this.newName };
+    const data = { name: this.newName };
     userStore.updateUser(data);
-  }
-  handleResponse() {
+  };
+
+  handleResponse = () => {
     this.renameDisabled = true;
     this.oldName = this.newName;
     this.focusTextInput();
-  }
-  focusTextInput() {
+  };
+
+  focusTextInput = () => {
     if (this.renameDisabled) {
       this.renameInput.setAttribute('disabled', 'true');
     } else {
       this.renameInput.removeAttribute('disabled');
       this.renameInput.focus();
     }
-  }
+  };
+
   render() {
-    const { userStore } = this.props.stores;
+    const { stores } = this.props;
+    const { userStore } = stores;
     return (
       <div className='profile-container' id='edit-profile'>
         {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? (
@@ -165,9 +171,9 @@ class EditProfile extends Component {
                 {userStore.user.email}
               </div>
               <div className='column'>
-                <a href='#' className='add-button' id='change-password-link' onClick={this.changePassword}>
+                <Button htmlType='button' className='btn-link add-button' id='change-password-link' onClick={this.changePassword}>
                   Change password
-                </a>
+                </Button>
               </div>
             </div>
           </span>
@@ -176,9 +182,5 @@ class EditProfile extends Component {
     );
   }
 }
-
-EditProfile.propTypes = {
-  stores: PropTypes.object,
-};
 
 export default EditProfile;

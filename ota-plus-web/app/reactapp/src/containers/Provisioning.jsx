@@ -1,49 +1,48 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { ProvisioningTooltip, ProvisioningHeader, ProvisioningList, ProvisioningCreateModal } from '../components/profile/access-keys';
-import { AsyncStatusCallbackHandler } from '../utils';
 
 @inject('stores')
 @observer
 class Provisioning extends Component {
-  @observable tooltipShown = false;
-  @observable createModalShown = false;
+  @observable
+  tooltipShown = false;
+  @observable
+  createModalShown = false;
 
-  constructor(props) {
-    super(props);
-    this.showTooltip = this.showTooltip.bind(this);
-    this.hideTooltip = this.hideTooltip.bind(this);
-    this.showCreateModal = this.showCreateModal.bind(this);
-    this.hideCreateModal = this.hideCreateModal.bind(this);
-    this.changeFilter = this.changeFilter.bind(this);
-  }
-  showTooltip(e) {
+  showTooltip = e => {
     if (e) e.preventDefault();
     this.tooltipShown = true;
-  }
-  hideTooltip(e) {
+  };
+
+  hideTooltip = e => {
     if (e) e.preventDefault();
     this.tooltipShown = false;
-  }
-  showCreateModal(e) {
+  };
+
+  showCreateModal = e => {
     if (e) e.preventDefault();
     this.createModalShown = true;
-  }
-  hideCreateModal(e) {
+  };
+
+  hideCreateModal = e => {
     if (e) e.preventDefault();
     const { provisioningStore } = this.props.stores;
     this.createModalShown = false;
     resetAsync(provisioningStore.provisioningKeyCreateAsync);
-  }
-  changeFilter(filter) {
+  };
+
+  changeFilter = filter => {
     const { provisioningStore } = this.props.stores;
     provisioningStore._filterProvisioningKeys(filter);
-  }
+  };
+
   render() {
     const { provisioningStore } = this.props.stores;
     return (
@@ -64,6 +63,7 @@ class Provisioning extends Component {
             </div>
           </div>
         )}
+        {/* TODO: still to check after finishing modal */}
         <ProvisioningTooltip shown={this.tooltipShown} hide={this.hideTooltip} />
         <ProvisioningCreateModal shown={this.createModalShown} hide={this.hideCreateModal} />
       </span>

@@ -1,15 +1,17 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import Draggable from 'react-draggable';
-import { Circle } from 'react-progressbar.js';
+import { Progress, Button } from 'antd';
+// import { Circle } from 'react-progressbar.js';
 import { translate } from 'react-i18next';
-import _ from 'underscore';
+import _ from 'lodash';
 import { PackagesCancelUploadModal, PackagesCancelAllUploadsModal } from '../components/packages';
 import { ConvertTime, ConvertBytes } from '../utils';
-import Modal from './Modal';
+import OTAModal from './OTAModal';
 
 @inject('stores')
 @observer
@@ -19,45 +21,41 @@ class UploadBox extends Component {
   @observable actionUploadIndex = null;
   @observable ifClearUploads = false;
 
-  constructor(props) {
-    super(props);
-    this.toggleMode = this.toggleMode.bind(this);
-    this.removeFromList = this.removeFromList.bind(this);
-    this.showCancelUploadModal = this.showCancelUploadModal.bind(this);
-    this.hideCancelUploadModal = this.hideCancelUploadModal.bind(this);
-    this.showCancelAllUploadsModal = this.showCancelAllUploadsModal.bind(this);
-    this.hideCancelAllUploadsModal = this.hideCancelAllUploadsModal.bind(this);
-    this.close = this.close.bind(this);
-  }
-  toggleMode(e) {
+  toggleMode = e => {
     if (e) e.preventDefault();
     this.props.toggleUploadBoxMode();
-  }
-  removeFromList(index, e) {
+  };
+
+  removeFromList = (index, e) => {
     if (e) e.preventDefault();
     const { packagesStore } = this.props.stores;
     packagesStore.packagesUploading.splice(index, 1);
-  }
-  showCancelUploadModal(index, e) {
+  };
+
+  showCancelUploadModal = (index, e) => {
     if (e) e.preventDefault();
     this.cancelUploadModalShown = true;
     this.actionUploadIndex = index;
-  }
-  hideCancelUploadModal(e) {
+  };
+
+  hideCancelUploadModal = e => {
     if (e) e.preventDefault();
     this.cancelUploadModalShown = false;
     this.actionUploadIndex = null;
-  }
-  showCancelAllUploadsModal(ifClear = false, e) {
+  };
+
+  showCancelAllUploadsModal = (ifClear = false, e) => {
     if (e) e.preventDefault();
     this.cancelAllUploadsModalShown = true;
     this.ifClearUploads = ifClear;
-  }
-  hideCancelAllUploadsModal(e) {
+  };
+
+  hideCancelAllUploadsModal = e => {
     if (e) e.preventDefault();
     this.cancelAllUploadsModalShown = false;
-  }
-  close(e) {
+  };
+
+  close = e => {
     if (e) e.preventDefault();
     const { packagesStore } = this.props.stores;
     let uploadFinished = true;
@@ -69,7 +67,8 @@ class UploadBox extends Component {
     } else {
       this.showCancelAllUploadsModal(true, null);
     }
-  }
+  };
+
   render() {
     const { t, minimized, toggleUploadBoxMode } = this.props;
     const { packagesStore } = this.props.stores;
@@ -101,7 +100,7 @@ class UploadBox extends Component {
               <span>Upload is finished</span>
             ) : (
               <span id='timeleft'>
-                <ConvertTime seconds={secondsRemaining} />
+                <ConvertTime seconds={secondsRemaining}/>
                 &nbsp;left
               </span>
             )}
@@ -128,39 +127,39 @@ class UploadBox extends Component {
                       {upload.package.version}
                     </div>
                     <div className='col uploaded' id='uploaded-bytes'>
-                      <ConvertBytes bytes={upload.uploaded} />
+                      <ConvertBytes bytes={upload.uploaded}/>
                       &nbsp;of&nbsp;
-                      <ConvertBytes bytes={upload.size} />
+                      <ConvertBytes bytes={upload.size}/>
                     </div>
-                    <div className='col status' id='upload-status'>
-                      {upload.progress !== 100 && upload.status === null ? (
-                        <Circle
-                          progress={upload.progress / 100}
-                          options={barOptions}
-                          initialAnimate={false}
-                          containerStyle={{
-                            width: '30px',
-                            height: '30px',
-                            display: 'inline-block',
-                            verticalAlign: 'middle',
-                            margin: '-3px 0 0 0',
-                          }}
+
+                    <div className="col status" id="upload-status">
+                      {upload.progress !== 100 && upload.status === null ?
+                        <Progress
+                          type="circle"
+                          percent={upload.progress / 100}
+                          showInfo={false}
+                          width={24}
+                          strokeWidth ={20}
+                          strokeColor={'#A7DCD4'}
+
                         />
-                      ) : upload.status == 'success' ? (
-                        <span id='success'>
-                          <img src='/assets/img/icons/green_tick.svg' alt='Icon' /> Success
-                        </span>
-                      ) : upload.status == 'error' ? (
-                        <span id='error'>
-                          <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Error
-                        </span>
-                      ) : (
-                        <span id='processing'>
-                          <i className='fa fa-square-o fa-spin' /> &nbsp;
-                          <span className='counting black'>Processing</span>
-                        </span>
-                      )}
+                        :
+                        upload.status == 'success' ?
+                          <span id="success">
+                                                    <img src="/assets/img/icons/green_tick.svg" alt="Icon"/> Success
+                                                </span>
+                          :
+                          upload.status == 'error' ?
+                            <span id="error">
+                              <i className="fa fa-exclamation-triangle" aria-hidden="true"></i> Error
+                                                    </span>
+                            :
+                            <span id="processing"><i className="fa fa-square-o fa-spin"></i> &nbsp;
+                              <span className="counting black">Processing</span>
+                            </span>
+                      }
                     </div>
+
                     <div className='col action'>
                       {upload.status === null ? (
                         <a href='#' onClick={this.showCancelUploadModal.bind(this, index)} id='cancel-upload'>
@@ -179,26 +178,28 @@ class UploadBox extends Component {
             )}
           </ul>
         </div>
-        <PackagesCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal} uploadIndex={this.actionUploadIndex} packagesStore={packagesStore} />
-        <PackagesCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal} ifClearUploads={this.ifClearUploads} packagesStore={packagesStore} />
+        <PackagesCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal}
+                                   uploadIndex={this.actionUploadIndex} packagesStore={packagesStore}/>
+        <PackagesCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal}
+                                       ifClearUploads={this.ifClearUploads} packagesStore={packagesStore}/>
       </div>
     );
     const title = 'Uploading ' + t('common.packageWithCount', { count: packagesStore.packagesUploading.length });
     return (
-      <Modal
+      <OTAModal
         title={title}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-minimize' onClick={this.toggleMode} id='minimize-upload-box'>
-              <img src='/assets/img/icons/minimize.svg' alt='Icon' />
+              <img src='/assets/img/icons/minimize.svg' alt='Icon'/>
             </div>
             <div className='modal-close' onClick={this.close} id='close-upload-box'>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+              <img src='/assets/img/icons/close.svg' alt='Icon'/>
             </div>
           </div>
         }
         content={uploadBoxData}
-        shown={packagesStore.packagesUploading.length && !minimized ? true : false}
+        visible={packagesStore.packagesUploading.length && !minimized ? true : false}
         onRequestClose={toggleUploadBoxMode}
         className='upload-box'
       />

@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { GroupsHeader, GroupsList, GroupsArtificialList } from '../groups';
 
 const GroupsPanel = ({ showCreateGroupModal, selectGroup, onDeviceDrop }) => (

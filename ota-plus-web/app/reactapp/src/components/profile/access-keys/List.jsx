@@ -1,9 +1,10 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import ListItem from './ListItem';
 import NoKeys from './NoKeys';
 import { Loader } from '../../../partials';

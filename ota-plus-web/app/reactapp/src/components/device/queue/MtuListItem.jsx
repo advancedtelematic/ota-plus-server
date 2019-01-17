@@ -1,16 +1,17 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import InstallationEvents from '../InstallationEvents';
-import _ from 'underscore';
+import _ from 'lodash';
 import Loader from '../../../partials/Loader';
 
 @inject('stores')
 @observer
 class MtuListItem extends Component {
   render() {
-    const { update, cancelMtuUpdate, showSequencer, events } = this.props;
+    const { update, cancelMtuUpdate, events } = this.props;
     const { devicesStore } = this.props.stores;
     const { device } = devicesStore;
     const devicePrimaryEcu = device.directorAttributes.primary;

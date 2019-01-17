@@ -1,67 +1,34 @@
 /** @format */
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import List from './List';
+import { List, ListHeader } from '.';
 import Loader from '../../partials/Loader';
 
 @inject('stores')
 @observer
-export default class ContentPanel extends Component {
+class ContentPanel extends Component {
   static propTypes = {
-    status: PropTypes.string.isRequired,
-    expandedCampaigns: PropTypes.object.isRequired,
+    stores: PropTypes.object,
+    status: PropTypes.string,
+    expandedCampaigns: PropTypes.array,
     highlight: PropTypes.string,
     addNewWizard: PropTypes.func,
-    showWizard: PropTypes.func,
     showCancelCampaignModal: PropTypes.func,
     showDependenciesModal: PropTypes.func,
     toggleCampaign: PropTypes.func,
   };
 
-  renderHeader = status => {
-    const { addNewWizard } = this.props;
-    const headline = {
-      prepared: 'In preparation',
-      launched: 'running',
-      finished: 'finished',
-      cancelled: 'canceled',
-    };
-    const showColumns = status !== 'prepared';
-
-    return (
-      <div className='campaigns__header'>
-        <div className='campaigns__column'>{headline[status]}</div>
-        {showColumns && <div className='campaigns__column'>{'Created at'}</div>}
-        {showColumns && <div className='campaigns__column'>{'Processed'}</div>}
-        {showColumns && <div className='campaigns__column'>{'Affected'}</div>}
-        {showColumns && <div className='campaigns__column'>{'Finished'}</div>}
-        {showColumns && <div className='campaigns__column'>{'Failure rate'}</div>}
-        <div className='campaigns__header-link'>
-          <a
-            href='#'
-            className='add-button grey-button'
-            id='add-new-campaign'
-            onClick={e => {
-              e.preventDefault();
-              addNewWizard();
-            }}
-          >
-            <span>{'+ Add campaign'}</span>
-          </a>
-        </div>
-      </div>
-    );
-  };
-
   render() {
-    const { campaignsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
     const { campaignsFetchAsync } = campaignsStore;
-    const { status, highlight, showCancelCampaignModal, showDependenciesModal, expandedCampaigns, toggleCampaign } = this.props;
+    const { status, highlight, showCancelCampaignModal, showDependenciesModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
 
     return (
       <div className='campaigns' ref='list'>
-        {this.renderHeader(status)}
+        <ListHeader status={status} addNewWizard={addNewWizard} />
         {campaignsFetchAsync[status].isFetching ? (
           <div className='wrapper-center'>
             <Loader />
@@ -80,3 +47,5 @@ export default class ContentPanel extends Component {
     );
   }
 }
+
+export default ContentPanel;

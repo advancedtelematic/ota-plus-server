@@ -1,9 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
+import _ from 'lodash';
 import MtuListItem from './MtuListItem';
+import { toJS } from 'mobx';
 
 @inject('stores')
 @observer
@@ -17,9 +19,9 @@ class MtuList extends Component {
       </div>
     );
     return (
-      <ul className={'overview-panel__list' + (!devicesStore.deviceAprrovalPendingCampaigns.campaigns.length ? ' empty' : '')}>
-        {devicesStore.deviceAprrovalPendingCampaigns.campaigns.length
-          ? _.map(devicesStore.deviceAprrovalPendingCampaigns.campaigns, (campaign, index) => {
+      <ul className={'overview-panel__list' + (!devicesStore.deviceApprovalPendingCampaigns.campaigns.length ? ' empty' : '')}>
+        {devicesStore.deviceApprovalPendingCampaigns.campaigns.length
+          ? _.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => {
               return <MtuListItem key={index} campaign={campaign} cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />;
             })
           : emptyApprovalPending}

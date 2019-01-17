@@ -1,21 +1,21 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import PublicKeyPopover from './PublicKeyPopover';
-import _ from 'underscore';
+import _ from 'lodash';
 
 @observer
 class SecondaryEcu extends Component {
   onEcuClick = (ecu, e) => {
     if (e) e.preventDefault();
-    const { selectEcu, hideHardwareOverlay, hidePopover } = this.props;
+    const { selectEcu, changeHardwareOverlayVisibility } = this.props;
     selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');
-    hideHardwareOverlay();
-    hidePopover();
+    changeHardwareOverlayVisibility.bind(this, false);
   };
   render() {
-    const { active, ecu, device, showPopover, popoverShown, copyPublicKey, publicKeyCopied, hidePopover, popoverAnchor } = this.props;
+    const { active, ecu, device, changePopoverVisibility, popoverShown, copyPublicKey, publicKeyCopied } = this.props;
     return (
       <span>
         <a href='#' id={'hardware-secondary-' + ecu.id} className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} onClick={this.onEcuClick.bind(this, ecu)}>
@@ -26,19 +26,20 @@ class SecondaryEcu extends Component {
             <br />
             Serial: <span id={'hardware-serial-' + ecu.id}>{ecu.id}</span>
           </div>
-          <div className='hardware-panel__ecu-actions' id={'hardware-key-icon-secondary-' + ecu.id} onClick={showPopover.bind(this, ecu.id)}>
+          <div className='hardware-panel__ecu-actions' id={'hardware-key-icon-secondary-' + ecu.id}>
             <span className='hardware-panel__ecu-action hardware-panel__ecu-action--key'>
-              {active ? (
-                <img src='/assets/img/icons/white/key.svg' className='hardware-panel__ecu-action--key-size' alt='Icon' />
-              ) : (
-                <img src='/assets/img/icons/black/key.svg' className='hardware-panel__ecu-action--key-size' alt='Icon' />
-              )}
+              <PublicKeyPopover
+                serial={ecu.id}
+                device={device}
+                handleCopy={copyPublicKey}
+                changePopoverVisibility={changePopoverVisibility}
+                copied={publicKeyCopied}
+                active={active}
+                popoverShown={popoverShown}
+              />
             </span>
           </div>
         </a>
-        {popoverShown ? (
-          <PublicKeyPopover serial={ecu.id} device={device} handleRequestClose={hidePopover} handleCopy={copyPublicKey} popoverShown={popoverShown} anchorEl={popoverAnchor} copied={publicKeyCopied} />
-        ) : null}
       </span>
     );
   }

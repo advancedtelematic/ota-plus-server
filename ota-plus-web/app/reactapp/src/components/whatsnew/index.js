@@ -2,6 +2,6 @@
 
 import WhatsNewHeader from './Header';
 import WhatsNewList from './List';
-import WhatsNewPopover from './Popover';
+import WhatsNew from './WhatsNew';
 
-export { WhatsNewHeader, WhatsNewList, WhatsNewPopover };
+export { WhatsNewHeader, WhatsNewList, WhatsNew };

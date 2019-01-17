@@ -1,12 +1,13 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { translate } from 'react-i18next';
-import { MetaData, FadeAnimation } from '../utils';
-import { DevicesContainer } from '../containers';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+
+import { MetaData, FadeAnimation } from '../utils';
+import { DevicesContainer } from '../containers';
 
 const title = 'Devices';
 
@@ -14,19 +15,28 @@ const title = 'Devices';
 @inject('stores')
 @observer
 class Devices extends Component {
+  static propTypes = {
+    stores: PropTypes.object,
+    addNewWizard: PropTypes.func,
+  };
+
   componentWillMount() {
-    const { devicesStore, groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, groupsStore } = stores;
     const { selectedGroup } = groupsStore;
     const groupId = selectedGroup.id || null;
     devicesStore.fetchDevices('', groupId);
     groupsStore.fetchGroups();
     devicesStore.fetchUngroupedDevices();
   }
+
   componentWillUnmount() {
-    const { devicesStore, groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, groupsStore } = stores;
     devicesStore._reset();
     groupsStore._reset();
   }
+
   render() {
     const { addNewWizard } = this.props;
     return (
@@ -38,9 +48,5 @@ class Devices extends Component {
     );
   }
 }
-
-Devices.propTypes = {
-  stores: PropTypes.object,
-};
 
 export default Devices;

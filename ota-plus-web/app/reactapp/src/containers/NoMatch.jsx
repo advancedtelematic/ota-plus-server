@@ -1,9 +1,7 @@
 /** @format */
 
-import React, { Component } from 'react';
+import React from 'react';
 
-const NoMatch = () => {
-  return <span>404</span>;
-};
+const NoMatch = () => <span>404</span>;
 
 export default NoMatch;

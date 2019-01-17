@@ -1,8 +1,9 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Step1Option } from './step1';
-import { map } from 'underscore';
+import { map } from 'lodash';
 
 const options = [
   {

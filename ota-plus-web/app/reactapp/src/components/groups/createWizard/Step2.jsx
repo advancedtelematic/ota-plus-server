@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Step2CreateClassicGroup, Step2CreateSmartGroup } from './step2';
 
 const Step2 = ({ groupType, markStepAsFinished, markStepAsNotFinished, setFilter }) => {

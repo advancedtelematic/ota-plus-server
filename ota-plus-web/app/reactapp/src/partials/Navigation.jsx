@@ -1,21 +1,21 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import _ from 'underscore';
-import NavigationDropdown from './NavigationDropdown';
-import SettingsDropdown from './SettingsDropdown';
+import _ from 'lodash';
+
+import NavigationPopover from './NavigationPopover';
 import TabNavigation from './TabNavigation';
 
 @inject('stores')
 @observer
-export default class Navigation extends Component {
+class Navigation extends Component {
   static propTypes = {
+    stores: PropTypes.object,
     location: PropTypes.string.isRequired,
     uiUserProfileEdit: PropTypes.bool.isRequired,
-    toggleSWRepo: PropTypes.func.isRequired,
-    switchToSWRepo: PropTypes.bool,
     uiUserProfileMenu: PropTypes.bool.isRequired,
     uiCredentialsDownload: PropTypes.bool.isRequired,
     alphaPlusEnabled: PropTypes.bool.isRequired,
@@ -24,55 +24,55 @@ export default class Navigation extends Component {
     activeTab: PropTypes.string,
   };
 
-  handleClick = e => {
+  handleClick = event => {
     const { startWhatsNewPopover } = this.props;
     const newFeaturesAvailable = _.isFunction(startWhatsNewPopover);
-    e && e.preventDefault();
-    newFeaturesAvailable && startWhatsNewPopover();
+    if (event) event.preventDefault();
+    if (newFeaturesAvailable) startWhatsNewPopover();
   };
 
   render() {
-    const { uiUserProfileMenu, uiCredentialsDownload, location, toggleSWRepo, switchToSWRepo, uiUserProfileEdit, alphaPlusEnabled, switchTab, activeTab } = this.props;
+    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, switchTab, activeTab } = this.props;
 
-    const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = this.props.stores.featuresStore;
+    const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = stores.featuresStore;
 
     return (
-      <nav className='navbar navbar-inverse'>
-        <div className='container'>
+      <nav className='navbar navbar-inverse clearfix'>
+        <div className='container clearfix'>
           <div className='navbar-header'>
             <div className='navbar-brand' id='logo' />
           </div>
           <div id='navbar'>
             <ul className='nav navbar-nav'>
               <li>
-                <Link to='/' activeClassName='active' id='link-dashboard'>
-                  Dashboard
-                </Link>
+                <NavLink exact to='/' activeClassName='active' id='link-dashboard'>
+                  {'Dashboard'}
+                </NavLink>
               </li>
               <li>
-                <Link to='/devices' activeClassName='active' id='link-devices'>
-                  Devices
-                </Link>
+                <NavLink to='/devices' activeClassName='active' id='link-devices'>
+                  {'Devices'}
+                </NavLink>
               </li>
               <li>
-                <Link to='/packages' activeClassName='active' id='link-packages'>
-                  Packages
-                </Link>
+                <NavLink to='/packages' activeClassName='active' id='link-packages'>
+                  {'Packages'}
+                </NavLink>
               </li>
               <li>
-                <Link to='/updates' activeClassName='active' id='link-updates'>
-                  Updates
-                </Link>
+                <NavLink to='/updates' activeClassName='active' id='link-updates'>
+                  {'Updates'}
+                </NavLink>
               </li>
               <li>
-                <Link to='/campaigns' activeClassName='active' id='link-campaigns'>
-                  Campaigns
-                </Link>
+                <NavLink to='/campaigns' activeClassName='active' id='link-campaigns'>
+                  {'Campaigns'}
+                </NavLink>
               </li>
               <li>
-                <Link to='/impact-analysis' activeClassName='active' id='link-impactanalysis'>
-                  Impact analysis
-                </Link>
+                <NavLink to='/impact-analysis' activeClassName='active' id='link-impactanalysis'>
+                  {'Impact analysis'}
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -81,43 +81,37 @@ export default class Navigation extends Component {
               <span>
                 {(whatsNewPostponed || whatsNewPopOver) && (
                   <li className='text-link highlighted' ref='linkWhatsNew'>
-                    <a href='#' onClick={this.handleClick} target='_blank' id='whats-new-link'>
-                      WHAT'S NEW
+                    <a onClick={this.handleClick} id='whats-new-link'>
+                      {"WHAT'S NEW"}
                     </a>
                     <span className='whats-new-badge' />
                   </li>
                 )}
                 {whatsNewShowPage && (
                   <li className='text-link highlighted' ref='linkWhatsNew'>
-                    <Link to='/whats-new' activeClassName='active' id='whats-new-link'>
-                      WHAT'S NEW
-                    </Link>
+                    <NavLink to='/whats-new' activeClassName='active' id='whats-new-link'>
+                      {"WHAT'S NEW"}
+                    </NavLink>
                   </li>
                 )}
-                <li className={'separator'}>|</li>
+                <li className='separator'>{'|'}</li>
                 <li className='text-link'>
-                  <a href='http://docs.atsgarage.com' target='_blank' id='docs-link'>
-                    DOCS
+                  <a href='http://docs.atsgarage.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
+                    {'DOCS'}
                   </a>
                 </li>
-                <li className='separator'>|</li>
+                <li className='separator'>{'|'}</li>
                 <li className='text-link'>
                   <a href='mailto:otaconnect.support@here.com' id='support-link'>
-                    SUPPORT
+                    {'SUPPORT'}
                   </a>
                 </li>
               </span>
             )}
-            {uiUserProfileMenu ? (
+            {uiUserProfileMenu && (
               <li id='menu-login'>
-                <NavigationDropdown uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload} />
+                <NavigationPopover uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload} />
               </li>
-            ) : (
-              uiCredentialsDownload && (
-                <li id='menu-login'>
-                  <SettingsDropdown uiCredentialsDownload={uiCredentialsDownload} />
-                </li>
-              )
             )}
           </ul>
         </div>
@@ -127,3 +121,5 @@ export default class Navigation extends Component {
     );
   }
 }
+
+export default Navigation;

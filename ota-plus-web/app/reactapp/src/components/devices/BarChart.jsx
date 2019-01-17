@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import moment from 'moment';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const activeColor = '#48DAD0';
 const inActiveColor = '#F3F3F4';

@@ -1,125 +1,136 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepository } from '../pages';
 import { PackagesCreateModal, PackagesHeader, PackagesList, PackagesDependenciesManager, PackagesEditCommentModal } from '../components/packages';
-import { FlatButton } from 'material-ui';
 
 @inject('stores')
 @observer
 class Packages extends Component {
-  @observable createModalShown = false;
-  @observable fileUploaderModalShown = false;
-  @observable fileDropped = null;
-  @observable copied = false;
-  @observable dependenciesModalShown = false;
-  @observable dependenciesManagerShown = false;
-  @observable activeVersionFilepath = null;
-  @observable activeManagerVersion = null;
-  @observable deleteConfirmationShown = false;
-  @observable expandedPackageName = null;
-  @observable itemToDelete = null;
-  @observable editCommentShown = false;
-  @observable activeComment = '';
-  @observable activePackageFilepath = '';
+  @observable
+  createModalShown = false;
+  @observable
+  fileUploaderModalShown = false;
+  @observable
+  fileDropped = null;
+  @observable
+  copied = false;
+  @observable
+  dependenciesModalShown = false;
+  @observable
+  dependenciesManagerShown = false;
+  @observable
+  activeVersionFilepath = null;
+  @observable
+  activeManagerVersion = null;
+  @observable
+  deleteConfirmationShown = false;
+  @observable
+  expandedPackageName = null;
+  @observable
+  itemToDelete = null;
+  @observable
+  editCommentShown = false;
+  @observable
+  activeComment = '';
+  @observable
+  activePackageFilepath = '';
 
-  constructor(props) {
-    super(props);
-    this.showCreateModal = this.showCreateModal.bind(this);
-    this.showFileUploaderModal = this.showFileUploaderModal.bind(this);
-    this.hideCreateModal = this.hideCreateModal.bind(this);
-    this.hideFileUploaderModal = this.hideFileUploaderModal.bind(this);
-    this.onFileDrop = this.onFileDrop.bind(this);
-    this.handleCopy = this.handleCopy.bind(this);
-    this.showDependenciesModal = this.showDependenciesModal.bind(this);
-    this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
-    this.showDependenciesManager = this.showDependenciesManager.bind(this);
-    this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
-    this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
-    this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
-    this.setExpandedPackageName = this.setExpandedPackageName.bind(this);
-    this.showEditComment = this.showEditComment.bind(this);
-    this.hideEditComment = this.hideEditComment.bind(this);
-  }
-  showEditComment(filepath, comment, e) {
+  showEditComment = (filepath, comment, e) => {
     if (e) e.preventDefault();
     this.editCommentShown = true;
     this.activeComment = comment;
     this.activePackageFilepath = filepath;
-  }
-  hideEditComment(e) {
+  };
+
+  hideEditComment = e => {
     if (e) e.preventDefault();
     this.editCommentShown = false;
     this.activeComment = '';
     this.activePackageFilepath = null;
-  }
-  setExpandedPackageName(name) {
+  };
+
+  setExpandedPackageName = name => {
     this.expandedPackageName = name;
-  }
-  deleteItem(e) {
+  };
+
+  deleteItem = e => {
     if (e) e.preventDefault();
     const { packagesStore } = this.props.stores;
     packagesStore.deletePackage(this.itemToDelete);
     this.hideDeleteConfirmation();
-  }
-  showDeleteConfirmation(itemName, itemType, e) {
+  };
+
+  showDeleteConfirmation = (itemName, itemType, e) => {
     if (e) e.preventDefault();
     this.itemToDelete = itemName;
     this.deleteConfirmationShown = true;
-  }
-  hideDeleteConfirmation(e) {
+  };
+
+  hideDeleteConfirmation = e => {
     if (e) e.preventDefault();
     this.deleteConfirmationShown = false;
-  }
-  showDependenciesModal(activeVersionFilepath, e) {
+  };
+
+  showDependenciesModal = (activeVersionFilepath, e) => {
     if (e) e.preventDefault();
     this.dependenciesModalShown = true;
     this.activeVersionFilepath = activeVersionFilepath;
-  }
-  hideDependenciesModal(e) {
+  };
+
+  hideDependenciesModal = e => {
     if (e) e.preventDefault();
     this.dependenciesModalShown = false;
     this.activeVersionFilepath = null;
-  }
-  showDependenciesManager(activeManagerVersion, e) {
+  };
+
+  showDependenciesManager = (activeManagerVersion, e) => {
     if (e) e.preventDefault();
     this.dependenciesManagerShown = true;
     this.activeManagerVersion = activeManagerVersion;
-  }
-  hideDependenciesManager(e) {
+  };
+
+  hideDependenciesManager = e => {
     if (e) e.preventDefault();
     this.dependenciesManagerShown = false;
     this.activeManagerVersion = null;
-  }
-  showCreateModal(files, e) {
+  };
+
+  showCreateModal = (files, e) => {
     if (e) e.preventDefault();
     this.createModalShown = true;
     this.fileDropped = files ? files[0] : null;
-  }
-  showFileUploaderModal(e) {
+  };
+
+  showFileUploaderModal = e => {
     if (e) e.preventDefault();
     this.fileUploaderModalShown = true;
-  }
-  hideFileUploaderModal(e) {
+  };
+
+  hideFileUploaderModal = e => {
     if (e) e.preventDefault();
     this.fileUploaderModalShown = false;
-  }
-  handleCopy(e) {
+  };
+
+  handleCopy = e => {
     if (e) e.preventDefault();
     this.copied = true;
-  }
-  hideCreateModal(e) {
+  };
+
+  hideCreateModal = e => {
     if (e) e.preventDefault();
     this.createModalShown = false;
     this.fileDropped = null;
-  }
-  onFileDrop(files) {
+  };
+
+  onFileDrop = files => {
     this.showCreateModal(files);
-  }
+  };
+
   render() {
     const { highlightedPackage, switchToSWRepo } = this.props;
     const { packagesStore } = this.props.stores;
@@ -153,7 +164,7 @@ class Packages extends Component {
               <div>
                 <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
               </div>
-              <div>You haven't created any packages yet.</div>
+              <div>{"You haven't created any packages yet."}</div>
               <div>
                 <a href='#' className='add-button light' id='add-new-package' onClick={this.showCreateModal.bind(this, null)}>
                   <span>+</span>

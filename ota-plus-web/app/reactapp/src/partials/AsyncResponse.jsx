@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 const AsyncResponse = ({ action, handledStatus, successMsg, errorMsg, id }) => {
   return (

@@ -1,27 +1,16 @@
 /** @format */
 
 import React from 'react';
-import { render } from 'react-dom';
-import Routes from './Routes';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import ReactDOM from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
 import { Provider } from 'mobx-react';
-import { DevicesStore, HardwareStore, GroupsStore, PackagesStore, CampaignsStore, ImpactAnalysisStore, FeaturesStore, ProvisioningStore, UserStore, UpdatesStore } from './stores';
+import { ConfigProvider } from 'antd';
+import { DEFAULT_THEME_CONFIG } from './config';
+import i18n from './i18n';
 
-const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: '#9ce2d8',
-  },
-  datePicker: {
-    selectColor: '#48DAD0',
-  },
-  flatButton: {
-    primaryTextColor: '#4B5151',
-  },
-});
+import MainLayout from './layouts/Main';
+import { DevicesStore, HardwareStore, GroupsStore, PackagesStore, CampaignsStore, ImpactAnalysisStore, FeaturesStore, ProvisioningStore, UserStore, UpdatesStore } from './stores';
 
 const stores = {
   devicesStore: new DevicesStore(),
@@ -36,17 +25,16 @@ const stores = {
   updatesStore: new UpdatesStore(),
 };
 
-const Main = () => {
-  injectTapEventPlugin();
-  return (
+const Main = () => (
+  <HashRouter>
     <Provider stores={stores}>
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <ConfigProvider {...DEFAULT_THEME_CONFIG}>
         <I18nextProvider i18n={i18n}>
-          <Routes />
+          <MainLayout />
         </I18nextProvider>
-      </MuiThemeProvider>
+      </ConfigProvider>
     </Provider>
-  );
-};
+  </HashRouter>
+);
 
-render(<Main />, document.getElementById('app'));
+ReactDOM.render(<Main />, document.getElementById('app'));

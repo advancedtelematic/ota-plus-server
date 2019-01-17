@@ -1,26 +1,59 @@
 /** @format */
 
-import _ from 'underscore';
+import _ from 'lodash';
+import { toJS } from 'mobx';
 
-const _contains = (objects, item) => {
-  const { type } = item;
-  const useId = _.isUndefined(type);
+const contains = (objects, item, compareAs) => {
+  const useId = _.isUndefined(compareAs);
   // default compare
   let compare = {};
-
+  
   if (useId) {
     compare = { id: item.id };
-  } else if (type === 'update') {
+  } else if (compareAs === 'update') {
     compare = {
       uuid: item.uuid,
+    };
+  } else if (compareAs === 'hardware') {
+    compare = {
+      name: item.name,
     };
   } else {
     compare = {
       name: item.name,
     };
   }
-
+  
   return _.isObject(_.find(objects, compare));
 };
 
-export { _contains };
+const prepareUpdateObject = data => {
+  const targets = {};
+  _.each(data, item => {
+    targets[item.hardwareId] = {
+      from: {
+        target: item.from.target,
+        checksum: {
+          method: 'sha256',
+          hash: item.from.hash,
+        },
+        targetLength: item.from.targetLength,
+      },
+      to: {
+        target: item.to.target,
+        checksum: {
+          method: 'sha256',
+          hash: item.to.hash,
+        },
+        targetLength: item.to.targetLength,
+      },
+      targetFormat: item.targetFormat,
+      generateDiff: item.generateDiff,
+    };
+  });
+  return {
+    targets,
+  };
+};
+
+export { contains, prepareUpdateObject };

@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Items from './usage/Items';
@@ -17,16 +18,13 @@ for (var i = 0; i <= monthsCount; i++) {
 @inject('stores')
 @observer
 class Usage extends Component {
-  constructor(props) {
-    super(props);
-    this.fetchUsage = this.fetchUsage.bind(this);
-  }
   componentWillMount() {
     const { userStore } = this.props.stores;
     userStore._setUsageInitial(startTime, monthsCount);
     this.fetchUsage();
   }
-  fetchUsage() {
+
+  fetchUsage = () => {
     const { userStore } = this.props.stores;
     for (var i = monthsCount; i >= monthsCount - 2; i--) {
       const startTimeTmp = moment(startTime).add(i, 'months');
@@ -35,7 +33,8 @@ class Usage extends Component {
       userStore.fetchActiveDeviceCount(startTimeTmp, endTimeTmp);
       userStore.fetchConnectedDeviceCount(startTimeTmp.format('YYYY'), startTimeTmp.format('MM'));
     }
-  }
+  };
+
   render() {
     return (
       <div className='profile-container' id='usage'>
