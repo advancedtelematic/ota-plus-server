@@ -92,11 +92,8 @@ class Campaigns extends Component {
           showCancelCampaignModal={this.showCancelCampaignModal}
           showDependenciesModal={this.showDependenciesModal}
         />
-        <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal}
-                                     switchTab={switchTab}/>
-        {this.dependenciesModalShown &&
-        <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal}
-                           activeItemName={this.activeCampaign}/>}
+        <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal} switchTab={switchTab} />
+        {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeCampaign} />}
       </span>
     );
   }

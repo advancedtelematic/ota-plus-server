@@ -130,28 +130,20 @@ class CreateModal extends Component {
       default:
         break;
     }
-    // console.log(toJS(this.wizardData), 'o firtst step');
     this.validateStep(this.currentStepId);
   };
   onStep2DataSelect = (selected, type, value) => {
-    // console.log(toJS(selected), 'selected');
-    // console.log(type, 'type');
-    // console.log(toJS(value), 'value');
     const { name: hardwareId } = selected;
     const { update } = this.wizardData;
-    console.log(toJS(this.wizardData));
     update[hardwareId] = _.isObject(update[hardwareId]) ? update[hardwareId] : {};
     update[hardwareId][type] = value;
 
     if (type === 'fromPack') {
-      console.log('fromPack');
       update[hardwareId].fromVersion = null;
     }
     if (type === 'toPack') {
-      console.log('toPack');
       update[hardwareId].toVersion = null;
     }
-    console.log(toJS(this.wizardData));
     this.validateStep(this.currentStepId);
   };
 
@@ -179,25 +171,21 @@ class CreateModal extends Component {
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {<currentStep.class wizardData={this.wizardData} onStep1DataSelect={this.onStep1DataSelect}
-                            onStep2DataSelect={this.onStep2DataSelect} showDetails={showDetails}/>}
+        {<currentStep.class wizardData={this.wizardData} onStep1DataSelect={this.onStep1DataSelect} onStep2DataSelect={this.onStep2DataSelect} showDetails={showDetails} />}
         <div className='body-actions' style={{ margin: 0 }}>
           {this.isLastStep() ? (
             !showDetails && (
               <div style={{ display: 'flex' }}>
-                <Button htmlType='button' className='btn-primary' id='wizard-back-button' onClick={this.prevStep}
-                        style={{ marginRight: '10px' }}>
+                <Button htmlType='button' className='btn-primary' id='wizard-back-button' onClick={this.prevStep} style={{ marginRight: '10px' }}>
                   {'Back'}
                 </Button>
-                <Button htmlType='button' className='btn-primary pull-right' id='wizard-launch-button'
-                        disabled={!currentStep.isFinished} onClick={this.createMtu}>
+                <Button htmlType='button' className='btn-primary pull-right' id='wizard-launch-button' disabled={!currentStep.isFinished} onClick={this.createMtu}>
                   {'Save'}
                 </Button>
               </div>
             )
           ) : (
-            <Button htmlType='button' disabled={!currentStep.isFinished} className='btn-primary' id='next'
-                    onClick={this.nextStep}>
+            <Button htmlType='button' disabled={!currentStep.isFinished} className='btn-primary' id='next' onClick={this.nextStep}>
               {'Continue'}
             </Button>
           )}
@@ -210,7 +198,7 @@ class CreateModal extends Component {
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' id='close-update-modal' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon'/>
+              <img src='/assets/img/icons/close.svg' alt='Icon' />
             </div>
           </div>
         }

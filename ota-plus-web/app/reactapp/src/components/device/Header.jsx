@@ -45,7 +45,6 @@ class Header extends Component {
     devicesStore.deleteDevice(device.uuid).then(() => {
       history.push('/devices');
     });
-
   };
   render() {
     const { devicesStore } = this.props.stores;

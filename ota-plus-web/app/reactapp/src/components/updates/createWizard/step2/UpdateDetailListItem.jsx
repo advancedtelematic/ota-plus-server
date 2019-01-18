@@ -41,8 +41,6 @@ class UpdateDetailListItem extends Component {
     } else {
       this.toVersions = formattedData;
     }
-    console.log(toJS(this.fromVersions), 'this.fromVersions');
-    console.log(toJS(this.toVersions), 'this.toVersions');
   };
 
   render() {
@@ -50,13 +48,10 @@ class UpdateDetailListItem extends Component {
     const { packagesStore } = this.props.stores;
     const { update } = wizardData;
     const { fromPack, toPack, fromVersion, toVersion } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
-console.log(toJS(packagesStore.packages));
     let uniqPackages = _.uniqBy(packagesStore.packages, item => {
-      console.log('item', item.id.name);
       return item.id.name;
     });
-    
-    console.log(uniqPackages, 'uniqPackages');
+
     const packages = _.map(uniqPackages, item => {
       return {
         text: item.id.name,
@@ -65,8 +60,6 @@ console.log(toJS(packagesStore.packages));
         item,
       };
     });
-    
-    console.log(packages, 'packages');
 
     return (
       <div className='update-block'>

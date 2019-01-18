@@ -4,13 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import {
-  FlexibleWidthXYPlot,
-  XAxis,
-  YAxis,
-  VerticalGridLines,
-  HorizontalRectSeries,
-} from 'react-vis';
+import { FlexibleWidthXYPlot, XAxis, YAxis, VerticalGridLines, HorizontalRectSeries } from 'react-vis';
 import ReactTooltip from 'react-tooltip';
 
 @inject('stores')
@@ -95,35 +89,29 @@ class InstallationReportView extends Component {
         <div className='failure-data'>
           <div className='failure-data__devices'>Number of devices: {devicesCount}</div>
           <div className='failure-data__legend'>
-            <span className='failure-data__color'/>
+            <span className='failure-data__color' />
             Devices
           </div>
         </div>
-        <div className="failures">
-          <div className="failures__chart">
-            <FlexibleWidthXYPlot
-              height={75 * failures.length}
-              margin={{ left: 75, right: 150 }}
-              yType="ordinal">
-              <VerticalGridLines/>
-              <XAxis tickTotal={devices} tickValues={xtickValues} tickFormat={v => v < 10 && v !== 0 ? ('0' + v) : v}/>
-              <YAxis orientation="left" tickTotal={failures.length} tickValues={ytickValues}
-                     tickFormat={v => failures[v].name}/>
+        <div className='failures'>
+          <div className='failures__chart'>
+            <FlexibleWidthXYPlot height={75 * failures.length} margin={{ left: 75, right: 150 }} yType='ordinal'>
+              <VerticalGridLines />
+              <XAxis tickTotal={devices} tickValues={xtickValues} tickFormat={v => (v < 10 && v !== 0 ? '0' + v : v)} />
+              <YAxis orientation='left' tickTotal={failures.length} tickValues={ytickValues} tickFormat={v => failures[v].name} />
               {_.map(failures, (group, index) => {
                 return (
                   <HorizontalRectSeries
                     key={group.name}
                     animation
-                    data={[
-                      { y0: index, y: index, x0: 0, x: group.devices },
-                    ]}
+                    data={[{ y0: index, y: index, x0: 0, x: group.devices }]}
                     color={group.color}
-                    className="rect-series"
+                    className='rect-series'
                     style={{ transform: 'translate(0px, -10px)' }}
-                    onSeriesMouseOver={(e) => {
+                    onSeriesMouseOver={e => {
                       console.log(e);
                     }}
-                    onValueMouseOver={(e) => {
+                    onValueMouseOver={e => {
                       console.log(e);
                     }}
                   />
@@ -131,54 +119,35 @@ class InstallationReportView extends Component {
               })}
             </FlexibleWidthXYPlot>
           </div>
-          <div className="failures__actions">
+          <div className='failures__actions'>
             {_.map(failures, (group, index) => {
               return (
-                <div key={group.name} className="failures__action-wrapper"
-                     style={{ height: 'calc(75px - ' + 50 / failures.length + 'px)' }}>
-                  <div className={'failures__action-bg ' + (index % 2 !== 0 ? 'failures__action-bg--odd' : '')}></div>
-                  <div className="failures__action-label" data-tip data-for={`label ${group.name}`}></div>
-                  <div className="failures__action-tip" data-tip data-for={group.name}></div>
+                <div key={group.name} className='failures__action-wrapper' style={{ height: 'calc(75px - ' + 50 / failures.length + 'px)' }}>
+                  <div className={'failures__action-bg ' + (index % 2 !== 0 ? 'failures__action-bg--odd' : '')} />
+                  <div className='failures__action-label' data-tip data-for={`label ${group.name}`} />
+                  <div className='failures__action-tip' data-tip data-for={group.name} />
 
-                  <div className="failures__action" data-tip data-for="extract-vins">
-                    <img src="/assets/img/icons/download.svg" alt="Icon"/>
+                  <div className='failures__action' data-tip data-for='extract-vins'>
+                    <img src='/assets/img/icons/download.svg' alt='Icon' />
                   </div>
-                  <div className="failures__action" data-tip data-for="relaunch-campaign">
-                    <img src="/assets/img/icons/relaunch.svg" alt="Icon"/>
+                  <div className='failures__action' data-tip data-for='relaunch-campaign'>
+                    <img src='/assets/img/icons/relaunch.svg' alt='Icon' />
                   </div>
                   <ReactTooltip id={`label ${group.name}`}>
-                    <div>
-                      Ecu id: {group.description.ecuID}
-                    </div>
-                    <div>
-                      Ecu type: {group.description.ecuType}
-                    </div>
-                    <div>
-                      Failure reason: {group.description.reason}
-                    </div>
+                    <div>Ecu id: {group.description.ecuID}</div>
+                    <div>Ecu type: {group.description.ecuType}</div>
+                    <div>Failure reason: {group.description.reason}</div>
                   </ReactTooltip>
                   <ReactTooltip id={group.name}>
-                    <div>
-                      Ecu id: {group.description.ecuID}
-                    </div>
-                    <div>
-                      Hardware id: {group.description.hardwareID}
-                    </div>
-                    <div>
-                      Failure reason: {group.description.reason}
-                    </div>
+                    <div>Ecu id: {group.description.ecuID}</div>
+                    <div>Hardware id: {group.description.hardwareID}</div>
+                    <div>Failure reason: {group.description.reason}</div>
                   </ReactTooltip>
-                  <ReactTooltip id="extract-vins">
-                    Extract VINs
-                  </ReactTooltip>
-                  <ReactTooltip id="relaunch-campaign">
-                    Relaunch campaign
-                  </ReactTooltip>
-
+                  <ReactTooltip id='extract-vins'>Extract VINs</ReactTooltip>
+                  <ReactTooltip id='relaunch-campaign'>Relaunch campaign</ReactTooltip>
                 </div>
               );
             })}
-
           </div>
         </div>
       </div>

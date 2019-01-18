@@ -144,18 +144,18 @@ class Sequencer extends Component {
   };
 
   highlightAvailableSpaces = selectedElementRow => {
-    const nextRow = $(`.${  FLEX_ROW  }--${  selectedElementRow + 1}`);
-    const prevRow = $(`.${  FLEX_ROW  }--${  selectedElementRow - 1}`);
+    const nextRow = $(`.${FLEX_ROW}--${selectedElementRow + 1}`);
+    const prevRow = $(`.${FLEX_ROW}--${selectedElementRow - 1}`);
 
-    const nextRowNode = nextRow.children.length ? _.first(nextRow.children(`.${  EMPTY_NODE}`)) : null;
-    const prevRowNode = prevRow.children.length ? _.first(prevRow.children(`.${  EMPTY_NODE}`)) : null;
+    const nextRowNode = nextRow.children.length ? _.first(nextRow.children(`.${EMPTY_NODE}`)) : null;
+    const prevRowNode = prevRow.children.length ? _.first(prevRow.children(`.${EMPTY_NODE}`)) : null;
 
     if (nextRowNode) nextRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED);
     if (prevRowNode) prevRowNode.classList.add(EMPTY_NODE_HIGHLIGHTED);
   };
 
   resetHighlightedSpaces = () => {
-    const emptyNodes = $(`.${  EMPTY_NODE}`);
+    const emptyNodes = $(`.${EMPTY_NODE}`);
 
     _.each(emptyNodes, val => {
       val.classList.remove(EMPTY_NODE_HIGHLIGHTED);
@@ -211,7 +211,7 @@ class Sequencer extends Component {
             onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, { column: -1, row: -1, value: {} }) : null}
           >
             <div className='c-sequencer__text'>Init</div>
-            {readOnly ? <SequencerProgress delay={0} duration={INIT_PROGRESS_TIME} className="c-sequencer__progress c-sequencer__progress--default-phase" /> : null}
+            {readOnly ? <SequencerProgress delay={0} duration={INIT_PROGRESS_TIME} className='c-sequencer__progress c-sequencer__progress--default-phase' /> : null}
           </div>
           <div className='c-sequencer__init' style={{ visibility: 'hidden' }}>
             Phase 1
@@ -229,7 +229,7 @@ class Sequencer extends Component {
               <SequencerProgress
                 delay={INIT_PROGRESS_TIME + PHASE_PROGRESS_TIME * numberOfPhases}
                 duration={TERMINATION_PROGRESS_TIME}
-                className="c-sequencer__progress c-sequencer__progress--default-phase"
+                className='c-sequencer__progress c-sequencer__progress--default-phase'
               />
             ) : null}
           </div>
@@ -262,27 +262,26 @@ class Sequencer extends Component {
                             selectAction={this.selectAction}
                             row={rowIndex}
                             column={columnIndex}
-                            key={`${rowIndex  }-${  columnIndex}`}
+                            key={`${rowIndex}-${columnIndex}`}
                             readOnly={readOnly}
                           />
                         );
-                      } 
-                        return (
-                          <div
-                            className='c-sequencer__empty-node'
-                            onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
-                            key={`${rowIndex  }-${  columnIndex}`}
-                          />
-                        );
-                      
-                    })
-                  : _.map(updatesArray, (value, columnIndex) => (
+                      }
+                      return (
                         <div
                           className='c-sequencer__empty-node'
                           onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
-                          key={`${rowIndex  }-${  columnIndex}`}
+                          key={`${rowIndex}-${columnIndex}`}
                         />
-                      ))}
+                      );
+                    })
+                  : _.map(updatesArray, (value, columnIndex) => (
+                      <div
+                        className='c-sequencer__empty-node'
+                        onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
+                        key={`${rowIndex}-${columnIndex}`}
+                      />
+                    ))}
               </div>
             </div>
           );

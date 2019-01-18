@@ -378,7 +378,7 @@ class Wizard extends Component {
             <div
               id='close-wizard'
               className='wizard-close'
-              onClick={(e) => {
+              onClick={e => {
                 if (this.currentDetails) this.hideUpdateDetails();
                 else hideWizard(wizardIdentifier, e);
               }}

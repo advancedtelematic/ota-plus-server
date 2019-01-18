@@ -10,34 +10,32 @@ class SearchBar extends Component {
     this.props.changeAction('');
   };
 
-  onChange = (value) => {
-      let timeout = undefined;
-      const {changeAction} = this.props;
-          const filter = value;
-          if (timeout != undefined) {
-              clearTimeout(timeout);
-          }
-          timeout = setTimeout(() => {
-              timeout = undefined;
-              changeAction(filter);
-          }, 500);
-      }
-
+  onChange = value => {
+    let timeout = undefined;
+    const { changeAction } = this.props;
+    const filter = value;
+    if (timeout != undefined) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      timeout = undefined;
+      changeAction(filter);
+    }, 500);
+  };
 
   render() {
-
     const { value, disabled, id, additionalClassName } = this.props;
     return (
       <div className={'search-box ' + (additionalClassName ? additionalClassName : '')}>
         <Input
-          name="filterValue"
+          name='filterValue'
           value={value}
           id={id}
-          className="input-wrapper search"
+          className='input-wrapper search'
           disabled={disabled}
           onChange={this.onChange}
-          prefix={<Icon type="search" />}
-          suffix={<Icon type="close" onClick={this.clearInput} />}
+          prefix={<Icon type='search' />}
+          suffix={<Icon type='close' onClick={this.clearInput} />}
         />
       </div>
     );

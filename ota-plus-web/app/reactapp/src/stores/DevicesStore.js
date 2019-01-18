@@ -17,8 +17,7 @@ import {
   API_CANCEL_MULTI_TARGET_UPDATE,
   API_CAMPAIGNS_FETCH_SINGLE,
   API_UPDATES_SEARCH,
-  API_DEVICE_APPROVAL_PENDING_CAMPAIGNS
-
+  API_DEVICE_APPROVAL_PENDING_CAMPAIGNS,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'lodash';
@@ -52,7 +51,7 @@ export default class DevicesStore {
   @observable devicesSort = 'asc';
   @observable device = {};
   @observable deviceApprovalPendingCampaigns = {
-    campaigns:[]
+    campaigns: [],
   };
   @observable deviceEvents = {};
   @observable deviceNetworkInfo = {
@@ -411,7 +410,7 @@ export default class DevicesStore {
           this,
         );
         if (data.campaigns.length) {
-          _.each(data.campaigns, (item) => {
+          _.each(data.campaigns, item => {
             let status = null;
             let afterCampaign = _.after(
               status === 'success',
@@ -426,7 +425,6 @@ export default class DevicesStore {
                       name: update.name,
                     };
                     after();
-                   
                   })
                   .catch(() => {
                     after();
@@ -443,7 +441,6 @@ export default class DevicesStore {
                 };
                 status = 'success';
                 afterCampaign();
-                
               })
               .catch(() => {
                 status = 'error';
@@ -504,7 +501,6 @@ export default class DevicesStore {
   }
 
   fetchDevicesCount() {
-    console.log("fetchDevicesCount");
     resetAsync(this.devicesCountFetchAsync, true);
     let that = this;
     return axios
