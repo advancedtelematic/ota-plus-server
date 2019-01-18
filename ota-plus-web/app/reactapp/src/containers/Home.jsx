@@ -112,7 +112,7 @@ class Home extends Component {
                       <div
                         className='home__tutorial-step-desc'>{'New to Yocto? We\'ll take you through a starter project step by step.'}</div>
                       <div className='home__tutorial-step-link'>
-                        <a href='https://docs.atsgarage.com/quickstarts/raspberry-pi.html' className='add-button'
+                        <a href='https://docs.ota.here.com/quickstarts/raspberry-pi.html' className='add-button'
                            rel='noopener noreferrer' target='_blank' id='user-new-yocto-docs'>
                           {'Quickstart guide'}
                         </a>
@@ -128,7 +128,7 @@ class Home extends Component {
                         className='home__tutorial-step-desc'>{'Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.'}</div>
                       <div className='home__tutorial-step-link'>
                         <a
-                          href='https://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html'
+                          href='https://docs.ota.here.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html'
                           id='user-existing-yocto-docs'
                           className='add-button'
                           rel='noopener noreferrer'
@@ -158,7 +158,7 @@ class Home extends Component {
                 {this.deviceSubmenuShown && (
                   <Dropdown hideSubmenu={this.hideDeviceSubmenu}>
                     <li className='device-dropdown-item'>
-                      <a className='device-dropdown-item' href='https://docs.atsgarage.com/quickstarts/start-intro.html'
+                      <a className='device-dropdown-item' href='https://docs.ota.here.com/quickstarts/start-intro.html'
                          rel='noopener noreferrer' target='_blank' onClick={e => e.stopPropagation()}>
                         {'Add device'}
                       </a>
