@@ -153,7 +153,7 @@ class Devices extends Component {
                 <img src="/assets/img/icons/white/devices.svg" alt="Icon"/>
               </div>
               <div>{'You haven\'t created any devices yet.'}</div>
-              <a href="https://docs.atsgarage.com/quickstarts/start-intro.html" className="add-button light"
+              <a href="https://docs.ota.here.com/quickstarts/start-intro.html" className="add-button light"
                  id="add-new-device" target="_blank">
                 <span>+</span>
                 <span>Add new device</span>

@@ -96,7 +96,7 @@ class Navigation extends Component {
                 )}
                 <li className='separator'>{'|'}</li>
                 <li className='text-link'>
-                  <a href='http://docs.atsgarage.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
+                  <a href='http://docs.ota.here.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
                     {'DOCS'}
                   </a>
                 </li>
