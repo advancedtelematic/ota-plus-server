@@ -68,12 +68,7 @@ class WizardStep3 extends Component {
     ) : (
       <div>
         <span className='c-form__label'>{'Select Update'}</span>
-        <SelectUpdateList
-          selectedUpdate={selectedUpdate}
-          stepId={2}
-          toggleSelection={this.toggleUpdate}
-          showUpdateDetails={this.showDetails}
-        />
+        <SelectUpdateList selectedUpdate={selectedUpdate} stepId={2} toggleSelection={this.toggleUpdate} showUpdateDetails={this.showDetails} />
       </div>
     );
   }

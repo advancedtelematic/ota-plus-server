@@ -131,13 +131,12 @@ class Devices extends Component {
     return (
       <span>
         {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ? (
-          <div className="wrapper-center">
-            <Loader/>
+          <div className='wrapper-center'>
+            <Loader />
           </div>
         ) : devicesStore.devicesInitialTotalCount ? (
           <span>
-            <DevicesGroupsPanel showCreateGroupModal={this.showCreateGroupModal} selectGroup={this.selectGroup}
-                                onDeviceDrop={this.onDeviceDrop}/>
+            <DevicesGroupsPanel showCreateGroupModal={this.showCreateGroupModal} selectGroup={this.selectGroup} onDeviceDrop={this.onDeviceDrop} />
             <DevicesContentPanel
               changeSort={this.changeSort}
               changeFilter={this.changeFilter}
@@ -147,36 +146,31 @@ class Devices extends Component {
             />
           </span>
         ) : (
-          <div className="wrapper-center">
-            <div className="page-intro">
+          <div className='wrapper-center'>
+            <div className='page-intro'>
               <div>
-                <img src="/assets/img/icons/white/devices.svg" alt="Icon"/>
+                <img src='/assets/img/icons/white/devices.svg' alt='Icon' />
               </div>
-              <div>{'You haven\'t created any devices yet.'}</div>
-              <a href="https://docs.ota.here.com/quickstarts/start-intro.html" className="add-button light"
-                 id="add-new-device" target="_blank">
+              <div>{"You haven't created any devices yet."}</div>
+              <a href='https://docs.ota.here.com/quickstarts/start-intro.html' className='add-button light' id='add-new-device' target='_blank'>
                 <span>+</span>
                 <span>Add new device</span>
               </a>
             </div>
           </div>
         )}
-        {this.createGroupModalShown ?
-          <GroupsCreateModal shown={this.createGroupModalShown} hide={this.hideCreateGroupModal}
-                             selectGroup={this.selectGroup}/> : null}
+        {this.createGroupModalShown ? <GroupsCreateModal shown={this.createGroupModalShown} hide={this.hideCreateGroupModal} selectGroup={this.selectGroup} /> : null}
         {this.deleteConfirmationShown ? (
           <ConfirmationModal
-            modalTitle={<div className="text-red">Delete device</div>}
+            modalTitle={<div className='text-red'>Delete device</div>}
             id='delete-device-confirmation-modal'
             shown={this.deleteConfirmationShown}
             hide={this.hideDeleteConfirmation}
             deleteItem={this.deleteDevice}
-            topText={<div className="delete-modal-top-text">Device will be removed.</div>}
+            topText={<div className='delete-modal-top-text'>Device will be removed.</div>}
           />
         ) : null}
-        {this.editNameShown ?
-          <EditModal modalTitle={<div>Edit name</div>} shown={this.editNameShown} hide={this.hideEditName}
-                     device={this.itemToEdit}/> : null}
+        {this.editNameShown ? <EditModal modalTitle={<div>Edit name</div>} shown={this.editNameShown} hide={this.hideEditName} device={this.itemToEdit} /> : null}
       </span>
     );
   }

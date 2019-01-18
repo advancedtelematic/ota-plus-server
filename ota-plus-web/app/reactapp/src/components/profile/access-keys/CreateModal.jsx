@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Form } from 'formsy-antd';
 import { Row, Col, DatePicker } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../../utils';
-import { OTAModal, AsyncResponse, FormInput, } from '../../../partials';
+import { OTAModal, AsyncResponse, FormInput } from '../../../partials';
 
 @inject('stores')
 @observer
@@ -19,22 +19,22 @@ class CreateModal extends Component {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
   };
-  
+
   @observable
   submitButtonDisabled = true;
   @observable
   untilTime = moment().add(1, 'year');
   @observable
   description = '';
-  
+
   disableButton = () => {
     this.submitButtonDisabled = true;
   };
-  
+
   enableButton = () => {
     this.submitButtonDisabled = false;
   };
-  
+
   submitForm = () => {
     let data = {
       description: this.description,
@@ -44,20 +44,19 @@ class CreateModal extends Component {
     const { provisioningStore } = stores;
     provisioningStore.createProvisioningKey(data);
   };
-  
-  disabledDate = (current) => {
+
+  disabledDate = current => {
     return current && current < moment().endOf('day');
   };
-  
-  handleDateChange = (value) => {
+
+  handleDateChange = value => {
     this.untilTime = value;
   };
-  
-  handleDescriptionChange = (e) => {
-    console.log(e.target.value);
+
+  handleDescriptionChange = e => {
     this.description = e.target.value;
   };
-  
+
   constructor(props) {
     super(props);
     const { stores } = this.props;
@@ -74,22 +73,21 @@ class CreateModal extends Component {
     const { provisioningStore } = stores;
     const { provisioningKeyCreateAsync } = provisioningStore;
     const form = (
-      <Form onValidSubmit={this.submitForm} id="provisioning-key-create-form">
-        <AsyncResponse handledStatus="error" action={provisioningKeyCreateAsync}
-                       errorMsg={provisioningKeyCreateAsync.data && provisioningKeyCreateAsync.data.description}/>
+      <Form onValidSubmit={this.submitForm} id='provisioning-key-create-form'>
+        <AsyncResponse handledStatus='error' action={provisioningKeyCreateAsync} errorMsg={provisioningKeyCreateAsync.data && provisioningKeyCreateAsync.data.description} />
         <Row className={'row'}>
           <Col span={24}>
             <FormInput
               onValid={this.enableButton}
               onInvalid={this.disableButton}
               onChange={this.handleDescriptionChange}
-              name="description"
-              className="input-wrapper"
+              name='description'
+              className='input-wrapper'
               isEditable={!provisioningKeyCreateAsync.isFetching}
-              title="Description"
-              label="Description"
-              placeholder="Description"
-              id="add-new-key-description"
+              title='Description'
+              label='Description'
+              placeholder='Description'
+              id='add-new-key-description'
             />
           </Col>
         </Row>
@@ -99,22 +97,21 @@ class CreateModal extends Component {
               {'Valid until'}
             </label>
             <DatePicker
-              className="input-wrapper date-wrapper"
-              name="until"
+              className='input-wrapper date-wrapper'
+              name='until'
               defaultValue={this.untilTime}
               onChange={this.handleDateChange}
               format={'YYYY-MM-DD'}
               showToday={false}
-              id="add-new-key-valid-until"
+              id='add-new-key-valid-until'
               disabled={provisioningKeyCreateAsync.isFetching}
               disabledDate={this.disabledDate}
               allowClear={false}
             />
           </Col>
         </Row>
-        <div className="body-actions">
-          <button disabled={this.submitButtonDisabled || provisioningKeyCreateAsync.isFetching} className="btn-primary"
-                  id="add-new-key-confirm﻿">
+        <div className='body-actions'>
+          <button disabled={this.submitButtonDisabled || provisioningKeyCreateAsync.isFetching} className='btn-primary' id='add-new-key-confirm﻿'>
             Add key
           </button>
         </div>
@@ -122,15 +119,15 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title="Add new key"
+        title='Add new key'
         topActions={
-          <div className="top-actions flex-end">
-            <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon"/>
+          <div className='top-actions flex-end'>
+            <div className='modal-close' onClick={hide}>
+              <img src='/assets/img/icons/close.svg' alt='Icon' />
             </div>
           </div>
         }
-        className="create-provisioning-key-modal"
+        className='create-provisioning-key-modal'
         content={form}
         visible={shown}
       />

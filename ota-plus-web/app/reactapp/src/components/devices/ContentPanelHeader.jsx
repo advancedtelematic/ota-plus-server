@@ -22,11 +22,10 @@ class ContentPanelHeader extends Component {
     const { selectedGroup } = groupsStore;
     return (
       <SubHeader>
-        {selectedGroup.id &&
-        selectedGroup.id !== 'ungrouped' && (
-          <div className="add-group-campaign">
+        {selectedGroup.id && selectedGroup.id !== 'ungrouped' && (
+          <div className='add-group-campaign'>
             <a
-              className="add-button bordered light"
+              className='add-button bordered light'
               onClick={e => {
                 e.preventDefault();
                 addNewWizard('groups');
@@ -37,11 +36,7 @@ class ContentPanelHeader extends Component {
           </div>
         )}
         <Form>
-          <SearchBar
-            value={devicesFilter}
-            changeAction={changeFilter}
-            id="search-devices-input"
-          />
+          <SearchBar value={devicesFilter} changeAction={changeFilter} id='search-devices-input' />
         </Form>
       </SubHeader>
     );

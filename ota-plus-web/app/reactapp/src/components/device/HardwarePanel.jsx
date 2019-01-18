@@ -112,11 +112,9 @@ class HardwarePanel extends Component {
         <div className='hardware-panel__title'>
           {secondaryEcusTitle}
           {isPrimaryEcuActive ? (
-            <img src='/assets/img/icons/black/questionmark.svg' alt='' className='hardware-panel__icon-secondary'
-                 onClick={this.showSecondaryDescription} id='hardware-secondary-ecu-details'/>
+            <img src='/assets/img/icons/black/questionmark.svg' alt='' className='hardware-panel__icon-secondary' onClick={this.showSecondaryDescription} id='hardware-secondary-ecu-details' />
           ) : (
-            <img src='/assets/img/icons/white/questionmark.svg' alt='' className='hardware-panel__icon-secondary'
-                 onClick={this.showSecondaryDescription} id='hardware-secondary-ecu-details'/>
+            <img src='/assets/img/icons/white/questionmark.svg' alt='' className='hardware-panel__icon-secondary' onClick={this.showSecondaryDescription} id='hardware-secondary-ecu-details' />
           )}
         </div>
         {!_.isEmpty(device.directorAttributes.secondary) || device.directorAttributes.secondary.length ? (
@@ -145,8 +143,7 @@ class HardwarePanel extends Component {
     );
     return (
       <div className='hardware-panel'>
-        <div className={'hardware-panel__overview ' + (!ECUselected ? 'hardware-panel__overview--selected' : '')}
-             onClick={this.onSelectQueue}>
+        <div className={'hardware-panel__overview ' + (!ECUselected ? 'hardware-panel__overview--selected' : '')} onClick={this.onSelectQueue}>
           <button className={'hardware-panel__overview-button'}>OVERVIEW</button>
         </div>
         <div className='hardware-panel__header'>{title}</div>
@@ -156,17 +153,12 @@ class HardwarePanel extends Component {
           {this.secondaryDescriptionShown ? (
             <FadeAnimation>
               <div className='overlay-animation-container'>
-                <DeviceHardwareSecondaryEcuDetails hideDetails={this.hideSecondaryDescription}
-                                                   shown={this.secondaryDescriptionShown}/>
+                <DeviceHardwareSecondaryEcuDetails hideDetails={this.hideSecondaryDescription} shown={this.secondaryDescriptionShown} />
               </div>
             </FadeAnimation>
           ) : null}
         </div>
-        <PackagesBlacklistModal
-          shown={this.packageBlacklistModalShown}
-          hide={this.hidePackageBlacklistModal}
-          blacklistAction={this.packageBlacklistAction}
-        />
+        <PackagesBlacklistModal shown={this.packageBlacklistModalShown} hide={this.hidePackageBlacklistModal} blacklistAction={this.packageBlacklistAction} />
       </div>
     );
   }

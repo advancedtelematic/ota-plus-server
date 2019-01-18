@@ -7,7 +7,7 @@ const contains = (objects, item, compareAs) => {
   const useId = _.isUndefined(compareAs);
   // default compare
   let compare = {};
-  
+
   if (useId) {
     compare = { id: item.id };
   } else if (compareAs === 'update') {
@@ -23,7 +23,7 @@ const contains = (objects, item, compareAs) => {
       name: item.name,
     };
   }
-  
+
   return _.isObject(_.find(objects, compare));
 };
 

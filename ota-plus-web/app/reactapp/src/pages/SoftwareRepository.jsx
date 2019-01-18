@@ -179,8 +179,8 @@ class SoftwareRepository extends Component {
   render() {
     const packagesList = Object.keys(this.associatedPackages).map((group, groupKey) => (
       <li key={Math.floor(Math.random() * 3000 + groupKey)}>
-        <span className="title">{group}</span>
-        <ul className="second-level">
+        <span className='title'>{group}</span>
+        <ul className='second-level'>
           {Object.keys(packages.groups[group]).map((item, itemKey) => {
             const groupItem = packages.groups[group][item];
             const itemTitle = item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '');
@@ -196,27 +196,27 @@ class SoftwareRepository extends Component {
                 data-keys={groupItem.keys}
                 data-role={role}
               >
-                <span className="item">{item}</span>
+                <span className='item'>{item}</span>
                 <div
                   className={`user-info ${this.selectedPackage === itemTitle ? '' : 'hide'}`}
                   onClick={e => {
                     e.stopPropagation();
                   }}
                 >
-                  <div className="owners">
+                  <div className='owners'>
                     {_.map(groupItem.keys, (key, i) => {
                       person = keys.keys[key].owner;
-                      return <i title={key} key={i} className="fa fa-owner" aria-hidden="true" onClick={this.showUserInfo.bind(this)} />;
+                      return <i title={key} key={i} className='fa fa-owner' aria-hidden='true' onClick={this.showUserInfo.bind(this)} />;
                     })}
                   </div>
                 </div>
                 <div
-                  className="info hide row"
+                  className='info hide row'
                   onClick={e => {
                     e.stopPropagation();
                   }}
                 >
-                  <div className="col-md-2">
+                  <div className='col-md-2'>
                     <ul>
                       <li>Name:</li>
                       <li>Position:</li>
@@ -227,7 +227,7 @@ class SoftwareRepository extends Component {
                       <li>Group:</li>
                     </ul>
                   </div>
-                  <div className="col-md-5">
+                  <div className='col-md-5'>
                     <ul>
                       <li>{person.name}</li>
                       <li>{person.position}</li>
@@ -249,28 +249,28 @@ class SoftwareRepository extends Component {
       </li>
     ));
     return (
-      <div className="software-repository">
-        <div className="wrapper-full">
-          <div className="container">
-            <div className="row">
-              <div className="keys" id="keys">
-                <div className="background-wrapper" />
-                <div className="section-header">Roles</div>
-                <div className="wrapper-software" onScroll={this.scroll}>
+      <div className='software-repository'>
+        <div className='wrapper-full'>
+          <div className='container'>
+            <div className='row'>
+              <div className='keys' id='keys'>
+                <div className='background-wrapper' />
+                <div className='section-header'>Roles</div>
+                <div className='wrapper-software' onScroll={this.scroll}>
                   <TreeUl data={roles} shown openTreeNode={this.openTreeNode} getParentsUntil={this.getParentsUntil} filterPackagesAndCampaigns={this.filterPackagesAndCampaigns} />
                 </div>
               </div>
-              <div className="packages" id="packages" onScroll={this.scroll}>
-                <div className="section-header">Software</div>
-                <ul className="first-level">{!_.isEmpty(toJS(this.associatedPackages)) ? packagesList : <p className="absolute-align">No associated packages</p>}</ul>
+              <div className='packages' id='packages' onScroll={this.scroll}>
+                <div className='section-header'>Software</div>
+                <ul className='first-level'>{!_.isEmpty(toJS(this.associatedPackages)) ? packagesList : <p className='absolute-align'>No associated packages</p>}</ul>
               </div>
-              <div className="campaigns" onScroll={this.scroll}>
-                <div className="section-header">Campaigns</div>
-                <ul className="first-level">
+              <div className='campaigns' onScroll={this.scroll}>
+                <div className='section-header'>Campaigns</div>
+                <ul className='first-level'>
                   <List
                     data={{ groups: this.associatedCampaigns }}
                     clickHandler={this.drawLineFromCampaign}
-                    dataType="campaigns"
+                    dataType='campaigns'
                     removeClasses={this.removeSelectedClasses}
                     getCanvasContext={this._getCanvasContext}
                     deselectAll={this.deselectAll}

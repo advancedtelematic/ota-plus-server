@@ -604,7 +604,7 @@ export default class PackagesStore {
               );
 
               axios
-                .get(API_CAMPAIGNS_FETCH_SINGLE  + '/' + campaignId)
+                .get(API_CAMPAIGNS_FETCH_SINGLE + '/' + campaignId)
                 .then(response => {
                   let campaign = response.data;
                   item.campaign = {
