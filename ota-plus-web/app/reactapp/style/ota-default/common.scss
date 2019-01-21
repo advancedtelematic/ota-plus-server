@@ -523,7 +523,7 @@ input {
   }
 
   #navbar {
-    margin: 0 0 0 50px;
+    margin: 0 0 0 30px;
     float: left;
 
     .navbar-nav {
@@ -537,7 +537,7 @@ input {
           color: $devices-group-text;
           height: 48px;
           padding: 15px 20px;
-          margin: 0 10px;
+          margin: 0 8px;
           @include transition;
           font-weight: 300;
           font-size: 18px;
@@ -766,7 +766,6 @@ input {
   .input-wrapper {
     font-family: 'Fira Sans', sans-serif !important;
     width: 280px !important;
-    //height: 28px !important;
 
     &.search {
       input {
