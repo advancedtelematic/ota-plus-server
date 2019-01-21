@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { SearchBar, FormInput, FormSelect } from '../../../../partials';
-import { Form } from 'formsy-react';
+import { Form } from 'formsy-antd';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import mobx from 'mobx';
