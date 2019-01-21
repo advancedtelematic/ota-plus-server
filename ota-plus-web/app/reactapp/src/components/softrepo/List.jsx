@@ -71,38 +71,38 @@ class List extends Component {
                     e.stopPropagation();
                   }}
                 >
-                    <div span={24} className='user-info'>
-                      <div className='owners'>
-                        {_.map(groupItem.keys, (key, i) => {
-                          person = keys.keys[key].owner;
-                          return <i key={i} className='fa fa-owner' aria-hidden='true' onClick={this.showUserInfo.bind(this)} />;
-                        })}
-                      </div>
+                  <div span={24} className='user-info'>
+                    <div className='owners'>
+                      {_.map(groupItem.keys, (key, i) => {
+                        person = keys.keys[key].owner;
+                        return <i key={i} className='fa fa-owner' aria-hidden='true' onClick={this.showUserInfo.bind(this)} />;
+                      })}
                     </div>
-                    <Row className='list hide'>
-                        <Col span={4}>
-                          <ul>
-                            <li>Name:</li>
-                            <li>Position:</li>
-                            <li>Company:</li>
-                            <li>Location:</li>
-                            <li>Email:</li>
-                            <li>Telephone:</li>
-                            <li>Group:</li>
-                          </ul>
-                        </Col>
-                        <Col span={10}>
-                          <ul>
-                            <li>{person.name}</li>
-                            <li>{person.position}</li>
-                            <li>{person.company}</li>
-                            <li>{person.location}</li>
-                            <li>{person.email}</li>
-                            <li>{person.phone}</li>
-                            <li>{person.group}</li>
-                          </ul>
-                        </Col>
-                    </Row>
+                  </div>
+                  <Row className='list hide'>
+                    <Col span={4}>
+                      <ul>
+                        <li>Name:</li>
+                        <li>Position:</li>
+                        <li>Company:</li>
+                        <li>Location:</li>
+                        <li>Email:</li>
+                        <li>Telephone:</li>
+                        <li>Group:</li>
+                      </ul>
+                    </Col>
+                    <Col span={10}>
+                      <ul>
+                        <li>{person.name}</li>
+                        <li>{person.position}</li>
+                        <li>{person.company}</li>
+                        <li>{person.location}</li>
+                        <li>{person.email}</li>
+                        <li>{person.phone}</li>
+                        <li>{person.group}</li>
+                      </ul>
+                    </Col>
+                  </Row>
                   {(groupItem.warnings && groupItem.warnings.length > 0) || (groupItem.errors && groupItem.errors.length > 0) ? (
                     <div className='warnings'>
                       {_.map(groupItem.warnings, (warning, key) => (

@@ -360,7 +360,8 @@ export default class GroupsStore {
 
   _prepareGroups(groups) {
     const preparedGroups = {};
-    groups.slice()
+    groups
+      .slice()
       .sort((a, b) => {
         const aName = a.groupName;
         const bName = b.groupName;
@@ -381,7 +382,8 @@ export default class GroupsStore {
   _prepareWizardGroups() {
     const groups = this.wizardGroups;
     const preparedGroups = {};
-    groups.slice()
+    groups
+      .slice()
       .sort((a, b) => {
         const aName = a.groupName;
         const bName = b.groupName;

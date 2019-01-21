@@ -65,11 +65,11 @@ class Overlay extends Component {
             </div>
           </div>
           <Form>
-          {this.hardwareInfoShown ? (
-          <SearchBar value={hardwareStore.hardwareFilter} changeAction={this.changeHardwareFilter} id="search-installed-hardware-input" additionalClassName="white" />
-          ) : (
-          <SearchBar value={packagesStore.ondeviceFilter} changeAction={this.changePackagesFilter} id="search-installed-packages-input" additionalClassName="white" />
-          )}
+            {this.hardwareInfoShown ? (
+              <SearchBar value={hardwareStore.hardwareFilter} changeAction={this.changeHardwareFilter} id='search-installed-hardware-input' additionalClassName='white' />
+            ) : (
+              <SearchBar value={packagesStore.ondeviceFilter} changeAction={this.changePackagesFilter} id='search-installed-packages-input' additionalClassName='white' />
+            )}
           </Form>
         </SubHeader>
         {this.hardwareInfoShown ? (

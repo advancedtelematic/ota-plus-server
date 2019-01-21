@@ -48,13 +48,7 @@ class WizardStep6 extends Component {
     const versions = this.prepareVersionData();
 
     return versions.length ? (
-      <Sequencer
-        campaignsStore={campaignsStore}
-        wizardIdentifier={wizardIdentifier}
-        data={versions}
-        entity='campaign'
-        readOnly={false}
-      />
+      <Sequencer campaignsStore={campaignsStore} wizardIdentifier={wizardIdentifier} data={versions} entity='campaign' readOnly={false} />
     ) : (
       <div className='wrapper-center'>{'Live installation progress is not available for this update.'}</div>
     );
