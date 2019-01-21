@@ -2,7 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { translate } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
 
@@ -23,28 +23,85 @@ function collect(connect, monitor) {
   };
 }
 
+@inject('stores')
 @observer
 class ListItemArtificial extends Component {
   render() {
-    const { t, group, isSelected, selectGroup, isDND, deviceCount } = this.props;
-    const { isOver, connectDropTarget } = this.props;
+    const { t, group, isSelected, selectGroup, isDND } = this.props;
+    const { isOver, connectDropTarget, stores } = this.props;
+    const { groupsStore, devicesStore } = stores;
     return connectDropTarget(
-      <div
-        title={group.friendlyName}
-        id={group.identifier}
-        className={'groups-panel__item groups-panel__item--artificial' + (isSelected ? ' groups-panel__item--selected' : '') + (isOver ? ' groups-panel__item--active' : '')}
-        onClick={() => {
-          selectGroup({ type: 'artificial', groupName: group.name, id: group.id });
-        }}
-        key={group.name}
-      >
-        <div className='groups-panel__item-desc'>
-          <div className='groups-panel__item-title'>{group.friendlyName}</div>
-          <div className='groups-panel__item-subtitle' id={'group-' + group.name + '-devices'}>
-            {t('common.deviceWithCount', { count: deviceCount })}
+      group.name === 'all' ? (
+        <div
+          title={group.friendlyName}
+          id={group.identifier}
+          className={'groups-panel__item groups-panel__item--artificial' + (isSelected ? ' groups-panel__item--selected' : '') + (isOver ? ' groups-panel__item--active' : '')}
+          onClick={() => {
+            selectGroup({ type: 'artificial', groupName: group.name, id: group.id });
+          }}
+          key={group.name}
+        >
+          <div className='groups-panel__item-desc'>
+            <div className='groups-panel__item-title'>{group.friendlyName}</div>
+            <div className='groups-panel__item-subtitle' id={'group-' + group.name + '-devices'}>
+              {t('common.deviceWithCount', { count: devicesStore.devicesInitialTotalCount })}
+            </div>
           </div>
         </div>
-      </div>,
+      ) : (
+        <div
+          title={group.friendlyName}
+          id={group.identifier}
+          className={'groups-panel__item groups-panel__item--artificial' + (isSelected ? ' groups-panel__item--selected' : '') + (isOver ? ' groups-panel__item--active' : '')}
+          key={group.name}
+        >
+          <div className='groups-panel__item-desc'>
+            <div className='groups-panel__item-title'>{group.friendlyName}</div>
+            <div
+              className={
+                'groups-panel__item-subtitle' +
+                (groupsStore.selectedGroup.ungrouped === 'inAnyGroup' ? ' groups-panel__item-subtitle--selected' : '') +
+                (isOver ? ' groups-panel__item-subtitle--active' : '')
+              }
+              id={'group-' + group.name + '-devices'}
+              onClick={() => {
+                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'inAnyGroup' });
+              }}
+            >
+              <span>Not in a group: </span>
+              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_inAnyGroup })}</span>
+            </div>
+            <div
+              className={
+                'groups-panel__item-subtitle' +
+                (groupsStore.selectedGroup.ungrouped === 'notInSmartGroup' ? ' groups-panel__item-subtitle--selected' : '') +
+                (isOver ? ' groups-panel__item-subtitle--active' : '')
+              }
+              id={'group-' + group.name + '-devices'}
+              onClick={() => {
+                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInSmartGroup' });
+              }}
+            >
+              <span>Not in a smart group: </span>
+              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_notInSmartGroup })}</span>
+            </div>
+            <div
+              className={
+                'groups-panel__item-subtitle' +
+                (groupsStore.selectedGroup.ungrouped === 'notInFixedGroup' ? ' groups-panel__item-subtitle--selected' : '') +
+                (isOver ? ' groups-panel__item-subtitle--active' : '')
+              }
+              id={'group-' + group.name + '-devices'}
+              onClick={() => {
+                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInFixedGroup' });
+              }}
+            >
+              <span>Not in a fixed group: </span>
+              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_notInFixedGroup })}</span>
+            </div>
+          </div>
+        </div>
+      ),
     );
   }
 }
@@ -55,7 +112,6 @@ ListItemArtificial.propTypes = {
   selectGroup: PropTypes.func.isRequired,
   onDeviceDrop: PropTypes.func.isRequired,
   isDND: PropTypes.bool.isRequired,
-  deviceCount: PropTypes.number.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired,

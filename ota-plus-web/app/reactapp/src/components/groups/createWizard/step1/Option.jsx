@@ -5,7 +5,12 @@ import React, { Component } from 'react';
 
 const Option = ({ selectOption, isSelected, title, teaser }) => {
   return (
-    <div className='wizard__option'>
+    <div
+      className='wizard__option'
+      onClick={() => {
+        selectOption();
+      }}
+    >
       <div className='wizard__select'>
         <button
           id={`wizard__${title}-checkbox`}

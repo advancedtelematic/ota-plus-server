@@ -7,7 +7,7 @@ import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
 import { Row, Col } from 'antd';
 
 const CreateClassicGroup = inject('stores')(
-  observer(({ stores, markStepAsFinished, markStepAsNotFinished }) => {
+  observer(({ stores, onStep2DataSelect }) => {
     const { groupsStore } = stores;
     return (
       <OTAForm id='classic-group-create-form'>
@@ -23,13 +23,10 @@ const CreateClassicGroup = inject('stores')(
                 title={'Group Name'}
                 label={'Group Name'}
                 placeholder={'Name'}
-                onValid={() => {
-                  markStepAsFinished();
-                }}
-                onInvalid={() => {
-                  markStepAsNotFinished();
-                }}
                 statusIconShown={true}
+                onChange={e => {
+                  onStep2DataSelect('name', e.target.value);
+                }}
               />
             </div>
           </Col>

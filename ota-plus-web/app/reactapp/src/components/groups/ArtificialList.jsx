@@ -33,13 +33,7 @@ const ArtificialList = inject('stores')(
       <div className='groups-panel__artificial-list'>
         {_.map(groupsArtificial, group => {
           const isSelected = groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.groupName === group.name;
-          let deviceCount = 0;
-          if (group.name === 'all') {
-            deviceCount = devicesStore.devicesInitialTotalCount;
-          } else if (group.name === 'ungrouped') {
-            deviceCount = devicesStore.ungroupedDevicesInitialTotalCount;
-          }
-          return <ListItemArtificial group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} isDND={group.isDND} deviceCount={deviceCount} key={group.name} />;
+          return <ListItemArtificial group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} isDND={group.isDND} key={group.name} />;
         })}
       </div>
     );

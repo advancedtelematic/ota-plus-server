@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
 
 const CreateSmartGroup = inject('stores')(
-  observer(({ markStepAsFinished, markStepAsNotFinished, stores, setFilter }) => {
+  observer(({ stores, wizardData, onStep2DataSelect }) => {
     const { groupsStore } = stores;
 
     return (
@@ -23,11 +23,8 @@ const CreateSmartGroup = inject('stores')(
                 title={'Name'}
                 label={'Name'}
                 placeholder={'Name'}
-                onValid={() => {
-                  markStepAsFinished();
-                }}
-                onInvalid={() => {
-                  markStepAsNotFinished();
+                onChange={e => {
+                  onStep2DataSelect('name', e.target.value);
                 }}
               />
             </Col>
@@ -36,7 +33,7 @@ const CreateSmartGroup = inject('stores')(
         <div className='wizard__row-wrapper'>
           <Row className='row'>
             <Col span={24}>
-              <SmartFilters layout={[1, 1, 3]} setFilter={setFilter} />
+              <SmartFilters layout={[1, 1, 3]} wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />
             </Col>
           </Row>
         </div>

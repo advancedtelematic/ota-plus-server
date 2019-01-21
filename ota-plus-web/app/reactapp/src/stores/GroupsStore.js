@@ -3,7 +3,7 @@
 import { observable, computed } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
-import { API_GROUPS_FETCH, API_GROUPS_CREATE, API_GROUPS_RENAME, API_GROUPS_DEVICES_FETCH, API_GROUPS_ADD_DEVICE, API_GROUPS_REMOVE_DEVICE } from '../config';
+import { API_GROUPS_FETCH, API_GROUPS_CREATE, API_GROUPS_RENAME, API_GROUPS_DEVICES_FETCH, API_GROUPS_ADD_DEVICE, API_GROUPS_REMOVE_DEVICE, API_DEVICES_SEARCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
 export default class GroupsStore {
@@ -18,6 +18,7 @@ export default class GroupsStore {
   @observable groupsAddDeviceAsync = {};
   @observable groupsRemoveDeviceAsync = {};
   @observable groupsFetchDevicesAsync = {};
+  @observable numberOfDevicesByExpressionAsync = {};
   @observable smartGroups = [];
   @observable classicGroups = [];
   @observable groups = [];
@@ -26,6 +27,7 @@ export default class GroupsStore {
   @observable preparedGroups = {};
   @observable preparedWizardGroups = {};
   @observable latestCreatedGroupId = null;
+  @observable numberOfDevicesByExpression = 0;
   @observable selectedGroup = {
     type: 'artificial',
     groupName: 'all',
@@ -117,9 +119,9 @@ export default class GroupsStore {
           const after = _.after(
             groups.length,
             () => {
-              this.groups = _.uniqBy(this.groups.concat(groups), group => group.id);
-              this.classicGroups = _.uniqBy(_.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id);
-              this.smartGroups = _.uniqBy(_.filter(this.smartGroups.concat(groups), group => group.groupType === 'dynamic'), group => group.id);
+              this.groups = _.uniq(this.groups.concat(groups), group => group.id);
+              this.classicGroups = _.uniq(_.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id);
+              this.smartGroups = _.uniq(_.filter(this.smartGroups.concat(groups), group => group.groupType === 'dynamic'), group => group.id);
               this._prepareGroups(this.groups);
               this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
             },
@@ -137,7 +139,7 @@ export default class GroupsStore {
               });
           });
         } else {
-          this.groups = _.uniqBy(this.groups.concat(groups), group => group.id);
+          this.groups = _.uniq(this.groups.concat(groups), group => group.id);
           this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
         }
         this.groupsOffset = response.data.offset;
@@ -199,7 +201,7 @@ export default class GroupsStore {
           const after = _.after(
             groups.length,
             () => {
-              this.wizardGroups = _.uniqBy(this.wizardGroups.concat(groups), group => group.id);
+              this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
               this._prepareWizardGroups();
               this.groupsWizardLoadMoreFetchAsync = handleAsyncSuccess(response);
             },
@@ -217,7 +219,7 @@ export default class GroupsStore {
               });
           });
         } else {
-          this.wizardGroups = _.uniqBy(this.wizardGroups.concat(groups), group => group.id);
+          this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
           this.groupsWizardLoadMoreFetchAsync = handleAsyncSuccess(response);
         }
         this.groupsWizardOffset = response.data.offset;
@@ -291,6 +293,7 @@ export default class GroupsStore {
       });
   }
 
+  //to check - are this two functions below necessary? cannot be one?
   fetchDevicesForGroup(groupId) {
     resetAsync(this.groupsFetchDevicesAsync, true);
     return axios
@@ -314,6 +317,19 @@ export default class GroupsStore {
         this.selectedGroup.devices = resp.data;
       })
       .catch(() => {});
+  }
+
+  //for smartGroup creation wizard
+  fetchNumberOfDevicesByExpression(expression, async = 'numberOfDevicesByExpressionAsync') {
+    return axios
+      .get(API_DEVICES_SEARCH + '/count?expression=' + expression)
+      .then(response => {
+        this.numberOfDevicesByExpression = response.data;
+        this[async] = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this[async] = handleAsyncError(error);
+      });
   }
 
   fetchExpressionForSelectedGroup(groupId) {
@@ -342,6 +358,8 @@ export default class GroupsStore {
     resetAsync(this.groupsAddDeviceAsync);
     resetAsync(this.groupsRemoveDeviceAsync);
     resetAsync(this.groupsFetchDevicesAsync);
+    resetAsync(this.numberOfDevicesByExpressionAsync);
+
     this.smartGroups = [];
     this.classicGroups = [];
     this.groups = [];
