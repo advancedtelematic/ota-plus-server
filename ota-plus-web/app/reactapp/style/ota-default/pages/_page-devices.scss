@@ -74,10 +74,6 @@
         height: 100%;
       }
 
-      &:hover {
-        color: #fff;
-      }
-
       &--selected {
         border-left: 4px solid $home-header-button;
         color: #fff;
@@ -150,7 +146,18 @@
     }
 
     &__item-subtitle {
-      font-size: 12px;
+      font-size: 10px;
+      color: $devices-group-text;
+
+      &--selected {
+        color: #48dad0;
+      }
+      &:hover {
+        color: #fff;
+      }
+      &:active {
+        color: #48dad0;
+      }
     }
   }
 
@@ -250,6 +257,7 @@
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-bottom: 12px solid #48dad0;
+      margin-left: 15px;
       display: inline-block;
       margin-left: 5px;
     }
@@ -418,6 +426,7 @@
   &__option {
     flex: 1;
     padding: 30px 0;
+    cursor: pointer;
 
     &:last-child {
       padding-left: 20px;
@@ -437,7 +446,7 @@
 
   &__row-wrapper {
     &:not(:last-child) {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
 
@@ -456,88 +465,133 @@
 }
 
 .filters {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
+  &--operations {
+    display: flex;
+    margin: 20px 5px;
 
-  &:not(:last-child) {
-    &:after {
-      display: block;
-      content: 'AND';
-      width: 100%;
-      padding-top: 10px;
+    &__single {
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .btn-radio {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
     }
   }
 
-  &--dark {
-    &:last-child {
-      margin-bottom: 10px;
+  &--operation_dark {
+    padding-top: 10px;
+    padding-left: 10px;
+    color: white;
+  }
+
+  &--devices__number {
+    margin-bottom: 10px;
+    .devices-number {
+      margin-left: 30%;
+      font-weight: 500;
     }
-    &:not(:last-child) {
-      &:after {
-        color: white;
+  }
+
+  .filter {
+    display: flex;
+
+    &--dark {
+      &:last-child {
+        margin-bottom: 10px;
       }
-    }
+      &:not(:last-child) {
+        &:after {
+          color: white;
+        }
+      }
 
-    input {
-      background: $devices-groups-bg;
-      color: #fff;
-      height: 38px;
+      .filter__block {
+        margin-top: 10px;
+        &--double {
+          & > * {
+            margin-top: 0;
+          }
+        }
+      }
 
-      &:disabled {
+      input {
+        background: $devices-groups-bg;
+        color: #fff;
+        height: 38px;
+
+        &:disabled {
+          background: $devices-groups-bg;
+          color: #fff;
+        }
+      }
+
+      //i {
+      //    color: #fff;
+      //}
+
+      input::placeholder {
+        color: #fff;
+      }
+
+      .filters__block--fake {
         background: $devices-groups-bg;
         color: #fff;
       }
-    }
 
-    i {
-      color: #fff;
-    }
-
-    input::placeholder {
-      color: #fff;
-    }
-
-    .filters__block--fake {
-      background: $devices-groups-bg;
-      color: #fff;
-    }
-
-    form {
-      width: 100%;
-      height: 100%;
-
-      .search-box {
+      form {
+        width: 100%;
         height: 100%;
 
-        .icon-search,
-        .icon-close {
-          top: 14px;
-        }
+        .search-box {
+          height: 100%;
 
-        .search {
-          width: 100% !important;
-          height: 100% !important;
+          .icon-search,
+          .icon-close {
+            top: 14px;
+          }
+
+          .search {
+            width: 100% !important;
+            height: 100% !important;
+          }
         }
       }
     }
-  }
 
-  &__block {
-    display: flex;
-    align-items: center;
-    height: 38px;
-    margin-top: 10px;
+    &__block {
+      display: flex;
+      align-items: center;
+      height: 38px;
 
-    &--fake {
-      background-color: #ebebec;
-      width: 40px;
-      justify-content: center;
-      font-size: 30px;
-    }
+      input {
+        padding: 10px 30px 10px 10px !important;
+        font-size: 12px !important;
+      }
 
-    &:not(:last-child) {
-      margin-right: 10px;
+      select {
+        overflow: hidden;
+      }
+      &--double {
+        & > * {
+          margin-top: 0;
+        }
+      }
+
+      &--fake {
+        background-color: #ebebec;
+        width: 40px;
+        justify-content: center;
+        font-size: 30px;
+      }
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
     }
   }
 }

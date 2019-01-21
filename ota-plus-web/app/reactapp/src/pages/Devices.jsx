@@ -25,9 +25,10 @@ class Devices extends Component {
     const { devicesStore, groupsStore } = stores;
     const { selectedGroup } = groupsStore;
     const groupId = selectedGroup.id || null;
-    devicesStore.fetchDevices('', groupId);
+    const ungrouped = groupsStore.selectedGroup.ungrouped || null;
+    devicesStore.fetchDevices('', groupId, ungrouped);
+    devicesStore.fetchUngroupedDevicesCount();
     groupsStore.fetchGroups();
-    devicesStore.fetchUngroupedDevices();
   }
 
   componentWillUnmount() {

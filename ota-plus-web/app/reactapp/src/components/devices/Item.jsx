@@ -23,11 +23,9 @@ const deviceSource = {
   endDrag(props, monitor) {
     const { devicesStore, groupsStore } = props.stores;
     let selectedGroup = groupsStore.selectedGroup;
-    if (selectedGroup.id) {
-      devicesStore.fetchDevices('', selectedGroup.id);
-    } else {
-      devicesStore.fetchDevices();
-    }
+    const groupId = selectedGroup.id || null;
+    const ungrouped = groupsStore.selectedGroup.ungrouped || null;
+    devicesStore.fetchDevices('', groupId, ungrouped);
   },
 };
 

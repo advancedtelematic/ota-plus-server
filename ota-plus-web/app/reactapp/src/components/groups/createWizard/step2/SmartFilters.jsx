@@ -1,91 +1,145 @@
 /** @format */
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { SearchBar, FormInput, FormSelect } from '../../../../partials';
-import { Form } from 'formsy-antd';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
-import mobx from 'mobx';
 import _ from 'lodash';
+import Filter from './Filter';
 
-const nameFilterOptions = ['device ID'];
-const extraFilterOptions = ['contains'];
-
-let singleGroup = {
-  id: 1,
-  name: 'deviceid',
-  expression: 'contains',
-  word: '',
+const options = {
+  nameFilterOptions: ['Device ID'],
+  extraFilterOptions: ['contains', 'has a character equal to', 'has a character different from'],
 };
 
+@inject('stores')
 @observer
 class SmartFilters extends Component {
   @observable lastGivenId = 1;
-  @observable groups = [singleGroup];
+  @observable expressionForSmartGroup = '';
+  @observable filters = [
+    {
+      id: 1,
+      type: 'containsFilter',
+      expression: '',
+      operation: 'and',
+    },
+  ];
 
   addFilter = () => {
     this.lastGivenId += 1;
-    singleGroup.id = this.lastGivenId;
-    this.groups.push(singleGroup);
+    this.filters.push({
+      id: this.lastGivenId,
+      type: 'containsFilter',
+      expression: '',
+      operation: 'and',
+    });
+    this.setExpressionForSmartGroup();
   };
 
-  removeFilter(id) {
-    if (this.groups.length > 1) {
-      this.groups = _.filter(this.groups, el => el.id !== id);
+  removeFilter = id => {
+    if (this.filters.length > 1) {
+      this.filters = _.filter(this.filters, el => el.id !== id);
     }
-  }
+    this.setExpressionForSmartGroup();
+  };
+
+  setType = (id, value) => {
+    this.filters.forEach(el => {
+      if (el.id === id) {
+        switch (value) {
+          case 'contains':
+            el.type = 'containsFilter';
+            break;
+          case 'has a character equal to':
+            el.type = 'positionFilter';
+            break;
+          case 'has a character different from':
+            el.type = 'positionFilter';
+            break;
+          default:
+            break;
+        }
+      }
+    });
+  };
+
+  selectOperationType = (e, id, type) => {
+    e.preventDefault();
+
+    this.filters.forEach(el => {
+      if (el.id === id) {
+        el.operation = type;
+      }
+    });
+    this.setExpressionForSmartGroup();
+  };
+
+  setExpressionForSingleFilter = (expressionForSingleFilter, id) => {
+    this.filters.find(el => el.id === id).expression = expressionForSingleFilter;
+    this.setExpressionForSmartGroup();
+  };
+
+  setExpressionForSmartGroup = () => {
+    this.expressionForSmartGroup = '';
+    const { onStep2DataSelect } = this.props;
+
+    let stepValid = _.every(this.filters, el => el.expression.length >= 1);
+
+    const { groupsStore } = this.props.stores;
+
+    if (stepValid) {
+      this.filters.map((el, index) => {
+        if (index !== 0) this.expressionForSmartGroup += ` ${el.operation} `;
+        this.expressionForSmartGroup += el.expression;
+      });
+      groupsStore.fetchNumberOfDevicesByExpression(this.expressionForSmartGroup);
+      onStep2DataSelect('expression', this.expressionForSmartGroup);
+    } else {
+      onStep2DataSelect('expression', '');
+    }
+  };
 
   render() {
-    const { devicesView = false, layout, setFilter } = this.props;
-
-    const Filters = this.groups.map(group => {
-      return (
-        <div key={group.id} className={'filters'}>
-          <div className='filters__block' style={{ flex: layout[0] }}>
-            <FormSelect id='name-filter' placeholder='Data' appendMenuToBodyTag={true} options={nameFilterOptions} multiple={false} visibleFieldsCount={5} name='nameFilter' onChange={() => {}} />
-          </div>
-          <div className='filters__block' style={{ flex: layout[1] }}>
-            <FormSelect
-              id='expression-filter'
-              placeholder='Filter'
-              appendMenuToBodyTag={true}
-              options={extraFilterOptions}
-              multiple={false}
-              visibleFieldsCount={5}
-              name='expressionFilter'
-              onChange={() => {}}
-            />
-          </div>
-          <div className='filters__block' style={{ flex: layout[2] }}>
-            {devicesView ? (
-              <Form>
-                <SearchBar
-                  value={''}
-                  onChange={e => {
-                    setFilter('word', e.target.value);
-                  }}
-                  id='search-devices-input'
-                  name='word'
-                />
-              </Form>
-            ) : (
-              <FormInput id='word' name='word' className='input-wrapper' placeholder={'Type here'} onChange={() => {}} />
-            )}
-          </div>
-          <div className='filters__block filters__block--fake' id='filter-minus' onClick={this.removeFilter.bind(this, group.id)}>
-            -
-          </div>
-          <div className='filters__block filters__block--fake' id='filter-plus' onClick={this.addFilter}>
-            +
-          </div>
-        </div>
-      );
-    });
+    const { layout } = this.props;
+    const { numberOfDevicesByExpression } = this.props.stores.groupsStore;
 
     return (
-      <div>
-        <span>{Filters}</span>
+      <div className='filters'>
+        <div className='filters--devices__number'>
+          <span className='title'>Number of devices:</span>
+          <span className='devices-number'>{this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'} Devices</span>
+        </div>
+
+        {_.map(this.filters, (filter, index) => {
+          return (
+            <div key={filter.id}>
+              {index !== 0 && (
+                <div className='filters--operations'>
+                  <div className='filters--operations__single' onClick={e => this.selectOperationType(e, filter.id, 'and')}>
+                    <button id='filter--operation-and' className={`btn-radio ${filter.operation === 'and' ? ' checked' : ''}`} />
+                    <span>And</span>
+                  </div>
+                  <div className='filters--operations__single' onClick={e => this.selectOperationType(e, filter.id, 'or')}>
+                    <button id='filter-operation-or' className={`btn-radio ${filter.operation === 'or' ? ' checked' : ''}`} />
+                    <span>Or</span>
+                  </div>
+                </div>
+              )}
+              <div>
+                <Filter
+                  options={options}
+                  layout={layout}
+                  id={filter.id}
+                  addFilter={this.addFilter}
+                  removeFilter={this.removeFilter}
+                  setType={this.setType}
+                  type={filter.type}
+                  setExpressionForSingleFilter={this.setExpressionForSingleFilter}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }
