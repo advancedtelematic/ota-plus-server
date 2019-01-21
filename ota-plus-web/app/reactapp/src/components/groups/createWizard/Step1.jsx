@@ -18,7 +18,7 @@ const options = [
   },
 ];
 
-const Step1 = ({ selectGroupType, groupType }) => {
+const Step1 = ({ onStep1DataSelect, wizardData }) => {
   return (
     <div className='wizard__step1'>
       {map(options, option => {
@@ -28,9 +28,9 @@ const Step1 = ({ selectGroupType, groupType }) => {
             title={option.title}
             teaser={option.teaser}
             selectOption={() => {
-              selectGroupType(option.alias);
+              onStep1DataSelect(option.alias);
             }}
-            isSelected={groupType === option.alias}
+            isSelected={wizardData.groupType === option.alias}
           />
         );
       })}

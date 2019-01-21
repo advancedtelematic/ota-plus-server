@@ -25,19 +25,20 @@ const wizardSteps = [
   },
 ];
 
+const initialData = {
+  groupName: '',
+  groupType: '',
+  smartExpression: '',
+};
+
 const initialCurrentStepId = 0;
 
 @inject('stores')
 @observer
 class CreateModal extends Component {
+  @observable wizardData = initialData;
   @observable currentStepId = initialCurrentStepId;
   @observable steps = wizardSteps;
-  @observable groupType = '';
-  @observable groupFilters = {
-    name: null,
-    expression: null,
-    word: '',
-  };
 
   static propTypes = {
     stores: PropTypes.object,
@@ -49,7 +50,7 @@ class CreateModal extends Component {
   constructor(props) {
     super(props);
     const { groupsStore } = props.stores;
-    this.createHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsCreateAsync', this.handleResponse.bind(this));
+    this.createHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsCreateAsync', this.handleGroupCreated.bind(this));
   }
 
   componentWillUnmount() {
@@ -74,88 +75,103 @@ class CreateModal extends Component {
     }
   };
 
-  selectGroupType = type => {
-    this.groupType = type;
-    this.markStepAsFinished();
+  prevStep = () => {
+    if (this.currentStepId !== 0) {
+      this.currentStepId = this.currentStepId - 1;
+    }
+    this.validateStep(this.currentStepId);
   };
 
-  /* toDo: investigate and simplify if possible */
   createGroup = () => {
-    const { stores } = this.props;
-    const { groupsStore } = stores;
-    if (this.groupType === 'classic') {
-      const data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
+    const { groupName, groupType, smartExpression } = this.wizardData;
+
+    const { groupsStore } = this.props.stores;
+    if (groupType === 'classic') {
       groupsStore.createGroup({
-        name: data.groupName,
+        name: groupName,
         groupType: 'static',
         expression: null,
       });
     } else {
-      const data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
-
-      const expressionFilters = data.expressionFilter;
-      let nameFilters = data.nameFilter;
-      const wordFilters = data.word;
-      let expressionToSend = '';
-      if (typeof wordFilters === 'string') {
-        if (nameFilters === 'device ID') {
-          nameFilters = 'deviceid';
-        }
-        expressionToSend += `${nameFilters} ${expressionFilters} ${wordFilters}`.toLowerCase();
-      } else {
-        const filtersLength = wordFilters.length;
-
-        for (let i = 0; i < filtersLength; i++) {
-          if (nameFilters[i] === 'device ID') {
-            nameFilters[i] = 'deviceid';
-          }
-          expressionToSend += `(${nameFilters[i]} ${expressionFilters[i]} ${wordFilters[i]})`.toLowerCase();
-          if (i < filtersLength - 1) {
-            expressionToSend += ' and ';
-          }
-        }
-      }
-
+      let data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
       groupsStore.createGroup({
-        name: data.groupName,
+        name: groupName,
         groupType: 'dynamic',
-        expression: expressionToSend,
+        expression: smartExpression,
       });
     }
   };
 
-  handleResponse() {
-    const { stores, selectGroup, hide } = this.props;
-    const { groupsStore } = stores;
+  handleGroupCreated() {
+    const { groupName, groupType, smartExpression } = this.wizardData;
+
+    const { groupsStore } = this.props.stores;
     let data = null;
     let isSmart = false;
-    if (this.groupType === 'classic') {
+    if (groupType === 'classic') {
       data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
     } else {
-      data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
       isSmart = true;
       groupsStore.fetchExpressionForSelectedGroup(groupsStore.latestCreatedGroupId);
     }
-    selectGroup({
-      type: 'real',
-      groupName: data.groupName,
-      id: groupsStore.latestCreatedGroupId,
-      isSmart,
-    });
+    this.props.selectGroup({ type: 'real', groupName: groupName, id: groupsStore.latestCreatedGroupId, isSmart: isSmart });
     groupsStore._prepareGroups(groupsStore.groups);
-    hide();
+    this.props.hide();
   }
+
+  validateStep = id => {
+    const { groupName, groupType, smartExpression } = this.wizardData;
+
+    switch (id) {
+      case 0:
+        if (groupType !== '') {
+          this.markStepAsFinished();
+        } else {
+          this.markStepAsNotFinished();
+        }
+        break;
+      case 1:
+        if ((groupType === 'classic' && groupName !== '') || (groupType === 'smart' && groupName !== '' && smartExpression !== '')) {
+          this.markStepAsFinished();
+        } else {
+          this.markStepAsNotFinished();
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  onStep1DataSelect = type => {
+    this.wizardData.groupType = type;
+    this.validateStep(this.currentStepId);
+  };
+
+  onStep2DataSelect = (type, data) => {
+    switch (type) {
+      case 'name':
+        this.wizardData.groupName = data;
+        break;
+      case 'expression':
+        this.wizardData.smartExpression = data;
+        break;
+      default:
+        break;
+    }
+
+    this.validateStep(this.currentStepId);
+  };
 
   render() {
     const { shown, hide } = this.props;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {<currentStep.class selectGroupType={this.selectGroupType} groupType={this.groupType} markStepAsFinished={this.markStepAsFinished} markStepAsNotFinished={this.markStepAsNotFinished} />}
+        {<currentStep.class wizardData={this.wizardData} onStep1DataSelect={this.onStep1DataSelect} onStep2DataSelect={this.onStep2DataSelect} />}
         <div className='body-actions'>
           {this.isLastStep() ? (
-            <Button htmlType='button' className='btn-primary' id='wizard-launch-button' onClick={this.createGroup} disabled={!currentStep.isFinished}>
-              Create
+            <Button htmlType='button' className='btn-primary pull-right' id='wizard-launch-button' disabled={!currentStep.isFinished} onClick={this.createGroup}>
+              {'Create'}
             </Button>
           ) : (
             <Button htmlType='button' disabled={!currentStep.isFinished} className='btn-primary' id='next' onClick={this.nextStep}>

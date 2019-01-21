@@ -36,7 +36,7 @@ class Devices extends Component {
     const { groupsStore, devicesStore } = props.stores;
     this.fetchUngroupedDevicesHandler = observe(groupsStore, change => {
       if (change.name === 'groupsFetchDevicesAsync' && change.object[change.name].isFetching === false) {
-        devicesStore.fetchUngroupedDevices();
+        devicesStore.fetchUngroupedDevicesCount();
       }
     });
   }
@@ -95,7 +95,8 @@ class Devices extends Component {
     const { devicesStore, groupsStore } = this.props.stores;
     groupsStore.selectedGroup = group;
     const groupId = group.id || null;
-    devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);
+    const ungrouped = group.ungrouped || null;
+    devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped);
     if (group.isSmart) {
       groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
     }
@@ -103,7 +104,7 @@ class Devices extends Component {
 
   onDeviceDrop = (device, groupId) => {
     const { groupsStore, devicesStore } = this.props.stores;
-    devicesStore.fetchUngroupedDevices();
+    devicesStore.fetchUngroupedDevicesCount();
     if (device.groupId !== groupId && device.groupId) {
       groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
     }
@@ -122,12 +123,13 @@ class Devices extends Component {
     if (e) e.preventDefault();
     const { devicesStore, groupsStore } = this.props.stores;
     const groupId = groupsStore.selectedGroup.id;
-    devicesStore.fetchDevices(filter, groupId);
+    const ungrouped = groupsStore.selectedGroup.ungrouped || null;
+    devicesStore.fetchDevices(filter, groupId, ungrouped);
   };
 
   render() {
     const { addNewWizard } = this.props;
-    const { devicesStore } = this.props.stores;
+    const { devicesStore, groupsStore } = this.props.stores;
     return (
       <span>
         {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ? (
@@ -152,7 +154,7 @@ class Devices extends Component {
                 <img src='/assets/img/icons/white/devices.svg' alt='Icon' />
               </div>
               <div>{"You haven't created any devices yet."}</div>
-              <a href='https://docs.ota.here.com/quickstarts/start-intro.html' className='add-button light' id='add-new-device' target='_blank'>
+              <a href='https://docs.atsgarage.com/quickstarts/start-intro.html' className='add-button light' id='add-new-device' target='_blank'>
                 <span>+</span>
                 <span>Add new device</span>
               </a>
