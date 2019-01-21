@@ -112,16 +112,16 @@ class CreateModal extends Component {
         </Row>
         <Row className='row'>
           <Col span={12}>
-              <div className='upload-wrapper'>
-                {!fileDropped && (
-                  <Button htmlType='button' className='add-button' onClick={this._onFileUploadClick} id='choose-package'>
-                    <span>Choose file</span>
-                  </Button>
-                )}
-                <div className='file-name'>{(fileDropped && fileDropped.name) || this.fileName}</div>
-                <input ref='fileUpload' name='file' type='file' onChange={this._onFileChange.bind(this)} className='file' id='file-input-hidden' />
-                {<Input type='text' name='fake-file' value={(fileDropped && fileDropped.name) || this.fileName} style={{ display: 'none' }} required />}
-              </div>
+            <div className='upload-wrapper'>
+              {!fileDropped && (
+                <Button htmlType='button' className='add-button' onClick={this._onFileUploadClick} id='choose-package'>
+                  <span>Choose file</span>
+                </Button>
+              )}
+              <div className='file-name'>{(fileDropped && fileDropped.name) || this.fileName}</div>
+              <input ref='fileUpload' name='file' type='file' onChange={this._onFileChange.bind(this)} className='file' id='file-input-hidden' />
+              {<Input type='text' name='fake-file' value={(fileDropped && fileDropped.name) || this.fileName} style={{ display: 'none' }} required />}
+            </div>
           </Col>
         </Row>
         <Row className='row'>

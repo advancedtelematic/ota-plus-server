@@ -100,7 +100,7 @@ class UploadBox extends Component {
               <span>Upload is finished</span>
             ) : (
               <span id='timeleft'>
-                <ConvertTime seconds={secondsRemaining}/>
+                <ConvertTime seconds={secondsRemaining} />
                 &nbsp;left
               </span>
             )}
@@ -127,37 +127,28 @@ class UploadBox extends Component {
                       {upload.package.version}
                     </div>
                     <div className='col uploaded' id='uploaded-bytes'>
-                      <ConvertBytes bytes={upload.uploaded}/>
+                      <ConvertBytes bytes={upload.uploaded} />
                       &nbsp;of&nbsp;
-                      <ConvertBytes bytes={upload.size}/>
+                      <ConvertBytes bytes={upload.size} />
                     </div>
 
-                    <div className="col status" id="upload-status">
-                      {upload.progress !== 100 && upload.status === null ?
-                        <Progress
-                          type="circle"
-                          percent={upload.progress / 100}
-                          showInfo={false}
-                          width={24}
-                          strokeWidth ={20}
-                          strokeColor={'#A7DCD4'}
-
-                        />
-                        :
-                        upload.status == 'success' ?
-                          <span id="success">
-                                                    <img src="/assets/img/icons/green_tick.svg" alt="Icon"/> Success
-                                                </span>
-                          :
-                          upload.status == 'error' ?
-                            <span id="error">
-                              <i className="fa fa-exclamation-triangle" aria-hidden="true"></i> Error
-                                                    </span>
-                            :
-                            <span id="processing"><i className="fa fa-square-o fa-spin"></i> &nbsp;
-                              <span className="counting black">Processing</span>
-                            </span>
-                      }
+                    <div className='col status' id='upload-status'>
+                      {upload.progress !== 100 && upload.status === null ? (
+                        <Progress type='circle' percent={upload.progress / 100} showInfo={false} width={24} strokeWidth={20} strokeColor={'#A7DCD4'} />
+                      ) : upload.status == 'success' ? (
+                        <span id='success'>
+                          <img src='/assets/img/icons/green_tick.svg' alt='Icon' /> Success
+                        </span>
+                      ) : upload.status == 'error' ? (
+                        <span id='error'>
+                          <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Error
+                        </span>
+                      ) : (
+                        <span id='processing'>
+                          <i className='fa fa-square-o fa-spin' /> &nbsp;
+                          <span className='counting black'>Processing</span>
+                        </span>
+                      )}
                     </div>
 
                     <div className='col action'>
@@ -178,10 +169,8 @@ class UploadBox extends Component {
             )}
           </ul>
         </div>
-        <PackagesCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal}
-                                   uploadIndex={this.actionUploadIndex} packagesStore={packagesStore}/>
-        <PackagesCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal}
-                                       ifClearUploads={this.ifClearUploads} packagesStore={packagesStore}/>
+        <PackagesCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal} uploadIndex={this.actionUploadIndex} packagesStore={packagesStore} />
+        <PackagesCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal} ifClearUploads={this.ifClearUploads} packagesStore={packagesStore} />
       </div>
     );
     const title = 'Uploading ' + t('common.packageWithCount', { count: packagesStore.packagesUploading.length });
@@ -191,10 +180,10 @@ class UploadBox extends Component {
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-minimize' onClick={this.toggleMode} id='minimize-upload-box'>
-              <img src='/assets/img/icons/minimize.svg' alt='Icon'/>
+              <img src='/assets/img/icons/minimize.svg' alt='Icon' />
             </div>
             <div className='modal-close' onClick={this.close} id='close-upload-box'>
-              <img src='/assets/img/icons/close.svg' alt='Icon'/>
+              <img src='/assets/img/icons/close.svg' alt='Icon' />
             </div>
           </div>
         }

@@ -40,7 +40,9 @@ class SelectUpdateList extends Component {
                 hasMore={updatesStore.hasMoreWizardUpdates}
                 isLoading={updatesStore.updatesWizardFetchAsync.isFetching}
                 useWindow={false}
-                loadMore={() => { updatesStore.loadMoreWizardUpdates(); }}
+                loadMore={() => {
+                  updatesStore.loadMoreWizardUpdates();
+                }}
                 threshold={1}
               >
                 {_.map(updatesStore.preparedUpdatesWizard, (updates, firstLetter) => (
@@ -49,14 +51,7 @@ class SelectUpdateList extends Component {
                     {_.map(updates, (update, index) => {
                       const selected = contains(selectedUpdate, update, 'update');
                       return (
-                        <SelectableListItem
-                          key={index}
-                          item={update}
-                          selected={selected}
-                          onChange={this.onChangeSelected}
-                          showDetails={showUpdateDetails}
-                          sourceType={update.source.sourceType}
-                        />
+                        <SelectableListItem key={index} item={update} selected={selected} onChange={this.onChangeSelected} showDetails={showUpdateDetails} sourceType={update.source.sourceType} />
                       );
                     })}
                   </div>

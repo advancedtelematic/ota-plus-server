@@ -29,7 +29,7 @@ class WizardStep1 extends Component {
     return (
       <div className='step-wrapper'>
         <div>
-          <OTAForm formWidth='60%' id='add-campaign-name-form' onSubmit={ e => e.preventDefault()}>
+          <OTAForm formWidth='60%' id='add-campaign-name-form' onSubmit={e => e.preventDefault()}>
             <FormInput
               label='Name'
               name='name'

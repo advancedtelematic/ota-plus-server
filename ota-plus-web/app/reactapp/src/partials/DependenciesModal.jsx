@@ -560,24 +560,24 @@ class DependenciesModal extends Component {
       <span>
         {this.nodes.length && this.links.length ? (
           <div className={this.nodes.length <= 3 ? 'sankey-minimized' : ''}>
-         <Sankey
-                          align={ sankeyAlign }
-                          nodes={ toJS(this.nodes) }
-                          links={ toJS(this.links) }
-                          width={ this.sankeyWidth }
-                          height={ this.sankeyHeight }
-                          onLinkMouseOver={ this.onLinkMouseAction.bind(this, 'in') }
-                          onLinkMouseOut={ this.onLinkMouseAction.bind(this, 'out') }
-                          onLinkClick={ this.onLinkClick.bind(this) }
-                          layout={ 1000 }
-                          style={ {
-                              labels: {},
-                              links: {},
-                              rects: {
-                                  width: '15px',
-                              }
-                          } }
-                      />
+            <Sankey
+              align={sankeyAlign}
+              nodes={toJS(this.nodes)}
+              links={toJS(this.links)}
+              width={this.sankeyWidth}
+              height={this.sankeyHeight}
+              onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
+              onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
+              onLinkClick={this.onLinkClick.bind(this)}
+              layout={1000}
+              style={{
+                labels: {},
+                links: {},
+                rects: {
+                  width: '15px',
+                },
+              }}
+            />
           </div>
         ) : (
           <div className='wrapper-center'>This item is not on the chart.</div>

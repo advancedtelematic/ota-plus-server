@@ -75,16 +75,7 @@ class SubHeader extends Component {
             ) : null}
           </div>
         </div>
-        <EditCampaignModal
-                    modalTitle={(
-                        <div className="title">
-                            Edit name
-                        </div>
-                    )}
-                    shown={this.editModal}
-                    hide={this.hideEditModal}
-                    defaultValue={this.newCampaignName}
-                />
+        <EditCampaignModal modalTitle={<div className='title'>Edit name</div>} shown={this.editModal} hide={this.hideEditModal} defaultValue={this.newCampaignName} />
       </div>
     );
   }

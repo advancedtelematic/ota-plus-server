@@ -72,8 +72,7 @@ class Home extends Component {
             <div className='home__body home__body--left'>
               <div className='home__tutorial-top'>
                 <div className='home__tutorial-title'>{'Welcome to HERE OTA Connect!'}</div>
-                <div
-                  className='home__tutorial-subtitle'>{'HERE OTA Connect lets you manage updates on your embedded devices from the cloud.'}</div>
+                <div className='home__tutorial-subtitle'>{'HERE OTA Connect lets you manage updates on your embedded devices from the cloud.'}</div>
               </div>
               <div className='home__tutorial-overview'>
                 <div className='home__tutorial-wrapper'>
@@ -81,20 +80,16 @@ class Home extends Component {
                   <div className='home__tutorial-steps'>
                     <div className='home__tutorial-step'>
                       <div className='home__tutorial-step-name'>{'Step 1'}</div>
-                      <img className='home__tutorial-step-image' src='/assets/img/onboarding_step_one.svg'
-                           alt='onboarding-step-1'/>
+                      <img className='home__tutorial-step-image' src='/assets/img/onboarding_step_one.svg' alt='onboarding-step-1' />
                       <div className='home__tutorial-step-title'>{'Integrate our open source client'}</div>
-                      <div
-                        className='home__tutorial-step-desc'>{'Add a Yocto layer to an existing project, or follow a quickstart guide if you\'re new to Yocto/OpenEmbedded.'}</div>
+                      <div className='home__tutorial-step-desc'>{"Add a Yocto layer to an existing project, or follow a quickstart guide if you're new to Yocto/OpenEmbedded."}</div>
                     </div>
 
                     <div className='home__tutorial-step'>
                       <div className='home__tutorial-step-name'>{'Step 2'}</div>
-                      <img className='home__tutorial-step-image' src='/assets/img/onboarding_step_two.svg'
-                           alt='onboarding-step-2'/>
+                      <img className='home__tutorial-step-image' src='/assets/img/onboarding_step_two.svg' alt='onboarding-step-2' />
                       <div className='home__tutorial-step-title'>{'Manage your devices'}</div>
-                      <div
-                        className='home__tutorial-step-desc'>{'Auto-update test bench devices with every new build, define target groups, and manage full filesystem revisions with ease.'}</div>
+                      <div className='home__tutorial-step-desc'>{'Auto-update test bench devices with every new build, define target groups, and manage full filesystem revisions with ease.'}</div>
                     </div>
                   </div>
                 </div>
@@ -106,14 +101,11 @@ class Home extends Component {
                   <div className='home__tutorial-steps'>
                     <div className='home__tutorial-step'>
                       <div className='home__tutorial-step-name'>{'Start fresh'}</div>
-                      <img className='home__tutorial-start-image' src='/assets/img/icons/black/start_fresh.svg'
-                           alt='fresh-start'/>
+                      <img className='home__tutorial-start-image' src='/assets/img/icons/black/start_fresh.svg' alt='fresh-start' />
                       <div className='home__tutorial-step-title'>{'Try out a quickstart project'}</div>
-                      <div
-                        className='home__tutorial-step-desc'>{'New to Yocto? We\'ll take you through a starter project step by step.'}</div>
+                      <div className='home__tutorial-step-desc'>{"New to Yocto? We'll take you through a starter project step by step."}</div>
                       <div className='home__tutorial-step-link'>
-                        <a href='https://docs.ota.here.com/quickstarts/raspberry-pi.html' className='add-button'
-                           rel='noopener noreferrer' target='_blank' id='user-new-yocto-docs'>
+                        <a href='https://docs.ota.here.com/quickstarts/raspberry-pi.html' className='add-button' rel='noopener noreferrer' target='_blank' id='user-new-yocto-docs'>
                           {'Quickstart guide'}
                         </a>
                       </div>
@@ -121,11 +113,9 @@ class Home extends Component {
 
                     <div className='home__tutorial-step'>
                       <div className='home__tutorial-step-name'>{'Integrate'}</div>
-                      <img className='home__tutorial-start-image' src='/assets/img/icons/black/integrate.svg'
-                           alt='integration'/>
+                      <img className='home__tutorial-start-image' src='/assets/img/icons/black/integrate.svg' alt='integration' />
                       <div className='home__tutorial-step-title'>{'Integrate with existing project'}</div>
-                      <div
-                        className='home__tutorial-step-desc'>{'Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.'}</div>
+                      <div className='home__tutorial-step-desc'>{'Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.'}</div>
                       <div className='home__tutorial-step-link'>
                         <a
                           href='https://docs.ota.here.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html'
@@ -152,14 +142,13 @@ class Home extends Component {
               <div className='home__heading-col'>{'Status'}</div>
               <div className='dots' id='devices-menu' onClick={this.showDeviceSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
-                <span/>
-                <span/>
-                <span/>
+                <span />
+                <span />
+                <span />
                 {this.deviceSubmenuShown && (
                   <Dropdown hideSubmenu={this.hideDeviceSubmenu}>
                     <li className='device-dropdown-item'>
-                      <a className='device-dropdown-item' href='https://docs.ota.here.com/quickstarts/start-intro.html'
-                         rel='noopener noreferrer' target='_blank' onClick={e => e.stopPropagation()}>
+                      <a className='device-dropdown-item' href='https://docs.ota.here.com/quickstarts/start-intro.html' rel='noopener noreferrer' target='_blank' onClick={e => e.stopPropagation()}>
                         {'Add device'}
                       </a>
                     </li>
@@ -171,7 +160,7 @@ class Home extends Component {
               </div>
             </div>
             <div className='home__body home__body--right'>
-              <LastDevices/>
+              <LastDevices />
             </div>
           </div>
           <div className='home__list home__list--packages'>
@@ -181,9 +170,9 @@ class Home extends Component {
               <div className='home__heading-col'>{'Created at'}</div>
               <div className='dots' id='packages-menu' onClick={this.showPackageSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
-                <span/>
-                <span/>
-                <span/>
+                <span />
+                <span />
+                <span />
                 {this.packageSubmenuShown && (
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className='package-dropdown-item'>
@@ -199,7 +188,7 @@ class Home extends Component {
               </div>
             </div>
             <div className='home__body home__body--right'>
-              <LastPackages showPackagesCreateModal={this.showPackagesCreateModal}/>
+              <LastPackages showPackagesCreateModal={this.showPackagesCreateModal} />
             </div>
           </div>
           <div className='home__list home__list--campaigns'>
@@ -209,9 +198,9 @@ class Home extends Component {
               <div className='home__heading-col'>{'Failure rate'}</div>
               <div className='dots' id='campaigns-menu' onClick={this.showCampaignSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
-                <span/>
-                <span/>
-                <span/>
+                <span />
+                <span />
+                <span />
 
                 {this.campaignSubmenuShown && (
                   <Dropdown hideSubmenu={this.hideCampaignSubmenu}>
@@ -234,12 +223,11 @@ class Home extends Component {
               </div>
             </div>
             <div className='home__body home__body--right'>
-              <ActiveCampaigns addNewWizard={addNewWizard}/>
+              <ActiveCampaigns addNewWizard={addNewWizard} />
             </div>
           </div>
         </div>
-        {this.packagesCreateModalShown &&
-        <PackagesCreateModal shown={this.packagesCreateModalShown} hide={this.hidePackagesCreateModal}/>}
+        {this.packagesCreateModalShown && <PackagesCreateModal shown={this.packagesCreateModalShown} hide={this.hidePackagesCreateModal} />}
       </div>
     );
   }
