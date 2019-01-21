@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import { contains } from '../../utils/Collection';
+import { contains } from '../../utils/Helpers';
 import SelectableListItem from './SelectableListItem';
 
 const headerHeight = 28;

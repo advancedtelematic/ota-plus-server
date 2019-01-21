@@ -55,4 +55,6 @@ const prepareUpdateObject = data => {
   };
 };
 
-export { contains, prepareUpdateObject };
+const getSHA256Hash = mtu => mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
+
+export { contains, prepareUpdateObject, getSHA256Hash };
