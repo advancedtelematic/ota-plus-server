@@ -154,4 +154,5 @@ export const assets = {
   DEFAULT_TERMS_ICON: '/assets/img/icons/dropdown_terms.svg',
   DEFAULT_CLEAR_STORAGE_ICON: '/assets/img/icons/dropdown_reset_demo.svg',
   DEFAULT_LOGOUT_ICON: '/assets/img/icons/dropdown_logout.svg',
+  DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
 };
