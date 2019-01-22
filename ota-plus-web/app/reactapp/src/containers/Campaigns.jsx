@@ -81,7 +81,7 @@ class Campaigns extends Component {
     const { addNewWizard, highlight, activeTab, switchTab } = this.props;
 
     return (
-      <span>
+      <div>
         <CampaignsContentPanel
           status={activeTab}
           highlight={highlight}
@@ -94,7 +94,7 @@ class Campaigns extends Component {
         />
         <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal} switchTab={switchTab} />
         {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeCampaign} />}
-      </span>
+      </div>
     );
   }
 }
