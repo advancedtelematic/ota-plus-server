@@ -20,7 +20,7 @@ class Campaigns extends Component {
     match: PropTypes.object,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { stores } = this.props;
     const { groupsStore } = stores;
     groupsStore.fetchGroups();
