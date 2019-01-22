@@ -6,7 +6,6 @@ import { observer } from 'mobx-react';
 import { observable, toJS } from 'mobx';
 import _ from 'lodash';
 import { Row, Col } from 'antd';
-import { VelocityTransitionGroup } from 'velocity-react';
 import { keys } from './data';
 
 @observer

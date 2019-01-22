@@ -1,7 +1,6 @@
 /** @format */
 
 import _ from 'lodash';
-import { toJS } from 'mobx';
 
 const contains = (objects, item, compareAs) => {
   const useId = _.isUndefined(compareAs);

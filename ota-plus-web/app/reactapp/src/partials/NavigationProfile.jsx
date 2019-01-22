@@ -16,29 +16,28 @@ class NavigationProfile extends Component {
     settingsOnly: PropTypes.bool,
     uiUserProfileEdit: PropTypes.bool,
     uiCredentialsDownload: PropTypes.bool,
+    hideDropdown: PropTypes.func,
   };
-
-  /*closeDropdown = () => {
-        document.getElementById('profile-dropdown').click();
-    };*/
 
   logout = e => {
     e.preventDefault();
-    const { stores } = this.props;
+    const { stores, hideDropdown } = this.props;
     const { userStore } = stores;
     userStore._logout();
+    hideDropdown();
   };
 
   clearLocalStorage = e => {
     e.preventDefault();
-    const { stores } = this.props;
+    const { stores, hideDropdown } = this.props;
     const { packagesStore } = stores;
     localStorage.clear();
     packagesStore._handleCompatibles();
+    hideDropdown();
   };
 
   render() {
-    const { stores, settingsOnly, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { stores, settingsOnly, uiCredentialsDownload, uiUserProfileEdit, hideDropdown } = this.props;
     const { userStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const { user } = userStore;
@@ -60,7 +59,7 @@ class NavigationProfile extends Component {
         {settingsOnly && (
           <ul className='links'>
             <li>
-              <Link to='/profile/access-keys' id='dropdown-link-access-keys'>
+              <Link to='/profile/access-keys' id='dropdown-link-access-keys' onClick={hideDropdown}>
                 <img src={assets.DEFAULT_PROVISIONING_ICON} alt='Icon' />
                 {'Provisioning keys'}
               </Link>
@@ -71,28 +70,28 @@ class NavigationProfile extends Component {
           <ul className='links'>
             {uiUserProfileEdit && (
               <li>
-                <Link to='/profile/edit' id='dropdown-link-editprofile'>
+                <Link to='/profile/edit' id='dropdown-link-editprofile' onClick={hideDropdown}>
                   <img src={assets.DEFAULT_EDIT_ICON} alt='Icon' />
                   {'Edit profile'}
                 </Link>
               </li>
             )}
             <li>
-              <Link to='/profile/usage' id='dropdown-link-usage'>
+              <Link to='/profile/usage' id='dropdown-link-usage' onClick={hideDropdown}>
                 <img src={assets.DEFAULT_USAGE_ICON} alt='Icon' />
                 {'Usage'}
               </Link>
             </li>
             {uiCredentialsDownload && (
               <li>
-                <Link to='/profile/access-keys' id='dropdown-link-access-keys'>
+                <Link to='/profile/access-keys' id='dropdown-link-access-keys' onClick={hideDropdown}>
                   <img src={assets.DEFAULT_PROVISIONING_ICON} alt='Icon' />
                   {'Provisioning keys'}
                 </Link>
               </li>
             )}
             <li>
-              <Link to='/policy'>
+              <Link to='/policy'  onClick={hideDropdown}>
                 <img src={assets.DEFAULT_TERMS_ICON} alt='Icon' />
                 {'Terms of use'}
               </Link>
