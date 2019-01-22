@@ -13,6 +13,7 @@ class CampaignSummary extends Component {
   static propTypes = {
     campaign: PropTypes.object,
     type: PropTypes.string,
+    toggle: PropTypes.func,
   };
 
   render() {

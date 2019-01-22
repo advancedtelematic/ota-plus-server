@@ -7,7 +7,7 @@ import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { observer, inject } from 'mobx-react';
 import { SelectableListItem } from '../../../partials/lists';
 import _ from 'lodash';
-import { contains } from '../../../utils/Collection';
+import { contains } from '../../../utils/Helpers';
 
 @inject('stores')
 @observer

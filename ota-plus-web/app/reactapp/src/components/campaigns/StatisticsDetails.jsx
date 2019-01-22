@@ -5,11 +5,10 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
-import { CampaignGroupsList, CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 import { Doughnut } from 'react-chartjs-2';
+import { CampaignGroupsList, CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 
 const AUTO_REFRESH_TIME = 10000;
-const tooltipText = 'Show dependencies';
 
 @inject('stores')
 @observer
@@ -44,7 +43,7 @@ class StatisticsDetails extends Component {
     const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
     const { campaignsStore, featuresStore } = stores;
     const { alphaTestEnabled } = featuresStore;
-    const { overallCampaignStatistics } = campaignsStore;
+    const { campaign, overallCampaignStatistics } = campaignsStore;
     const failureRateData = [
       {
         value: overallCampaignStatistics.failed,
@@ -66,7 +65,7 @@ class StatisticsDetails extends Component {
       },
     ];
 
-    let stats = {
+    const stats = {
       datasets: [
         {
           data: [],
@@ -100,7 +99,7 @@ class StatisticsDetails extends Component {
     const cancelledRate = Math.min(Math.round((overallCampaignStatistics.cancelled / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
     return (
       <div className='statistics'>
-        <CampaignSubHeader campaign={campaignsStore.campaign} showCancelCampaignModal={showCancelCampaignModal} hideCancel={hideCancel} />
+        <CampaignSubHeader campaign={campaign} showCancelCampaignModal={showCancelCampaignModal} hideCancel={hideCancel} />
         <div className='statistics__wrapper'>
           <div className='statistics__box statistics__box--left'>
             <div className='statistics__box-title'>{'Failure rate'}</div>

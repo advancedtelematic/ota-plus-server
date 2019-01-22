@@ -5,16 +5,19 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, toJS, observe } from 'mobx';
 import _ from 'lodash';
+import { Sankey } from 'react-vis';
+
+import { Button } from 'antd';
 import OTAModal from './OTAModal';
 import Loader from './Loader';
-import { Sankey } from 'react-vis';
 import { AsyncStatusCallbackHandler } from '../utils';
+import { getSHA256Hash } from '../utils/Helpers';
+
+import { assets } from '../config';
 
 const defaultOpacity = '0.2';
 const highlightedOpacity = '0.5';
 const sankeyAlign = 'left';
-const nodeColor = 'grey';
-const linkColor = 'grey';
 
 @inject('stores')
 @observer
@@ -28,52 +31,13 @@ class DependenciesModal extends Component {
   @observable showOnlyActive = true;
   @observable sankeyWidth = 1000;
   @observable sankeyHeight = 700;
-  resizeSankey = () => {
-    if (window.innerHeight >= 1000) {
-      this.sankeyHeight = 700;
-    } else if (window.innerHeight < 1000 && window.innerHeight > 870) {
-      this.sankeyHeight = 600;
-    } else {
-      this.sankeyHeight = 500;
-    }
-  };
-  onLinkMouseAction = (actionType, linkdata, event) => {
-    let opacity = defaultOpacity;
-    if (actionType === 'in') {
-      opacity = highlightedOpacity;
-    }
-    event.target.setAttribute('opacity', opacity);
-    this.highlightTargets(linkdata.target.sourceLinks, opacity);
-    this.highlightSources(linkdata.source.targetLinks, opacity);
-  };
-  onLinkClick = (linkdata, event) => {
-    const { hide } = this.props;
-    const { campaignsStore } = this.props.stores;
-    let clickedItemType = linkdata.target.type;
-    switch (clickedItemType) {
-      case 'pack':
-        let packName = linkdata.target.originalName;
-        this.context.router.push(`/packages/${packName}`);
-        hide();
-        break;
-      case 'mtu':
-        break;
-      case 'campaign':
-        let campaignName = linkdata.target.originalName;
-        let campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName);
-        this.context.router.push(`/campaigns/${campaign.id}`);
-        hide();
-        break;
-      case 'device':
-        let deviceId = linkdata.target.uuid;
-        this.context.router.push(`/device/${deviceId}`);
-        break;
-      default:
-        break;
-    }
-  };
-  getCampaignStatus = campaign => {
-    return campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other';
+
+  static propTypes = {
+    stores: PropTypes.object,
+    status: PropTypes.string,
+    hide: PropTypes.func,
+    activeItemName: PropTypes.string,
+    shown: PropTypes.bool,
   };
 
   constructor(props) {
@@ -84,29 +48,29 @@ class DependenciesModal extends Component {
     this.packagesFetchHandler = new AsyncStatusCallbackHandler(packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
 
     this.sankeyModeHandler = observe(this, change => {
-      if (change['object'].showOnlyActive === false) {
+      if (change.object.showOnlyActive === false) {
         this.formatData(true);
       }
     });
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.resizeSankey);
-  }
-
-  componentWillMount() {
-    const { devicesStore, campaignsStore, packagesStore } = this.props.stores;
+    const { router } = this.context;
+    const { stores } = this.props;
+    const { devicesStore, campaignsStore, packagesStore } = stores;
     devicesStore.fetchDevices().then(() => {
-      if (window.location.href.indexOf('/packages') > -1) {
+      if (router.route.location !== '/packages') {
         campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
       } else {
         packagesStore.fetchPackages();
       }
     });
+    window.addEventListener('resize', this.resizeSankey);
   }
 
   componentWillUnmount() {
-    const { devicesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore } = stores;
     this.devicesFetchHandler();
     this.campaignsFetchHandler();
     this.packagesFetchHandler();
@@ -114,14 +78,64 @@ class DependenciesModal extends Component {
     window.removeEventListener('resize', this.resizeSankey);
   }
 
+  resizeSankey = () => {
+    if (window.innerHeight >= 1000) {
+      this.sankeyHeight = 700;
+    } else if (window.innerHeight < 1000 && window.innerHeight > 870) {
+      this.sankeyHeight = 600;
+    } else {
+      this.sankeyHeight = 500;
+    }
+  };
+
+  onLinkMouseAction = (actionType, linkData, event) => {
+    let opacity = defaultOpacity;
+    if (actionType === 'in') {
+      opacity = highlightedOpacity;
+    }
+    event.target.setAttribute('opacity', opacity);
+    this.highlightTargets(linkData.target.sourceLinks, opacity);
+    this.highlightSources(linkData.source.targetLinks, opacity);
+  };
+
+  onLinkClick = linkData => {
+    const { router } = this.context;
+    const { stores, hide } = this.props;
+    const { campaignsStore } = stores;
+    const clickedItemType = linkData.target.type;
+    let path = '';
+    switch (clickedItemType) {
+      case 'pack':
+        path = `/packages/${linkData.target.originalName}`;
+        hide();
+        break;
+      case 'mtu':
+        break;
+      case 'campaign':
+        const campaignName = linkData.target.originalName; //eslint-disable-line
+        const campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName); //eslint-disable-line
+        path = `/campaigns/${campaign.id}`;
+        hide();
+        break;
+      case 'device':
+        path = `/device/${linkData.target.uuid}`;
+        break;
+      default:
+        break;
+    }
+
+    router.push(path);
+  };
+  getCampaignStatus = campaign => (campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other');
+
   showFullGraph() {
     this.showOnlyActive = false;
   }
 
   highlightTargets(data, opacity) {
-    let paths = document.querySelectorAll('path');
-    _.each(data, (link, index) => {
-      let ix = link.index;
+    const paths = document.querySelectorAll('path');
+    _.each(data, link => {
+      const ix = link.index;
       paths[ix].setAttribute('opacity', opacity);
       if (link.target.sourceLinks) {
         this.highlightTargets(link.target.sourceLinks, opacity);
@@ -130,9 +144,9 @@ class DependenciesModal extends Component {
   }
 
   highlightSources(data, opacity) {
-    let paths = document.querySelectorAll('path');
-    _.each(data, (link, index) => {
-      let ix = link.index;
+    const paths = document.querySelectorAll('path');
+    _.each(data, link => {
+      const ix = link.index;
       paths[ix].setAttribute('opacity', opacity);
       if (link.source.targetLinks) {
         this.highlightSources(link.source.targetLinks, opacity);
@@ -141,8 +155,9 @@ class DependenciesModal extends Component {
   }
 
   devicesFetched() {
-    const { devicesStore } = this.props.stores;
-    _.each(devicesStore.devices, (device, index) => {
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    _.each(devicesStore.devices, device => {
       devicesStore.fetchMultiTargetUpdates(device.uuid);
       devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then(filepaths => {
         device.installedFilepaths = filepaths;
@@ -151,25 +166,23 @@ class DependenciesModal extends Component {
   }
 
   packagesFetched() {
-    const { campaignsStore } = this.props.stores;
-    // campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+    const { stores, status } = this.props;
+    const { campaignsStore } = stores;
+    campaignsStore.fetchCampaigns(status, 'campaignsSafeFetchAsync');
   }
 
   campaignsFetched() {
-    const { devicesStore, packagesStore } = this.props.stores;
-    _.each(devicesStore.multiTargetUpdatesSaved, (mtuUpdate, i) => {
-      let packageHash = mtuUpdate.targets[Object.keys(mtuUpdate.targets)[0]].image.fileinfo.hashes.sha256;
-      let pack = _.find(packagesStore.packages, pack => {
-        return pack.packageHash === packageHash;
-      });
+    const { stores } = this.props;
+    const { devicesStore, packagesStore } = stores;
+    _.each(devicesStore.multiTargetUpdatesSaved, mtuUpdate => {
+      const packageHash = getSHA256Hash(mtuUpdate);
+      const pack = _.find(packagesStore.packages, pack => pack.packageHash === packageHash);
       this.packages.push(pack);
     });
-    _.each(devicesStore.devices, (device, i) => {
-      let filepaths = device.installedFilepaths;
-      _.each(filepaths, (filepath, index) => {
-        let pack = _.find(packagesStore.packages, pack => {
-          return pack.filepath === filepath;
-        });
+    _.each(devicesStore.devices, device => {
+      const filepaths = device.installedFilepaths;
+      _.each(filepaths, filepath => {
+        const pack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
         if (!_.isUndefined(pack)) {
           this.packages.push(pack);
         }
@@ -181,25 +194,26 @@ class DependenciesModal extends Component {
   }
 
   prepareNodesAndLinks(source, highlight = false) {
-    const { campaignsStore, devicesStore, packagesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { campaignsStore, devicesStore } = stores;
     let devicesWithQueue = [];
     let devicesWithInstalled = [];
 
-    _.each(source, (pack, index) => {
+    _.each(source, pack => {
       pack.mtus = [];
-      _.each(devicesStore.multiTargetUpdatesSaved, (mtu, i) => {
+      _.each(devicesStore.multiTargetUpdatesSaved, mtu => {
         mtu.type = 'queue';
-        let packageHash = mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
+        const packageHash = getSHA256Hash(mtu);
         if (pack.packageHash === packageHash) {
           pack.mtus.push(mtu);
         }
       });
 
-      _.each(devicesStore.devices, (device, ind) => {
-        let filepaths = device.installedFilepaths;
-        _.each(filepaths, (filepath, index) => {
+      _.each(devicesStore.devices, device => {
+        const filepaths = device.installedFilepaths;
+        _.each(filepaths, filepath => {
           if (pack.filepath === filepath) {
-            let mtu = {
+            const mtu = {
               type: 'history',
               device: device.uuid,
             };
@@ -208,18 +222,19 @@ class DependenciesModal extends Component {
         });
       });
 
-      let pushedCampaigns = [];
-      _.each(pack.mtus, (mtu, i) => {
+      const pushedCampaigns = [];
+      _.each(pack.mtus, mtu => {
         mtu.campaigns = [];
         mtu.queuedOn = [];
         mtu.installedOn = [];
-        _.each(campaignsStore.campaigns, (campaign, ind) => {
-          if (campaign.update === mtu.updateId && pushedCampaigns.indexOf(campaign.update) === -1) {
+        _.each(campaignsStore.campaigns, campaign => {
+          const { updateId } = mtu;
+          if (campaign.update === updateId && pushedCampaigns.indexOf(campaign.update) === -1) {
             mtu.campaigns.push(campaign);
             pushedCampaigns.push(campaign.update);
           }
         });
-        _.each(devicesStore.devices, (device, ind) => {
+        _.each(devicesStore.devices, device => {
           if (device.uuid === mtu.device) {
             mtu.deviceName = device.deviceName;
 
@@ -242,15 +257,15 @@ class DependenciesModal extends Component {
 
     devicesWithQueue = _.uniqBy(devicesWithQueue, device => device.uuid);
     devicesWithInstalled = _.uniqBy(devicesWithInstalled, device => device.uuid);
-    let localDevices = [];
+    const localDevices = [];
 
-    _.each(devicesWithQueue, (device, index) => {
-      let dev = Object.assign({}, device);
+    _.each(devicesWithQueue, device => {
+      const dev = Object.assign({}, device);
       dev.section = 'queued';
       localDevices.push(dev);
     });
-    _.each(devicesWithInstalled, (device, index) => {
-      let dev = Object.assign({}, device);
+    _.each(devicesWithInstalled, device => {
+      const dev = Object.assign({}, device);
       dev.section = 'installed';
       localDevices.push(dev);
     });
@@ -258,7 +273,7 @@ class DependenciesModal extends Component {
     this.devices = localDevices;
     this.devices = _.sortBy(this.devices, device => device.deviceName);
 
-    let nodes = [
+    const nodes = [
       {
         name: 'targets.json',
         type: 'root',
@@ -266,9 +281,9 @@ class DependenciesModal extends Component {
       },
     ];
 
-    _.map(source, (item, index) => {
-      let packObj = {
-        name: item.id.name.substring(0, 15) + ' - ' + item.id.version.substring(0, 5),
+    _.map(source, item => {
+      const packObj = {
+        name: `${item.id.name.substring(0, 15)} - ${item.id.version.substring(0, 5)}`,
         originalName: item.id.name,
         type: 'pack',
         color: '#6A9CD3',
@@ -276,17 +291,17 @@ class DependenciesModal extends Component {
         installedOn: [],
         campaign: null,
       };
-      _.map(item.mtus, (mtu, i) => {
+      _.map(item.mtus, mtu => {
         if (mtu.queuedOn.length) {
           packObj.queuedOn.push(mtu.queuedOn[0]);
         }
         if (mtu.installedOn.length) {
           packObj.installedOn.push(mtu.installedOn[0]);
         }
-        _.map(mtu.campaigns, (campaign, i) => {
+        _.map(mtu.campaigns, campaign => {
           nodes.push({
             originalName: campaign.name,
-            name: campaign.name.substring(0, 15) + '(' + this.getCampaignStatus(campaign) + ')',
+            name: `${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`,
             type: 'campaign',
             status: this.getCampaignStatus(campaign),
             color: this.getCampaignStatus(campaign) === 'finished' ? '#88c062' : '#738771',
@@ -298,7 +313,7 @@ class DependenciesModal extends Component {
       packObj.installedOn = _.uniqBy(packObj.installedOn, device => device.uuid);
       nodes.push(packObj);
     });
-    _.map(this.devices, (device, index) => {
+    _.map(this.devices, device => {
       nodes.push({
         name: device.deviceName.substring(0, 15) + (device.section === 'queued' ? '(queued on)' : '(installed on)'),
         originalName: device.deviceName,
@@ -308,13 +323,13 @@ class DependenciesModal extends Component {
         color: device.section === 'queued' ? '#F6A623' : '#e9e587',
       });
     });
-    let packIndexes = [];
+    const packIndexes = [];
     _.each(nodes, (node, index) => {
       if (node.type === 'pack') {
         packIndexes.push(index);
       }
     });
-    let links = [];
+    const links = [];
     let nextPackIndex = 0;
 
     if (nodes.length <= 3) {
@@ -322,6 +337,8 @@ class DependenciesModal extends Component {
     } else {
       this.resizeSankey();
     }
+
+    let currentPackIndex = 0;
     _.map(nodes, (node, index) => {
       switch (node.type) {
         case 'root':
@@ -338,19 +355,18 @@ class DependenciesModal extends Component {
           });
           break;
         case 'pack':
-          let currentPackIndex = index;
-          let currentPackIndexIndex = _.indexOf(packIndexes, currentPackIndex);
-          nextPackIndex = packIndexes[++currentPackIndexIndex];
+          currentPackIndex = _.indexOf(packIndexes, index);
+          nextPackIndex = packIndexes[++currentPackIndex];
           if (_.isUndefined(nextPackIndex)) {
             nextPackIndex = Object.keys(nodes).length;
           }
 
-          let queuedOn = node.queuedOn;
-          let installedOn = node.installedOn;
-          let campaign = node.campaign;
+          const queuedOn = node.queuedOn; //eslint-disable-line
+          const installedOn = node.installedOn; //eslint-disable-line
+          const campaign = node.campaign; //eslint-disable-line
 
-          _.map(queuedOn, (device, i) => {
-            let foundDevice = _.find(nodes, node => node.name === device.deviceName.substring(0, 15) + '(queued on)');
+          _.map(queuedOn, device => {
+            const foundDevice = _.find(nodes, node => node.name === `${device.deviceName.substring(0, 15)}(queued on)`);
             if (foundDevice) {
               links.push({
                 source: index,
@@ -362,8 +378,8 @@ class DependenciesModal extends Component {
             }
           });
 
-          _.map(installedOn, (device, i) => {
-            let foundDevice = _.find(nodes, node => node.name === device.deviceName.substring(0, 15) + '(installed on)');
+          _.map(installedOn, device => {
+            const foundDevice = _.find(nodes, node => node.name === `${device.deviceName.substring(0, 15)}(installed on)`);
             if (foundDevice) {
               links.push({
                 source: index,
@@ -376,7 +392,7 @@ class DependenciesModal extends Component {
           });
 
           if (campaign) {
-            let foundCampaign = _.find(nodes, node => node.name === campaign.name.substring(0, 15) + '(' + this.getCampaignStatus(campaign) + ')');
+            const foundCampaign = _.find(nodes, node => node.name === `${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`);
             links.push({
               source: index,
               target: nodes.indexOf(foundCampaign),
@@ -401,16 +417,16 @@ class DependenciesModal extends Component {
     }, 5);
 
     if (highlight) {
-      let itemsToHighlight = [];
-      let activeItemName = this.props.activeItemName;
+      const itemsToHighlight = [];
+      const { activeItemName } = this.props;
 
-      _.map(source, (item, index) => {
+      _.map(source, item => {
         if (activeItemName === item.filepath) {
           itemsToHighlight.push(item);
         }
 
-        _.map(item.mtus, (mtu, i) => {
-          _.map(mtu.campaigns, (campaign, i) => {
+        _.map(item.mtus, mtu => {
+          _.map(mtu.campaigns, campaign => {
             if (activeItemName === campaign.name) {
               itemsToHighlight.push(item);
             }
@@ -419,38 +435,40 @@ class DependenciesModal extends Component {
       });
       this.itemsToHighlight = itemsToHighlight;
       setTimeout(() => {
-        that.hightlightActiveItems();
+        that.highlightActiveItems();
       }, 5);
     }
   }
 
   animateChart() {
-    let allTextElements = document.querySelectorAll('text');
-    let packs = [];
-    let campaigns = [];
-    let devices = [];
-    _.each(this.nodes, (node, i) => {
+    const allTextElements = document.querySelectorAll('text');
+    const packs = [];
+    const campaigns = [];
+    const devices = [];
+    _.each(this.nodes, node => {
       switch (node.type) {
         case 'pack':
           packs.push(node.name);
           break;
         case 'campaign':
           campaigns.push(node.name);
+          break;
         case 'device':
           devices.push(node.name);
+          break;
         default:
           break;
       }
     });
-    _.each(allTextElements, (item, index) => {
+    _.each(allTextElements, item => {
       item.style.transition = 'transform 0.5s';
-      if (_.includes(packs, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(packs, decodeURI(item.innerHTML))) {
         item.style.transform = 'translate(-30px)';
       }
-      if (_.includes(campaigns, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(campaigns, decodeURI(item.innerHTML))) {
         item.style.transform = 'translate(-5px)';
       }
-      if (_.includes(devices, this.unescapeHTML(item.innerHTML))) {
+      if (_.includes(devices, decodeURI(item.innerHTML))) {
         item.style.transform = 'translate(-5px)';
       }
       if (item.innerHTML === 'targets.json') {
@@ -460,42 +478,44 @@ class DependenciesModal extends Component {
   }
 
   formatData(removeHandler = false) {
-    const { devicesStore, packagesStore, campaignsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, campaignsStore } = stores;
     if (removeHandler) {
       this.sankeyModeHandler();
     }
     if (this.showOnlyActive) {
-      _.each(this.packages, (pack, index) => {
+      _.each(this.packages, pack => {
         pack.mtus = [];
-        _.each(devicesStore.multiTargetUpdatesSaved, (mtu, i) => {
+        _.each(devicesStore.multiTargetUpdatesSaved, mtu => {
           mtu.type = 'queue';
-          let packageHash = mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
+          const packageHash = getSHA256Hash(mtu);
           if (pack.packageHash === packageHash) {
             pack.mtus.push(mtu);
           }
         });
 
-        _.each(pack.mtus, (mtu, i) => {
+        _.each(pack.mtus, mtu => {
           mtu.campaigns = [];
-          _.each(campaignsStore.campaigns, (campaign, ind) => {
-            if (campaign.update === mtu.updateId) {
+          _.each(campaignsStore.campaigns, campaign => {
+            const { updateId } = mtu;
+            if (campaign.update === updateId) {
               mtu.campaigns.push(campaign);
             }
           });
         });
       });
 
-      let activePackages = [];
-      let activeItemName = this.props.activeItemName;
+      const activePackages = [];
+      const { activeItemName } = this.props;
 
-      _.map(this.packages, (item, index) => {
+      _.map(this.packages, item => {
         if (activeItemName === item.filepath) {
           activePackages.push(item);
         }
 
-        let pushedPackages = [];
-        _.map(item.mtus, (mtu, i) => {
-          _.map(mtu.campaigns, (campaign, i) => {
+        const pushedPackages = [];
+        _.map(item.mtus, mtu => {
+          _.map(mtu.campaigns, campaign => {
             if (activeItemName === campaign.name && pushedPackages.indexOf(item.filepath) === -1) {
               activePackages.push(item);
               pushedPackages.push(item.filepath);
@@ -516,41 +536,34 @@ class DependenciesModal extends Component {
     }
   }
 
-  hightlightActiveItems() {
-    let dataToFind = [];
+  highlightActiveItems() {
+    const dataToFind = [];
 
-    _.each(this.itemsToHighlight, (pack, ind) => {
-      let packName = pack.id.name.substring(0, 15);
-      let packVersion = pack.id.version.substring(0, 5);
-      let packString = packName + ' - ' + packVersion;
+    _.each(this.itemsToHighlight, pack => {
+      const packName = pack.id.name.substring(0, 15);
+      const packVersion = pack.id.version.substring(0, 5);
+      const packString = `${packName} - ${packVersion}`;
       dataToFind.push(packString);
       dataToFind.push('targets.json');
 
-      _.each(pack.mtus, (mtu, index) => {
-        let deviceStatus = mtu.queuedOn.length ? 'queued on' : 'installed on';
-        dataToFind.push(mtu.deviceName.substring(0, 15) + '(' + deviceStatus + ')');
+      _.each(pack.mtus, mtu => {
+        const deviceStatus = mtu.queuedOn.length ? 'queued on' : 'installed on';
+        dataToFind.push(`${mtu.deviceName.substring(0, 15)}(${deviceStatus})`);
 
-        _.each(mtu.campaigns, (campaign, i) => {
-          dataToFind.push(campaign.name.substring(0, 15) + '(' + this.getCampaignStatus(campaign) + ')');
+        _.each(mtu.campaigns, campaign => {
+          dataToFind.push(`${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`);
         });
       });
     });
 
-    let allTextElements = document.querySelectorAll('text');
-    _.each(allTextElements, (item, index) => {
-      if (_.includes(dataToFind, this.unescapeHTML(item.innerHTML))) {
+    const allTextElements = document.querySelectorAll('text');
+    _.each(allTextElements, item => {
+      if (_.includes(dataToFind, decodeURI(item.innerHTML))) {
         item.style.fontSize = '21px';
       } else if (dataToFind.length) {
         item.style.opacity = 0.5;
       }
     });
-  }
-
-  unescapeHTML(html) {
-    return html
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&');
   }
 
   render() {
@@ -566,9 +579,15 @@ class DependenciesModal extends Component {
               links={toJS(this.links)}
               width={this.sankeyWidth}
               height={this.sankeyHeight}
-              onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
-              onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
-              onLinkClick={this.onLinkClick.bind(this)}
+              onLinkMouseOver={e => {
+                this.onLinkMouseAction(this, 'in', e);
+              }}
+              onLinkMouseOut={e => {
+                this.onLinkMouseAction(this, 'out', e);
+              }}
+              onLinkClick={() => {
+                this.onLinkClick(this);
+              }}
               layout={1000}
               style={{
                 labels: {},
@@ -583,34 +602,34 @@ class DependenciesModal extends Component {
           <div className='wrapper-center'>This item is not on the chart.</div>
         )}
 
-        {this.showOnlyActive ? (
+        {this.showOnlyActive && (
           <div className='body-actions'>
-            <button className='btn-primary' onClick={this.showFullGraph.bind(this)}>
+            <Button htmlType='button' className='btn-primary' onClick={this.showFullGraph}>
               Show all
-            </button>
+            </Button>
           </div>
-        ) : null}
+        ) }
       </span>
     ) : (
       <div className='wrapper-center'>
-        <Loader />
+        Currently no dependency conflicts.
       </div>
     );
 
     return (
       <OTAModal
-        title={'Dependencies'}
+        title='Dependencies'
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt='Icon' />
             </div>
           </div>
         }
         content={content}
         visible={shown}
         className='dependencies-modal'
-        hideOnClickOutside={true}
+        hideOnClickOutside
         onRequestClose={hide}
       />
     );
