@@ -2,7 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable, toJS } from 'mobx';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 
