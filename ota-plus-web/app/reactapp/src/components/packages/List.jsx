@@ -149,7 +149,6 @@ class List extends Component {
   componentDidMount() {
     this.refs.list.addEventListener('scroll', this.listScroll);
     this.listScroll();
-    this.highlightPackage(this.props.highlightedPackage);
   }
 
   componentWillUnmount() {
@@ -193,7 +192,7 @@ class List extends Component {
                   const that = this;
                   return (
                     <span key={index} className='c-package'>
-                      <ListItem pack={pack} expandedPackageName={expandedPackageName} togglePackage={this.togglePackage} />
+                      <ListItem pack={pack} expandedPackageName={expandedPackageName} togglePackage={this.togglePackage} highlightedPackage={highlightedPackage} highlightPackage={this.highlightPackage}/>
                       <VelocityTransitionGroup
                         enter={{
                           animation: 'slideDown',

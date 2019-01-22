@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import MtuListItem from './MtuListItem';
-import { toJS } from 'mobx';
 
 @inject('stores')
 @observer

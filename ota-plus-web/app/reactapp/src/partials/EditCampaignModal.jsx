@@ -10,7 +10,6 @@ import { OTAForm } from './OTAForm';
 import FormInput from './FormInput';
 import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../utils';
-import _ from 'lodash';
 
 @inject('stores')
 @observer
