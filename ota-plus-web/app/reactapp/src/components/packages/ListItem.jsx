@@ -19,6 +19,11 @@ class ListItem extends Component {
     return this.props.pack.versions.length;
   };
 
+  componentDidMount() {
+    const { highlightedPackage, highlightPackage } = this.props;
+    highlightPackage(highlightedPackage);
+  }
+
   render() {
     const { pack, togglePackage, expandedPackageName } = this.props;
     let installedOnEcus = this.countInstalledOnEcus();

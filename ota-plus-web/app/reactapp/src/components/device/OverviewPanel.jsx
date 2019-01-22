@@ -3,7 +3,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { toJS } from 'mobx';
 import { Tabs } from 'antd';
 import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
