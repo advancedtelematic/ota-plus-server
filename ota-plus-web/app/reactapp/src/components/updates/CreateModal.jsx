@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { Button } from 'antd';
 import { OTAModal } from '../../partials';
 
-import { contains } from '../../utils/Collection';
+import { contains } from '../../utils/Helpers';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';

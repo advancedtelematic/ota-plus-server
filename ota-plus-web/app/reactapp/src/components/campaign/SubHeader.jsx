@@ -2,30 +2,40 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'lodash';
-import { Dropdown, EditCampaignModal } from '../../partials';
-import { AsyncStatusCallbackHandler } from '../../utils';
 
+import { Button, Menu } from 'antd';
+import { DropdownMenu, EditCampaignModal } from '../../partials';
+
+import { assets } from '../../config';
+
+@inject('stores')
 @observer
 class SubHeader extends Component {
-  @observable renameDisabled = true;
-  @observable newCampaignNameLength = 0;
-  @observable submenuIsShown = false;
+  @observable campaignName = '';
   @observable editModal = false;
 
-  componentWillMount() {
-    this.oldCampaignName = this.props.campaign.name;
-    this.newCampaignName = this.props.campaign.name;
-    this.newCampaignNameLength = this.props.campaign.name.length;
+  static propTypes = {
+    campaign: PropTypes.object.isRequired,
+    showCancelCampaignModal: PropTypes.bool,
+  };
+
+  constructor(props) {
+    super(props);
+    const { campaign } = props;
+    this.campaignName = campaign.name;
   }
-  componentWillReceiveProps(nextProps) {
-    if (!_.isEmpty(nextProps.campaign.name)) {
-      this.oldCampaignName = nextProps.campaign.name;
-      this.newCampaignName = nextProps.campaign.name;
-      this.newCampaignNameLength = nextProps.campaign.name.length;
-    }
+
+  componentDidMount() {
+    const { campaign } = this.props;
+    this.campaignName = campaign.name;
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    const { campaign } = nextProps;
+    const { name: newName } = campaign;
+    return {campaignName: newName};
   }
 
   showEditModal = e => {
@@ -37,45 +47,30 @@ class SubHeader extends Component {
     this.editModal = false;
   };
 
-  hideSubmenu = () => {
-    this.submenuIsShown = false;
-  };
-
-  showSubmenu = () => {
-    this.submenuIsShown = true;
-  };
-
   render() {
-    const { campaign, showCancelCampaignModal, hideCancel = true } = this.props;
+    const { campaign, showCancelCampaignModal } = this.props;
+
     return (
       <div className='statistics__campaign-name'>
-        {this.newCampaignName}
+        <h3>{campaign.name}</h3>
         <div className='statistics__campaign-actions'>
-          {campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled' ? (
+          {(campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled') && (
             <div className='cancel-campaign'>
-              <button id='campaign-detail-cancel-all' className='delete-button fixed-width' onClick={showCancelCampaignModal}>
+              <Button htmlType='button' id='campaign-detail-cancel-all' className='delete-button fixed-width' onClick={showCancelCampaignModal}>
                 Cancel campaign
-              </button>
+              </Button>
             </div>
-          ) : null}
-          <div className='dots' id='campaign-menu' onClick={this.showSubmenu}>
-            <span />
-            <span />
-            <span />
-
-            {this.submenuIsShown ? (
-              <Dropdown hideSubmenu={this.hideSubmenu}>
-                <li className='package-dropdown-item'>
-                  <a className='package-dropdown-item' href='#' id='edit-comment' onClick={this.showEditModal}>
-                    <img src='/assets/img/icons/edit_icon.svg' alt='Icon' />
-                    Edit
-                  </a>
-                </li>
-              </Dropdown>
-            ) : null}
-          </div>
+          )}
+          <DropdownMenu placement='bottomRight'>
+            <Menu.Item>
+              <Button htmlType='button' className='campaign__dropdown--item' id='edit-comment' onClick={this.showEditModal}>
+                <img src={assets.DEFAULT_EDIT_ICON} alt='Icon' />
+                Edit
+              </Button>
+            </Menu.Item>
+          </DropdownMenu>
         </div>
-        <EditCampaignModal modalTitle={<div className='title'>Edit name</div>} shown={this.editModal} hide={this.hideEditModal} defaultValue={this.newCampaignName} />
+        <EditCampaignModal modalTitle={<div className='title'>Edit name</div>} shown={this.editModal} hide={this.hideEditModal} defaultValue={campaign.name} />
       </div>
     );
   }

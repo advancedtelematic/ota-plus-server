@@ -19,7 +19,7 @@ import {
   LIMIT_CAMPAIGNS,
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { contains, prepareUpdateObject } from '../utils/Collection';
+import { contains, prepareUpdateObject } from '../utils/Helpers';
 
 export default class CampaignsStore {
   @observable campaignsFetchAsyncAll = {};
@@ -169,18 +169,17 @@ export default class CampaignsStore {
       });
   }
 
-  fetchCampaigns(status = 'prepared') {
+  fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', offset = 0) {
     const $this = this;
     this.campaigns = [];
-    this.currentDataOffset = 0;
+    this.currentDataOffset = offset;
     // first reset all possible active asyncs
-    resetAll($this.campaignsFetchAsync);
-    resetAsync($this.campaignsFetchAsync[status], true);
+    resetAll($this[async]);
+    resetAsync($this[async][status], true);
 
-    return this._fetch(status)
+    return this._fetch(status, offset)
       .then(response => {
         $this._fetchDetails(response, status);
-        $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
       })
       .catch(error => {
         $this.campaignsFetchAsync[status] = handleAsyncError(error);

@@ -18,6 +18,7 @@ import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
 import Dropdown from './Dropdown';
+import DropdownMenu from './DropdownMenu';
 import ConfirmationModal from './ConfirmationModal';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
@@ -43,6 +44,7 @@ export {
   FormSelect,
   FormTextarea,
   Dropdown,
+  DropdownMenu,
   ConfirmationModal,
   EditModal,
   EditCampaignModal,

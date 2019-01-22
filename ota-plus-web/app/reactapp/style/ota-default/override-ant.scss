@@ -1,4 +1,6 @@
 /** @format */
+@import 'fonts';
+@import 'variables-ota';
 @import 'variables-ant';
 @import 'mixins';
 
@@ -7,10 +9,90 @@ h3 {
 }
 
 /* components */
+.ant-dropdown {
+  &-menu-item {
+    background: transparent;
+    outline: none;
+    &:focus,
+    &:hover {
+      background: transparent;
+      outline: none;
+    }
+    .ant-btn {
+      border: none;
+      img {
+        margin-right: 1em;
+      }
+      &:hover,
+      &:focus {
+        color: $color-mint;
+      }
+    }
+  }
+}
+
 .ant-modal {
   .ant-tabs,
   .ant-tabs-content {
     height: 100%;
+  }
+}
+
+.ant-tabs-nav {
+  .ant-tabs {
+    &-tab-active,
+    &-tab:hover,
+    &-tab:focus {
+      color: $color-mint;
+    }
+    &-ink-bar {
+      background-color: $color-mint;
+    }
+  }
+}
+
+.ant-pagination {
+  float: right;
+  padding-right: 25px;
+  &__wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid $color-lightgrey;
+    padding: 5px 0;
+  }
+  .ant-pagination {
+    &-item {
+      display: none;
+    }
+    &-next,
+    &-prev {
+      margin: 0;
+      svg {
+        stroke-width: 3;
+      }
+    }
+    &-item-link {
+      border: none;
+      background: transparent;
+      &:hover,
+      &:focus {
+        color: $primary-color;
+      }
+    }
+    &-disabled {
+      .ant-pagination-item-link {
+        &:hover,
+        &:focus {
+          color: $text-color;
+        }
+      }
+    }
+    &-total-text {
+      font-family: akkurat;
+      font-weight: 700;
+    }
   }
 }
 
@@ -25,7 +107,7 @@ h3 {
   &:focus,
   &:hover {
     + .ant-checkbox-inner, // explicit override
-    .ant-checkbox-inner {
+      .ant-checkbox-inner {
       border-color: $primary-color;
       outline: none;
     }
