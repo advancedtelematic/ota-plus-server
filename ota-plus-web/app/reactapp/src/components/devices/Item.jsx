@@ -51,7 +51,6 @@ class Item extends Component {
 
   render() {
     const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
-    const { groupsStore } = this.props.stores;
     const { isDragging, connectDragSource } = this.props;
     const opacity = isDragging ? 0.4 : 1;
     const lastSeenDate = new Date(device.lastSeen);
@@ -70,12 +69,6 @@ class Item extends Component {
         break;
     }
 
-    let foundGroup = null;
-    if (!groupsStore.groupsFetchAsync.isFetching) {
-      foundGroup = _.find(groupsStore.groups, group => {
-        return group.devices.values.indexOf(device.uuid) > -1;
-      });
-    }
     return connectDragSource(
       <div className='devices-panel__device'>
         <div className='hover-area' style={{ opacity }} onClick={goToDetails.bind(this, device.uuid)} id={'link-devicedetails-' + device.uuid} />
@@ -105,7 +98,6 @@ class Item extends Component {
         <div className='devices-panel__device-icon'>
           <div className={'device-status device-status--' + device.deviceStatus} title={deviceStatus} />
         </div>
-
         <div className='devices-panel__device-desc'>
           <div className='devices-panel__device-title' title={device.deviceName} id={device.deviceName}>
             {device.deviceName}
@@ -116,7 +108,6 @@ class Item extends Component {
           <div className='devices-panel__device-subtitle'>
             {deviceStatus !== 'Status unknown' ? <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span> : <span>Never seen online</span>}
           </div>
-          <div className='devices-panel__device-subtitle'>{foundGroup ? 'Group: ' + foundGroup.groupName : 'Ungrouped'}</div>
         </div>
       </div>,
     );
