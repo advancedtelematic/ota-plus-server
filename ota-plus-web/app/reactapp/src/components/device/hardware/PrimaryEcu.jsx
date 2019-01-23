@@ -42,7 +42,7 @@ class PrimaryEcu extends Component {
         <a href='#' className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} id='hardware-primary-details' onClick={this.onEcuClick.bind(this)}>
           <div className='hardware-panel__ecu-desc'>
             <span>
-              <span id='hardware-id-value' className='hardware-panel__hardware-label app-label'>
+              <span id='hardware-id-primary' className='hardware-panel__hardware-label app-label'>
                 {devicesStore._getPrimaryHardwareId()}
               </span>{' '}
               <br />
