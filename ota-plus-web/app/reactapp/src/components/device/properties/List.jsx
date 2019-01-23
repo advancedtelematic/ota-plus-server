@@ -98,7 +98,7 @@ class List extends Component {
                   </div>
                 ) : isPackageInstalled ? (
                   <div>
-                    <span id={this.generateIdTag('image-installed', expandedPackage)}>{installed}</span>
+                    <span id='image-installed-checkmark'>{installed}</span>
                     <img className='properties-panel__info-status-icon' src='/assets/img/icons/green_tick.svg' alt='' id={this.generateIdTag('installed-icon', expandedPackage)} />
                   </div>
                 ) : (

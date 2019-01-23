@@ -15,12 +15,12 @@ class SecondaryEcu extends Component {
     changeHardwareOverlayVisibility.bind(this, false);
   };
   render() {
-    const { active, ecu, device, changePopoverVisibility, popoverShown, copyPublicKey, publicKeyCopied } = this.props;
+    const { active, ecu, device, changePopoverVisibility, popoverShown, copyPublicKey, publicKeyCopied, index } = this.props;
     return (
       <span>
         <a href='#' id={'hardware-secondary-' + ecu.id} className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} onClick={this.onEcuClick.bind(this, ecu)}>
           <div className='hardware-panel__ecu-desc'>
-            <span id={'hardware-id-' + ecu.hardwareId} className='hardware-panel__hardware-label app-label'>
+            <span id={'hardware-id-secondary-' + index} className='hardware-panel__hardware-label app-label'>
               {ecu.hardwareId}
             </span>{' '}
             <br />

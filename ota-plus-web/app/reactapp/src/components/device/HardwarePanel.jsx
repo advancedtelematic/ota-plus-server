@@ -131,6 +131,7 @@ class HardwarePanel extends Component {
                 copyPublicKey={this.copyPublicKey}
                 publicKeyCopied={this.publicKeyCopiedFor === item.id}
                 key={index}
+                index={index}
               />
             );
           })
