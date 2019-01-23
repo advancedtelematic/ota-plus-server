@@ -26,24 +26,24 @@ class GroupsListItem extends Component {
 
   render() {
     const { stores, group, setWizardData, isChosen } = this.props;
-    const { groupName, groupType, id } = group;
+    const { groupName, groupType, id: groupId } = group;
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const countDevices = groupsStore._getGroupDevices(group).length;
 
     return (
       <div>
-        <div className={`item${isChosen ? ' selected' : ''}`} id={`button-group-${groupName}`}>
+        <div className={`item${isChosen ? ' selected' : ''}`} id={`checkbox-group-${groupId}`}>
           <Checkbox
             checked={isChosen}
             onChange={() => {
-              setWizardData(id);
+              setWizardData(groupId);
             }}
           />
           <div
             className='element-box group'
             onClick={() => {
-              setWizardData(id);
+              setWizardData(groupId);
             }}
           >
             <div className={`icon icon--${groupType === 'static' ? 'default' : 'smart'}`} />
