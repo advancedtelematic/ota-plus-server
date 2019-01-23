@@ -359,64 +359,61 @@
     }
   }
 
-  //ToDO: correct the fullscreen  step6 of campaigns wizard, temporarly commented
-  //&.full-screen {
-  //  padding-top: 50px !important;
-  //
-  //  .body {
-  //    padding: 0 !important;
-  //  }
-  //
-  //  .step-programming-sequencer {
-  //    padding: 30px 15px;
-  //    background-color: #f7f7f7;
-  //
-  //    .c-sequencer {
-  //      background-color: #fff;
-  //    }
-  //  }
-  //
-  //  > div {
-  //    height: 100%;
-  //  }
-  //
-  //  .content {
-  //    height: 100%;
-  //    width: 100% !important;
-  //    max-width: 100% !important;
-  //    transform: none !important;
-  //    transition: none !important;
-  //
-  //    > div {
-  //      transition: none !important;
-  //    }
-  //  }
-  //
-  //  .campaigns-wizard {
-  //    position: absolute;
-  //    top: 60px;
-  //    right: 0;
-  //    bottom: 0;
-  //    width: 100% !important;
-  //    left: 50%;
-  //    margin-left: -50vw;
-  //    padding: 30px;
-  //    background-color: #fff;
-  //    margin-top: 0 !important;
-  //
-  //    .draggable-content {
-  //      height: 100%;
-  //
-  //      .internal-body {
-  //        height: 100%;
-  //
-  //        .content-step {
-  //          height: calc(100% - 170px);
-  //        }
-  //      }
-  //    }
-  //  }
-  //}
+  &.full-screen {
+    max-width: 100% !important;
+    position: absolute;
+    top: 60px;
+    right: 25px;
+    bottom: 25px;
+    left: 25px;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: #fff;
+
+
+    .body-actions {
+      position: absolute;
+      right: 25px;
+      bottom: 25px;
+      left: 25px;
+    }
+
+    .step-programming-sequencer {
+      padding: 30px 15px;
+      background-color: #f7f7f7;
+
+      .c-sequencer {
+        background-color: #fff;
+      }
+    }
+
+    > div {
+      height: 100%;
+    }
+
+    .content {
+      height: 100%;
+      width: 100% !important;
+      max-width: 100% !important;
+      transform: none !important;
+      transition: none !important;
+
+      > div {
+        transition: none !important;
+      }
+    }
+
+    .campaigns-wizard {
+      .draggable-content {
+        height: 100%;
+
+        .internal-body {
+          height: 100%;
+        }
+      }
+    }
+  }
 }
 
 .hardware-overlay-modal {

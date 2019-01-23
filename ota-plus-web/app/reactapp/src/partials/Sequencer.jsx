@@ -35,9 +35,9 @@ class Sequencer extends Component {
 
   static propTypes = {
     stores: PropTypes.object,
-    wizardIdentifier: PropTypes.string,
+    wizardIdentifier: PropTypes.number,
     entity: PropTypes.string,
-    data: PropTypes.string,
+    data: PropTypes.array,
     readOnly: PropTypes.bool,
   };
 
