@@ -111,7 +111,7 @@ class CreateModal extends Component {
           </Col>
         </Row>
         <div className='body-actions'>
-          <button disabled={this.submitButtonDisabled || provisioningKeyCreateAsync.isFetching} className='btn-primary' id='add-new-key-confirm﻿'>
+          <button disabled={this.submitButtonDisabled || provisioningKeyCreateAsync.isFetching} className='btn-primary' id='add-new-key-confirm'>
             Add key
           </button>
         </div>
