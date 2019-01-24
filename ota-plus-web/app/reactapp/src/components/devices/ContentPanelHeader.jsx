@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Form } from 'formsy-antd';
+import  { Button } from 'antd';
 import { SubHeader, SearchBar } from '../../partials';
 
 @inject('stores')
@@ -24,15 +25,16 @@ class ContentPanelHeader extends Component {
       <SubHeader>
         {selectedGroup.id && selectedGroup.id !== 'ungrouped' && (
           <div className='add-group-campaign'>
-            <a
-              className='add-button bordered light'
+            <Button
+              htmlType='button'
+              className='ant-btn-hero'
               onClick={e => {
                 e.preventDefault();
                 addNewWizard('groups');
               }}
             >
               {'Create campaign'}
-            </a>
+            </Button>
           </div>
         )}
         <Form>

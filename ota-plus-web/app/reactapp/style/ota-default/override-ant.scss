@@ -9,6 +9,49 @@ h3 {
 }
 
 /* components */
+.ant-btn {
+  font-family: 'Fira Sans', sans-serif;
+  &:not(.ant-btn-hero) {
+    &[ant-click-animating-without-extra-node]:after {
+      display: none;
+    }
+  }
+
+  &-hero {
+    border: 2px solid $color-mint;
+    color: $color-mint;
+    background: transparent;
+    &:focus,
+    &:hover {
+      border: 2px solid $color-white;
+      color: $color-white;
+      background: transparent;
+    }
+  }
+
+  &-plain,
+  &-plain:focus,
+  &-plain:hover {
+    border: none;
+    background: transparent;
+    text-shadow: none;
+    font-weight: 300;
+    .navbar &,
+    .right-nav & {
+      color: $color-lightgrey;
+      padding: 15px;
+    }
+  }
+  &-plain:focus,
+  &-plain:hover {
+    .navbar &,
+    .right-nav & {
+      color: $color-white;
+    }
+  }
+}
+
+
 .ant-dropdown {
   &-menu-item {
     background: transparent;
