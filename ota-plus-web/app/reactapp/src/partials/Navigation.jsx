@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 
+import { Button } from 'antd';
 import NavigationPopover from './NavigationPopover';
 import TabNavigation from './TabNavigation';
 
@@ -22,6 +23,7 @@ class Navigation extends Component {
     startWhatsNewPopover: PropTypes.func,
     switchTab: PropTypes.func,
     activeTab: PropTypes.string,
+    addNewWizard: PropTypes.func,
   };
 
   handleClick = event => {
@@ -32,7 +34,7 @@ class Navigation extends Component {
   };
 
   render() {
-    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, switchTab, activeTab } = this.props;
+    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, switchTab, activeTab, addNewWizard } = this.props;
 
     const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = stores.featuresStore;
 
@@ -81,9 +83,9 @@ class Navigation extends Component {
               <span>
                 {(whatsNewPostponed || whatsNewPopOver) && (
                   <li className='text-link highlighted' ref='linkWhatsNew'>
-                    <a onClick={this.handleClick} id='whats-new-link'>
+                    <Button htmlType='button' className='ant-btn ant-btn-plain' onClick={this.handleClick} id='whats-new-link'>
                       {"WHAT'S NEW"}
-                    </a>
+                    </Button>
                     <span className='whats-new-badge' />
                   </li>
                 )}
@@ -116,7 +118,7 @@ class Navigation extends Component {
           </ul>
         </div>
         {alphaPlusEnabled && location === 'page-packages' && <TabNavigation location={location} switchTab={switchTab} activeTab={activeTab} />}
-        {location === 'page-campaigns' && <TabNavigation location={location} switchTab={switchTab} activeTab={activeTab} />}
+        {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} switchTab={switchTab} activeTab={activeTab} />}
       </nav>
     );
   }
