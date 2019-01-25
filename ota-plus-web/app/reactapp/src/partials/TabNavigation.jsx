@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button } from 'antd';
+import { Button, Tabs, Tag } from "antd";
 import { action, observable, observe } from 'mobx';
 
 import {
@@ -119,7 +119,7 @@ class TabNavigation extends Component {
                 }}
                 className={`tab-navigation__link ${this.isActive('advanced')}`}
               >
-                <span>{'Advanced (BETA)'}</span>
+                <span>{'Advanced (BETA)'}<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></span>
               </li>
             </ul>
           </div>

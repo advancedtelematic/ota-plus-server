@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
-import { Tabs } from 'antd';
+import { Tabs, Tag } from 'antd';
 import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
 import { Loader } from '../../../partials';
 
@@ -83,7 +83,7 @@ class WizardStep2 extends Component {
             <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
           )}
         </TabPane>
-        <TabPane key='1' tab='OLP'>
+        <TabPane key='1' tab={<span>OLP<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></span>}>
           <WizardOLPGroupsListItem />
         </TabPane>
       </Tabs>
