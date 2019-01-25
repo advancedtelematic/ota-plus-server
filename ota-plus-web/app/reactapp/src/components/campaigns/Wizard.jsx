@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Form from 'formsy-antd';
 
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import { OTAModal, Loader, SearchBar } from '../../partials';
 import { UpdateDetails } from './wizardSteps/step3Files';
 import { WizardStep1, WizardStep2, WizardStep3, WizardStep4, WizardStep5, WizardStep6, WizardStep7 } from './wizardSteps';
@@ -26,6 +26,7 @@ const initialWizardStepForAlphaPlus = [
     title: 'Select Name',
     isFinished: false,
     isSearchBarShown: false,
+    hasAlphaTag: false,
   },
   {
     class: WizardStep2,
@@ -33,6 +34,7 @@ const initialWizardStepForAlphaPlus = [
     name: 'groups',
     isFinished: false,
     isSearchBarShown: false,
+    hasAlphaTag: false,
   },
   {
     class: WizardStep3,
@@ -40,6 +42,7 @@ const initialWizardStepForAlphaPlus = [
     title: 'Select Update',
     isFinished: false,
     isSearchBarShown: false,
+    hasAlphaTag: false,
   },
   {
     class: WizardStep4,
@@ -47,6 +50,7 @@ const initialWizardStepForAlphaPlus = [
     name: 'metadata',
     isFinished: false,
     isSearchBarShown: false,
+    hasAlphaTag: false,
   },
   {
     class: WizardStep5,
@@ -54,6 +58,7 @@ const initialWizardStepForAlphaPlus = [
     name: 'dependencies-management',
     isFinished: false,
     isSearchBarShown: false,
+    hasAlphaTag: true,
   },
   {
     class: WizardStep6,
@@ -61,6 +66,7 @@ const initialWizardStepForAlphaPlus = [
     name: 'programming-sequencer',
     isFinished: true,
     isSearchBarShown: false,
+    hasAlphaTag: true,
   },
   {
     class: WizardStep7,
@@ -69,6 +75,7 @@ const initialWizardStepForAlphaPlus = [
     finishButtonLabel: 'Launch',
     isFinished: true,
     isSearchBarShown: false,
+    hasAlphaTag: false,
   },
 ];
 
@@ -275,6 +282,7 @@ class Wizard extends Component {
   render() {
     const { stores, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
     const { campaignsStore, featuresStore } = stores;
+    const { alphaPlusEnabled } = featuresStore;
     const currentStep = this.wizardSteps[this.currentStepId];
 
     const wizardMinimized = _.find(minimizedWizards, wizard => wizard.id === wizardIdentifier);
@@ -307,6 +315,7 @@ class Wizard extends Component {
                       {index + 1}
                     </button>
                     <div className='stepnum'>{step.title}</div>
+                    {(alphaPlusEnabled && step.hasAlphaTag) && <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>}
                   </div>
                 ))}
               </div>
