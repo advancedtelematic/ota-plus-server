@@ -12,7 +12,7 @@ export default class FeaturesStore {
   @observable featuresFetchAsync = {};
   @observable features = [];
   @observable clientId = null;
-  @observable alphaPlusEnabled = true;
+  @observable alphaPlusEnabled = false;
   @observable alphaTestEnabled = false;
   @observable whatsNew = whatsNew;
 
