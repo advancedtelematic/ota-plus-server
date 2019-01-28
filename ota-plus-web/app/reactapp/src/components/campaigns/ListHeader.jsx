@@ -8,11 +8,10 @@ import { observer } from 'mobx-react';
 class ListHeader extends Component {
   static propTypes = {
     status: PropTypes.string,
-    addNewWizard: PropTypes.func,
   };
 
   render() {
-    const { status, addNewWizard } = this.props;
+    const { status } = this.props;
     const headline = {
       prepared: 'In preparation',
       launched: 'running',
@@ -29,18 +28,6 @@ class ListHeader extends Component {
         {showColumns && <div className='campaigns__column'>{'Affected'}</div>}
         {showColumns && <div className='campaigns__column'>{'Finished'}</div>}
         {showColumns && <div className='campaigns__column'>{'Failure rate'}</div>}
-        <div className='campaigns__header-link'>
-          <a
-            className='add-button grey-button'
-            id='add-new-campaign'
-            onClick={e => {
-              e.preventDefault();
-              addNewWizard();
-            }}
-          >
-            <span>{'+ Add campaign'}</span>
-          </a>
-        </div>
       </div>
     );
   }

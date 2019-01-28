@@ -7,6 +7,8 @@ import { observer } from 'mobx-react';
 import { VelocityTransitionGroup } from 'velocity-react';
 import { Statistics, CampaignSummary } from '.';
 
+import { assets } from '../../config';
+
 @observer
 class ListItem extends Component {
   static propTypes = {
@@ -41,7 +43,7 @@ class ListItem extends Component {
           <div>
             <div className='campaigns__item' id={`item-${campaign.id}`} onClick={e => this.toggle(campaign, e)}>
               <div className='wrapper-center'>
-                <img src='assets/img/icons/black/arrow-up.svg' alt='Icon' />
+                <img src={assets.DEFAULT_COLLAPSE_CAMPAIGN} alt='Icon' />
               </div>
             </div>
             <Statistics showCancelCampaignModal={showCancelCampaignModal} showDependenciesModal={showDependenciesModal} campaignId={campaign.id} hideCancel={!isCancelable} />

@@ -244,6 +244,7 @@ class Main extends Component {
           startWhatsNewPopover={this.showWhatsNew}
           switchTab={this.switchTab}
           activeTab={activeTab}
+          addNewWizard={this.addNewWizard}
         />
         <div
           id={pageId}
