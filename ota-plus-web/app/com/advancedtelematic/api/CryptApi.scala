@@ -118,6 +118,8 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
       .transform {
         case Success(res) if Status.isServerError(res.header.status) =>
                             Failure(RemoteApiError(res, "vault error status"))
+        case Success(res) if ! Status.isSuccessful(res.header.status) =>
+          Failure(RemoteApiError(res, s"Error status ${res.header.status} downloading credentials"))
         case Success(res) => Success(res.body)
         case Failure(exception) => Failure(exception)
       }
