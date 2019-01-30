@@ -16,7 +16,7 @@ import {
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_DETAIL,
   CAMPAIGNS_STATUSES,
-  LIMIT_CAMPAIGNS,
+  LIMIT_CAMPAIGNS_PER_PAGE,
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { contains, prepareUpdateObject } from '../utils/Helpers';
@@ -59,7 +59,7 @@ export default class CampaignsStore {
 
   @observable fullScreenMode = false;
   @observable transitionsEnabled = true;
-  @observable limitCampaigns = LIMIT_CAMPAIGNS;
+  @observable limitCampaigns = LIMIT_CAMPAIGNS_PER_PAGE;
   @observable hasMoreCampaigns = false;
 
   @observable currentDataOffset = 0;
@@ -152,34 +152,17 @@ export default class CampaignsStore {
     }
   }
 
-  loadMoreCampaigns(status = 'prepared') {
-    const newDataOffset = this.limitCampaigns + this.currentDataOffset;
-    const $this = this;
-    resetAll($this.campaignsFetchAsync);
-    resetAsync($this.campaignsFetchAsync[status], true);
-
-    return this._fetch(status, newDataOffset)
-      .then(response => {
-        $this._fetchDetails(response, status);
-        $this.currentDataOffset = response.data.offset;
-        $this.hasMoreCampaigns = $this.currentDataOffset < response.data.total;
-      })
-      .catch(error => {
-        $this.campaignsFetchAsync[status] = handleAsyncError(error);
-      });
-  }
-
-  fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', offset = 0) {
+  fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', dataOffset = 0) {
     const $this = this;
     this.campaigns = [];
-    this.currentDataOffset = offset;
     // first reset all possible active asyncs
-    resetAll($this[async]);
-    resetAsync($this[async][status], true);
+    resetAll(this[async]);
+    resetAsync(this[async][status], true);
 
-    return this._fetch(status, offset)
+    return this._fetch(status, dataOffset)
       .then(response => {
         $this._fetchDetails(response, status);
+        $this.currentDataOffset = dataOffset;
       })
       .catch(error => {
         $this.campaignsFetchAsync[status] = handleAsyncError(error);

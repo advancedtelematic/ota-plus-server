@@ -66,39 +66,28 @@ class List extends Component {
 
     const campaignsAvailable = !!campaigns.length;
 
-    return campaignsAvailable ? (
-      <InfiniteScroll
-        loadMore={() => {
-          campaignsStore.loadMoreCampaigns(status);
-        }}
-        className='campaigns__list'
-        id={`${status}-campaigns`}
-        ref='list'
-        hasMore={campaignsStore.hasMoreCampaigns}
-        isLoading={campaignsStore.campaignsFetchAsync[status].isFetching}
-        useWindow
-        threshold={100}
-      >
+    return campaignsAvailable ?
+      <div className='campaigns__list'>
         {campaigns.map(campaign => {
           const isExpanded = contains(expandedCampaigns, campaign);
           const isCancelable = status === 'launched';
           return (
             <ListItem
-              key={campaign.id}
-              campaign={campaign}
-              type={status}
-              isExpanded={isExpanded}
-              showCancelCampaignModal={showCancelCampaignModal}
-              showDependenciesModal={showDependenciesModal}
-              toggleCampaign={toggleCampaign}
-              isCancelable={isCancelable}
+              key={ campaign.id }
+              campaign={ campaign }
+              type={ status }
+              isExpanded={ isExpanded }
+              showCancelCampaignModal={ showCancelCampaignModal }
+              showDependenciesModal={ showDependenciesModal }
+              toggleCampaign={ toggleCampaign }
+              isCancelable={ isCancelable }
             />
           );
         })}
-      </InfiniteScroll>
-    ) : (
+      </div>
+      :
       <div className='campaigns__list--empty'>{`Currently there are no ${status} campaigns.`}</div>
-    );
+    ;
   }
 }
 
