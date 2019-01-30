@@ -98,12 +98,13 @@ h3 {
   float: right;
   padding-right: 25px;
   &__wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-top: 1px solid $color-lightgrey;
+    position: fixed;
+    bottom: 25px;
+    left: 30px;
+    right: 30px;
+    border-top: 1px solid $color-text-light;
     padding: 5px 0;
+    background-color: $color-grey;
   }
   .ant-pagination {
     &-item {
@@ -112,13 +113,13 @@ h3 {
     &-next,
     &-prev {
       margin: 0;
-      svg {
-        stroke-width: 3;
-      }
     }
+
     &-item-link {
       border: none;
       background: transparent;
+      color: $color-text-light;
+      font-weight: bold;
       &:hover,
       &:focus {
         color: $primary-color;
@@ -128,13 +129,16 @@ h3 {
       .ant-pagination-item-link {
         &:hover,
         &:focus {
-          color: $text-color;
+          color: $color-text-light;
         }
       }
     }
     &-total-text {
       font-family: akkurat;
       font-weight: 700;
+      color: $color-text-light;
+      font-size: smaller;
+      padding-top: 2px;
     }
   }
 }

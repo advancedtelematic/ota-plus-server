@@ -138,7 +138,7 @@ export const LIMIT_UPDATES_MAIN = 30;
  * campaigns
  */
 
-export const LIMIT_CAMPAIGNS = 20;
+export const LIMIT_CAMPAIGNS_PER_PAGE = 10;
 export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
 
 /**
