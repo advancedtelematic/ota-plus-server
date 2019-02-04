@@ -455,7 +455,7 @@ a:active {
 
 html,
 body {
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -467,7 +467,7 @@ body {
   background-color: $home-bg;
   background-attachment: fixed;
   background-size: cover;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 input {

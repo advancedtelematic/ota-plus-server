@@ -11,6 +11,7 @@ import Routes from '../Routes';
 
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
+import { getCurrentLocation } from '../utils/Helpers';
 import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT } from '../config';
 import { Navigation, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
@@ -115,9 +116,10 @@ class Main extends Component {
   };
 
   addNewWizard = (skipStep = null) => {
+    const { router } = this.context;
     const wizard = (
       <Wizard
-        location={this.currentLocation()}
+        location={getCurrentLocation(router)}
         wizardIdentifier={this.wizards.length}
         hideWizard={this.hideWizard}
         toggleWizard={this.toggleWizard}
@@ -161,13 +163,13 @@ class Main extends Component {
     if (!userStore._isTermsAccepted() && !router.isActive('/')) {
       history.push('/');
     }
-    // this.updateCampaignsView();
   };
 
   updateCampaignsView = () => {
+    const { router } = this.context;
     const { stores } = this.props;
     const { campaignsStore } = stores;
-    if (this.currentLocation() === 'campaigns' && !campaignsStore.campaignsFetchAsync[this.getActiveTab()].isFetching) {
+    if (getCurrentLocation(router) === 'campaigns' && !campaignsStore.campaignsFetchAsync[this.getActiveTab()].isFetching) {
       campaignsStore.fetchStatusCounts();
       campaignsStore.fetchCampaigns(this.getActiveTab());
     }
@@ -196,19 +198,16 @@ class Main extends Component {
   };
 
   switchTab = identifier => {
-    const location = this.currentLocation();
+    const { router } = this.context;
+    const location = getCurrentLocation(router);
     this.activeTab[location] = identifier;
     this.switchToSWRepo = this.activeTab[location] === 'advanced';
     this.updateCampaignsView();
   };
 
-  currentLocation = () => {
-    const { location } = this.props;
-    return location.pathname.toLowerCase().split('/')[1];
-  };
-
   getActiveTab = () => {
-    const location = this.currentLocation();
+    const { router } = this.context;
+    const location = getCurrentLocation(router);
     const locationHasTabs = location === 'packages' || location === 'campaigns';
     if (locationHasTabs) {
       return this.activeTab[location];
@@ -217,7 +216,8 @@ class Main extends Component {
   };
 
   calcHeight = () => {
-    const currentLocation = this.currentLocation();
+    const { router } = this.context;
+    const currentLocation = getCurrentLocation(router);
     if (currentLocation === 'campaigns') {
       return 'calc(100vh - 100px)';
     }
@@ -225,7 +225,8 @@ class Main extends Component {
   };
 
   render() {
-    const pageId = `page-${this.currentLocation() || 'home'}`;
+    const { router } = this.context;
+    const pageId = `page-${getCurrentLocation(router) || 'home'}`;
     const { stores, ...rest } = this.props;
     const { userStore, featuresStore } = stores;
     const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;

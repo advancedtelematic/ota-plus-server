@@ -7,7 +7,6 @@ import _ from 'lodash';
 
 import ListItem from './ListItem';
 import { contains } from '../../utils/Helpers';
-import InfiniteScroll from '../../utils/InfiniteScroll';
 
 @inject('stores')
 @observer

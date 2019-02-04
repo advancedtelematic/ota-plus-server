@@ -140,6 +140,13 @@ export const LIMIT_UPDATES_MAIN = 30;
 
 export const LIMIT_CAMPAIGNS_PER_PAGE = 10;
 export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
+export const CAMPAIGNS_STATUS_TAB_TITLE = {
+  'prepared': 'In Preparation',
+  'launched': 'Running',
+  'finished': 'Finished',
+  'cancelled': 'Canceled',
+};
+export const CAMPAIGNS_DEFAULT_TAB = 'prepared';
 
 /**
  * default relative paths used in app

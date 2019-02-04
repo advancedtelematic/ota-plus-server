@@ -14,21 +14,17 @@ import { CampaignCancelCampaignModal } from '../components/campaign';
 @inject('stores')
 @observer
 class Campaigns extends Component {
+  @observable cancelCampaignModalShown = false;
+  @observable dependenciesModalShown = false;
+  @observable activeCampaign = null;
+  @observable expandedCampaigns = [];
+
   static propTypes = {
     stores: PropTypes.object,
-    activeTab: PropTypes.string,
-    switchTab: PropTypes.func,
     highlight: PropTypes.string,
     addNewWizard: PropTypes.func,
   };
-  @observable
-  cancelCampaignModalShown = false;
-  @observable
-  dependenciesModalShown = false;
-  @observable
-  activeCampaign = null;
-  @observable
-  expandedCampaigns = [];
+
   toggle = campaign => {
     if (!_.isEqual(this.expandedCampaigns.pop(), campaign)) {
       this.expandedCampaigns.push(campaign);
@@ -78,12 +74,11 @@ class Campaigns extends Component {
   };
 
   render() {
-    const { addNewWizard, highlight, activeTab, switchTab } = this.props;
+    const { addNewWizard, highlight } = this.props;
 
     return (
-      <div>
+      <>
         <CampaignsContentPanel
-          status={activeTab}
           highlight={highlight}
           expandedCampaigns={this.expandedCampaigns}
           toggleCampaign={this.toggle}
@@ -92,9 +87,9 @@ class Campaigns extends Component {
           showCancelCampaignModal={this.showCancelCampaignModal}
           showDependenciesModal={this.showDependenciesModal}
         />
-        <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal} switchTab={switchTab} />
+        <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal} />
         {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeCampaign} />}
-      </div>
+      </>
     );
   }
 }
