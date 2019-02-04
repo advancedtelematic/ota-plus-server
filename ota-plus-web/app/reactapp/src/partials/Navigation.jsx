@@ -21,8 +21,6 @@ class Navigation extends Component {
     uiCredentialsDownload: PropTypes.bool.isRequired,
     alphaPlusEnabled: PropTypes.bool.isRequired,
     startWhatsNewPopover: PropTypes.func,
-    switchTab: PropTypes.func,
-    activeTab: PropTypes.string,
     addNewWizard: PropTypes.func,
   };
 
@@ -34,7 +32,7 @@ class Navigation extends Component {
   };
 
   render() {
-    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, switchTab, activeTab, addNewWizard } = this.props;
+    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, addNewWizard } = this.props;
 
     const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = stores.featuresStore;
 
@@ -117,8 +115,8 @@ class Navigation extends Component {
             )}
           </ul>
         </div>
-        {alphaPlusEnabled && location === 'page-packages' && <TabNavigation location={location} switchTab={switchTab} activeTab={activeTab} />}
-        {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} switchTab={switchTab} activeTab={activeTab} />}
+        {alphaPlusEnabled && location === 'page-packages' && <TabNavigation location={location} />}
+        {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} />}
       </nav>
     );
   }

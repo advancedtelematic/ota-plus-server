@@ -15,8 +15,6 @@ class Campaigns extends Component {
   static propTypes = {
     stores: PropTypes.object,
     addNewWizard: PropTypes.func,
-    activeTab: PropTypes.string,
-    switchTab: PropTypes.func,
     match: PropTypes.object,
   };
 
@@ -35,13 +33,13 @@ class Campaigns extends Component {
   }
 
   render() {
-    const { match, addNewWizard, activeTab, switchTab } = this.props;
+    const { match, addNewWizard } = this.props;
     const { params } = match;
 
     return (
       <FadeAnimation>
         <MetaData title={title}>
-          <CampaignsContainer highlight={params.campaignId} activeTab={activeTab} switchTab={switchTab} addNewWizard={addNewWizard} />
+          <CampaignsContainer highlight={params.campaignId} addNewWizard={addNewWizard} />
         </MetaData>
       </FadeAnimation>
     );

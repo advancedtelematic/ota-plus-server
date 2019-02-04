@@ -1,6 +1,6 @@
 /** @format */
 
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
 import {
@@ -17,6 +17,7 @@ import {
   API_GROUPS_DETAIL,
   CAMPAIGNS_STATUSES,
   LIMIT_CAMPAIGNS_PER_PAGE,
+  CAMPAIGNS_DEFAULT_TAB,
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { contains, prepareUpdateObject } from '../utils/Helpers';
@@ -60,9 +61,12 @@ export default class CampaignsStore {
   @observable fullScreenMode = false;
   @observable transitionsEnabled = true;
   @observable limitCampaigns = LIMIT_CAMPAIGNS_PER_PAGE;
-  @observable hasMoreCampaigns = false;
 
   @observable currentDataOffset = 0;
+
+  @observable _latestCampaignsCreated = null;
+
+  @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
 
   constructor() {
     CAMPAIGNS_STATUSES.forEach(status => {
@@ -95,8 +99,12 @@ export default class CampaignsStore {
       });
   }
 
-  _fetch(status, offset = 0) {
-    return axios.get(`${API_CAMPAIGNS_FETCH}?status=${status}&limit=${this.limitCampaigns}&offset=${offset}`);
+  _fetch(status = '', offset = 0, latestOnly = false, limit = null) {
+    const limitThisRequest = limit || this.limitCampaigns;
+    if (latestOnly) {
+      return axios.get(`${ API_CAMPAIGNS_FETCH }?orderBy=createdAt&limit=${ limitThisRequest }`);
+    }
+    return axios.get(`${ API_CAMPAIGNS_FETCH }?status=${ status }&limit=${ limitThisRequest }&offset=${ offset }`);
   }
 
   _fetchCampaign(id) {
@@ -153,7 +161,6 @@ export default class CampaignsStore {
   }
 
   fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', dataOffset = 0) {
-    const $this = this;
     this.campaigns = [];
     // first reset all possible active asyncs
     resetAll(this[async]);
@@ -161,11 +168,11 @@ export default class CampaignsStore {
 
     return this._fetch(status, dataOffset)
       .then(response => {
-        $this._fetchDetails(response, status);
-        $this.currentDataOffset = dataOffset;
+        this._fetchDetails(response, status);
+        this.currentDataOffset = dataOffset;
       })
       .catch(error => {
-        $this.campaignsFetchAsync[status] = handleAsyncError(error);
+        this.campaignsFetchAsync[status] = handleAsyncError(error);
       });
   }
 
@@ -353,12 +360,6 @@ export default class CampaignsStore {
     return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'finished');
   }
 
-  @computed get lastActiveCampaigns() {
-    let campaigns = this.runningCampaigns;
-    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
-    return campaigns.slice(0, 10);
-  }
-
   @computed get overallCampaignStatistics() {
     const stats = {
       processed: 0,
@@ -381,5 +382,60 @@ export default class CampaignsStore {
     stats.failed = this.campaign.statistics.failed.length;
     stats.successful = stats.finished - stats.failed;
     return stats;
+  }
+
+  /**
+   * latest created campaigns
+   *
+   * Following grouped functions are parts of an useful pattern
+   * where with @computed decorated functions can trigger an async request
+   * if necessary.
+   *
+   * Also first introduction of @action functions which are similar to known Redux' actions
+   * quite much more convenient to implement but to use with care.
+   *
+   * IMPORTANT: Exclusively functions which are supposed to apply a state change will be decorated with @action
+   */
+
+  _fetchLatestCampaignsCreated(limit = 10) {
+    // temporary array to fetch all data at once
+    // before passing to an @action
+    const fetchedCampaigns = [];
+    const latestOnly = true;
+    resetAsync(this.campaignsLatestFetchAsync, true);
+    return this._fetch('', 0, latestOnly, limit)
+      .then(response => {
+        if (response.data.total > 0) {
+          response.data.values.forEach(id => {
+            this._fetchCampaign(id)
+              .then(response => {fetchedCampaigns.push(response && response.data)})
+          });
+        }
+        this.campaignsLatestFetchAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsLatestFetchAsync = handleAsyncError(error);
+      })
+      .finally(() => {
+        this.updateLatestCreatedCampaigns(fetchedCampaigns);
+      });
+  }
+
+  /**
+   * Computed values can be derived from the existing state or other computed values.
+   * Also data which are of specific characteristics and have to be requested from api
+   */
+  @computed get latestCampaignsCreated() {
+    if (this._latestCampaignsCreated === null) {
+      this._fetchLatestCampaignsCreated();
+    }
+    return this._latestCampaignsCreated;
+  }
+
+  /**
+   * this @action assigns fetched data of latest created campaigns to an observable
+   */
+  @action updateLatestCreatedCampaigns(fetchedData) {
+    this._latestCampaignsCreated = fetchedData;
   }
 }

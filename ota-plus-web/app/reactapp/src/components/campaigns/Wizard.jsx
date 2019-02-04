@@ -121,7 +121,6 @@ class Wizard extends Component {
     skipStep: PropTypes.string,
     minimizedWizards: PropTypes.array,
     wizardIdentifier: PropTypes.number,
-    switchTab: PropTypes.func,
     hideWizard: PropTypes.func,
     toggleWizard: PropTypes.func,
   };
@@ -199,11 +198,11 @@ class Wizard extends Component {
     campaignsStore.createCampaign(createData);
   };
   handleCampaignCreated = () => {
-    const { stores, wizardIdentifier, switchTab, hideWizard } = this.props;
+    const { stores, wizardIdentifier, hideWizard } = this.props;
     const { campaignsStore } = stores;
     campaignsStore.launchCampaign(campaignsStore.campaignData.campaignId);
     hideWizard(wizardIdentifier);
-    switchTab('launched');
+    campaignsStore.activeTab = 'launched';
   };
   changeFilter = filterValue => {
     this.filterValue = filterValue;
