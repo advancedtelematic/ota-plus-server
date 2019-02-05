@@ -222,9 +222,9 @@ class Home extends Component {
                 )}
               </div>
             </div>
-            <div className='home__body home__body--right'>
+            {/*<div className='home__body home__body--right'>
               <ActiveCampaigns addNewWizard={addNewWizard} />
-            </div>
+            </div>*/}
           </div>
         </div>
         {this.packagesCreateModalShown && <PackagesCreateModal shown={this.packagesCreateModalShown} hide={this.hidePackagesCreateModal} />}

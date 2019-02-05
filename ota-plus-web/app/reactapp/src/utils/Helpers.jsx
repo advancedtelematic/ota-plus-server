@@ -57,4 +57,6 @@ const prepareUpdateObject = data => {
 
 const getSHA256Hash = mtu => mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
 
-export { contains, prepareUpdateObject, getSHA256Hash };
+const getCurrentLocation = router => router.route.location.pathname.split('/')[1];
+
+export { contains, prepareUpdateObject, getSHA256Hash, getCurrentLocation };
