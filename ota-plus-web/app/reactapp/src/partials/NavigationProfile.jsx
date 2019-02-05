@@ -91,7 +91,7 @@ class NavigationProfile extends Component {
               </li>
             )}
             <li>
-              <Link to='/policy'  onClick={hideDropdown}>
+              <Link to='/policy' id='dropdown-link-terms-of-use' onClick={hideDropdown}>
                 <img src={assets.DEFAULT_TERMS_ICON} alt='Icon' />
                 {'Terms of use'}
               </Link>

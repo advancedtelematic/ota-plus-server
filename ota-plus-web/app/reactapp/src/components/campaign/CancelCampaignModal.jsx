@@ -5,39 +5,50 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
 import _ from 'lodash';
+
+import { Button } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { OTAModal, AsyncResponse } from '../../partials';
+
+import { assets } from '../../config';
 
 @inject('stores')
 @observer
 class CancelCampaignModal extends Component {
   static propTypes = {
+    stores: PropTypes.object,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    switchTab: PropTypes.func.isRequired,
+    t: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    const { campaignsStore } = props.stores;
-    this.cancelHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsCancelAsync', this.handleResponse.bind(this));
+    const { stores } = props;
+    const { campaignsStore } = stores;
+    this.cancelHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsCancelAsync', this.handleResponse);
   }
+
   componentWillUnmount() {
     this.cancelHandler();
   }
-  cancelCampaign() {
-    const { campaignsStore } = this.props.stores;
+
+  cancelCampaign = () => {
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
     const { campaign } = campaignsStore;
-    const { switchTab } = this.props;
     campaignsStore.cancelCampaign(campaign.id);
-    switchTab('cancelled');
-  }
-  handleResponse() {
-    this.props.hide();
-  }
+    campaignsStore.activeTab = 'cancelled';
+  };
+
+  handleResponse = () => {
+    const { hide } = this.props;
+    hide();
+  };
+
   render() {
-    const { t, shown, hide } = this.props;
-    const { campaignsStore } = this.props.stores;
+    const { stores, t, shown, hide } = this.props;
+    const { campaignsStore } = stores;
     const { campaign } = campaignsStore;
     const content = !_.isEmpty(campaign) ? (
       <span>
@@ -60,9 +71,9 @@ class CancelCampaignModal extends Component {
           and will be moved to <strong>Finished</strong>.
         </span>
         <div className='body-actions'>
-          <button className='btn-primary' id='cancel-all-confirm' onClick={this.cancelCampaign.bind(this)}>
+          <Button htmlType='button' className='btn-primary' id='cancel-all-confirm' onClick={this.cancelCampaign}>
             Confirm
-          </button>
+          </Button>
         </div>
       </span>
     ) : (
@@ -74,7 +85,7 @@ class CancelCampaignModal extends Component {
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt='Close' />
             </div>
           </div>
         }
