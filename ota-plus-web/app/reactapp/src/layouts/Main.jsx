@@ -45,13 +45,6 @@ class Main extends Component {
   atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
   @observable
   showWhatsNewPopover = false;
-  @observable
-  switchToSWRepo = false;
-  @observable
-  activeTab = {
-    campaigns: 'prepared',
-    packages: 'compact',
-  };
 
   constructor(props) {
     super(props);
@@ -126,8 +119,6 @@ class Main extends Component {
         minimizedWizards={this.minimizedWizards}
         skipStep={skipStep}
         key={this.wizards.length}
-        activeTab={this.getActiveTab()}
-        switchTab={this.switchTab}
       />
     );
     this.wizards = this.wizards.concat(wizard);
@@ -165,16 +156,6 @@ class Main extends Component {
     }
   };
 
-  updateCampaignsView = () => {
-    const { router } = this.context;
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-    if (getCurrentLocation(router) === 'campaigns' && !campaignsStore.campaignsFetchAsync[this.getActiveTab()].isFetching) {
-      campaignsStore.fetchStatusCounts();
-      campaignsStore.fetchCampaigns(this.getActiveTab());
-    }
-  };
-
   toggleUploadBoxMode = e => {
     if (e) e.preventDefault();
     this.uploadBoxMinimized = !this.uploadBoxMinimized;
@@ -197,31 +178,25 @@ class Main extends Component {
     history.push(path);
   };
 
-  switchTab = identifier => {
-    const { router } = this.context;
-    const location = getCurrentLocation(router);
-    this.activeTab[location] = identifier;
-    this.switchToSWRepo = this.activeTab[location] === 'advanced';
-    this.updateCampaignsView();
-  };
-
-  getActiveTab = () => {
-    const { router } = this.context;
-    const location = getCurrentLocation(router);
-    const locationHasTabs = location === 'packages' || location === 'campaigns';
-    if (locationHasTabs) {
-      return this.activeTab[location];
-    }
-    return '';
-  };
-
-  calcHeight = () => {
-    const { router } = this.context;
-    const currentLocation = getCurrentLocation(router);
-    if (currentLocation === 'campaigns') {
+  calcHeight = pageId => {
+    if (pageId === 'page-campaigns') {
       return 'calc(100vh - 100px)';
     }
     return 'calc(100vh - 50px)';
+  };
+
+  pagePadding = pageId => {
+    const { stores } = this.props;
+    const { featuresStore } = stores;
+    const { alphaPlusEnabled } = featuresStore;
+
+    if (!alphaPlusEnabled && pageId === 'page-packages') {
+      return '0 30px 30px 30px';
+    }
+    if (pageId === 'page-devices') {
+      return '0';
+    }
+    return '30px';
   };
 
   render() {
@@ -230,7 +205,6 @@ class Main extends Component {
     const { stores, ...rest } = this.props;
     const { userStore, featuresStore } = stores;
     const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;
-    const activeTab = this.getActiveTab();
 
     return (
       <span>
@@ -243,15 +217,13 @@ class Main extends Component {
           uiCredentialsDownload={this.uiCredentialsDownload}
           alphaPlusEnabled={alphaPlusEnabled}
           startWhatsNewPopover={this.showWhatsNew}
-          switchTab={this.switchTab}
-          activeTab={activeTab}
           addNewWizard={this.addNewWizard}
         />
         <div
           id={pageId}
           style={{
-            height: this.calcHeight(),
-            padding: !alphaPlusEnabled && pageId === 'page-packages' ? '30px' : '',
+            height: this.calcHeight(pageId),
+            padding: this.pagePadding(pageId),
           }}
         >
           <FadeAnimation>
@@ -263,8 +235,6 @@ class Main extends Component {
               uiAutoFeatureActivation={this.uiAutoFeatureActivation}
               uiUserProfileMenu={this.uiUserProfileMenu}
               uiCredentialsDownload={this.uiCredentialsDownload}
-              activeTab={activeTab}
-              switchTab={this.switchTab}
             />
           </FadeAnimation>
           <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />

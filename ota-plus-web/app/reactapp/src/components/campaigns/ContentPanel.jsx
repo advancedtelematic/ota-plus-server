@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { action, observable, observe, onBecomeObserved } from 'mobx';
 
 import { Pagination } from 'antd';
+import _ from 'lodash';
 import { List, ListHeader } from '.';
 import Loader from '../../partials/Loader';
 
@@ -31,9 +32,11 @@ class ContentPanel extends Component {
     const { stores } = props;
     const { campaignsStore } = stores;
 
-    this.cancelChange = observe(campaignsStore, change => { this.apply(change)});
+    this.cancelObserveTabChange = observe(campaignsStore, change => {
+      this.applyTab(change);
+    });
 
-    onBecomeObserved(this, 'activeTab', this.onResumeScope);
+    onBecomeObserved(this, 'activeTab', this.resumeScope);
   }
 
   componentDidMount() {
@@ -41,8 +44,13 @@ class ContentPanel extends Component {
   }
 
   componentWillUnmount() {
-    this.cancelChange();
+    this.cancelObserveTabChange();
   }
+
+  @action
+  setActive = tab => {
+    this.activeTab = tab;
+  };
 
   onPageChange = (page, pageSize) => {
     this.fetchCampaignsData(page, pageSize);
@@ -50,25 +58,36 @@ class ContentPanel extends Component {
 
   showTotalTemplate = (total, range) => (total > 0 ? `${range[0]}-${range[1]} of ${total}` : '');
 
-  onResumeScope = () => {
-    const { stores } = this.props;
+  resumeScope = () => {
+    const { stores, highlight, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
+
     this.setActive(campaignsStore.activeTab);
     this.fetchCampaignsData(1, LIMIT_CAMPAIGNS_PER_PAGE);
+
+    /**
+     * Since data set of latest active campaigns is a subset of all campaigns in general
+     * it is safe to treat prop "highlight" as given.
+     *
+     * A search for a campaign with "highlight" equal to campaign.id as formerly implemented
+     * is not necessary. It's sufficient to push a faked campaign object with {id: highlight}
+     * into array of expanded campaigns. Based on this information List component can accordingly set
+     * the correct campaign as expanded.
+     */
+    if (!_.isUndefined(highlight) && _.isString(highlight) && !_.isEmpty(highlight)) {
+      toggleCampaign({id: highlight});
+    }
   };
 
-  apply = change => {
+  applyTab = change => {
     const { name, newValue } = change;
+
     if (name === 'activeTab') {
       this.setActive(newValue);
       this.fetchCampaignsData(1, LIMIT_CAMPAIGNS_PER_PAGE);
     }
   };
 
-  @action
-  setActive = tab => { this.activeTab = tab };
-
-  @action
   fetchCampaignsData = (page, pageSize) => {
     const { stores } = this.props;
     const { campaignsStore } = stores;
@@ -77,7 +96,7 @@ class ContentPanel extends Component {
   };
 
   render() {
-    const { stores, highlight, showCancelCampaignModal, showDependenciesModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
+    const { stores, showCancelCampaignModal, showDependenciesModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
     const { campaignsStore } = stores;
     const { campaignsFetchAsync } = campaignsStore;
 
@@ -91,7 +110,6 @@ class ContentPanel extends Component {
         ) : (
           <List
             status={this.activeTab}
-            focus={highlight}
             expandedCampaigns={expandedCampaigns}
             showCancelCampaignModal={showCancelCampaignModal}
             showDependenciesModal={showDependenciesModal}

@@ -1,6 +1,6 @@
 /** @format */
 
-import { observable, computed, action } from 'mobx';
+import { observable, computed } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
 import {
@@ -38,7 +38,7 @@ export default class CampaignsStore {
     finished: 0,
     cancelled: 0,
   };
-
+  @observable campaignsLatestFetchAsync = {};
   @observable campaignsSafeFetchAsync = {};
   @observable campaignsSingleFetchAsync = {};
   @observable campaignsSingleSafeFetchAsync = {};
@@ -64,7 +64,7 @@ export default class CampaignsStore {
 
   @observable currentDataOffset = 0;
 
-  @observable _latestCampaignsCreated = null;
+  @observable latestCampaigns = [];
 
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
 
@@ -102,17 +102,17 @@ export default class CampaignsStore {
   _fetch(status = '', offset = 0, latestOnly = false, limit = null) {
     const limitThisRequest = limit || this.limitCampaigns;
     if (latestOnly) {
-      return axios.get(`${ API_CAMPAIGNS_FETCH }?orderBy=createdAt&limit=${ limitThisRequest }`);
+      return axios.get(`${ API_CAMPAIGNS_FETCH }?sortBy=createdAt&limit=${ limitThisRequest }`);
     }
-    return axios.get(`${ API_CAMPAIGNS_FETCH }?status=${ status }&limit=${ limitThisRequest }&offset=${ offset }`);
+    return axios.get(`${ API_CAMPAIGNS_FETCH }?sortBy=createdAt&status=${ status }&limit=${ limitThisRequest }&offset=${ offset }`);
   }
 
   _fetchCampaign(id) {
-    return axios.get(`${API_CAMPAIGNS_FETCH_SINGLE}/${id}`);
+    return axios.get(`${ API_CAMPAIGNS_FETCH_SINGLE }/${ id }`);
   }
 
   _fetchCampaignStatistics(id) {
-    return axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`);
+    return axios.get(`${ API_CAMPAIGNS_STATISTICS_SINGLE }/${ id }/stats`);
   }
 
   fetchStatusCounts() {
@@ -135,8 +135,7 @@ export default class CampaignsStore {
     const campaignIds = response && response.data && response.data.values;
 
     if (!_.isEmpty(campaignIds)) {
-      campaignIds.forEach((id, index) => {
-        const progressDone = index === campaignIds.length - 1;
+      campaignIds.forEach((id) => {
         axios.all([this._fetchCampaign(id), this._fetchCampaignStatistics(id)]).then(
           axios.spread((campaign, statistics) => {
             const isNewItem = !contains(this.campaigns, campaign.data);
@@ -150,14 +149,9 @@ export default class CampaignsStore {
             }
           }),
         );
-
-        if (progressDone) {
-          this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
-        }
       });
-    } else {
-      this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
     }
+    this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
   }
 
   fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', dataOffset = 0) {
@@ -176,20 +170,48 @@ export default class CampaignsStore {
       });
   }
 
+  fetchLatestCampaigns(limit = 10) {
+    const latestOnly = true;
+    this.latestCampaigns = [];
+    resetAsync(this.campaignsLatestFetchAsync, true);
+    return this._fetch('', 0, latestOnly, limit)
+      .then(response => {
+        if (response.data.total > 0) {
+          response.data.values.forEach(id => {
+              axios.all([this._fetchCampaign(id), this._fetchCampaignStatistics(id)]).then(
+                axios.spread((campaign, statistics) => {
+                  this.latestCampaigns.push({
+                    ...campaign.data,
+                    summary: statistics.data,
+                  });
+                })
+              )
+            },
+          );
+        }
+        this.latestCampaigns = _.sortBy(this.latestCampaigns.slice(), campaign => campaign.createdAt).reverse();
+
+        this.campaignsLatestFetchAsync = handleAsyncSuccess(response);
+      })
+      .catch(error => {
+        this.campaignsLatestFetchAsync = handleAsyncError(error);
+      });
+  }
+
   fetchCampaign(id, mainAsync = 'campaignsSingleFetchAsync', statsAsync = 'campaignsSingleStatisticsFetchAsync') {
     resetAsync(this[mainAsync], true);
     return this._fetchCampaign(id)
       .then(response => {
         resetAsync(this[statsAsync], true);
         axios
-          .get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`)
+          .get(`${ API_CAMPAIGNS_STATISTICS_SINGLE }/${ id }/stats`)
           .then(statsResponse => {
             const { data } = response;
             const promises = [];
             data.statistics = statsResponse.data;
 
             _.each(data.groups, groupId => {
-              promises.push(axios.get(`${API_GROUPS_DEVICES_FETCH}/${groupId}/devices`), axios.get(`${API_GROUPS_DETAIL}/${groupId}`));
+              promises.push(axios.get(`${ API_GROUPS_DEVICES_FETCH }/${ groupId }/devices`), axios.get(`${ API_GROUPS_DETAIL }/${ groupId }`));
             });
 
             axios.all(promises).then(responseSet => {
@@ -226,7 +248,7 @@ export default class CampaignsStore {
   launchCampaign(id) {
     resetAsync(this.campaignsLaunchAsync, true);
     return axios
-      .post(`${API_CAMPAIGNS_LAUNCH}/${id}/launch`)
+      .post(`${ API_CAMPAIGNS_LAUNCH }/${ id }/launch`)
       .then(response => {
         this.campaignsLaunchAsync = handleAsyncSuccess(response);
       })
@@ -238,7 +260,7 @@ export default class CampaignsStore {
   renameCampaign(id, data) {
     resetAsync(this.campaignsRenameAsync, true);
     return axios
-      .put(`${API_CAMPAIGNS_RENAME}/${id}`, data)
+      .put(`${ API_CAMPAIGNS_RENAME }/${ id }`, data)
       .then(response => {
         const campaign = _.find(this.campaigns, singleCampaign => singleCampaign.id === id);
         campaign.name = data.name;
@@ -252,7 +274,7 @@ export default class CampaignsStore {
   cancelCampaign(id) {
     resetAsync(this.campaignsCancelAsync, true);
     return axios
-      .post(`${API_CAMPAIGNS_CANCEL}/${id}/cancel`)
+      .post(`${ API_CAMPAIGNS_CANCEL }/${ id }/cancel`)
       .then(response => {
         this.campaignsCancelAsync = handleAsyncSuccess(response);
       })
@@ -264,7 +286,7 @@ export default class CampaignsStore {
   cancelCampaignRequest(id) {
     resetAsync(this.campaignsCancelRequestAsync, true);
     return axios
-      .put(`${API_CAMPAIGNS_CANCEL_REQUEST}/${id}/cancel`)
+      .put(`${ API_CAMPAIGNS_CANCEL_REQUEST }/${ id }/cancel`)
       .then(response => {
         this.campaignsCancelRequestAsync = handleAsyncSuccess(response);
       })
@@ -382,60 +404,5 @@ export default class CampaignsStore {
     stats.failed = this.campaign.statistics.failed.length;
     stats.successful = stats.finished - stats.failed;
     return stats;
-  }
-
-  /**
-   * latest created campaigns
-   *
-   * Following grouped functions are parts of an useful pattern
-   * where with @computed decorated functions can trigger an async request
-   * if necessary.
-   *
-   * Also first introduction of @action functions which are similar to known Redux' actions
-   * quite much more convenient to implement but to use with care.
-   *
-   * IMPORTANT: Exclusively functions which are supposed to apply a state change will be decorated with @action
-   */
-
-  _fetchLatestCampaignsCreated(limit = 10) {
-    // temporary array to fetch all data at once
-    // before passing to an @action
-    const fetchedCampaigns = [];
-    const latestOnly = true;
-    resetAsync(this.campaignsLatestFetchAsync, true);
-    return this._fetch('', 0, latestOnly, limit)
-      .then(response => {
-        if (response.data.total > 0) {
-          response.data.values.forEach(id => {
-            this._fetchCampaign(id)
-              .then(response => {fetchedCampaigns.push(response && response.data)})
-          });
-        }
-        this.campaignsLatestFetchAsync = handleAsyncSuccess(response);
-      })
-      .catch(error => {
-        this.campaignsLatestFetchAsync = handleAsyncError(error);
-      })
-      .finally(() => {
-        this.updateLatestCreatedCampaigns(fetchedCampaigns);
-      });
-  }
-
-  /**
-   * Computed values can be derived from the existing state or other computed values.
-   * Also data which are of specific characteristics and have to be requested from api
-   */
-  @computed get latestCampaignsCreated() {
-    if (this._latestCampaignsCreated === null) {
-      this._fetchLatestCampaignsCreated();
-    }
-    return this._latestCampaignsCreated;
-  }
-
-  /**
-   * this @action assigns fetched data of latest created campaigns to an observable
-   */
-  @action updateLatestCreatedCampaigns(fetchedData) {
-    this._latestCampaignsCreated = fetchedData;
   }
 }
