@@ -23,15 +23,15 @@ import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './component
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
-const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiAutoFeatureActivation, uiUserProfileMenu, uiCredentialsDownload, activeTab, switchTab }) => (
+const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload, activeTab, switchTab }) => (
   <Switch>
-    <Route exact path='/' component={HomePage} />
+    <Route exact path='/' render={props => <HomePage {...props} addNewWizard={addNewWizard} uiAutoFeatureActivation={uiAutoFeatureActivation} />} />
     <Route path='/fireworks' component={FireworksPage} />
     <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/device/:id' component={DevicePage} />
     <Route path='/packages/:packageName?' render={props => <PackagesPage {...props} switchToSWRepo={switchToSWRepo} />} />
     <Route path='/updates/:updateName?' component={UpdatesPage} />
-    <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} activeTab={activeTab} addNewWizard={addNewWizard} switchTab={switchTab} />} />
+    <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/impact-analysis' component={ImpactAnalysisPage} />
     <Route path='/whats-new' component={WhatsNewPage} />
     <Route path='/software-repository' component={SoftwareRepository} />
@@ -41,9 +41,9 @@ const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiAutoFeature
       render={props => (
         <ProfilePage {...props} uiUserProfileMenu={uiUserProfileMenu} uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload}>
           <Switch>
-            <Route path={`/profile/edit`} component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-            <Route path={`/profile/usage`} component={ProfileUsage} />
-            <Route path={`/profile/access-keys`} render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
+            <Route path='/profile/edit' component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
+            <Route path='/profile/usage' component={ProfileUsage} />
+            <Route path='/profile/access-keys' render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
           </Switch>
         </ProfilePage>
       )}

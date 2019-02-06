@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { ActiveCampaigns, LastDevices, LastPackages } from '../components/home';
+import { Button } from 'antd';
+import { LatestCreatedCampaigns, LastDevices, LastPackages } from '../components/home';
 import { Dropdown } from '../partials';
 import { PackagesCreateModal } from '../components/packages';
 
@@ -176,9 +177,9 @@ class Home extends Component {
                 {this.packageSubmenuShown && (
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className='package-dropdown-item'>
-                      <a className='package-dropdown-item' onClick={this.showPackagesCreateModal}>
+                      <Button htmlType='button' className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showPackagesCreateModal}>
                         {'Add package'}
-                      </a>
+                      </Button>
                     </li>
                     <li className='package-dropdown-item'>
                       <NavLink to='/packages'>{'View all'}</NavLink>
@@ -205,15 +206,16 @@ class Home extends Component {
                 {this.campaignSubmenuShown && (
                   <Dropdown hideSubmenu={this.hideCampaignSubmenu}>
                     <li className='campaign-dropdown-item'>
-                      <a
-                        className='campaign-dropdown-item'
+                      <Button
+                        htmlType='button'
+                        className='ant-btn ant-btn-plain campaign-dropdown-item'
                         onClick={e => {
                           e.preventDefault();
                           addNewWizard();
                         }}
                       >
                         {'Add campaign'}
-                      </a>
+                      </Button>
                     </li>
                     <li className='campaign-dropdown-item'>
                       <NavLink to='/campaigns'>{'View all'}</NavLink>
@@ -222,9 +224,9 @@ class Home extends Component {
                 )}
               </div>
             </div>
-            {/*<div className='home__body home__body--right'>
-              <ActiveCampaigns addNewWizard={addNewWizard} />
-            </div>*/}
+            <div className='home__body home__body--right'>
+              <LatestCreatedCampaigns addNewWizard={addNewWizard} />
+            </div>
           </div>
         </div>
         {this.packagesCreateModalShown && <PackagesCreateModal shown={this.packagesCreateModalShown} hide={this.hidePackagesCreateModal} />}

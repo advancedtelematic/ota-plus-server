@@ -10,7 +10,6 @@ import {
   CAMPAIGNS_STATUSES,
   CAMPAIGNS_STATUS_TAB_TITLE,
   CAMPAIGNS_DEFAULT_TAB,
-  LIMIT_CAMPAIGNS_PER_PAGE
 } from '../config';
 
 @inject('stores')
@@ -33,18 +32,18 @@ class TabNavigation extends Component {
 
   componentDidMount() {
     const { stores, location } = this.props;
-    const { campaignsStore } = stores;
+    const { campaignsStore, packagesStore } = stores;
     if (this.isCampaignsPage(location)) {
       this.setActive(campaignsStore.activeTab);
       this.fetchStatusCount();
     }
+    if (this.isPackagesPage(location)) {
+      this.setActive(packagesStore.activeTab);
+    }
   }
 
   componentWillUnmount() {
-    const { location } = this.props;
-    if (this.isCampaignsPage(location)) {
-      this.storeActive(this.activeTab);
-    }
+    this.storeActive(this.activeTab);
     this.cancelChange();
   }
 
@@ -57,11 +56,10 @@ class TabNavigation extends Component {
 
   switch = tab => {
     const { location } = this.props;
-    this.setActive(tab);
     if (this.isCampaignsPage(location)) {
-      this.storeActive(tab);
       this.fetchStatusCount();
     }
+    this.setActive(tab);
   };
 
   isPackagesPage = location => location === 'page-packages';
@@ -71,7 +69,10 @@ class TabNavigation extends Component {
   isActive = tab => (tab === this.activeTab) ? 'tab-navigation__link--active' : '';
 
   @action
-  setActive = tab => { this.activeTab = tab; };
+  setActive = tab => {
+    this.activeTab = tab;
+    this.storeActive(tab);
+  };
 
   @action
   fetchStatusCount = () => {
@@ -83,9 +84,14 @@ class TabNavigation extends Component {
 
   @action
   storeActive = tab => {
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-    campaignsStore.activeTab = tab;
+    const { stores, location } = this.props;
+    const { campaignsStore, packagesStore } = stores;
+    if (this.isCampaignsPage(location)) {
+      campaignsStore.activeTab = tab;
+    }
+    if (this.isPackagesPage(location)) {
+      packagesStore.activeTab = tab;
+    }
   };
 
   render() {
