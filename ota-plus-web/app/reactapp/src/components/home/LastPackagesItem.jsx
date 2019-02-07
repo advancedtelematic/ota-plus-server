@@ -2,7 +2,6 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
