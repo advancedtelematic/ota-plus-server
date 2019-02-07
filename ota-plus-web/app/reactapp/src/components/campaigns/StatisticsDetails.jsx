@@ -6,7 +6,10 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
-import { CampaignGroupsList, CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
+import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
+import { Tabs } from 'antd';
+
+const { TabPane } = Tabs;
 
 const AUTO_REFRESH_TIME = 10000;
 
@@ -197,7 +200,7 @@ class StatisticsDetails extends Component {
                 </div>
               </div>
             </div>
-            {alphaTestEnabled ? <CampaignInstallationReportView /> : <CampaignGroupsList />}
+            {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView /> : <div className='codes__no-items'>No failure data has been collected yet. Check back later</div>}
           </div>
         </div>
       </div>
