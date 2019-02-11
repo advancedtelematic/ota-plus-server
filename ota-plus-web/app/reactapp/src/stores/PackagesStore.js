@@ -1,7 +1,8 @@
 /** @format */
 
-import { observable, computed, extendObservable } from 'mobx';
+import { observable, computed } from 'mobx';
 import axios from 'axios';
+import _ from 'lodash';
 import {
   API_PACKAGES,
   API_UPLOAD_PACKAGE,
@@ -29,9 +30,9 @@ import {
   API_DELETE_PACKAGE,
   API_UPDATES_SEARCH,
   API_CAMPAIGNS_FETCH_SINGLE,
+  PACKAGES_DEFAULT_TAB,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'lodash';
 
 export default class PackagesStore {
   @observable packagesDeleteAsync = {};
@@ -81,6 +82,8 @@ export default class PackagesStore {
   @observable expandedPackage = null;
   @observable compatibilityData = [];
 
+  @observable activeTab = PACKAGES_DEFAULT_TAB;
+
   constructor() {
     resetAsync(this.packagesDeleteAsync);
     resetAsync(this.packagesFetchAsync);
@@ -106,15 +109,15 @@ export default class PackagesStore {
     return axios
       .delete(`${API_DELETE_PACKAGE}/${filepath}`)
       .then(
-        function(response) {
+        (response) => {
           this.packagesDeleteAsync = handleAsyncSuccess(response);
           this._removePackage(filepath);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesDeleteAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -134,9 +137,7 @@ export default class PackagesStore {
   }
 
   _removePackage(filepath) {
-    this.packages = _.filter(this.packages, pack => {
-      return pack.filepath !== filepath;
-    });
+    this.packages = _.filter(this.packages, pack => pack.filepath !== filepath);
     this._preparePackages();
   }
 
@@ -145,14 +146,14 @@ export default class PackagesStore {
     return axios
       .get(API_PACKAGES_COMMENTS)
       .then(
-        function(response) {
+        (response) => {
           this._prepareComments(response.data);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.commentsFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -160,30 +161,30 @@ export default class PackagesStore {
     return axios
       .put(`${API_PACKAGES_COMMENTS}/${filepath}`, { comment: data })
       .then(
-        function(response) {
+        (response) => {
           this._updatePackageComment(filepath, data);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.commentUpdateAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   fetchPackages(async = 'packagesFetchAsync') {
-    let that = this;
+    const that = this;
     resetAsync(that[async], true);
     return axios
       .get(API_PACKAGES)
-      .then(function(response) {
-        let packages = response.data.signed.targets;
+      .then((response) => {
+        const packages = response.data.signed.targets;
         that._formatPackages(packages);
         that.fetchComments();
-        let filepaths = that._getFilepaths();
+        const filepaths = that._getFilepaths();
         axios
           .post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
-          .then(function(resp) {
+          .then((resp) => {
             that._prepareFilePaths(resp.data);
             switch (that.page) {
               case 'device':
@@ -195,7 +196,7 @@ export default class PackagesStore {
             }
             that[async] = handleAsyncSuccess(response);
           })
-          .catch(function(e) {
+          .catch((e) => {
             switch (that.page) {
               case 'device':
                 that._prepareDevicePackages();
@@ -207,16 +208,14 @@ export default class PackagesStore {
             that[async] = handleAsyncSuccess(response);
           });
       })
-      .catch(function(error) {
+      .catch((error) => {
         that[async] = handleAsyncError(error);
       });
   }
 
   _getFilepaths() {
     return {
-      filepaths: this.packages.map(function(pack) {
-        return pack.filepath;
-      }),
+      filepaths: this.packages.map((pack) => pack.filepath),
     };
   }
 
@@ -241,12 +240,12 @@ export default class PackagesStore {
   }
 
   _formatPackages(packages) {
-    let packs = [];
+    const packs = [];
     _.each(packages, (pack, filepath) => {
-      let formattedPack = {
-        customExists: pack.custom ? true : false,
+      const formattedPack = {
+        customExists: !!pack.custom,
         packageHash: pack.hashes.sha256,
-        filepath: filepath,
+        filepath,
         createdAt: pack.custom ? pack.custom.createdAt : null,
         updatedAt: pack.custom ? pack.custom.updatedAt : null,
         description: pack.hashes.sha256,
@@ -271,23 +270,23 @@ export default class PackagesStore {
       packs.push(formattedPack);
     });
 
-    let deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
-    let deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
+    const deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
+    const deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
     this.packages = _.filter(packs, pack => !_.includes(deletedPackageNames, pack.id.name) && !_.includes(deletedVersions, pack.id.version));
   }
 
   _updatePackageComment(filepath, comment) {
-    let result = _.find(this.packages, pack => pack.filepath === filepath);
+    const result = _.find(this.packages, pack => pack.filepath === filepath);
     result.comment = comment;
   }
 
   _packageURI(entryName, name, version, hardwareIds) {
-    return API_UPLOAD_PACKAGE + '/' + entryName + '?name=' + encodeURIComponent(name) + '&version=' + encodeURIComponent(version) + '&hardwareIds=' + hardwareIds;
+    return `${API_UPLOAD_PACKAGE  }/${  entryName  }?name=${  encodeURIComponent(name)  }&version=${  encodeURIComponent(version)  }&hardwareIds=${  hardwareIds}`;
   }
 
   createPackage(data, formData, hardwareIds) {
-    let source = axios.CancelToken.source();
-    let length = this.packagesUploading.push({
+    const source = axios.CancelToken.source();
+    const length = this.packagesUploading.push({
       status: null,
       size: 0,
       uploaded: 0,
@@ -300,32 +299,32 @@ export default class PackagesStore {
     });
     const uploadObj = this.packagesUploading[length - 1];
     const config = {
-      onUploadProgress: function(progressEvent) {
-        let currentTime = new Date().getTime();
-        let lastUpTime = uploadObj.lastUpTime || currentTime;
-        let upSpeed = ((progressEvent.loaded - uploadObj.uploaded) * 1000) / ((currentTime - lastUpTime) * 1024);
+      onUploadProgress(progressEvent) {
+        const currentTime = new Date().getTime();
+        const lastUpTime = uploadObj.lastUpTime || currentTime;
+        const upSpeed = ((progressEvent.loaded - uploadObj.uploaded) * 1000) / ((currentTime - lastUpTime) * 1024);
         uploadObj.progress = (progressEvent.loaded * 100) / progressEvent.total;
         uploadObj.size = progressEvent.total;
         uploadObj.uploaded = progressEvent.loaded;
         uploadObj.upSpeed = upSpeed;
         uploadObj.lastUpTime = currentTime;
-      }.bind(this),
+      },
       cancelToken: source.token,
     };
-    const entryName = data.packageName + '_' + data.version;
+    const entryName = `${data.packageName  }_${  data.version}`;
     const request = axios
       .put(this._packageURI(entryName, data.packageName, data.version, hardwareIds), formData, config)
       .then(
-        function(response) {
+        (response) => {
           uploadObj.status = 'success';
           this.packagesCreateAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           uploadObj.status = 'error';
           this.packagesCreateAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
     uploadObj.source = source;
   }
@@ -335,11 +334,11 @@ export default class PackagesStore {
     return axios
       .get(API_PACKAGES_BLACKLIST_FETCH)
       .then(
-        function(response) {
+        (response) => {
           if (ifWithStats) {
-            let blacklist = response.data;
+            const blacklist = response.data;
             if (blacklist.length) {
-              let after = _.after(
+              const after = _.after(
                 blacklist.length,
                 () => {
                   this.blacklist = blacklist;
@@ -362,12 +361,12 @@ export default class PackagesStore {
               );
               _.each(blacklist, (pack, index) => {
                 axios
-                  .get(API_PACKAGES_COUNT_DEVICE_AND_GROUP + '/' + pack.packageId.name + '/' + pack.packageId.version)
-                  .then(function(count) {
+                  .get(`${API_PACKAGES_COUNT_DEVICE_AND_GROUP  }/${  pack.packageId.name  }/${  pack.packageId.version}`)
+                  .then((count) => {
                     pack.statistics = count.data;
                     after();
                   })
-                  .catch(function(err) {
+                  .catch((err) => {
                     pack.statistics = {};
                     after();
                   });
@@ -394,12 +393,12 @@ export default class PackagesStore {
             }
             this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
           }
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesBlacklistFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -407,17 +406,17 @@ export default class PackagesStore {
     this.blacklistedPackage = {};
     resetAsync(this.packagesOneBlacklistedFetchAsync, true);
     return axios
-      .get(API_PACKAGES_PACKAGE_BLACKLISTED_FETCH + '/' + data.name + '/' + data.version, data.details)
+      .get(`${API_PACKAGES_PACKAGE_BLACKLISTED_FETCH  }/${  data.name  }/${  data.version}`, data.details)
       .then(
-        function(response) {
+        (response) => {
           this.blacklistedPackage = response.data;
           this.packagesOneBlacklistedFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesOneBlacklistedFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -426,14 +425,14 @@ export default class PackagesStore {
     return axios
       .post(API_PACKAGES_BLACKLIST, data)
       .then(
-        function(response) {
+        (response) => {
           this.packagesBlacklistAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesBlacklistAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -442,49 +441,49 @@ export default class PackagesStore {
     return axios
       .put(API_PACKAGES_UPDATE_BLACKLISTED, data)
       .then(
-        function(response) {
+        (response) => {
           this.fetchBlacklist();
           this.packagesUpdateBlacklistedAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesUpdateBlacklistedAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   removePackageFromBlacklist(data) {
     resetAsync(this.packagesRemoveFromBlacklistAsync, true);
     return axios
-      .delete(API_PACKAGES_REMOVE_FROM_BLACKLIST + '/' + data.name + '/' + data.version)
+      .delete(`${API_PACKAGES_REMOVE_FROM_BLACKLIST  }/${  data.name  }/${  data.version}`)
       .then(
-        function(response) {
+        (response) => {
           this.fetchBlacklist();
           this.packagesRemoveFromBlacklistAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesRemoveFromBlacklistAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   fetchAffectedDevicesCount(data) {
     resetAsync(this.packagesAffectedDevicesCountFetchAsync, true);
     return axios
-      .get(API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH + '/' + data.name + '/' + data.version + '/preview')
+      .get(`${API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH  }/${  data.name  }/${  data.version  }/preview`)
       .then(
-        function(response) {
+        (response) => {
           this.affectedDevicesCount = response.data;
           this.packagesAffectedDevicesCountFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesAffectedDevicesCountFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -499,18 +498,18 @@ export default class PackagesStore {
     this.ondeviceFilter = filter;
     return axios
       .get(
-        API_PACKAGES_DEVICE_PACKAGES +
-          '/' +
-          id +
-          '/packages?regex=' +
-          (filter ? filter : '') +
-          '&limit=' +
-          this.ondevicePackagesLimit +
-          '&offset=' +
-          this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit,
+        `${API_PACKAGES_DEVICE_PACKAGES 
+          }/${ 
+          id 
+          }/packages?regex=${ 
+          filter || '' 
+          }&limit=${ 
+          this.ondevicePackagesLimit 
+          }&offset=${ 
+          this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit}`,
       )
       .then(
-        function(response) {
+        (response) => {
           this.ondevicePackages = _.uniqBy(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
           switch (this.page) {
             case 'device':
@@ -522,21 +521,21 @@ export default class PackagesStore {
               break;
           }
           this.packagesOndeviceFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesOndeviceFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   fetchAutoInstalledPackages(deviceId, ecuSerial) {
     resetAsync(this.packagesAutoInstalledFetchAsync, true);
     return axios
-      .get(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update')
+      .get(`${API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL  }/${  deviceId  }/ecus/${  ecuSerial  }/auto_update`)
       .then(
-        function(response) {
+        (response) => {
           this.autoInstalledPackages = response.data;
           switch (this.page) {
             case 'device':
@@ -546,12 +545,12 @@ export default class PackagesStore {
               break;
           }
           this.packagesAutoInstalledFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesAutoInstalledFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -563,11 +562,11 @@ export default class PackagesStore {
     }
     this.packagesHistoryFilter = filter;
     return axios
-      .get(API_PACKAGES_DEVICE_HISTORY + '/' + id + '/installation_history' + '?limit=1000')
+      .get(`${API_PACKAGES_DEVICE_HISTORY  }/${  id  }/installation_history` + `?limit=1000`)
       .then(
-        function(response) {
-          let data = response.data.values;
-          let after = _.after(
+        (response) => {
+          const data = response.data.values;
+          const after = _.after(
             data.length,
             () => {
               this.packagesHistoryCurrentPage++;
@@ -579,14 +578,14 @@ export default class PackagesStore {
           );
           _.each(data, (item, index) => {
             if (item.correlationId && item.correlationId.search('urn:here-ota:campaign:') >= 0) {
-              let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
-              let afterCampaign = _.after(
+              const campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
+              const afterCampaign = _.after(
                 data.values.length,
                 () => {
                   axios
-                    .get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
+                    .get(`${API_UPDATES_SEARCH  }/${  item.campaign.update.id}`)
                     .then(response => {
-                      let update = response.data;
+                      const update = response.data;
                       item.campaign = Object.assign(item.campaign, {
                         update: {
                           id: update.uuid,
@@ -604,9 +603,9 @@ export default class PackagesStore {
               );
 
               axios
-                .get(API_CAMPAIGNS_FETCH_SINGLE + '/' + campaignId)
+                .get(`${API_CAMPAIGNS_FETCH_SINGLE  }/${  campaignId}`)
                 .then(response => {
-                  let campaign = response.data;
+                  const campaign = response.data;
                   item.campaign = {
                     id: campaign.id,
                     name: campaign.name,
@@ -624,80 +623,70 @@ export default class PackagesStore {
             }
           });
           this.packagesHistoryFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesHistoryFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   _preparePackagesHistory() {
-    this.packagesHistory = _.sortBy(this.packagesHistory, pack => {
-      return pack.receivedAt;
-    }).reverse();
+    this.packagesHistory = _.sortBy(this.packagesHistory, pack => pack.receivedAt).reverse();
   }
 
   enablePackageAutoInstall(targetName, deviceId, ecuSerial) {
     resetAsync(this.packagesEnableAutoInstallAsync, true);
     return axios
-      .put(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + targetName)
+      .put(`${API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL  }/${  deviceId  }/ecus/${  ecuSerial  }/auto_update/${  targetName}`)
       .then(
-        function(response) {
+        (response) => {
           this.fetchAutoInstalledPackages(deviceId, ecuSerial);
           this.packagesEnableAutoInstallAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesEnableAutoInstallAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   disablePackageAutoInstall(packageName, deviceId, ecuSerial) {
     resetAsync(this.packagesDisableAutoInstallAsync, true);
     return axios
-      .delete(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + packageName)
+      .delete(`${API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL  }/${  deviceId  }/ecus/${  ecuSerial  }/auto_update/${  packageName}`)
       .then(
-        function(response) {
+        (response) => {
           this.fetchAutoInstalledPackages(deviceId, ecuSerial);
           this.packagesDisableAutoInstallAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.packagesDisableAutoInstallAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   _getPackage(data) {
-    return _.find(this.packages, pack => {
-      return pack.id.name === data.name && pack.id.version === data.version;
-    });
+    return _.find(this.packages, pack => pack.id.name === data.name && pack.id.version === data.version);
   }
 
   _getInstalledPackage(filepath, hardwareId) {
-    let filteredPacks = _.filter(this.packages, pack => {
-      return _.includes(pack.hardwareIds, hardwareId) ? pack : null;
-    });
-    let result = _.find(filteredPacks, pack => {
-      return pack.filepath === filepath;
-    });
+    const filteredPacks = _.filter(this.packages, pack => _.includes(pack.hardwareIds, hardwareId) ? pack : null);
+    const result = _.find(filteredPacks, pack => pack.filepath === filepath);
     if (result) {
       result.isInstalled = true;
       return result;
-    } else {
+    } 
       return this._getReportedPackage(filepath, hardwareId);
-    }
+    
   }
 
   _getReportedPackage(filepath, hardwareId) {
-    let result = _.find(this.packages, pack => {
-      return pack.filepath === filepath;
-    });
+    const result = _.find(this.packages, pack => pack.filepath === filepath);
     if (result) {
       result.isInstalled = true;
       return result;
@@ -706,14 +695,14 @@ export default class PackagesStore {
   }
 
   _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
-    let packages = this.packages;
-    let groupedPackages = {};
+    const packages = this.packages;
+    const groupedPackages = {};
     let sortedPackages = {};
     this.packagesSort = packagesSort;
     _.each(
       packages,
       (obj, index) => {
-        if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
+        if (_.isUndefined(groupedPackages[obj.id.name]) || !(groupedPackages[obj.id.name] instanceof Array)) {
           groupedPackages[obj.id.name] = new Object();
           groupedPackages[obj.id.name].versions = [];
           groupedPackages[obj.id.name].packageName = obj.id.name;
@@ -724,25 +713,23 @@ export default class PackagesStore {
       this,
     );
     _.each(groupedPackages, (obj, index) => {
-      groupedPackages[index].versions = _.sortBy(obj.versions, pack => {
-        return pack.createdAt;
-      }).reverse();
+      groupedPackages[index].versions = _.sortBy(obj.versions, pack => pack.createdAt).reverse();
     });
-    let specialGroup = {
+    const specialGroup = {
       '#': [],
     };
     Object.keys(groupedPackages)
       .sort((a, b) => {
         if (packagesSort !== 'undefined' && packagesSort == 'desc') {
           return b.localeCompare(a);
-        } else {
+        } 
           return a.localeCompare(b);
-        }
+        
       })
       .forEach(key => {
         let firstLetter = key.charAt(0).toUpperCase();
         firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-        if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !sortedPackages[firstLetter] instanceof Array) {
+        if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
           sortedPackages[firstLetter] = [];
         }
         if (firstLetter != '#') {
@@ -759,31 +746,31 @@ export default class PackagesStore {
 
   _prepareDevicePackages(packagesSort = this.packagesSort) {
     this.packagesSort = packagesSort;
-    let packages = JSON.parse(JSON.stringify(this.packages));
+    const packages = JSON.parse(JSON.stringify(this.packages));
 
     if (packages.length) {
       const autoInstalledPackages = this.autoInstalledPackages;
       const blacklist = this.blacklist;
-      let groupedPackages = {};
+      const groupedPackages = {};
       let sortedPackages = {};
-      let parsedBlacklist = [];
+      const parsedBlacklist = [];
 
       _.each(blacklist, pack => {
-        parsedBlacklist[pack.packageId.name + '-' + pack.packageId.version] = {
+        parsedBlacklist[`${pack.packageId.name  }-${  pack.packageId.version}`] = {
           isBlackListed: true,
           comment: pack.comment,
         };
       });
 
       _.each(packages, packInstalled => {
-        if (!_.isUndefined(parsedBlacklist[packInstalled.id.name + '-' + packInstalled.id.version])) {
+        if (!_.isUndefined(parsedBlacklist[`${packInstalled.id.name  }-${  packInstalled.id.version}`])) {
           packInstalled.isBlackListed = true;
         }
         if (autoInstalledPackages.indexOf(packInstalled.id.name) > -1) packInstalled.isAutoInstallEnabled = true;
       });
 
       _.each(packages, (pack, index) => {
-        if (_.isUndefined(groupedPackages[pack.id.name]) || !groupedPackages[pack.id.name] instanceof Object) {
+        if (_.isUndefined(groupedPackages[pack.id.name]) || !(groupedPackages[pack.id.name] instanceof Object)) {
           groupedPackages[pack.id.name] = {
             versions: [],
             packageName: pack.id.name,
@@ -795,20 +782,18 @@ export default class PackagesStore {
         groupedPackages[pack.id.name].versions.push(pack);
       });
       _.each(groupedPackages, (pack, index) => {
-        groupedPackages[index].versions = _.sortBy(pack.versions, element => {
-          return element.createdAt;
-        }).reverse();
+        groupedPackages[index].versions = _.sortBy(pack.versions, element => element.createdAt).reverse();
       });
-      let specialGroup = { '#': [] };
+      const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
           if (packagesSort !== 'undefined' && packagesSort == 'desc') return b.localeCompare(a);
-          else return a.localeCompare(b);
+          return a.localeCompare(b);
         })
         .forEach(key => {
           let firstLetter = key.charAt(0).toUpperCase();
           firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !sortedPackages[firstLetter] instanceof Array) {
+          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
             sortedPackages[firstLetter] = [];
           }
           if (firstLetter != '#') sortedPackages[firstLetter].push(groupedPackages[key]);
@@ -826,28 +811,28 @@ export default class PackagesStore {
   _prepareOndevicePackages(packagesSort = this.packagesOndeviceSort) {
     this.packagesOndeviceSort = packagesSort;
     if (this.ondevicePackages.length) {
-      let packages = [];
-      let groupedPackages = {};
+      const packages = [];
+      const groupedPackages = {};
       let sortedPackages = {};
-      let parsedBlacklist = [];
+      const parsedBlacklist = [];
 
       _.each(this.blacklist, pack => {
-        parsedBlacklist[pack.packageId.name + '-' + pack.packageId.version] = true;
+        parsedBlacklist[`${pack.packageId.name  }-${  pack.packageId.version}`] = true;
       });
 
       _.each(this.ondevicePackages, pack => {
         if (pack.packageId !== 'undefined') {
-          let newPack = {
+          const newPack = {
             name: pack.packageId.name,
             version: pack.packageId.version,
-            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[pack.packageId.name + '-' + pack.packageId.version]),
+            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[`${pack.packageId.name  }-${  pack.packageId.version}`]),
           };
           packages.push(newPack);
         } else {
-          let newPack = {
+          const newPack = {
             name: pack.name,
             version: pack.version,
-            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[pack.name + '-' + pack.version]),
+            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[`${pack.name  }-${  pack.version}`]),
           };
           packages.push(newPack);
         }
@@ -856,22 +841,22 @@ export default class PackagesStore {
       _.each(
         packages,
         (obj, index) => {
-          const objKey = obj.name + '_' + obj.version;
+          const objKey = `${obj.name  }_${  obj.version}`;
           groupedPackages[objKey] = obj;
         },
         this,
       );
 
-      let specialGroup = { '#': [] };
+      const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
           if (packagesSort !== 'undefined' && packagesSort == 'desc') return b.localeCompare(a);
-          else return a.localeCompare(b);
+          return a.localeCompare(b);
         })
         .forEach(key => {
           let firstLetter = key.charAt(0).toUpperCase();
           firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !sortedPackages[firstLetter] instanceof Array) {
+          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
             sortedPackages[firstLetter] = [];
           }
           if (firstLetter != '#') sortedPackages[firstLetter].push(groupedPackages[key]);
@@ -891,7 +876,7 @@ export default class PackagesStore {
     let groupedPackages = {};
     let sortedPackages = {};
     _.each(this.blacklist, (obj, index) => {
-      if (_.isUndefined(groupedPackages[obj.packageId.name]) || !groupedPackages[obj.packageId.name] instanceof Array) {
+      if (_.isUndefined(groupedPackages[obj.packageId.name]) || !(groupedPackages[obj.packageId.name] instanceof Array)) {
         groupedPackages[obj.packageId.name] = new Object();
         groupedPackages[obj.packageId.name] = {
           versions: [],
@@ -907,22 +892,18 @@ export default class PackagesStore {
       groupedPackages[obj.packageId.name].versions.push(this.blacklist[index]);
     });
     _.each(groupedPackages, (obj, index) => {
-      groupedPackages[index].versions = _.sortBy(obj.versions, version => {
-        return version.statistics.deviceCount;
-      }).reverse();
+      groupedPackages[index].versions = _.sortBy(obj.versions, version => version.statistics.deviceCount).reverse();
     });
-    groupedPackages = _.sortBy(groupedPackages, version => {
-      return version.deviceCount;
-    }).reverse();
+    groupedPackages = _.sortBy(groupedPackages, version => version.deviceCount).reverse();
 
     groupedPackages.sort();
 
-    let specialGroup = { '#': [] };
+    const specialGroup = { '#': [] };
     _.each(groupedPackages, (pack, key) => {
       let firstLetter = pack.packageName.charAt(0).toUpperCase();
 
       firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-      if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !sortedPackages[firstLetter] instanceof Array) {
+      if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
         sortedPackages[firstLetter] = [];
       }
       if (firstLetter != '#') sortedPackages[firstLetter].push(pack);
@@ -994,9 +975,13 @@ export default class PackagesStore {
   }
 
   _getAllStorage() {
-    var values = [],
-      keys = Object.keys(localStorage),
-      i = keys.length;
+    const values = [];
+
+      
+const keys = Object.keys(localStorage);
+
+      
+let i = keys.length;
     while (i--) {
       try {
         values.push(JSON.parse(localStorage.getItem(keys[i])));
@@ -1006,27 +991,27 @@ export default class PackagesStore {
   }
 
   _handleCompatibles(compatibilityData = null) {
-    let data = this._getAllStorage();
+    const data = this._getAllStorage();
     this.compatibilityData = data;
   }
 
   _addPackage(pack) {
-    let name = pack.custom ? pack.custom.name : pack.filename;
-    let version = pack.custom ? pack.custom.version : pack.checksum.hash;
-    let hardwareIds = pack.custom ? pack.custom.hardwareIds : [];
-    let formattedPack = {
-      customExists: pack.custom ? true : false,
+    const name = pack.custom ? pack.custom.name : pack.filename;
+    const version = pack.custom ? pack.custom.version : pack.checksum.hash;
+    const hardwareIds = pack.custom ? pack.custom.hardwareIds : [];
+    const formattedPack = {
+      customExists: !!pack.custom,
       packageHash: pack.checksum.hash,
       filepath: pack.filename,
       createdAt: pack.custom ? pack.custom.createdAt : null,
       updatedAt: pack.custom ? pack.custom.updatedAt : null,
       targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
       targetLength: pack.length,
-      hardwareIds: hardwareIds,
+      hardwareIds,
       description: pack.checksum.hash,
       id: {
-        name: name,
-        version: version,
+        name,
+        version,
       },
       installedOnEcus: 0,
       isBlackListed: false,
@@ -1036,9 +1021,7 @@ export default class PackagesStore {
       vendor: null,
       comment: 'Default comment',
     };
-    let found = _.find(this.packages, pack => {
-      return pack.id.name === name && pack.id.version === version;
-    });
+    const found = _.find(this.packages, pack => pack.id.name === name && pack.id.version === version);
     if (found) {
       found.hardwareIds = hardwareIds;
     } else {
@@ -1061,9 +1044,7 @@ export default class PackagesStore {
 
   @computed
   get lastPackages() {
-    return _.sortBy(this.packages, function(pack) {
-      return pack.createdAt;
-    })
+    return _.sortBy(this.packages, (pack) => pack.createdAt)
       .reverse()
       .slice(0, 10);
   }
