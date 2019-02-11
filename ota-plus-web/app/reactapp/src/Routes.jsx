@@ -60,8 +60,6 @@ Routes.propTypes = {
   uiAutoFeatureActivation: PropTypes.bool,
   uiUserProfileMenu: PropTypes.bool,
   uiCredentialsDownload: PropTypes.bool,
-  activeTab: PropTypes.string,
-  switchTab: PropTypes.func,
 };
 
 export default Routes;
