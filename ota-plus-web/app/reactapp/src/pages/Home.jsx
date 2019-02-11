@@ -2,9 +2,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observe, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { MetaData, FadeAnimation, AsyncStatusCallbackHandler } from '../utils';
+import { MetaData, FadeAnimation } from '../utils';
 import { HomeContainer, SanityCheckContainer, Terms } from '../containers';
 import { Loader } from '../partials';
 
@@ -13,9 +12,15 @@ const title = 'Home';
 @inject('stores')
 @observer
 class Home extends Component {
-  componentWillMount() {
-    const { uiAutoFeatureActivation } = this.props;
-    const { provisioningStore, devicesStore, packagesStore } = this.props.stores;
+  static propTypes = {
+    stores: PropTypes.object,
+    addNewWizard: PropTypes.func,
+    uiAutoFeatureActivation: PropTypes.bool,
+  };
+
+  componentDidMount() {
+    const { stores, uiAutoFeatureActivation } = this.props;
+    const { provisioningStore, devicesStore, packagesStore } = stores;
     if (!uiAutoFeatureActivation) {
       provisioningStore.sanityCheckCompleted = true;
     }
@@ -24,16 +29,18 @@ class Home extends Component {
     packagesStore.fetchPackages();
   }
   componentWillUnmount() {
-    const { devicesStore, packagesStore, campaignsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, packagesStore, campaignsStore } = stores;
     devicesStore._reset();
     packagesStore._reset();
     campaignsStore._reset();
   }
   render() {
-    const { uiUserProfileMenu, addNewWizard } = this.props;
-    const { userStore, provisioningStore } = this.props.stores;
+    const { stores, addNewWizard } = this.props;
+    const { userStore, provisioningStore } = stores;
     const isTermsAccepted = userStore._isTermsAccepted();
     const { sanityCheckCompleted } = provisioningStore;
+
     return (
       <FadeAnimation display='flex'>
         {isTermsAccepted ? (
@@ -60,8 +67,6 @@ class Home extends Component {
   }
 }
 
-Home.propTypes = {
-  stores: PropTypes.object,
-};
+
 
 export default Home;
