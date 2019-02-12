@@ -2,9 +2,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'lodash';
 import { Loader } from '../../partials';
+import _ from 'lodash';
 import LastDevicesItem from './LastDevicesItem';
 import NoItems from './NoItems';
 
@@ -12,8 +13,7 @@ import NoItems from './NoItems';
 @observer
 class LastDevices extends Component {
   render() {
-    const { stores } = this.props;
-    const { devicesStore } = stores;
+    const { devicesStore } = this.props.stores;
     const { lastDevices } = devicesStore;
     return (
       <span style={{ height: '100%' }}>
@@ -22,9 +22,11 @@ class LastDevices extends Component {
             <Loader className='dark' />
           </div>
         ) : Object.keys(lastDevices).length ? (
-          _.map(lastDevices, (device, index) => <LastDevicesItem key={device.uuid} index={index} device={device} />)
+          _.map(lastDevices, (device, index) => {
+            return <LastDevicesItem key={device.uuid} index={index} device={device} />;
+          })
         ) : (
-          <NoItems itemType="device" create={null} />
+          <NoItems itemName={'device'} create={null} />
         )}
       </span>
     );

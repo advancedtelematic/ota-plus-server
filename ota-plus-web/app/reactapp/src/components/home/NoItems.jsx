@@ -1,21 +1,17 @@
 /** @format */
 
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Button } from 'antd';
+import React, { Component } from 'react';
 
-const NoItems = ({ itemType, createItem = null }) => (
+const NoItems = ({ itemName, create = null }) => {
+  return (
     <div className='home__items-empty'>
-      <span>No {itemType}s to show</span>
-      <Button htmlType='button' className='ant-btn ant-btn-plain add-button' onClick={createItem}>
-        Create a new {itemType}
-      </Button>
+      <span>No {itemName}s to show</span>
+      <a href='#' className='add-button' onClick={create}>
+        Create a new {itemName}
+      </a>
     </div>
   );
-
-NoItems.propTypes = {
-  itemType: PropTypes.string,
-  createItem: PropTypes.func,
 };
 
 export default NoItems;

@@ -1,8 +1,8 @@
 /** @format */
 
-import LatestCreatedCampaigns from './LatestCreatedCampaigns';
-import LatestCreatedCampaignItem from './LatestCreatedCampaignItem';
+import ActiveCampaigns from './ActiveCampaigns';
+import ActiveCampaignItem from './ActiveCampaignItem';
 import LastDevices from './LastDevices';
 import LastPackages from './LastPackages';
 
-export { LatestCreatedCampaigns, LastDevices, LastPackages, LatestCreatedCampaignItem };
+export { ActiveCampaigns, LastDevices, LastPackages, ActiveCampaignItem };

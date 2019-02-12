@@ -135,17 +135,10 @@ export const LIMIT_UPDATES_WIZARD = 5;
 export const LIMIT_UPDATES_MAIN = 30;
 
 /**
- * packages
- */
-
-export const PACKAGES_DEFAULT_TAB = 'compact';
-
-/**
  * campaigns
  */
 
-export const LIMIT_LATEST_CAMPAIGNS = 10;
-export const LIMIT_CAMPAIGNS_PER_PAGE = 15;
+export const LIMIT_CAMPAIGNS_PER_PAGE = 10;
 export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
 export const CAMPAIGNS_STATUS_TAB_TITLE = {
   'prepared': 'In Preparation',
