@@ -2,13 +2,14 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import enhanceWithClickOutside from 'react-click-outside';
 
 @observer
 class Dropdown extends React.Component {
   static propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.object,
     customStyles: PropTypes.object,
     customClassName: PropTypes.string,
   };

@@ -177,9 +177,9 @@ class Home extends Component {
                 {this.packageSubmenuShown && (
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className='package-dropdown-item'>
-                      <a className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showPackagesCreateModal}>
+                      <Button htmlType='button' className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showPackagesCreateModal}>
                         {'Add package'}
-                      </a>
+                      </Button>
                     </li>
                     <li className='package-dropdown-item'>
                       <NavLink to='/packages'>{'View all'}</NavLink>
@@ -206,7 +206,8 @@ class Home extends Component {
                 {this.campaignSubmenuShown && (
                   <Dropdown hideSubmenu={this.hideCampaignSubmenu}>
                     <li className='campaign-dropdown-item'>
-                      <a
+                      <Button
+                        htmlType='button'
                         className='ant-btn ant-btn-plain campaign-dropdown-item'
                         onClick={e => {
                           e.preventDefault();
@@ -214,7 +215,7 @@ class Home extends Component {
                         }}
                       >
                         {'Add campaign'}
-                      </a>
+                      </Button>
                     </li>
                     <li className='campaign-dropdown-item'>
                       <NavLink to='/campaigns'>{'View all'}</NavLink>

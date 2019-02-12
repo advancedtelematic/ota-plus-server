@@ -119,6 +119,8 @@ class Main extends Component {
         minimizedWizards={this.minimizedWizards}
         skipStep={skipStep}
         key={this.wizards.length}
+        activeTab={this.getActiveTab()}
+        switchTab={this.switchTab}
       />
     );
     this.wizards = this.wizards.concat(wizard);
