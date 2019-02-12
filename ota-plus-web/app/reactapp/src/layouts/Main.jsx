@@ -45,6 +45,13 @@ class Main extends Component {
   atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
   @observable
   showWhatsNewPopover = false;
+  @observable
+  switchToSWRepo = false;
+  @observable
+  activeTab = {
+    campaigns: 'prepared',
+    packages: 'compact',
+  };
 
   constructor(props) {
     super(props);
@@ -158,6 +165,16 @@ class Main extends Component {
     }
   };
 
+  updateCampaignsView = () => {
+    const { router } = this.context;
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
+    if (getCurrentLocation(router) === 'campaigns' && !campaignsStore.campaignsFetchAsync[this.getActiveTab()].isFetching) {
+      campaignsStore.fetchStatusCounts();
+      campaignsStore.fetchCampaigns(this.getActiveTab());
+    }
+  };
+
   toggleUploadBoxMode = e => {
     if (e) e.preventDefault();
     this.uploadBoxMinimized = !this.uploadBoxMinimized;
@@ -180,6 +197,24 @@ class Main extends Component {
     history.push(path);
   };
 
+  switchTab = identifier => {
+    const { router } = this.context;
+    const location = getCurrentLocation(router);
+    this.activeTab[location] = identifier;
+    this.switchToSWRepo = this.activeTab[location] === 'advanced';
+    this.updateCampaignsView();
+  };
+
+  getActiveTab = () => {
+    const { router } = this.context;
+    const location = getCurrentLocation(router);
+    const locationHasTabs = location === 'packages' || location === 'campaigns';
+    if (locationHasTabs) {
+      return this.activeTab[location];
+    }
+    return '';
+  };
+
   calcHeight = () => {
     const { router } = this.context;
     const currentLocation = getCurrentLocation(router);
@@ -195,6 +230,7 @@ class Main extends Component {
     const { stores, ...rest } = this.props;
     const { userStore, featuresStore } = stores;
     const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;
+    const activeTab = this.getActiveTab();
 
     return (
       <span>
@@ -207,6 +243,8 @@ class Main extends Component {
           uiCredentialsDownload={this.uiCredentialsDownload}
           alphaPlusEnabled={alphaPlusEnabled}
           startWhatsNewPopover={this.showWhatsNew}
+          switchTab={this.switchTab}
+          activeTab={activeTab}
           addNewWizard={this.addNewWizard}
         />
         <div
@@ -225,6 +263,8 @@ class Main extends Component {
               uiAutoFeatureActivation={this.uiAutoFeatureActivation}
               uiUserProfileMenu={this.uiUserProfileMenu}
               uiCredentialsDownload={this.uiCredentialsDownload}
+              activeTab={activeTab}
+              switchTab={this.switchTab}
             />
           </FadeAnimation>
           <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />

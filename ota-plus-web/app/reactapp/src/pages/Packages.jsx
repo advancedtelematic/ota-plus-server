@@ -13,10 +13,11 @@ const title = 'Packages';
 class Packages extends Component {
   static propTypes = {
     stores: PropTypes.object.isRequired,
+    switchToSWRepo: PropTypes.bool.isRequired,
     match: PropTypes.object,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { stores } = this.props;
     const { packagesStore } = stores;
     packagesStore.page = 'packages';
@@ -30,12 +31,12 @@ class Packages extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { switchToSWRepo, match } = this.props;
     const { params } = match;
     return (
       <FadeAnimation>
         <MetaData title={title}>
-          <PackagesContainer highlightedPackage={params.packageName} />
+          <PackagesContainer switchToSWRepo={switchToSWRepo} highlightedPackage={params.packageName} />
         </MetaData>
       </FadeAnimation>
     );
