@@ -18,6 +18,9 @@ import {
   CAMPAIGNS_STATUSES,
   LIMIT_CAMPAIGNS_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
+  API_DEVICES_DEVICE_DETAILS,
+  API_DEVICES_DIRECTOR_DEVICE, API_GROUPS_CREATE,
+  API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { contains, prepareUpdateObject } from '../utils/Helpers';
@@ -204,24 +207,35 @@ export default class CampaignsStore {
       .then(response => {
         resetAsync(this[statsAsync], true);
         axios
-          .get(`${ API_CAMPAIGNS_STATISTICS_SINGLE }/${ id }/stats`)
-          .then(statsResponse => {
-            const { data } = response;
-            const promises = [];
-            data.statistics = statsResponse.data;
+          .all([
+            axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`),
+            axios.get(`${API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE}/stats?correlationId=urn:here-ota:campaign:${id}`)
+          ])
+          .then(
+            axios.spread((fromCampaignsAPI, fromDeviceAPI) => {
+              const { data } = response;
+              const promises = [];
+              data.statistics = fromCampaignsAPI.data;
+              data.statistics.byResultCode = [];
+              if (!_.isEmpty(fromDeviceAPI.data)) {
+                _.map(fromDeviceAPI.data, el => {
+                  !el.success && data.statistics.byResultCode.push(el);
+                });
+              }
 
-            _.each(data.groups, groupId => {
-              promises.push(axios.get(`${ API_GROUPS_DEVICES_FETCH }/${ groupId }/devices`), axios.get(`${ API_GROUPS_DETAIL }/${ groupId }`));
-            });
+              _.each(data.groups, groupId => {
+                promises.push(axios.get(`${API_GROUPS_DEVICES_FETCH}/${groupId}/devices`), axios.get(`${API_GROUPS_DETAIL}/${groupId}`));
+              });
 
-            axios.all(promises).then(responseSet => {
-              const results = _.map(responseSet, singleResponse => singleResponse.data);
-              const chunks = _.chunk(results, 2);
-              data.groups = _.map(chunks, chunk => ({ ...chunk[0], ...chunk[1] }));
-              this.campaign = data;
-              this[statsAsync] = handleAsyncSuccess(statsResponse);
-            });
-          })
+              axios.all(promises).then(responseSet => {
+                const results = _.map(responseSet, singleResponse => singleResponse.data);
+                const chunks = _.chunk(results, 2);
+                data.groups = _.map(chunks, chunk => ({ ...chunk[0], ...chunk[1] }));
+                this.campaign = data;
+                this[statsAsync] = handleAsyncSuccess(fromCampaignsAPI);
+              });
+            }),
+          )
           .catch(statsError => {
             this[statsAsync] = handleAsyncError(statsError);
           });
