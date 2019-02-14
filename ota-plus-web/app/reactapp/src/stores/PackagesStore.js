@@ -702,7 +702,7 @@ export default class PackagesStore {
     _.each(
       packages,
       (obj, index) => {
-        if (_.isUndefined(groupedPackages[obj.id.name]) || !(groupedPackages[obj.id.name] instanceof Array)) {
+        if (_.isUndefined(groupedPackages[obj.id.name])) {
           groupedPackages[obj.id.name] = new Object();
           groupedPackages[obj.id.name].versions = [];
           groupedPackages[obj.id.name].packageName = obj.id.name;
