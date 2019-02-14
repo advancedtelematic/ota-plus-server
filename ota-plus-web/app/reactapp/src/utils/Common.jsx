@@ -6,12 +6,6 @@ const doLogout = () => {
   document.getElementById('logout').submit();
 };
 
-const resetAll = (asyncCollection, isFetching = false) => {
-  _.each(asyncCollection, async => {
-    resetAsync(async, isFetching);
-  });
-};
-
 const resetAsync = (obj, isFetching = false) => {
   obj.isFetching = isFetching;
   obj.status = null;
@@ -19,14 +13,18 @@ const resetAsync = (obj, isFetching = false) => {
   obj.code = null;
 };
 
-const handleAsyncSuccess = response => {
-  return {
+const resetAll = (asyncCollection, isFetching = false) => {
+  _.each(asyncCollection, async => {
+    resetAsync(async, isFetching);
+  });
+};
+
+const handleAsyncSuccess = response => ({
     status: 'success',
     code: response.status,
     data: response.data,
     isFetching: false,
-  };
-};
+});
 
 const handleAsyncError = error => {
   error.response = error.response || { status: null, data: {} };

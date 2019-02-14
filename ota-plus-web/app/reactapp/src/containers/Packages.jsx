@@ -2,8 +2,11 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable } from 'mobx';
+import { action, observable, observe, onBecomeObserved } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import _ from 'lodash';
+
+
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepository } from '../pages';
 import { PackagesCreateModal, PackagesHeader, PackagesList, PackagesDependenciesManager, PackagesEditCommentModal } from '../components/packages';
@@ -11,34 +14,67 @@ import { PackagesCreateModal, PackagesHeader, PackagesList, PackagesDependencies
 @inject('stores')
 @observer
 class Packages extends Component {
-  @observable
-  createModalShown = false;
-  @observable
-  fileUploaderModalShown = false;
-  @observable
-  fileDropped = null;
-  @observable
-  copied = false;
-  @observable
-  dependenciesModalShown = false;
-  @observable
-  dependenciesManagerShown = false;
-  @observable
-  activeVersionFilepath = null;
-  @observable
-  activeManagerVersion = null;
-  @observable
-  deleteConfirmationShown = false;
-  @observable
-  expandedPackageName = null;
-  @observable
-  itemToDelete = null;
-  @observable
-  editCommentShown = false;
-  @observable
-  activeComment = '';
-  @observable
-  activePackageFilepath = '';
+  @observable createModalShown = false;
+  @observable fileUploaderModalShown = false;
+  @observable fileDropped = null;
+  @observable copied = false;
+  @observable dependenciesModalShown = false;
+  @observable dependenciesManagerShown = false;
+  @observable activeVersionFilepath = null;
+  @observable activeManagerVersion = null;
+  @observable deleteConfirmationShown = false;
+  @observable expandedPackageName = null;
+  @observable itemToDelete = null;
+  @observable editCommentShown = false;
+  @observable activeComment = '';
+  @observable activePackageFilepath = '';
+  @observable switchToSWRepo = false;
+
+  static propTypes = {
+    stores: PropTypes.object,
+    highlightedPackage: PropTypes.string,
+  };
+
+  componentDidMount() {
+    const { stores } = this.props;
+    const { packagesStore, featuresStore } = stores;
+
+    if (featuresStore.alphaPlusEnabled) {
+      this.cancelObserveTabChange = observe(packagesStore, change => {
+        this.applyTab(change);
+      });
+      onBecomeObserved(this, 'switchToSWRepo', this.resumeScope);
+    }
+  }
+
+  componentWillUnmount() {
+    if (!_.isUndefined(this.cancelObserveTabChange)) {
+      this.cancelObserveTabChange();
+    }
+  }
+
+  @action setActive = tab => {
+    const { stores } = this.props;
+    const { packagesStore } = stores;
+
+    this.switchToSWRepo = tab === 'advanced';
+    packagesStore.activeTab = tab;
+  };
+
+  resumeScope = () => {
+    const { stores } = this.props;
+    const { packagesStore } = stores;
+
+    this.setActive(packagesStore.activeTab);
+  };
+
+  applyTab = change => {
+    const { name, newValue } = change;
+
+    if (name === 'activeTab') {
+      this.setActive(newValue);
+    }
+  };
 
   showEditComment = (filepath, comment, e) => {
     if (e) e.preventDefault();
@@ -59,8 +95,9 @@ class Packages extends Component {
   };
 
   deleteItem = e => {
+    const { stores } = this.props;
+    const { packagesStore } = stores;
     if (e) e.preventDefault();
-    const { packagesStore } = this.props.stores;
     packagesStore.deletePackage(this.itemToDelete);
     this.hideDeleteConfirmation();
   };
@@ -132,8 +169,8 @@ class Packages extends Component {
   };
 
   render() {
-    const { highlightedPackage, switchToSWRepo } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { stores, highlightedPackage } = this.props;
+    const { packagesStore } = stores;
     return (
       <span ref='component'>
         {packagesStore.packagesFetchAsync.isFetching ? (
@@ -142,8 +179,8 @@ class Packages extends Component {
           </div>
         ) : packagesStore.packagesCount ? (
           <span>
-            {!switchToSWRepo ? <PackagesHeader showCreateModal={this.showCreateModal} /> : null}
-            {!switchToSWRepo ? (
+            {!this.switchToSWRepo && <PackagesHeader showCreateModal={this.showCreateModal} />}
+            {!this.switchToSWRepo ? (
               <PackagesList
                 onFileDrop={this.onFileDrop}
                 highlightedPackage={highlightedPackage}
@@ -174,8 +211,8 @@ class Packages extends Component {
             </div>
           </div>
         )}
-        {this.createModalShown ? <PackagesCreateModal shown={this.createModalShown} hide={this.hideCreateModal} fileDropped={this.fileDropped} /> : null}
-        {this.deleteConfirmationShown ? (
+        {this.createModalShown && <PackagesCreateModal shown={this.createModalShown} hide={this.hideCreateModal} fileDropped={this.fileDropped} />}
+        {this.deleteConfirmationShown && (
           <ConfirmationModal
             modalTitle={
               <div className='text-red' id='delete-package-title'>
@@ -187,8 +224,8 @@ class Packages extends Component {
             deleteItem={this.deleteItem}
             topText={
               <div className='delete-modal-top-text' id='delete-package-top-text'>
-                Remove <b id={'delete-package-' + this.expandedPackageName}>{this.expandedPackageName}</b> v.
-                <b id={'delete-package-' + this.expandedPackageName + '-version-' + this.itemToDelete}>{this.itemToDelete}</b> permanently?
+                Remove <b id={`delete-package-${this.expandedPackageName}`}>{this.expandedPackageName}</b> v.
+                <b id={`delete-package-${this.expandedPackageName}-version-${this.itemToDelete}`}>{this.itemToDelete}</b> permanently?
               </div>
             }
             bottomText={
@@ -196,22 +233,17 @@ class Packages extends Component {
                 If the package is part of any active campaigns, any devices that haven't installed it will fail the campaign.
               </div>
             }
-            showDetailedInfo={true}
+            showDetailedInfo
           />
-        ) : null}
-        {this.dependenciesModalShown ? <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeVersionFilepath} /> : null}
-        {this.dependenciesManagerShown ? (
+        )}
+        {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeVersionFilepath} />}
+        {this.dependenciesManagerShown && (
           <PackagesDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={packagesStore.preparedPackages} activePackage={this.activeManagerVersion} />
-        ) : null}
-        {this.editCommentShown ? <PackagesEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} /> : null}
+        )}
+        {this.editCommentShown && <PackagesEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} />}
       </span>
     );
   }
 }
-
-Packages.propTypes = {
-  stores: PropTypes.object,
-  highlightedPackage: PropTypes.string,
-};
 
 export default Packages;
