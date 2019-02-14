@@ -876,7 +876,7 @@ export default class PackagesStore {
     let groupedPackages = {};
     let sortedPackages = {};
     _.each(this.blacklist, (obj, index) => {
-      if (_.isUndefined(groupedPackages[obj.packageId.name]) || !(groupedPackages[obj.packageId.name] instanceof Array)) {
+      if (_.isUndefined(groupedPackages[obj.packageId.name])) {
         groupedPackages[obj.packageId.name] = new Object();
         groupedPackages[obj.packageId.name] = {
           versions: [],
