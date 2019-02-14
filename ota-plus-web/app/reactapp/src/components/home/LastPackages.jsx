@@ -28,7 +28,7 @@ class LastPackages extends Component {
             return <LastPackagesItem key={index} pack={pack} />;
           })
         ) : (
-          <NoItems itemName={'package'} create={showPackagesCreateModal} />
+          <NoItems itemType={'package'} createItem={showPackagesCreateModal} />
         )}
       </span>
     );

@@ -18,7 +18,7 @@ class SubHeader extends Component {
 
   static propTypes = {
     campaign: PropTypes.object.isRequired,
-    showCancelCampaignModal: PropTypes.bool,
+    showCancelCampaignModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -30,12 +30,6 @@ class SubHeader extends Component {
   componentDidMount() {
     const { campaign } = this.props;
     this.campaignName = campaign.name;
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    const { campaign } = nextProps;
-    const { name: newName } = campaign;
-    return {campaignName: newName};
   }
 
   showEditModal = e => {
