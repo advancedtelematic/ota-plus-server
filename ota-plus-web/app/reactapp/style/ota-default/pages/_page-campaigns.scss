@@ -371,7 +371,7 @@
   }
 
   .col-name {
-    width: 20%;
+    width: 15%;
   }
 
   .col-progress {
@@ -379,8 +379,16 @@
   }
 
   .col-numbers {
-    width: 20%;
+    width: 15%;
     align-content: center;
+  }
+
+  .col-actions {
+    width: 10%;
+    align-content: center;
+    .failure_report {
+      cursor: pointer;
+    }
   }
 
   &__item {
