@@ -18,8 +18,6 @@ import {
   CAMPAIGNS_STATUSES,
   LIMIT_CAMPAIGNS_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
-  API_DEVICES_DEVICE_DETAILS,
-  API_DEVICES_DIRECTOR_DEVICE, API_GROUPS_CREATE,
   API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE
 } from '../config';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';

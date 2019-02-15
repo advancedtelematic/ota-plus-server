@@ -4,10 +4,18 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE } from "../../config";
 
 @inject('stores')
 @observer
 class InstallationReportView extends Component {
+
+  downloadReport = () => {
+    const { campaignsStore } = this.props.stores;
+    const { campaign } = campaignsStore;
+    location.href = `${API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE}/failed-installations.csv?correlationId=urn:here-ota:campaign:${campaign.id}`;
+  };
+
   render() {
     const { campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
@@ -34,8 +42,8 @@ class InstallationReportView extends Component {
             Number of Affected <br />
             devices in campaign
           </div>
-          {/*<div className='col-actions'>Downloads</div>
-          <div className='col-actions'>Retry</div>
+          <div className='col-actions'>Downloads</div>
+          {/* <div className='col-actions'>Retry</div>
           <div className='col-actions'>Retry status</div>*/}
         </div>
 
@@ -54,14 +62,13 @@ class InstallationReportView extends Component {
                 <div className='col-numbers'>
                   {el.devices} of {devicesTotal}
                 </div>
-                {/*
                 <div className='col-actions'>
-                  <div className='failures__action' data-tip data-for='extract-vins' onClick={this.downloadReport}>
+                  <div className='failure_report' onClick={this.downloadReport}>
                     <img src='/assets/img/icons/download.svg' alt='Icon' />
                   </div>
                 </div>
-                <div className='col-actions'>
-                  <div className='failures__action' data-tip data-for='relaunch-campaign'>
+                {/*<div className='col-actions'>
+                  <div className='failures__action' >
                     <img src='/assets/img/icons/relaunch.svg' alt='Icon' />
                   </div>
                 </div>
