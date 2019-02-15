@@ -179,24 +179,15 @@ class Main extends Component {
   };
 
   calcHeight = pageId => {
-    if (pageId === 'page-campaigns') {
-      return 'calc(100vh - 100px)';
-    }
-    return 'calc(100vh - 50px)';
-  };
-
-  pagePadding = pageId => {
     const { stores } = this.props;
     const { featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
 
-    if (!alphaPlusEnabled && pageId === 'page-packages') {
-      return '0 30px 30px 30px';
+    if (pageId === 'page-campaigns' || (alphaPlusEnabled && pageId === 'page-packages')) {
+      return 'calc(100vh - 100px)';
+    } else {
+      return 'calc(100vh - 50px)';
     }
-    if (pageId === 'page-devices') {
-      return '0';
-    }
-    return '30px';
   };
 
   render() {
@@ -223,7 +214,6 @@ class Main extends Component {
           id={pageId}
           style={{
             height: this.calcHeight(pageId),
-            padding: this.pagePadding(pageId),
           }}
         >
           <FadeAnimation>
