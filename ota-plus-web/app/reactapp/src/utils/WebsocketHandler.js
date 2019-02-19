@@ -58,6 +58,7 @@ const WebsocketHandler = function(wsUrl, stores) {
           break;
         case 'DeviceEventMessage':
           stores.devicesStore._updateStatus(data.deviceUuid, 'installing');
+          stores.devicesStore.fetchEvents(data.deviceUuid);
           break;
         default:
           console.log('Unhandled event type: ' + eventObj.type);
