@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
+import { Tag } from 'antd';
 import _ from 'lodash';
 import { OTAModal } from '../../partials';
 
@@ -187,7 +188,7 @@ class DependenciesManager extends Component {
     );
     return (
       <OTAModal
-        title='Dependencies management'
+        title={<span>Dependencies management<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></span>}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
