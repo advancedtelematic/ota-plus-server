@@ -4,9 +4,11 @@
 @import '../mixins';
 
 #page-updates {
-  background-color: $home-bg;
-  height: calc(100vh - 50px);
   padding: 30px;
+
+  .ios-list {
+    height: calc(100% - 40px);
+  }
 
   .update-subheader {
     justify-content: normal;

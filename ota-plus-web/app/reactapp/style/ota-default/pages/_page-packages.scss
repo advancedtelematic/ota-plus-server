@@ -4,9 +4,7 @@
 @import '../mixins';
 
 #page-packages {
-  background-color: $home-bg;
-  height: calc(100vh - 100px);
-
+  padding: 30px;
   .ios-list {
     height: calc(100% - 40px);
   }
