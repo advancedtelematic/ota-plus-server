@@ -51,7 +51,16 @@ $sw-repo-border-color: #cfd0d3;
 $confirm-modal-title: #d0021b;
 $olp-group-layer: $warning-color;
 
-/* Application icons */
+//campaign stats
+$campaign-success-color: #44CA9D;
+$campaign-queued-color: #FA9D00;
+$campaign-failure-color: #C41C33;
+$campaign-notProcessed-color: #d8d8d8;
+$campaign-notImpacted-color: #9FA2A6;
+$campaign-cancelled-color: #6F737A;
+
+
+  /* Application icons */
 $here-logo: '/assets/img/HERE_Logo_2016.png';
 
 $car-image-url: '/assets/img/icons/car.svg';

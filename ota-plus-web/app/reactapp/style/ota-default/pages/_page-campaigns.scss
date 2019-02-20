@@ -166,18 +166,8 @@
 
   &__wrapper {
     display: flex;
-    padding: 0 25px;
-  }
-
-  &__box {
-    &--left {
-      padding-top: 25px;
-    }
-
-    &--right {
-      flex: auto;
-      background: #fff;
-    }
+    padding: 0 40px;
+    flex-direction: column;
   }
 
   &__box-title {
@@ -186,27 +176,6 @@
     font-size: 12px;
     text-transform: uppercase;
     color: $devices-group-text;
-  }
-
-  &__failure-chart {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__failure-rate {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: $home-bg;
-    font-weight: 400;
   }
 
   &__blocks {
@@ -253,45 +222,12 @@
   }
 
   &__bar-item {
-    &--failure {
-      height: 10px;
-      background-color: #fe0001;
-      float: left;
-    }
-
-    &--success {
-      height: 10px;
-      background-color: #83d060;
-      float: left;
-    }
-
-    &--queued {
-      height: 10px;
-      background-color: #f5a623;
-      float: left;
-    }
-
-    &--not-proceed {
-      height: 10px;
-      background-color: #f3f3f4;
-      float: left;
-    }
-
-    &--not-impacted {
-      height: 10px;
-      background-color: #9fa2a6;
-      float: left;
-    }
-
-    &--cancelled {
-      height: 10px;
-      background-color: #6f737a;
-      float: left;
-    }
+     height: 10px;
+     float: left;
   }
 
   &__progress {
-    padding: 40px;
+    padding-bottom: 40px;
   }
 
   &__legend {
@@ -310,50 +246,36 @@
     display: inline-block;
     margin-right: 10px;
 
+  }
+  &__legend-item-color, &__bar-item {
+
     &--success {
-      background-color: #fe0001;
+      background-color: $campaign-success-color;
     }
 
     &--failure {
-      background-color: #fe0001;
-    }
-
-    &--success {
-      background-color: $progress-default-color;
+      background-color: $campaign-failure-color;
     }
 
     &--queued {
-      background-color: #f5a623;
+      background-color: $campaign-queued-color;
     }
 
     &--not-proceed {
-      background-color: #f3f3f4;
+      background-color: $campaign-notProcessed-color;
     }
 
     &--not-impacted {
-      background-color: #9fa2a6;
+      background-color: $campaign-notImpacted-color;
     }
 
     &--cancelled {
-      background-color: #6f737a;
+      background-color: $campaign-cancelled-color;
     }
-  }
-
-  &__legend-item-title {
-    margin-right: 10px;
-    display: inline-block;
-  }
-
-  &__legend-item-count {
-    display: inline-block;
   }
 }
 
 .codes {
-  &__no-items{
-    padding: 0 40px 20px;
-  }
-
   &__heading {
     text-transform: uppercase;
     text-align: center;
@@ -362,8 +284,8 @@
     font-weight: 500;
     font-size: 12px;
     color: $devices-group-text;
-    border-bottom: 1px solid #f3f3f4;
-    border-top: 1px solid #f3f3f4;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
     align-items: center;
   }
 
@@ -402,12 +324,12 @@
 
   &__item-progress-wrapper {
     height: 20px;
-    background-color: #f3f3f4;
+    background-color: white;
     display:flex;
   }
 
   &__item-progress-value {
-    background-color: white;
+    background-color: $device-item-bg;
     padding-right: 10px;
   }
 
@@ -416,6 +338,6 @@
     margin: 0;
     position: relative;
     border-radius: 0;
-    background-color: #D35566;
+    background-color: $campaign-failure-color;
   }
 }
