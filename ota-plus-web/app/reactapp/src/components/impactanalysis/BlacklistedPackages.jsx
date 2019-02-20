@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
+import { Tag } from 'antd';
 
 const headerHeight = 30;
 
@@ -121,7 +122,12 @@ class BlacklistedPackages extends Component {
     const blacklist = packagesStore.preparedBlacklist;
     return (
       <div className='blacklisted-packages-panel'>
-        <div className='section-header'>Blacklisted packages</div>
+        <div className='section-header'>
+          Blacklisted packages
+          <Tag color='#48dad0' className='alpha-tag'>
+            ALPHA
+          </Tag>
+        </div>
         <div className='ios-list' ref='list'>
           <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
             <div className='left-box'>{this.fakeHeaderLetter}</div>

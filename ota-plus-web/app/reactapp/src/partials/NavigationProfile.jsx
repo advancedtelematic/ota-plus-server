@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 
-import { Avatar, Divider } from 'antd';
+import { Avatar, Divider, Tag } from 'antd';
 import { assets } from '../config';
 
 @inject('stores')
@@ -101,6 +101,7 @@ class NavigationProfile extends Component {
                 <a onClick={this.clearLocalStorage} id='reset-demo' className='add-button'>
                   <img src={assets.DEFAULT_CLEAR_STORAGE_ICON} alt='Icon' />
                   {'Reset demo'}
+                  <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>
                 </a>
               </li>
             )}

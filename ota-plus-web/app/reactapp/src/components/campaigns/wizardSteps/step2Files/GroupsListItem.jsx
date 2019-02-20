@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { VelocityTransitionGroup } from 'velocity-react';
 
-import { Checkbox } from 'antd';
+import { Checkbox, Tag } from 'antd';
 
 @inject('stores')
 @observer
@@ -55,7 +55,9 @@ class GroupsListItem extends Component {
           {alphaPlusEnabled && groupType === 'dynamic' && (
             <div className='automatic-campaign' onClick={this.toggleAutomaticCampaign}>
               <div>
-                <span>{'automatic campaign'}</span>
+                <span>{'automatic campaign'}
+                  <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>
+                </span>
                 <div className={`switch${this.automaticCampaign ? ' switchOn' : ''}`} />
               </div>
             </div>
