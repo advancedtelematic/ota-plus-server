@@ -42,50 +42,14 @@ class StatisticsDetails extends Component {
     }
   };
 
+  pluralizeDevices = amount => {
+    return amount === 1 ? `${amount} device ` : `${amount} devices `;
+  };
+
   render() {
     const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
-    const { campaignsStore, featuresStore } = stores;
-    const { alphaTestEnabled } = featuresStore;
+    const { campaignsStore } = stores;
     const { campaign, overallCampaignStatistics } = campaignsStore;
-    const failureRateData = [
-      {
-        value: overallCampaignStatistics.failed,
-        color: '#FE0001',
-        highlight: '#FE0001',
-        label: 'Failure rate',
-      },
-      {
-        value: overallCampaignStatistics.failed === 0 ? 1 : overallCampaignStatistics.finished,
-        color: '#44CA9D',
-        highlight: '#44CA9D',
-        label: 'Success rate',
-      },
-      {
-        value: 0,
-        color: '#CCCCCC',
-        highlight: '#CCCCCC',
-        label: 'Cancelled rate',
-      },
-    ];
-
-    const stats = {
-      datasets: [
-        {
-          data: [],
-          label: [],
-          backgroundColor: [],
-          hoverBackgroundColor: [],
-          borderWidth: 0,
-        },
-      ],
-    };
-
-    _.each(failureRateData, item => {
-      stats.datasets[0].data.push(item.value);
-      stats.datasets[0].label.push(name.label);
-      stats.datasets[0].backgroundColor.push(item.color);
-      stats.datasets[0].hoverBackgroundColor.push(item.highlight);
-    });
 
     const successRate = Math.min(Math.round((overallCampaignStatistics.successful / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
     const failureRate = Math.min(Math.round((overallCampaignStatistics.failed / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
@@ -104,104 +68,85 @@ class StatisticsDetails extends Component {
       <div className='statistics'>
         <CampaignSubHeader campaign={campaign} showCancelCampaignModal={showCancelCampaignModal} hideCancel={hideCancel} />
         <div className='statistics__wrapper'>
-          <div className='statistics__box statistics__box--left'>
-            <div className='statistics__box-title'>{'Failure rate'}</div>
-            <div className='statistics__failure-chart' id='campaign-detail-total-failure-rate'>
-              <div className='statistics__failure-chart-wrapper'>
-                <Doughnut
-                  data={stats}
-                  options={{
-                    cutoutPercentage: 75,
-                  }}
-                  width={120}
-                  height={120}
-                />
+          <div className='statistics__progress'>
+            <div className='statistics__box-title'>{'Total progress'}</div>
+            <div className='statistics__blocks'>
+              <div className='statistics__processed'>
+                <span className='statistics__count' id='campaign-detail-devices-stats-processed'>
+                  {overallCampaignStatistics.processed}
+                </span>
+                {'Processed'}
               </div>
-              <div className='statistics__failure-rate'>{Math.round((overallCampaignStatistics.failed / Math.max(overallCampaignStatistics.finished, 1)) * 100)}%</div>
-            </div>
-          </div>
-
-          <div className='statistics__box statistics__box--right'>
-            <div className='statistics__progress'>
-              <div className='statistics__box-title'>{'Total progress'}</div>
-              <div className='statistics__blocks'>
-                <div className='statistics__processed'>
-                  <span className='statistics__count' id='campaign-detail-devices-stats-processed'>
-                    {overallCampaignStatistics.processed}
-                  </span>
-                  {'Processed'}
-                </div>
-                <div className='statistics__affected'>
-                  <span className='statistics__count' id='campaign-detail-devices-stats-affected'>
-                    {overallCampaignStatistics.affected}
-                  </span>
-                  {'Affected'}
-                </div>
-              </div>
-              <div className='statistics__installation'>
-                <div className='statistics__bar-wrapper'>
-                  <div className='statistics__bar'>
-                    <div className='statistics__bar-item statistics__bar-item--failure' style={{ width: `${failureRate}%` }} />
-                    <div className='statistics__bar-item statistics__bar-item--success' style={{ width: `${successRate}%` }} />
-                    <div className='statistics__bar-item statistics__bar-item--queued' style={{ width: `${queuedRate}%` }} />
-                    <div className='statistics__bar-item statistics__bar-item--not-impacted' style={{ width: `${notImpactedRate}%` }} />
-                    <div className='statistics__bar-item statistics__bar-item--not-proceed' style={{ width: `${notProcessedRate}%` }} />
-                    <div className='statistics__bar-item statistics__bar-item--cancelled' style={{ width: `${cancelledRate}%` }} />
-                  </div>
-                  <div className='statistics__legend'>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--success' />
-                      <span className='statistics__legend-item-title'>{'Success'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_success'>
-                        {overallCampaignStatistics.successful}
-                      </span>
-                    </div>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--queued' />
-                      <span className='statistics__legend-item-title'>{'Queued'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_queued'>
-                        {overallCampaignStatistics.queued}
-                      </span>
-                    </div>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--failure' />
-                      <span className='statistics__legend-item-title'>{'Failure'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_failure'>
-                        {overallCampaignStatistics.failed}
-                      </span>
-                    </div>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--not-proceed' />
-                      <span className='statistics__legend-item-title'>{'Not processed'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_not_proceed'>
-                        {notProcessed}
-                      </span>
-                    </div>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--not-impacted' />
-                      <span className='statistics__legend-item-title'>{'Not impacted'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_not_impacted'>
-                        {overallCampaignStatistics.notImpacted}
-                      </span>
-                    </div>
-                    <div className='statistics__legend-item'>
-                      <span className='statistics__legend-item-color statistics__legend-item-color--cancelled' />
-                      <span className='statistics__legend-item-title'>{'Cancelled'}</span>
-                      <span className='statistics__legend-item-count' id='target_stats_cancelled'>
-                        {overallCampaignStatistics.cancelled}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className='statistics__dependencies'>
-                  <a className='add-button' id='target_show_dependencies' onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                    <span>{'Show dependencies'}</span>
-                  </a>
-                </div>
+              <div className='statistics__affected'>
+                <span className='statistics__count' id='campaign-detail-devices-stats-affected'>
+                  {overallCampaignStatistics.affected}
+                </span>
+                {'Affected'}
               </div>
             </div>
-            {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView /> : <div className='codes__no-items'>No failure data has been collected yet. Check back later</div>}
+            <div className='statistics__installation'>
+              <div className='statistics__bar-wrapper'>
+                <div className='statistics__bar'>
+                  <div className='statistics__bar-item statistics__bar-item--failure' style={{ width: `${failureRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--success' style={{ width: `${successRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--queued' style={{ width: `${queuedRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--not-impacted' style={{ width: `${notImpactedRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--not-proceed' style={{ width: `${notProcessedRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--cancelled' style={{ width: `${cancelledRate}%` }} />
+                </div>
+                <div className='statistics__legend'>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--success' />
+                    <span>Success: </span>
+                    <span id='target_stats_success'>
+                      {this.pluralizeDevices(overallCampaignStatistics.successful)} ({successRate} %)
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--queued' />
+                    <span >Queued: </span>
+                    <span id='target_stats_queued'>
+                      {this.pluralizeDevices(overallCampaignStatistics.queued)} ({queuedRate} %)
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--failure' />
+                    <span>Failure: </span>
+                    <span id='target_stats_failure'>
+                      {this.pluralizeDevices(overallCampaignStatistics.failed)} ({failureRate} %)
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--not-proceed' />
+                    <span>Not processed: </span>
+                    <span id='target_stats_not_proceed'>
+                      {this.pluralizeDevices(notProcessed)} ({notProcessedRate} %)
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--not-impacted' />
+                    <span>Not impacted: </span>
+                    <span id='target_stats_not_impacted'>
+                      {this.pluralizeDevices(overallCampaignStatistics.notImpacted)} ({notImpactedRate} %)
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--cancelled' />
+                    <span>Cancelled: </span>
+                    <span id='target_stats_cancelled'>
+                      {this.pluralizeDevices(overallCampaignStatistics.cancelled)} ({cancelledRate} %)
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className='statistics__dependencies'>
+                <a className='add-button' id='target_show_dependencies' onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
+                  <span>{'Show dependencies'}</span>
+                </a>
+              </div>
+            </div>
           </div>
+          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView /> : <div>No failure data has been collected yet. Check back later</div>}
         </div>
       </div>
     );
