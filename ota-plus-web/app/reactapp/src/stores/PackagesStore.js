@@ -974,25 +974,28 @@ export default class PackagesStore {
     this.preparedPackages = [];
   }
 
+  /*
+   * ToDo: refactoring of messy localStorage accesses
+   */
   _getAllStorage() {
     const values = [];
+    const keys = Object.keys(localStorage);
 
-      
-const keys = Object.keys(localStorage);
-
-      
-let i = keys.length;
+    let i = keys.length;
     while (i--) {
       try {
+        // localStorage can hold different data from another application
         values.push(JSON.parse(localStorage.getItem(keys[i])));
-      } catch (e) {}
+      } catch (e) {
+        // at least console output in case of error
+        console.debug(e);
+      }
     }
     return values;
   }
 
-  _handleCompatibles(compatibilityData = null) {
-    const data = this._getAllStorage();
-    this.compatibilityData = data;
+  _handleCompatibles() {
+    this.compatibilityData = this._getAllStorage();
   }
 
   _addPackage(pack) {

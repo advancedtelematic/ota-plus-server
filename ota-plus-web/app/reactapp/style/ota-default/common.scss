@@ -476,6 +476,7 @@ input {
 
 #app {
   min-width: 1280px;
+  height: 100vh;
 }
 
 .navbar-inverse {
@@ -942,7 +943,7 @@ input {
 .ios-list {
   //TODO: Remove redundant styles
   background: #fff;
-  height: calc(100%);
+  height: 100%;
   overflow-y: auto;
   position: relative;
 

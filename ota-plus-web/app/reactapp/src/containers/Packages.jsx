@@ -178,7 +178,7 @@ class Packages extends Component {
             <Loader />
           </div>
         ) : packagesStore.packagesCount ? (
-          <span>
+          <div className='packages-container'>
             {!this.switchToSWRepo && <PackagesHeader showCreateModal={this.showCreateModal} />}
             {!this.switchToSWRepo ? (
               <PackagesList
@@ -194,7 +194,7 @@ class Packages extends Component {
             ) : (
               <SoftwareRepository />
             )}
-          </span>
+          </div>
         ) : (
           <div className='wrapper-center'>
             <div className='page-intro'>

@@ -176,10 +176,12 @@ class List extends Component {
   }
 
   render() {
-    const { onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { stores, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
+    const { packagesStore, featuresStore } = stores;
+    const { alphaPlusEnabled } = featuresStore;
+
     return (
-      <div className='ios-list' ref='list'>
+      <div className='ios-list' ref='list' style={{height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})`}}>
         <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
           <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
             {this.fakeHeaderLetter}
