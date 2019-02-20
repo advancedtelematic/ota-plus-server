@@ -4,6 +4,8 @@
 @import '../mixins';
 
 #page-device {
+  background: $home-bg;
+  height: calc(100vh - 50px);
   font-size: 12px;
 
   .device-offline-title {
@@ -113,7 +115,6 @@
     &__overview {
       @include transition;
       height: 60px;
-      color: $devices-group-inactive;
       padding: 15px;
       border-left: 4px solid transparent;
       margin-left: -10px;
@@ -260,7 +261,6 @@
       height: calc(100vh - 240px);
       line-height: 22px;
       overflow-y: auto;
-      margin-top: 20px;
     }
 
     &__empty {

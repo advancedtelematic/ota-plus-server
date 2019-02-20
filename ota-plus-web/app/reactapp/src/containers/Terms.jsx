@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import moment from 'moment';
 
-import { Button } from 'antd';
+import { Button, Checkbox } from 'antd';
 import { OTAModal } from '../partials';
 import * as contracts from '../../../assets/contracts';
 
@@ -56,7 +56,7 @@ class Terms extends Component {
     );
     return (
       <div className='terms'>
-        <div className='wrapper-center wrapper-responsive'>
+        <div className='wrapper wrapper-center wrapper-responsive'>
           <div className='logo logo--terms'>
             <img src='/assets/img/HERE_pos.png' alt='HERE' />
           </div>
@@ -65,16 +65,9 @@ class Terms extends Component {
             The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for the purposes of allowing you to test the service internally during the Trial Period.
           </p>
           <div className='checkbox-wrapper'>
-            <Button
-              htmlType='button'
-              className={`btn-checkbox ${this.termsAccepted || checked ? 'checked' : ''}`}
-              onClick={() => {
-                this.termsAccepted = !this.termsAccepted;
-              }}
-              id={`terms-checkbox${this.termsAccepted && '-checked'}`}
-            >
-              <i className='fa fa-check' aria-hidden='true' />
-            </Button>
+            <Checkbox
+              checked={this.termsAccepted}
+              onChange={ () => { this.termsAccepted = !this.termsAccepted;}}/>
             <div>
               I agree to HERE Location Platform Services Online
               <a id='service-terms-link' rel='noopener noreferrer' target='_blank' href='https://developer.here.com/terms-and-conditions'>

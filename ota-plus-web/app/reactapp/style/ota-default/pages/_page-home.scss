@@ -4,7 +4,7 @@
 @import '../mixins';
 
 #page-home {
-  padding: 30px;
+  background-color: $home-bg;
 }
 
 .home {
@@ -15,6 +15,7 @@
 
   &__box {
     flex-basis: 50%;
+    min-height: 723px;
     overflow: hidden;
 
     &--left {
@@ -80,7 +81,7 @@
     }
 
     &--left {
-      height: calc(100vh - 160px);
+      height: calc(100vh - 100px);
       padding: 20px;
 
       @media (max-height: 768px) {
@@ -197,7 +198,10 @@
     min-height: 215px;
 
     &:not(:last-child) {
-      margin-bottom: 8px;
+      margin-bottom: 5px;
+      @media all and (min-height:769px) {
+        margin-bottom: 8px;
+      }
     }
   }
 

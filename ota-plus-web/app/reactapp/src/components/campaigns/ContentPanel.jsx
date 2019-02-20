@@ -101,7 +101,7 @@ class ContentPanel extends Component {
     const { campaignsFetchAsync } = campaignsStore;
 
     return (
-      <div className='campaigns' ref='list' style={{ height: 'calc(100vh - 193px', width: 'calc(100vw - 60px' }}>
+      <div className='campaigns' ref='list'>
         <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
         {campaignsFetchAsync[this.activeTab].isFetching ? (
           <div className='wrapper-center'>

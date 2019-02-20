@@ -4,9 +4,19 @@
 @import '../mixins';
 
 #page-packages {
-  padding: 30px;
+  background-color: $home-bg;
+
+
   .ios-list {
-    height: calc(100% - 40px);
+    height: calc(100% - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  &.alpha-plus {
+    .ios-list {
+      height: calc(100% - 100px);
+    }
   }
 
   .c-package {
