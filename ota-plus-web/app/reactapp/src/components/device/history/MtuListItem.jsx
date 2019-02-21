@@ -20,7 +20,7 @@ class MtuListItem extends Component {
     let type = item.campaign ? 'campaign' : 'singleInstallation';
 
     return (
-      <li className='overview-panel__item'>
+      <li className='overview-panel__item overview-panel__item-history'>
         <div className='overview-panel__item-header'>
           {type === 'campaign' ? (
             <div>
@@ -125,7 +125,7 @@ class MtuListItem extends Component {
             );
           })}
         </div>
-        <div className='overview-panel__device-status'>
+        <div className='overview-panel__operation-status'>
           <div className={`overview-panel__status-code ${item.result.success ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}>
             <span>Result code</span>{' '}
             <span className='overview-panel__status-code-value' id={'result-code-' + item.correlationId}>
