@@ -24,7 +24,7 @@ class Statistics extends Component {
   }
 
   render() {
-    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+    const { stores, showCancelCampaignModal, showDependenciesModal, showRetryModal, hideCancel } = this.props;
     const { campaignsStore } = stores;
     return (
       <div>
@@ -33,7 +33,7 @@ class Statistics extends Component {
             <Loader />
           </div>
         ) : (
-          <StatisticsDetails showCancelCampaignModal={showCancelCampaignModal} showDependenciesModal={showDependenciesModal} hideCancel={hideCancel} />
+          <StatisticsDetails showCancelCampaignModal={showCancelCampaignModal} showDependenciesModal={showDependenciesModal} showRetryModal={showRetryModal} hideCancel={hideCancel} />
         )}
       </div>
     );

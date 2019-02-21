@@ -23,7 +23,7 @@ class List extends Component {
     const { stores } = this.props;
     const { campaignsStore } = stores;
     const { campaigns } = campaignsStore;
-    const { status, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, toggleCampaign } = this.props;
+    const { status, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal, toggleCampaign } = this.props;
 
     const campaignsAvailable = !!campaigns.length;
 
@@ -40,6 +40,7 @@ class List extends Component {
               isExpanded={isExpanded}
               showCancelCampaignModal={showCancelCampaignModal}
               showDependenciesModal={showDependenciesModal}
+              showRetryModal={showRetryModal}
               toggleCampaign={toggleCampaign}
               isCancelable={isCancelable}
             />

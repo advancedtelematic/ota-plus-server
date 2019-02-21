@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import { API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE } from "../../config";
+import { API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE } from '../../config';
+import { Tag } from 'antd';
 
 @inject('stores')
 @observer
 class InstallationReportView extends Component {
-
   downloadReport = () => {
     const { campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
@@ -17,7 +17,9 @@ class InstallationReportView extends Component {
   };
 
   render() {
-    const { campaignsStore } = this.props.stores;
+    const { showRetryModal } = this.props;
+    const { campaignsStore, featuresStore } = this.props.stores;
+    const { alphaPlusEnabled } = featuresStore;
     const { campaign } = campaignsStore;
     const devicesTotal = _.reduce(_.map(campaign.statistics.stats, group => group.processed), (prev, next) => {
       return prev + next;
@@ -43,16 +45,23 @@ class InstallationReportView extends Component {
             devices in campaign
           </div>
           <div className='col-actions'>Downloads</div>
-          {/* <div className='col-actions'>Retry</div>
-          <div className='col-actions'>Retry status</div>*/}
+          {alphaPlusEnabled && (
+            <div style={{ display: 'flex', flexDirection: 'column' }} className='col-actions'>
+              <Tag color='#48dad0' className='alpha-tag'>
+                ALPHA
+              </Tag>
+              <span>Retry</span>
+            </div>
+          )}
+          {/*  <div className='col-actions'>Retry status</div>*/}
         </div>
 
         <>
-          {_.map(failures, (el, index) => {
-            const progress = Math.min(Math.round((el.devices / Math.max(devicesTotal, 1)) * 100), 100);
+          {_.map(failures, (failure, index) => {
+            const progress = Math.min(Math.round((failure.devices / Math.max(devicesTotal, 1)) * 100), 100);
             return (
               <div key={index} className='codes__item'>
-                <div className='col-name'>{el.name}</div>
+                <div className='col-name'>{failure.name}</div>
                 <div className='col-progress'>
                   <div className='codes__item-progress-wrapper'>
                     <div className='codes__item-progress-value'>{devicesTotal !== 0 ? progress + '%' : '100%'}</div>
@@ -60,19 +69,20 @@ class InstallationReportView extends Component {
                   </div>
                 </div>
                 <div className='col-numbers'>
-                  {el.devices} of {devicesTotal}
+                  {failure.devices} of {devicesTotal}
                 </div>
                 <div className='col-actions'>
                   <div className='failure_report' onClick={this.downloadReport}>
                     <img src='/assets/img/icons/download.svg' alt='Icon' />
                   </div>
                 </div>
-                {/*<div className='col-actions'>
-                  <div className='failures__action' >
-                    <img src='/assets/img/icons/relaunch.svg' alt='Icon' />
+                {alphaPlusEnabled && (
+                  <div className='col-actions'>
+                    <div className='failure_report' onClick={() => {showRetryModal(failure.name)}}>
+                      <img src='/assets/img/icons/retry_icon.svg' alt='Icon' />
+                    </div>
                   </div>
-                </div>
-                <div className='col-actions'>No retry?</div>*/}
+                )}
               </div>
             );
           })}
