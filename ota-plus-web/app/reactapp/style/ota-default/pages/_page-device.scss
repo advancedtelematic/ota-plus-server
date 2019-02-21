@@ -262,6 +262,7 @@
       overflow-y: auto;
       margin-top: 20px;
     }
+
     &__empty {
       font-size: 18px;
       font-weight: 400;
@@ -270,9 +271,12 @@
     &__item {
       margin: 15px;
       padding-top: 15px;
-      border-bottom: 1px solid $device-active-item-bg;
+      padding-bottom: 5px;
       position: relative;
       background-color: #f3f3f4;
+      &-history {
+        padding-bottom: 0;
+      }
     }
 
     &__item-header {
@@ -331,6 +335,7 @@
         position: relative;
       }
     }
+
     &__label {
       &--queued {
         position: absolute;
@@ -369,6 +374,15 @@
 
     &__operation-status {
       display: flex;
+      flex-direction: column;
+      & > div {
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
 
     &__operation-info-failure {
@@ -402,13 +416,6 @@
 
     &__status-code {
       color: #fff;
-      padding: 5px;
-      text-align: center;
-      border-bottom-left-radius: 5px;
-      width: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
 
       &--success {
         background-color: $device-pack-installed-bg;
@@ -417,25 +424,16 @@
       &--error {
         background-color: $campaigns-cancel-color;
       }
-    }
-
-    &__status-code-value {
-      padding-left: 10px;
+      &-value {
+        padding-left: 10px;
+      }
     }
 
     &__status-text {
       color: #fff;
-      padding: 5px 10px;
-      display: flex;
-      align-items: center;
       background-color: #4b4b4b;
       border-bottom-right-radius: 5px;
-      width: calc(100% - 100px);
-    }
-
-    &__device-status {
-      display: flex;
-      height: 40px;
+      border-bottom-left-radius: 5px;
     }
 
     &__cancel-update,
