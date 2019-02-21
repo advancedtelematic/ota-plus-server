@@ -47,7 +47,7 @@ class StatisticsDetails extends Component {
   };
 
   render() {
-    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel, showRetryModal } = this.props;
     const { campaignsStore } = stores;
     const { campaign, overallCampaignStatistics } = campaignsStore;
 
@@ -146,7 +146,7 @@ class StatisticsDetails extends Component {
               </div>
             </div>
           </div>
-          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView /> : <div>No failure data has been collected yet. Check back later</div>}
+          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView showRetryModal={showRetryModal}/> : <div>No failure data has been collected yet. Check back later</div>}
         </div>
       </div>
     );

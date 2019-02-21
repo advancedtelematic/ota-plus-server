@@ -28,7 +28,7 @@ class ListItem extends Component {
   };
 
   render() {
-    const { campaign, isExpanded, showDependenciesModal, showCancelCampaignModal, isCancelable, type } = this.props;
+    const { campaign, isExpanded, showDependenciesModal, showCancelCampaignModal, showRetryModal, isCancelable, type } = this.props;
 
     return (
       <VelocityTransitionGroup
@@ -46,7 +46,13 @@ class ListItem extends Component {
                 <img src={assets.DEFAULT_COLLAPSE_CAMPAIGN} alt='Icon' />
               </div>
             </div>
-            <Statistics showCancelCampaignModal={showCancelCampaignModal} showDependenciesModal={showDependenciesModal} campaignId={campaign.id} hideCancel={!isCancelable} />
+            <Statistics
+              showCancelCampaignModal={showCancelCampaignModal}
+              showDependenciesModal={showDependenciesModal}
+              showRetryModal={showRetryModal}
+              campaignId={campaign.id}
+              hideCancel={!isCancelable}
+            />
           </div>
         ) : (
           <CampaignSummary campaign={campaign} type={type} toggle={this.toggle} />
