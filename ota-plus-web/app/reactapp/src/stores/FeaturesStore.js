@@ -24,13 +24,6 @@ export default class FeaturesStore {
     resetAsync(this.featuresFetchAsync);
   }
 
-  resetFeaturesFetchAsync(isFetching = false) {
-    this.featuresFetchAsync = {
-      isFetching,
-      status: null,
-    };
-  }
-
   fetchFeatures() {
     resetAsync(this.featuresFetchAsync, true);
     return axios
