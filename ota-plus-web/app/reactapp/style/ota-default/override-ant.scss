@@ -51,7 +51,6 @@ h3 {
   }
 }
 
-
 .ant-dropdown {
   &-menu-item {
     background: transparent;
@@ -99,11 +98,11 @@ h3 {
   padding-right: 25px;
   &__wrapper {
     position: fixed;
-    bottom: 25px;
-    left: 30px;
-    right: 30px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     border-top: 1px solid $color-text-light;
-    padding: 5px 0;
+    padding: 0;
     background-color: $color-grey;
   }
   .ant-pagination {
@@ -147,6 +146,11 @@ h3 {
 .ant-checkbox-wrapper {
   display: flex;
   align-items: center;
+  .terms & {
+    align-items: flex-start;
+    margin-right: 10px;
+  }
+
   .ant-checkbox-inner {
     border-radius: 0;
   }

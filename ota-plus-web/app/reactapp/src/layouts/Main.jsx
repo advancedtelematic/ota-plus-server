@@ -178,18 +178,6 @@ class Main extends Component {
     history.push(path);
   };
 
-  calcHeight = pageId => {
-    const { stores } = this.props;
-    const { featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
-
-    if (pageId === 'page-campaigns' || (alphaPlusEnabled && pageId === 'page-packages')) {
-      return 'calc(100vh - 100px)';
-    } else {
-      return 'calc(100vh - 50px)';
-    }
-  };
-
   render() {
     const { router } = this.context;
     const pageId = `page-${getCurrentLocation(router) || 'home'}`;
@@ -210,12 +198,7 @@ class Main extends Component {
           startWhatsNewPopover={this.showWhatsNew}
           addNewWizard={this.addNewWizard}
         />
-        <div
-          id={pageId}
-          style={{
-            height: this.calcHeight(pageId),
-          }}
-        >
+        <div id={pageId} className={alphaPlusEnabled && 'alpha-plus'}>
           <FadeAnimation>
             <Routes
               {...rest}

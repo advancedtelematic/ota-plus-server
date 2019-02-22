@@ -4,7 +4,7 @@
 @import '../mixins';
 
 #page-campaigns {
-  padding: 30px;
+  background-color: $home-bg;
 
   .content {
     .content-empty {
@@ -49,6 +49,7 @@
   display: block;
   position: relative;
   background-color: $color-grey;
+  height: calc(100vh - 100px);
 
   &__header {
     position: fixed;
@@ -57,7 +58,7 @@
     font-size: 12px;
     font-weight: 700;
     background: #d3d3d3;
-    width: calc(100vw - 60px);
+    width: 100%;
     height: 40px;
     text-transform: uppercase;
     display: flex;
@@ -98,10 +99,8 @@
 
   &__list {
     background-color: #fff;
-    // height: calc(100vh - 145px);
     position: relative;
     top: 40px;
-    width: calc(100vw - 60px);
 
     &--empty {
       background-color: #fff;
@@ -160,7 +159,7 @@
       span {
         background-color: $color-mint;
         width: 4px;
-        heigth: 4px;
+        height: 4px;
       }
     }
   }

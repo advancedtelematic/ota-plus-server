@@ -4,7 +4,8 @@
 @import '../mixins';
 
 #page-updates {
-  padding: 30px;
+  background-color: $home-bg;
+  height: calc(100vh - 50px);
 
   .ios-list {
     height: calc(100% - 40px);
