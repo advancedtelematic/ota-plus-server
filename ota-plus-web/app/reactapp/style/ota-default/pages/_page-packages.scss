@@ -6,6 +6,47 @@
 #page-packages {
   background-color: $home-bg;
 
+  .packages-list{
+    padding-top: 30px;
+    &__header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 30px;
+      padding: 0 25px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: $home-grey;
+      > * {
+        color: $fake-header-text;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+
+    &__column {
+      &-title {
+        flex: 2;
+        padding-right: 15px;
+      }
+      &-versions {
+        flex: 1;
+        text-align: center;
+      }
+      &-ecu-installed {
+        flex: 1;
+        text-align: center;
+      }
+      &-last {
+        flex: 3;
+      }
+    }
+  }
+
+
 
   .ios-list {
     height: calc(100% - 50px);
@@ -234,6 +275,9 @@
 
       &:not(:last-child) {
         margin-bottom: 5px;
+        @media all and (min-height: 768px)  {
+          margin-bottom: 8px;
+        }
       }
     }
 

@@ -183,13 +183,18 @@ class List extends Component {
     return (
       <div className='ios-list' ref='list' style={{height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})`}}>
         <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
-          <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
-            {this.fakeHeaderLetter}
+          {/*
+           * ToDo: drop quick & dirty solution
+           */}
+          <div className='packages-list__header'>
+            <div className='packages-list__column-title'>Title</div>
+            <div className='packages-list__column-versions'>Versions</div>
+            <div className='packages-list__column-ecu-installed'>#ECU</div>
+            <div className='packages-list__column-last'>{' '}</div>
           </div>
           {_.map(packagesStore.preparedPackages, (packages, letter) => {
             return (
-              <span key={letter}>
-                <div className='header'>{letter}</div>
+              <div className='packages-list' key={letter}>
                 {_.map(packages, (pack, index) => {
                   const that = this;
                   return (
@@ -272,7 +277,7 @@ class List extends Component {
                     </span>
                   );
                 })}
-              </span>
+              </div>
             );
           })}
         </Dropzone>

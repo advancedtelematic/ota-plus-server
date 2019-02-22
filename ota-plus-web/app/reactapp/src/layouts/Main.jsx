@@ -198,7 +198,7 @@ class Main extends Component {
           startWhatsNewPopover={this.showWhatsNew}
           addNewWizard={this.addNewWizard}
         />
-        <div id={pageId} className={alphaPlusEnabled && 'alpha-plus'}>
+        <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : ''}>
           <FadeAnimation>
             <Routes
               {...rest}

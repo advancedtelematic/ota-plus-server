@@ -17,6 +17,18 @@ strong {
   font-weight: 700;
 }
 
+.banner {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  &-dark {
+    background-color: $banner-dark-bg;
+  }
+}
+
 .clearfix {
   &:before {
     display: table;
