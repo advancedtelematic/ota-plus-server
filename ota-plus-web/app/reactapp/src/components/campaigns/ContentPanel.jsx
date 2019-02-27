@@ -24,6 +24,7 @@ class ContentPanel extends Component {
     addNewWizard: PropTypes.func,
     showCancelCampaignModal: PropTypes.func,
     showDependenciesModal: PropTypes.func,
+    showRetryModal: PropTypes.func,
     toggleCampaign: PropTypes.func,
   };
 
@@ -96,7 +97,7 @@ class ContentPanel extends Component {
   };
 
   render() {
-    const { stores, showCancelCampaignModal, showDependenciesModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
+    const { stores, showCancelCampaignModal, showDependenciesModal, showRetryModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
     const { campaignsStore } = stores;
     const { campaignsFetchAsync } = campaignsStore;
 
@@ -113,6 +114,7 @@ class ContentPanel extends Component {
             expandedCampaigns={expandedCampaigns}
             showCancelCampaignModal={showCancelCampaignModal}
             showDependenciesModal={showDependenciesModal}
+            showRetryModal={showRetryModal}
             toggleCampaign={toggleCampaign}
           />
         )}

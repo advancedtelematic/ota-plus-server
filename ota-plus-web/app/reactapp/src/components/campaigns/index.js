@@ -6,5 +6,6 @@ import ListHeader from './ListHeader';
 import ListItem from './ListItem';
 import CampaignSummary from './CampaignSummary';
 import Statistics from './Statistics';
+import RetryModal from './RetryModal';
 
-export { CampaignsContentPanel, List, ListHeader, ListItem, CampaignSummary, Statistics };
+export { CampaignsContentPanel, List, ListHeader, ListItem, CampaignSummary, Statistics, RetryModal };
