@@ -14,6 +14,7 @@ const WebsocketHandler = function(wsUrl, stores) {
       const eventObj = JSON.parse(msg.data);
       const type = eventObj.type;
       const data = eventObj.event;
+      console.log(data);
       switch (type) {
         case 'DeviceSeen':
           stores.devicesStore._updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
