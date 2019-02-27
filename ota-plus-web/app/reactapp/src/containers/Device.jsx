@@ -148,7 +148,6 @@ class Device extends Component {
             {!this.ECUselected ? (
               devicesStore.approvalPendingCampaignsFetchAsync.isFetching ||
               devicesStore.mtuFetchAsync.isFetching ||
-              devicesStore.eventsFetchAsync.isFetching ||
               packagesStore.packagesHistoryFetchAsync.isFetching ? (
                 <ul className='overview-panel__list'>
                   <div className='wrapper-center'>
