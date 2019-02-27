@@ -717,3 +717,14 @@
     text-align: center;
   }
 }
+
+.retry-campaign-modal {
+  .list-header {
+    font-size: 14px;
+  }
+  li {
+    list-style-type: decimal;
+    padding-left: 10px;
+    margin-left: 20px;
+  }
+}
