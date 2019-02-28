@@ -20,19 +20,19 @@ class Home extends Component {
 
   componentDidMount() {
     const { stores, uiAutoFeatureActivation } = this.props;
-    const { provisioningStore, devicesStore, packagesStore } = stores;
+    const { provisioningStore, devicesStore, softwareStore } = stores;
     if (!uiAutoFeatureActivation) {
       provisioningStore.sanityCheckCompleted = true;
     }
     provisioningStore.namespaceSetup();
     devicesStore.fetchDevices();
-    packagesStore.fetchPackages();
+    softwareStore.fetchPackages();
   }
   componentWillUnmount() {
     const { stores } = this.props;
-    const { devicesStore, packagesStore, campaignsStore } = stores;
+    const { devicesStore, softwareStore, campaignsStore } = stores;
     devicesStore._reset();
-    packagesStore._reset();
+    softwareStore._reset();
     campaignsStore._reset();
   }
   render() {

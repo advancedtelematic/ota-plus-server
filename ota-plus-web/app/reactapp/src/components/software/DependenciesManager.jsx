@@ -45,7 +45,7 @@ class DependenciesManager extends Component {
 
   addVersion = version => {
     const { stores, activePackage } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
 
     const relatedItem = {
       name: version,
@@ -113,15 +113,15 @@ class DependenciesManager extends Component {
       localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
     }
 
-    packagesStore._handleCompatibles();
+    softwareStore._handleCompatibles();
   };
 
   render() {
     const { stores, shown, hide, packages, activePackage } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
 
     const requiredBy = [];
-    _.each(packagesStore.compatibilityData, data => {
+    _.each(softwareStore.compatibilityData, data => {
       const found = _.find(data.required, item => item === activePackage.filepath);
       if (found) {
         requiredBy.push(data.name);

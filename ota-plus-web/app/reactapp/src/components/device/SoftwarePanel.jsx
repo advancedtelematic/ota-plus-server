@@ -5,29 +5,29 @@ import React, { Component } from 'react';
 import { observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
-import { PackagesList } from './packages';
+import { SoftwareList } from './software';
 import _ from 'lodash';
 
 const title = 'Software';
-const noSearchResults = 'No matching packages found.';
+const noSearchResults = 'No matching software found.';
 
 @inject('stores')
 @observer
 class SoftwarePanel extends Component {
   render() {
     const { togglePackageAutoUpdate, onFileDrop, showPackageDetails, triggerPackages, expandedPackageName, togglePackage } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     return (
       <div className='software-panel'>
         <div className='software-panel__header darkgrey-header'>{title}</div>
         <div className='software-panel__wrapper'>
           <span>
-            {packagesStore.packagesFetchAsync.isFetching ? (
+            {softwareStore.packagesFetchAsync.isFetching ? (
               <div className='wrapper-center'>
                 <Loader />
               </div>
-            ) : Object.keys(packagesStore.preparedPackages).length ? (
-              <PackagesList
+            ) : Object.keys(softwareStore.preparedPackages).length ? (
+              <SoftwareList
                 onFileDrop={onFileDrop}
                 togglePackageAutoUpdate={togglePackageAutoUpdate}
                 showPackageDetails={showPackageDetails}

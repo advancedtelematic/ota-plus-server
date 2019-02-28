@@ -25,14 +25,14 @@ class ImpactAnalysis extends Component {
   };
 
   render() {
-    const { packagesStore, impactAnalysisStore } = this.props.stores;
+    const { softwareStore, impactAnalysisStore } = this.props.stores;
     return (
       <span>
-        {packagesStore.packagesBlacklistFetchAsync.isFetching || impactAnalysisStore.impactAnalysisFetchAsync.isFetching ? (
+        {softwareStore.packagesBlacklistFetchAsync.isFetching || impactAnalysisStore.impactAnalysisFetchAsync.isFetching ? (
           <div className='wrapper-center'>
             <Loader />
           </div>
-        ) : packagesStore.blacklistCount ? (
+        ) : softwareStore.blacklistCount ? (
           <span>
             <BlacklistedPackages />
             <ImpactAnalysisChart />

@@ -22,7 +22,7 @@ import DropdownMenu from './DropdownMenu';
 import ConfirmationModal from './ConfirmationModal';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
-import EditPackageModal from './EditPackageModal';
+import EditSoftwareModal from './EditSoftwareModal';
 import TimePicker from './TimePicker';
 
 export {
@@ -48,6 +48,6 @@ export {
   ConfirmationModal,
   EditModal,
   EditCampaignModal,
-  EditPackageModal,
+  EditSoftwareModal,
   TimePicker,
 };

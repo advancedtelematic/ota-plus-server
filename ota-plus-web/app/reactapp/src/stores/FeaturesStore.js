@@ -12,8 +12,8 @@ export default class FeaturesStore {
   @observable featuresFetchAsync = {};
   @observable features = [];
   @observable clientId = null;
-  @observable alphaPlusEnabled = false;
-  @observable alphaTestEnabled = false;
+  @observable alphaPlusEnabled = true;
+  @observable alphaTestEnabled = true;
   @observable whatsNew = whatsNew;
 
   @observable whatsNewPopOver = false;

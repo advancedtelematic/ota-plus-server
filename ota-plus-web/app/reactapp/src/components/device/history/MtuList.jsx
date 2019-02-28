@@ -12,7 +12,7 @@ import { InfiniteScroll } from '../../../utils';
 class MtuList extends Component {
   render() {
     const { device } = this.props;
-    const { packagesStore, devicesStore } = this.props.stores;
+    const { softwareStore, devicesStore } = this.props.stores;
     const emptyHistory = (
       <div className='wrapper-center'>
         <span className={'overview-panel__empty'}>Multi target update history is empty.</span>
@@ -22,15 +22,15 @@ class MtuList extends Component {
       <ul className='overview-panel__list'>
         <InfiniteScroll
           className='wrapper-infinite-scroll'
-          hasMore={packagesStore.packagesHistoryCurrentPage < packagesStore.packagesHistoryTotalCount / packagesStore.packagesHistoryLimit}
-          isLoading={packagesStore.packagesHistoryFetchAsync.isFetching}
+          hasMore={softwareStore.packagesHistoryCurrentPage < softwareStore.packagesHistoryTotalCount / softwareStore.packagesHistoryLimit}
+          isLoading={softwareStore.packagesHistoryFetchAsync.isFetching}
           useWindow={false}
           loadMore={() => {
-            packagesStore.fetchPackagesHistory(device.uuid, packagesStore.packagesHistoryFilter);
+            softwareStore.fetchPackagesHistory(device.uuid, softwareStore.packagesHistoryFilter);
           }}
         >
-          {packagesStore.packagesHistory.length
-            ? _.map(packagesStore.packagesHistory, (historyItem, index) => {
+          {softwareStore.packagesHistory.length
+            ? _.map(softwareStore.packagesHistory, (historyItem, index) => {
                 let itemEvents = devicesStore.deviceEvents.filter(el => {
                   if (el.payload.correlationId) {
                     return el.payload.correlationId === historyItem.correlationId;

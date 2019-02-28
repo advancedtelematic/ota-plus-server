@@ -13,13 +13,13 @@ import { AsyncStatusCallbackHandler } from '../utils';
 
 @inject('stores')
 @observer
-class EditPackageModal extends Component {
+class EditSoftwareModal extends Component {
   @observable submitButtonDisabled = true;
 
   constructor(props) {
     super(props);
-    const { packagesStore } = props.stores;
-    this.renameHandler = new AsyncStatusCallbackHandler(packagesStore, 'campaignsRenameAsync', this.handleRenameResponse.bind(this));
+    const { softwareStore } = props.stores;
+    this.renameHandler = new AsyncStatusCallbackHandler(softwareStore, 'campaignsRenameAsync', this.handleRenameResponse.bind(this));
   }
   enableButton() {
     this.submitButtonDisabled = false;
@@ -29,23 +29,23 @@ class EditPackageModal extends Component {
   }
   submitForm(e) {
     if (e) e.preventDefault();
-    const { packagesStore, campaignsStore } = this.props.stores;
+    const { softwareStore, campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
     const formData = serialize(document.querySelector('#edit-name-form'), { hash: true });
-    packagesStore.renameCampaign(campaign.id, { name: formData.campaignName });
+    softwareStore.renameCampaign(campaign.id, { name: formData.campaignName });
   }
   handleRenameResponse() {
     this.props.hide();
   }
   render() {
     const { shown, hide, modalTitle, defaultValue } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     const form = (
       <OTAForm onSubmit={this.submitForm.bind(this)} id='edit-name-form'>
         <AsyncResponse
           handledStatus='error'
-          action={packagesStore.campaignsRenameAsync}
-          errorMsg={packagesStore.campaignsRenameAsync.data ? packagesStore.campaignsRenameAsync.data.description : null}
+          action={softwareStore.campaignsRenameAsync}
+          errorMsg={softwareStore.campaignsRenameAsync.data ? softwareStore.campaignsRenameAsync.data.description : null}
         />
         <div className='row'>
           <div className='col-xs-12'>
@@ -54,7 +54,7 @@ class EditPackageModal extends Component {
               onInvalid={this.disableButton.bind(this)}
               name='campaignName'
               className='input-wrapper'
-              isEditable={!packagesStore.campaignsRenameAsync.isFetching}
+              isEditable={!softwareStore.campaignsRenameAsync.isFetching}
               title={'Campaign name'}
               label={'Campaign name'}
               placeholder={'Name'}
@@ -66,7 +66,7 @@ class EditPackageModal extends Component {
         <div className='row'>
           <div className='col-xs-12'>
             <div className='body-actions'>
-              <button disabled={this.submitButtonDisabled || packagesStore.campaignsRenameAsync.isFetching} className='btn-primary' id='add'>
+              <button disabled={this.submitButtonDisabled || softwareStore.campaignsRenameAsync.isFetching} className='btn-primary' id='add'>
                 Edit
               </button>
             </div>
@@ -92,4 +92,4 @@ class EditPackageModal extends Component {
   }
 }
 
-export default EditPackageModal;
+export default EditSoftwareModal;

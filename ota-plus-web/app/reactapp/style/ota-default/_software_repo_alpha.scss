@@ -2,7 +2,7 @@
 
 @import 'variables-ota';
 
-.software-repository {
+.software-repository-alpha {
   display: block !important;
   min-width: 1220px;
   overflow: auto;
@@ -13,7 +13,7 @@
     border-right: 2px solid #0f1621;
   }
 
-  .packages {
+  .software {
     width: 40%;
     border-right: 2px solid #0f1621;
   }
@@ -180,7 +180,7 @@
       }
     }
 
-    .packages,
+    .software,
     .campaigns {
       i.selected-user {
         &:after {
@@ -329,7 +329,7 @@
           border-bottom: none !important;
         }
       }
-      li[data-packages] {
+      li[data-software] {
         &.expanded {
           span:first-child {
             background-color: #48dad0;
@@ -598,7 +598,7 @@
       }
     }
 
-    .packages {
+    .software {
       padding: 0;
       overflow-y: scroll;
       height: 100%;

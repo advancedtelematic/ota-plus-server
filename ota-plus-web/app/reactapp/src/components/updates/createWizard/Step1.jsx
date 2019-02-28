@@ -58,7 +58,7 @@ class Step1 extends Component {
             />
           </Col>
         </Row>
-        <label className='c-form__label'>{'Select Hardware ids'}</label>
+        <label className='c-form__label'>{'Select ECU types'}</label>
         <Row className='row hardware-container'>
           <Col span={12}>
             <div className='ids-list'>

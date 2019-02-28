@@ -57,10 +57,10 @@ class Main extends Component {
       }
       return Promise.reject(error);
     });
-    const { devicesStore, packagesStore, hardwareStore, campaignsStore, groupsStore, userStore } = props.stores;
+    const { devicesStore, softwareStore, hardwareStore, campaignsStore, groupsStore, userStore } = props.stores;
     this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
       devicesStore,
-      packagesStore,
+      softwareStore,
       hardwareStore,
       campaignsStore,
       groupsStore,
@@ -94,7 +94,7 @@ class Main extends Component {
   toggleWizard = (wizardId, wizardName, e) => {
     if (e) e.preventDefault();
     const { stores } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     const minimizedWizard = {
       id: wizardId,
       name: wizardName,
@@ -102,7 +102,7 @@ class Main extends Component {
     const wizardAlreadyMinimized = _.find(this.minimizedWizards, { id: wizardId });
     if (wizardAlreadyMinimized) {
       this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, minimized => minimized.id === wizardId), 1);
-      packagesStore.fetchPackages('packagesSafeFetchAsync');
+      softwareStore.fetchPackages('packagesSafeFetchAsync');
     } else {
       this.minimizedWizards.push(minimizedWizard);
     }
@@ -135,11 +135,11 @@ class Main extends Component {
 
   callFakeWsHandler = () => {
     const { stores } = this.props;
-    const { devicesStore, packagesStore, hardwareStore, campaignsStore, groupsStore } = stores;
+    const { devicesStore, softwareStore, hardwareStore, campaignsStore, groupsStore } = stores;
     const wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
     this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
       devicesStore,
-      packagesStore,
+      softwareStore,
       hardwareStore,
       campaignsStore,
       groupsStore,

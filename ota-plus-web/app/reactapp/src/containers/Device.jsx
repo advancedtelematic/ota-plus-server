@@ -6,7 +6,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { DeviceHeader, DeviceHardwarePanel, DevicePropertiesPanel, DeviceSoftwarePanel, DeviceOverviewPanel } from '../components/device';
-import { PackagesCreateModal } from '../components/packages';
+import { SoftwareCreateModal } from '../components/software';
 
 @inject('stores')
 @observer
@@ -47,23 +47,23 @@ class Device extends Component {
   };
   selectEcu = (hardwareId, serial, filepath, type, e) => {
     if (e) e.preventDefault();
-    const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
+    const { softwareStore, devicesStore, hardwareStore } = this.props.stores;
     hardwareStore.activeEcu = {
       hardwareId: hardwareId,
       serial: serial,
       type: type,
     };
-    let expandedPackage = packagesStore._getInstalledPackage(filepath, hardwareId);
+    let expandedPackage = softwareStore._getInstalledPackage(filepath, hardwareId);
     if (!expandedPackage) {
-      packagesStore.expandedPackage = {
+      softwareStore.expandedPackage = {
         unmanaged: true,
       };
       this.expandedPackageName = null;
     } else {
-      packagesStore.expandedPackage = expandedPackage;
+      softwareStore.expandedPackage = expandedPackage;
       this.expandedPackageName = expandedPackage.id.name;
     }
-    packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
+    softwareStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
     this.triggerPackages = true;
 
     this.ECUselected = true;
@@ -89,10 +89,10 @@ class Device extends Component {
       e.preventDefault();
       e.stopPropagation();
     }
-    const { packagesStore, hardwareStore } = this.props.stores;
+    const { softwareStore, hardwareStore } = this.props.stores;
     let activeEcuSerial = hardwareStore.activeEcu.serial;
-    if (isAutoInstallEnabled) packagesStore.disablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
-    else packagesStore.enablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
+    if (isAutoInstallEnabled) softwareStore.disablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
+    else softwareStore.enablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
   };
   togglePackage = packageName => {
     this.expandedPackageName = this.expandedPackageName !== packageName ? packageName : null;
@@ -112,14 +112,14 @@ class Device extends Component {
   };
   showPackageDetails = (pack, e) => {
     if (e) e.preventDefault();
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     let isPackageUnmanaged = pack === 'unmanaged';
     if (isPackageUnmanaged) {
-      packagesStore.expandedPackage = {
+      softwareStore.expandedPackage = {
         unmanaged: true,
       };
     } else {
-      packagesStore.expandedPackage = pack;
+      softwareStore.expandedPackage = pack;
     }
   };
   setOverviewPanelActiveTabId = tabId => {
@@ -127,7 +127,7 @@ class Device extends Component {
   };
 
   render() {
-    const { devicesStore, packagesStore } = this.props.stores;
+    const { devicesStore, softwareStore } = this.props.stores;
     const { device } = devicesStore;
     return (
       <span>
@@ -138,7 +138,7 @@ class Device extends Component {
           </div>
         ) : device.lastSeen ? (
           <span>
-            {packagesStore.packagesFetchAsync.isFetching ? (
+            {softwareStore.packagesFetchAsync.isFetching ? (
               <div className='wrapper-center'>
                 <Loader />
               </div>
@@ -146,9 +146,7 @@ class Device extends Component {
               <DeviceHardwarePanel selectEcu={this.selectEcu} onFileDrop={this.onFileDrop} ECUselected={this.ECUselected} selectQueue={this.selectQueue} />
             )}
             {!this.ECUselected ? (
-              devicesStore.approvalPendingCampaignsFetchAsync.isFetching ||
-              devicesStore.mtuFetchAsync.isFetching ||
-              packagesStore.packagesHistoryFetchAsync.isFetching ? (
+              devicesStore.approvalPendingCampaignsFetchAsync.isFetching || devicesStore.mtuFetchAsync.isFetching || softwareStore.packagesHistoryFetchAsync.isFetching ? (
                 <ul className='overview-panel__list'>
                   <div className='wrapper-center'>
                     <Loader />
@@ -181,7 +179,7 @@ class Device extends Component {
             <div className='device-offline-title'>Device never seen online.</div>
           </div>
         )}
-        {this.packageCreateModalShown ? <PackagesCreateModal shown={this.packageCreateModalShown} hide={this.hidePackageCreateModal} fileDropped={this.fileDropped} /> : null}
+        {this.packageCreateModalShown ? <SoftwareCreateModal shown={this.packageCreateModalShown} hide={this.hidePackageCreateModal} fileDropped={this.fileDropped} /> : null}
       </span>
     );
   }

@@ -26,8 +26,8 @@ class InstalledList extends Component {
 
   constructor(props) {
     super(props);
-    const { packagesStore } = this.props.stores;
-    this.packagesChangeHandler = observe(packagesStore, change => {
+    const { softwareStore } = this.props.stores;
+    this.packagesChangeHandler = observe(softwareStore, change => {
       if (change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -76,7 +76,7 @@ class InstalledList extends Component {
   };
 
   listScroll = () => {
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
@@ -89,7 +89,7 @@ class InstalledList extends Component {
         headersPositions,
         (position, index) => {
           if (scrollTop >= position) {
-            newFakeHeaderLetter = Object.keys(packagesStore.preparedOndevicePackages)[index];
+            newFakeHeaderLetter = Object.keys(softwareStore.preparedOndevicePackages)[index];
             return true;
           } else if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
@@ -130,25 +130,25 @@ class InstalledList extends Component {
   }
   render() {
     const { device, showPackageBlacklistModal, onFileDrop } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     return (
       <span>
         <div className='ios-list' ref='list'>
           <InfiniteScroll
             className='wrapper-infinite-scroll'
-            hasMore={packagesStore.ondevicePackagesCurrentPage < packagesStore.ondevicePackagesTotalCount / packagesStore.ondevicePackagesLimit}
-            isLoading={packagesStore.packagesOndeviceFetchAsync.isFetching}
+            hasMore={softwareStore.ondevicePackagesCurrentPage < softwareStore.ondevicePackagesTotalCount / softwareStore.ondevicePackagesLimit}
+            isLoading={softwareStore.packagesOndeviceFetchAsync.isFetching}
             useWindow={false}
             loadMore={() => {
-              packagesStore.fetchOndevicePackages(device.uuid, packagesStore.ondeviceFilter);
+              softwareStore.fetchOndevicePackages(device.uuid, softwareStore.ondeviceFilter);
             }}
           >
-            {Object.keys(packagesStore.preparedOndevicePackages).length ? (
+            {Object.keys(softwareStore.preparedOndevicePackages).length ? (
               <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
                 <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
                   {this.fakeHeaderLetter}
                 </div>
-                {_.map(packagesStore.preparedOndevicePackages, (packages, letter) => {
+                {_.map(softwareStore.preparedOndevicePackages, (packages, letter) => {
                   return (
                     <span key={letter}>
                       <div className='header'>{letter}</div>

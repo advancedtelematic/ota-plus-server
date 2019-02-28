@@ -61,7 +61,7 @@ class VersionsStats extends Component {
           </div>
         ) : (
           <div id={'package-' + pack.packageName + '-not-installed'} className='not-installed'>
-            This package has not been installed yet.
+            This software has not been installed yet.
           </div>
         )}
       </div>

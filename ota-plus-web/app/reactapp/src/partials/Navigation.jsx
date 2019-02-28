@@ -55,8 +55,8 @@ class Navigation extends Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink to='/packages' activeClassName='active' id='link-packages'>
-                  {'Packages'}
+                <NavLink to='/software-repository' activeClassName='active' id='link-software-repository'>
+                  {'Software Repository'}
                 </NavLink>
               </li>
               <li>
@@ -115,7 +115,7 @@ class Navigation extends Component {
             )}
           </ul>
         </div>
-        {alphaPlusEnabled && location === 'page-packages' && <TabNavigation location={location} />}
+        {alphaPlusEnabled && location === 'page-software-repository' && <TabNavigation location={location} />}
         {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} />}
       </nav>
     );
