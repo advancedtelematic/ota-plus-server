@@ -12,8 +12,8 @@ import { translate } from 'react-i18next';
 class Chart extends Component {
   render() {
     const { t } = this.props;
-    const { packagesStore } = this.props.stores;
-    const blacklist = packagesStore.preparedBlacklistRaw;
+    const { softwareStore } = this.props.stores;
+    const blacklist = softwareStore.preparedBlacklistRaw;
     const availableColors = ['#DFF9F8', '#B2E7E5', '#7ED7D3', '#4CC7C4', '#00AFAA'];
     const groupedStatsName = 'Other';
     let colorIndex = -1;

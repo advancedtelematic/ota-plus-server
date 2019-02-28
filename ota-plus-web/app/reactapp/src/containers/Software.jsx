@@ -6,14 +6,13 @@ import { action, observable, observe, onBecomeObserved } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 
-
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
-import { SoftwareRepository } from '../pages';
-import { PackagesCreateModal, PackagesHeader, PackagesList, PackagesDependenciesManager, PackagesEditCommentModal } from '../components/packages';
+import { SoftwareRepositoryAlpha } from '../pages';
+import { SoftwareCreateModal, SoftwareHeader, SoftwareList, SoftwareDependenciesManager, SoftwareEditCommentModal } from '../components/software';
 
 @inject('stores')
 @observer
-class Packages extends Component {
+class Software extends Component {
   @observable createModalShown = false;
   @observable fileUploaderModalShown = false;
   @observable fileDropped = null;
@@ -37,10 +36,10 @@ class Packages extends Component {
 
   componentDidMount() {
     const { stores } = this.props;
-    const { packagesStore, featuresStore } = stores;
+    const { softwareStore, featuresStore } = stores;
 
     if (featuresStore.alphaPlusEnabled) {
-      this.cancelObserveTabChange = observe(packagesStore, change => {
+      this.cancelObserveTabChange = observe(softwareStore, change => {
         this.applyTab(change);
       });
       onBecomeObserved(this, 'switchToSWRepo', this.resumeScope);
@@ -55,17 +54,17 @@ class Packages extends Component {
 
   @action setActive = tab => {
     const { stores } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
 
     this.switchToSWRepo = tab === 'advanced';
-    packagesStore.activeTab = tab;
+    softwareStore.activeTab = tab;
   };
 
   resumeScope = () => {
     const { stores } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
 
-    this.setActive(packagesStore.activeTab);
+    this.setActive(softwareStore.activeTab);
   };
 
   applyTab = change => {
@@ -96,9 +95,9 @@ class Packages extends Component {
 
   deleteItem = e => {
     const { stores } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     if (e) e.preventDefault();
-    packagesStore.deletePackage(this.itemToDelete);
+    softwareStore.deletePackage(this.itemToDelete);
     this.hideDeleteConfirmation();
   };
 
@@ -170,18 +169,18 @@ class Packages extends Component {
 
   render() {
     const { stores, highlightedPackage } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     return (
       <span ref='component'>
-        {packagesStore.packagesFetchAsync.isFetching ? (
+        {softwareStore.packagesFetchAsync.isFetching ? (
           <div className='wrapper-center'>
             <Loader />
           </div>
-        ) : packagesStore.packagesCount ? (
+        ) : softwareStore.packagesCount ? (
           <div className='packages-container'>
-            {!this.switchToSWRepo && <PackagesHeader showCreateModal={this.showCreateModal} />}
+            {!this.switchToSWRepo && <SoftwareHeader showCreateModal={this.showCreateModal} />}
             {!this.switchToSWRepo ? (
-              <PackagesList
+              <SoftwareList
                 onFileDrop={this.onFileDrop}
                 highlightedPackage={highlightedPackage}
                 showDependenciesModal={this.showDependenciesModal}
@@ -192,7 +191,7 @@ class Packages extends Component {
                 showEditComment={this.showEditComment}
               />
             ) : (
-              <SoftwareRepository />
+              <SoftwareRepositoryAlpha />
             )}
           </div>
         ) : (
@@ -201,36 +200,35 @@ class Packages extends Component {
               <div>
                 <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
               </div>
-              <div>{"You haven't created any packages yet."}</div>
+              <div>{"You haven't created any software yet."}</div>
               <div>
-                <a href='#' className='add-button light' id='add-new-package' onClick={this.showCreateModal.bind(this, null)}>
-                  <span>+</span>
-                  <span>Add new package</span>
+                <a href='#' className='add-button light' id='add-new-software' onClick={this.showCreateModal.bind(this, null)}>
+                  <span>{'+ Add new software'}</span>
                 </a>
               </div>
             </div>
           </div>
         )}
-        {this.createModalShown && <PackagesCreateModal shown={this.createModalShown} hide={this.hideCreateModal} fileDropped={this.fileDropped} />}
+        {this.createModalShown && <SoftwareCreateModal shown={this.createModalShown} hide={this.hideCreateModal} fileDropped={this.fileDropped} />}
         {this.deleteConfirmationShown && (
           <ConfirmationModal
             modalTitle={
-              <div className='text-red' id='delete-package-title'>
-                Delete package
+              <div className='text-red' id='delete-software-title'>
+                Delete software
               </div>
             }
             shown={this.deleteConfirmationShown}
             hide={this.hideDeleteConfirmation}
             deleteItem={this.deleteItem}
             topText={
-              <div className='delete-modal-top-text' id='delete-package-top-text'>
-                Remove <b id={`delete-package-${this.expandedPackageName}`}>{this.expandedPackageName}</b> v.
-                <b id={`delete-package-${this.expandedPackageName}-version-${this.itemToDelete}`}>{this.itemToDelete}</b> permanently?
+              <div className='delete-modal-top-text' id='delete-software-top-text'>
+                Remove <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b> v.
+                <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>{this.itemToDelete}</b> permanently?
               </div>
             }
             bottomText={
-              <div className='delete-modal-bottom-text' id='delete-package-bottom-text'>
-                If the package is part of any active campaigns, any devices that haven't installed it will fail the campaign.
+              <div className='delete-modal-bottom-text' id='delete-software-bottom-text'>
+                If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.
               </div>
             }
             showDetailedInfo
@@ -238,12 +236,12 @@ class Packages extends Component {
         )}
         {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeVersionFilepath} />}
         {this.dependenciesManagerShown && (
-          <PackagesDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={packagesStore.preparedPackages} activePackage={this.activeManagerVersion} />
+          <SoftwareDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={softwareStore.preparedSoftware} activePackage={this.activeManagerVersion} />
         )}
-        {this.editCommentShown && <PackagesEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} />}
+        {this.editCommentShown && <SoftwareEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} />}
       </span>
     );
   }
 }
 
-export default Packages;
+export default Software;

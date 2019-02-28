@@ -17,8 +17,8 @@ class ImpactAnalysis extends Component {
 
   componentDidMount() {
     const { stores } = this.props;
-    const { packagesStore, impactAnalysisStore } = stores;
-    packagesStore.fetchBlacklist(true, true);
+    const { softwareStore, impactAnalysisStore } = stores;
+    softwareStore.fetchBlacklist(true, true);
     impactAnalysisStore.fetchImpactAnalysis();
   }
 

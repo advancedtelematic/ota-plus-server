@@ -8,7 +8,7 @@ import {
   HomePage,
   DevicesPage,
   DevicePage,
-  PackagesPage,
+  SoftwareRepositoryPage,
   UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
@@ -16,7 +16,7 @@ import {
   ProfilePage,
   NoMatchPage,
   FireworksPage,
-  SoftwareRepository,
+  SoftwareRepositoryAlpha,
   TermsAndConditions,
 } from './pages';
 import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './components/profile';
@@ -29,12 +29,12 @@ const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfile
     <Route path='/fireworks' component={FireworksPage} />
     <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/device/:id' component={DevicePage} />
-    <Route path='/packages/:packageName?' render={props => <PackagesPage {...props} switchToSWRepo={switchToSWRepo} />} />
+    <Route path='/software-repository/:packageName?' render={props => <SoftwareRepositoryPage {...props} switchToSWRepo={switchToSWRepo} />} />
     <Route path='/updates/:updateName?' component={UpdatesPage} />
     <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/impact-analysis' component={ImpactAnalysisPage} />
     <Route path='/whats-new' component={WhatsNewPage} />
-    <Route path='/software-repository' component={SoftwareRepository} />
+    <Route path='/software-repository-alpha' component={SoftwareRepositoryAlpha} />
     <Route path='/policy' component={TermsAndConditions} />
     <Route
       path='/profile'

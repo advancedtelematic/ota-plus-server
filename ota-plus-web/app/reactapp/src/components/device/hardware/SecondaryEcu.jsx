@@ -17,14 +17,16 @@ class SecondaryEcu extends Component {
   render() {
     const { active, ecu, device, changePopoverVisibility, popoverShown, copyPublicKey, publicKeyCopied, index } = this.props;
     return (
-      <span>
+      <>
         <a href='#' id={'hardware-secondary-' + ecu.id} className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} onClick={this.onEcuClick.bind(this, ecu)}>
           <div className='hardware-panel__ecu-desc'>
-            <span id={'hardware-id-secondary-' + index} className='hardware-panel__hardware-label app-label'>
+            {'Type: '}
+            <span id={'hardware-type-secondary-' + index} className='hardware-panel__hardware-label app-label'>
               {ecu.hardwareId}
-            </span>{' '}
+            </span>
             <br />
-            Serial: <span id={'hardware-serial-' + ecu.id}>{ecu.id}</span>
+            {'Identifier: '}
+            <span id={'hardware-identifier-' + ecu.id}>{ecu.id}</span>
           </div>
           <div className='hardware-panel__ecu-actions' id={'hardware-key-icon-secondary-' + ecu.id}>
             <span className='hardware-panel__ecu-action hardware-panel__ecu-action--key'>
@@ -40,7 +42,7 @@ class SecondaryEcu extends Component {
             </span>
           </div>
         </a>
-      </span>
+      </>
     );
   }
 }

@@ -30,7 +30,7 @@ class SequencerItem extends Component {
         >
           <div className='c-sequencer__details-row'>
             <div className='c-sequencer__info'>
-              <div className='c-sequencer__hardware-id'>{value.hardwareId}</div>
+              <div className='c-sequencer__hardware-type'>{value.hardwareId}</div>
               <div className='c-sequencer__pack-name'>{value.name}</div>
               <div className='c-sequencer__update-from'>From: {value.from}</div>
               <div className='c-sequencer__update-to'>To: {value.to}</div>

@@ -6,9 +6,9 @@ import { NavLink } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
-import { LatestCreatedCampaigns, LastDevices, LastPackages } from '../components/home';
+import { LatestCreatedCampaigns, LastDevices, LastSoftware } from '../components/home';
 import { Dropdown } from '../partials';
-import { PackagesCreateModal } from '../components/packages';
+import { SoftwareCreateModal } from '../components/software';
 
 @observer
 class Home extends Component {
@@ -21,12 +21,12 @@ class Home extends Component {
     addNewWizard: PropTypes.func,
   };
 
-  showPackagesCreateModal = e => {
+  showSoftwareCreateModal = e => {
     if (e) e.preventDefault();
     this.packagesCreateModalShown = true;
   };
 
-  hidePackagesCreateModal = e => {
+  hideSoftwareCreateModal = e => {
     if (e) e.preventDefault();
     this.packagesCreateModalShown = false;
   };
@@ -164,12 +164,12 @@ class Home extends Component {
               <LastDevices />
             </div>
           </div>
-          <div className='home__list home__list--packages'>
+          <div className='home__list home__list--software'>
             <div className='home__heading'>
-              <div className='home__heading-col'>{'Last added packages'}</div>
+              <div className='home__heading-col'>{'Last added software'}</div>
               <div className='home__heading-col'>{'Version'}</div>
               <div className='home__heading-col'>{'Created at'}</div>
-              <div className='dots' id='packages-menu' onClick={this.showPackageSubmenu}>
+              <div className='dots' id='software-menu' onClick={this.showPackageSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
                 <span />
                 <span />
@@ -177,19 +177,19 @@ class Home extends Component {
                 {this.packageSubmenuShown && (
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className='package-dropdown-item'>
-                      <a className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showPackagesCreateModal}>
-                        {'Add package'}
+                      <a className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showSoftwareCreateModal}>
+                        {'Add software'}
                       </a>
                     </li>
                     <li className='package-dropdown-item'>
-                      <NavLink to='/packages'>{'View all'}</NavLink>
+                      <NavLink to='/software-repository'>{'View all'}</NavLink>
                     </li>
                   </Dropdown>
                 )}
               </div>
             </div>
             <div className='home__body home__body--right'>
-              <LastPackages showPackagesCreateModal={this.showPackagesCreateModal} />
+              <LastSoftware showSoftwareCreateModal={this.showSoftwareCreateModal} />
             </div>
           </div>
           <div className='home__list home__list--campaigns'>
@@ -228,7 +228,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        {this.packagesCreateModalShown && <PackagesCreateModal shown={this.packagesCreateModalShown} hide={this.hidePackagesCreateModal} />}
+        {this.packagesCreateModalShown && <SoftwareCreateModal shown={this.packagesCreateModalShown} hide={this.hideSoftwareCreateModal} />}
       </div>
     );
   }

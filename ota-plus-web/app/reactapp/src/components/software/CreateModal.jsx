@@ -35,7 +35,7 @@ class CreateModal extends Component {
   /* ToDo: investigate and improve submit function */
   submitForm = () => {
     const { stores, fileDropped } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     const formData = new FormData();
 
     if (fileDropped) {
@@ -44,11 +44,11 @@ class CreateModal extends Component {
       formData.append('file', this.refs.fileUpload.files[0]);
     }
 
-    const data = serialize(document.querySelector('#package-create-form'), { hash: true });
+    const data = serialize(document.querySelector('#software-create-form'), { hash: true });
     delete data['fake-file'];
     data.description = data.description ? data.description : '';
     data.vendor = data.vendor ? data.vendor : '';
-    packagesStore.createPackage(data, formData, this.selectedHardwareIds.join());
+    softwareStore.createPackage(data, formData, this.selectedHardwareIds.join());
     this.hideModal();
   };
 
@@ -80,27 +80,27 @@ class CreateModal extends Component {
     const { stores, shown, hide, fileDropped } = this.props;
     const { hardwareStore } = stores;
     const directorForm = (
-      <Form onValid={this.enableButton} onInvalid={this.disableButton} onValidSubmit={this.submitForm} id='package-create-form'>
+      <Form onValid={this.enableButton} onInvalid={this.disableButton} onValidSubmit={this.submitForm} id='software-create-form'>
         <Row className='row'>
           <Col span={12}>
-            <FormInput label='Package Name' placeholder='Name' name='packageName' onInvalid={this.disableButton} id='add-new-package-name' />
+            <FormInput label='Software Name' placeholder='Name' name='packageName' onInvalid={this.disableButton} id='add-new-software-name' />
           </Col>
           <Col span={12}>
-            <FormInput label='Version' name='version' id='add-new-package-version' onInvalid={this.disableButton} placeholder='Select version' />
+            <FormInput label='Version' name='version' id='add-new-software-version' onInvalid={this.disableButton} placeholder='Select version' />
           </Col>
         </Row>
         <Row className='row'>
           <Col span={12}>
-            <div className='hardware-ids-select'>
+            <div className='ecu-types-select'>
               {hardwareStore.hardwareIdsFetchAsync.isFetching ? (
                 <Loader />
               ) : (
                 <FormSelect
                   multiple
                   appendMenuToBodyTag
-                  label='Hardware ids'
-                  id='hardware-ids-select'
-                  placeholder='Select Hardware ids'
+                  label='ECU Types'
+                  id='ecu-types-select'
+                  placeholder='Select ECU types'
                   onChange={this.selectHardwareIds}
                   visibleFieldsCount={4}
                   defaultValue={_.isArray(this.selectedHardwareIds) ? this.selectedHardwareIds : null}
@@ -114,7 +114,7 @@ class CreateModal extends Component {
           <Col span={12}>
             <div className='upload-wrapper'>
               {!fileDropped && (
-                <Button htmlType='button' className='add-button' onClick={this._onFileUploadClick} id='choose-package'>
+                <Button htmlType='button' className='add-button' onClick={this._onFileUploadClick} id='choose-software'>
                   <span>Choose file</span>
                 </Button>
               )}
@@ -137,7 +137,7 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title='Add new package'
+        title='Add new software'
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
@@ -147,7 +147,7 @@ class CreateModal extends Component {
         }
         content={directorForm}
         visible={shown}
-        className='add-package-modal'
+        className='add-software-modal'
       />
     );
   }

@@ -23,8 +23,8 @@ class BlacklistedPackages extends Component {
 
   constructor(props) {
     super(props);
-    const { packagesStore } = props.stores;
-    this.packagesChangeHandler = observe(packagesStore, change => {
+    const { softwareStore } = props.stores;
+    this.packagesChangeHandler = observe(softwareStore, change => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -73,7 +73,7 @@ class BlacklistedPackages extends Component {
   };
 
   listScroll = () => {
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
@@ -86,7 +86,7 @@ class BlacklistedPackages extends Component {
         headersPositions,
         (position, index) => {
           if (scrollTop >= position) {
-            newFakeHeaderLetter = Object.keys(packagesStore.preparedBlacklist)[index];
+            newFakeHeaderLetter = Object.keys(softwareStore.preparedBlacklist)[index];
             return true;
           } else if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
@@ -118,8 +118,8 @@ class BlacklistedPackages extends Component {
   };
 
   render() {
-    const { packagesStore } = this.props.stores;
-    const blacklist = packagesStore.preparedBlacklist;
+    const { softwareStore } = this.props.stores;
+    const blacklist = softwareStore.preparedBlacklist;
     return (
       <div className='blacklisted-packages-panel'>
         <div className='section-header'>

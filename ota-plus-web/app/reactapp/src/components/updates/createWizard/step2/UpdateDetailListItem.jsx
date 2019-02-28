@@ -17,8 +17,8 @@ class UpdateDetailListItem extends Component {
   @observable toVersions = [];
 
   formatVersions = (type, name) => {
-    const { packagesStore } = this.props.stores;
-    const { preparedPackages } = packagesStore;
+    const { softwareStore } = this.props.stores;
+    const { preparedPackages } = softwareStore;
     let versions = null;
     _.each(preparedPackages, packs => {
       const found = _.find(packs, pack => pack.name === name);
@@ -45,10 +45,10 @@ class UpdateDetailListItem extends Component {
 
   render() {
     const { item, wizardData, onStep2DataSelect } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     const { update } = wizardData;
     const { fromPack, toPack, fromVersion, toVersion } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
-    let uniqPackages = _.uniqBy(packagesStore.packages, item => {
+    let uniqPackages = _.uniqBy(softwareStore.packages, item => {
       return item.id.name;
     });
 
@@ -63,7 +63,7 @@ class UpdateDetailListItem extends Component {
 
     return (
       <div className='update-block'>
-        <Row className='hardware-id'>
+        <Row className='hardware-type'>
           <Col span={24}>{item.name}</Col>
         </Row>
         <Row className='header'>
@@ -74,14 +74,14 @@ class UpdateDetailListItem extends Component {
           <Form>
             <Col span={12}>
               <FormSelect
-                id={`${item.name}-from-package`}
+                id={`${item.name}-from-software`}
                 options={packages}
-                label='Package'
+                label='Software'
                 multiple={false}
                 wrapperWidth='100%'
                 visibleFieldsCount={5}
                 appendMenuToBodyTag={true}
-                placeholder='Select from package'
+                placeholder='Select from software'
                 defaultValue={fromPack && fromPack.id && fromPack.id.name}
                 onChange={value => {
                   if (value && value.id) {
@@ -93,14 +93,14 @@ class UpdateDetailListItem extends Component {
             </Col>
             <Col span={12}>
               <FormSelect
-                id={`${item.name}-to-package`}
+                id={`${item.name}-to-software`}
                 options={packages}
-                label='Package'
+                label='Software'
                 multiple={false}
                 wrapperWidth='100%'
                 visibleFieldsCount={5}
                 appendMenuToBodyTag={true}
-                placeholder='Select to package'
+                placeholder='Select to software'
                 defaultValue={toPack && toPack.id && toPack.id.name}
                 onChange={value => {
                   if (value && value.id) {

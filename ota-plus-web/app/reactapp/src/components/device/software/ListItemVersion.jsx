@@ -16,17 +16,17 @@ class ListItemVersion extends Component {
   };
 
   isPackageBlacklisted(version) {
-    const { packagesStore } = this.props.stores;
-    let isPackageBlacklisted = _.find(packagesStore.blacklist, dev => {
+    const { softwareStore } = this.props.stores;
+    let isPackageBlacklisted = _.find(softwareStore.blacklist, dev => {
       return dev.packageId.name === version.id.name && dev.packageId.version === version.id.version;
     });
     return isPackageBlacklisted ? isPackageBlacklisted : false;
   }
   render() {
     const { version, queuedPackage, installedPackage } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     let blacklistedPackage = this.isPackageBlacklisted(version);
-    let isSelected = version.filepath === packagesStore.expandedPackage.filepath;
+    let isSelected = version.filepath === softwareStore.expandedPackage.filepath;
     return (
       <li
         className={'software-panel__version' + (isSelected ? ' software-panel__version--selected' : '')}

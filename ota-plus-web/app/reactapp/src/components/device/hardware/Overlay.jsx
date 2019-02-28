@@ -21,10 +21,10 @@ class Overlay extends Component {
 
   componentWillMount() {
     const { device } = this.props;
-    const { hardwareStore, packagesStore } = this.props.stores;
+    const { hardwareStore, softwareStore } = this.props.stores;
     hardwareStore.fetchHardware(device.uuid);
-    packagesStore.fetchOndevicePackages(device.uuid);
-    packagesStore.fetchBlacklist();
+    softwareStore.fetchOndevicePackages(device.uuid);
+    softwareStore.fetchBlacklist();
   }
 
   showPackagesList = e => {
@@ -46,13 +46,13 @@ class Overlay extends Component {
 
   changePackagesFilter = filter => {
     const { device } = this.props;
-    const { packagesStore } = this.props.stores;
-    packagesStore.fetchOndevicePackages(device.uuid, filter);
+    const { softwareStore } = this.props.stores;
+    softwareStore.fetchOndevicePackages(device.uuid, filter);
   };
 
   render() {
     const { changeHardwareOverlayVisibility, hardwareOverlayShown, device, showPackageBlacklistModal, onFileDrop, active } = this.props;
-    const { hardwareStore, packagesStore } = this.props.stores;
+    const { hardwareStore, softwareStore } = this.props.stores;
     let content = (
       <div id='hardware-overlay'>
         <SubHeader>
@@ -68,7 +68,7 @@ class Overlay extends Component {
             {this.hardwareInfoShown ? (
               <SearchBar value={hardwareStore.hardwareFilter} changeAction={this.changeHardwareFilter} id='search-installed-hardware-input' additionalClassName='white' />
             ) : (
-              <SearchBar value={packagesStore.ondeviceFilter} changeAction={this.changePackagesFilter} id='search-installed-packages-input' additionalClassName='white' />
+              <SearchBar value={softwareStore.ondeviceFilter} changeAction={this.changePackagesFilter} id='search-installed-packages-input' additionalClassName='white' />
             )}
           </Form>
         </SubHeader>

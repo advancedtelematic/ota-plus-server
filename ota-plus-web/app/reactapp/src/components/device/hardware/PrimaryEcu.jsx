@@ -38,15 +38,16 @@ class PrimaryEcu extends Component {
     } = this.props;
     const { devicesStore } = this.props.stores;
     return (
-      <span>
+      <>
         <a href='#' className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} id='hardware-primary-details' onClick={this.onEcuClick.bind(this)}>
           <div className='hardware-panel__ecu-desc'>
             <span>
-              <span id='hardware-id-primary' className='hardware-panel__hardware-label app-label'>
+              {'Type: '}
+              <span id='hardware-type-primary' className='hardware-panel__hardware-label app-label'>
                 {devicesStore._getPrimaryHardwareId()}
-              </span>{' '}
+              </span>
               <br />
-              Serial: <span id='hardware-serial-value'>{devicesStore._getPrimarySerial()}</span>
+              {'Identifier: '} <span id='hardware-identifier-value'>{devicesStore._getPrimarySerial()}</span>
             </span>
           </div>
           <div className='hardware-panel__ecu-actions'>
@@ -73,7 +74,7 @@ class PrimaryEcu extends Component {
             </div>
           </div>
         </a>
-      </span>
+      </>
     );
   }
 }

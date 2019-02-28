@@ -6,7 +6,7 @@ import { observable } from 'mobx';
 import { Row, Col } from 'antd';
 import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
-import StatsBlock from '../packages/stats/StatsBlock';
+import StatsBlock from '../software/stats/StatsBlock';
 
 export default class ItemVersions extends Component {
   render() {
@@ -81,7 +81,7 @@ export default class ItemVersions extends Component {
                           <span className='light'>Length: {versionItem.length}</span>
                           <span className='light'>Installed on {versionItem.installedOnEcus} ECU(s)</span>
                           <span className='light'>
-                            Hardware ids:{' '}
+                            {'ECU types: '}
                             {_.map(versionItem.id, (id, key) => {
                               return (
                                 <span key={key} className='app-label'>
