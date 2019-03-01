@@ -16,7 +16,7 @@ import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT } from '../config';
 import { Navigation, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
-import { WhatsNew } from '../components/whatsnew';
+import { GetStarted } from '../components/getstarted';
 
 @inject('stores')
 @observer
@@ -43,8 +43,6 @@ class Main extends Component {
   uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === 'true';
   @observable
   atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
-  @observable
-  showWhatsNewPopover = false;
 
   constructor(props) {
     super(props);
@@ -84,7 +82,6 @@ class Main extends Component {
     this.websocketHandler.init();
     window.atsGarageTheme = this.atsGarageTheme;
     history.listen(this.locationChange);
-    featuresStore.checkWhatsNewStatus();
   }
 
   componentWillUnmount() {
@@ -165,14 +162,6 @@ class Main extends Component {
     this.switchToSWRepo = !this.switchToSWRepo;
   };
 
-  showWhatsNew = () => {
-    this.showWhatsNewPopover = true;
-  };
-
-  hideWhatsNew = () => {
-    this.showWhatsNewPopover = false;
-  };
-
   navigate = path => {
     const { history } = this.props;
     history.push(path);
@@ -183,7 +172,7 @@ class Main extends Component {
     const pageId = `page-${getCurrentLocation(router) || 'home'}`;
     const { stores, ...rest } = this.props;
     const { userStore, featuresStore } = stores;
-    const { alphaPlusEnabled, whatsNewPopOver } = featuresStore;
+    const { alphaPlusEnabled } = featuresStore;
 
     return (
       <span>
@@ -195,7 +184,6 @@ class Main extends Component {
           uiUserProfileMenu={this.uiUserProfileMenu}
           uiCredentialsDownload={this.uiCredentialsDownload}
           alphaPlusEnabled={alphaPlusEnabled}
-          startWhatsNewPopover={this.showWhatsNew}
           addNewWizard={this.addNewWizard}
         />
         <div id={pageId} className={alphaPlusEnabled && 'alpha-plus'}>
@@ -215,11 +203,6 @@ class Main extends Component {
           {this.wizards}
           <Minimized uploadBoxMinimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} minimizedWizards={this.minimizedWizards} toggleWizard={this.toggleWizard} />
         </div>
-        {userStore._isTermsAccepted() && (whatsNewPopOver || this.showWhatsNewPopover) && (
-          <div className='whats-new-keynotes'>
-            <WhatsNew hide={this.hideWhatsNew} changeRoute={this.navigate} />
-          </div>
-        )}
       </span>
     );
   }

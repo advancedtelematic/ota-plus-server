@@ -12,7 +12,7 @@ import {
   UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
-  WhatsNewPage,
+  GetStartedPage,
   ProfilePage,
   NoMatchPage,
   FireworksPage,
@@ -33,7 +33,7 @@ const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfile
     <Route path='/updates/:updateName?' component={UpdatesPage} />
     <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/impact-analysis' component={ImpactAnalysisPage} />
-    <Route path='/whats-new' component={WhatsNewPage} />
+    <Route path='/get-started' component={GetStartedPage} />
     <Route path='/software-repository-alpha' component={SoftwareRepositoryAlpha} />
     <Route path='/policy' component={TermsAndConditions} />
     <Route

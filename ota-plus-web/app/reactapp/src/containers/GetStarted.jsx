@@ -3,28 +3,28 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { WhatsNewHeader, WhatsNewList } from '../components/whatsnew';
+import { GetStartedHeader, GetStartedList } from '../components/getstarted';
 
 @inject('stores')
 @observer
-class WhatsNew extends Component {
+class GetStarted extends Component {
   static propTypes = {
     stores: PropTypes.object,
   };
 
   componentWillMount() {
     const { featuresStore } = this.props.stores;
-    this.features = featuresStore.whatsNew;
+    this.features = featuresStore.getStarted;
   }
 
   render() {
     return (
       <span>
-        <WhatsNewHeader />
-        <WhatsNewList data={this.features} />
+        <GetStartedHeader />
+        <GetStartedList data={this.features} />
       </span>
     );
   }
 }
 
-export default WhatsNew;
+export default GetStarted;
