@@ -44,7 +44,7 @@ class InstallationReportView extends Component {
             Number of Affected <br />
             devices in campaign
           </div>
-          <div className='col-actions'>Downloads</div>
+          <div className='col-actions'>Export device statistics</div>
           {alphaPlusEnabled && (
             <div style={{ display: 'flex', flexDirection: 'column' }} className='col-actions'>
               <Tag color='#48dad0' className='alpha-tag'>
@@ -78,7 +78,12 @@ class InstallationReportView extends Component {
                 </div>
                 {alphaPlusEnabled && (
                   <div className='col-actions'>
-                    <div className='failure_report' onClick={() => {showRetryModal(failure.name)}}>
+                    <div
+                      className='failure_report'
+                      onClick={() => {
+                        showRetryModal(failure.name);
+                      }}
+                    >
                       <img src='/assets/img/icons/retry_icon.svg' alt='Icon' />
                     </div>
                   </div>
