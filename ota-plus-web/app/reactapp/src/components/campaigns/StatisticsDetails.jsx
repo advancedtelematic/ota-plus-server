@@ -97,14 +97,14 @@ class StatisticsDetails extends Component {
                 <div className='statistics__legend'>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--success' />
-                    <span>Success: </span>
+                    <span>Succeeded: </span>
                     <span id='target_stats_success'>
                       {this.pluralizeDevices(overallCampaignStatistics.successful)} ({successRate} %)
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--queued' />
-                    <span >Queued: </span>
+                    <span>Queued: </span>
                     <span id='target_stats_queued'>
                       {this.pluralizeDevices(overallCampaignStatistics.queued)} ({queuedRate} %)
                     </span>
@@ -146,7 +146,7 @@ class StatisticsDetails extends Component {
               </div>
             </div>
           </div>
-          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView showRetryModal={showRetryModal}/> : <div>No failure data has been collected yet. Check back later</div>}
+          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView showRetryModal={showRetryModal} /> : <div>No failure data has been collected yet. Check back later</div>}
         </div>
       </div>
     );
