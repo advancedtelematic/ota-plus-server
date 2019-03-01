@@ -7,7 +7,7 @@ import SoftwareRepositoryPage from './SoftwareRepository';
 import UpdatesPage from './Updates';
 import CampaignsPage from './Campaigns';
 import ImpactAnalysisPage from './ImpactAnalysis';
-import WhatsNewPage from './WhatsNew';
+import GetStartedPage from './GetStarted';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
 import FireworksPage from './Fireworks';
@@ -22,7 +22,7 @@ export {
   UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
-  WhatsNewPage,
+  GetStartedPage,
   ProfilePage,
   NoMatchPage,
   FireworksPage,

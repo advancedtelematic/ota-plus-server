@@ -10,17 +10,19 @@ class List extends Component {
 
     function reverseObject(obj) {
       let new_obj = {};
-      let rev_obj = Object.keys(obj).reverse();
-      rev_obj.forEach(function(i) {
-        new_obj[i] = obj[i];
-      });
+      if (obj) {
+        let rev_obj = Object.keys(obj).reverse();
+        rev_obj.forEach(function(i) {
+          new_obj[i] = obj[i];
+        });
+      }
       return new_obj;
     }
 
     const dataReverse = reverseObject(data);
 
     return renderContent ? (
-      <div className='whats-new-content'>
+      <div className='get-started-content'>
         {_.map(dataReverse, (version, i) => {
           delete version.slides.introduction;
           return (
@@ -28,13 +30,14 @@ class List extends Component {
               {_.map(version.slides, (slide, i) => {
                 return (
                   <div className='item' key={i}>
-                    <div className='image-box'>
-                      <img src={slide.feature.blogImage.src} alt='' />
-                    </div>
-                    <div className='description-box'>
-                      <div className='date'> DATE OF RELEASE: {version.dataOfRelease}</div>
-                      <div className='title'>{slide.feature.title}</div>
-                      {!slide.feature.message.__html ? <div className='message'>{slide.feature.message}</div> : <div className='message' dangerouslySetInnerHTML={slide.feature.message} />}
+                    <div className='item__title'>{slide.feature.title}</div>
+                    <div className='item__content'>
+                      <div className='item__content__image-box'>
+                        <img src={slide.feature.blogImage.src} alt='' />
+                      </div>
+                      <div className='item__content__description-box'>
+                        {!slide.feature.message.__html ? <div className='message'>{slide.feature.message}</div> : <div className='message' dangerouslySetInnerHTML={slide.feature.message} />}
+                      </div>
                     </div>
                   </div>
                 );

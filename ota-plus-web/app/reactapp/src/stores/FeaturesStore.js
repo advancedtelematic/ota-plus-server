@@ -6,19 +6,15 @@ import _ from 'lodash';
 import Cookies from 'js-cookie';
 import { API_FEATURES_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { whatsNew } from './data/newFeatures';
+import { getStarted } from './data/newFeatures';
 
 export default class FeaturesStore {
   @observable featuresFetchAsync = {};
   @observable features = [];
   @observable clientId = null;
-  @observable alphaPlusEnabled = true;
-  @observable alphaTestEnabled = true;
-  @observable whatsNew = whatsNew;
-
-  @observable whatsNewPopOver = false;
-  @observable whatsNewPostponed = false;
-  @observable whatsNewShowPage = false;
+  @observable alphaPlusEnabled = false;
+  @observable alphaTestEnabled = false;
+  @observable getStarted = getStarted;
 
   constructor() {
     resetAsync(this.featuresFetchAsync);
@@ -42,45 +38,6 @@ export default class FeaturesStore {
       .catch(error => {
         this.featuresFetchAsync = handleAsyncError(error);
       });
-  }
-
-  checkWhatsNewStatus() {
-    const currentVersion = _.last(Object.keys(this.whatsNew));
-    const WHATS_NEW_DELAY = Cookies.get('WHATS_NEW_DELAY');
-    const WHATS_NEW_HIDE = Cookies.get('WHATS_NEW_HIDE');
-    const WHATS_NEW_HIDE_VERSION = Cookies.get('WHATS_NEW_HIDE_VERSION');
-
-    if (currentVersion === WHATS_NEW_HIDE_VERSION) {
-      this.whatsNewShowPage = true;
-    } else if (WHATS_NEW_HIDE) {
-      Cookies.set('WHATS_NEW_HIDE', 'false');
-      Cookies.remove('WHATS_NEW_HIDE_VERSION');
-      this.whatsNewPopOver = true;
-    }
-
-    if (WHATS_NEW_DELAY && !WHATS_NEW_HIDE) {
-      this.whatsNewPostponed = true;
-    }
-
-    if (!WHATS_NEW_DELAY && !WHATS_NEW_HIDE) {
-      this.whatsNewPopOver = true;
-    }
-  }
-
-  setWhatsNewDelay() {
-    Cookies.set('WHATS_NEW_DELAY', true, { expires: 1 });
-    this.whatsNewPopOver = false;
-    this.whatsNewPostponed = true;
-  }
-
-  setWhatsNewHide() {
-    const currentVersion = _.last(Object.keys(this.whatsNew));
-    Cookies.set('WHATS_NEW_HIDE', 'true');
-    Cookies.set('WHATS_NEW_HIDE_VERSION', currentVersion);
-    Cookies.remove('WHATS_NEW_DELAY');
-    this.whatsNewPopOver = false;
-    this.whatsNewPostponed = false;
-    this.whatsNewShowPage = true;
   }
 
   _reset() {
