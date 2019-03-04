@@ -42,10 +42,10 @@ class DependenciesModal extends Component {
 
   constructor(props) {
     super(props);
-    const { devicesStore, packagesStore, campaignsStore } = props.stores;
+    const { devicesStore, softwareStore, campaignsStore } = props.stores;
     this.devicesFetchHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
     this.campaignsFetchHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
-    this.packagesFetchHandler = new AsyncStatusCallbackHandler(packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
+    this.packagesFetchHandler = new AsyncStatusCallbackHandler(softwareStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
 
     this.sankeyModeHandler = observe(this, change => {
       if (change.object.showOnlyActive === false) {
@@ -57,12 +57,12 @@ class DependenciesModal extends Component {
   componentDidMount() {
     const { router } = this.context;
     const { stores } = this.props;
-    const { devicesStore, campaignsStore, packagesStore } = stores;
+    const { devicesStore, campaignsStore, softwareStore } = stores;
     devicesStore.fetchDevices().then(() => {
       if (router.route.location !== '/packages') {
         campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
       } else {
-        packagesStore.fetchPackages();
+        softwareStore.fetchPackages();
       }
     });
     window.addEventListener('resize', this.resizeSankey);
@@ -173,16 +173,16 @@ class DependenciesModal extends Component {
 
   campaignsFetched() {
     const { stores } = this.props;
-    const { devicesStore, packagesStore } = stores;
+    const { devicesStore, softwareStore } = stores;
     _.each(devicesStore.multiTargetUpdatesSaved, mtuUpdate => {
       const packageHash = getSHA256Hash(mtuUpdate);
-      const pack = _.find(packagesStore.packages, pack => pack.packageHash === packageHash);
+      const pack = _.find(softwareStore.packages, pack => pack.packageHash === packageHash);
       this.packages.push(pack);
     });
     _.each(devicesStore.devices, device => {
       const filepaths = device.installedFilepaths;
       _.each(filepaths, filepath => {
-        const pack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
+        const pack = _.find(softwareStore.packages, pack => pack.filepath === filepath);
         if (!_.isUndefined(pack)) {
           this.packages.push(pack);
         }

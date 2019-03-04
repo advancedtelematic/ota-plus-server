@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { Progress } from 'antd';
 import { translate } from 'react-i18next';
 import _ from 'lodash';
-import { PackagesCancelUploadModal, PackagesCancelAllUploadsModal } from '../components/packages';
+import { SoftwareCancelUploadModal, SoftwareCancelAllUploadsModal } from '../components/software';
 import { ConvertTime, ConvertBytes } from '../utils';
 import OTAModal from './OTAModal';
 
@@ -26,8 +26,8 @@ class UploadBox extends Component {
 
   removeFromList = (index, e) => {
     if (e) e.preventDefault();
-    const { packagesStore } = this.props.stores;
-    packagesStore.packagesUploading.splice(index, 1);
+    const { softwareStore } = this.props.stores;
+    softwareStore.packagesUploading.splice(index, 1);
   };
 
   showCancelUploadModal = (index, e) => {
@@ -55,13 +55,13 @@ class UploadBox extends Component {
 
   close = e => {
     if (e) e.preventDefault();
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     let uploadFinished = true;
-    _.each(packagesStore.packagesUploading, upload => {
+    _.each(softwareStore.packagesUploading, upload => {
       if (upload.status === null) uploadFinished = false;
     });
     if (uploadFinished) {
-      packagesStore.packagesUploading = [];
+      softwareStore.packagesUploading = [];
     } else {
       this.showCancelAllUploadsModal(true, null);
     }
@@ -69,7 +69,7 @@ class UploadBox extends Component {
 
   render() {
     const { t, minimized, toggleUploadBoxMode } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     const barOptions = {
       strokeWidth: 18,
       easing: 'easeInOut',
@@ -81,7 +81,7 @@ class UploadBox extends Component {
     let uploadFinished = true;
     let totalSize = 0;
     let secondsRemaining = 0;
-    _.each(packagesStore.packagesUploading, upload => {
+    _.each(softwareStore.packagesUploading, upload => {
       let uploadSize = upload.size / (1024 * 1024);
       let uploadedSize = !isNaN(upload.uploaded) ? upload.uploaded / (1024 * 1024) : 0;
       let uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
@@ -114,7 +114,7 @@ class UploadBox extends Component {
         <div className='content'>
           <ul className='list'>
             {_.map(
-              packagesStore.packagesUploading,
+              softwareStore.packagesUploading,
               (upload, index) => {
                 return (
                   <li key={index}>
@@ -167,11 +167,11 @@ class UploadBox extends Component {
             )}
           </ul>
         </div>
-        <PackagesCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal} uploadIndex={this.actionUploadIndex} packagesStore={packagesStore} />
-        <PackagesCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal} ifClearUploads={this.ifClearUploads} packagesStore={packagesStore} />
+        <SoftwareCancelUploadModal shown={this.cancelUploadModalShown} hide={this.hideCancelUploadModal} uploadIndex={this.actionUploadIndex} softwareStore={softwareStore} />
+        <SoftwareCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal} ifClearUploads={this.ifClearUploads} softwareStore={softwareStore} />
       </div>
     );
-    const title = 'Uploading ' + t('common.packageWithCount', { count: packagesStore.packagesUploading.length });
+    const title = 'Uploading ' + t('common.softwareWithCount', { count: softwareStore.packagesUploading.length });
     return (
       <OTAModal
         title={title}
@@ -186,7 +186,7 @@ class UploadBox extends Component {
           </div>
         }
         content={uploadBoxData}
-        visible={packagesStore.packagesUploading.length && !minimized ? true : false}
+        visible={softwareStore.packagesUploading.length && !minimized ? true : false}
         onRequestClose={toggleUploadBoxMode}
         className='upload-box'
       />

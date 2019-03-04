@@ -3,6 +3,6 @@
 import LatestCreatedCampaigns from './LatestCreatedCampaigns';
 import LatestCreatedCampaignItem from './LatestCreatedCampaignItem';
 import LastDevices from './LastDevices';
-import LastPackages from './LastPackages';
+import LastSoftware from './LastSoftware';
 
-export { LatestCreatedCampaigns, LastDevices, LastPackages, LatestCreatedCampaignItem };
+export { LatestCreatedCampaigns, LastDevices, LastSoftware, LatestCreatedCampaignItem };

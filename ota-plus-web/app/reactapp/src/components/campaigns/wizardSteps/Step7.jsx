@@ -72,7 +72,7 @@ class WizardStep7 extends Component {
                         </div>
                       </span>
                     </div>
-                    <div className='hardware-id-container'>
+                    <div className='hardware-type-container'>
                       <div className='text'>{'On:'}</div>
                       <div className='value app-label' id={'package-version-' + hardwareId}>
                         {hardwareId}

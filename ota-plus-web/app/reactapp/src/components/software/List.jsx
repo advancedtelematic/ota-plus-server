@@ -9,8 +9,8 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
-import { PackagesVersionsStats } from './stats';
-import { Loader, Dropdown, EditPackageModal, ConfirmationModal } from '../../partials';
+import { SoftwareVersionsStats } from './stats';
+import { Loader, Dropdown, EditSoftwareModal, ConfirmationModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
@@ -62,7 +62,7 @@ class List extends Component {
     return positions;
   };
   listScroll = () => {
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     if (this.refs.list) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
@@ -75,7 +75,7 @@ class List extends Component {
         headersPositions,
         (position, index) => {
           if (scrollTop >= position) {
-            newFakeHeaderLetter = Object.keys(packagesStore.preparedPackages)[index];
+            newFakeHeaderLetter = Object.keys(softwareStore.preparedPackages)[index];
             return true;
           } else if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
@@ -115,9 +115,9 @@ class List extends Component {
   };
   togglePackage = (packageName, e) => {
     const { expandedPackageName, setExpandedPackageName } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     if (e) e.preventDefault();
-    packagesStore._handleCompatibles();
+    softwareStore._handleCompatibles();
     setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
   };
   hideSubmenu = () => {
@@ -135,8 +135,8 @@ class List extends Component {
 
   constructor(props) {
     super(props);
-    const { packagesStore } = props.stores;
-    this.packagesChangeHandler = observe(packagesStore, change => {
+    const { softwareStore } = props.stores;
+    this.packagesChangeHandler = observe(softwareStore, change => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -177,16 +177,16 @@ class List extends Component {
 
   render() {
     const { stores, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
-    const { packagesStore, featuresStore } = stores;
+    const { softwareStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
 
     return (
-      <div className='ios-list' ref='list' style={{height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})`}}>
+      <div className='ios-list' ref='list' style={{ height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})` }}>
         <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
           <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
             {this.fakeHeaderLetter}
           </div>
-          {_.map(packagesStore.preparedPackages, (packages, letter) => {
+          {_.map(softwareStore.preparedPackages, (packages, letter) => {
             return (
               <span key={letter}>
                 <div className='header'>{letter}</div>
@@ -194,7 +194,13 @@ class List extends Component {
                   const that = this;
                   return (
                     <span key={index} className='c-package'>
-                      <ListItem pack={pack} expandedPackageName={expandedPackageName} togglePackage={this.togglePackage} highlightedPackage={highlightedPackage} highlightPackage={this.highlightPackage}/>
+                      <ListItem
+                        pack={pack}
+                        expandedPackageName={expandedPackageName}
+                        togglePackage={this.togglePackage}
+                        highlightedPackage={highlightedPackage}
+                        highlightPackage={this.highlightPackage}
+                      />
                       <VelocityTransitionGroup
                         enter={{
                           animation: 'slideDown',
@@ -248,7 +254,7 @@ class List extends Component {
                             <div className='c-package__versions-wrapper'>
                               <div className='c-package__chart'>
                                 <div className='c-package__heading'>Distribution by devices</div>
-                                <PackagesVersionsStats pack={pack} />
+                                <SoftwareVersionsStats pack={pack} />
                               </div>
                               <ul className='c-package__versions' id='versions'>
                                 {_.map(pack.versions, (version, i) => {
@@ -286,17 +292,17 @@ class List extends Component {
             hide={this.hideDeleteModal}
             shown={this.deleteModal}
             deleteItem={() => {
-              packagesStore.deleteAllVersions(this.packVersions);
+              softwareStore.deleteAllVersions(this.packVersions);
               this.hideDeleteModal();
             }}
             topText={
               <div className='delete-modal-top-text' id='delete-all-versions-top-text'>
-                All package versions will be removed.
+                All software versions will be removed.
               </div>
             }
             bottomText={
               <div className='delete-modal-bottom-text' id='delete-all-versions-bottom-text'>
-                If the package is part of any active campaigns, any devices that haven't installed it will fail the campaign.
+                If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.
               </div>
             }
             showDetailedInfo={true}

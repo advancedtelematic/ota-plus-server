@@ -10,13 +10,13 @@ import { DEFAULT_THEME_CONFIG } from './config';
 import i18n from './i18n';
 
 import MainLayout from './layouts/Main';
-import { DevicesStore, HardwareStore, GroupsStore, PackagesStore, CampaignsStore, ImpactAnalysisStore, FeaturesStore, ProvisioningStore, UserStore, UpdatesStore } from './stores';
+import { DevicesStore, HardwareStore, GroupsStore, SoftwareStore, CampaignsStore, ImpactAnalysisStore, FeaturesStore, ProvisioningStore, UserStore, UpdatesStore } from './stores';
 
 const stores = {
   devicesStore: new DevicesStore(),
   hardwareStore: new HardwareStore(),
   groupsStore: new GroupsStore(),
-  packagesStore: new PackagesStore(),
+  softwareStore: new SoftwareStore(),
   campaignsStore: new CampaignsStore(),
   impactAnalysisStore: new ImpactAnalysisStore(),
   featuresStore: new FeaturesStore(),

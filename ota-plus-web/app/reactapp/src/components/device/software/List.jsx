@@ -27,19 +27,19 @@ class List extends Component {
 
   constructor(props) {
     super(props);
-    const { packagesStore } = props.stores;
-    this.packagesChangeHandler = observe(packagesStore, change => {
+    const { softwareStore } = props.stores;
+    this.packagesChangeHandler = observe(softwareStore, change => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
           that.listScroll();
-          that.highlightInstalledPackage(packagesStore.expandedPackage);
+          that.highlightInstalledPackage(softwareStore.expandedPackage);
         }, 50);
       }
     });
   }
   componentWillReceiveProps(nextProps) {
-    const { packagesStore } = nextProps.stores;
+    const { softwareStore } = nextProps.stores;
     if (nextProps.triggerPackages) {
       this.selectPackagesToDisplay();
       this.addUnmanagedPackage();
@@ -159,10 +159,10 @@ class List extends Component {
     });
   }
   selectPackagesToDisplay() {
-    const { devicesStore, packagesStore, hardwareStore } = this.props.stores;
-    let preparedPackages = packagesStore.preparedPackages;
+    const { devicesStore, softwareStore, hardwareStore } = this.props.stores;
+    let preparedPackages = softwareStore.preparedPackages;
     let dirPacks = {};
-    _.map(packagesStore.preparedPackages, (packages, letter) => {
+    _.map(softwareStore.preparedPackages, (packages, letter) => {
       dirPacks[letter] = [];
       _.map(packages, (pack, index) => {
         let filteredVersions = [];
@@ -204,7 +204,7 @@ class List extends Component {
     this.preparedPackages = dirPacks;
   }
   addUnmanagedPackage() {
-    const { devicesStore, packagesStore, hardwareStore } = this.props.stores;
+    const { devicesStore, softwareStore, hardwareStore } = this.props.stores;
     let preparedPackages = this.preparedPackages;
     let ecuObject = null;
     switch (hardwareStore.activeEcu.type) {
@@ -220,7 +220,7 @@ class List extends Component {
     const filepath = ecuObject.image.filepath;
     const hash = ecuObject.image.hash.sha256;
     const size = ecuObject.image.size;
-    const pack = packagesStore._getInstalledPackage(filepath, hardwareStore.activeEcu.hardwareId);
+    const pack = softwareStore._getInstalledPackage(filepath, hardwareStore.activeEcu.hardwareId);
     if (!pack) {
       let unmanagedPack = {
         filepath: filepath,

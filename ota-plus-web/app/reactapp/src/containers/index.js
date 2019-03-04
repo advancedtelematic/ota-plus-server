@@ -4,7 +4,7 @@ import HomeContainer from './Home';
 import WhatsNew from '../components/whatsnew/WhatsNew';
 import DevicesContainer from './Devices';
 import DeviceContainer from './Device';
-import PackagesContainer from './Packages';
+import SoftwareContainer from './Software';
 import UpdatesContainer from './Updates';
 import CampaignsContainer from './Campaigns';
 import ImpactAnalysisContainer from './ImpactAnalysis';
@@ -19,7 +19,7 @@ export {
   WhatsNew,
   DevicesContainer,
   DeviceContainer,
-  PackagesContainer,
+  SoftwareContainer,
   UpdatesContainer,
   CampaignsContainer,
   ImpactAnalysisContainer,

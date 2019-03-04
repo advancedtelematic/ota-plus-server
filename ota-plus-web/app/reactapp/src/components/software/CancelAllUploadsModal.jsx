@@ -2,24 +2,31 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inject } from 'mobx-react';
-
 import { Button } from 'antd';
+import _ from 'lodash';
+import { inject } from 'mobx-react';
 import { OTAModal } from '../../partials';
 
 @inject('stores')
-class CancelUploadModal extends Component {
+class CancelAllUploadsModal extends Component {
   static propTypes = {
     stores: PropTypes.object,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    uploadIndex: PropTypes.number,
+    ifClearUploads: PropTypes.bool.isRequired,
   };
 
-  cancelUpload = () => {
-    const { stores, uploadIndex, hide } = this.props;
-    const { packagesStore } = stores;
-    packagesStore.packagesUploading[uploadIndex].source.cancel();
+  cancelAllUploads = () => {
+    const { stores, ifClearUploads, hide } = this.props;
+    const { softwareStore } = stores;
+    _.each(
+      softwareStore.packagesUploading,
+      upload => {
+        upload.source.cancel();
+      },
+      this,
+    );
+    if (ifClearUploads) softwareStore.packagesUploading = [];
     hide();
   };
 
@@ -27,20 +34,20 @@ class CancelUploadModal extends Component {
     const { shown, hide } = this.props;
     const content = (
       <span>
-        Your upload is not complete. Would you like to cancel the upload?
+        Your uploads are not complete. Would you like to cancel all ongoing uploads?
         <div className='body-actions'>
           <a onClick={hide} className='link-cancel'>
-            Continue upload
+            Continue uploads
           </a>
-          <a className='btn-primary' id='cancel-upload' onClick={this.cancelUpload}>
-            Cancel upload
+          <a className='btn-primary' id='cancel-all-uploads' onClick={this.cancelAllUploads}>
+            Cancel uploads
           </a>
         </div>
       </span>
     );
     return (
       <OTAModal
-        title='Cancel upload?'
+        title='Cancel all uploads?'
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
@@ -56,4 +63,4 @@ class CancelUploadModal extends Component {
   }
 }
 
-export default CancelUploadModal;
+export default CancelAllUploadsModal;

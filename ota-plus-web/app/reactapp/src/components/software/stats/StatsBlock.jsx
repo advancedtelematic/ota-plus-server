@@ -99,7 +99,7 @@ class StatsBlock extends Component {
             </div>
           ) : (
             <div id={'package-' + pack.packageName + '-not-installed'} style={{ textAlign: 'left' }}>
-              This package has not been installed yet.
+              This software has not been installed yet.
             </div>
           )}
         </div>

@@ -33,17 +33,17 @@ const WebsocketHandler = function(wsUrl, stores) {
           }
           break;
         case 'TufTargetAdded':
-          stores.packagesStore._addPackage(data);
+          stores.softwareStore._addPackage(data);
           break;
         case 'PackageBlacklisted':
-          stores.packagesStore.fetchBlacklist();
+          stores.softwareStore.fetchBlacklist();
           break;
         case 'UpdateSpec':
           if (window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.uuid === data.device) {
             stores.devicesStore.fetchMultiTargetUpdates(data.device);
             if (data.status === 'Finished') {
-              stores.packagesStore.fetchPackagesHistory(data.device, stores.packagesStore.packagesHistoryFilter, true);
-              stores.packagesStore.fetchOndevicePackages(data.device, null);
+              stores.softwareStore.fetchPackagesHistory(data.device, stores.softwareStore.packagesHistoryFilter, true);
+              stores.softwareStore.fetchOndevicePackages(data.device, null);
             }
           }
           if (data.status === 'Finished') {

@@ -3,14 +3,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button, Tabs, Tag } from "antd";
+import { Button, Tabs, Tag } from 'antd';
 import { action, observable, observe } from 'mobx';
 
-import {
-  CAMPAIGNS_STATUSES,
-  CAMPAIGNS_STATUS_TAB_TITLE,
-  CAMPAIGNS_DEFAULT_TAB,
-} from '../config';
+import { CAMPAIGNS_STATUSES, CAMPAIGNS_STATUS_TAB_TITLE, CAMPAIGNS_DEFAULT_TAB } from '../config';
 
 @inject('stores')
 @observer
@@ -27,18 +23,20 @@ class TabNavigation extends Component {
     super(props);
     const { stores } = props;
     const { campaignsStore } = stores;
-    this.cancelChange = observe(campaignsStore, change => { this.apply(change)});
+    this.cancelChange = observe(campaignsStore, change => {
+      this.apply(change);
+    });
   }
 
   componentDidMount() {
     const { stores, location } = this.props;
-    const { campaignsStore, packagesStore } = stores;
+    const { campaignsStore, softwareStore } = stores;
     if (this.isCampaignsPage(location)) {
       this.setActive(campaignsStore.activeTab);
       this.fetchStatusCount();
     }
     if (this.isPackagesPage(location)) {
-      this.setActive(packagesStore.activeTab);
+      this.setActive(softwareStore.activeTab);
     }
   }
 
@@ -61,11 +59,11 @@ class TabNavigation extends Component {
     this.setActive(tab);
   };
 
-  isPackagesPage = location => location === 'page-packages';
+  isPackagesPage = location => location === 'page-software-repository';
 
   isCampaignsPage = location => location === 'page-campaigns';
 
-  isActive = tab => (tab === this.activeTab) ? 'tab-navigation__link--active' : '';
+  isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   @action
   setActive = tab => {
@@ -84,12 +82,12 @@ class TabNavigation extends Component {
   @action
   storeActive = tab => {
     const { stores, location } = this.props;
-    const { campaignsStore, packagesStore } = stores;
+    const { campaignsStore, softwareStore } = stores;
     if (this.isCampaignsPage(location)) {
       campaignsStore.activeTab = tab;
     }
     if (this.isPackagesPage(location)) {
-      packagesStore.activeTab = tab;
+      softwareStore.activeTab = tab;
     }
   };
 
@@ -97,7 +95,7 @@ class TabNavigation extends Component {
     const { stores, location, showCreateCampaignModal } = this.props;
     const { campaignsStore } = stores;
     const { count } = campaignsStore;
-    const packagesTabsActive = location === 'page-packages';
+    const packagesTabsActive = location === 'page-software-repository';
     const campaignsTabsActive = location === 'page-campaigns';
 
     return (
@@ -119,7 +117,12 @@ class TabNavigation extends Component {
                 }}
                 className={`tab-navigation__link ${this.isActive('advanced')}`}
               >
-                <span>{'Advanced (BETA)'}<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></span>
+                <span>
+                  {'Advanced (BETA)'}
+                  <Tag color='#48dad0' className='alpha-tag'>
+                    ALPHA
+                  </Tag>
+                </span>
               </li>
             </ul>
           </div>

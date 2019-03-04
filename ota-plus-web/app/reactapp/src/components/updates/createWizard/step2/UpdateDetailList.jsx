@@ -12,11 +12,11 @@ import UpdateDetailListItem from './UpdateDetailListItem';
 class UpdateDetailList extends Component {
   render() {
     const { wizardData, onStep2DataSelect } = this.props;
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     const selectedHardwares = wizardData.selectedHardwares;
     return (
       <span>
-        {packagesStore.packagesFetchAsync.isFetching ? (
+        {softwareStore.packagesFetchAsync.isFetching ? (
           <div className='wrapper-center'>
             <Loader />
           </div>

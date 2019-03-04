@@ -26,9 +26,9 @@ class Campaigns extends Component {
 
   componentWillUnmount() {
     const { stores } = this.props;
-    const { campaignsStore, packagesStore, groupsStore } = stores;
+    const { campaignsStore, softwareStore, groupsStore } = stores;
     campaignsStore._reset();
-    packagesStore._reset();
+    softwareStore._reset();
     groupsStore._reset();
   }
 

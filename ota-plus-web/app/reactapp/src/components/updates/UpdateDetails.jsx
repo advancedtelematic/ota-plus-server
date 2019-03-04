@@ -61,10 +61,10 @@ class UpdateDetails extends Component {
                   </Row>
                   <Row className='row'>
                     <Col span={12}>
-                      <FormInput label='Package' name='fromPackage' id={`${hardwareId}-from-package`} defaultValue={fromPackage ? fromPackage : noInformation} isEditable={isEditable} />
+                      <FormInput label='Software' name='fromPackage' id={`${hardwareId}-from-package`} defaultValue={fromPackage ? fromPackage : noInformation} isEditable={isEditable} />
                     </Col>
                     <Col span={12}>
-                      <FormInput label='Package' name='toPackage' id={`${hardwareId}-to-package`} defaultValue={toPackage ? toPackage : noInformation} isEditable={isEditable} />
+                      <FormInput label='Software' name='toPackage' id={`${hardwareId}-to-package`} defaultValue={toPackage ? toPackage : noInformation} isEditable={isEditable} />
                     </Col>
                   </Row>
                   <Row className='row'>

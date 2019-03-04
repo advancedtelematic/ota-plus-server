@@ -22,10 +22,10 @@ class EditCommentModal extends Component {
   @observable submitButtonDisabled = false;
   submitForm = e => {
     const { stores, filepath, hide } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     if (e) e.preventDefault();
     const data = serialize(document.querySelector('#comment-edit-form'), { hash: true });
-    packagesStore.updateComment(filepath, data.comment);
+    softwareStore.updateComment(filepath, data.comment);
     hide();
   };
 

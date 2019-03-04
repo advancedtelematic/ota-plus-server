@@ -7,7 +7,7 @@ import { observable } from 'mobx';
 import { DeviceHardwareOverlay, DeviceHardwareSecondaryEcuDetails, DevicePrimaryEcu, DeviceSecondaryEcu } from './hardware';
 import { FadeAnimation } from '../../utils';
 import _ from 'lodash';
-import { PackagesBlacklistModal } from '../../components/packages';
+import { PackageBlacklistModal } from '../software';
 
 const title = 'Hardware';
 const primaryEcusTitle = 'Primary Ecu';
@@ -77,11 +77,11 @@ class HardwarePanel extends Component {
     this.hardwareOverlayShown = false;
   };
   hidePackageBlacklistModal = e => {
-    const { packagesStore } = this.props.stores;
+    const { softwareStore } = this.props.stores;
     if (e) e.preventDefault();
     this.packageBlacklistModalShown = false;
     this.packageBlacklistAction = {};
-    packagesStore._resetBlacklistActions();
+    softwareStore._resetBlacklistActions();
   };
 
   render() {
@@ -159,7 +159,7 @@ class HardwarePanel extends Component {
             </FadeAnimation>
           ) : null}
         </div>
-        <PackagesBlacklistModal shown={this.packageBlacklistModalShown} hide={this.hidePackageBlacklistModal} blacklistAction={this.packageBlacklistAction} />
+        <PackageBlacklistModal shown={this.packageBlacklistModalShown} hide={this.hidePackageBlacklistModal} blacklistAction={this.packageBlacklistAction} />
       </div>
     );
   }
