@@ -7,7 +7,8 @@ import java.util.Base64
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityClaims, IdToken, SessionCodecs}
-import com.advancedtelematic.controllers.{UserLogin, UserId}
+import com.advancedtelematic.controllers.{UserId, UserLogin}
+import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
@@ -60,6 +61,7 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
     messageBus.publishSafe(UserLogin(
         fakeNamespace,
         Some(IdentityClaims(UserId(fakeNamespace), "guest", None, email)),
+        Namespace(fakeNamespace),
         Instant.now()))
 
     Future.successful(result)
