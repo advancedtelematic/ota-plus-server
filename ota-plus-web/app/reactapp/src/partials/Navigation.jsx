@@ -20,21 +20,11 @@ class Navigation extends Component {
     uiUserProfileMenu: PropTypes.bool.isRequired,
     uiCredentialsDownload: PropTypes.bool.isRequired,
     alphaPlusEnabled: PropTypes.bool.isRequired,
-    startWhatsNewPopover: PropTypes.func,
     addNewWizard: PropTypes.func,
   };
 
-  handleClick = event => {
-    const { startWhatsNewPopover } = this.props;
-    const newFeaturesAvailable = _.isFunction(startWhatsNewPopover);
-    if (event) event.preventDefault();
-    if (newFeaturesAvailable) startWhatsNewPopover();
-  };
-
   render() {
-    const { stores, uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, addNewWizard } = this.props;
-
-    const { whatsNewShowPage, whatsNewPostponed, whatsNewPopOver } = stores.featuresStore;
+    const { uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, addNewWizard } = this.props;
 
     return (
       <nav className='navbar navbar-inverse clearfix'>
@@ -44,6 +34,11 @@ class Navigation extends Component {
           </div>
           <div id='navbar'>
             <ul className='nav navbar-nav'>
+              <li className='text-link highlighted' ref='linkGetStarted'>
+                <NavLink to='/get-started' activeClassName='active' id='get-started-link'>
+                  {'Get Started'}
+                </NavLink>
+              </li>
               <li>
                 <NavLink exact to='/' activeClassName='active' id='link-dashboard'>
                   {'Dashboard'}
@@ -79,22 +74,6 @@ class Navigation extends Component {
           <ul className='right-nav'>
             {window.atsGarageTheme && (
               <span>
-                {(whatsNewPostponed || whatsNewPopOver) && (
-                  <li className='text-link highlighted' ref='linkWhatsNew'>
-                    <Button htmlType='button' className='ant-btn ant-btn-plain' onClick={this.handleClick} id='whats-new-link'>
-                      {"WHAT'S NEW"}
-                    </Button>
-                    <span className='whats-new-badge' />
-                  </li>
-                )}
-                {whatsNewShowPage && (
-                  <li className='text-link highlighted' ref='linkWhatsNew'>
-                    <NavLink to='/whats-new' activeClassName='active' id='whats-new-link'>
-                      {"WHAT'S NEW"}
-                    </NavLink>
-                  </li>
-                )}
-                <li className='separator'>{'|'}</li>
                 <li className='text-link'>
                   <a href='http://docs.ota.here.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
                     {'DOCS'}

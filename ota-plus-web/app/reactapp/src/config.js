@@ -157,11 +157,6 @@ export const DEFAULT_THEME_CONFIG = {
  */
 export const VIEWPORT_MIN_WIDTH = 1280;
 export const VIEWPORT_MIN_HEIGHT = 768;
-/**
- * what's new
- */
-export const WHATS_NEW_INITIAL_STEP = 'introduction';
-export const WHATS_NEW_DEFAULT_ACTIONS = ['Back', 'Close', 'Next'];
 
 /**
  * updates
