@@ -47,10 +47,10 @@ class InstallationReportView extends Component {
           <div className='col-actions'>Export device statistics</div>
           {alphaPlusEnabled && (
             <div style={{ display: 'flex', flexDirection: 'column' }} className='col-actions'>
-              <Tag color='#48dad0' className='alpha-tag'>
+              <Tag color='#48dad0' className='alpha-tag alpha-tag--small-margins'>
                 ALPHA
               </Tag>
-              <span>Retry</span>
+              <span>Retry the update installation</span>
             </div>
           )}
           {/*  <div className='col-actions'>Retry status</div>*/}
