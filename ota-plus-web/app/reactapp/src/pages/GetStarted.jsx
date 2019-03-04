@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { MetaData, FadeAnimation } from '../utils';
-import { WhatsNewContainer } from '../containers';
+import { GetStartedContainer } from '../containers';
 
-const title = "WHAT's NEW";
+const title = 'GET STARTED';
 
-const WhatsNew = () => (
+const GetStarted = () => (
   <FadeAnimation>
     <MetaData title={title}>
-      <WhatsNewContainer />
+      <GetStartedContainer />
     </MetaData>
   </FadeAnimation>
 );
 
-export default WhatsNew;
+export default GetStarted;
