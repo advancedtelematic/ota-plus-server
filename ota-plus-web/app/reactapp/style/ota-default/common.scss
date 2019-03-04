@@ -2121,4 +2121,7 @@ input {
   height: 18px;
   padding: 0 5px;
   margin: 10px;
+  &--small-margins {
+    margin: 4px 0 2px;
+  }
 }
