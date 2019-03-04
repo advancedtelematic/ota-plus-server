@@ -49,14 +49,14 @@ class List extends Component {
   }
   render() {
     const { installPackage } = this.props;
-    const { packagesStore, devicesStore } = this.props.stores;
+    const { softwareStore, devicesStore } = this.props.stores;
 
     let isPackageBlacklisted = false;
     let isPackageQueued = false;
     let isPackageInstalled = false;
     let unmanaged = false;
 
-    const { expandedPackage } = packagesStore;
+    const { expandedPackage } = softwareStore;
     if (!expandedPackage.unmanaged) {
       isPackageQueued = this.isPackageQueued(expandedPackage);
       isPackageInstalled = this.isPackageInstalled(expandedPackage);
@@ -145,8 +145,8 @@ class List extends Component {
                   </span>
                 </div>
                 <div className='properties-panel__info-data-block'>
-                  <span className='properties-panel__info-data-subtitle'>Hardware ids:</span>
-                  <span id={this.generateIdTag('version-hardware-ids-value', expandedPackage)}>
+                  <span className='properties-panel__info-data-subtitle'>ECU types:</span>
+                  <span id={this.generateIdTag('version-hardware-types-value', expandedPackage)}>
                     {_.map(expandedPackage.hardwareIds, (hardwareId, index) => {
                       return (
                         <span className='app-label' key={index}>

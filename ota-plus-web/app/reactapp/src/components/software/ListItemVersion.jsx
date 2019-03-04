@@ -23,8 +23,8 @@ class ListItemVersion extends Component {
 
   render() {
     const { stores, version, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
-    const { packagesStore, featuresStore } = stores;
-    const { compatibilityData } = packagesStore;
+    const { softwareStore, featuresStore } = stores;
+    const { compatibilityData } = softwareStore;
     // const { alphaPlusEnabled } = featuresStore;
     // ToDo: this is a quick & dirty switch to locally disable alpha plus
     const alphaPlusEnabled = false;
@@ -38,11 +38,11 @@ class ListItemVersion extends Component {
       };
     }
 
-    /* ToDo: according to PackagesStore._getAllStorage()
+    /* ToDo: according to softwareStore._getAllStorage()
      *
     let versionCompatibilityData = null;
     if (alphaPlusEnabled && Object.keys(compatibilityData).length) {
-      versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
+      versionCompatibilityData = _.find(softwareStore.compatibilityData, item => item.name === version.filepath);
     }*/
 
     const directorBlock = (
@@ -107,7 +107,7 @@ class ListItemVersion extends Component {
           </div>
           <div className='c-package__sw-wrapper'>
             <div className='c-package__hw-row'>
-              <div className='c-package__subheading'>Hardware ids:</div>
+              <div className='c-package__subheading'>ECU types:</div>
               <div className='c-package__hw-value'>
                 {_.map(version.hardwareIds, (hardwareId, index) => (
                   <span className='app-label' key={index} id={`package-${packageName}-app-label-${version.id.version.substring(0, 8)}`}>
@@ -143,7 +143,7 @@ class ListItemVersion extends Component {
                   <div className='c-package__relations' id='required'>
                     <div className='c-package__heading'>Required</div>
                     {_.map(versionCompatibilityData.required, (filepath, i) => {
-                      const pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                      const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
                         <div className='c-package__relation-item' key={i}>
                           <span className='c-package__relation-name' id={`required-${pack.id.name}`}>
@@ -161,7 +161,7 @@ class ListItemVersion extends Component {
                   <div className='c-package__relations' id='not-compatible'>
                     <div className='c-package__heading'>Not compatible:</div>
                     {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
-                      const pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                      const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
                         <div className='c-package__relation-item' key={i}>
                           <span className='c-package__relation-name' id={`not-compatible-${pack.id.name}`}>
@@ -179,7 +179,7 @@ class ListItemVersion extends Component {
                   <div className='c-package__relations' id='required-by'>
                     <div className='c-package__heading'>Required by:</div>
                     {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
-                      const pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                      const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
                         <div className='c-package__relation-item' key={i}>
                           <span className='c-package__relation-name' id={`required-by-${pack.id.version}`}>

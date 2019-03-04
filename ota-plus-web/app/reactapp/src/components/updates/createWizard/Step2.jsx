@@ -10,8 +10,8 @@ import UpdateDetails from '../UpdateDetails';
 @observer
 class Step2 extends Component {
   componentWillMount() {
-    const { packagesStore } = this.props.stores;
-    packagesStore.fetchPackages();
+    const { softwareStore } = this.props.stores;
+    softwareStore.fetchPackages();
   }
 
   render() {

@@ -872,7 +872,6 @@ input {
   }
 }
 
-
 .element-box {
   padding: 20px 0;
 
@@ -1201,7 +1200,7 @@ input {
     @include textoverflowEllipsis;
   }
 
-  &__hardware-id {
+  &__hardware-type {
     font-size: 10px;
     @include textoverflowEllipsis;
     color: #444;

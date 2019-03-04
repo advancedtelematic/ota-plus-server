@@ -30,9 +30,9 @@ class NavigationProfile extends Component {
   clearLocalStorage = e => {
     e.preventDefault();
     const { stores, hideDropdown } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     localStorage.clear();
-    packagesStore._handleCompatibles();
+    softwareStore._handleCompatibles();
     hideDropdown();
   };
 

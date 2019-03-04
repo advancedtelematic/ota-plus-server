@@ -11,9 +11,8 @@ class Header extends Component {
     const { showCreateModal } = this.props;
     return (
       <SubHeader>
-        <a href='#' className='add-button grey-button' id='add-new-package' onClick={showCreateModal.bind(this, null)}>
-          <span>+</span>
-          <span>Add package</span>
+        <a href='#' className='add-button grey-button' id='add-new-software' onClick={showCreateModal.bind(this, null)}>
+          <span>{'+ Add software'}</span>
         </a>
       </SubHeader>
     );

@@ -60,7 +60,7 @@ class WizardStep5 extends Component {
 
   checkVersion = data => {
     const { stores, markStepAsFinished } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     this.fetchSelectedVersions();
 
     const objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
@@ -76,7 +76,7 @@ class WizardStep5 extends Component {
             }
           });
           if (!skipAdd) {
-            const childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
+            const childPack = _.find(softwareStore.packages, pack => pack.filepath === filepath);
             const obj = {
               parentPack: data.packName,
               parentFilepath: data.filepath,
@@ -97,7 +97,7 @@ class WizardStep5 extends Component {
             }
           });
           if (isTryingToInstall) {
-            const childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
+            const childPack = _.find(softwareStore.packages, pack => pack.filepath === filepath);
             const obj = {
               parentPack: data.packName,
               parentFilepath: data.filepath,
@@ -130,9 +130,9 @@ class WizardStep5 extends Component {
 
   getPackVersions = packName => {
     const { stores } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     let matchedVersions = [];
-    _.each(packagesStore.preparedPackages, packs => {
+    _.each(softwareStore.preparedPackages, packs => {
       _.each(packs, pack => {
         matchedVersions = pack.packageName === packName ? pack.versions : [];
       });

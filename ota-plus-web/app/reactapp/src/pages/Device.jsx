@@ -23,12 +23,12 @@ class Device extends Component {
   };
 
   componentDidMount() {
-    const { packagesStore, devicesStore } = this.props.stores;
+    const { softwareStore, devicesStore } = this.props.stores;
     const { params } = this.props.match;
-    packagesStore.page = 'device';
+    softwareStore.page = 'device';
     devicesStore.fetchDevice(params.id);
-    packagesStore.fetchPackages();
-    packagesStore.fetchPackagesHistory(params.id, packagesStore.packagesHistoryFilter);
+    softwareStore.fetchPackages();
+    softwareStore.fetchPackagesHistory(params.id, softwareStore.packagesHistoryFilter);
     devicesStore.fetchDeviceNetworkInfo(params.id);
     devicesStore.fetchMultiTargetUpdates(params.id);
     devicesStore.fetchEvents(params.id);
@@ -36,9 +36,9 @@ class Device extends Component {
   }
 
   componentWillUnmount() {
-    const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
+    const { softwareStore, devicesStore, hardwareStore } = this.props.stores;
     devicesStore._reset();
-    packagesStore._reset();
+    softwareStore._reset();
     hardwareStore._reset();
   }
 

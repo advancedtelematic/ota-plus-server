@@ -13,12 +13,12 @@ const title = 'Properties';
 class PropertiesPanel extends Component {
   render() {
     const { stores, installPackage } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     return (
       <div className='properties-panel'>
         <div className='properties-panel__header darkgrey-header'>{title}</div>
         <div className='properties-panel__wrapper'>
-          {packagesStore.packagesFetchAsync.isFetching ? (
+          {softwareStore.packagesFetchAsync.isFetching ? (
             <div className='wrapper-center'>
               <Loader />
             </div>

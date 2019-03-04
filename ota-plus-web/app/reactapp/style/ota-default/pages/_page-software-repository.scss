@@ -3,9 +3,8 @@
 @import '../variables-ota';
 @import '../mixins';
 
-#page-packages {
+#page-software-repository {
   background-color: $home-bg;
-
 
   .ios-list {
     height: calc(100% - 50px);

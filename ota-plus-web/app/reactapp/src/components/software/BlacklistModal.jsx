@@ -25,15 +25,15 @@ class BlacklistModal extends Component {
 
   componentDidMount() {
     const { stores, hide } = this.props;
-    const { packagesStore } = stores;
-    this.blacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesBlacklistAsync', hide);
-    this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesUpdateBlacklistedAsync', hide);
-    this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesRemoveFromBlacklistAsync', hide);
+    const { softwareStore } = stores;
+    this.blacklistHandler = AsyncStatusCallbackHandler(softwareStore, 'packagesBlacklistAsync', hide);
+    this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(softwareStore, 'packagesUpdateBlacklistedAsync', hide);
+    this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(softwareStore, 'packagesRemoveFromBlacklistAsync', hide);
   }
 
   componentWillReceiveProps(nextProps) {
     const { stores, blacklistAction } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     if (
       nextProps.blacklistAction.name &&
       nextProps.blacklistAction.version &&
@@ -44,10 +44,10 @@ class BlacklistModal extends Component {
         version: nextProps.blacklistAction.version,
       };
       if (nextProps.blacklistAction.mode === 'edit') {
-        packagesStore.fetchBlacklist();
-        packagesStore.fetchBlacklistedPackage(data);
+        softwareStore.fetchBlacklist();
+        softwareStore.fetchBlacklistedPackage(data);
       } else {
-        packagesStore.fetchAffectedDevicesCount(data);
+        softwareStore.fetchAffectedDevicesCount(data);
       }
     }
   }
@@ -68,7 +68,7 @@ class BlacklistModal extends Component {
 
   submitForm = e => {
     const { stores, blacklistAction } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     if (e) e.preventDefault();
     const formData = serialize(document.querySelector('#blacklist-form'), { hash: true });
     const data = {
@@ -79,27 +79,27 @@ class BlacklistModal extends Component {
       comment: formData.comment,
     };
     if (blacklistAction.mode === 'edit') {
-      packagesStore.updateBlacklistedPackage(data);
+      softwareStore.updateBlacklistedPackage(data);
     } else {
-      packagesStore.blacklistPackage(data);
+      softwareStore.blacklistPackage(data);
     }
   };
 
   removeFromBlacklist = e => {
     if (e) e.preventDefault();
     const { stores, blacklistAction } = this.props;
-    const { packagesStore } = stores;
+    const { softwareStore } = stores;
     const data = {
       name: blacklistAction.name,
       version: blacklistAction.version,
     };
-    packagesStore.removePackageFromBlacklist(data);
+    softwareStore.removePackageFromBlacklist(data);
   };
 
   render() {
     const { stores, shown, hide, blacklistAction } = this.props;
-    const { packagesStore } = stores;
-    const { packagesUpdateBlacklistedAsync, packagesRemoveFromBlacklistAsync, packagesBlacklistAsync } = packagesStore;
+    const { softwareStore } = stores;
+    const { packagesUpdateBlacklistedAsync, packagesRemoveFromBlacklistAsync, packagesBlacklistAsync } = softwareStore;
     const content = (
       <OTAForm onSubmit={this.submitForm} id='blacklist-form'>
         {blacklistAction.mode === 'edit' ? (
@@ -124,13 +124,13 @@ class BlacklistModal extends Component {
 
         <div className='row'>
           <div className='col-xs-12'>
-            {packagesStore.packagesOneBlacklistedFetchAsync.isFetching ? (
+            {softwareStore.packagesOneBlacklistedFetchAsync.isFetching ? (
               <Loader className='dark' />
             ) : (
               <span>
                 <FormTextarea
                   name='comment'
-                  defaultValue={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
+                  defaultValue={!_.isEmpty(softwareStore.blacklistedPackage) ? softwareStore.blacklistedPackage.comment : ''}
                   label='Comment'
                   id='blacklist-comment'
                   onValid={this.enableButton}

@@ -61,7 +61,7 @@ class List extends Component {
                 onClick={e => {
                   this.showInfo(e, item);
                 }}
-                data-packages={packages}
+                data-software={packages}
               >
                 <span>{item}</span>
                 <div
