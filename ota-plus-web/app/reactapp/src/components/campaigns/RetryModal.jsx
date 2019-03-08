@@ -3,12 +3,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 
 import { Form } from 'formsy-antd';
 import { Row, Col, DatePicker, Button } from 'antd';
 import { OTAModal } from '../../partials';
-
+@inject('stores')
 @observer
 class RetryModal extends Component {
   static propTypes = {
@@ -17,16 +17,12 @@ class RetryModal extends Component {
     hide: PropTypes.func.isRequired,
   };
 
-  @observable
-  submitButtonDisabled = true;
-
-  disableButton = () => {
-    this.submitButtonDisabled = true;
-  };
-
-  enableButton = () => {
-    this.submitButtonDisabled = false;
-  };
+  launch = () => {
+    const { stores, hide, failureforRetry } = this.props;
+    const { campaignsStore } = stores;
+    campaignsStore.launchRetryCampaign(campaignsStore.campaign.id, failureforRetry);
+    hide();
+  }
 
   render() {
     const { shown, hide, failureforRetry } = this.props;
@@ -48,7 +44,7 @@ class RetryModal extends Component {
           <li>Once you've figured it out, create another update and deploy it in another campaign.</li>
         </ol>
         <div className='body-actions'>
-          <button disabled={this.submitButtonDisabled} className='btn-primary' id='add-new-key-confirm'>
+          <button className='btn-primary' id='add-new-key-confirm' onClick={this.launch}>
             Confirm
           </button>
         </div>
