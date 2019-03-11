@@ -34,7 +34,7 @@ class Navigation extends Component {
           </div>
           <div id='navbar'>
             <ul className='nav navbar-nav'>
-              <li className='text-link highlighted' ref='linkGetStarted'>
+              <li ref='linkGetStarted'>
                 <NavLink to='/get-started' activeClassName='active' id='get-started-link'>
                   {'Get Started'}
                 </NavLink>

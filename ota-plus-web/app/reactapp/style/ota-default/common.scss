@@ -595,6 +595,12 @@ input {
       }
     }
   }
+
+  @media only screen and (max-width: 1390px) {
+    #navbar > .navbar-nav > li > a {
+      padding: 15px 12px;
+    }
+  }
 }
 
 .menu-login-clickable {
