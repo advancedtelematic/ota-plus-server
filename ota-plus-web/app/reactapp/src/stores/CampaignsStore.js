@@ -405,16 +405,15 @@ export default class CampaignsStore {
       failed: 0,
       cancelled: 0,
     };
-    _.each(this.campaign.statistics.stats, statistic => {
-      stats.affected += statistic.affected;
-      stats.processed += statistic.processed;
-    });
-    stats.notImpacted = stats.processed - stats.affected;
-    stats.finished = this.campaign.statistics.finished;
-    stats.cancelled = this.campaign.statistics.cancelled;
-    stats.queued = stats.affected - (stats.finished + stats.cancelled);
-    stats.failed = this.campaign.statistics.failed.length;
-    stats.successful = stats.finished - stats.failed;
+    const { affected, processed, cancelled, failed, finished } = this.campaign.statistics;
+    stats.affected = affected;
+    stats.processed = processed;
+    stats.notImpacted = processed - affected;
+    stats.finished = finished;
+    stats.cancelled = cancelled;
+    stats.queued = affected - (finished + cancelled);
+    stats.failed = failed.length;
+    stats.successful = finished - failed.length;
     return stats;
   }
 }

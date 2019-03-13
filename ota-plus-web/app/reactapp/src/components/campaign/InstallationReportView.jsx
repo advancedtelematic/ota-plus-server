@@ -21,9 +21,7 @@ class InstallationReportView extends Component {
     const { campaignsStore, featuresStore } = this.props.stores;
     const { alphaPlusEnabled } = featuresStore;
     const { campaign } = campaignsStore;
-    const devicesTotal = _.reduce(_.map(campaign.statistics.stats, group => group.processed), (prev, next) => {
-      return prev + next;
-    });
+    const devicesTotal = campaign.statistics.processed;
     let failureStats = campaign.statistics.byResultCode;
     let failures = [];
 
