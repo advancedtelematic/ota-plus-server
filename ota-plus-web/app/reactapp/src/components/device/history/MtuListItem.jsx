@@ -60,7 +60,10 @@ class MtuListItem extends Component {
             <span id={'received-at-title-' + item.correlationId} className={'overview-panel__item-header__label'}>
               Received at:
             </span>
-            <span id={'received-at-' + item.correlationId}>{moment(item.receivedAt).format('ddd MMM DD YYYY, h:mm A')}</span>
+            <span id={'received-at-' + item.correlationId}>
+              {moment(item.eventTime ? item.eventTime : item.receivedAt)
+                .format('ddd MMM DD YYYY, h:mm A')}
+            </span>
           </div>
         </div>
 
