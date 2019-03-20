@@ -32,11 +32,11 @@ dockerRepository := Some("advancedtelematic")
 
 dockerUpdateLatest := true
 
-dockerBaseImage := "openjdk:8u151-jre-alpine"
+dockerBaseImage := "openjdk:8u191-jre-alpine"
 
 dockerCommands ++= Seq(
   Cmd("USER", "root"),
-  Cmd("RUN", "apk upgrade --update && apk add --update bash coreutils"),
+  Cmd("RUN", "apk add --update --no-cache bash coreutils"),
   Cmd("USER", (daemonUser in Docker).value)
 )
 
