@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';

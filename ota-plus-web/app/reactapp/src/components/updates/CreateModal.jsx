@@ -29,7 +29,7 @@ const initialData = {
   name: '',
   description: '',
   selectedHardwares: [],
-  update: {},
+  update: {}
 };
 
 const initialCurrentStepId = 0;
@@ -98,7 +98,13 @@ class CreateModal extends Component {
         break;
       case 1:
         _.each(selectedHardwares, item => {
-          if (!showDetails && update && update[item.name] && update[item.name].fromPack && update[item.name].toPack && update[item.name].fromVersion && update[item.name].toVersion) {
+          if (!showDetails &&
+              update &&
+              update[item.name] &&
+              update[item.name].fromPack &&
+              update[item.name].toPack &&
+              (update[item.name].updateFromAny || update[item.name].fromVersion) &&
+              update[item.name].toVersion) {
             this.markStepAsFinished();
           } else {
             this.markStepAsNotFinished();
