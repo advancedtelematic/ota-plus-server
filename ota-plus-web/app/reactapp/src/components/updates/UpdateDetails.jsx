@@ -25,7 +25,7 @@ class UpdateDetails extends Component {
       const { updatesStore, softwareStore } = this.props.stores;
       const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
       _.each(mtuData, (target) => {
-        const { target: fromPackage } = target.from;
+        const { target: fromPackage } = target.from || {};
         const { target: toPackage } = target.to;
         _.find(softwareStore.packages, pack => {
           const { version } = pack.id;
@@ -44,7 +44,6 @@ class UpdateDetails extends Component {
     const { updatesStore } = this.props.stores;
     const { updateItem, isEditable } = this.props;
     const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
-
     return (
       <div>
         <Row className='row name-container'>
@@ -70,8 +69,8 @@ class UpdateDetails extends Component {
             </div>
           ) : mtuData ? (
             _.map(mtuData, (target, hardwareId) => {
-              const noInformation = 'No information.';
-              const { target: fromPackage } = target.from;
+              const noInformation = 'No information / Any';
+              const { target: fromPackage } = target.from || {};
               const { target: toPackage } = target.to;
               return (
                 <Col span={24} className='hardware-container' key={hardwareId}>

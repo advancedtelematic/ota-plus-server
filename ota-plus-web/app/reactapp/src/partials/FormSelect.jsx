@@ -114,7 +114,6 @@ class FormSelect extends Component {
 
   selectOption = (value, e) => {
     const { appendMenuToBodyTag, multiple } = this.props;
-
     if (appendMenuToBodyTag) {
       e.target.classList.toggle('c-form__option--selected');
     }
@@ -156,18 +155,19 @@ class FormSelect extends Component {
       visibleFieldsCount = options.length > 1 ? options.length : 2,
       name = '',
       onChange = null,
+      disabled = false
     } = this.props;
 
     const { showDropDown, selectedOptions } = this.state;
     const inputValue = selectedOptions.id
       ? selectedOptions.id
       : selectedOptions.text
-      ? selectedOptions.text
-      : selectedOptions.length
-      ? selectedOptions
-      : defaultValue && defaultValue.length > 0
-      ? defaultValue
-      : '';
+        ? selectedOptions.text
+        : selectedOptions.length
+          ? selectedOptions
+          : defaultValue && defaultValue.length > 0
+            ? defaultValue
+            : '';
     return (
       <div className='c-form__wrapper' style={{ width: wrapperWidth }}>
         {label ? <label className='c-form__label'>{label}</label> : null}
@@ -183,6 +183,7 @@ class FormSelect extends Component {
             id={id}
             autoComplete='off'
             name={name}
+            disabled={disabled}
           />
           {inputValue.length ? <i className={`fa fa-check c-form__select-icon`} /> : <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`} />}
           {showDropDown && !appendMenuToBodyTag ? (
