@@ -7,7 +7,7 @@
       padding: 20px 0;
       .heading {
         font-weight: 300 !important;
-        color: $home-bg;
+        color: $dashboard-bg;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -109,7 +109,7 @@
       font-weight: 300 !important;
       height: 60px !important;
       padding: 0 30px !important;
-      color: $home-bg;
+      color: $dashboard-bg;
 
     }
     .body {
@@ -452,7 +452,7 @@
   .content {
     .heading {
       background: $device-item-bg;
-      color: $home-bg;
+      color: $dashboard-bg;
       height: 60px;
       padding: 0 30px;
       font-size: 14px;
@@ -593,7 +593,7 @@
           }
 
           .version {
-            color: $home-grey;
+            color: $dashboard-grey;
           }
         }
 

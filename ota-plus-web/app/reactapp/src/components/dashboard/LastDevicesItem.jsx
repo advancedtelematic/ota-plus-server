@@ -27,14 +27,14 @@ class LastDevicesItem extends Component {
         break;
     }
     return (
-      <Link to={`${link}`} className='home__list-item' title={device.deviceName} id={'link-devicedetails-' + index}>
-        <div className='home__body-col' id={'link-devicedetails-' + device.uuid}>
+      <Link to={`${link}`} className='dashboard__list-item' title={device.deviceName} id={'link-devicedetails-' + index}>
+        <div className='dashboard__body-col' id={'link-devicedetails-' + device.uuid}>
           {device.deviceName}
         </div>
-        <div className='home__body-col'>
+        <div className='dashboard__body-col'>
           {deviceStatus !== 'Status unknown' ? <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span> : <span>Never seen online</span>}
         </div>
-        <div className='home__body-col'>{deviceStatus}</div>
+        <div className='dashboard__body-col'>{deviceStatus}</div>
       </Link>
     );
   }

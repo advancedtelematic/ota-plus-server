@@ -5,7 +5,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import {
-  HomePage,
+  DashboardPage,
   DevicesPage,
   DevicePage,
   SoftwareRepositoryPage,
@@ -25,7 +25,8 @@ const userProfileEdit = document.getElementById('toggle-userProfileEdit').value 
 
 const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload, activeTab, switchTab }) => (
   <Switch>
-    <Route exact path='/' render={props => <HomePage {...props} addNewWizard={addNewWizard} uiAutoFeatureActivation={uiAutoFeatureActivation} />} />
+    <Route exact path='/' component={GetStartedPage} />
+    <Route path='/dashboard' render={props => <DashboardPage {...props} addNewWizard={addNewWizard} uiAutoFeatureActivation={uiAutoFeatureActivation} />} />
     <Route path='/fireworks' component={FireworksPage} />
     <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/device/:id' component={DevicePage} />
@@ -33,7 +34,6 @@ const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfile
     <Route path='/updates/:updateName?' component={UpdatesPage} />
     <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/impact-analysis' component={ImpactAnalysisPage} />
-    <Route path='/get-started' component={GetStartedPage} />
     <Route path='/software-repository-alpha' component={SoftwareRepositoryAlpha} />
     <Route path='/policy' component={TermsAndConditions} />
     <Route

@@ -4,7 +4,7 @@
 @import '../mixins';
 
 #page-campaigns {
-  background-color: $home-bg;
+  background-color: $dashboard-bg;
 
   .content {
     .content-empty {
@@ -54,7 +54,7 @@
   &__header {
     position: fixed;
     z-index: 2;
-    color: $home-header-text;
+    color: $dashboard-header-text;
     font-size: 12px;
     font-weight: 700;
     background: #d3d3d3;
@@ -63,7 +63,7 @@
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    background: $home-grey;
+    background: $dashboard-grey;
     padding: 0 25px;
   }
 
@@ -88,7 +88,7 @@
       text-align: right;
       * {
         font-weight: 500;
-        color: $home-header-button !important;
+        color: $dashboard-header-button !important;
       }
     }
   }
