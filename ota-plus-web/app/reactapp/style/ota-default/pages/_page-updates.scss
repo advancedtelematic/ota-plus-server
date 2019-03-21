@@ -4,7 +4,7 @@
 @import '../mixins';
 
 #page-updates {
-  background-color: $home-bg;
+  background-color: $dashboard-bg;
   height: calc(100vh - 50px);
 
   .ios-list {
@@ -16,7 +16,7 @@
 
     &__item {
       flex-grow: 1;
-      color: $home-header-text;
+      color: $dashboard-header-text;
       font-weight: 500;
       text-transform: uppercase;
     }

@@ -13,10 +13,10 @@ $color-white: #fff;
 $color-text-light: #9fa2a6;
 
 /* colors extended */
-$home-bg: #0f1621;
-$home-grey: #9b9da2;
-$home-header-text: #6a6d74;
-$home-header-button: $primary-color;
+$dashboard-bg: #0f1621;
+$dashboard-grey: #9b9da2;
+$dashboard-header-text: #6a6d74;
+$dashboard-header-button: $primary-color;
 
 $devices-groups-bg: #3f454d;
 $devices-group-inactive: #b7b9bc;
@@ -33,7 +33,7 @@ $device-pack-auto-update: #00a19d;
 $campaigns-cancel-color: $error-color;
 $campaign-details-text: #707070;
 $progress-default-color: #44ca9d;
-$panel-delimiter-color: $home-bg;
+$panel-delimiter-color: $dashboard-bg;
 $section-header-border-color: #8a8b90;
 $add-button-grey: #e7e7e8;
 $edit-profile-border: #ebebeb;
@@ -41,8 +41,8 @@ $hardware-overlay-item-color: #4a4a4a;
 $hardware-overlay-underline: rgba(215, 216, 218, 0.5);
 $hardware-overlay-menu-active: rgba(15, 22, 33, 0.8);
 $hardware-overlay-menu-inactive: rgba(15, 22, 33, 0.4);
-$home-heading-bg: #d7d8da;
-$home-step-bg: rgba(243, 243, 243, 0.5);
+$dashboard-heading-bg: #d7d8da;
+$dashboard-step-bg: rgba(243, 243, 243, 0.5);
 $page-title-color: rgba(15, 22, 33, 0.8);
 $edit-profile-section-header: #e4e6e9;
 $edit-profile-section-border: rgba(215, 216, 218, 0.5);

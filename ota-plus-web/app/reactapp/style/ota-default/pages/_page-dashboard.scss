@@ -1,0 +1,142 @@
+/** @format */
+
+@import '../variables-ota';
+@import '../mixins';
+
+#page-dashboard {
+  background-color: $dashboard-bg;
+}
+
+.dashboard {
+  font-size: 12px;
+  height: calc(100vh - 50px);
+  width: 100%;
+  &__box {
+    width: inherit;
+    height: inherit;
+    overflow: hidden;
+  }
+
+  &__heading {
+    text-transform: uppercase;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $dashboard-heading-bg;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  &__heading-col {
+    font-weight: 500;
+    width: 33%;
+    display: flex;
+    color: #383c45;
+    align-items: center;
+    @include textoverflowEllipsis;
+
+    &:not(:first-child) {
+      justify-content: center;
+      font-size: 12px;
+      color: $devices-group-text;
+    }
+  }
+
+  &__body-col {
+    width: 33%;
+    display: flex;
+    color: #000;
+    align-items: center;
+    @include textoverflowEllipsis;
+
+    &:not(:first-child) {
+      justify-content: center;
+      font-size: 10px;
+      color: $device-hardware-header;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(100% - 50px);
+    height: calc(100% - 50px);
+    max-height: 235px;
+    overflow-y: hidden;
+  }
+
+  &__list {
+    height: calc(100% / 3 - 16px / 3);
+    min-height: 215px;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+      @media all and (min-height:769px) {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  &__list-item {
+    display: flex;
+    height: 25%;
+    min-height: 40px;
+    padding: 0 20px;
+    background-color: #fff;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &:nth-of-type(even) {
+      background-color: $device-item-bg;
+    }
+  }
+
+  &__items-empty {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    color: $devices-group-inactive;
+  }
+}
+
+.sanity-check {
+  background-color: #f3f3f4;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+
+  .wrapper-center {
+    flex-direction: column;
+  }
+
+  &__logo-image {
+    width: 75px;
+  }
+
+  &__title {
+    font-size: 22px;
+    color: #202020;
+    margin-top: 25px;
+    margin-bottom: 125px;
+  }
+
+  &__item-name {
+    font-size: 22px;
+    color: $dashboard-header-button;
+  }
+
+  &__item-image {
+    width: 20px;
+    position: relative;
+    top: -2px;
+    left: 5px;
+  }
+}

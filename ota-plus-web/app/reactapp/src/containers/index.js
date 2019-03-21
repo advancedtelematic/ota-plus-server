@@ -1,6 +1,6 @@
 /** @format */
 
-import HomeContainer from './Home';
+import DashboardContainer from './Dashboard';
 import DevicesContainer from './Devices';
 import DeviceContainer from './Device';
 import SoftwareContainer from './Software';
@@ -14,7 +14,7 @@ import SanityCheckContainer from './SanityCheck';
 import Terms from './Terms';
 
 export {
-  HomeContainer,
+  DashboardContainer,
   DevicesContainer,
   DeviceContainer,
   SoftwareContainer,

@@ -4,7 +4,7 @@
 @import '../mixins';
 
 #page-software-repository {
-  background-color: $home-bg;
+  background-color: $dashboard-bg;
 
   .ios-list {
     height: calc(100% - 50px);
@@ -76,7 +76,7 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      color: $home-bg;
+      color: $dashboard-bg;
       font-weight: 400;
     }
 
@@ -88,7 +88,7 @@
     &__more-info {
       flex: 3;
       text-align: right;
-      color: $home-header-button;
+      color: $dashboard-header-button;
       font-weight: 500;
     }
 
@@ -125,7 +125,7 @@
     &__heading {
       margin-bottom: 10px;
       font-weight: 500;
-      color: $home-grey;
+      color: $dashboard-grey;
       font-size: 12px;
       text-transform: uppercase;
     }
