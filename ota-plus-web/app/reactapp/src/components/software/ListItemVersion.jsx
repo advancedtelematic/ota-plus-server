@@ -25,9 +25,7 @@ class ListItemVersion extends Component {
     const { stores, version, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
     const { softwareStore, featuresStore } = stores;
     const { compatibilityData } = softwareStore;
-    // const { alphaPlusEnabled } = featuresStore;
-    // ToDo: this is a quick & dirty switch to locally disable alpha plus
-    const alphaPlusEnabled = false;
+    const { alphaPlusEnabled } = featuresStore;
     const packageName = version.id.name;
     let borderStyle = {
       borderLeft: '10px solid #e1e1e1',
@@ -38,12 +36,13 @@ class ListItemVersion extends Component {
       };
     }
 
-    /* ToDo: according to softwareStore._getAllStorage()
-     *
+    /* 
+     *  ToDo: according to softwareStore._getAllStorage()
+     */
     let versionCompatibilityData = null;
-    if (alphaPlusEnabled && Object.keys(compatibilityData).length) {
+    if (alphaPlusEnabled && Object.keys(compatibilityData)) {
       versionCompatibilityData = _.find(softwareStore.compatibilityData, item => item.name === version.filepath);
-    }*/
+    }
 
     const directorBlock = (
       <span>
