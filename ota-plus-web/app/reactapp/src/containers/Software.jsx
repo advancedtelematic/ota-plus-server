@@ -236,7 +236,7 @@ class Software extends Component {
         )}
         {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeVersionFilepath} />}
         {this.dependenciesManagerShown && (
-          <SoftwareDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={softwareStore.preparedSoftware} activePackage={this.activeManagerVersion} />
+          <SoftwareDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={softwareStore.preparedPackages} activePackage={this.activeManagerVersion} />
         )}
         {this.editCommentShown && <SoftwareEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} />}
       </span>

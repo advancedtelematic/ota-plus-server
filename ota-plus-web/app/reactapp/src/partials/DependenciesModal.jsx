@@ -7,7 +7,7 @@ import { observable, toJS, observe } from 'mobx';
 import _ from 'lodash';
 import { Sankey } from 'react-vis';
 
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import OTAModal from './OTAModal';
 import Loader from './Loader';
 import { AsyncStatusCallbackHandler } from '../utils';
@@ -618,7 +618,12 @@ class DependenciesModal extends Component {
 
     return (
       <OTAModal
-        title='Dependencies'
+        title={<span>
+                {'Dependencies'}
+                <Tag color='#48dad0' className='alpha-tag alpha-tag--gutter-horizontal'>
+                  {'ALPHA'}
+                </Tag>
+              </span>}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
