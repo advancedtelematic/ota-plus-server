@@ -81,7 +81,7 @@ mkVersionProperties := {
   Seq(propFile)
 }
 
-val runWebpack = taskKey[Seq[Int]]("Run webpack")
+val runWebpack = taskKey[Seq[Int]]("Run webpack:10")
 
 runWebpack := {
   Seq(
@@ -89,7 +89,7 @@ runWebpack := {
       "docker" :: "run" ::
         "--rm" ::
         "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
-        "advancedtelematic/webpack" ::
+        "advancedtelematic/webpack:10" ::
         "bash" :: "-c" :: "cd reactapp && npm install && webpack -p" ::
         Nil
     ) !
