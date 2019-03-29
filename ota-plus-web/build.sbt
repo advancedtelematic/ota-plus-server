@@ -89,8 +89,8 @@ runWebpack := {
       "docker" :: "run" ::
         "--rm" ::
         "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
-        "advancedtelematic/webpack:10" ::
-        "bash" :: "-c" :: "cd reactapp && npm install && webpack -p" ::
+        "advancedtelematic/webpack:10.1" ::
+        "sh" :: "-c" :: "cd reactapp && npm install && webpack -p" ::
         Nil
     ) !
   )
