@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
-import { HomeContainer, SanityCheckContainer, Terms } from '../containers';
+import { DashboardContainer, SanityCheckContainer, Terms } from '../containers';
 import { Loader } from '../partials';
 
-const title = 'Home';
+const title = 'Dashboard';
 
 @inject('stores')
 @observer
-class Home extends Component {
+class Dashboard extends Component {
   static propTypes = {
     stores: PropTypes.object,
     addNewWizard: PropTypes.func,
@@ -46,22 +46,22 @@ class Home extends Component {
         {isTermsAccepted ? (
           sanityCheckCompleted ? (
             <MetaData title={title}>
-              <HomeContainer addNewWizard={addNewWizard} />
+              <DashboardContainer addNewWizard={addNewWizard} />
             </MetaData>
           ) : provisioningStore.namespaceSetupFetchAsync.isFetching ? (
             <div className='wrapper-center'>
               <Loader />
             </div>
           ) : (
-            <SanityCheckContainer />
-          )
+                <SanityCheckContainer />
+              )
         ) : userStore.contractsFetchAsync.isFetching ? (
           <div className='wrapper-center'>
             <Loader />
           </div>
         ) : (
-          <Terms />
-        )}
+              <Terms />
+            )}
       </FadeAnimation>
     );
   }
@@ -69,4 +69,4 @@ class Home extends Component {
 
 
 
-export default Home;
+export default Dashboard;
