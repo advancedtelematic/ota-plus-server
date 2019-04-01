@@ -22,22 +22,13 @@ class InstallationReportView extends Component {
     const { alphaPlusEnabled } = featuresStore;
     const { campaign } = campaignsStore;
     const devicesTotal = campaign.statistics.processed;
-    let failureStats = campaign.statistics.byResultCode;
-    let failures = [];
-
-    failureStats.map(el => {
-      let failure = {
-        name: el.resultCode,
-        devices: el.total,
-      };
-      failures.push(failure);
-    });
+    const failures = campaign.statistics.failures;
 
     return (
       <div className='codes'>
         <div className='codes__heading'>
           <div className='col-name'>Failure code</div>
-          <div className='col-progress'>% of devices in campiagn</div>
+          <div className='col-progress'>% of devices in campaign</div>
           <div className='col-numbers'>
             Number of Affected <br />
             devices in campaign
@@ -51,15 +42,14 @@ class InstallationReportView extends Component {
               <span>Retry the update installation</span>
             </div>
           )}
-          {/*  <div className='col-actions'>Retry status</div>*/}
         </div>
 
         <>
           {_.map(failures, (failure, index) => {
-            const progress = Math.min(Math.round((failure.devices / Math.max(devicesTotal, 1)) * 100), 100);
+            const progress = Math.min(Math.round((failure.count / Math.max(devicesTotal, 1)) * 100), 100);
             return (
               <div key={index} className='codes__item'>
-                <div className='col-name'>{failure.name}</div>
+                <div className='col-name'>{failure.code}</div>
                 <div className='col-progress'>
                   <div className='codes__item-progress-wrapper'>
                     <div className='codes__item-progress-value'>{devicesTotal !== 0 ? progress + '%' : '100%'}</div>
@@ -67,7 +57,7 @@ class InstallationReportView extends Component {
                   </div>
                 </div>
                 <div className='col-numbers'>
-                  {failure.devices} of {devicesTotal}
+                  {failure.count} of {devicesTotal}
                 </div>
                 <div className='col-actions'>
                   <div className='failure_report' onClick={() => this.downloadReport(failure.name)}>
@@ -79,7 +69,7 @@ class InstallationReportView extends Component {
                     <div
                       className='failure_report'
                       onClick={() => {
-                        showRetryModal(failure.name);
+                        showRetryModal(failure.code);
                       }}
                     >
                       <img src='/assets/img/icons/retry_icon.svg' alt='Icon' />

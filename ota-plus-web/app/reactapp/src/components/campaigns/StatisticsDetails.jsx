@@ -146,7 +146,7 @@ class StatisticsDetails extends Component {
               </div>
             </div>
           </div>
-          {campaign.statistics.byResultCode.length ? <CampaignInstallationReportView showRetryModal={showRetryModal} /> : <div>No failure data has been collected yet. Check back later</div>}
+          {campaign.statistics.failures.length ? <CampaignInstallationReportView showRetryModal={showRetryModal} /> : <div>No failure data has been collected yet. Check back later</div>}
         </div>
       </div>
     );

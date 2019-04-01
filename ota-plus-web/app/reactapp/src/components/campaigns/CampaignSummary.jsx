@@ -28,11 +28,11 @@ class CampaignSummary extends Component {
 
     if (type === 'launched' || type === 'finished') {
       const { failed, finished, affected, processed } = campaign.summary;
-      totalFailed = failed.length;
+      totalFailed = failed;
       totalFinished = finished;
       totalAffected = affected;
       totalProcessed = processed;
-      failureRate = Math.round((totalFailed / Math.max(totalFinished, 1)) * 100);
+      failureRate = Math.round((totalFailed / Math.max(totalAffected, 1)) * 100);
     }
 
     return (

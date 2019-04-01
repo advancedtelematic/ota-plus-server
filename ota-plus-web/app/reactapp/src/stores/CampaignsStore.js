@@ -405,15 +405,15 @@ export default class CampaignsStore {
       failed: 0,
       cancelled: 0,
     };
-    const { affected, processed, cancelled, failed, finished } = this.campaign.statistics;
+    const { affected, processed, cancelled, failed, successful, finished } = this.campaign.statistics;
     stats.affected = affected;
     stats.processed = processed;
     stats.notImpacted = processed - affected;
     stats.finished = finished;
     stats.cancelled = cancelled;
     stats.queued = affected - (finished + cancelled);
-    stats.failed = failed.length;
-    stats.successful = finished - failed.length;
+    stats.failed = failed;
+    stats.successful = successful;
     return stats;
   }
 }
