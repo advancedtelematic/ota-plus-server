@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import { API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE } from '../../config';
+import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
 import { Tag } from 'antd';
 
 @inject('stores')
 @observer
 class InstallationReportView extends Component {
-  downloadReport = () => {
+  downloadReport = failureCode => {
     const { campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
-    location.href = `${API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE}/failed-installations.csv?correlationId=urn:here-ota:campaign:${campaign.id}`;
+    location.href = `${API_CAMPAIGNS_STATISTICS_SINGLE}/${campaign.id}/failed-installations.csv?failureCode=${failureCode || ''}`;
   };
 
   render() {
@@ -70,7 +70,7 @@ class InstallationReportView extends Component {
                   {failure.devices} of {devicesTotal}
                 </div>
                 <div className='col-actions'>
-                  <div className='failure_report' onClick={this.downloadReport}>
+                  <div className='failure_report' onClick={() => this.downloadReport(failure.name)}>
                     <img src='/assets/img/icons/download.svg' alt='Icon' />
                   </div>
                 </div>
