@@ -31,12 +31,12 @@ class LatestCreatedCampaignItem extends Component {
   getBriefKeyData = campaign => {
     const { summary } = campaign;
     const keyData = {
-      totalFailed: summary.failed.length,
+      totalFailed: summary.failed,
       totalFinished: summary.finished,
       totalAffected: summary.affected,
     };
 
-    keyData.failureRate = Math.round((keyData.totalFailed / Math.max(keyData.totalFinished, 1)) * 100);
+    keyData.failureRate = Math.round((keyData.totalFailed / Math.max(keyData.totalAffected, 1)) * 100);
 
     return keyData;
   };
