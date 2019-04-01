@@ -12,10 +12,10 @@ class LastSoftwareItem extends Component {
     const link = 'software-repository/' + pack.id.name;
     const createdDate = new Date(pack.createdAt);
     return (
-      <Link to={`${link}`} className='home__list-item' title={pack.id.name + ' ' + pack.id.version} id={'link-software-' + pack.uuid}>
-        <div className='home__body-col'>{pack.id.name}</div>
-        <div className='home__body-col'>{pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}</div>
-        <div className='home__body-col'>{createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}</div>
+      <Link to={`${link}`} className='dashboard__list-item' title={pack.id.name + ' ' + pack.id.version} id={'link-software-' + pack.uuid}>
+        <div className='dashboard__body-col'>{pack.id.name}</div>
+        <div className='dashboard__body-col'>{pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}</div>
+        <div className='dashboard__body-col'>{createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}</div>
       </Link>
     );
   }

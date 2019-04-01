@@ -1,6 +1,6 @@
 /** @format */
 
-import HomePage from './Home';
+import DashboardPage from './Dashboard';
 import DevicesPage from './Devices';
 import DevicePage from './Device';
 import SoftwareRepositoryPage from './SoftwareRepository';
@@ -15,7 +15,7 @@ import SoftwareRepositoryAlpha from './SoftwareRepositoryAlpha';
 import TermsAndConditions from './TermsAndConditions';
 
 export {
-  HomePage,
+  DashboardPage,
   DevicesPage,
   DevicePage,
   SoftwareRepositoryPage,

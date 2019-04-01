@@ -46,12 +46,12 @@ class LatestCreatedCampaignItem extends Component {
     const keyData = this.getBriefKeyData(campaign);
 
     return (
-      <div className='home__list-item' title={campaign.name} id={`link-campaign__wizard-${campaign.id}`} onClick={this.onClick}>
-        <div className='home__body-col'>{campaign.name}</div>
-        <div className='home__body-col'>
+      <div className='dashboard__list-item' title={campaign.name} id={`link-campaign__wizard-${campaign.id}`} onClick={this.onClick}>
+        <div className='dashboard__body-col'>{campaign.name}</div>
+        <div className='dashboard__body-col'>
           {keyData.totalFinished}/{keyData.totalAffected}
         </div>
-        <div className='home__body-col'>{keyData.failureRate}%</div>
+        <div className='dashboard__body-col'>{keyData.failureRate}%</div>
       </div>
     );
   }
