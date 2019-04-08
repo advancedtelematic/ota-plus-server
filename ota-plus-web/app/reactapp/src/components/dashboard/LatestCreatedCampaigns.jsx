@@ -8,7 +8,7 @@ import { Loader } from '../../partials';
 import LatestCreatedCampaignItem from './LatestCreatedCampaignItem';
 import NoItems from './NoItems';
 
-import { LIMIT_LATEST_CAMPAIGNS } from '../../config';
+import { CAMPAIGNS_LIMIT_LATEST } from '../../config';
 
 @inject('stores')
 @observer
@@ -35,7 +35,7 @@ class LatestCreatedCampaigns extends Component {
   fetchLatestCampaignsData = () => {
     const { stores } = this.props;
     const { campaignsStore } = stores;
-    campaignsStore.fetchLatestCampaigns(LIMIT_LATEST_CAMPAIGNS);
+    campaignsStore.fetchLatestCampaigns(CAMPAIGNS_LIMIT_LATEST);
   };
 
   render() {

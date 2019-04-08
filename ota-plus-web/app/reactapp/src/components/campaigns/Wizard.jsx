@@ -9,7 +9,7 @@ import Form from 'formsy-antd';
 
 import { Button, Tag } from 'antd';
 import { OTAModal, Loader, SearchBar } from '../../partials';
-import { UpdateDetails } from './wizardSteps/step3Files';
+import UpdateDetails from '../updates/UpdateDetails';
 import { WizardStep1, WizardStep2, WizardStep3, WizardStep4, WizardStep5, WizardStep6, WizardStep7 } from './wizardSteps';
 
 const initialCurrentStepId = 0;

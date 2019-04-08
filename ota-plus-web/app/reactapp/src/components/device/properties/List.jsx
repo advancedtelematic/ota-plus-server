@@ -3,8 +3,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { observe, observable } from 'mobx';
-import { Sequencer } from '../../../partials';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -20,7 +18,7 @@ class List extends Component {
   isPackageQueued(version) {
     const { devicesStore, hardwareStore } = this.props.stores;
     let isPackageQueued = false;
-    let serial = hardwareStore.activeEcu.serial;
+    const serial = hardwareStore.activeEcu.serial;
     _.each(devicesStore.multiTargetUpdates, (update, i) => {
       if (!_.isEmpty(update.targets[serial])) {
         if (version.filepath === update.targets[serial].image.filepath) {
@@ -47,11 +45,22 @@ class List extends Component {
   generateIdTag(tagName, obj) {
     return tagName + '-' + obj.id.version.substring(0, 8);
   }
+
+  classNameForPanelInfo = (isPackageInstalled, isPackageQueued) => {
+    if (isPackageQueued) {
+      return 'properties-panel__info queued';
+    }
+    if (!isPackageInstalled) {
+      return 'properties-panel__info not-installed';
+    }
+    return 'properties-panel__info';
+  };
+
   render() {
     const { installPackage } = this.props;
     const { softwareStore, devicesStore } = this.props.stores;
 
-    let isPackageBlacklisted = false;
+    const isPackageBlacklisted = false;
     let isPackageQueued = false;
     let isPackageInstalled = false;
     let unmanaged = false;
@@ -69,7 +78,7 @@ class List extends Component {
     return (
       <span>
         {!unmanaged ? (
-          <div className='properties-panel__info'>
+          <div className={this.classNameForPanelInfo(isPackageInstalled, isPackageQueued)}>
             <div className='properties-panel__info-heading'>
               <div className='properties-panel__info-title' id={'image-title-' + expandedPackage.id.name}>
                 {expandedPackage.id.name}
@@ -171,37 +180,37 @@ class List extends Component {
               <textarea
                 className='properties-panel__info-comment-value'
                 name='comment-stick'
-                rows='10'
+                rows="8"
                 value={expandedPackage.comment}
                 disabled
                 id={'package-' + expandedPackage.id.name + '-comment-' + expandedPackage.id.version.substring(0, 8)}
               />
             </div>
-            {!isPackageInstalled ? (
-              <div className='properties-panel__install'>
-                <button
-                  className='properties-panel__install-button btn-primary'
-                  label='Install'
-                  title='Install'
-                  id={'button-install-package-' + expandedPackage.id.name + '-' + expandedPackage.id.version}
-                  onClick={installPackage.bind(this, {
-                    target: expandedPackage.filepath,
-                    hash: expandedPackage.packageHash,
-                    targetLength: expandedPackage.targetLength,
-                    targetFormat: expandedPackage.targetFormat,
-                    generateDiff: false,
-                  })}
-                  disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
-                >
-                  {install}
-                </button>
-              </div>
-            ) : null}
           </div>
         ) : unmanaged ? (
           unmanagedPackage
         ) : (
           noPackage
+        )}
+        {!isPackageInstalled && (
+          <div className={isPackageQueued ? 'properties-panel__install' : 'properties-panel__install not-installed'}>
+            <button
+              className='properties-panel__install-button btn-primary'
+              label='Install'
+              title='Install'
+              id={'button-install-package-' + expandedPackage.id.name + '-' + expandedPackage.id.version}
+              onClick={installPackage.bind(this, {
+                target: expandedPackage.filepath,
+                hash: expandedPackage.packageHash,
+                targetLength: expandedPackage.targetLength,
+                targetFormat: expandedPackage.targetFormat,
+                generateDiff: false,
+              })}
+              disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
+            >
+              {install}
+            </button>
+          </div>
         )}
         {isPackageBlacklisted && isPackageInstalled ? (
           <div className='properties-panel__bottom-status properties-panel__bottom-status--red'>{installed}</div>
@@ -209,10 +218,8 @@ class List extends Component {
           <div className='properties-panel__bottom-status properties-panel__bottom-status--red'>{blacklisted}</div>
         ) : isPackageQueued ? (
           <div className='properties-panel__bottom-status properties-panel__bottom-status--orange'>{queued}</div>
-        ) : isPackageInstalled ? (
+        ) : isPackageInstalled && (
           <div className='properties-panel__bottom-status properties-panel__bottom-status--green'>{installed}</div>
-        ) : (
-          <div className='properties-panel__bottom-status properties-panel__bottom-status--grey'>{notInstalled}</div>
         )}
       </span>
     );

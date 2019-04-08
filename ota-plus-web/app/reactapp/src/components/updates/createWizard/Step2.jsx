@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { AsyncResponse } from '../../../partials';
 import { observer, inject } from 'mobx-react';
-import { Step2UpdateList } from './step2';
+import UpdatesWizardDetailList from './step2/UpdatesWizardDetailList';
 import UpdateDetails from '../UpdateDetails';
 
 @inject('stores')
@@ -25,7 +25,7 @@ class Step2 extends Component {
           errorMsg={updatesStore.updatesCreateAsync.status !== 200 && updatesStore.updatesCreateAsync.data && updatesStore.updatesCreateAsync.data.description}
         />
         <div className='updates-container clearfix'>
-          {showDetails ? <UpdateDetails updateItem={showDetails} isEditable={false} /> : <Step2UpdateList wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />}
+          {showDetails ? <UpdateDetails updateItem={showDetails} isEditable={false} /> : <UpdatesWizardDetailList wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />}
         </div>
       </div>
     );
