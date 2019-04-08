@@ -175,8 +175,8 @@ export const PACKAGES_DEFAULT_TAB = 'compact';
  * campaigns
  */
 
-export const LIMIT_LATEST_CAMPAIGNS = 10;
-export const LIMIT_CAMPAIGNS_PER_PAGE = 15;
+export const CAMPAIGNS_LIMIT_LATEST = 4;
+export const CAMPAIGNS_LIMIT_PER_PAGE = 10;
 export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
 export const CAMPAIGNS_STATUS_TAB_TITLE = {
   prepared: 'In Preparation',
@@ -185,6 +185,20 @@ export const CAMPAIGNS_STATUS_TAB_TITLE = {
   cancelled: 'Canceled',
 };
 export const CAMPAIGNS_DEFAULT_TAB = 'prepared';
+
+/**
+ * devices
+ */
+
+export const DEVICES_LIMIT_LATEST = 4;
+export const DEVICES_LIMIT_PER_PAGE = 30;
+
+/**
+ * softwares
+ */
+
+export const SOFTWARES_LIMIT_LATEST = 4;
+export const SOFTWARES_LIMIT_PER_PAGE = 30;
 
 /**
  * default relative paths used in app

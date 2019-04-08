@@ -1,18 +1,19 @@
 /** @format */
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Form } from 'formsy-antd';
+import _ from 'lodash';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import _ from 'lodash';
-import { FormSelect } from '../../../../partials';
-import { Form } from 'formsy-antd';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+
+import { FormSelect } from '../../../../partials';
 import { Row, Col } from 'antd';
 
 @inject('stores')
 @observer
-class UpdateDetailListItem extends Component {
+class UpdatesWizardDetailListItem extends Component {
   @observable fromVersions = [];
   @observable toVersions = [];
 
@@ -155,11 +156,11 @@ class UpdateDetailListItem extends Component {
   }
 }
 
-UpdateDetailListItem.propTypes = {
+UpdatesWizardDetailListItem.propTypes = {
   stores: PropTypes.object,
   item: PropTypes.object,
   wizardData: PropTypes.object,
   onStep2DataSelect: PropTypes.func,
 };
 
-export default UpdateDetailListItem;
+export default UpdatesWizardDetailListItem;

@@ -11,7 +11,7 @@ import InfiniteScroll from '../../../../utils/InfiniteScroll';
 
 @inject('stores')
 @observer
-class SelectUpdateList extends Component {
+class CampaignsWizardUpdateList extends Component {
   static propTypes = {
     stores: PropTypes.object,
     selectedUpdate: PropTypes.array,
@@ -70,4 +70,4 @@ class SelectUpdateList extends Component {
   }
 }
 
-export default SelectUpdateList;
+export default CampaignsWizardUpdateList;

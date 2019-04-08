@@ -1,12 +1,13 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { Form } from 'formsy-antd';
 import { Row, Col } from 'antd';
-import { FormInput, FormTextarea, Loader } from '../../../partials';
-import { observer, inject } from 'mobx-react';
-import { SelectableListItem } from '../../../partials/lists';
+import { Form } from 'formsy-antd';
 import _ from 'lodash';
+import { observer, inject } from 'mobx-react';
+
+import { FormInput, FormTextarea, Loader } from '../../../partials';
+import { SelectableListItem } from '../../../partials/lists';
 import { contains } from '../../../utils/Helpers';
 
 @inject('stores')

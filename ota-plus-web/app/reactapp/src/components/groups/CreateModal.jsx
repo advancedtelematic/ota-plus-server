@@ -103,7 +103,7 @@ class CreateModal extends Component {
   };
 
   handleGroupCreated() {
-    const { groupName, groupType, smartExpression } = this.wizardData;
+    const { groupName, groupType } = this.wizardData;
 
     const { groupsStore } = this.props.stores;
     let data = null;
@@ -114,12 +114,12 @@ class CreateModal extends Component {
       isSmart = true;
       groupsStore.fetchExpressionForSelectedGroup(groupsStore.latestCreatedGroupId);
     }
-    this.props.selectGroup({ type: 'real', groupName: groupName, id: groupsStore.latestCreatedGroupId, isSmart: isSmart });
+    this.props.selectGroup({ type: 'real', groupName, id: groupsStore.latestCreatedGroupId, isSmart });
     groupsStore._prepareGroups(groupsStore.groups);
     this.props.hide();
   }
 
-  validateStep = id => {
+  validateStep = (id) => {
     const { groupName, groupType, smartExpression } = this.wizardData;
 
     switch (id) {
@@ -142,7 +142,7 @@ class CreateModal extends Component {
     }
   };
 
-  onStep1DataSelect = type => {
+  onStep1DataSelect = (type) => {
     this.wizardData.groupType = type;
     this.validateStep(this.currentStepId);
   };
@@ -167,14 +167,26 @@ class CreateModal extends Component {
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {<currentStep.class wizardData={this.wizardData} onStep1DataSelect={this.onStep1DataSelect} onStep2DataSelect={this.onStep2DataSelect} />}
-        <div className='body-actions'>
+        {<currentStep.class groupType={this.wizardData.groupType} onStep1DataSelect={this.onStep1DataSelect} onStep2DataSelect={this.onStep2DataSelect} />}
+        <div className="body-actions">
           {this.isLastStep() ? (
-            <Button htmlType='button' className='btn-primary pull-right' id='wizard-launch-button' disabled={!currentStep.isFinished} onClick={this.createGroup}>
+            <Button
+              htmlType="button"
+              className="btn-primary pull-right"
+              id="wizard-launch-butto"
+              disabled={!currentStep.isFinished}
+              onClick={this.createGroup}
+            >
               {'Create'}
             </Button>
           ) : (
-            <Button htmlType='button' disabled={!currentStep.isFinished} className='btn-primary' id='next' onClick={this.nextStep}>
+            <Button
+              htmlType="button"
+              disabled={!currentStep.isFinished}
+              className="btn-primary"
+              id="next"
+              onClick={this.nextStep}
+            >
               Next
             </Button>
           )}
@@ -185,13 +197,13 @@ class CreateModal extends Component {
       <OTAModal
         title={<div>Create new group</div>}
         topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' id='create-group-modal_close-icon' />
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
+              <img src="/assets/img/icons/close.svg" alt="Icon" id="create-group-modal_close-icon" />
             </div>
           </div>
         }
-        className='create-group-modal'
+        className="create-group-modal"
         content={step}
         visible={shown}
       />

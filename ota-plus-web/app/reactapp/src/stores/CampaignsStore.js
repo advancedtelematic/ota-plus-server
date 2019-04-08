@@ -16,10 +16,10 @@ import {
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_DETAIL,
+  API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE,
   CAMPAIGNS_STATUSES,
-  LIMIT_CAMPAIGNS_PER_PAGE,
+  CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
-  API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE
 } from '../config';
 import { CAMPAIGN_RETRY_STATUSES } from '../constants'
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -64,7 +64,7 @@ export default class CampaignsStore {
 
   @observable fullScreenMode = false;
   @observable transitionsEnabled = true;
-  @observable limitCampaigns = LIMIT_CAMPAIGNS_PER_PAGE;
+  @observable limitCampaigns = CAMPAIGNS_LIMIT_PER_PAGE;
 
   @observable currentDataOffset = 0;
 
