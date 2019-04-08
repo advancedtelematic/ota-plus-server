@@ -25,8 +25,8 @@ class Fireworks extends Component {
     const { stores } = this.props;
     const { devicesStore } = stores;
     const { router } = this.context;
-    const directorDeviceId = _.first(devicesStore.directorDevicesIds);
-    router.push(`/device/${directorDeviceId}`);
+    const directorDeviceId = _.last(devicesStore.directorDevicesIds);
+    router.history.push(`/device/${directorDeviceId}`);
   };
 
   render() {
