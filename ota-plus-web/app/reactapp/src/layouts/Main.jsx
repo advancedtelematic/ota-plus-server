@@ -169,7 +169,7 @@ class Main extends Component {
 
   render() {
     const { router } = this.context;
-    const pageId = `page-${getCurrentLocation(router) || 'get-started'}`;
+    const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
     const { userStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;

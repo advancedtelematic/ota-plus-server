@@ -50,7 +50,7 @@ export const getStarted = {
             __html:
               'Once you have provisioned your devices, you should see them show up in the OTA Connect user interface.' +
               '<p><strong>To check if your devices have been provisioned properly, follow this step:</strong></p>' +
-              '<ul><li>Navigate to the Devices page and select the All Devices or Ungrouped Devices menu items.</li></ul>' +
+              '<ul><li>Navigate to the <strong>Devices</strong> page and select the <strong>All Devices</strong> or <strong>Ungrouped Devices</strong> menu items.</li></ul>' +
               '<p>Because we haven‘t created any device groups yet, all your provisioned devices should show up as "ungrouped".</p> ' +
               '<p>Click the name of a device in the main list to see more details for that device</p>' +
               '<p>You‘ll need to copy the zip file to the file system of your device.</p>',
@@ -69,16 +69,16 @@ export const getStarted = {
               '<p>You should practice organizing them into groups, because this is how you‘ll organize your vehicle fleet which you move to production.</p>' +
               '<p>There have two types of group, but the <strong>smart group</strong> type is better for organizing large fleets that are constantly changing.</p>' +
               '<p><strong>To create a smart group, follow these steps:</strong></p>' +
-              '<ol><li>Open the Devicestab and click +Add group.</li>' +
-              '<li>Select Smart Group and click Next.</li>' +
+              '<ol><li>Open the <strong>Devices</strong> tab and click <strong>+Add group</strong>.</li>' +
+              '<li>Select <strong>Smart Group</strong> and click Next.</li>' +
               '<li>In the next window, enter a group name and define a filter for your devices.' +
               '<p>A filter helps OTA Connect assign each vehicle to a fleet. Currently, OTA Connect can filter based on characters in the Device ID — this is usually the VIN number of the connected vehicle.</p> ' +
-              '<ul><li>To create a filter, select Device ID from the Data dropdown.</li>' +
+              '<ul><li>To create a filter, select <strong>Device ID</strong> from the <strong>Data</strong> dropdown.</li>' +
               '<li>In the Filter dropdown, select your filter criteria.' +
               '<p>Since every character in the VIN number has a meaning, we could select <strong>Has character equal to</strong>, enter the letter <strong>M</strong>, and select <strong>in position 10</strong> (the 10th character in a VIN number is usually the model).</p></li>' +
-              '<li>OTA Connect will tell you how many devices match this critera. </li></ul></li>' +
-              '<li>Assuming you have devices that match, click Create to create your smart group.' +
-              '<p>The smart group is „smart“ because an new vehicles that register with OTA Connect will be filtered into this group as long as they also match the filter criteria.</p></li></ol>',
+              '<li>OTA Connect will tell you how many devices match this criteria. </li></ul></li>' +
+              '<li>Assuming you have devices that match, click <strong>Create</strong> to create your smart group.' +
+              '<p>The smart group is „smart“ because any new vehicles that register with OTA Connect will be filtered into this group as long as they also match the filter criteria.</p></li></ol>',
           },
           blogImage: {
             src: assets + 'v1/blog/' + 's3-group.svg',
@@ -103,7 +103,7 @@ export const getStarted = {
               '<li>In the window that appears, enter a <strong>name</strong> for your software, the software<strong> version</strong>, and in the <strong>Hardware id </strong>dropdown, select the type of ECU that your software is intended for.</li>' +
               '<li>Click <strong>Choose File</strong>, browse forthe software file, and click <strong>Add</strong> to upload the software.</li></ol>' +
               '<p>If you want to practice updating software, you might want to repeat this process and upload another version of the file and enter a newer <strong>software version</strong>.</p>' +
-              '<p>This way, you have two sets of software. The current version, and theversion that you want to upgrade to.</p>',
+              '<p>This way, you have two sets of software. The current version, and the version that you want to upgrade to.</p>',
           },
           blogImage: {
             src: assets + 'v1/blog/' + 's4-software_upload.svg',
@@ -127,7 +127,7 @@ export const getStarted = {
               '<li>Click the <strong>Install</strong> button at the bottom of the <strong>PROPERTIES</strong> section.' +
               '<ul> <li><span>OTA Connect will remotely install the software on your test device.</li> </ul></li></ol>' +
               '<p>Note that this isn‘t the standard way to install new software in production, but it‘s a simple way to show you how OTA Connect works.</p>' +
-              '<p>To learning about installing new software in production, see our <a href="https://docs.ota.here.com/quickstarts/start-intro.html" target="_blank"><strong>developer documentation</strong></a></p>',
+              '<p>To learn about installing new software in production, see our <a href="https://docs.ota.here.com/quickstarts/start-intro.html" target="_blank"><strong>developer documentation</strong></a></p>',
           },
           blogImage: {
             src: assets + 'v1/blog/' + 's5-install_device.svg',
@@ -146,9 +146,9 @@ export const getStarted = {
               '<ol><li>Click <strong>Updates</strong>, and in the top right, click <strong>+Create new update</strong>.</li>' +
               '<li>In the window that appears, give your update a name and add a brief description.</li>' +
               '<li>In the section <strong>Select Hardware ids</strong>, select the types of ECU that the update should apply to and click <strong>Continue</strong>.</li>  ' +
-              '<li>In the next window, define the software version that you want to upgrade <strong>from</strong> and the version that you want to upgrade to.' +
+              '<li>In the next window, define the software version that you want to upgrade <strong>from</strong> and the version that you want to upgrade <strong>to</strong>.' +
               '<ul><li>In the <strong>From</strong> section, open the <strong>Software</strong> dropdown and select the name of your software.' +
-              '<ul><li><strong>In the </strong><strong>From</strong><strong> section, open the </strong><strong>Version</strong><span> dropdown and select the software version to upgrade from.</li>' +
+              '<ul><li>In the <strong>From</strong> section, open the <strong>Version</strong><span> dropdown and select the software version to upgrade from.</li>' +
               '<li>In the <strong>To</strong> section, open the <strong>Software</strong> dropdown and again select the name of your software.</li>' +
               '<li>In the <strong>To</strong> section, open the <strong>Version</strong> dropdown and select the software version to upgrade to.</li></ul></li></ul></li>' +
               '<li>Click <strong>Save</strong>.</li></ol>' +
@@ -177,7 +177,7 @@ export const getStarted = {
               '<ul><li>The next few steps are optional for now, so we‘re going to leave them at their default settings. Here‘s a brief explanation of those steps:' +
               '<ul><li><strong>Distribution settings</strong> – Configure the campaign so that end users must consent to the update. You can define your own notification text for the end user to read.</li>' +
               '<li><strong>Dependencies Management</strong> – Configure the campaign to check for required software dependencies before installing the update.</li>' +
-              '<li><strong>Programming Sequencer</strong> – Configure sequence in which each piece of software is installed. You can also configure some rollback behavior in case any piece of software failed to install.</li></ul></li></ul></li>' +
+              '<li><strong>Programming Sequencer</strong> – Configure the sequence in which each piece of software is installed. You can also configure some rollback behavior in case any piece of software failed to install.</li></ul></li></ul></li>' +
               '<li>Click <strong>Next</strong> until you get to the <strong>Summary</strong> step, then click <strong>Launch</strong>.</li></ol>',
           },
           blogImage: {
@@ -193,13 +193,13 @@ export const getStarted = {
               'After you launch a campaign you can open the <strong>Campaign Details</strong> to monitor the progress of the campaign and look for any installation issues.' +
               '<p><strong>To see the Campaign Details, follow these steps:</strong></p>' +
               '<ol><li>Click </span><strong>Campaigns</strong> and click a status tab.' +
-              '<ul><li>Assuming your campaign is still running you would click the <strong>Running</strong>tab.</li>' +
+              '<ul><li>Assuming your campaign is still running you would click the <strong>Running</strong> tab.</li>' +
               '<li>If your campaign is a test campaign, it might finish quickly, in which case, you‘ll find it on the <strong> Finished</strong> tab</li></ul></li>' +
               '<li>In the campaign list, click your campaign.' +
               '<p>You should see the progress details for your campaign.</p>' +
               '<p>You‘ll see a summary of all the update attempts for each device grouped by status:</p>' +
-              '<ul><li><strong>Success</strong> indicates the number of devices where the sofware was successfully updated.</li>' +
-              '<li><strong>Queued </strong>indicates the umber of devices that are still waiting to be updated.' +
+              '<ul><li><strong>Success</strong> indicates the number of devices where the software was successfully updated.</li>' +
+              '<li><strong>Queued </strong>indicates the number of devices that are still waiting to be updated.' +
               '<ul><li>These devices might be offline or the OTA Connect server is waiting until a previous batch of updates has completed.</li></ul></li>' +
               '<li><strong>Failure</strong> indicates the number of devices where the update attempt failed.' +
               '<ul><li>If there are update failures, the campaign details include a breakdown by individual failure code.</li>' +
@@ -219,15 +219,15 @@ export const getStarted = {
           title: 'Step 9: Review the Update History on an Individual Device ',
           message: {
             __html:
-              'At some point you might need to assist a specific customer who is having trouble with the software on their vehcile.' +
+              'At some point you might need to assist a specific customer who is having trouble with the software on their vehicle.' +
               '<p>In this case, your customer support team can use the VIN number of the vehicle to find the device in OTA Connect. Then, they can inspect an individual device to get more details about the problem.</p>' +
               '<p><strong>To see the update history for an individual device, follow these steps:</strong></p>' +
               '<ol><li>Open the device details:' +
-              '<ul><li>Navigate to the <strong>Devices page</strong>.</li>' +
+              '<ul><li>Navigate to the <strong>Devices</strong> page.</li>' +
               '<li>Search for the affected device by entering the VIN number in the search box.</li>' +
               '<li>Click the device name to open the device details.</li></ul></li>' +
-              '<li>If it‘s not open already, click the <strong>History</strong> tab.' +
-              '<p>On this tab, you can see any all the updates that were peformed on the device. If applicable, you also see the campaign that the update was associated with. Note that it‘s possible to update a single device, so updates don‘t always have an associated campaign.</p>' +
+              '<li>If it isn‘t open already, click the <strong>History</strong> tab.' +
+              '<p>On this tab, you can see all the updates that were performed on the device. If applicable, you also see the campaign that the update was associated with. Note that it‘s possible to update a single device, so updates don‘t always have an associated campaign.</p>' +
               '<p>Failed updates are indicated in red with the failure code that the device reported.</p></li></ol>',
           },
           blogImage: {
@@ -244,10 +244,10 @@ export const getStarted = {
               '<p>In the short term, you‘ll want to prevent anyone else from installing the defective software in another software update. You do this by blacklisting the software.</p>' +
               '<p>If you‘ve blacklisted some software, you can see how many devices or vehicles are impacted by the defective software.</p>' +
               '<p><strong>To blacklist a piece of software, follow these steps:</strong></p>' +
-              '<ol><li>Navigate to the Devices page.</li>' +
+              '<ol><li>Navigate to the <strong>Devices</strong> page.</li>' +
               '<li>Search for a device that you know is running the defective software and open the device details for that device</li>' +
               '<li>In the HARDWARE section, locate the primary ECU and click the info icon <img src="/assets/img/icons/black/info.svg" alt="Icon">.</li>' +
-              '<li>In the window that appears, click the Packages tab and use the search box to filter for the defective software version.</li>' +
+              '<li>In the window that appears, click the <strong>Packages</strong> tab and use the search box to filter for the defective software version.</li>' +
               '<li>Click the blacklist icon <img src="/assets/img/icons/ban_grey.png" alt="Icon"> next to the version number.</li></ol>' +
               '<p><strong>To see the impact of blacklisted software, open the Impact analysis page:</strong><p>' +
               '<ul><li>In the left-hand pane, you can see the total number of devices that are running the defective software package.</li>' +
