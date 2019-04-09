@@ -35,12 +35,12 @@ class Navigation extends Component {
           <div id='navbar'>
             <ul className='nav navbar-nav'>
               <li>
-                <NavLink exact to='/' activeClassName='active' id='link-get-started'>
+                <NavLink to='/get-started' activeClassName='active' id='link-get-started'>
                   {'Get Started'}
                 </NavLink>
               </li>
               <li>
-                <NavLink to='/dashboard' activeClassName='active' id='link-dashboard'>
+                <NavLink exact to='/' activeClassName='active' id='link-dashboard'>
                   {'Dashboard'}
                 </NavLink>
               </li>
