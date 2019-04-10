@@ -186,7 +186,7 @@ class Main extends Component {
           alphaPlusEnabled={alphaPlusEnabled}
           addNewWizard={this.addNewWizard}
         />
-        <div id={pageId} className={alphaPlusEnabled && 'alpha-plus'}>
+        <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : undefined}>
           <FadeAnimation>
             <Routes
               {...rest}
