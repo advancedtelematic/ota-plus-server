@@ -8,7 +8,10 @@ import enhanceWithClickOutside from 'react-click-outside';
 @observer
 class Dropdown extends React.Component {
   static propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.array
+    ]),
     customStyles: PropTypes.object,
     customClassName: PropTypes.string,
   };
