@@ -12,6 +12,7 @@ import {
   API_CAMPAIGNS_RENAME,
   API_CAMPAIGNS_CANCEL,
   API_CAMPAIGNS_CANCEL_REQUEST,
+  API_CAMPAIGNS_RETRY_SINGLE,
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_DETAIL,
@@ -20,6 +21,7 @@ import {
   CAMPAIGNS_DEFAULT_TAB,
   API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE
 } from '../config';
+import { CAMPAIGN_RETRY_STATUSES } from '../constants'
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { contains, prepareUpdateObject } from '../utils/Helpers';
 
@@ -45,6 +47,7 @@ export default class CampaignsStore {
   @observable campaignsSingleSafeFetchAsync = {};
   @observable campaignsSingleStatisticsFetchAsync = {};
   @observable campaignsSingleSafeStatisticsFetchAsync = {};
+  @observable campaignsSingleRetryAsync = {};
   @observable campaignsCreateAsync = {};
   @observable campaignsLaunchAsync = {};
   @observable campaignsRenameAsync = {};
@@ -78,6 +81,7 @@ export default class CampaignsStore {
     resetAsync(this.campaignsSingleSafeFetchAsync);
     resetAsync(this.campaignsSingleStatisticsFetchAsync);
     resetAsync(this.campaignsSingleSafeStatisticsFetchAsync);
+    resetAsync(this.campaignsSingleRetryAsync);
     resetAsync(this.campaignsCreateAsync);
     resetAsync(this.campaignsLaunchAsync);
     resetAsync(this.campaignsRenameAsync);
@@ -206,32 +210,14 @@ export default class CampaignsStore {
         resetAsync(this[statsAsync], true);
         axios
           .all([
-            axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`),
-            axios.get(`${API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE}/stats?correlationId=urn:here-ota:campaign:${id}`)
+            axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`)
           ])
           .then(
-            axios.spread((fromCampaignsAPI, fromDeviceAPI) => {
+            axios.spread((fromCampaignsAPI) => {
               const { data } = response;
-              const promises = [];
               data.statistics = fromCampaignsAPI.data;
-              data.statistics.byResultCode = [];
-              if (!_.isEmpty(fromDeviceAPI.data)) {
-                _.map(fromDeviceAPI.data, el => {
-                  !el.success && data.statistics.byResultCode.push(el);
-                });
-              }
-
-              _.each(data.groups, groupId => {
-                promises.push(axios.get(`${API_GROUPS_DEVICES_FETCH}/${groupId}/devices`), axios.get(`${API_GROUPS_DETAIL}/${groupId}`));
-              });
-
-              axios.all(promises).then(responseSet => {
-                const results = _.map(responseSet, singleResponse => singleResponse.data);
-                const chunks = _.chunk(results, 2);
-                data.groups = _.map(chunks, chunk => ({ ...chunk[0], ...chunk[1] }));
-                this.campaign = data;
-                this[statsAsync] = handleAsyncSuccess(fromCampaignsAPI);
-              });
+              this.campaign = data;
+              this[statsAsync] = handleAsyncSuccess(fromCampaignsAPI);
             }),
           )
           .catch(statsError => {
@@ -266,6 +252,20 @@ export default class CampaignsStore {
       })
       .catch(error => {
         this.campaignsLaunchAsync = handleAsyncError(error);
+      });
+  }
+
+  launchRetryCampaign(id, failureCode) {
+    resetAsync(this.campaignsSingleRetryAsync, true);
+    const failure = _.find(this.campaign.statistics.failures, singleFailure => singleFailure.code === failureCode);
+    return axios
+      .post(`${API_CAMPAIGNS_RETRY_SINGLE}/${id}/retry-failed`, { failureCode })
+      .then(response => {
+        this.campaignsSingleRetryAsync = handleAsyncSuccess(response);
+        failure.retryStatus = CAMPAIGN_RETRY_STATUSES.LAUNCHED;
+      })
+      .catch(error => {
+        this.campaignsSingleRetryAsync = handleAsyncError(error);
       });
   }
 
@@ -353,6 +353,7 @@ export default class CampaignsStore {
     resetAsync(this.campaignsSingleSafeFetchAsync);
     resetAsync(this.campaignsSingleStatisticsFetchAsync);
     resetAsync(this.campaignsSingleSafeStatisticsFetchAsync);
+    resetAsync(this.campaignsSingleRetryAsync);
     resetAsync(this.campaignsCreateAsync);
     resetAsync(this.campaignsLaunchAsync);
     resetAsync(this.campaignsRenameAsync);

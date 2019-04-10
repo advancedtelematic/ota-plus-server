@@ -5,15 +5,30 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
-import { Tag } from 'antd';
+import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
+import { Button, Tag, Tooltip } from 'antd';
+
+const RetryButtonWithTooltip = ({ status, tooltipText, onClick }) => (
+  <Tooltip title={tooltipText} placement="left">
+    <Button
+      className="retry-button"
+      shape="circle"
+      disabled={status !== CAMPAIGN_RETRY_STATUSES.NOT_LAUNCHED}
+      onClick={onClick}
+    >
+      <img src={`/assets/img/icons/retry_icon_${status}.svg`} alt='Icon' />
+    </Button>
+  </Tooltip>
+);
 
 @inject('stores')
 @observer
 class InstallationReportView extends Component {
+  
   downloadReport = failureCode => {
     const { campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
-    location.href = `${API_CAMPAIGNS_STATISTICS_SINGLE}/${campaign.id}/failed-installations.csv?failureCode=${failureCode || ''}`;
+    location.href = `${API_CAMPAIGNS_STATISTICS_SINGLE}/${campaign.id}/failed-installations.csv?failureCode=${failureCode}`;
   };
 
   render() {
@@ -60,19 +75,29 @@ class InstallationReportView extends Component {
                   {failure.count} of {devicesTotal}
                 </div>
                 <div className='col-actions'>
-                  <div className='failure_report' onClick={() => this.downloadReport(failure.name)}>
-                    <img src='/assets/img/icons/download.svg' alt='Icon' />
+                  <div
+                    className='failure_report'
+                    style={{ cursor: failure.retryStatus === CAMPAIGN_RETRY_STATUSES.LAUNCHED && 'not-allowed' }}
+                    onClick={() => failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED ? this.downloadReport(failure.code) : undefined}
+                  >
+                    <Tooltip
+                      title={failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED ? 'You can export' : 'Please, wait to export'}
+                      placement="left"
+                    >
+                      <img src='/assets/img/icons/download.svg' alt='Icon' />
+                    </Tooltip>
                   </div>
                 </div>
                 {alphaPlusEnabled && (
                   <div className='col-actions'>
-                    <div
-                      className='failure_report'
-                      onClick={() => {
-                        showRetryModal(failure.code);
-                      }}
-                    >
-                      <img src='/assets/img/icons/retry_icon.svg' alt='Icon' />
+                    <div>
+                      <RetryButtonWithTooltip
+                        status={failure.retryStatus}
+                        tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[failure.retryStatus]}
+                        onClick={() => {
+                          showRetryModal(failure.code);
+                        }}
+                      />
                     </div>
                   </div>
                 )}

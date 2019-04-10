@@ -121,6 +121,7 @@ export const API_CAMPAIGNS_CANCEL = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_CANCEL = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CANCEL_REQUEST = '/api/v1/update_requests';
 export const API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE = '/api/v1/devices';
+export const API_CAMPAIGNS_RETRY_SINGLE = '/api/v2/campaigns';
 
 /*
  *  Impact analysis
