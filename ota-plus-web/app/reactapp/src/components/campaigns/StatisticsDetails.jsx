@@ -56,12 +56,12 @@ class StatisticsDetails extends Component {
      */
     const notProcessed = 0;
     const notProcessedRate = 0;
-
-    const successRate = Math.min(Math.round((overallCampaignStatistics.successful / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
-    const failureRate = Math.min(Math.round((overallCampaignStatistics.failed / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
-    const queuedRate = Math.min(Math.round((overallCampaignStatistics.queued / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
-    const notImpactedRate = Math.min(Math.round((overallCampaignStatistics.notImpacted / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
-    const cancelledRate = Math.min(Math.round((overallCampaignStatistics.cancelled / Math.max(overallCampaignStatistics.processed, 1)) * 100), 100);
+    
+    const successRate = Math.round(overallCampaignStatistics.successful / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
+    const failureRate = Math.round(overallCampaignStatistics.failed / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
+    const queuedRate = Math.round(overallCampaignStatistics.queued / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
+    const notImpactedRate = Math.round(overallCampaignStatistics.notImpacted / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
+    const cancelledRate = Math.round(overallCampaignStatistics.cancelled / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
     
     return (
       <div className='statistics'>
