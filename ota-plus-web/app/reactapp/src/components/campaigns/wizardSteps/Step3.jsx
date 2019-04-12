@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 
 import Loader from '../../../partials/Loader';
-import { SelectUpdateList } from './step3Files';
+import CampaignsWizardUpdateList from './step3Files/CampaignsWizardUpdateList';
 
 @inject('stores')
 @observer
@@ -68,7 +68,7 @@ class WizardStep3 extends Component {
     ) : (
       <div>
         <span className='c-form__label'>{'Select Update'}</span>
-        <SelectUpdateList selectedUpdate={selectedUpdate} stepId={2} toggleSelection={this.toggleUpdate} showUpdateDetails={this.showDetails} />
+        <CampaignsWizardUpdateList selectedUpdate={selectedUpdate} stepId={2} toggleSelection={this.toggleUpdate} showUpdateDetails={this.showDetails} />
       </div>
     );
   }

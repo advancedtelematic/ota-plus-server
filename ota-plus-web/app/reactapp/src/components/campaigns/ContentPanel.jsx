@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { List, ListHeader } from '.';
 import Loader from '../../partials/Loader';
 
-import { LIMIT_CAMPAIGNS_PER_PAGE, CAMPAIGNS_DEFAULT_TAB } from '../../config';
+import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB } from '../../config';
 
 @inject('stores')
 @observer
@@ -41,7 +41,7 @@ class ContentPanel extends Component {
   }
 
   componentDidMount() {
-    this.fetchCampaignsData(1, LIMIT_CAMPAIGNS_PER_PAGE);
+    this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
   }
 
   componentWillUnmount() {
@@ -64,7 +64,7 @@ class ContentPanel extends Component {
     const { campaignsStore } = stores;
 
     this.setActive(campaignsStore.activeTab);
-    this.fetchCampaignsData(1, LIMIT_CAMPAIGNS_PER_PAGE);
+    this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
 
     /**
      * Since data set of latest active campaigns is a subset of all campaigns in general
@@ -85,7 +85,7 @@ class ContentPanel extends Component {
 
     if (name === 'activeTab') {
       this.setActive(newValue);
-      this.fetchCampaignsData(1, LIMIT_CAMPAIGNS_PER_PAGE);
+      this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
     }
   };
 
@@ -120,7 +120,7 @@ class ContentPanel extends Component {
         )}
         <div className='ant-pagination__wrapper clearfix'>
           <Pagination
-            defaultPageSize={LIMIT_CAMPAIGNS_PER_PAGE}
+            defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
             // hideOnSinglePage
             onChange={this.onPageChange}
             total={campaignsStore.count[this.activeTab]}

@@ -1,15 +1,16 @@
 /** @format */
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+
 import { Loader } from '../../../../partials';
-import UpdateDetailListItem from './UpdateDetailListItem';
+import UpdatesWizardDetailListItem from './UpdatesWizardDetailListItem';
 
 @inject('stores')
 @observer
-class UpdateDetailList extends Component {
+class UpdatesWizardDetailList extends Component {
   render() {
     const { wizardData, onStep2DataSelect } = this.props;
     const { softwareStore } = this.props.stores;
@@ -22,7 +23,7 @@ class UpdateDetailList extends Component {
           </div>
         ) : (
           _.map(selectedHardwares, item => {
-            return <UpdateDetailListItem key={item.name} item={item} wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />;
+            return <UpdatesWizardDetailListItem key={item.name} item={item} wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />;
           })
         )}
       </span>
@@ -30,8 +31,8 @@ class UpdateDetailList extends Component {
   }
 }
 
-UpdateDetailList.propTypes = {
+UpdatesWizardDetailList.propTypes = {
   stores: PropTypes.object,
 };
 
-export default UpdateDetailList;
+export default UpdatesWizardDetailList;

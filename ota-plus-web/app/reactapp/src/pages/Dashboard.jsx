@@ -3,9 +3,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import { MetaData, FadeAnimation } from '../utils';
 import { DashboardContainer, SanityCheckContainer, Terms } from '../containers';
 import { Loader } from '../partials';
+import { DEVICES_LIMIT_LATEST } from '../config';
 
 const title = 'Dashboard';
 
@@ -25,8 +27,8 @@ class Dashboard extends Component {
       provisioningStore.sanityCheckCompleted = true;
     }
     provisioningStore.namespaceSetup();
-    devicesStore.fetchDevices();
-    softwareStore.fetchPackages();
+    devicesStore.fetchDevicesWithLimit(DEVICES_LIMIT_LATEST);
+    softwareStore.fetchPackagesWithLimit();
   }
   componentWillUnmount() {
     const { stores } = this.props;

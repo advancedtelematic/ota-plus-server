@@ -44,7 +44,7 @@
 
 .campaigns {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   width: 100%;
   display: block;
   position: relative;
@@ -101,6 +101,8 @@
     background-color: #fff;
     position: relative;
     top: 40px;
+    overflow-y: auto;
+    height: calc(100% - 73px);
 
     &--empty {
       background-color: #fff;
