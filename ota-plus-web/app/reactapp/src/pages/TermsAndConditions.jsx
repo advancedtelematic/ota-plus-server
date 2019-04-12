@@ -9,7 +9,7 @@ const title = 'Policy';
 const TermsAndConditions = () => (
   <FadeAnimation>
     <MetaData title={title}>
-      <Terms goBack checked />
+      <Terms checked />
     </MetaData>
   </FadeAnimation>
 );

@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
@@ -19,7 +20,6 @@ class Terms extends Component {
 
   static propTypes = {
     stores: PropTypes.object,
-    goBackAllowed: PropTypes.bool,
     checked: PropTypes.bool,
   };
 
@@ -28,14 +28,8 @@ class Terms extends Component {
     this.showModal = !this.showModal;
   };
 
-  goBack = e => {
-    e.preventDefault();
-    const { goBackAllowed } = this.props;
-    if (goBackAllowed) window.history.go(-1);
-  };
-
   render() {
-    const { stores, checked } = this.props;
+    const { stores, checked, history } = this.props;
     const { userStore } = stores;
     let terms = _.find(userStore.contracts, obj => contracts.default[obj.contract]);
     const agreedDate = terms && terms.accepted;
@@ -65,9 +59,12 @@ class Terms extends Component {
             The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for the purposes of allowing you to test the service internally during the Trial Period.
           </p>
           <div className='checkbox-wrapper'>
-            <Checkbox
-              checked={this.termsAccepted}
-              onChange={ () => { this.termsAccepted = !this.termsAccepted;}}/>
+            {!terms.accepted && (
+              <Checkbox
+                checked={this.termsAccepted}
+                onChange={ () => { this.termsAccepted = !this.termsAccepted; }}
+              />
+            )}
             <div>
               I agree to HERE Location Platform Services Online
               <a id='service-terms-link' rel='noopener noreferrer' target='_blank' href='https://developer.here.com/terms-and-conditions'>
@@ -81,27 +78,34 @@ class Terms extends Component {
               <div className='agreed--terms'>{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
             </div>
           </div>
-          <div className='steps'>
-            <a href='/login' className='back btn-primary' id='terms-btn-back' onClick={this.goBack}>
-              Back
-            </a>
-            {this.termsAccepted ? (
-              <Button
-                htmlType='button'
-                className='next btn-primary'
-                id='terms-btn-continue'
-                onClick={() => {
-                  userStore.acceptContract(terms && terms.contract);
-                }}
-              >
-                Continue
-              </Button>
-            ) : (
-              <Button htmlType='button' type='primary' className='next' id='terms-btn-continue_disabled' disabled>
-                Continue
-              </Button>
-            )}
-          </div>
+          {!terms.accepted && (
+            <div className='steps'>
+              <a href='/login' className='back btn-primary' id='terms-btn-back'>
+                Back
+              </a>
+              {this.termsAccepted ? (
+                <Button
+                  htmlType='button'
+                  className='next btn-primary'
+                  id='terms-btn-continue'
+                  onClick={() => {
+                    userStore.acceptContract(terms && terms.contract)
+                      .then((success) => {
+                        if (success) {
+                          history.push('/get-started');
+                        }
+                      });
+                  }}
+                >
+                  Continue
+                </Button>
+              ) : (
+                <Button htmlType='button' type='primary' className='next' id='terms-btn-continue_disabled' disabled>
+                  Continue
+                </Button>
+              )}
+            </div>
+          )}
         </div>
         <OTAModal content={contractModalContent} visible={this.showModal} />
       </div>
@@ -109,4 +113,4 @@ class Terms extends Component {
   }
 }
 
-export default Terms;
+export default withRouter(Terms);

@@ -77,17 +77,15 @@ export default class UserStore {
     resetAsync(this.contractsAcceptAsync, true);
     return axios
       .put(`${API_USER_CONTRACTS}/${encodedPath}`)
-      .then(
-        function(response) {
-          this.fetchContracts();
+      .then(response => {
+        this.fetchContracts();
           this.contractsAcceptAsync = handleAsyncSuccess(response);
-        }.bind(this),
-      )
-      .catch(
-        function(error) {
-          this.contractsAcceptAsync = handleAsyncError(error);
-        }.bind(this),
-      );
+          return true;
+      })
+      .catch(error => {
+        this.contractsAcceptAsync = handleAsyncError(error);
+        return false;
+      });
   }
 
   updateUser(data) {
