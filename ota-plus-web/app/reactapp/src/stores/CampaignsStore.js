@@ -257,12 +257,17 @@ export default class CampaignsStore {
 
   launchRetryCampaign(id, failureCode) {
     resetAsync(this.campaignsSingleRetryAsync, true);
-    const failure = _.find(this.campaign.statistics.failures, singleFailure => singleFailure.code === failureCode);
+    const retryFailure = _.find(this.campaign.statistics.failures, singleFailure => singleFailure.code === failureCode);
     return axios
       .post(`${API_CAMPAIGNS_RETRY_SINGLE}/${id}/retry-failed`, { failureCode })
       .then(response => {
         this.campaignsSingleRetryAsync = handleAsyncSuccess(response);
-        failure.retryStatus = CAMPAIGN_RETRY_STATUSES.LAUNCHED;
+        _.each(this.campaign.statistics.failures, singleFailure => {
+          if (singleFailure.code !== failureCode) {
+            singleFailure.retryStatus = CAMPAIGN_RETRY_STATUSES.WAITING;
+          }
+        });
+        retryFailure.retryStatus = CAMPAIGN_RETRY_STATUSES.LAUNCHED;
       })
       .catch(error => {
         this.campaignsSingleRetryAsync = handleAsyncError(error);

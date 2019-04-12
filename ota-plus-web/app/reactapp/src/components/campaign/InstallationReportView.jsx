@@ -38,7 +38,8 @@ class InstallationReportView extends Component {
     const { campaign } = campaignsStore;
     const devicesTotal = campaign.statistics.processed;
     const failures = campaign.statistics.failures;
-
+    const isAnyRetryLaunched = _.find(failures, failure => failure.retryStatus === CAMPAIGN_RETRY_STATUSES.LAUNCHED);
+    
     return (
       <div className='codes'>
         <div className='codes__heading'>
@@ -62,6 +63,9 @@ class InstallationReportView extends Component {
         <>
           {_.map(failures, (failure, index) => {
             const progress = Math.min(Math.round((failure.count / Math.max(devicesTotal, 1)) * 100), 100);
+            const retryStatus = isAnyRetryLaunched && failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED 
+                                  ? CAMPAIGN_RETRY_STATUSES.WAITING
+                                  : failure.retryStatus;
             return (
               <div key={index} className='codes__item'>
                 <div className='col-name'>{failure.code}</div>
@@ -92,8 +96,8 @@ class InstallationReportView extends Component {
                   <div className='col-actions'>
                     <div>
                       <RetryButtonWithTooltip
-                        status={failure.retryStatus}
-                        tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[failure.retryStatus]}
+                        status={retryStatus}
+                        tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[retryStatus]}
                         onClick={() => {
                           showRetryModal(failure.code);
                         }}
