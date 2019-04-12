@@ -118,7 +118,7 @@ class TabNavigation extends Component {
                 className={`tab-navigation__link ${this.isActive('advanced')}`}
               >
                 <span>
-                  {'Advanced (BETA)'}
+                  {'Advanced'}
                   <Tag color='#48dad0' className='alpha-tag'>
                     ALPHA
                   </Tag>
