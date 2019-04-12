@@ -5,9 +5,9 @@
 
 #page-software-repository {
   background-color: $dashboard-bg;
+  height: calc(100% - 50px);
 
   .ios-list {
-    height: calc(100% - 50px);
     overflow-y: auto;
     overflow-x: hidden;
   }
