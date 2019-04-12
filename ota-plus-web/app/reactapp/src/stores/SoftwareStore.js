@@ -8,29 +8,21 @@ import {
   API_UPLOAD_SOFTWARE,
   API_PACKAGES_BLACKLIST_FETCH,
   API_PACKAGES_COUNT_DEVICE_AND_GROUP,
-  API_PACKAGES_COUNT_VERSION_BY_NAME,
   API_PACKAGES_PACKAGE_BLACKLISTED_FETCH,
   API_PACKAGES_BLACKLIST,
   API_PACKAGES_UPDATE_BLACKLISTED,
   API_PACKAGES_REMOVE_FROM_BLACKLIST,
   API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH,
   API_SOFTWARE_DEVICE_SOFTWARE,
-  API_SOFTWARE_DEVICE_AUTO_INSTALLED_SOFTWARE,
-  API_SOFTWARE_DEVICE_QUEUE,
   API_SOFTWARE_DEVICE_HISTORY,
-  API_SOFTWARE_DIRECTOR_DEVICE_HISTORY,
-  API_SOFTWARE_DEVICE_UPDATES_LOGS,
-  API_SOFTWARE_DEVICE_AUTO_INSTALL,
-  API_SOFTWARE_DEVICE_INSTALL,
-  API_SOFTWARE_DEVICE_CANCEL_INSTALLATION,
   API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL,
   API_SOFTWARE_COUNT_INSTALLED_ECUS,
-  API_SOFTWARE_DEVICE_CANCEL_MTU_UPDATE,
   API_SOFTWARE_COMMENTS,
   API_DELETE_SOFTWARE,
   API_UPDATES_SEARCH,
   API_CAMPAIGNS_FETCH_SINGLE,
   PACKAGES_DEFAULT_TAB,
+  SOFTWARES_LIMIT_LATEST,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
@@ -108,11 +100,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesDeleteAsync, true);
     return axios
       .delete(`${API_DELETE_SOFTWARE}/${filepath}`)
-      .then(response => {
+      .then((response) => {
         this.packagesDeleteAsync = handleAsyncSuccess(response);
         this._removePackage(filepath);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesDeleteAsync = handleAsyncError(error);
       });
   }
@@ -165,14 +157,14 @@ export default class SoftwareStore {
     resetAsync(that[async], true);
     return axios
       .get(API_SOFTWARE)
-      .then(response => {
+      .then((response) => {
         const packages = response.data.signed.targets;
         that._formatPackages(packages);
         that.fetchComments();
         const filepaths = that._getFilepaths();
         axios
           .post(API_SOFTWARE_COUNT_INSTALLED_ECUS, filepaths)
-          .then(resp => {
+          .then((resp) => {
             that._prepareFilePaths(resp.data);
             switch (that.page) {
               case 'device':
@@ -184,7 +176,7 @@ export default class SoftwareStore {
             }
             that[async] = handleAsyncSuccess(response);
           })
-          .catch(e => {
+          .catch((e) => {
             switch (that.page) {
               case 'device':
                 that._prepareDevicePackages();
@@ -196,9 +188,13 @@ export default class SoftwareStore {
             that[async] = handleAsyncSuccess(response);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         that[async] = handleAsyncError(error);
       });
+  }
+
+  fetchPackagesWithLimit(limit) {
+    this.fetchPackages('packagesFetchAsync', limit);
   }
 
   _getFilepaths() {
@@ -208,7 +204,7 @@ export default class SoftwareStore {
   }
 
   _prepareFilePaths(filepaths) {
-    _.each(this.packages, (pack, index) => {
+    _.each(this.packages, (pack) => {
       _.each(filepaths, (installedOn, filepath) => {
         if (pack.filepath === filepath) {
           pack.installedOnEcus = installedOn;
@@ -977,7 +973,7 @@ export default class SoftwareStore {
   get lastPackages() {
     return _.sortBy(this.packages, pack => pack.createdAt)
       .reverse()
-      .slice(0, 10);
+      .slice(0, SOFTWARES_LIMIT_LATEST);
   }
 
   @computed

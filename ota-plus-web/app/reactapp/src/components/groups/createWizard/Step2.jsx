@@ -1,18 +1,26 @@
 /** @format */
 
 import React from 'react';
-import { Step2CreateClassicGroup, Step2CreateSmartGroup } from './step2';
+import PropTypes from 'prop-types';
 
-const Step2 = ({ wizardData, onStep2DataSelect }) => {
+import CreateClassicGroup from './step2/CreateClassicGroup';
+import CreateSmartGroup from './step2/CreateSmartGroup';
+
+const Step2 = ({ groupType, onStep2DataSelect }) => {
   return (
-    <div className='wizard__step2'>
-      {wizardData.groupType === 'classic' ? (
-        <Step2CreateClassicGroup wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />
+    <div className="wizard__step2">
+      {groupType === 'classic' ? (
+        <CreateClassicGroup onStep2DataSelect={onStep2DataSelect} />
       ) : (
-        <Step2CreateSmartGroup wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />
+        <CreateSmartGroup onStep2DataSelect={onStep2DataSelect} />
       )}
     </div>
   );
+};
+
+Step2.propTypes = {
+  onStep2DataSelect: PropTypes.func.isRequired,
+  groupType: PropTypes.string.isRequired,
 };
 
 export default Step2;

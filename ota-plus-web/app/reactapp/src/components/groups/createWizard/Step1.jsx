@@ -1,9 +1,9 @@
 /** @format */
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { Step1Option } from './step1';
+import React from 'react';
 import { map } from 'lodash';
+import Option from './step1/Option';
 
 const options = [
   {
@@ -17,25 +17,29 @@ const options = [
     alias: 'smart',
   },
 ];
-
-const Step1 = ({ onStep1DataSelect, wizardData }) => {
+const Step1 = ({ groupType, onStep1DataSelect }) => {
   return (
-    <div className='wizard__step1'>
-      {map(options, option => {
+    <div className="wizard__step1">
+      {map(options, (option) => {
         return (
-          <Step1Option
+          <Option
             key={option.alias}
             title={option.title}
             teaser={option.teaser}
             selectOption={() => {
               onStep1DataSelect(option.alias);
             }}
-            isSelected={wizardData.groupType === option.alias}
+            isSelected={groupType === option.alias}
           />
         );
       })}
     </div>
   );
+};
+
+Step1.propTypes = {
+  onStep1DataSelect: PropTypes.func.isRequired,
+  groupType: PropTypes.string.isRequired,
 };
 
 export default Step1;

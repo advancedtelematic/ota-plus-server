@@ -2,6 +2,8 @@
 
 import { observable, computed, extendObservable, toJS } from 'mobx';
 import axios from 'axios';
+import _ from 'lodash';
+
 import {
   API_DEVICES_SEARCH,
   API_DEVICES_NETWORK_INFO,
@@ -18,9 +20,9 @@ import {
   API_CAMPAIGNS_FETCH_SINGLE,
   API_UPDATES_SEARCH,
   API_DEVICE_APPROVAL_PENDING_CAMPAIGNS,
+  DEVICES_LIMIT_PER_PAGE,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'lodash';
 
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
@@ -86,7 +88,6 @@ export default class DevicesStore {
     resetAsync(this.mtuCancelAsync);
     resetAsync(this.eventsFetchAsync);
     resetAsync(this.approvalPendingCampaignsFetchAsync);
-    this.devicesLimit = 30;
   }
 
   @computed get lastDevices() {
@@ -116,14 +117,14 @@ export default class DevicesStore {
       });
   }
 
-  fetchDevices(filter = '', groupId, ungrouped, async = 'devicesFetchAsync') {
+  fetchDevices(filter = '', groupId, ungrouped, async = 'devicesFetchAsync', limit = DEVICES_LIMIT_PER_PAGE) {
     resetAsync(this[async], true);
     filter = filter.toLowerCase();
     this.devicesOffset = 0;
     this.devicesCurrentPage = 1;
     this.devicesFilter = filter;
     this.devicesGroupFilter = groupId;
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
     if (groupId && groupId === 'ungrouped') {
       switch (ungrouped) {
         case 'inAnyGroup':
@@ -166,6 +167,10 @@ export default class DevicesStore {
       });
   }
 
+  fetchDevicesWithLimit(limit) {
+    this.fetchDevices('', undefined, undefined, 'devicesFetchAsync', limit);
+  }
+
   fetchUngroupedDevicesCount(async = 'ungroupedDevicesCountFetchAsync') {
     resetAsync(this[async], true);
     return axios
@@ -183,43 +188,9 @@ export default class DevicesStore {
       });
   }
 
-  // fetchDevicesByFilter(filter = '', async = 'devicesFetchAsync') {
-  //   resetAsync(this.devicesByFilterFetchAsync, true);
-  //   filter = filter.toLowerCase();
-  //   let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}`;
-  //   return axios
-  //     .get(apiAddress)
-  //     .then(response => {
-  //       this.filteredDevicesCount = response.data.total;
-  //       this.devicesByFilterFetchAsync = handleAsyncSuccess(response);
-  //     })
-  //     .catch(error => {
-  //       this.devicesByFilterFetchAsync = handleAsyncError(error);
-  //     });
-  // }
-
-  loadMoreDevices(filter = '', groupId) {
+  loadMoreDevices(filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE) {
     resetAsync(this.devicesLoadMoreAsync, true);
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
-    if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
-    else if (groupId) apiAddress += `&groupId=${groupId}`;
-    return axios
-      .get(apiAddress)
-      .then(response => {
-        this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
-        this.devicesOffset = response.data.offset;
-        this._prepareDevices();
-        this.devicesCurrentPage++;
-        this.devicesLoadMoreAsync = handleAsyncSuccess(response);
-      })
-      .catch(error => {
-        this.devicesLoadMoreAsync = handleAsyncError(error);
-      });
-  }
-
-  loadMoreDevices(filter = '', groupId) {
-    resetAsync(this.devicesLoadMoreAsync, true);
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset + limit}`;
     if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios

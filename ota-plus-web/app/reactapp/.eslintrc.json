@@ -1,6 +1,6 @@
 {
   "plugins": ["react", "prettier"],
-  "extends": ["airbnb", "plugin:react/recommended", "prettier", "prettier/react"],
+  "extends": ["eslint-config-airbnb-base", "eslint-config-airbnb-base/rules/strict", "airbnb/rules/react"],
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
@@ -24,25 +24,7 @@
     }
   },
   "rules": {
-    "class-methods-use-this": 0,
-    "no-plusplus": 0,
-    "spaced-comment": 0,
-    "lines-between-class-members": 0,
-    "no-underscore-dangle": 0,
-    "no-nested-ternary": 0,
-    "function-paren-newline": 0,
-    "no-shadow": 0,
-    "no-param-reassign": [
-      "error",
-      {
-        "props": false
-      }
-    ],
     "linebreak-style": 0,
-    "global-require": 0,
-    "eslint linebreak-style": [0, "error", "windows"],
-    "object-curly-newline": 0,
-    "import/prefer-default-export": 0,
     "jsx-a11y/anchor-is-valid": [
       "error",
       {
@@ -51,21 +33,18 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ],
-    // currently disabled needs more research about necessarity
-    "jsx-a11y/no-static-element-interactions": 0,
-    "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "react/forbid-prop-types": 0,
-    "react/no-array-index-key": 0,
-    "react/no-string-refs": 0,
-    "react/no-typos": 0,
-    "react/require-default-props": 0,
-    "react/jsx-curly-brace-presence": [1, { "props": "never", "children": "ignore" }],
-    "react/jsx-filename-extension": [
-      1,
+    "max-len": [
+      2,
       {
-        "extensions": [".js", ".jsx"]
+        "code": 120,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true
       }
-    ]
+    ],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-curly-brace-presence": [1, { "props": "never", "children": "ignore" }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] } ]
   }
 }
