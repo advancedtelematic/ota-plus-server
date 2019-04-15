@@ -66,6 +66,7 @@ class InstallationReportView extends Component {
             const retryStatus = isAnyRetryLaunched && failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED 
                                   ? CAMPAIGN_RETRY_STATUSES.WAITING
                                   : failure.retryStatus;
+            const isActionDisabled = failure.retryStatus === CAMPAIGN_RETRY_STATUSES.LAUNCHED || retryStatus === CAMPAIGN_RETRY_STATUSES.WAITING;
             return (
               <div key={index} className='codes__item'>
                 <div className='col-name'>{failure.code}</div>
@@ -81,11 +82,11 @@ class InstallationReportView extends Component {
                 <div className='col-actions'>
                   <div
                     className='failure_report'
-                    style={{ cursor: failure.retryStatus === CAMPAIGN_RETRY_STATUSES.LAUNCHED && 'not-allowed' }}
-                    onClick={() => failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED ? this.downloadReport(failure.code) : undefined}
+                    style={{ cursor: isActionDisabled && 'not-allowed' }}
+                    onClick={() => !isActionDisabled ? this.downloadReport(failure.code) : undefined}
                   >
                     <Tooltip
-                      title={failure.retryStatus !== CAMPAIGN_RETRY_STATUSES.LAUNCHED ? 'You can export' : 'Please, wait to export'}
+                      title={isActionDisabled ? 'Please, wait to export' : 'You can export'}
                       placement="left"
                     >
                       <img src='/assets/img/icons/download.svg' alt='Icon' />
