@@ -65,14 +65,16 @@ export default class UpdatesStore {
     let targets = {};
     _.each(data, (values, hwId) => {
       targets[hwId] = {
-        from: {
-          target: values.fromVersion.filepath,
-          checksum: {
-            method: 'sha256',
-            hash: values.fromVersion.packageHash,
-          },
-          targetLength: values.fromVersion.targetLength,
-        },
+        ...(!values.updateFromAny && {
+          from: {
+            target: values.fromVersion.filepath,
+            checksum: {
+              method: 'sha256',
+              hash: values.fromVersion.packageHash,
+            },
+            targetLength: values.fromVersion.targetLength,
+          }
+        }),
         to: {
           target: values.toVersion.filepath,
           checksum: {
