@@ -37,7 +37,7 @@ class WizardStep7 extends Component {
             {updateSummary &&
               _.map(updateSummary, (target, hardwareId) => {
                 const noInformation = 'No information.';
-                const { target: fromPackage, checksum: fromVersion } = target.from;
+                const { target: fromPackage, checksum: fromVersion } = target.from || {};
                 const { target: toPackage, checksum: toVersion } = target.to;
 
                 return (

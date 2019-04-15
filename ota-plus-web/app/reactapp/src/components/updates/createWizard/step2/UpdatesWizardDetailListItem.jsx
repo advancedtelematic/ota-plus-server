@@ -9,13 +9,19 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { FormSelect } from '../../../../partials';
-import { Row, Col } from 'antd';
+import { Row, Col, Checkbox } from 'antd';
 
 @inject('stores')
 @observer
 class UpdatesWizardDetailListItem extends Component {
   @observable fromVersions = [];
   @observable toVersions = [];
+  @observable updateFromAny = false;
+
+  constructor(props) {
+    super(props);
+    this.fromVersionSelect = React.createRef();
+  }
 
   formatVersions = (type, name) => {
     const { softwareStore } = this.props.stores;
@@ -42,6 +48,13 @@ class UpdatesWizardDetailListItem extends Component {
     } else {
       this.toVersions = formattedData;
     }
+  };
+
+  toggleUpdateFromAny = () => {
+    const { item, onStep2DataSelect } = this.props;
+    this.updateFromAny = !this.updateFromAny;
+    this.fromVersionSelect.current.setState({ selectedOptions: [] });
+    onStep2DataSelect(item, 'updateFromAny', this.updateFromAny);
   };
 
   render() {
@@ -82,7 +95,7 @@ class UpdatesWizardDetailListItem extends Component {
                 wrapperWidth='100%'
                 visibleFieldsCount={5}
                 appendMenuToBodyTag={true}
-                placeholder='Select from software'
+                placeholder={'Select from software'}
                 defaultValue={fromPack && fromPack.id && fromPack.id.name}
                 onChange={value => {
                   if (value && value.id) {
@@ -118,11 +131,13 @@ class UpdatesWizardDetailListItem extends Component {
             <Col span={12}>
               <FormSelect
                 id={`${item.name}-from-version`}
+                ref={this.fromVersionSelect}
+                disabled={this.updateFromAny}
                 options={this.fromVersions}
                 appendMenuToBodyTag={true}
                 label='Version'
                 multiple={false}
-                placeholder='Select from version'
+                placeholder={this.updateFromAny ? 'Any' : 'Select from version'}
                 visibleFieldsCount={5}
                 defaultValue={fromVersion && fromVersion.id && fromVersion.id.version}
                 onChange={value => {
@@ -150,6 +165,13 @@ class UpdatesWizardDetailListItem extends Component {
               />
             </Col>
           </Form>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Checkbox className="no-sw-version-checkbox" onChange={this.toggleUpdateFromAny}>
+              {'Do not specify the origin SW version. This may result in potential compatibility conflicts between some origin SW version and the target SW versions, or between this SW version and another SW of the update.'}
+            </Checkbox>
+          </Col>
         </Row>
       </div>
     );

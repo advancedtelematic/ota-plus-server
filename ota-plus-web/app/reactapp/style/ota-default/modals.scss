@@ -706,6 +706,15 @@
   }
 }
 
+.update-modal {
+  .no-sw-version-checkbox {
+    align-items: flex-start;
+    .ant-checkbox {
+      top: 2px;
+    }
+  }
+}
+
 .create-provisioning-key-modal {
   width: 550px !important;
 }
