@@ -14,3 +14,9 @@ export const CAMPAIGN_RETRY_STATUSES = {
     WAITING: 'waiting',
     FINISHED: 'finished'
 };
+
+/*
+ *  Timeout duration
+ */
+
+export const SEARCH_REFRESH_TIMEOUT = 400;
