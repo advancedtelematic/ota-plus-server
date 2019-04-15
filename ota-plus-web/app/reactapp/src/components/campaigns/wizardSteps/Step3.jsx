@@ -21,9 +21,10 @@ class WizardStep3 extends Component {
 
   componentDidMount() {
     const { stores, wizardData } = this.props;
-    const { updatesStore } = stores;
+    const { updatesStore, softwareStore } = stores;
     const selectedGroupIds = wizardData.groups.map(group => group.id);
     updatesStore.fetchWizardUpdates(selectedGroupIds);
+    softwareStore.fetchPackages();
   }
 
   validateStep = selectedUpdate => {
