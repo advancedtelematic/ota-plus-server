@@ -18,8 +18,9 @@ class Updates extends Component {
 
   componentWillMount() {
     const { stores } = this.props;
-    const { updatesStore } = stores;
+    const { updatesStore, softwareStore } = stores;
     updatesStore.fetchUpdates();
+    softwareStore.fetchPackages();
   }
 
   componentWillUnmount() {
