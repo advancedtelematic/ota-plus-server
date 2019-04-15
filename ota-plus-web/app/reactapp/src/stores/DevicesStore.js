@@ -119,12 +119,11 @@ export default class DevicesStore {
 
   fetchDevices(filter = '', groupId, ungrouped, async = 'devicesFetchAsync', limit = DEVICES_LIMIT_PER_PAGE) {
     resetAsync(this[async], true);
-    filter = filter.toLowerCase();
     this.devicesOffset = 0;
     this.devicesCurrentPage = 1;
     this.devicesFilter = filter;
     this.devicesGroupFilter = groupId;
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter.toLowerCase()}&limit=${limit}&offset=${this.devicesOffset}`;
     if (groupId && groupId === 'ungrouped') {
       switch (ungrouped) {
         case 'inAnyGroup':

@@ -402,7 +402,6 @@
 
     &__device-title {
       font-size: 14px;
-      text-transform: capitalize;
       @include textoverflowEllipsis;
       position: relative;
     }
