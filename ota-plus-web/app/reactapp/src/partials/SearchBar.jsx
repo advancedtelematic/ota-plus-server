@@ -4,23 +4,28 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Input } from 'formsy-antd';
 import { Icon } from 'antd';
+import { SEARCH_REFRESH_TIMEOUT } from '../constants';
 
 class SearchBar extends Component {
+  constructor(props) {
+    super(props);
+    this.searchTimeout = undefined;
+  }
+
   clearInput = () => {
     this.props.changeAction('');
   };
 
   onChange = value => {
-    let timeout = undefined;
     const { changeAction } = this.props;
     const filter = value;
-    if (timeout != undefined) {
-      clearTimeout(timeout);
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
     }
-    timeout = setTimeout(() => {
-      timeout = undefined;
+    this.searchTimeout = setTimeout(() => {
+      this.searchTimeout = undefined;
       changeAction(filter);
-    }, 500);
+    }, SEARCH_REFRESH_TIMEOUT);
   };
 
   render() {
