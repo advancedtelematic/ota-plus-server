@@ -707,10 +707,19 @@
 }
 
 .update-modal {
-  .no-sw-version-checkbox {
-    align-items: flex-start;
-    .ant-checkbox {
-      top: 2px;
+  .no-sw-version {
+    padding-bottom: 16px;
+    &__checkbox {
+      align-items: flex-start;
+      .ant-checkbox {
+        top: 2px;
+      }
+    }
+    &__warning {
+      display: block;
+      color: $error-color;
+      margin-top: 4px;
+      padding: 0;
     }
   }
 }

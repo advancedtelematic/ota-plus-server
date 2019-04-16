@@ -101,7 +101,7 @@ class CreateModal extends Component {
           if (!showDetails &&
               update &&
               update[item.name] &&
-              update[item.name].fromPack &&
+              (update[item.name].updateFromAny || update[item.name].fromPack)  &&
               update[item.name].toPack &&
               (update[item.name].updateFromAny || update[item.name].fromVersion) &&
               update[item.name].toVersion) {
