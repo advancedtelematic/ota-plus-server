@@ -1912,6 +1912,12 @@ input {
       background-color: #cfd0d3;
       color: #000;
     }
+    &--antd {
+      border: none;
+      &:hover, &:focus {
+        box-shadow: none;
+      }
+    }
   }
 
   &__select {
