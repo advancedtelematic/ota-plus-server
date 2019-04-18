@@ -20,6 +20,7 @@ class UpdatesWizardDetailListItem extends Component {
 
   constructor(props) {
     super(props);
+    this.fromPackageSelect = React.createRef();
     this.fromVersionSelect = React.createRef();
   }
 
@@ -53,6 +54,7 @@ class UpdatesWizardDetailListItem extends Component {
   toggleUpdateFromAny = () => {
     const { item, onStep2DataSelect } = this.props;
     this.updateFromAny = !this.updateFromAny;
+    this.fromPackageSelect.current.setState({ selectedOptions: [] });
     this.fromVersionSelect.current.setState({ selectedOptions: [] });
     onStep2DataSelect(item, 'updateFromAny', this.updateFromAny);
   };
@@ -80,6 +82,18 @@ class UpdatesWizardDetailListItem extends Component {
         <Row className='hardware-type'>
           <Col span={24}>{item.name}</Col>
         </Row>
+        <Row className="no-sw-version">
+          <Col span={24}>
+            <Checkbox className="no-sw-version__checkbox" onChange={this.toggleUpdateFromAny}>
+              {'Update the software regardless of what is already installed.'}
+            </Checkbox>
+            {this.updateFromAny && (
+              <span className="no-sw-version__warning">
+                {'If you select this option, you’ll be upgrading to the new version on all ECUs . Bear in mind that older software versions might not upgrade properly due to version incompatibility.'}
+              </span>
+            )}
+          </Col>
+        </Row>
         <Row className='header'>
           <Col span={12}>From</Col>
           <Col span={12}>To</Col>
@@ -89,14 +103,16 @@ class UpdatesWizardDetailListItem extends Component {
             <Col span={12}>
               <FormSelect
                 id={`${item.name}-from-software`}
+                ref={this.fromPackageSelect}
+                disabled={this.updateFromAny}
                 options={packages}
                 label='Software'
                 multiple={false}
                 wrapperWidth='100%'
                 visibleFieldsCount={5}
                 appendMenuToBodyTag={true}
-                placeholder={'Select from software'}
-                defaultValue={fromPack && fromPack.id && fromPack.id.name}
+                placeholder={this.updateFromAny ? 'Any software version' : 'Select from software'}
+                defaultValue={!this.updateFromAny && fromPack && fromPack.id && fromPack.id.name}
                 onChange={value => {
                   if (value && value.id) {
                     this.formatVersions('from', value.id);
@@ -137,9 +153,9 @@ class UpdatesWizardDetailListItem extends Component {
                 appendMenuToBodyTag={true}
                 label='Version'
                 multiple={false}
-                placeholder={this.updateFromAny ? 'Any' : 'Select from version'}
+                placeholder={this.updateFromAny ? 'Any software version' : 'Select from version'}
                 visibleFieldsCount={5}
-                defaultValue={fromVersion && fromVersion.id && fromVersion.id.version}
+                defaultValue={!this.updateFromAny && fromVersion && fromVersion.id && fromVersion.id.version}
                 onChange={value => {
                   if (value && value.version) {
                     onStep2DataSelect(item, 'fromVersion', value.version);
@@ -165,13 +181,6 @@ class UpdatesWizardDetailListItem extends Component {
               />
             </Col>
           </Form>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Checkbox className="no-sw-version-checkbox" onChange={this.toggleUpdateFromAny}>
-              {'Do not specify the origin SW version. This may result in potential compatibility conflicts between some origin SW version and the target SW versions, or between this SW version and another SW of the update.'}
-            </Checkbox>
-          </Col>
         </Row>
       </div>
     );
