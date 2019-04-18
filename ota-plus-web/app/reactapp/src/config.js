@@ -177,14 +177,28 @@ export const PACKAGES_DEFAULT_TAB = 'compact';
 
 export const CAMPAIGNS_LIMIT_LATEST = 4;
 export const CAMPAIGNS_LIMIT_PER_PAGE = 10;
-export const CAMPAIGNS_STATUSES = ['prepared', 'launched', 'finished', 'cancelled'];
+export const CAMPAIGNS_STATUS_ALL = 'all';
+export const CAMPAIGNS_STATUS_PREPARED = 'prepared';
+export const CAMPAIGNS_STATUS_LAUNCHED = 'launched';
+export const CAMPAIGNS_STATUS_FINISHED = 'finished';
+export const CAMPAIGNS_STATUS_CANCELLED = 'cancelled';
+export const CAMPAIGNS_STATUS_SCHEDULED ='scheduled';
+
+export const CAMPAIGNS_STATUSES = [
+  CAMPAIGNS_STATUS_ALL,
+  CAMPAIGNS_STATUS_PREPARED,
+  CAMPAIGNS_STATUS_LAUNCHED,
+  CAMPAIGNS_STATUS_FINISHED,
+  CAMPAIGNS_STATUS_CANCELLED
+];
 export const CAMPAIGNS_STATUS_TAB_TITLE = {
-  prepared: 'In Preparation',
-  launched: 'Running',
-  finished: 'Finished',
-  cancelled: 'Canceled',
+  [CAMPAIGNS_STATUS_ALL]: 'All',
+  [CAMPAIGNS_STATUS_PREPARED]: 'In Preparation',
+  [CAMPAIGNS_STATUS_LAUNCHED]: 'Running',
+  [CAMPAIGNS_STATUS_FINISHED]: 'Finished',
+  [CAMPAIGNS_STATUS_CANCELLED]: 'Canceled',
 };
-export const CAMPAIGNS_DEFAULT_TAB = 'prepared';
+export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_PREPARED;
 
 /**
  * devices

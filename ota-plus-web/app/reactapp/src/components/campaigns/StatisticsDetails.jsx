@@ -4,14 +4,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'lodash';
-import { Doughnut } from 'react-chartjs-2';
 import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
-import { Tabs } from 'antd';
-
-const { TabPane } = Tabs;
+import { getCampaignSummaryData } from '../../helpers/campaignHelper';
 
 const AUTO_REFRESH_TIME = 10000;
+const CHART_PERCENTAGE_FACTOR = 10;
 
 @inject('stores')
 @observer
@@ -42,27 +39,27 @@ class StatisticsDetails extends Component {
     }
   };
 
-  pluralizeDevices = amount => {
+  pluralizeDevices = (amount) => {
     return amount === 1 ? `${amount} device ` : `${amount} devices `;
   };
 
   render() {
     const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel, showRetryModal } = this.props;
     const { campaignsStore } = stores;
-    const { campaign, overallCampaignStatistics } = campaignsStore;
+    const { campaign } = campaignsStore;
+    const {
+      affectedCount,
+      failedCount,
+      failedRate,
+      successRate,
+      installingCount,
+      installingRate,
+      notApplicableCount,
+      notApplicableRate,
+      processedCount,
+      successCount
+    } = getCampaignSummaryData(campaign.statistics, CHART_PERCENTAGE_FACTOR);
 
-    /*
-     *  notProcessed is supposed to count batches, but the BE doesn’t send any batch info to display
-     */
-    const notProcessed = 0;
-    const notProcessedRate = 0;
-    
-    const successRate = Math.round(overallCampaignStatistics.successful / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
-    const failureRate = Math.round(overallCampaignStatistics.failed / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
-    const queuedRate = Math.round(overallCampaignStatistics.queued / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
-    const notImpactedRate = Math.round(overallCampaignStatistics.notImpacted / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
-    const cancelledRate = Math.round(overallCampaignStatistics.cancelled / Math.max(overallCampaignStatistics.processed, 1) * 100 * 10) / 10;
-    
     return (
       <div className='statistics'>
         <CampaignSubHeader campaign={campaign} showCancelCampaignModal={showCancelCampaignModal} hideCancel={hideCancel} />
@@ -72,13 +69,13 @@ class StatisticsDetails extends Component {
             <div className='statistics__blocks'>
               <div className='statistics__processed'>
                 <span className='statistics__count' id='campaign-detail-devices-stats-processed'>
-                  {overallCampaignStatistics.processed}
+                  {processedCount}
                 </span>
                 {'Processed'}
               </div>
               <div className='statistics__affected'>
                 <span className='statistics__count' id='campaign-detail-devices-stats-affected'>
-                  {overallCampaignStatistics.affected}
+                  {affectedCount}
                 </span>
                 {'Affected'}
               </div>
@@ -86,54 +83,38 @@ class StatisticsDetails extends Component {
             <div className='statistics__installation'>
               <div className='statistics__bar-wrapper'>
                 <div className='statistics__bar'>
-                  <div className='statistics__bar-item statistics__bar-item--failure' style={{ width: `${failureRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--failure' style={{ width: `${failedRate}%` }} />
                   <div className='statistics__bar-item statistics__bar-item--success' style={{ width: `${successRate}%` }} />
-                  <div className='statistics__bar-item statistics__bar-item--queued' style={{ width: `${queuedRate}%` }} />
-                  <div className='statistics__bar-item statistics__bar-item--not-impacted' style={{ width: `${notImpactedRate}%` }} />
-                  <div className='statistics__bar-item statistics__bar-item--not-proceed' style={{ width: `${notProcessedRate}%` }} />
-                  <div className='statistics__bar-item statistics__bar-item--cancelled' style={{ width: `${cancelledRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--queued' style={{ width: `${installingRate}%` }} />
+                  <div className='statistics__bar-item statistics__bar-item--not-impacted' style={{ width: `${notApplicableRate}%` }} />
                 </div>
                 <div className='statistics__legend'>
                   <div className='statistics__legend-item'>
+                    <span className='statistics__legend-item-color statistics__legend-item-color--failure' />
+                    <span>Failed: </span>
+                    <span id='target_stats_failure'>
+                      {`${this.pluralizeDevices(failedCount)} (${failedRate} %)`}
+                    </span>
+                  </div>
+                  <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--success' />
-                    <span>Succeeded: </span>
+                    <span>Successful: </span>
                     <span id='target_stats_success'>
-                      {this.pluralizeDevices(overallCampaignStatistics.successful)} ({successRate} %)
+                      {`${this.pluralizeDevices(successCount)} (${successRate} %)`}
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--queued' />
-                    <span>Queued: </span>
+                    <span>Installing: </span>
                     <span id='target_stats_queued'>
-                      {this.pluralizeDevices(overallCampaignStatistics.queued)} ({queuedRate} %)
-                    </span>
-                  </div>
-                  <div className='statistics__legend-item'>
-                    <span className='statistics__legend-item-color statistics__legend-item-color--failure' />
-                    <span>Failure: </span>
-                    <span id='target_stats_failure'>
-                      {this.pluralizeDevices(overallCampaignStatistics.failed)} ({failureRate} %)
+                      {`${this.pluralizeDevices(installingCount)} (${installingRate} %)`}
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--not-proceed' />
-                    <span>Not processed: </span>
+                    <span>Not applicable: </span>
                     <span id='target_stats_not_proceed'>
-                      {this.pluralizeDevices(notProcessed)} ({notProcessedRate} %)
-                    </span>
-                  </div>
-                  <div className='statistics__legend-item'>
-                    <span className='statistics__legend-item-color statistics__legend-item-color--not-impacted' />
-                    <span>Not impacted: </span>
-                    <span id='target_stats_not_impacted'>
-                      {this.pluralizeDevices(overallCampaignStatistics.notImpacted)} ({notImpactedRate} %)
-                    </span>
-                  </div>
-                  <div className='statistics__legend-item'>
-                    <span className='statistics__legend-item-color statistics__legend-item-color--cancelled' />
-                    <span>Cancelled: </span>
-                    <span id='target_stats_cancelled'>
-                      {this.pluralizeDevices(overallCampaignStatistics.cancelled)} ({cancelledRate} %)
+                      {`${this.pluralizeDevices(notApplicableCount)} (${notApplicableRate} %)`}
                     </span>
                   </div>
                 </div>
@@ -145,7 +126,8 @@ class StatisticsDetails extends Component {
               </div>
             </div>
           </div>
-          {campaign.statistics.failures.length ? <CampaignInstallationReportView showRetryModal={showRetryModal} /> : <div>No failure data has been collected yet. Check back later</div>}
+          {campaign.statistics.failures.length > 0
+          && <CampaignInstallationReportView showRetryModal={showRetryModal} />}
         </div>
       </div>
     );

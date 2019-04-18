@@ -24,15 +24,14 @@
     }
   },
   "rules": {
+    "comma-dangle": ["error", {
+      "arrays": "only-multiline",
+      "objects": "only-multiline",
+      "imports": "only-multiline",
+      "exports": "only-multiline",
+      "functions": "ignore"
+    }],
     "linebreak-style": 0,
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": ["NavLink"],
-        "specialLink": ["to", "hrefLeft", "hrefRight"],
-        "aspects": ["noHref", "invalidHref", "preferButton"]
-      }
-    ],
     "max-len": [
       2,
       {
@@ -42,6 +41,7 @@
         "ignoreTemplateLiterals": true
       }
     ],
+    "object-curly-newline": [2, { "consistent": true }],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/jsx-curly-brace-presence": [1, { "props": "never", "children": "ignore" }],
