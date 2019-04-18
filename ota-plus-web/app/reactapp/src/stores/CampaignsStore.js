@@ -14,21 +14,25 @@ import {
   API_CAMPAIGNS_CANCEL_REQUEST,
   API_CAMPAIGNS_RETRY_SINGLE,
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
-  API_GROUPS_DEVICES_FETCH,
-  API_GROUPS_DETAIL,
-  API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE,
   CAMPAIGNS_STATUSES,
+  CAMPAIGNS_STATUS_ALL,
+  CAMPAIGNS_STATUS_LAUNCHED,
+  CAMPAIGNS_STATUS_FINISHED,
+  CAMPAIGNS_STATUS_CANCELLED,
+  CAMPAIGNS_STATUS_SCHEDULED,
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
 } from '../config';
 import { CAMPAIGN_RETRY_STATUSES } from '../constants'
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { contains, prepareUpdateObject } from '../utils/Helpers';
+import { prepareUpdateObject } from '../utils/Helpers';
+import { getOverallCampaignStatistics } from '../helpers/campaignHelper';
 
 export default class CampaignsStore {
   @observable campaignsFetchAsyncAll = {};
 
   @observable campaignsFetchAsync = {
+    all: {},
     prepared: {},
     launched: {},
     finished: {},
@@ -36,6 +40,7 @@ export default class CampaignsStore {
   };
 
   @observable count = {
+    all: 0,
     prepared: 0,
     launched: 0,
     finished: 0,
@@ -107,16 +112,19 @@ export default class CampaignsStore {
   _fetch(status = '', offset = 0, latestOnly = false, limit = null) {
     const limitThisRequest = limit || this.limitCampaigns;
     if (latestOnly) {
-      return axios.get(`${ API_CAMPAIGNS_FETCH }?sortBy=createdAt&limit=${ limitThisRequest }`);
+      return axios.get(`${API_CAMPAIGNS_FETCH}?limit=${limitThisRequest}`);
     }
-    return axios.get(`${ API_CAMPAIGNS_FETCH }?sortBy=createdAt&status=${ status }&limit=${ limitThisRequest }&offset=${ offset }`);
+    if (status === CAMPAIGNS_STATUS_ALL) {
+      return axios.get(`${API_CAMPAIGNS_FETCH}?nameContains=${this.campaignsFilter.toLowerCase()}&limit=${limitThisRequest}&offset=${offset}`);
+    }
+    return axios.get(`${API_CAMPAIGNS_FETCH}?status=${status}&nameContains=${this.campaignsFilter.toLowerCase()}&limit=${limitThisRequest}&offset=${offset}`);
   }
 
   _fetchCampaign(id) {
     return axios.get(`${ API_CAMPAIGNS_FETCH_SINGLE }/${ id }`);
   }
 
-  _fetchCampaignStatistics(id) {
+  fetchCampaignStatistics(id) {
     return axios.get(`${ API_CAMPAIGNS_STATISTICS_SINGLE }/${ id }/stats`);
   }
 
@@ -136,27 +144,20 @@ export default class CampaignsStore {
     });
   }
 
-  _fetchDetails(response, status) {
-    const campaignIds = response && response.data && response.data.values;
-
-    if (!_.isEmpty(campaignIds)) {
-      campaignIds.forEach((id) => {
-        axios.all([this._fetchCampaign(id), this._fetchCampaignStatistics(id)]).then(
-          axios.spread((campaign, statistics) => {
-            const isNewItem = !contains(this.campaigns, campaign.data);
-
-            if (isNewItem) {
-              const newItem = {
-                ...campaign.data,
-                summary: statistics.data,
-              };
-              this.campaigns.push(newItem);
-            }
+  fetchAllCampaignsStatistics(campaigns) {
+    const campaignsIds = campaigns.map(campaign => campaign.id);
+    if (!_.isEmpty(campaignsIds)) {
+      campaignsIds.forEach((id) => {
+        axios.all([this.fetchCampaignStatistics(id)]).then(
+          axios.spread((statistics) => {
+            const updatingCampaign = campaigns.find(
+              iteratedCampaign => iteratedCampaign.id === statistics.data.campaign
+            );
+            updatingCampaign.summary = statistics.data;
           }),
         );
       });
     }
-    this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
   }
 
   fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', dataOffset = 0) {
@@ -166,11 +167,15 @@ export default class CampaignsStore {
     resetAsync(this[async][status], true);
 
     return this._fetch(status, dataOffset)
-      .then(response => {
-        this._fetchDetails(response, status);
+      .then((response) => {
+        const campaigns = response && response.data && response.data.values;
+        this.campaigns = campaigns;
+        this.fetchAllCampaignsStatistics(this.campaigns);
+
         this.currentDataOffset = dataOffset;
+        this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsFetchAsync[status] = handleAsyncError(error);
       });
   }
@@ -180,25 +185,13 @@ export default class CampaignsStore {
     this.latestCampaigns = [];
     resetAsync(this.campaignsLatestFetchAsync, true);
     return this._fetch('', 0, latestOnly, limit)
-      .then(response => {
-        if (response.data.total > 0) {
-          response.data.values.forEach(id => {
-              axios.all([this._fetchCampaign(id), this._fetchCampaignStatistics(id)]).then(
-                axios.spread((campaign, statistics) => {
-                  this.latestCampaigns.push({
-                    ...campaign.data,
-                    summary: statistics.data,
-                  });
-                })
-              )
-            },
-          );
-        }
-        this.latestCampaigns = _.sortBy(this.latestCampaigns.slice(), campaign => campaign.createdAt).reverse();
-
+      .then((response) => {
+        const campaigns = response && response.data && response.data.values;
+        this.latestCampaigns = campaigns;
+        this.fetchAllCampaignsStatistics(this.latestCampaigns);
         this.campaignsLatestFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsLatestFetchAsync = handleAsyncError(error);
       });
   }
@@ -368,7 +361,7 @@ export default class CampaignsStore {
     this.campaigns = [];
     this.preparedCampaigns = [];
     this.overallCampaignsCount = null;
-    this.campaignsFilter = null;
+    this.campaignsFilter = '';
     this.campaignsSort = 'asc';
     this.campaign = {};
     this.campaignData = {};
@@ -377,49 +370,34 @@ export default class CampaignsStore {
   }
 
   @computed get inPreparationCampaigns() {
-    let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
-    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'scheduled');
+    return _.filter(
+      this.preparedCampaigns,
+      campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === CAMPAIGNS_STATUS_SCHEDULED
+    );
   }
 
   @computed get cancelledCampaigns() {
-    let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
-    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'cancelled');
+    return _.filter(
+      this.preparedCampaigns,
+      campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === CAMPAIGNS_STATUS_CANCELLED
+    );
   }
 
   @computed get runningCampaigns() {
-    let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt);
-    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'launched');
+    return _.filter(
+      this.preparedCampaigns,
+      campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === CAMPAIGNS_STATUS_LAUNCHED
+    );
   }
 
   @computed get finishedCampaigns() {
-    let campaigns = this.preparedCampaigns;
-    campaigns = _.sortBy(campaigns, campaign => campaign.createdAt).reverse();
-    return _.filter(campaigns, campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === 'finished');
+    return _.filter(
+      this.preparedCampaigns,
+      campaign => !_.isUndefined(campaign.summary) && campaign.summary.status === CAMPAIGNS_STATUS_FINISHED
+    );
   }
 
   @computed get overallCampaignStatistics() {
-    const stats = {
-      processed: 0,
-      affected: 0,
-      finished: 0,
-      queued: 0,
-      successful: 0,
-      notImpacted: 0,
-      failed: 0,
-      cancelled: 0,
-    };
-    const { affected, processed, cancelled, failed, successful, finished } = this.campaign.statistics;
-    stats.affected = affected;
-    stats.processed = processed;
-    stats.notImpacted = processed - affected;
-    stats.finished = finished;
-    stats.cancelled = cancelled;
-    stats.queued = affected - (finished + cancelled);
-    stats.failed = failed;
-    stats.successful = successful;
-    return stats;
+    return getOverallCampaignStatistics(this.campaign.statistics);
   }
 }

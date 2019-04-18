@@ -11,16 +11,6 @@ import { assets } from '../../config';
 
 @observer
 class ListItem extends Component {
-  static propTypes = {
-    campaign: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired,
-    isExpanded: PropTypes.bool.isRequired,
-    toggleCampaign: PropTypes.func.isRequired,
-    isCancelable: PropTypes.bool,
-    showCancelCampaignModal: PropTypes.func,
-    showDependenciesModal: PropTypes.func,
-  };
-
   toggle = (campaign, mouseEvent) => {
     const { toggleCampaign } = this.props;
     if (mouseEvent) mouseEvent.preventDefault();
@@ -28,7 +18,8 @@ class ListItem extends Component {
   };
 
   render() {
-    const { campaign, isExpanded, showDependenciesModal, showCancelCampaignModal, showRetryModal, isCancelable, type } = this.props;
+    const { campaign, isExpanded, showDependenciesModal,
+      showCancelCampaignModal, showRetryModal, isCancelable } = this.props;
 
     return (
       <VelocityTransitionGroup
@@ -41,9 +32,9 @@ class ListItem extends Component {
       >
         {isExpanded ? (
           <div>
-            <div className='campaigns__item' id={`item-${campaign.id}`} onClick={e => this.toggle(campaign, e)}>
-              <div className='wrapper-center'>
-                <img src={assets.DEFAULT_COLLAPSE_CAMPAIGN} alt='Icon' />
+            <div className="campaigns__item" id={`item-${campaign.id}`} onClick={e => this.toggle(campaign, e)}>
+              <div className="wrapper-center">
+                <img src={assets.DEFAULT_COLLAPSE_CAMPAIGN} alt="Icon" />
               </div>
             </div>
             <Statistics
@@ -55,11 +46,21 @@ class ListItem extends Component {
             />
           </div>
         ) : (
-          <CampaignSummary campaign={campaign} type={type} toggle={this.toggle} />
+          <CampaignSummary campaign={campaign} toggle={this.toggle} />
         )}
       </VelocityTransitionGroup>
     );
   }
 }
+
+ListItem.propTypes = {
+  campaign: PropTypes.shape({}).isRequired,
+  isCancelable: PropTypes.bool.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
+  toggleCampaign: PropTypes.func.isRequired,
+  showCancelCampaignModal: PropTypes.func.isRequired,
+  showDependenciesModal: PropTypes.func.isRequired,
+  showRetryModal: PropTypes.func.isRequired,
+};
 
 export default ListItem;

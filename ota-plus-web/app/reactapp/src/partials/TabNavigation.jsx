@@ -3,29 +3,47 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button, Tabs, Tag } from 'antd';
-import { action, observable, observe } from 'mobx';
+import { Button, Dropdown, Icon, Menu, Tag } from 'antd';
+import { Form } from 'formsy-antd';
+import { action, observable } from 'mobx';
 
 import { CAMPAIGNS_STATUSES, CAMPAIGNS_STATUS_TAB_TITLE, CAMPAIGNS_DEFAULT_TAB } from '../config';
+import { SearchBar } from './index';
 
 @inject('stores')
 @observer
 class TabNavigation extends Component {
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
+  @observable campaignsFilter = '';
 
   static propTypes = {
-    stores: PropTypes.object,
     location: PropTypes.string.isRequired,
     showCreateCampaignModal: PropTypes.func,
+    stores: PropTypes.shape({}),
+  };
+
+  static defaultProps = {
+    showCreateCampaignModal: () => null,
+    stores: {}
   };
 
   constructor(props) {
     super(props);
-    const { stores } = props;
-    const { campaignsStore } = stores;
-    this.cancelChange = observe(campaignsStore, change => {
-      this.apply(change);
-    });
+    this.state = {
+      filterValue: ''
+    };
+    this.filterChangeCallback = this.filterChangeCallback.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.menu = (
+      <Menu onClick={this.handleMenuClick}>
+        {CAMPAIGNS_STATUSES.map(status => (
+          <Menu.Item key={status}>
+            <Icon type="arrow-right" />
+            {CAMPAIGNS_STATUS_TAB_TITLE[status]}
+          </Menu.Item>
+        ))}
+      </Menu>
+    );
   }
 
   componentDidMount() {
@@ -34,6 +52,7 @@ class TabNavigation extends Component {
     if (this.isCampaignsPage(location)) {
       this.setActive(campaignsStore.activeTab);
       this.fetchStatusCount();
+      this.setFilter(campaignsStore.campaignsFilter);
     }
     if (this.isPackagesPage(location)) {
       this.setActive(softwareStore.activeTab);
@@ -44,21 +63,6 @@ class TabNavigation extends Component {
     this.storeActive(this.activeTab);
   }
 
-  apply = change => {
-    const { name, newValue } = change;
-    if (name === 'activeTab') {
-      this.switch(newValue);
-    }
-  };
-
-  switch = tab => {
-    const { location } = this.props;
-    if (this.isCampaignsPage(location)) {
-      this.fetchStatusCount();
-    }
-    this.setActive(tab);
-  };
-
   isPackagesPage = location => location === 'page-software-repository';
 
   isCampaignsPage = location => location === 'page-campaigns';
@@ -66,21 +70,21 @@ class TabNavigation extends Component {
   isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   @action
-  setActive = tab => {
+  fetchStatusCount = () => {
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
+    campaignsStore.fetchStatusCounts();
+  };
+
+
+  @action
+  setActive = (tab) => {
     this.activeTab = tab;
     this.storeActive(tab);
   };
 
   @action
-  fetchStatusCount = () => {
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-
-    campaignsStore.fetchStatusCounts();
-  };
-
-  @action
-  storeActive = tab => {
+  storeActive = (tab) => {
     const { stores, location } = this.props;
     const { campaignsStore, softwareStore } = stores;
     if (this.isCampaignsPage(location)) {
@@ -91,21 +95,47 @@ class TabNavigation extends Component {
     }
   };
 
-  render() {
-    const { stores, location, showCreateCampaignModal } = this.props;
+  @action
+  setFilter = (filter) => {
+    this.campaignsFilter = filter;
+    this.storeFilter(filter);
+  };
+
+  @action
+  storeFilter = (filter) => {
+    const { stores } = this.props;
     const { campaignsStore } = stores;
-    const { count } = campaignsStore;
+    campaignsStore.campaignsFilter = filter;
+  };
+
+  handleMenuClick(event) {
+    this.setActive(event.key);
+    this.fetchStatusCount();
+  }
+
+  filterChangeCallback(value) {
+    const { stores } = this.props;
+    const { campaignsStore } = stores;
+    this.setState({ filterValue: value });
+    this.setFilter(value);
+    campaignsStore.fetchCampaigns(this.activeTab, 'campaignsFetchAsync', 0);
+    this.fetchStatusCount();
+  }
+
+  render() {
+    const { location, showCreateCampaignModal } = this.props;
+    const { filterValue } = this.state;
     const packagesTabsActive = location === 'page-software-repository';
     const campaignsTabsActive = location === 'page-campaigns';
 
     return (
-      <div className='tab-navigation-wrapper'>
+      <div className="tab-navigation-wrapper">
         {packagesTabsActive && (
-          <div className='tab-navigation'>
-            <ul className='tab-navigation__links'>
+          <div className="tab-navigation">
+            <ul className="tab-navigation__links">
               <li
                 onClick={() => {
-                  this.switch('compact');
+                  this.setActive('compact');
                 }}
                 className={`tab-navigation__link ${this.isActive('compact')}`}
               >
@@ -113,13 +143,13 @@ class TabNavigation extends Component {
               </li>
               <li
                 onClick={() => {
-                  this.switch('advanced');
+                  this.setActive('advanced');
                 }}
                 className={`tab-navigation__link ${this.isActive('advanced')}`}
               >
                 <span>
                   {'Advanced'}
-                  <Tag color='#48dad0' className='alpha-tag'>
+                  <Tag color="#48dad0" className="alpha-tag">
                     ALPHA
                   </Tag>
                 </span>
@@ -128,27 +158,28 @@ class TabNavigation extends Component {
           </div>
         )}
         {campaignsTabsActive && (
-          <div className='tab-navigation clearfix'>
-            <ul className='tab-navigation__links'>
-              {CAMPAIGNS_STATUSES.map(status => (
-                <li
-                  key={status}
-                  onClick={() => {
-                    this.switch(status);
-                  }}
-                  className={`tab-navigation__link ${this.isActive(status)}`}
-                >
-                  <span>{`${count[status]} ${CAMPAIGNS_STATUS_TAB_TITLE[status]}`}</span>
-                </li>
-              ))}
-            </ul>
-            <div className='tab-navigation__buttons'>
+          <div className="tab-navigation clearfix">
+            <div className="tab-navigation__buttons">
+              <div className="tab-navigation__drop-down-container">
+                <Dropdown overlay={this.menu}>
+                  <Button
+                    htmlType="button"
+                    className="ant-btn ant-btn-hero drop-down"
+                  >
+                    {CAMPAIGNS_STATUS_TAB_TITLE[this.activeTab]}
+                    <Icon type="down" />
+                  </Button>
+                </Dropdown>
+              </div>
+              <Form className="tab-navigation__form-search-campaigns-filter">
+                <SearchBar value={filterValue} changeAction={this.filterChangeCallback} id="search-campaigns-filter" />
+              </Form>
               <Button
-                htmlType='button'
-                className='ant-btn ant-btn-hero'
-                id='button-create-campaign'
-                onClick={e => {
-                  e.preventDefault();
+                htmlType="button"
+                className="ant-btn ant-btn-hero"
+                id="button-create-campaign"
+                onClick={(event) => {
+                  event.preventDefault();
                   showCreateCampaignModal();
                 }}
               >
