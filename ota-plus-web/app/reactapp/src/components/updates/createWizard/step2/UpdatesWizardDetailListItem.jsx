@@ -85,7 +85,7 @@ class UpdatesWizardDetailListItem extends Component {
         <Row className="no-sw-version">
           <Col span={24}>
             <Checkbox className="no-sw-version__checkbox" onChange={this.toggleUpdateFromAny}>
-              {'Update the software regardless of what is already installed.'}
+              {'Update to my selected version regardless of what is currently installed.'}
             </Checkbox>
             {this.updateFromAny && (
               <span className="no-sw-version__warning">
