@@ -6,37 +6,39 @@ import { observer, inject } from 'mobx-react';
 
 import ListItem from './ListItem';
 import { contains } from '../../utils/Helpers';
+import { CAMPAIGNS_STATUS_LAUNCHED } from '../../config';
 
 @inject('stores')
 @observer
 class List extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}).isRequired,
     status: PropTypes.string.isRequired,
-    expandedCampaigns: PropTypes.array.isRequired,
-    toggleCampaign: PropTypes.func,
-    showCancelCampaignModal: PropTypes.func,
-    showDependenciesModal: PropTypes.func,
+    expandedCampaigns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    showCancelCampaignModal: PropTypes.func.isRequired,
+    showDependenciesModal: PropTypes.func.isRequired,
+    showRetryModal: PropTypes.func.isRequired,
+    toggleCampaign: PropTypes.func.isRequired,
   };
 
   render() {
     const { stores } = this.props;
     const { campaignsStore } = stores;
     const { campaigns } = campaignsStore;
-    const { status, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal, toggleCampaign } = this.props;
+    const { status, expandedCampaigns, showCancelCampaignModal,
+      showDependenciesModal, showRetryModal, toggleCampaign } = this.props;
 
     const campaignsAvailable = !!campaigns.length;
 
     return campaignsAvailable ? (
-      <div className='campaigns__list'>
-        {campaigns.map(campaign => {
+      <div className="campaigns__list">
+        {campaigns.map((campaign) => {
           const isExpanded = contains(expandedCampaigns, campaign);
-          const isCancelable = status === 'launched';
+          const isCancelable = status === CAMPAIGNS_STATUS_LAUNCHED;
           return (
             <ListItem
               key={campaign.id}
               campaign={campaign}
-              type={status}
               isExpanded={isExpanded}
               showCancelCampaignModal={showCancelCampaignModal}
               showDependenciesModal={showDependenciesModal}
@@ -48,7 +50,7 @@ class List extends Component {
         })}
       </div>
     ) : (
-      <div className='campaigns__list--empty'>{`Currently there are no ${status} campaigns.`}</div>
+      <div className="campaigns__list--empty">{`Currently there are no ${status} campaigns.`}</div>
     );
   }
 }

@@ -100,7 +100,6 @@ class ContentPanel extends Component {
     const { stores, showCancelCampaignModal, showDependenciesModal, showRetryModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
     const { campaignsStore } = stores;
     const { campaignsFetchAsync } = campaignsStore;
-
     return (
       <div className='campaigns' ref='list'>
         <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />

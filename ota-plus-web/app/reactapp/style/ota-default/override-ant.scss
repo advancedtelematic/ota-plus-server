@@ -29,6 +29,11 @@ h3 {
     }
   }
 
+  &-hero.drop-down {
+    border: 2px solid $color-lightgrey;
+    color: $color-white;
+  }
+
   &-plain,
   &-plain:focus,
   &-plain:hover {
@@ -57,7 +62,7 @@ h3 {
     outline: none;
     &:focus,
     &:hover {
-      background: transparent;
+      background: $color-mint2;
       outline: none;
     }
     .ant-btn {
@@ -178,5 +183,5 @@ h3 {
 }
 
 .ant-tooltip {
-  font-family: 'Fira Sans', sans-serif; 
+  font-family: 'Fira Sans', sans-serif;
 }

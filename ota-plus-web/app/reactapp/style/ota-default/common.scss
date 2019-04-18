@@ -605,7 +605,7 @@ input {
       position: relative;
       padding-left: 18px;
     }
-  } 
+  }
 }
 
 .menu-login-clickable {
@@ -701,6 +701,17 @@ input {
   &__buttons {
     float: right;
     padding: 10px 0 4px;
+  }
+
+  &__drop-down-container {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  &__form-search-campaigns-filter {
+    float: left;
+    margin-right: 10px;
   }
 
   &__link {
