@@ -88,6 +88,7 @@ export default class DevicesStore {
     resetAsync(this.mtuCancelAsync);
     resetAsync(this.eventsFetchAsync);
     resetAsync(this.approvalPendingCampaignsFetchAsync);
+    this.devicesLimit = DEVICES_LIMIT_PER_PAGE;
   }
 
   @computed get lastDevices() {
@@ -189,16 +190,17 @@ export default class DevicesStore {
 
   loadMoreDevices(filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE) {
     resetAsync(this.devicesLoadMoreAsync, true);
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset + limit}`;
+    this.devicesCurrentPage++;
+    this.devicesOffset += limit;
+    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
     if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
       .get(apiAddress)
       .then(response => {
+        // TODO: lodash uniq doesn't seem to work properly under certain conditions
         this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
-        this.devicesOffset = response.data.offset;
         this._prepareDevices();
-        this.devicesCurrentPage++;
         this.devicesLoadMoreAsync = handleAsyncSuccess(response);
       })
       .catch(error => {
