@@ -5,17 +5,17 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Form, Input } from 'formsy-antd';
-import { Row, Col } from 'antd';
+import { Row, Col, Button, Input as TextInput } from 'antd';
 import serialize from 'form-serialize';
 import _ from 'lodash';
 
-import { Button } from 'antd';
-import { OTAModal, Loader, FormSelect, FormInput } from '../../partials';
+import { OTAModal, Loader, FormSelect } from '../../partials';
 
 @inject('stores')
 @observer
 class CreateModal extends Component {
-  @observable submitButtonDisabled = true;
+  @observable softwareName = '';
+  @observable softwareVersion = '';
   @observable fileName = null;
   @observable selectedHardwareIds = [];
 
@@ -24,13 +24,6 @@ class CreateModal extends Component {
     const { hardwareStore } = stores;
     hardwareStore.fetchHardwareIds();
   }
-
-  enableButton = () => {
-    this.submitButtonDisabled = false;
-  };
-  disableButton = () => {
-    this.submitButtonDisabled = true;
-  };
 
   /* ToDo: investigate and improve submit function */
   submitForm = () => {
@@ -76,17 +69,40 @@ class CreateModal extends Component {
     this.selectedHardwareIds = selectedOptions;
   };
 
+  onInputChange = value => event => {
+    this[value] = event.target.value;
+  };
+
   render() {
     const { stores, shown, hide, fileDropped } = this.props;
     const { hardwareStore } = stores;
+    const isSubmitEnabled = this.softwareName && this.softwareVersion && this.selectedHardwareIds.length && this.fileName;
     const directorForm = (
-      <Form onValid={this.enableButton} onInvalid={this.disableButton} onValidSubmit={this.submitForm} id='software-create-form'>
+      <Form onValidSubmit={this.submitForm} id='software-create-form'>
         <Row className='row'>
           <Col span={12}>
-            <FormInput label='Software Name' placeholder='Name' name='packageName' onInvalid={this.disableButton} id='add-new-software-name' />
+            <label className='c-form__label'>
+              {'Software Name'}
+            </label>
+            <TextInput 
+              id='add-new-software-name'
+              className='c-form__input c-form__input--antd' 
+              placeholder='Name' 
+              name='packageName' 
+              onChange={this.onInputChange('softwareName')} 
+            />
           </Col>
           <Col span={12}>
-            <FormInput label='Version' name='version' id='add-new-software-version' onInvalid={this.disableButton} placeholder='Select version' />
+            <label className='c-form__label'>
+              {'Version'}
+            </label>
+            <TextInput 
+              id='add-new-software-version'
+              className='c-form__input c-form__input--antd'
+              placeholder='Select version' 
+              name='version' 
+              onChange={this.onInputChange('softwareVersion')} 
+            />
           </Col>
         </Row>
         <Row className='row'>
@@ -127,7 +143,7 @@ class CreateModal extends Component {
         <Row className='row'>
           <Col span={24}>
             <div className='body-actions'>
-              <button className='btn-primary' disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length} id='add-new-package-confirm'>
+              <button className='btn-primary' disabled={!isSubmitEnabled} id='add-new-package-confirm'>
                 Add
               </button>
             </div>
