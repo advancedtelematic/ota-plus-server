@@ -3,7 +3,6 @@
 import { observable } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
-import Cookies from 'js-cookie';
 import { API_FEATURES_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { getStarted } from './data/newFeatures';
