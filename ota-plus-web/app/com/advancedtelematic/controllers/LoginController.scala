@@ -9,6 +9,7 @@ import com.advancedtelematic.api.UnexpectedResponse
 import com.advancedtelematic.auth.{AccessToken, IdentityClaims, IdToken, LoginAction, LogoutAction,
   OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
+import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
@@ -20,7 +21,7 @@ import scala.concurrent.Future
 
 final case class LoginData(username: String, password: String)
 
-final case class UserLogin(id: String, identity: Option[IdentityClaims], timestamp: Instant)
+final case class UserLogin(id: String, identity: Option[IdentityClaims], namespace: Namespace, timestamp: Instant)
 
 object UserLogin {
 
@@ -88,13 +89,13 @@ class OAuthOidcController @Inject()(
     Redirect(routes.OAuthOidcController.authorizationError()).flashing("authzError" -> error)
   }
 
-  def publishLoginEvent(userId: UserId, accessToken: AccessToken): Future[Done] = {
+  def publishLoginEvent(userId: UserId, namespace: Namespace, accessToken: AccessToken): Future[Done] = {
     oidcGateway.getUserInfo(accessToken)
-      .map(x => UserLogin(x.userId.id, Some(x), Instant.now()))
+      .map(claim => UserLogin(claim.userId.id, Some(claim), Namespace(claim.userId.id), Instant.now()))
       .recover {
         case t =>
-          log.warn("Unble get user info", t)
-          UserLogin(userId.id, None, Instant.now())
+          log.warn("Unable to get user info", t)
+          UserLogin(userId.id, None, namespace, Instant.now())
       }
       .flatMap(x => messageBus.publish(x).map(_ => Done))
   }
@@ -113,7 +114,7 @@ class OAuthOidcController @Inject()(
         tokens                                   <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
         ns = namespaceProvider.apply(newTokens)
-        _ <- publishLoginEvent(idToken.userId, accessToken)
+        _ <- publishLoginEvent(idToken.userId, ns, accessToken)
       } yield
         Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
           "namespace"    -> ns.get,
