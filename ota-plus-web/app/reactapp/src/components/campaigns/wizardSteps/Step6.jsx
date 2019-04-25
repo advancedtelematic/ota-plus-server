@@ -28,13 +28,14 @@ class WizardStep6 extends Component {
     const { updatesStore } = stores;
     const { currentMtuData: mtu } = updatesStore;
     const versions = [];
+    const noInformation = 'No information / Any';
     _.each(mtu.data, (data, hardwareId) => {
-      const { checksum: fromVersion } = data.from;
+      const { checksum: fromVersion } = data.from || {};
       const { checksum: toVersion, target } = data.to;
       versions.push({
         hardwareId,
         name: target,
-        from: fromVersion.hash,
+        ...(fromVersion ? { from: fromVersion.hash } : { from: noInformation }),
         to: toVersion.hash,
         filepath: `${target}-${toVersion.hash}`,
       });
