@@ -1,10 +1,18 @@
 /** @format */
 
-import { observable, computed } from 'mobx';
+import { observable, toJS } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
 import _ from 'lodash';
-import { API_USER_DETAILS, API_USER_UPDATE, API_USER_CHANGE_PASSWORD, API_USER_ACTIVE_DEVICE_COUNT, API_USER_DEVICES_SEEN, API_USER_CONTRACTS } from '../config';
+import {
+  API_USER_DETAILS,
+  API_USER_UPDATE,
+  API_USER_CHANGE_PASSWORD,
+  API_USER_ACTIVE_DEVICE_COUNT,
+  API_USER_DEVICES_SEEN,
+  API_USER_CONTRACTS,
+  API_USER_NAMESPACES
+} from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts/';
 
@@ -16,6 +24,7 @@ export default class UserStore {
   @observable userChangePasswordAsync = {};
   @observable userActiveDeviceCountFetch = {};
   @observable user = {};
+  @observable userNamespace = '';
   @observable contracts = {};
   @observable ifLogout = false;
 
@@ -33,6 +42,12 @@ export default class UserStore {
     resetAsync(this.contractsAcceptAsync);
   }
 
+  getNamespaces = async () => {
+    const response = await axios.get(API_USER_NAMESPACES);
+    const { data } = await response;
+    this.userNamespace = data.length ? data[0] : '';
+  };
+
   fetchUser() {
     resetAsync(this.userFetchAsync, true);
     return axios
@@ -41,6 +56,7 @@ export default class UserStore {
         function(response) {
           this.user = response.data;
           this.userFetchAsync = handleAsyncSuccess(response);
+          this.getNamespaces();
         }.bind(this),
       )
       .catch(

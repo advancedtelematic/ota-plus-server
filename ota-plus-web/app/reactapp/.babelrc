@@ -27,6 +27,7 @@
         "libraryName": "formsy-antd"
       },
       "ant-formsy"
-    ]
+    ],
+    ["@babel/transform-runtime"]
   ]
 }
