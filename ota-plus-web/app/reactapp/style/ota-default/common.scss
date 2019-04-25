@@ -240,6 +240,26 @@ strong {
   }
 }
 
+.navigation-name-organization {
+  flex-direction: column;
+  float: left;
+  font-size: .8125rem;
+  width: 200px;
+  .fullname {
+    color: #9B9DA2;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .organization {
+    color: #FFFFFF;
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden
+  }
+}
+
 .dots {
   display: flex;
   flex-direction: column;
@@ -609,8 +629,8 @@ input {
 }
 
 .menu-login-clickable {
-  padding: 10px 0 10px 2px;
-  width: 55px;
+  padding: 5px 0 5px 2px;
+  width: 280px;
   position: relative;
 
   .ant-avatar-image {
@@ -633,7 +653,7 @@ input {
     height: 50px !important;
     margin: 0 auto;
     display: block !important;
-    background: #ccc;
+    background-color: #ccc;
   }
 
   .user-data {
@@ -658,6 +678,7 @@ input {
     li {
       height: 30px;
       display: block;
+      padding-top: 5px;
 
       a {
         padding: 0;
@@ -678,6 +699,10 @@ input {
 
       &.clear-localstorage {
         padding-top: 2px;
+      }
+
+      &.link-support {
+        text-align: center;
       }
     }
   }

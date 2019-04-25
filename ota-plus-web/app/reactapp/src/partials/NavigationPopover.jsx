@@ -2,12 +2,11 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip'
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Avatar, Popover } from 'antd';
 import NavigationProfile from './NavigationProfile';
-
-import { assets } from '../config';
 
 @inject('stores')
 @observer
@@ -24,37 +23,52 @@ class NavigationPopover extends Component {
     this.visibleDropdown = false;
   };
 
-  changeVisibility = visibility => {
+  changeVisibility = (visibility) => {
     this.visibleDropdown = visibility;
   };
 
   render() {
     const { stores, uiCredentialsDownload, uiUserProfileEdit } = this.props;
     const { userStore } = stores;
-    const { user } = userStore;
+    const { user, userNamespace } = userStore;
     const settingsOnly = !uiUserProfileEdit && uiCredentialsDownload;
-    const pictureSrc = settingsOnly ? assets.DEFAULT_SETTINGS_ICON : user.picture || assets.DEFAULT_PROFILE_PICTURE;
 
-    const profileMenu = <NavigationProfile hideDropdown={this.hideDropdown} uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload} settingsOnly={settingsOnly} />;
+    const { fullName } = user;
+    const initials = fullName ? (fullName.split(' ').map(name => name[0]).join(' ').toUpperCase()) : '';
+    const profileMenu = (
+      <NavigationProfile
+        hideDropdown={this.hideDropdown}
+        uiUserProfileEdit={uiUserProfileEdit}
+        uiCredentialsDownload={uiCredentialsDownload}
+        settingsOnly={settingsOnly}
+      />
+    );
 
     return (
       <Popover
         content={profileMenu}
-        placement='bottomRight'
-        id='profile-dropdown'
-        trigger='click'
-        overlayClassName='dropdown-menu-popover'
+        placement="bottomRight"
+        id="profile-dropdown"
+        trigger="click"
+        overlayClassName="dropdown-menu-popover"
         visible={this.visibleDropdown}
         onVisibleChange={this.changeVisibility}
       >
-        <div className='menu-login-clickable'>
-          <Avatar src={pictureSrc} className='icon-profile' id='icon-profile-min' />
-          <span className='dots nav-dots' id='nav-menu'>
+        <div className="menu-login-clickable">
+          <div className="navigation-name-organization">
+            <div className="fullname">{fullName}</div>
+            <div className="organization" data-tip={userNamespace}>{userNamespace}</div>
+          </div>
+          <Avatar src={user.picture} className="ant-avatar-menu" id="icon-profile-min">
+            {initials}
+          </Avatar>
+          <span className="dots nav-dots" id="nav-menu">
             <span />
             <span />
             <span />
           </span>
         </div>
+        <ReactTooltip />
       </Popover>
     );
   }

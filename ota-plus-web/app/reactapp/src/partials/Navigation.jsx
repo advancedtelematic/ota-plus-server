@@ -73,21 +73,6 @@ class Navigation extends Component {
           </div>
           <div>
             <ul className='right-nav'>
-              {window.atsGarageTheme && (
-                <>
-                  <li className='text-link'>
-                    <a href='http://docs.ota.here.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
-                      {'DOCS'}
-                    </a>
-                  </li>
-                  <li className='separator'>{'|'}</li>
-                  <li className='text-link'>
-                    <a href='mailto:otaconnect.support@here.com' id='support-link'>
-                      {'SUPPORT'}
-                    </a>
-                  </li>
-                </>
-              )}
               {uiUserProfileMenu && (
                 <li id='menu-login'>
                   <NavigationPopover uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload} />

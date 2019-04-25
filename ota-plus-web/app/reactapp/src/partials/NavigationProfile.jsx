@@ -56,6 +56,21 @@ class NavigationProfile extends Component {
           </div>
         </div>
         <Divider type='horizontal' />
+        {window.atsGarageTheme && (
+          <ul className='links'>
+            <li className="link-support">
+              <a href='http://docs.ota.here.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
+                {'DOCS'}
+              </a>
+            </li>
+            <li className="link-support">
+              <a href='mailto:otaconnect.support@here.com' id='support-link'>
+                {'SUPPORT'}
+              </a>
+            </li>
+          </ul>
+        )}
+        <Divider type='horizontal' />
         {settingsOnly && (
           <ul className='links'>
             <li>
