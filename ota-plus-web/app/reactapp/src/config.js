@@ -26,6 +26,7 @@ export const API_USER_UPDATE = '/user/profile';
 export const API_USER_CHANGE_PASSWORD = '/user/change_password';
 export const API_USER_ACTIVE_DEVICE_COUNT = '/api/v1/active_device_count';
 export const API_USER_DEVICES_SEEN = '/api/v1/auditor/devices_seen_in';
+export const API_USER_NAMESPACES = '/user/namespaces';
 
 /*
  *  Features
