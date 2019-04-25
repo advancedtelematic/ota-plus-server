@@ -245,7 +245,7 @@ class Sequencer extends Component {
         {_.map(updatesArray, (val, rowIndex) => {
           const rowIsEmpty = _.find(updatesMatrix[rowIndex], obj => !_.isEmpty(obj));
           return (
-            <div className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
+            <div key={rowIndex} className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
               <span className='c-sequencer__phase'>Phase {rowIndex + 2}</span>
               <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
                 {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0
