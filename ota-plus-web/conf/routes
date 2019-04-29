@@ -43,3 +43,5 @@ POST    /user/change_password                    com.advancedtelematic.controlle
 GET     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 
+# Namespaces AKA organizations
+GET     /organizations/:namespace/index   com.advancedtelematic.controllers.NamespaceController.switchNamespace(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
