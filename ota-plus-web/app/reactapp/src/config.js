@@ -183,7 +183,7 @@ export const CAMPAIGNS_STATUS_PREPARED = 'prepared';
 export const CAMPAIGNS_STATUS_LAUNCHED = 'launched';
 export const CAMPAIGNS_STATUS_FINISHED = 'finished';
 export const CAMPAIGNS_STATUS_CANCELLED = 'cancelled';
-export const CAMPAIGNS_STATUS_SCHEDULED ='scheduled';
+export const CAMPAIGNS_STATUS_SCHEDULED = 'scheduled';
 
 export const CAMPAIGNS_STATUSES = [
   CAMPAIGNS_STATUS_ALL,
@@ -199,7 +199,7 @@ export const CAMPAIGNS_STATUS_TAB_TITLE = {
   [CAMPAIGNS_STATUS_FINISHED]: 'Finished',
   [CAMPAIGNS_STATUS_CANCELLED]: 'Canceled',
 };
-export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_PREPARED;
+export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_ALL;
 
 /**
  * devices

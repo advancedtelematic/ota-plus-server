@@ -40,16 +40,12 @@ class ContentPanel extends Component {
     onBecomeObserved(this, 'activeTab', this.resumeScope);
   }
 
-  componentDidMount() {
-    this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
-  }
-
   componentWillUnmount() {
     this.cancelObserveTabChange();
   }
 
   @action
-  setActive = tab => {
+  setActive = (tab) => {
     this.activeTab = tab;
   };
 
@@ -80,7 +76,7 @@ class ContentPanel extends Component {
     }
   };
 
-  applyTab = change => {
+  applyTab = (change) => {
     const { name, newValue } = change;
 
     if (name === 'activeTab') {
