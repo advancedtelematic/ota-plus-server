@@ -56,6 +56,7 @@ class Main extends Component {
       return Promise.reject(error);
     });
     const { devicesStore, softwareStore, hardwareStore, campaignsStore, groupsStore, userStore } = props.stores;
+
     this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
       devicesStore,
       softwareStore,

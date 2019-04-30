@@ -204,25 +204,31 @@ class Wizard extends Component {
 
     campaignsStore.createCampaign(createData);
   };
+
   handleCampaignCreated = () => {
     const { stores, wizardIdentifier, hideWizard } = this.props;
     const { campaignsStore } = stores;
     campaignsStore.launchCampaign(campaignsStore.campaignData.campaignId);
     hideWizard(wizardIdentifier);
-    campaignsStore.activeTab = 'launched';
+    campaignsStore.fetchCampaigns(campaignsStore.activeTab, 'campaignsFetchAsync', 0);
+    campaignsStore.fetchStatusCounts();
   };
-  changeFilter = filterValue => {
+
+  changeFilter = (filterValue)=> {
     this.filterValue = filterValue;
   };
+
   showUpdateDetails = (update, e) => {
     if (e) {
       e.preventDefault();
     }
     this.currentDetails = update;
   };
+
   hideUpdateDetails = () => {
     this.currentDetails = null;
   };
+
   metadataAsArray = () => {
     const { metadata } = this.wizardData;
     const currentMetadata = [];

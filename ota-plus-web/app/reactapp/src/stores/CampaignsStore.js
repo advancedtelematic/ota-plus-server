@@ -160,7 +160,7 @@ export default class CampaignsStore {
     }
   }
 
-  fetchCampaigns(status = 'prepared', async = 'campaignsFetchAsync', dataOffset = 0) {
+  fetchCampaigns(status = 'all', async = 'campaignsFetchAsync', dataOffset = 0) {
     this.campaigns = [];
     // first reset all possible active asyncs
     resetAll(this[async]);
