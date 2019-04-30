@@ -1,20 +1,21 @@
 /** @format */
 
-const WebsocketHandler = function(wsUrl, stores) {
+const WebsocketHandler = function (wsUrl, stores) {
+  console.log(`WebSocket: wsUrl: ${wsUrl}`);
   const base = this;
   let stop = false;
-  this.init = function() {
+  this.init = function () {
     this.websocket = new WebSocket(wsUrl);
 
     this.websocket.onopen = function() {
-      console.log('WEBSOCKET: OPEN');
+      console.log('WebSocket: OPEN');
     };
 
     this.websocket.onmessage = function(msg) {
       const eventObj = JSON.parse(msg.data);
       const type = eventObj.type;
       const data = eventObj.event;
-      console.log(data);
+      console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
       switch (type) {
         case 'DeviceSeen':
           stores.devicesStore._updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
@@ -68,14 +69,14 @@ const WebsocketHandler = function(wsUrl, stores) {
     };
 
     this.websocket.onclose = function(msg) {
-      console.log('WEBSOCKET: CLOSE');
+      console.log(`WebSocket: CLOSE - msg.code: ${msg.code}, stop: ${stop}`);
       if (msg.code === 1006 && !stop) {
         base.init();
       }
     };
 
     this.websocket.onerror = function(msg) {
-      console.log('WEBSOCKET: ERROR');
+      console.log('WebSocket: ERROR - msg: ', msg);
       console.log(msg);
       stop = true;
       base.destroy();
