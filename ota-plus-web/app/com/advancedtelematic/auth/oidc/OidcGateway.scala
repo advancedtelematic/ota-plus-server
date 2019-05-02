@@ -3,27 +3,26 @@ package com.advancedtelematic.auth.oidc
 import java.security.PublicKey
 import java.util.function.Consumer
 
-import akka.NotUsed
 import akka.http.scaladsl.model.Uri
 import com.advancedtelematic.api.{MalformedResponse, UnexpectedResponse}
-import com.advancedtelematic.auth.{AccessToken, IdentityClaims, IdToken, OAuthConfig, Tokens}
 import com.advancedtelematic.auth.oidc.OidcConfiguration.Url
+import com.advancedtelematic.auth._
 import javax.crypto.SecretKey
 import javax.inject.{Inject, Singleton}
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jwa.AlgorithmConstraints.ConstraintType
 import org.jose4j.jwk.{JsonWebKey, JsonWebKeySet, VerificationJwkSelector}
 import org.jose4j.jws.{AlgorithmIdentifiers, JsonWebSignature}
-import play.api.{Configuration, Logger}
 import play.api.cache.AsyncCacheApi
 import play.api.http.{HeaderNames, MimeTypes, Status}
-import play.api.libs.json.{Format, JsError, JsLookupResult, JsPath, JsResult, JsSuccess, JsValue}
+import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc.{Result, Results}
+import play.api.{Configuration, Logger}
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Try}
 
 final case class ProviderMetadata(issuer: Url,

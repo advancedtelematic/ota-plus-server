@@ -27,7 +27,6 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
   import system.dispatcher
 
   private lazy val log           = Logger(this.getClass)
-  private lazy val jwtSecret     = configuration.get[String]("authplus.token")
   private lazy val fakeNamespace = configuration.get[String]("oidc.namespace")
 
   private def namespace(request: Request[AnyContent]): String = {

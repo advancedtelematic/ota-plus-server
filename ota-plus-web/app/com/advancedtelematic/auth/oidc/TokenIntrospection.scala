@@ -9,8 +9,7 @@ import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCode
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NoTokenIntrospection @Inject()(conf: Configuration, wsClient: WSClient)
-                                    (implicit executionContext: ExecutionContext) extends TokenVerification {
+class NoTokenIntrospection @Inject()(conf: Configuration, wsClient: WSClient) extends TokenVerification {
   override def apply(v1: AccessToken): Future[Boolean] = Future.successful(true)
 }
 
