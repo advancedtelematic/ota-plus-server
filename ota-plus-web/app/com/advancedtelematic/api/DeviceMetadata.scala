@@ -3,9 +3,8 @@ package com.advancedtelematic.api
 import java.util.UUID
 
 import akka.http.scaladsl.model.Uri
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import play.api.data.validation.ValidationError
+import play.api.libs.json._
 
 /**
   * Access token obtained from Auth+ upon registering a VIN for the first time.
@@ -14,8 +13,8 @@ final case class RegistrationAccessToken(underlying: String) extends AnyVal
 
 object RegistrationAccessToken {
 
-  import play.api.libs.json._
   import play.api.libs.json.Reads.StringReads
+  import play.api.libs.json._
 
   implicit val RegistrationAccessTokenFormat: Format[RegistrationAccessToken] = Format(
     StringReads.map( RegistrationAccessToken.apply ),

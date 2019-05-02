@@ -3,23 +3,20 @@ package com.advancedtelematic.api
 import java.util.UUID
 
 import akka.Done
-import akka.http.scaladsl.util.FastFuture
 import akka.stream.Materializer
 import akka.util.ByteString
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.auth.AccessToken
 import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
-import com.advancedtelematic.libtuf.data.TufCodecs.{keyTypeEncoder, tufKeyPairDecoder}
-import com.advancedtelematic.libtuf.data.TufDataType.{KeyType, TufKeyPair}
-import com.advancedtelematic.libtuf_server.data.Requests.{CreateRepositoryRequest, createRepositoryRequestEncoder}
-import io.circe.{Encoder, Printer}
-import io.circe.syntax._
-import play.api.{Configuration, Logger}
+import com.advancedtelematic.libtuf.data.TufCodecs.tufKeyPairDecoder
+import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
+import play.api.Configuration
 import play.api.http.Status
 import play.api.libs.json._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc._
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -132,7 +129,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     *   <li>the web-app persisted the association DeviceID -> ClientID</li>
     * </ul>
     */
-  def fetchClientInfo(clientID: UUID, token: AccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
+  def fetchClientInfo(clientID: UUID, token: AccessToken): Future[JsValue] = {
     authPlusRequest(s"clients/${clientID.toString}")
       .withToken(token.value)
       .transform(_.withMethod("GET"))
@@ -171,8 +168,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   def getFeatures(userId: UserId): Future[Seq[FeatureName]] =
     userProfileRequest("users/" + userId.id + "/features").execJson[Seq[FeatureName]](apiExec)
 
-  def activateFeature(userId: UserId, feature: FeatureName, clientId: UUID)
-                     (implicit executionContext: ExecutionContext): Future[Result] = {
+  def activateFeature(userId: UserId, feature: FeatureName, clientId: UUID): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
     userProfileRequest(s"users/${userId.id}/features")
@@ -187,8 +183,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     apiExec.runSafe(request).map(_ => Done)
   }
 
-  def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)
-                          (implicit executionContext: ExecutionContext): Future[Result] =
+  def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue): Future[Result] =
     userProfileRequest(s"users/${userId.id}/billing_info")
       .transform(
         _.withMethod("PUT")
@@ -205,7 +200,7 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends
                                                                                  with CirceJsonBodyWritables {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
 
-  def rootJsonResult(namespace: Namespace)(implicit ec: ExecutionContext): Future[Result] =
+  def rootJsonResult(namespace: Namespace): Future[Result] =
     request("user_repo/root.json")
       .withNamespace(Some(namespace))
       .execResult(apiExec)
