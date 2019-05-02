@@ -7,7 +7,7 @@ import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
 import com.advancedtelematic.auth.{AccessToken, IdentityClaims, IdToken, LoginAction, LogoutAction,
-  OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
+  SessionCodecs, TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
@@ -72,8 +72,6 @@ class OAuthOidcController @Inject()(
     extends AbstractController(components) {
 
   implicit val ec = components.executionContext
-
-  private[this] val oauthConfig = OAuthConfig(conf)
 
   private[this] val log = Logger(this.getClass)
 

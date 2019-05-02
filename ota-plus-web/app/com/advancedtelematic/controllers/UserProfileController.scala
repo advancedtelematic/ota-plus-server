@@ -1,18 +1,15 @@
 package com.advancedtelematic.controllers
 
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
-import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
 import com.advancedtelematic.auth.oidc.OidcGateway
+import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
-import play.api.mvc._
 import play.api.mvc.Results.EmptyContent
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
