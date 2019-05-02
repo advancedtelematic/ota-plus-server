@@ -91,7 +91,7 @@ class OAuthOidcController @Inject()(
 
   def publishLoginEvent(userId: UserId, namespace: Namespace, accessToken: AccessToken): Future[Done] = {
     oidcGateway.getUserInfo(accessToken)
-      .map(claim => UserLogin(claim.userId.id, Some(claim), Namespace(claim.userId.id), Instant.now()))
+      .map(claim => UserLogin(claim.userId.id, Some(claim), namespace, Instant.now()))
       .recover {
         case t =>
           log.warn("Unable to get user info", t)
