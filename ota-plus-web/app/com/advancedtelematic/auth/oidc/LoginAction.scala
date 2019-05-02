@@ -1,11 +1,7 @@
 package com.advancedtelematic.auth.oidc
 
 import javax.inject.Inject
-
-import com.advancedtelematic.auth.OAuthConfig
-import play.api.{Configuration, Logger}
-import play.api.http.Status
-import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
+import play.api.mvc.{AnyContent, BodyParsers, Request, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 

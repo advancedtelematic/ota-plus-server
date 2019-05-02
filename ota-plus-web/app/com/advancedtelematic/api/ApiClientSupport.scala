@@ -1,12 +1,8 @@
 package com.advancedtelematic.api
 
 import com.advancedtelematic.auth.garage.Auth0Api
-import com.advancedtelematic.controllers.{FeatureName, UserId}
 import play.api.Configuration
 import play.api.libs.ws.WSClient
-import play.api.mvc.{Result, Results}
-
-import scala.concurrent.{ExecutionContext, Future}
 
 trait ApiClientSupport {
   val ws: WSClient

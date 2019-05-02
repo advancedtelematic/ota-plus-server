@@ -69,11 +69,6 @@ class Application @Inject() (ws: WSClient,
   private[this] val wsPort = conf.underlying.getString("ws.port")
   private[this] val wsPath = conf.underlying.getString("ws.path")
 
-  private def logToAudit(caller: String, msg: String) {
-    // Useful to debug instances running in the cloud.
-    auditLogger.info(s"[Application.$caller()] $msg")
-  }
-
   /**
    * Returns the uri of the service to proxy to.
    * Note: core knows nothing about Filters and Components.
@@ -148,7 +143,6 @@ class Application @Inject() (ws: WSClient,
     case (ApiVersion.v2, "updates" :: _) => campaignerApiUri
   }
   val allowedHeaders = Seq("content-type")
-  private def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase))
 
 
   val bodySource = BodyParser { req =>

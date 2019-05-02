@@ -15,7 +15,6 @@ class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaP
   private[this] val auth0Config    = Auth0Config(conf)
   private val domain: String       = oauthConfig.domain
   private val auth0Request         = ApiRequest.base(s"https://$domain/")
-  private val auth0RequestUserData = ApiRequest.base(s"https://$domain/api/v2/users/")
 
   def changePassword(email: String)(implicit executionContext: ExecutionContext): Future[Done] = {
     val requestBody =
