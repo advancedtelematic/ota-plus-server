@@ -92,9 +92,8 @@ class UserProfileController @Inject()(val conf: Configuration,
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
 
   def getFeatures(): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.userId
     userProfileApi
-      .getFeatures(userId)
+      .getFeatures(request.namespace)
       .map { features =>
         Ok(Json.toJson(features))
       }
