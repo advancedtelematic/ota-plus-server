@@ -25,8 +25,13 @@ class NamespaceControllerSpec extends PlaySpec
   val userAllowedNamespace = "another-namespace"
 
   val mock = MockWS {
-    case (GET, url) if s"$userProfileUri/api/v1/users/.*/namespaces".r.findFirstIn(url).isDefined =>
-      Action(_ => Ok(Json.arr(userAllowedNamespace)))
+    case (GET, url) if s"$userProfileUri/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
+      Action(_ => Ok(Json.arr(
+        Json.obj(
+          "namespace" -> userAllowedNamespace,
+          "name" -> "My Organization",
+          "isCreator" -> true
+        ))))
   }
 
   implicit override lazy val app: play.api.Application =

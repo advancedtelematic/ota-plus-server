@@ -14,12 +14,13 @@ import akka.http.scaladsl.model.Uri
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import com.advancedtelematic.api._
+import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
 import play.api.Configuration
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{Json, JsPath, Writes}
+import play.api.libs.json.{JsPath, Json, Writes}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
@@ -75,6 +76,7 @@ class ClientToolController @Inject()(
     val ws: WSClient,
     val authAction: ApiAuthAction,
     val clientExec: ApiClientExec,
+    oidcGateway: OidcGateway,
     tokenBuilder: AccessTokenBuilder,
     components: ControllerComponents)
     (implicit executionContext: ExecutionContext, actorSystem: ActorSystem)
@@ -86,9 +88,9 @@ class ClientToolController @Inject()(
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def getOAuth2Params(userId: UserId) : Future[AuthParams] = {
+  def getOAuth2Params(namespace: Namespace, userId: UserId) : Future[AuthParams] = {
     val accessToken = tokenBuilder.mkToken(userId.id, Instant.now().plus(1, ChronoUnit.MINUTES), Set())
-    userProfileApi.getFeature(userId, FeatureName("treehub"))
+    userProfileApi.getFeature(namespace, FeatureName("treehub"))
       .flatMap { feat =>
         feat.client_id match {
           case Some(id) => for {
@@ -154,7 +156,7 @@ class ClientToolController @Inject()(
         }
       }
       val authParams = if(conf.getOptional[String]("authplus.host").isDefined) {
-        await(getOAuth2Params(UserId(namespace.get)))
+        await(oidcGateway.getUserInfo(accessToken).flatMap(ic => getOAuth2Params(namespace, ic.userId)))
       } else {
         AuthParams(noAuth = Some(true))
       }

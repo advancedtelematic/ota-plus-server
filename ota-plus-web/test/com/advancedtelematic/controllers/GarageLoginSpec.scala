@@ -82,6 +82,14 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
       val jwks = new JsonWebKeySet(key).toJson
       Action(Ok(jwks))
 
+    case ("GET", url) if ".*/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
+      Action(_ => Ok(Json.arr(
+        Json.obj(
+        "namespace" -> namespace,
+        "name" -> "My Organization",
+        "isCreator" -> true
+      ))))
+
     case (method, url) =>
       Action {
         NotFound(s"No handler for ' $method $url'")

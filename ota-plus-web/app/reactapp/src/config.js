@@ -15,7 +15,7 @@ export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER = '/api/v1/multi_target_upd
 export const API_CREATE_MULTI_TARGET_UPDATE = '/api/v1/admin/devices';
 export const API_FETCH_MULTI_TARGET_UPDATES = '/api/v1/admin/devices';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v2/cancel_device_update_campaign';
-export const API_NAMESPACE_SETUP_STEPS = '/user/setup';
+export const API_NAMESPACE_SETUP_STEPS = '/organization/setup';
 
 /*
  *  User
