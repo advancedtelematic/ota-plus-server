@@ -2,7 +2,7 @@ object Version {
   val Akka = "2.5.9"
   val JsonWebSecurity = "0.4.5"
   val MockWs = "2.6.2"
-  val LibAts = "0.1.0-5-g6b585f0"
+  val LibAts = "0.2.1-15-g7cd2082"
   val LibTuf = "0.4.0-10-ge535619"
   val Netty = "4.1.19.Final"
   val ScalaCheck = "1.13.4"
