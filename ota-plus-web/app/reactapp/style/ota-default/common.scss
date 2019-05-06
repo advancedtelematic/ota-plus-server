@@ -241,10 +241,14 @@ strong {
 }
 
 .navigation-name-organization {
+  display: inline-block;
   flex-direction: column;
   float: left;
   font-size: .8125rem;
-  width: 200px;
+  width: 220px;
+  @media only screen and (max-width: 1480px) {
+    max-width: 146px;
+  }
   .fullname {
     color: #9B9DA2;
     text-transform: uppercase;
@@ -256,7 +260,11 @@ strong {
     white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
-    overflow: hidden
+    overflow: hidden;
+    @media only screen and (max-width: 1480px) {
+        display: inline-block;
+        max-width: 120px;
+    }
   }
 }
 
@@ -487,7 +495,8 @@ body {
   background-color: $dashboard-bg;
   background-attachment: fixed;
   background-size: cover;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 input {
@@ -630,11 +639,17 @@ input {
 
 .menu-login-clickable {
   padding: 5px 0 5px 2px;
-  width: 280px;
-  position: relative;
+  width: 300px;
+  position: absolute;
+  right: 0;
+  text-align: right;
 
   .ant-avatar-image {
     background: #ccc;
+  }
+
+  @media only screen and (max-width: 1480px) {
+    width: 220px;
   }
 }
 
