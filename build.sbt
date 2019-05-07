@@ -18,7 +18,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
       "-target", "1.8",
       "-Xlint:unchecked",
       "-Xlint:deprecation"))
-    .settings(dependencyOverrides ++= Set(
+    .settings(dependencyOverrides ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.scala-lang" % "scala-library" % scalaVersion.value,
       "org.scala-lang.modules" % "scala-xml_2.12" % "1.1.0",
