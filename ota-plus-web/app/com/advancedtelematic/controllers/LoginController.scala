@@ -11,6 +11,7 @@ import com.advancedtelematic.auth.{AccessToken, IdentityClaims, IdToken, LoginAc
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
+import io.circe.{Decoder, Encoder}
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
@@ -25,12 +26,13 @@ final case class UserLogin(id: String, identity: Option[IdentityClaims], namespa
 
 object UserLogin {
 
-  import com.advancedtelematic.libats.codecs.CirceCodecs._
+  import com.advancedtelematic.libats.codecs.CirceAnyVal.{anyValStringDecoder, anyValStringEncoder}
+
   private[this] implicit val identityClaimsEncoder = io.circe.generic.semiauto.deriveEncoder[IdentityClaims]
   private[this] implicit val identityClaimsDecoder = io.circe.generic.semiauto.deriveDecoder[IdentityClaims]
 
-  private[this] implicit val UserLoginEncoder = io.circe.generic.semiauto.deriveEncoder[UserLogin]
-  private[this] implicit val UserLoginDecoder = io.circe.generic.semiauto.deriveDecoder[UserLogin]
+  private[this] implicit val UserLoginEncoder: Encoder[UserLogin] = io.circe.generic.semiauto.deriveEncoder[UserLogin]
+  private[this] implicit val UserLoginDecoder: Decoder[UserLogin] = io.circe.generic.semiauto.deriveDecoder[UserLogin]
 
   implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
 }
