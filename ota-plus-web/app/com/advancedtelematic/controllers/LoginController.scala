@@ -26,8 +26,11 @@ final case class UserLogin(id: String, identity: Option[IdentityClaims], namespa
 object UserLogin {
 
   import com.advancedtelematic.libats.codecs.CirceCodecs._
-  private[this] implicit val UserLoginEncoder = io.circe.generic.semiauto.deriveEncoder[IdentityClaims]
-  private[this] implicit val UserLoginDecoder = io.circe.generic.semiauto.deriveDecoder[IdentityClaims]
+  private[this] implicit val identityClaimsEncoder = io.circe.generic.semiauto.deriveEncoder[IdentityClaims]
+  private[this] implicit val identityClaimsDecoder = io.circe.generic.semiauto.deriveDecoder[IdentityClaims]
+
+  private[this] implicit val UserLoginEncoder = io.circe.generic.semiauto.deriveEncoder[UserLogin]
+  private[this] implicit val UserLoginDecoder = io.circe.generic.semiauto.deriveDecoder[UserLogin]
 
   implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
 }
