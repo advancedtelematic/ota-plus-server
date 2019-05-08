@@ -6,10 +6,17 @@ import { observer, inject } from 'mobx-react';
 import { AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'lodash';
+import { observable } from 'mobx';
+
+import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
+import { NO_VERSION_INFO } from '../../../constants';
 
 @inject('stores')
 @observer
 class WizardStep7 extends Component {
+  @observable
+  updateDetails = [];
+
   componentWillMount() {
     const { updatesStore } = this.props.stores;
     const { wizardData } = this.props;
@@ -17,13 +24,17 @@ class WizardStep7 extends Component {
     updatesStore.fetchUpdate(currentUpdate && currentUpdate.source.id);
   }
 
+  componentDidMount() {
+    const { updatesStore, softwareStore } = this.props.stores;
+    const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
+    const { packages } = softwareStore;
+    this.updateDetails = getUpdateDetails(mtuData, packages);
+  }
+
   render() {
     const { t, wizardData } = this.props;
-    const { campaignsStore, groupsStore, updatesStore } = this.props.stores;
+    const { campaignsStore, groupsStore } = this.props.stores;
     const { campaignsCreateAsync } = campaignsStore;
-
-    const { data: updateSummary } = updatesStore.currentMtuData;
-
     return (
       <div className='step-inner'>
         <AsyncResponse
@@ -32,14 +43,13 @@ class WizardStep7 extends Component {
           errorMsg={campaignsCreateAsync.status && campaignsCreateAsync.status !== 200 ? campaignsCreateAsync.data.description : null}
         />
         <div className='box-summary'>
-          <div className='title'>{'Software & Version'}</div>
+          <div className='title'>
+            {'Software & Version'}
+          </div>
           <div className='desc'>
-            {updateSummary &&
-              _.map(updateSummary, (target, hardwareId) => {
-                const noInformation = 'No information.';
-                const { target: fromPackage, checksum: fromVersion } = target.from || {};
-                const { target: toPackage, checksum: toVersion } = target.to;
-
+            {this.updateDetails &&
+              _.map(this.updateDetails, target => {
+                const { hardwareId, fromPackage, fromVersion, toPackage, toVersion } = target;
                 return (
                   <div className='package-container' key={hardwareId}>
                     <div className='update-container'>
@@ -47,13 +57,13 @@ class WizardStep7 extends Component {
                         <div className='update-from'>
                           <div className='text'>{'From:'}</div>
                           <div className='value' id={'from-package-name-' + fromPackage}>
-                            {fromPackage ? fromPackage : noInformation}
+                            {fromPackage || NO_VERSION_INFO}
                           </div>
                         </div>
                         <div className='update-to'>
                           <div className='text'>{'To:'}</div>
                           <div className='value' id={'to-package-name-' + toPackage}>
-                            {toPackage ? toPackage : noInformation}
+                            {toPackage || NO_VERSION_INFO}
                           </div>
                         </div>
                       </span>
@@ -61,13 +71,13 @@ class WizardStep7 extends Component {
                         <div className='update-from'>
                           <div className='text'>{'Version:'}</div>
                           <div className='value' id={'from-package-version-' + fromVersion}>
-                            {fromVersion ? fromVersion.hash : noInformation}
+                            {fromVersion || NO_VERSION_INFO}
                           </div>
                         </div>
                         <div className='update-to'>
                           <div className='text'>{'Version:'}</div>
                           <div className='value' id={'to-package-version-' + toVersion}>
-                            {toVersion ? toVersion.hash : noInformation}
+                            {toVersion || NO_VERSION_INFO}
                           </div>
                         </div>
                       </span>

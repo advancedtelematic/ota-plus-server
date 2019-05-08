@@ -20,3 +20,9 @@ export const CAMPAIGN_RETRY_STATUSES = {
  */
 
 export const SEARCH_REFRESH_TIMEOUT = 400;
+
+/*
+ *  Software version
+ */
+
+export const NO_VERSION_INFO = 'No information / Any';
