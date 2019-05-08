@@ -8,11 +8,14 @@ import { Row, Col } from 'antd';
 import { FormInput, FormTextarea, Loader } from '../../partials/index';
 import _ from 'lodash';
 
+import { getUpdateDetails } from '../../helpers/updateDetailsHelper';
+import { NO_VERSION_INFO } from '../../constants';
+
 @inject('stores')
 @observer
 class UpdateDetails extends Component {
-  @observable fromVersion = '';
-  @observable toVersion = '';
+  @observable 
+  updateDetails = [];
 
   componentWillMount() {
     const { updatesStore } = this.props.stores;
@@ -20,23 +23,17 @@ class UpdateDetails extends Component {
     updatesStore.fetchUpdate(updateItem && updateItem.source && updateItem.source.id);
   }
 
+  componentWillUnmount() {
+    const { updatesStore } = this.props.stores;
+    updatesStore.currentMtuData = {};
+  }
+
   componentDidUpdate() {
-    if (!this.fromVersion && !this.toVersion) {
-      const { updatesStore, softwareStore } = this.props.stores;
-      const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
-      _.each(mtuData, (target) => {
-        const { target: fromPackage } = target.from || {};
-        const { target: toPackage } = target.to;
-        _.find(softwareStore.packages, pack => {
-          const { version } = pack.id;
-          if (pack.filepath === fromPackage) {
-            this.fromVersion = version;
-          }
-          if (pack.filepath === toPackage) {
-            this.toVersion = version;
-          }
-        });
-      });
+    const { updatesStore, softwareStore } = this.props.stores;
+    const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
+    if (!this.updateDetails.length) {
+      const { packages } = softwareStore;
+      this.updateDetails = getUpdateDetails(mtuData, packages);
     }
   }
 
@@ -48,7 +45,14 @@ class UpdateDetails extends Component {
       <div>
         <Row className='row name-container'>
           <Col span={12}>
-            <FormInput label='Update Name' placeholder='Name' name='updateName' id={`update-name-${updateItem.name}`} defaultValue={updateItem.name} isEditable={isEditable} />
+            <FormInput 
+              label='Update Name' 
+              placeholder='Name' 
+              name='updateName' 
+              id={`update-name-${updateItem.name}`} 
+              defaultValue={updateItem.name} 
+              isEditable={isEditable} 
+            />
           </Col>
           <Col span={12}>
             <FormTextarea
@@ -68,10 +72,8 @@ class UpdateDetails extends Component {
               <Loader />
             </div>
           ) : mtuData ? (
-            _.map(mtuData, (target, hardwareId) => {
-              const noInformation = 'No information / Any';
-              const { target: fromPackage } = target.from || {};
-              const { target: toPackage } = target.to;
+            _.map(this.updateDetails, target => {
+              const { hardwareId, fromPackage, fromVersion, toPackage, toVersion } = target;
               return (
                 <Col span={24} className='hardware-container' key={hardwareId}>
                   <label className='c-form__label' id={`label-hardware-${hardwareId}`}>
@@ -83,18 +85,42 @@ class UpdateDetails extends Component {
                   </Row>
                   <Row className='row'>
                     <Col span={12}>
-                      <FormInput label='Software' name='fromPackage' id={`${hardwareId}-from-package`} defaultValue={fromPackage ? fromPackage : noInformation} isEditable={isEditable} />
+                      <FormInput 
+                        label='Software' 
+                        name='fromPackage' 
+                        id={`${hardwareId}-from-package`} 
+                        defaultValue={fromPackage || NO_VERSION_INFO} 
+                        isEditable={isEditable} 
+                      />
                     </Col>
                     <Col span={12}>
-                      <FormInput label='Software' name='toPackage' id={`${hardwareId}-to-package`} defaultValue={toPackage ? toPackage : noInformation} isEditable={isEditable} />
+                      <FormInput 
+                        label='Software' 
+                        name='toPackage' 
+                        id={`${hardwareId}-to-package`} 
+                        defaultValue={toPackage || NO_VERSION_INFO} 
+                        isEditable={isEditable} 
+                      />
                     </Col>
                   </Row>
                   <Row className='row'>
                     <Col span={12}>
-                      <FormInput label='Version' name='fromVersion' id={`${hardwareId}-from-version`} defaultValue={this.fromVersion || noInformation} isEditable={isEditable} />
+                      <FormInput 
+                        label='Version' 
+                        name='fromVersion' 
+                        id={`${hardwareId}-from-version`} 
+                        defaultValue={fromVersion || NO_VERSION_INFO} 
+                        isEditable={isEditable} 
+                      />
                     </Col>
                     <Col span={12}>
-                      <FormInput label='Version' name='toVersion' id={`${hardwareId}-to-version`} defaultValue={this.toVersion || noInformation} isEditable={isEditable} />
+                      <FormInput 
+                        label='Version' 
+                        name='toVersion' 
+                        id={`${hardwareId}-to-version`} 
+                        defaultValue={toVersion || NO_VERSION_INFO} 
+                        isEditable={isEditable} 
+                      />
                     </Col>
                   </Row>
                 </Col>

@@ -5,10 +5,17 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Sequencer } from '../../../partials';
+import { observable } from 'mobx';
+
+import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
+import { NO_VERSION_INFO } from '../../../constants';
 
 @inject('stores')
 @observer
 class WizardStep6 extends Component {
+  @observable
+  updateDetails = [];
+
   static propTypes = {
     stores: PropTypes.object,
     wizardData: PropTypes.object,
@@ -23,21 +30,24 @@ class WizardStep6 extends Component {
     updatesStore.fetchUpdate(source && source.id);
   }
 
-  prepareVersionData = () => {
+  componentDidMount() {
     const { stores } = this.props;
-    const { updatesStore } = stores;
-    const { currentMtuData: mtu } = updatesStore;
+    const { updatesStore, softwareStore } = stores;
+    const { data: mtuData } = updatesStore.currentMtuData;
+    const { packages } = softwareStore;
+    this.updateDetails = getUpdateDetails(mtuData, packages);
+  }
+
+  prepareVersionData = () => { 
     const versions = [];
-    const noInformation = 'No information / Any';
-    _.each(mtu.data, (data, hardwareId) => {
-      const { checksum: fromVersion } = data.from || {};
-      const { checksum: toVersion, target } = data.to;
+    _.each(this.updateDetails, targetDetails => {
+      const { hardwareId, fromVersion, toPackage, toVersion, toTarget, checksum } = targetDetails;
       versions.push({
         hardwareId,
-        name: target,
-        ...(fromVersion ? { from: fromVersion.hash } : { from: noInformation }),
-        to: toVersion.hash,
-        filepath: `${target}-${toVersion.hash}`,
+        name: toPackage,
+        ...(fromVersion ? { from: fromVersion } : { from: NO_VERSION_INFO }),
+        to: toVersion,
+        filepath: `${toTarget}-${checksum.hash}`,
       });
     });
     return versions;
@@ -49,7 +59,13 @@ class WizardStep6 extends Component {
     const versions = this.prepareVersionData();
 
     return versions.length ? (
-      <Sequencer campaignsStore={campaignsStore} wizardIdentifier={wizardIdentifier} data={versions} entity='campaign' readOnly={false} />
+      <Sequencer 
+        campaignsStore={campaignsStore} 
+        wizardIdentifier={wizardIdentifier} 
+        data={versions} 
+        entity='campaign' 
+        readOnly={false} 
+      />
     ) : (
       <div className='wrapper-center'>{'Live installation progress is not available for this update.'}</div>
     );
