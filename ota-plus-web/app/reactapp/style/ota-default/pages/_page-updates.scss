@@ -8,7 +8,7 @@
   height: calc(100vh - 50px);
 
   .ios-list {
-    height: calc(100% - 40px);
+    height: calc(100% - 123px);
   }
 
   .update-subheader {
@@ -19,6 +19,10 @@
       color: $dashboard-header-text;
       font-weight: 500;
       text-transform: uppercase;
+
+      &.description {
+        flex-grow: 4;
+      }
     }
 
     a {
@@ -78,7 +82,7 @@
 
   .search-box {
     input {
-      background: $device-hardware-header !important;
+      background: #3f454d !important;
       font-weight: normal !important;
     }
 

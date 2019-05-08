@@ -164,7 +164,7 @@ export const VIEWPORT_MIN_HEIGHT = 768;
  * updates
  */
 export const LIMIT_UPDATES_WIZARD = 5;
-export const LIMIT_UPDATES_MAIN = 30;
+export const UPDATES_LIMIT_PER_PAGE = 10;
 
 /**
  * packages

@@ -10,7 +10,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { SoftwareVersionsStats } from './stats';
-import { Loader, Dropdown, EditSoftwareModal, ConfirmationModal } from '../../partials';
+import { Dropdown, ConfirmationModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
@@ -33,6 +33,7 @@ class List extends Component {
   showEditModal = () => {
     this.editModal = true;
   };
+
   generateHeadersPositions = () => {
     const headers = this.refs.list.getElementsByClassName('header');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
@@ -47,6 +48,7 @@ class List extends Component {
     );
     return positions;
   };
+
   generateItemsPositions = () => {
     const items = this.refs.list.getElementsByClassName('item');
     const wrapperPosition = this.refs.list.getBoundingClientRect();
@@ -61,6 +63,7 @@ class List extends Component {
     );
     return positions;
   };
+
   listScroll = () => {
     const { softwareStore } = this.props.stores;
     if (this.refs.list) {
@@ -101,6 +104,7 @@ class List extends Component {
       this.fakeHeaderTopPosition = scrollTop;
     }
   };
+
   highlightPackage = pack => {
     const { animatedScroll, setExpandedPackageName } = this.props;
     if (this.refs.list && pack) {
@@ -113,6 +117,7 @@ class List extends Component {
       }, 400);
     }
   };
+
   togglePackage = (packageName, e) => {
     const { expandedPackageName, setExpandedPackageName } = this.props;
     const { softwareStore } = this.props.stores;
@@ -120,15 +125,19 @@ class List extends Component {
     softwareStore._handleCompatibles();
     setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
   };
+
   hideSubmenu = () => {
     this.submenuIsShown = false;
   };
+
   showSubmenu = versions => {
     this.submenuIsShown = true;
   };
+
   showDeleteModal = () => {
     this.deleteModal = true;
   };
+
   hideDeleteModal = () => {
     this.deleteModal = false;
   };
@@ -183,104 +192,98 @@ class List extends Component {
     return (
       <div className='ios-list' ref='list' style={{ height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})` }}>
         <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
-          <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
-            {this.fakeHeaderLetter}
-          </div>
-          {_.map(softwareStore.preparedPackages, (packages, letter) => {
-            return (
-              <span key={letter}>
-                <div className='header'>{letter}</div>
-                {_.map(packages, (pack, index) => {
-                  const that = this;
-                  return (
-                    <span key={index} className='c-package'>
-                      <ListItem
-                        pack={pack}
-                        expandedPackageName={expandedPackageName}
-                        togglePackage={this.togglePackage}
-                        highlightedPackage={highlightedPackage}
-                        highlightPackage={this.highlightPackage}
-                      />
-                      <VelocityTransitionGroup
-                        enter={{
-                          animation: 'slideDown',
-                          begin: () => {
-                            that.startIntervalListScroll();
-                          },
-                          complete: () => {
-                            that.stopIntervalListScroll();
-                          },
-                        }}
-                        leave={{
-                          animation: 'slideUp',
-                          begin: () => {
-                            that.startIntervalListScroll();
-                          },
-                          complete: () => {
-                            that.stopIntervalListScroll();
-                          },
-                        }}
-                      >
-                        {expandedPackageName === pack.packageName ? (
-                          <div className='c-package__details'>
-                            <div className='c-package__main-name'>
-                              <span>{pack.packageName}</span>
-                              <div className='dots' id='package-menu' onClick={() => this.showSubmenu()}>
-                                <span />
-                                <span />
-                                <span />
+          {_.map(softwareStore.preparedPackages, (packages, letter) => (
+            <div key={letter}>
+              {_.map(packages, (pack, index) => {
+                const that = this;
+                return (
+                  <span key={index} className='c-package'>
+                    <ListItem
+                      pack={pack}
+                      expandedPackageName={expandedPackageName}
+                      togglePackage={this.togglePackage}
+                      highlightedPackage={highlightedPackage}
+                      highlightPackage={this.highlightPackage}
+                    />
+                    <VelocityTransitionGroup
+                      enter={{
+                        animation: 'slideDown',
+                        begin: () => {
+                          that.startIntervalListScroll();
+                        },
+                        complete: () => {
+                          that.stopIntervalListScroll();
+                        },
+                      }}
+                      leave={{
+                        animation: 'slideUp',
+                        begin: () => {
+                          that.startIntervalListScroll();
+                        },
+                        complete: () => {
+                          that.stopIntervalListScroll();
+                        },
+                      }}
+                    >
+                      {expandedPackageName === pack.packageName && (
+                        <div className='c-package__details'>
+                          <div className='c-package__main-name'>
+                            <span>{pack.packageName}</span>
+                            <div className='dots' id='package-menu' onClick={() => this.showSubmenu()}>
+                              <span />
+                              <span />
+                              <span />
 
-                                {this.submenuIsShown ? (
-                                  <Dropdown hideSubmenu={this.hideSubmenu}>
-                                    <li className='package-dropdown-item'>
-                                      <a
-                                        className='package-dropdown-item'
-                                        href='#'
-                                        id='edit-comment'
-                                        onClick={e => {
-                                          e.preventDefault();
-                                          this.packVersions = pack.versions;
-                                          this.showDeleteModal();
-                                        }}
-                                      >
-                                        <img src='/assets/img/icons/trash_icon.svg' alt='Icon' />
-                                        Delete
-                                      </a>
-                                    </li>
-                                  </Dropdown>
-                                ) : null}
-                              </div>
-                            </div>
-                            <div className='c-package__versions-wrapper'>
-                              <div className='c-package__chart'>
-                                <div className='c-package__heading'>Distribution by devices</div>
-                                <SoftwareVersionsStats pack={pack} />
-                              </div>
-                              <ul className='c-package__versions' id='versions'>
-                                {_.map(pack.versions, (version, i) => {
-                                  return (
-                                    <ListItemVersion
-                                      pack={pack}
-                                      version={version}
-                                      showDependenciesModal={showDependenciesModal}
-                                      showDependenciesManager={showDependenciesManager}
-                                      showDeleteConfirmation={showDeleteConfirmation}
-                                      showEditComment={showEditComment}
-                                      key={i}
-                                    />
-                                  );
-                                })}
-                              </ul>
+                              {this.submenuIsShown && (
+                                <Dropdown hideSubmenu={this.hideSubmenu}>
+                                  <li className='package-dropdown-item'>
+                                    <a
+                                      className='package-dropdown-item'
+                                      href='#'
+                                      id='edit-comment'
+                                      onClick={e => {
+                                        e.preventDefault();
+                                        this.packVersions = pack.versions;
+                                        this.showDeleteModal();
+                                      }}
+                                    >
+                                      <img src='/assets/img/icons/trash_icon.svg' alt='Icon' />
+                                      Delete
+                                    </a>
+                                  </li>
+                                </Dropdown>
+                              )}
                             </div>
                           </div>
-                        ) : null}
-                      </VelocityTransitionGroup>
-                    </span>
-                  );
-                })}
-              </span>
-            );
-          })}
+                          <div className='c-package__versions-wrapper'>
+                            <div className='c-package__chart'>
+                              <div className='c-package__heading'>Distribution by devices</div>
+                              <SoftwareVersionsStats pack={pack} />
+                            </div>
+                            <ul className='c-package__versions' id='versions'>
+                              {_.map(pack.versions, (version, i) => {
+                                return (
+                                  <ListItemVersion
+                                    pack={pack}
+                                    version={version}
+                                    showDependenciesModal={showDependenciesModal}
+                                    showDependenciesManager={showDependenciesManager}
+                                    showDeleteConfirmation={showDeleteConfirmation}
+                                    showEditComment={showEditComment}
+                                    key={i}
+                                  />
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </VelocityTransitionGroup>
+                  </span>
+                );
+              })}
+            </div>
+          ))}
         </Dropzone>
         {this.deleteModal ? (
           <ConfirmationModal

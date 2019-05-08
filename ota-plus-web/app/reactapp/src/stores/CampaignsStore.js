@@ -71,8 +71,6 @@ export default class CampaignsStore {
   @observable transitionsEnabled = true;
   @observable limitCampaigns = CAMPAIGNS_LIMIT_PER_PAGE;
 
-  @observable currentDataOffset = 0;
-
   @observable latestCampaigns = [];
 
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
@@ -172,7 +170,6 @@ export default class CampaignsStore {
         this.campaigns = campaigns;
         this.fetchAllCampaignsStatistics(this.campaigns);
 
-        this.currentDataOffset = dataOffset;
         this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
       })
       .catch((error) => {

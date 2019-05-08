@@ -3,10 +3,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, observe } from 'mobx';
-import ListItem from './ListItem';
 import _ from 'lodash';
-import { Form } from 'formsy-antd';
-import { SearchBar } from '../../partials';
+
+import ListItem from './ListItem';
 
 const headerHeight = 30;
 
@@ -112,28 +111,15 @@ class List extends Component {
     }
   };
 
-  changeFilter = (filter, e) => {
-    if (e) e.preventDefault();
-    const { updatesStore } = this.props.stores;
-    updatesStore._filterUpdates(filter);
-  };
-
   render() {
     const { showUpdateDetails } = this.props;
     const { updatesStore } = this.props.stores;
     return (
       <div className='ios-list' id='list-updates' ref='list'>
-        <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
-          <div className='letter'>{this.fakeHeaderLetter}</div>
-          <Form>
-            <SearchBar value={updatesStore.updateFilter} changeAction={this.changeFilter} id='search-updates-input' />
-          </Form>
-        </div>
         {!_.isEmpty(updatesStore.preparedUpdates) ? (
           _.map(updatesStore.preparedUpdates, (updates, letter) => {
             return (
               <span key={letter}>
-                <div className='header'>{letter}</div>
                 {_.map(updates, (update, index) => {
                   return <ListItem key={index} update={update} showUpdateDetails={showUpdateDetails} />;
                 })}
