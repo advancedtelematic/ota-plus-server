@@ -3,7 +3,13 @@
 import { observable } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
-import { API_UPDATES_SEARCH, API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, API_UPDATES_CREATE, LIMIT_UPDATES_WIZARD, LIMIT_UPDATES_MAIN } from '../config';
+import {
+  API_UPDATES_SEARCH,
+  API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
+  API_UPDATES_CREATE,
+  LIMIT_UPDATES_WIZARD,
+  UPDATES_LIMIT_PER_PAGE
+} from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
 export default class UpdatesStore {
@@ -15,23 +21,18 @@ export default class UpdatesStore {
   @observable updatesFetchMtuIdAsync = {};
   @observable updatesWizardFetchAsync = {};
 
-  @observable initialUpdates = [];
   @observable updates = [];
   @observable updateFilter = '';
-  @observable updatesLimitPage = LIMIT_UPDATES_MAIN; // 30
-  @observable updatesOffsetPage = 0;
+  @observable updatesLimitPage = UPDATES_LIMIT_PER_PAGE;
 
   @observable updatesTotalCount = 0;
-  @observable updatesInitialTotalCount = 0;
-  @observable currentPagesLoaded = 1;
 
   @observable preparedUpdates = {};
   @observable lastCreatedMtuId = null;
   @observable currentMtuData = {};
 
   @observable updatesWizard = [];
-  @observable currentPagesLoadedWizard = 0;
-  @observable initialUpdatesWizard = [];
+
   @observable preparedUpdatesWizard = {};
   @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD; // 5
   @observable updatesOffsetWizard = 0;
@@ -105,19 +106,17 @@ export default class UpdatesStore {
       });
   }
 
-  fetchUpdates(async = 'updatesFetchAsync') {
+  fetchUpdates(async = 'updatesFetchAsync', dataOffset = 0) {
     resetAsync(this[async], true);
-    this.updatesOffsetPage = 0;
-    let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitPage}&offset=${this.updatesOffsetPage}`;
+    const limit = `limit=${this.updatesLimitPage}`;
+    const nameContains = `nameContains=${this.updateFilter.toLowerCase()}`;
+    const offset = `offset=${dataOffset}`;
+    const apiAddress = `${API_UPDATES_SEARCH}?${nameContains}&${limit}&${offset}&sortBy=createdAt`;
     return axios
       .get(apiAddress)
-      .then(response => {
+      .then((response) => {
         this.updates = response.data.values;
-        this.initialUpdates = response.data.values;
-
-        if (!this.updatesInitialTotalCount) {
-          this.updatesInitialTotalCount = response.data.total;
-        }
+        this.updatesTotalCount = response.data.total;
         this._prepareUpdates();
         this[async] = handleAsyncSuccess(response);
       })
@@ -128,7 +127,6 @@ export default class UpdatesStore {
 
   fetchWizardUpdates(selectedGroupIds, async = 'updatesWizardFetchAsync') {
     resetAsync(this[async], true);
-    this.updatesOffsetPage = 0;
     const groupApi = selectedGroupIds.map(groupId => `&groupId=${groupId}`).join('');
     const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
     return axios
@@ -194,7 +192,7 @@ export default class UpdatesStore {
   }
 
   _prepareUpdates(mode = null) {
-    const updates = this.sortUpdates(mode === 'wizard' ? this.updatesWizard : this.updates);
+    const updates = mode === 'wizard' ? this.sortUpdates(this.updatesWizard) : this.updates;
     const specialGroup = {
       '#': [],
     };
@@ -223,11 +221,9 @@ export default class UpdatesStore {
     }
   }
 
-  _filterUpdates(filter) {
-    const lowCaseFilter = filter.toLowerCase();
-    this.updateFilter = lowCaseFilter;
-    this.updates = _.filter(this.initialUpdates, update => update.name.toLowerCase().indexOf(lowCaseFilter) >= 0);
-    this._prepareUpdates();
+  filterUpdates(filter) {
+    this.updateFilter = filter;
+    this.fetchUpdates('updatesFetchAsync', 0);
   }
 
   _reset() {
@@ -240,22 +236,17 @@ export default class UpdatesStore {
     resetAsync(this.updatesWizardFetchAsync);
 
     this.updates = [];
-    this.initialUpdates = [];
     this.updateFilter = '';
-    this.updatesOffsetPage = 0;
     this.updatesTotalCount = 0;
-    this.updatesInitialTotalCount = 0;
     this.preparedUpdates = {};
     this.lastCreatedMtuId = null;
-    this.updatesLimitPage = LIMIT_UPDATES_MAIN;
+    this.updatesLimitPage = UPDATES_LIMIT_PER_PAGE;
   }
 
   _resetWizardData() {
     resetAsync(this.updatesFetchMtuIdAsync);
     this.updatesWizard = [];
-    this.initialUpdatesWizard = [];
     this.preparedUpdatesWizard = {};
     this.updatesLimitWizard = LIMIT_UPDATES_WIZARD;
-    this.currentPagesLoadedWizard = 0;
   }
 }
