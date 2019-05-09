@@ -1,6 +1,7 @@
 import com.typesafe.sbt.packager.docker.Cmd
 import play.sbt.PlaySettings
 import play.sbt.routes.RoutesKeys
+import scala.sys.process.Process
 
 PlaySettings.defaultScalaSettings
 
@@ -27,6 +28,9 @@ dockerExposedPorts := Seq(9000)
 maintainer in Docker := "dev@advancedtelematic.com"
 
 packageName in Docker := "ota-plus-web"
+
+daemonUserUid in Docker := None
+daemonUser in Docker := "daemon"
 
 dockerRepository := Some("advancedtelematic")
 

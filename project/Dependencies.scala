@@ -31,5 +31,5 @@ object Dependencies {
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
   lazy val LibTufServer = "com.advancedtelematic" %% "libtuf-server" % Version.LibTuf
 
-  val Netty = Set("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
+  val Netty = Seq("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
 }
