@@ -51,9 +51,6 @@ class Sequencer extends Component {
       this._createCampaignUpdates(matrixFromStorage[0]);
       this.updateMatrix = matrixFromStorage;
     }
-    if (this.campaignUpdates.length >= 2) {
-      this.showFullScreen();
-    }
   }
 
   componentWillUnmount() {
@@ -71,20 +68,6 @@ class Sequencer extends Component {
         extendObservable(value, { selectedAction: actionType });
       }
     });
-  };
-
-  showFullScreen = e => {
-    if (e) e.preventDefault();
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-    campaignsStore._showFullScreen();
-  };
-
-  hideFullScreen = e => {
-    if (e) e.preventDefault();
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-    campaignsStore._hideFullScreen();
   };
 
   _createCampaignUpdates = (data = null) => {
