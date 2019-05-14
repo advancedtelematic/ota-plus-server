@@ -158,6 +158,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     (__ \ "client_id").readNullable[UUID] and
     (__ \ "enabled").read[Boolean]
   )(Feature.apply _)}
+  implicit val namespaceR: Reads[Namespace] = Reads.StringReads.map(Namespace)
 
   def getUser(userId: UserId): Future[JsValue] =
     userProfileRequest("users/" + userId.id).execJsonValue(apiExec)
@@ -194,6 +195,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   def userProfileRequest(userId: UserId, method: String, path: String): Future[Result] =
     userProfileRequest(s"users/${userId.id}/${path}").transform(_.withMethod(method))
       .execResult(apiExec)
+
+  def namespaceIsAllowed(userId: UserId, namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] =
+    userProfileRequest(s"users/${userId.id}/namespaces")
+      .transform(_.withMethod("GET"))
+      .execJson[Set[Namespace]](apiExec)
+      .map(_.contains(namespace))
 }
 
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig
