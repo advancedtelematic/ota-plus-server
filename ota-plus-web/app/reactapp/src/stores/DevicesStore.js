@@ -93,7 +93,7 @@ export default class DevicesStore {
 
   @computed get lastDevices() {
     return _.sortBy(this.devices, device => {
-      return device.createdAt;
+      return device.lastSeen;
     })
       .reverse()
       .slice(0, 10);
