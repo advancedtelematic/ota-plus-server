@@ -6,7 +6,6 @@ import { observer, inject } from 'mobx-react';
 import { AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'lodash';
-import { observable } from 'mobx';
 
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
 import { NO_VERSION_INFO } from '../../../constants';
@@ -14,8 +13,6 @@ import { NO_VERSION_INFO } from '../../../constants';
 @inject('stores')
 @observer
 class WizardStep7 extends Component {
-  @observable
-  updateDetails = [];
 
   componentWillMount() {
     const { updatesStore } = this.props.stores;
@@ -24,17 +21,18 @@ class WizardStep7 extends Component {
     updatesStore.fetchUpdate(currentUpdate && currentUpdate.source.id);
   }
 
-  componentDidMount() {
+  prepareUpdateDetails = () => {
     const { updatesStore, softwareStore } = this.props.stores;
     const mtuData = updatesStore && updatesStore.currentMtuData && updatesStore.currentMtuData.data;
     const { packages } = softwareStore;
-    this.updateDetails = getUpdateDetails(mtuData, packages);
+    return getUpdateDetails(mtuData, packages);
   }
-
+  
   render() {
     const { t, wizardData } = this.props;
     const { campaignsStore, groupsStore } = this.props.stores;
     const { campaignsCreateAsync } = campaignsStore;
+    const updateDetails = this.prepareUpdateDetails();
     return (
       <div className='step-inner'>
         <AsyncResponse
@@ -47,8 +45,8 @@ class WizardStep7 extends Component {
             {'Software & Version'}
           </div>
           <div className='desc'>
-            {this.updateDetails &&
-              _.map(this.updateDetails, target => {
+            {updateDetails &&
+              _.map(updateDetails, target => {
                 const { hardwareId, fromPackage, fromVersion, toPackage, toVersion } = target;
                 return (
                   <div className='package-container' key={hardwareId}>
