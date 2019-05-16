@@ -43,7 +43,7 @@ class SubHeader extends Component {
 
   render() {
     const { campaign, showCancelCampaignModal } = this.props;
-
+    const { name } = campaign;
     return (
       <div className='statistics__campaign-name'>
         <h3>{campaign.name}</h3>
@@ -56,15 +56,24 @@ class SubHeader extends Component {
             </div>
           )}
           <DropdownMenu placement='bottomRight'>
-            <Menu.Item>
+            <Menu.Item className="ant-dropdown-menu-item--clear">
               <Button htmlType='button' className='campaign__dropdown--item' id='edit-comment' onClick={this.showEditModal}>
                 <img src={assets.DEFAULT_EDIT_ICON} alt='Icon' />
-                Edit
+                {'Rename Campaign'}
               </Button>
             </Menu.Item>
           </DropdownMenu>
         </div>
-        <EditCampaignModal modalTitle={<div className='title'>Edit name</div>} shown={this.editModal} hide={this.hideEditModal} defaultValue={campaign.name} />
+        <EditCampaignModal 
+          modalTitle={
+            <div className='title'>
+              {'Edit name'}
+            </div>
+          } 
+          shown={this.editModal} 
+          hide={this.hideEditModal} 
+          defaultValue={name} 
+        />
       </div>
     );
   }

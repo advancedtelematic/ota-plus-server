@@ -84,7 +84,7 @@ class Item extends Component {
             <li className='device-dropdown-item'>
               <a className='device-dropdown-item' id='edit-device' onClick={showEditName.bind(this, device)}>
                 <img src='/assets/img/icons/edit_icon.svg' alt='Icon' />
-                Edit device
+                {'Rename device'}
               </a>
             </li>
             <li className='device-dropdown-item'>

@@ -68,13 +68,13 @@ class WizardStep2 extends Component {
         </div>
       ) : (
         <div>
-          <h3>{'Select group(s)'}</h3>
+          <h3>{'Select groups'}</h3>
           <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
         </div>
       )
     ) : (
       <Tabs onChange={this.setActiveTab}>
-        <TabPane key='0' tab='Select group(s)'>
+        <TabPane key='0' tab='Select groups'>
           {groupsStore.groupsWizardFetchAsync.isFetching ? (
             <div className='wrapper-center'>
               <Loader />
