@@ -143,7 +143,7 @@ export const getStarted = {
               '<ul><li>The <strong>type of ECU</strong> that the software applies to.</li>' +
               '<li>The <strong>current version</strong> of the software that you want update.</li></ul>' +
               '<p><strong>To create a software update, follow these steps:</strong></p>' +
-              '<ol><li>Click <strong>Updates</strong>, and in the top right, click <strong>+Create new update</strong>.</li>' +
+              '<ol><li>Click <strong>Updates</strong>, and in the top right, click <strong>Create Update</strong>.</li>' +
               '<li>In the window that appears, give your update a name and add a brief description.</li>' +
               '<li>In the section <strong>Select Hardware ids</strong>, select the types of ECU that the update should apply to and click <strong>Continue</strong>.</li>  ' +
               '<li>In the next window, define the software version that you want to upgrade <strong>from</strong> and the version that you want to upgrade <strong>to</strong>.' +

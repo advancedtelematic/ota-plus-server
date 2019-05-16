@@ -10,8 +10,7 @@ class Header extends Component {
     return (
       <SubHeader>
         <a className='add-button grey-button' id='add-new-campaign'>
-          <span>{'+'}</span>
-          <span>{'Add campaign'}</span>
+          <span>{'Create Campaign'}</span>
         </a>
       </SubHeader>
     );

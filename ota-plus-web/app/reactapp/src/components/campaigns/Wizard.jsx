@@ -30,7 +30,7 @@ const initialWizardStepForAlphaPlus = [
   },
   {
     class: WizardStep2,
-    title: 'Select Group(s)',
+    title: 'Select Groups',
     name: 'groups',
     isFinished: false,
     isSearchBarShown: false,
@@ -89,7 +89,7 @@ const initialWizardStep = [
   },
   {
     class: WizardStep2,
-    title: 'Select Group(s)',
+    title: 'Select Groups',
     name: 'groups',
     isFinished: false,
     isSearchBarShown: false,
