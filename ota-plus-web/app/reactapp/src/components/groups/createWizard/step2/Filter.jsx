@@ -26,8 +26,11 @@ class Filter extends Component {
       name = 'deviceid';
     }
 
-    if (position) {
-      position = position[position.length - 1];
+    // the position equals to: "in position X", we need to get X from the string (X is a number)
+    // for example: the input is "in position 13" and the output is: "13"
+    if (position && position.indexOf(' ') > -1) {
+      const positionArray = position.split(' ');
+      position = positionArray[positionArray.length - 1];
     }
 
     switch (condition) {
