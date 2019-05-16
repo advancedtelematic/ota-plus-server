@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
 import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
-import { Button, Tag, Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
 
 const RetryButtonWithTooltip = ({ status, tooltipText, onClick }) => (
   <Tooltip title={tooltipText} placement="left">
@@ -33,8 +33,7 @@ class InstallationReportView extends Component {
 
   render() {
     const { showRetryModal } = this.props;
-    const { campaignsStore, featuresStore } = this.props.stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { campaignsStore } = this.props.stores;
     const { campaign } = campaignsStore;
     const devicesTotal = campaign.statistics.processed;
     const failures = campaign.statistics.failures;
@@ -50,14 +49,9 @@ class InstallationReportView extends Component {
             devices in campaign
           </div>
           <div className='col-actions'>Export device statistics</div>
-          {alphaPlusEnabled && (
-            <div style={{ display: 'flex', flexDirection: 'column' }} className='col-actions'>
-              <Tag color='#48dad0' className='alpha-tag alpha-tag--small-margins'>
-                ALPHA
-              </Tag>
-              <span>Retry the update installation</span>
-            </div>
-          )}
+          <div style={{ display: 'flex', flexDirection: 'column' }} className='col-actions'>
+            <span>Retry the update installation</span>
+          </div>
         </div>
 
         <>
@@ -93,19 +87,17 @@ class InstallationReportView extends Component {
                     </Tooltip>
                   </div>
                 </div>
-                {alphaPlusEnabled && (
-                  <div className='col-actions'>
-                    <div>
-                      <RetryButtonWithTooltip
-                        status={retryStatus}
-                        tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[retryStatus]}
-                        onClick={() => {
-                          showRetryModal(failure.code);
-                        }}
-                      />
-                    </div>
+                <div className='col-actions'>
+                  <div>
+                    <RetryButtonWithTooltip
+                      status={retryStatus}
+                      tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[retryStatus]}
+                      onClick={() => {
+                        showRetryModal(failure.code);
+                      }}
+                    />
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
