@@ -143,7 +143,7 @@ class Dashboard extends Component {
                           addNewWizard();
                         }}
                       >
-                        {'Add campaign'}
+                        {'Create Campaign'}
                       </a>
                     </li>
                     <li className='campaign-dropdown-item'>

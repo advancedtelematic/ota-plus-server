@@ -30,7 +30,7 @@ class GroupsListItem extends Component {
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const countDevices = groupsStore._getGroupDevices(group).length;
-
+    const isPlural = countDevices > 1; 
     return (
       <div>
         <div className={`item${isChosen ? ' selected' : ''}`} id={`checkbox-group-${groupId}`}>
@@ -49,7 +49,9 @@ class GroupsListItem extends Component {
             <div className={`icon icon--${groupType === 'static' ? 'default' : 'smart'}`} />
             <div className='desc'>
               <div className='title'>{groupName}</div>
-              <div className='subtitle'>{`${countDevices} device(s)`}</div>
+              <div className='subtitle'>
+                {`${countDevices} ${isPlural ? 'devices' : 'device'}`}
+              </div>
             </div>
           </div>
           {alphaPlusEnabled && groupType === 'dynamic' && (

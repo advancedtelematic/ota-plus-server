@@ -87,6 +87,11 @@ h3 {
       background: $color-mint2;
       outline: none;
     }
+    &--clear {
+      &:hover {
+        background: transparent;
+      }
+    }
     .ant-btn {
       border: none;
       img {

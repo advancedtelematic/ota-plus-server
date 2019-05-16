@@ -73,7 +73,11 @@ class List extends Component {
       unmanaged = true;
       isPackageInstalled = true;
     }
-    const unmanagedPackage = <div className='wrapper-center'>Unmanaged package</div>;
+    const unmanagedPackage = (
+      <div className='wrapper-center'>
+        {'This software was installed outside of OTA Connect so there are no details to display.'}
+      </div>
+    );
     const noPackage = <div className='wrapper-center absolute-position'>Select the package version to see its details.</div>;
     return (
       <span>

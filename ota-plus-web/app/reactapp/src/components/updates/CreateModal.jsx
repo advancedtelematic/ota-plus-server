@@ -200,7 +200,7 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={showDetails ? 'Update details' : 'Create new update'}
+        title={showDetails ? 'Update details' : 'Create Update'}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' id='close-update-modal' onClick={hide}>

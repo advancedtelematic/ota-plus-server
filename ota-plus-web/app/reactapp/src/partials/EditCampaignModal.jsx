@@ -58,7 +58,7 @@ class EditCampaignModal extends Component {
           action={campaignsStore.campaignsRenameAsync}
           errorMsg={campaignsStore.campaignsRenameAsync.data && campaignsStore.campaignsRenameAsync.data.description}
         />
-        <div className='row'>
+        <div>
           <div className='col-xs-12'>
             <FormInput
               onValid={this.enableButton}
@@ -74,7 +74,7 @@ class EditCampaignModal extends Component {
             />
           </div>
         </div>
-        <div className='row'>
+        <div>
           <div className='col-xs-12'>
             <div className='body-actions'>
               <Button htmlType='submit' disabled={this.submitButtonDisabled || campaignsStore.campaignsRenameAsync.isFetching} className='btn-primary' id='add'>

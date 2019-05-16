@@ -137,9 +137,14 @@ class ContentPanel extends Component {
                   />
                 ))
               ) : (
-                <span className='devices-panel__list-empty'>
-                  <div className='wrapper-center'>{'This group is empty. Please, drag and drop devices here.'}</div>
-                </span>
+                <div className='wrapper-center'>
+                  <div className='devices-panel__list-empty'>
+                    {isSmart 
+                      ? 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.' 
+                      : 'This group is empty. Please, drag and drop devices here.'
+                    }
+                  </div>
+                </div>
               )}
             </InfiniteScroll>
           </div>

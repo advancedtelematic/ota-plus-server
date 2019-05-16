@@ -15,7 +15,9 @@ class MtuList extends Component {
     const { softwareStore, devicesStore } = this.props.stores;
     const emptyHistory = (
       <div className='wrapper-center'>
-        <span className={'overview-panel__empty'}>Multi target update history is empty.</span>
+        <span className={'overview-panel__empty'}>
+          {'This device hasn\'t installed any updates yet.'}
+        </span>
       </div>
     );
     return (
