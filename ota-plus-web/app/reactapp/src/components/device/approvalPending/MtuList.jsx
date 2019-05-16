@@ -14,7 +14,9 @@ class MtuList extends Component {
     const { devicesStore } = this.props.stores;
     const emptyApprovalPending = (
       <div className='wrapper-center'>
-        <span className={'overview-panel__empty'}>You haven't got any campaigns which require approval.</span>
+        <span className={'overview-panel__empty'}>
+          {'There aren\'t any updates that are waiting for approval on this device.'}
+        </span>
       </div>
     );
     return (

@@ -15,7 +15,9 @@ class MtuQueueList extends Component {
     const emptyQueue = (
       <div className='overview-panel__list'>
         <div className='wrapper-center'>
-          <span className={'overview-panel__empty'}>You haven't got any multi target updates pending.</span>
+          <span className={'overview-panel__empty'}>
+            {'There aren\'t any updates queued for this device.'}
+          </span>
         </div>
       </div>
     );
