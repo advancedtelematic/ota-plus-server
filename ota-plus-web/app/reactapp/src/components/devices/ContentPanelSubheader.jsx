@@ -5,6 +5,8 @@ import { SubHeader } from '../../partials';
 import { observer, inject } from 'mobx-react';
 import { FormInput } from '../../partials';
 
+const CHARACTER_POSITION_REGEXP_PATTERN = '\\((.*?)\\)';
+
 @inject('stores')
 @observer
 class ContentPanelSubheader extends Component {
@@ -29,9 +31,11 @@ class ContentPanelSubheader extends Component {
           type: 'contains',
         });
       } else if (element.search('position') > 0) {
-        let indexOfCharacter = element.indexOf('(') + 1;
-        let character = element[indexOfCharacter];
-        let position = singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1];
+
+        // we need to get value between () brackets
+        // for example: the input is "deviceid,position(13),is,8" and the output is ["(15)", "15"]
+        const [, character] = element.match(CHARACTER_POSITION_REGEXP_PATTERN);
+        const position = singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1];
 
         if (element.search('than') < 0) {
           singleExpressionToDisplay = ['Device ID', 'has a character equal to', position, `in position ${character}`];
