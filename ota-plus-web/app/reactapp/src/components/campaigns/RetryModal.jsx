@@ -2,11 +2,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import { Form } from 'formsy-antd';
-import { Row, Col, DatePicker, Button } from 'antd';
 import { OTAModal } from '../../partials';
 @inject('stores')
 @observer
