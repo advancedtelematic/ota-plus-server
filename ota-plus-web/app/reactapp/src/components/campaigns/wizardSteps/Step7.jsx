@@ -104,7 +104,7 @@ class WizardStep7 extends Component {
                         {group.groupName}
                       </div>
                       <div className='subtitle' id='wizard-summary-group-devices'>
-                        {t('common.deviceWithCount', { count: groupsStore._getGroupDevices(group).length })}
+                        {t('common.deviceWithCount', { count: groupsStore._getGroupDevicesCount(group) })}
                       </div>
                     </div>
                   </div>
