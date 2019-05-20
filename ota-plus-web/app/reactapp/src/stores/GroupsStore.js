@@ -433,4 +433,8 @@ export default class GroupsStore {
   _getGroupDevices(group) {
     return group.devices.values;
   }
+
+  _getGroupDevicesCount(group) {
+    return group.devices.total;
+  }
 }

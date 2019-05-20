@@ -29,8 +29,9 @@ class GroupsListItem extends Component {
     const { groupName, groupType, id: groupId } = group;
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
-    const countDevices = groupsStore._getGroupDevices(group).length;
+    const countDevices = groupsStore._getGroupDevicesCount(group);
     const isPlural = countDevices > 1; 
+
     return (
       <div>
         <div className={`item${isChosen ? ' selected' : ''}`} id={`checkbox-group-${groupId}`}>
