@@ -129,16 +129,22 @@ class Devices extends Component {
 
   render() {
     const { addNewWizard } = this.props;
-    const { devicesStore, groupsStore } = this.props.stores;
+    const { devicesStore } = this.props.stores;
+    const { devicesInitialTotalCount } = devicesStore;
+
     return (
       <span>
-        {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ? (
+        {!devicesInitialTotalCount && devicesStore.devicesFetchAsync.isFetching ? (
           <div className='wrapper-center'>
             <Loader />
           </div>
-        ) : devicesStore.devicesInitialTotalCount ? (
+        ) : devicesInitialTotalCount ? (
           <span>
-            <DevicesGroupsPanel showCreateGroupModal={this.showCreateGroupModal} selectGroup={this.selectGroup} onDeviceDrop={this.onDeviceDrop} />
+            <DevicesGroupsPanel 
+              showCreateGroupModal={this.showCreateGroupModal} 
+              selectGroup={this.selectGroup} 
+              onDeviceDrop={this.onDeviceDrop} 
+            />
             <DevicesContentPanel
               changeSort={this.changeSort}
               changeFilter={this.changeFilter}
@@ -153,16 +159,21 @@ class Devices extends Component {
               <div>
                 <img src='/assets/img/icons/white/devices.svg' alt='Icon' />
               </div>
-              <div>{"You haven't created any devices yet."}</div>
+              <div>{'You currently have no devices to manage. Try provisioning some devices first.'}</div>
               <a href='https://docs.atsgarage.com/quickstarts/start-intro.html' className='add-button light' id='add-new-device' target='_blank'>
-                <span>+</span>
-                <span>Add new device</span>
+                <span>{'+ Add new device'}</span>
               </a>
             </div>
           </div>
         )}
-        {this.createGroupModalShown ? <GroupsCreateModal shown={this.createGroupModalShown} hide={this.hideCreateGroupModal} selectGroup={this.selectGroup} /> : null}
-        {this.deleteConfirmationShown ? (
+        {this.createGroupModalShown && (
+          <GroupsCreateModal 
+            shown={this.createGroupModalShown} 
+            hide={this.hideCreateGroupModal} 
+            selectGroup={this.selectGroup} 
+          />
+        )}
+        {this.deleteConfirmationShown && (
           <ConfirmationModal
             modalTitle={<div className='text-red'>Delete device</div>}
             id='delete-device-confirmation-modal'
@@ -171,8 +182,15 @@ class Devices extends Component {
             deleteItem={this.deleteDevice}
             topText={<div className='delete-modal-top-text'>Device will be removed.</div>}
           />
-        ) : null}
-        {this.editNameShown ? <EditModal modalTitle={<div>Edit name</div>} shown={this.editNameShown} hide={this.hideEditName} device={this.itemToEdit} /> : null}
+        )}
+        {this.editNameShown && (
+          <EditModal 
+            modalTitle={<div>Edit name</div>} 
+            shown={this.editNameShown} 
+            hide={this.hideEditName} 
+            device={this.itemToEdit} 
+          />
+        )}
       </span>
     );
   }

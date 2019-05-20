@@ -26,3 +26,9 @@ export const SEARCH_REFRESH_TIMEOUT = 400;
  */
 
 export const NO_VERSION_INFO = 'No information / Any';
+
+/*
+ *  Device groups
+ */
+
+export const ARTIFICIAL = 'artificial';
