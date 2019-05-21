@@ -16,7 +16,6 @@ import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT } from '../config';
 import { Navigation, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
-import { GetStarted } from '../components/getstarted';
 
 @inject('stores')
 @observer
