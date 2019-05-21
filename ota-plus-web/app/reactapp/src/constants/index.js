@@ -32,3 +32,23 @@ export const NO_VERSION_INFO = 'No information / Any';
  */
 
 export const ARTIFICIAL = 'artificial';
+
+/*
+ *  Web events
+ */
+
+ export const WEB_EVENTS = {
+    DEVICE_CREATED: 'DeviceCreated',
+    DEVICE_EVENT_MESSAGE: 'DeviceEventMessage',
+    DEVICE_SEEN: 'DeviceSeen',
+    DEVICE_SYSTEM_INFO_CHANGED: 'DeviceSystemInfoChanged',
+    DEVICE_UPDATE_STATUS: 'DeviceUpdateStatus',
+    PACKAGE_BLACKLISTED: 'PackageBlacklisted',
+    TUF_TARGET_ADDED: 'TufTargetAdded',
+    UPDATE_SPEC: 'UpdateSpec'
+};
+export const UPDATE_STATUSES = {
+    DOWNLOADING: 'downloading',
+    FINISHED: 'Finished',
+    INSTALLING: 'installing'
+};
