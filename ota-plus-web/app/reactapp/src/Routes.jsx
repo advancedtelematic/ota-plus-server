@@ -23,10 +23,21 @@ import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './component
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
-const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload, activeTab, switchTab }) => (
+const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload }) => (
   <Switch>
     <Route path='/get-started' component={GetStartedPage} />
-    <Route exact path='/' render={props => <DashboardPage {...props} addNewWizard={addNewWizard} uiAutoFeatureActivation={uiAutoFeatureActivation} />} />
+    <Route 
+      exact 
+      path='/' 
+      render={props => (
+        <DashboardPage 
+          {...props} 
+          addNewWizard={addNewWizard}
+          uiAutoFeatureActivation={uiAutoFeatureActivation} 
+          uiUserProfileMenu={uiUserProfileMenu}
+        />
+      )}
+    />
     <Route path='/fireworks' component={FireworksPage} />
     <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path='/device/:id' component={DevicePage} />
