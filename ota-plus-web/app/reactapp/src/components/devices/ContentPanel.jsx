@@ -11,6 +11,7 @@ import ContentPanelHeader from './ContentPanelHeader';
 import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
+import { ARTIFICIAL } from '../../constants';
 
 const connections = {
   live: {
@@ -90,12 +91,20 @@ class ContentPanel extends Component {
     const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
     const { devicesStore, featuresStore, groupsStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
+    const { 
+      devices,
+      devicesCurrentPage,
+      devicesFilter, 
+      devicesGroupFilter,
+      devicesLimit,
+      devicesTotalCount
+    } = devicesStore;
     const { selectedGroup } = groupsStore;
-    const { isSmart } = selectedGroup;
+    const { type, isSmart } = selectedGroup;
 
     return (
       <div className='devices-panel'>
-        <ContentPanelHeader devicesFilter={devicesStore.devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
+        <ContentPanelHeader devicesFilter={devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
         {isSmart &&
           (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
             <div className='wrapper-center'>
@@ -108,11 +117,11 @@ class ContentPanel extends Component {
           <div className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}>
             <InfiniteScroll
               className='wrapper-infinite-scroll'
-              hasMore={devicesStore.devicesCurrentPage < devicesStore.devicesTotalCount / devicesStore.devicesLimit}
+              hasMore={devicesCurrentPage < devicesTotalCount / devicesLimit}
               isLoading={devicesStore.devicesFetchAsync.isFetching}
               useWindow={false}
               loadMore={() => {
-                devicesStore.loadMoreDevices(devicesStore.devicesFilter, devicesStore.devicesGroupFilter);
+                devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter);
               }}
               threshold={100}
             >
@@ -121,8 +130,8 @@ class ContentPanel extends Component {
                   <Loader />
                 </div>
               )}
-              {devicesStore.devices.length ? (
-                _.map(devicesStore.devices, device => (
+              {devices.length ? (
+                _.map(devices, device => (
                   <DeviceItem
                     device={device}
                     goToDetails={this.goToDetails}
@@ -139,9 +148,11 @@ class ContentPanel extends Component {
               ) : (
                 <div className='wrapper-center'>
                   <div className='devices-panel__list-empty'>
-                    {isSmart 
-                      ? 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.' 
-                      : 'This group is empty. Please, drag and drop devices here.'
+                    {type === ARTIFICIAL
+                      ? 'All your devices are grouped. Good work!'
+                      : isSmart 
+                          ? 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.' 
+                          : 'This group is empty. Please, drag and drop devices here.'
                     }
                   </div>
                 </div>
