@@ -18,18 +18,22 @@ class Dashboard extends Component {
     stores: PropTypes.object,
     addNewWizard: PropTypes.func,
     uiAutoFeatureActivation: PropTypes.bool,
+    uiUserProfileMenu: PropTypes.bool
   };
 
   componentDidMount() {
-    const { stores, uiAutoFeatureActivation } = this.props;
+    const { stores, uiAutoFeatureActivation, uiUserProfileMenu } = this.props;
     const { provisioningStore, devicesStore, softwareStore } = stores;
     if (!uiAutoFeatureActivation) {
       provisioningStore.sanityCheckCompleted = true;
     }
-    provisioningStore.namespaceSetup();
+    if (uiUserProfileMenu) {
+      provisioningStore.namespaceSetup();
+    }
     devicesStore.fetchDevicesWithLimit(DEVICES_LIMIT_LATEST);
     softwareStore.fetchPackagesWithLimit();
   }
+
   componentWillUnmount() {
     const { stores } = this.props;
     const { devicesStore, softwareStore, campaignsStore } = stores;
@@ -37,33 +41,37 @@ class Dashboard extends Component {
     softwareStore._reset();
     campaignsStore._reset();
   }
+
   render() {
-    const { stores, addNewWizard } = this.props;
+    const { stores, addNewWizard, uiUserProfileMenu } = this.props;
     const { userStore, provisioningStore } = stores;
     const isTermsAccepted = userStore._isTermsAccepted();
     const { sanityCheckCompleted } = provisioningStore;
+    const renderDashboard = (
+      <MetaData title={title}>
+        <DashboardContainer addNewWizard={addNewWizard} />
+      </MetaData>
+    );
+    const renderLoader = (
+      <div className='wrapper-center'>
+        <Loader />
+      </div>
+    );
 
     return (
       <FadeAnimation display='flex'>
-        {isTermsAccepted ? (
-          sanityCheckCompleted ? (
-            <MetaData title={title}>
-              <DashboardContainer addNewWizard={addNewWizard} />
-            </MetaData>
-          ) : provisioningStore.namespaceSetupFetchAsync.isFetching ? (
-            <div className='wrapper-center'>
-              <Loader />
-            </div>
-          ) : (
-                <SanityCheckContainer />
-              )
-        ) : userStore.contractsFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
-            <Loader />
-          </div>
-        ) : (
-              <Terms />
-            )}
+        {uiUserProfileMenu 
+          ? isTermsAccepted
+            ? sanityCheckCompleted 
+              ? renderDashboard
+              : provisioningStore.namespaceSetupFetchAsync.isFetching 
+                ? renderLoader
+                : <SanityCheckContainer />
+            : userStore.contractsFetchAsync.isFetching 
+              ? renderLoader
+              : <Terms />
+          : renderDashboard
+        }
       </FadeAnimation>
     );
   }
