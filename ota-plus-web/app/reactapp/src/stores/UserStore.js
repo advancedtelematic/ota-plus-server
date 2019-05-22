@@ -1,9 +1,10 @@
 /** @format */
 
-import { observable, toJS } from 'mobx';
+import { observable } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
 import _ from 'lodash';
+
 import {
   API_USER_DETAILS,
   API_USER_UPDATE,
@@ -11,10 +12,10 @@ import {
   API_USER_ACTIVE_DEVICE_COUNT,
   API_USER_DEVICES_SEEN,
   API_USER_CONTRACTS,
-  API_USER_NAMESPACES
+  API_USER_ORGANIZATIONS
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import * as contracts from '../../../assets/contracts/';
+import * as contracts from '../../../assets/contracts';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -24,7 +25,7 @@ export default class UserStore {
   @observable userChangePasswordAsync = {};
   @observable userActiveDeviceCountFetch = {};
   @observable user = {};
-  @observable userNamespace = '';
+  @observable userOrganizationName = '';
   @observable contracts = {};
   @observable ifLogout = false;
 
@@ -42,10 +43,10 @@ export default class UserStore {
     resetAsync(this.contractsAcceptAsync);
   }
 
-  getNamespaces = async () => {
-    const response = await axios.get(API_USER_NAMESPACES);
+  getOrganizations = async () => {
+    const response = await axios.get(API_USER_ORGANIZATIONS);
     const { data } = await response;
-    this.userNamespace = data.length ? data[0] : '';
+    this.userOrganizationName = data.find(organization => organization.isCreator).name;
   };
 
   fetchUser() {
@@ -56,7 +57,7 @@ export default class UserStore {
         function(response) {
           this.user = response.data;
           this.userFetchAsync = handleAsyncSuccess(response);
-          this.getNamespaces();
+          this.getOrganizations();
         }.bind(this),
       )
       .catch(
@@ -89,7 +90,7 @@ export default class UserStore {
   }
 
   acceptContract(path) {
-    let encodedPath = encodeURIComponent(path);
+    const encodedPath = encodeURIComponent(path);
     resetAsync(this.contractsAcceptAsync, true);
     return axios
       .put(`${API_USER_CONTRACTS}/${encodedPath}`)
@@ -194,7 +195,7 @@ export default class UserStore {
   }
 
   _setUsageInitial(startTime, monthsCount) {
-    for (var i = 0; i <= monthsCount; i++) {
+    for (let i = 0; i <= monthsCount; i++) {
       const startTimeTmp = moment(startTime).add(i, 'months');
       const objKey = startTimeTmp.format('YYYYMM');
       this.activatedDevices.set(objKey, {});
