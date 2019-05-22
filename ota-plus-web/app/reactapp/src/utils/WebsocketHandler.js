@@ -1,5 +1,7 @@
 /** @format */
 
+import { WEB_EVENTS, UPDATE_STATUSES } from '../constants';
+
 const WebsocketHandler = function (wsUrl, stores) {
   console.log(`WebSocket: wsUrl: ${wsUrl}`);
   const base = this;
@@ -13,54 +15,53 @@ const WebsocketHandler = function (wsUrl, stores) {
 
     this.websocket.onmessage = function(msg) {
       const eventObj = JSON.parse(msg.data);
-      const type = eventObj.type;
-      const data = eventObj.event;
+      const { type, event: data } = eventObj;
+      const { campaignsStore, devicesStore, softwareStore } = stores;
       console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
       switch (type) {
-        case 'DeviceSeen':
-          stores.devicesStore._updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
+        case WEB_EVENTS.DEVICE_SEEN:
+          devicesStore._updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
           if (window.location.href.indexOf('/device/') > -1) {
-            stores.devicesStore.fetchDirectorAttributes(data.uuid);
-            stores.devicesStore._updateStatus(data.uuid, 'downloading');
+            devicesStore.fetchDirectorAttributes(data.uuid);
+            devicesStore._updateStatus(data.uuid, UPDATE_STATUSES.DOWNLOADING);
           }
           break;
-        case 'DeviceUpdateStatus':
-          stores.devicesStore._updateDeviceData(data.device, { deviceStatus: data.status });
+        case WEB_EVENTS.DEVICE_UPDATE_STATUS:
+          devicesStore._updateDeviceData(data.device, { deviceStatus: data.status });
           break;
-        case 'DeviceCreated':
-          stores.devicesStore._addDevice(data);
-          if (document.cookie.indexOf('fireworksPageAcknowledged') == -1 && stores.devicesStore.devicesInitialTotalCount === 1) {
+        case WEB_EVENTS.DEVICE_CREATED:
+          devicesStore._addDevice(data);
+          if (document.cookie.indexOf('fireworksPageAcknowledged') == -1 && devicesStore.devicesInitialTotalCount === 1) {
             window.location = '#/fireworks';
           }
           break;
-        case 'TufTargetAdded':
-          stores.softwareStore._addPackage(data);
+        case WEB_EVENTS.TUF_TARGET_ADDED:
+          softwareStore._addPackage(data);
           break;
-        case 'PackageBlacklisted':
-          stores.softwareStore.fetchBlacklist();
+        case WEB_EVENTS.PACKAGE_BLACKLISTED:
+          softwareStore.fetchBlacklist();
           break;
-        case 'UpdateSpec':
-          if (window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.uuid === data.device) {
-            stores.devicesStore.fetchMultiTargetUpdates(data.device);
-            if (data.status === 'Finished') {
-              stores.softwareStore.fetchPackagesHistory(data.device, stores.softwareStore.packagesHistoryFilter, true);
-              stores.softwareStore.fetchOndevicePackages(data.device, null);
+        case WEB_EVENTS.UPDATE_SPEC:
+          if (window.location.href.indexOf('/device/') > -1 && devicesStore.device.uuid === data.device) {
+            devicesStore.fetchMultiTargetUpdates(data.device);
+            if (data.status === UPDATE_STATUSES.FINISHED) {
+              softwareStore.fetchPackagesHistory(data.device, softwareStore.packagesHistoryFilter, true);
+              softwareStore.fetchOndevicePackages(data.device, null);
             }
           }
-          if (data.status === 'Finished') {
-            if (Object.keys(stores.campaignsStore.campaign).length) {
-              let campaignId = stores.campaignsStore.campaign.id;
-              stores.campaignsStore.fetchCampaign(campaignId);
+          if (data.status === UPDATE_STATUSES.FINISHED) {
+            if (campaignsStore.campaign) {
+              campaignsStore.fetchCampaign(campaignsStore.campaign.id);
             }
-            stores.campaignsStore.fetchCampaigns('finished');
+            campaignsStore.fetchCampaigns(campaignsStore.activeTab);
           }
           break;
-        case 'DeviceSystemInfoChanged':
-          stores.devicesStore.fetchDeviceNetworkInfo(data.uuid, { isFromWs: true });
+        case WEB_EVENTS.DEVICE_SYSTEM_INFO_CHANGED:
+          devicesStore.fetchDeviceNetworkInfo(data.uuid, { isFromWs: true });
           break;
-        case 'DeviceEventMessage':
-          stores.devicesStore._updateStatus(data.deviceUuid, 'installing');
-          stores.devicesStore.fetchEvents(data.deviceUuid);
+        case WEB_EVENTS.DEVICE_EVENT_MESSAGE:
+          devicesStore._updateStatus(data.deviceUuid, UPDATE_STATUSES.INSTALLING);
+          devicesStore.fetchEvents(data.deviceUuid);
           break;
         default:
           console.log('Unhandled event type: ' + eventObj.type);
