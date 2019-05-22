@@ -30,7 +30,7 @@ class NavigationPopover extends Component {
   render() {
     const { stores, uiCredentialsDownload, uiUserProfileEdit } = this.props;
     const { userStore } = stores;
-    const { user, userNamespace } = userStore;
+    const { user, userOrganizationName } = userStore;
     const settingsOnly = !uiUserProfileEdit && uiCredentialsDownload;
 
     const { fullName } = user;
@@ -57,7 +57,7 @@ class NavigationPopover extends Component {
         <div className="menu-login-clickable">
           <div className="navigation-name-organization">
             <div className="fullname">{fullName}</div>
-            <div className="organization" data-tip={userNamespace}>{userNamespace}</div>
+            <div className="organization" data-tip={userOrganizationName}>{userOrganizationName}</div>
           </div>
           <Avatar src={user.picture} className="ant-avatar-menu" id="icon-profile-min">
             {initials}
