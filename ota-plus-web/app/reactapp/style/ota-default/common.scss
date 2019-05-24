@@ -307,7 +307,9 @@ strong {
   }
 
   &.nav-dots {
-    right: 5px;
+    position: absolute;
+    top: 15px;
+    right: 8px;
     span {
       background: $dashboard-header-button;
       height: 4px;
@@ -520,6 +522,7 @@ input {
 
   .container {
     background: $devices-groups-bg;
+    padding-right: 0;
   }
 
   .alert {
@@ -594,37 +597,103 @@ input {
   }
 
   .right-nav {
-    height: 50px;
-    margin: 0;
+    height: 49px;
     display: flex;
     position: absolute;
-    right: 15px;
+    right: 0;
+    background-color: $devices-groups-bg;
+  }
 
-    li {
-      height: 48px;
-      a {
-        &:not(.add-button) {
-          color: #888;
-          font-size: 14px;
-          padding: 15px;
-          display: block;
-
-          &:hover {
-            color: #fff;
-            @include transition;
+  .support-menu {
+    overflow: hidden;
+    z-index: 999;
+    &-mask {
+      z-index: 998;
+      position: absolute;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, .13);
+    }
+    &-header {
+      height: 49px;
+      width: 114px;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      color: $devices-group-text;
+      font-size: 12px;
+      font-weight: 500;
+      transition: .25s ease-in-out;
+      &__separator {
+        width: 1px;
+        height: 28px;
+        margin-right: 20px;
+        background-color: $dashboard-header-text;
+        transition: .25s ease-in-out;
+      }
+      &__arrows {
+        &--left {
+          margin-right: 4px;
+        }
+        &--right {
+          position: absolute;
+          right: 16px;
+        }
+      }
+    }
+    &-body {
+      height: calc(100vh - 49px);
+      padding: 60px 20px;
+      position: absolute;
+      width: 114px;
+      right: -250px;
+      overflow: hidden;
+      background-color: $device-item-bg;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.12);
+      transition: .4s ease-in-out;
+      .support-menu-links {
+        &__link {
+          margin-bottom: 10px;
+          a {
+            font-size: 12px;
+            font-weight: 500;
+            color: $primary-color;
+            text-decoration: underline;
+            img {
+              margin-left: 4px;
+            }
           }
         }
       }
-
-      &.separator {
-        line-height: 1.5em;
-        padding: 15px 0;
-        color: $devices-group-text;
+      &__separator {
+        width: 100%;
+        height: 1px;
+        margin: 60px auto;
+        background-color: $device-active-item-bg;
+      }
+    }
+    &--expanded {
+      .support-menu {
+        &-header {
+          width: 250px; 
+          background-color: $color-mint;
+          color: $hardware-overlay-item-color;
+          &__separator {
+            background-color: $color-mint;
+          }
+        }
+        &-body {
+          width: 250px;
+          right: 0;
+          transition: .22s ease-in-out;
+        }
       }
     }
   }
 
-  @media only screen and (max-width: 1480px) {
+  @media only screen and (max-width: 1560px) {
     #navbar > .navbar-nav > li > a {
       padding: 15px 12px;
     }
@@ -639,11 +708,10 @@ input {
 
 .menu-login-clickable {
   padding: 5px 0 5px 2px;
+  margin-right: 10px;
   width: 300px;
-  position: absolute;
-  right: 0;
   text-align: right;
-
+  position: relative;
   .ant-avatar-image {
     background: #ccc;
   }
@@ -654,7 +722,7 @@ input {
 }
 
 .dropdown-menu-popover {
-  right: 25px !important;
+  right: 114px;
   width: 350px;
   border-radius: 0 !important;
   top: 45px !important;
