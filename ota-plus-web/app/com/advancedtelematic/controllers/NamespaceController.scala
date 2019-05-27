@@ -32,11 +32,11 @@ class NamespaceController @Inject()(val conf: Configuration,
     val userId = request.idToken.userId
       userProfileApi.namespaceIsAllowed(userId, namespace).map {
         case false =>
-          log.info(s"User $userId tries to switch to the namespace ${namespace.get}," +
+          log.info(s"User ${userId.id} tries to switch to the namespace ${namespace.get}," +
             " but it doesn't exist or the user is not allowed to access it.")
           redirectToIndex
         case true =>
-          log.info(s"User $userId switches to the namespace ${namespace.get}")
+          log.info(s"User ${userId.id} switches to the namespace ${namespace.get}")
           redirectToIndex.withSession(
             "namespace" -> namespace.get,
             "id_token" -> request.idToken.value,
