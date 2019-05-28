@@ -36,7 +36,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
     )
     .settings(testFrameworks := Seq(sbt.TestFrameworks.ScalaTest))
     .settings(fork in Test := false) // PRO-157
-    .settings(publish := ())
+    .settings(publish := (()))
     .enablePlugins(BuildInfoPlugin)
     .settings(buildInfoOptions ++= Seq(BuildInfoOption.ToJson, BuildInfoOption.ToMap))
 
@@ -50,6 +50,6 @@ lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
 lazy val rootProject = (project in file(".")).
   aggregate(otaPlusWeb)
   .settings(Release.settings)
-  .settings(publish := ())
+  .settings(publish := (()))
 
 publishArtifact := false
