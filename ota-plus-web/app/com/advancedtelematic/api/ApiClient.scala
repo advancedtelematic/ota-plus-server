@@ -36,6 +36,8 @@ case class UserPass(user: String, pass: String)
 
 case class Feature(feature: FeatureName, client_id: Option[UUID], enabled: Boolean)
 
+case class UserOrganization(namespace: Namespace, name: String, isCreator: Boolean)
+
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
                          authuser: Option[UserPass] = None,
@@ -153,26 +155,35 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
 
   implicit val featureNameR: Reads[FeatureName] = Reads.StringReads.map(FeatureName)
   implicit val featureNameW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
+  implicit val namespaceR: Reads[Namespace] = Reads.StringReads.map(Namespace(_))
+
   implicit val featureR: Reads[Feature] = {(
     (__ \ "feature").read[FeatureName] and
     (__ \ "client_id").readNullable[UUID] and
     (__ \ "enabled").read[Boolean]
   )(Feature.apply _)}
-  implicit val namespaceR: Reads[Namespace] = Reads.StringReads.map(Namespace)
+
+  implicit val userOrganizationR: Reads[UserOrganization] = {
+    (
+      (__ \ "namespace").read[Namespace] and
+      (__ \ "name").read[String] and
+      (__ \ "isCreator").read[Boolean]
+    )(UserOrganization.apply _)
+  }
 
   def getUser(userId: UserId): Future[JsValue] =
     userProfileRequest("users/" + userId.id).execJsonValue(apiExec)
 
-  def getFeature(userId: UserId, feature: FeatureName): Future[Feature] =
-    userProfileRequest("users/" + userId.id + "/features/" + feature.get).execJson[Feature](apiExec)
+  def getFeature(namespace: Namespace, feature: FeatureName): Future[Feature] =
+    userProfileRequest("organizations/" + namespace.get + "/features/" + feature.get).execJson[Feature](apiExec)
 
-  def getFeatures(userId: UserId): Future[Seq[FeatureName]] =
-    userProfileRequest("users/" + userId.id + "/features").execJson[Seq[FeatureName]](apiExec)
+  def getFeatures(namespace: Namespace): Future[Seq[FeatureName]] =
+    userProfileRequest("organizations/" + namespace.get + "/features").execJson[Seq[FeatureName]](apiExec)
 
-  def activateFeature(userId: UserId, feature: FeatureName, clientId: UUID): Future[Result] = {
+  def activateFeature(namespace: Namespace, feature: FeatureName, clientId: UUID): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
-    userProfileRequest(s"users/${userId.id}/features")
+    userProfileRequest(s"organizations/${namespace.get}/features")
       .transform(_.withMethod("POST").withBody(requestBody))
       .execResult(apiExec)
   }
@@ -196,11 +207,18 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     userProfileRequest(s"users/${userId.id}/${path}").transform(_.withMethod(method))
       .execResult(apiExec)
 
-  def namespaceIsAllowed(userId: UserId, namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] =
-    userProfileRequest(s"users/${userId.id}/namespaces")
+  def userOrganizations(userId: UserId): Future[Set[UserOrganization]] =
+    userProfileRequest(s"users/${userId.id}/organizations")
       .transform(_.withMethod("GET"))
-      .execJson[Set[Namespace]](apiExec)
-      .map(_.contains(namespace))
+      .execJson[Set[UserOrganization]](apiExec)
+
+  def namespaceIsAllowed(userId: UserId, namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] =
+    userOrganizations(userId).map(_.map(_.namespace)).map(_.contains(namespace))
+
+  def getNamespaceSetupStatus(namespace: Namespace): Future[Result] =
+    userProfileRequest(s"organizations/${namespace.get}/setup")
+      .transform(_.withMethod("GET"))
+      .execResult(apiExec)
 }
 
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig

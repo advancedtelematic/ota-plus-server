@@ -44,4 +44,8 @@ class NamespaceController @Inject()(val conf: Configuration,
           )
       }
     }
+
+  def namespaceStatus: Action[AnyContent]= authAction.async { request =>
+    userProfileApi.getNamespaceSetupStatus(request.namespace)
+  }
 }
