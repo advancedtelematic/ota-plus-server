@@ -49,8 +49,8 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
   val registrationUrl = s"$CryptHost/accounts/$namespaceWithOnlineKeys/credentials/registration"
 
   val authPlusClientUrl =  s"$authPlusUri/clients/$clientId"
-  val treehubJsonUrl = s"$userProfileUri/api/v1/users/$namespaceWithOnlineKeys/features/treehub"
-  val treehubJsonOfflineUrl = s"$userProfileUri/api/v1/users/$namespaceWithOfflineKeys/features/treehub"
+  val treehubJsonUrl = s"$userProfileUri/api/v1/organizations/$namespaceWithOnlineKeys/features/treehub"
+  val treehubJsonOfflineUrl = s"$userProfileUri/api/v1/organizations/$namespaceWithOfflineKeys/features/treehub"
 
   val rootJsonUrl = s"$repoServerUri/api/v1/user_repo/root.json"
   val keyPairsUrl = s"$keyServerUri/api/v1/root/$namespaceWithOnlineKeys/keys/targets/pairs"
@@ -106,6 +106,15 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
 
     case (GET, `keyOfflineUrl`) =>
       Action(_ => NotFound)
+
+    case (GET, url) if url.endsWith("/userinfo") =>
+      Action(_ => Ok(
+        Json.obj(
+          "email" -> "",
+          "sub" -> "",
+          "name" -> ""
+        )
+      ))
   }
 
   val mockClient = MockWS(defaultCryptRoutes orElse defaultRoutes)

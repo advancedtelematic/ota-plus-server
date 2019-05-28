@@ -116,7 +116,7 @@ class OAuthOidcController @Inject()(
       val loginResult = for {
         tokens                                   <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
-        ns = namespaceProvider.apply(newTokens)
+        ns <- namespaceProvider(newTokens)
         _ <- publishLoginEvent(idToken.userId, ns, accessToken)
       } yield
         Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(

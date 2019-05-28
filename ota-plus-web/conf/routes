@@ -45,3 +45,4 @@ PUT     /user/*path                       com.advancedtelematic.controllers.User
 
 # Namespaces AKA organizations
 GET     /organizations/:namespace/index   com.advancedtelematic.controllers.NamespaceController.switchNamespace(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
+GET     /organization/setup               com.advancedtelematic.controllers.NamespaceController.namespaceStatus
