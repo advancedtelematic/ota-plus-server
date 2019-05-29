@@ -50,6 +50,29 @@ h3 {
     color: $color-white;
   }
 
+  &-hero.organization-namespace {
+    font-size: 12px;
+    height: 24px;
+    padding: 0 6px;
+    @media only screen and (max-width: 1430px) {
+      font-size: 9px;
+    }
+    & > span {
+      &:first-of-type {
+        max-width: 170px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+        @media only screen and (max-width: 1430px) {
+          font-size: 9px;
+          max-width: 80px;
+        }
+      }
+    }
+  }
+
   &-plain,
   &-plain:focus,
   &-plain:hover {
