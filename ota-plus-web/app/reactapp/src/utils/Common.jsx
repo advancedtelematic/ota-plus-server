@@ -1,9 +1,12 @@
 /** @format */
 
 import _ from 'lodash';
+import Cookies from 'js-cookie';
+import { ORGANIZATION_NAMESPACE_COOKIE } from '../config';
 
 const doLogout = () => {
   document.getElementById('logout').submit();
+  Cookies.remove(ORGANIZATION_NAMESPACE_COOKIE);
 };
 
 const resetAsync = (obj, isFetching = false) => {
