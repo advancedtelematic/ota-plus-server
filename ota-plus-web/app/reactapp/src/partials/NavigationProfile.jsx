@@ -3,10 +3,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { observer, inject } from 'mobx-react';
 
 import { Avatar, Divider, Tag } from 'antd';
-import { assets } from '../config';
+import { assets, ORGANIZATION_NAMESPACE_COOKIE } from '../config';
 
 @inject('stores')
 @observer
@@ -23,6 +24,7 @@ class NavigationProfile extends Component {
     e.preventDefault();
     const { stores, hideDropdown } = this.props;
     const { userStore } = stores;
+    Cookies.remove(ORGANIZATION_NAMESPACE_COOKIE);
     userStore._logout();
     hideDropdown();
   };

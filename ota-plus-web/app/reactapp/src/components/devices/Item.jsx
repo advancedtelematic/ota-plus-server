@@ -11,12 +11,13 @@ import { Dropdown } from '../../partials';
 const deviceSource = {
   beginDrag(props) {
     const { groupsStore } = props.stores;
+    const { uuid } = props.device;
     const foundClassicGroup = _.find(groupsStore.groups, group => {
-      return group.devices.values.indexOf(props.device.uuid) > -1 && group.groupType === 'static';
+      return group.devices.values.indexOf(uuid) > -1 && group.groupType === 'static';
     });
 
     return {
-      uuid: props.device.uuid,
+      uuid: uuid,
       groupId: foundClassicGroup ? foundClassicGroup.id : null,
     };
   },
@@ -50,20 +51,22 @@ class Item extends Component {
   };
 
   render() {
+    const semiTransparent = 0.4;
     const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
+    const { uuid, deviceId, deviceName, deviceStatus, lastSeen } = device;
     const { isDragging, connectDragSource } = this.props;
-    const opacity = isDragging ? 0.4 : 1;
-    const lastSeenDate = new Date(device.lastSeen);
-    let deviceStatus = 'Status unknown';
-    switch (device.deviceStatus) {
+    const opacity = isDragging ? semiTransparent : 1;
+    const lastSeenDate = new Date(lastSeen);
+    let deviceStatusMessage = 'Status unknown';
+    switch (deviceStatus) {
       case 'UpToDate':
-        deviceStatus = 'Device synchronized';
+        deviceStatusMessage = 'Device synchronized';
         break;
       case 'Outdated':
-        deviceStatus = 'Device unsynchronized';
+        deviceStatusMessage = 'Device unsynchronized';
         break;
       case 'Error':
-        deviceStatus = 'Installation error';
+        deviceStatusMessage = 'Installation error';
         break;
       default:
         break;
@@ -71,15 +74,20 @@ class Item extends Component {
 
     return connectDragSource(
       <div className='devices-panel__device'>
-        <div className='hover-area' style={{ opacity }} onClick={goToDetails.bind(this, device.uuid)} id={'link-devicedetails-' + device.uuid} />
-        <div className='dots align' id={'device-actions-' + device.uuid} onClick={this.showMenu}>
+        <div
+          className='hover-area'
+          style={{ opacity }}
+          onClick={goToDetails.bind(this, uuid)}
+          id={`link-devicedetails-${uuid}-${deviceName}`}
+        />
+        <div className='dots align' id={'device-actions-' + uuid} onClick={this.showMenu}>
           <div className='dots__wrapper'>
             <span />
             <span />
             <span />
           </div>
         </div>
-        {this.menuShown ? (
+        {this.menuShown && (
           <Dropdown hideSubmenu={this.hideMenu} customClassName={'align'}>
             <li className='device-dropdown-item'>
               <a className='device-dropdown-item' id='edit-device' onClick={showEditName.bind(this, device)}>
@@ -94,19 +102,22 @@ class Item extends Component {
               </a>
             </li>
           </Dropdown>
-        ) : null}
+        )}
         <div className='devices-panel__device-icon'>
-          <div className={'device-status device-status--' + device.deviceStatus} title={deviceStatus} />
+          <div className={'device-status device-status--' + deviceStatus} title={deviceStatus} />
         </div>
         <div className='devices-panel__device-desc'>
-          <div className='devices-panel__device-title' title={device.deviceName} id={device.deviceName}>
-            {device.deviceName}
+          <div className='devices-panel__device-title' title={deviceName} id={deviceName}>
+            {deviceName}
           </div>
-          <div className='devices-panel__device-subtitle' title={device.deviceId} id={device.deviceId}>
-            ID: {device.deviceId}
+          <div className='devices-panel__device-subtitle' title={deviceId} id={deviceId}>
+            ID: {deviceId}
           </div>
           <div className='devices-panel__device-subtitle'>
-            {deviceStatus !== 'Status unknown' ? <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span> : <span>Never seen online</span>}
+            {deviceStatusMessage !== 'Status unknown'
+              ? <span>{`Last seen: ${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`}</span>
+              : <span>{'Never seen online'}</span>
+            }
           </div>
         </div>
       </div>,

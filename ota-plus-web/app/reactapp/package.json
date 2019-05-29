@@ -81,6 +81,7 @@
     "dev": " ./node_modules/webpack/bin/webpack.js -w",
     "lint": "eslint src/**/*.js src/**/*.jsx",
     "npm-check": "npm-check -p",
+    "socket-rome": "curl -k https://web-events.rome.sit-ota.aws.in.here.com/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -1,5 +1,6 @@
 /** @format */
 
+import Cookies from 'js-cookie';
 import { observable } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
@@ -12,8 +13,10 @@ import {
   API_USER_ACTIVE_DEVICE_COUNT,
   API_USER_DEVICES_SEEN,
   API_USER_CONTRACTS,
-  API_USER_ORGANIZATIONS
+  API_USER_ORGANIZATIONS,
+  ORGANIZATION_NAMESPACE_COOKIE
 } from '../config';
+
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts';
 
@@ -26,6 +29,8 @@ export default class UserStore {
   @observable userActiveDeviceCountFetch = {};
   @observable user = {};
   @observable userOrganizationName = '';
+  @observable userOrganizationNamespace = '';
+  @observable userOrganizations = [];
   @observable contracts = {};
   @observable ifLogout = false;
 
@@ -46,7 +51,18 @@ export default class UserStore {
   getOrganizations = async () => {
     const response = await axios.get(API_USER_ORGANIZATIONS);
     const { data } = await response;
-    this.userOrganizationName = data.find(organization => organization.isCreator).name;
+    this.userOrganizations = data;
+    const namespaceCookie = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
+    let userOrganization;
+    // we have to get organization based on cookie (if it exists) or default one by isCreator flag
+    if (namespaceCookie) {
+      userOrganization = data.find(organization => organization.namespace === namespaceCookie);
+    } else {
+      userOrganization = data.find(organization => organization.isCreator);
+      Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, userOrganization.namespace);
+    }
+    this.userOrganizationName = userOrganization.name;
+    this.userOrganizationNamespace = userOrganization.namespace;
   };
 
   fetchUser() {
