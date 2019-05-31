@@ -32,41 +32,64 @@ h3 {
       display: none;
     }
   }
-
-  &-hero {
-    border: 2px solid $color-mint;
-    color: $color-mint;
-    background: transparent;
-    &:focus,
-    &:hover {
-      border: 2px solid $color-white;
-      color: $color-white;
-      background: transparent;
-    }
-  }
-
-  &-add-registered-user {
-    background: $color-mint;
+  &-primary, &-error {
     border: 0;
     border-radius: 0;
     color: $color-white;
     float: right;
     font-size: 12px;
-    margin-right: 10px;
     width: 200px;
-    &:focus {
-      background: $color-mint;
-      color: $color-white;
-    }
     &:hover {
       color: $color-white;
+    }
+  }
+  &--gutter-right {
+    margin-right: 10px;
+  }
+  &--sm {
+    text-transform: none;
+    font-size: 11px;
+    width: 110px;
+  }
+  &-primary {
+    background: $color-mint;
+    border: 1px solid $button-outline-color;
+    &:focus {
+      background: $color-mint;
+    }
+    &:hover {
       background: $switch-blue-color;
+    }
+  }
+  &-outlined {
+    color: $button-outline-color;
+    background-color: transparent;
+    font-size: 14px;	
+    letter-spacing: 0.01px;	
+    line-height: 20px;
+    border: 1px solid $button-outline-color;
+    border-radius: 1px;
+    &:hover, &:focus {
+      color: $color-white;
+      border-color: $color-white;
+      background-color: transparent;
+    }
+  }
+  &-error {
+    background: $confirm-modal-title;
+    &:focus {
+      background: $confirm-modal-title;
+    }
+    &:hover {
+      background: $campaign-failure-color;
     }
   }
 
   &-hero.drop-down {
-    border: 2px solid $color-lightgrey;
+    border: 1px solid $color-lightgrey;
+    border-radius: 2px;
     color: $color-white;
+    background-color: transparent;
   }
 
   &-hero.organization-namespace {

@@ -59,9 +59,9 @@ class Step1 extends Component {
             />
           </Col>
         </Row>
-        <label className='c-form__label'>{'Select ECU types'}</label>
         <Row className='row hardware-container'>
-          <Col span={12}>
+          <Col span={24}>
+            <label className='c-form__label'>{'Select ECU types'}</label>
             <div className='ids-list'>
               {hardwareStore.hardwareIdsFetchAsync.isFetching ? (
                 <div className='wrapper-center'>

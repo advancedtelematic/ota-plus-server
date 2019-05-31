@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { Tag } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -94,28 +95,31 @@ class WizardStep4 extends Component {
         <div className='checkboxes'>
           <div className='flex-row'>
             <button type='button' className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`} onClick={this.toggleNotify} />
-            <span>{'Update automatically'}</span>
+            <span>{"Don't request driver's consent"}</span>
           </div>
           <div className='flex-row'>
             <button type='button' className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`} onClick={this.toggleApprove} />
-            <span>{"Require OTA client's approval before installation"}</span>
+            <span>{"Request driver's consent"}</span>
           </div>
         </div>
         <div className='description'>
           <div className='search-box'>
             {alphaTest && (
-              <FormInput
-                label='Notification Text'
-                id='internal_reuse-text'
-                placeholder='Re-use text from'
-                getInputRef={ref => {
-                  this.inputRef = ref;
-                }}
-                wrapperWidth='50%'
-              >
-                <i className='fa fa-search icon-search' />
-                <i className='fa fa-close icon-close' onClick={this.clearInput} />
-              </FormInput>
+              <>
+                <FormInput
+                  label='Notification Text'
+                  id='internal_reuse-text'
+                  placeholder='Re-use text from'
+                  getInputRef={ref => {
+                    this.inputRef = ref;
+                  }}
+                  wrapperWidth='50%'
+                >
+                  <i className='fa fa-search icon-search icon-search--alpha' />
+                  <i className='fa fa-close icon-close icon-close--alpha' onClick={this.clearInput} />
+                </FormInput>
+                <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>
+              </>
             )}
           </div>
           <FormTextarea

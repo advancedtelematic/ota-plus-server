@@ -39,7 +39,7 @@ class Header extends Component {
             </Form>
             <Button
               htmlType="button"
-              className="ant-btn ant-btn-hero"
+              className="ant-btn ant-btn-outlined"
               id="add-new-update"
               onClick={() => {
                 showCreateModal(null);

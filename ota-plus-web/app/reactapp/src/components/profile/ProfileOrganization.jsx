@@ -182,7 +182,7 @@ class ProfileOrganization extends Component {
               </Form>
               <Button
                 htmlType="button"
-                className="ant-btn ant-btn-add-registered-user"
+                className="ant-btn ant-btn-primary ant-btn-primary--gutter-right"
                 id="button-add-registered-user"
                 onClick={this.addRegisteredUser}
               >

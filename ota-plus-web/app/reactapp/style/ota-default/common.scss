@@ -193,46 +193,40 @@ strong {
   position: absolute;
   top: 20px;
   display: flex;
-  width: 180px;
+  width: 190px;
   flex-direction: column;
   background: #fff;
-  left: -130px;
-  font-size: 14px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  right: 0;
+  font-size: 16px;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
   margin: 0;
   z-index: 120;
-  padding: 5px 0;
   font-weight: 300;
-
-  img {
-    width: 15px;
-    margin-right: 15px;
-  }
-
   li {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 15px 0;
-
-    &:not(:only-child) {
-      padding: 10px 0 7.5px;
+    height: 50px;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $device-active-item-bg;
     }
   }
-
   a {
-    padding: 0 15px;
+    padding: 0 20px;
     line-height: 17px;
     display: flex;
+    color: $devices-groups-bg;
     cursor: pointer;
-    color: $device-hardware-header;
     text-transform: none;
+    &.primary {
+      display: flex;
+      align-items: center;
+      color: $color-mint;
+    }
   }
-
   &.relative {
     left: -115px;
   }
-
   &.align {
     left: auto;
     right: 0;
@@ -653,17 +647,18 @@ input {
     }
     &-body {
       height: calc(100vh - 49px);
-      padding: 60px 20px;
       position: absolute;
-      width: 114px;
-      right: -250px;
+      width: 0;
+      right: 0;
       overflow: hidden;
       background-color: $device-item-bg;
       box-shadow: -2px 0 8px rgba(0,0,0,0.12);
-      transition: .4s ease-in-out;
+      transition: .25s ease-in-out;
       .support-menu-links {
+        padding: 60px 20px;
         &__link {
           margin-bottom: 10px;
+          white-space: nowrap;
           a {
             font-size: 12px;
             font-weight: 500;
@@ -739,59 +734,25 @@ input {
 }
 
 .dropdown-menu {
-  .icon-profile {
-    width: 50px !important;
-    height: 50px !important;
-    margin: 0 auto;
-    display: block !important;
-    background-color: #ccc;
-  }
-
-  .user-data {
-    text-align: center;
-
-    .full-name {
-      color: $fake-header-text;
-      font-size: 16px;
-      font-weight: 500;
-      margin: 10px 0 0 0;
-      word-wrap: break-word;
-    }
-
-    .email {
-      color: $dashboard-grey;
-      margin: 5px 0 0 0;
-      word-wrap: break-word;
-    }
-  }
-
   .links {
     li {
-      height: 30px;
+      height: 50px;
       display: block;
-      padding-top: 5px;
-
       a {
         padding: 0;
-        font-size: 14px !important;
-
+        font-size: 16px;
+        font-weight: 300;
         &:not(.add-button) {
-          color: $dashboard-grey;
+          color: $devices-groups-bg;
 
           &:hover {
             color: $dashboard-bg;
           }
         }
-
-        img {
-          margin-right: 15px;
-        }
       }
-
       &.clear-localstorage {
         padding-top: 2px;
       }
-
       &.link-support {
         text-align: center;
       }
@@ -904,7 +865,7 @@ input {
 
 .search-box {
   position: relative;
-
+  display: flex;
   &.white {
     .icon-search,
     .icon-close {
@@ -932,35 +893,44 @@ input {
   .input-wrapper {
     font-family: 'Fira Sans', sans-serif !important;
     width: 280px !important;
+    #search-devices-input {
+      background-color: $devices-groups-bg !important;
+    }
 
     &.search {
       input {
         font-size: 12px !important;
         background: #fff !important;
         padding: 0 15px !important;
-        background: $devices-groups-bg !important;
+        background: $dashboard-bg !important;
         color: #fff !important;
         padding: 0 30px !important;
+        caret-color: $color-mint;
       }
     }
   }
 
   .icon-search {
-    position: absolute;
-    top: 7px;
-    left: 10px;
     color: #fff;
     font-size: 12px;
+    &--alpha {
+      position: absolute;
+      top: 7px;
+      left: 10px;
+    }
   }
 
   .icon-close {
-    position: absolute;
-    top: 7px;
     right: 10px;
     color: #fff;
     font-size: 12px;
     cursor: pointer;
+    &--alpha {
+      position: absolute;
+      top: 7px;
+    }
   }
+
 }
 
 .page-intro {
@@ -2032,6 +2002,9 @@ input {
     box-sizing: border-box;
     position: relative;
     display: flex;
+    textarea {
+      padding-left: 0;
+    }
   }
 
   &__input {
@@ -2055,8 +2028,9 @@ input {
     }
     &:disabled {
       cursor: not-allowed;
-      background-color: #cfd0d3;
+      background-color: white;
       color: #000;
+      padding: 0;
     }
     &--antd {
       border: none;
@@ -2141,10 +2115,31 @@ input {
   height: 18px;
   padding: 0 5px;
   margin: 10px;
+  font-weight: 400;
   &--small-margins {
     margin: 4px 0 2px;
   }
   &--gutter-horizontal {
     margin: 0 10px;
   }
+  &--nav {
+    height: 13px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0 6px 0;
+    margin-left: 3px;
+  }
+}
+
+.select-ecu-item {
+  width: 100%;
+  &:nth-child(2n+1) {
+    background-color: $device-item-bg;
+  }
+}
+
+.gutter-bottom {
+  margin-bottom: 32px;
 }

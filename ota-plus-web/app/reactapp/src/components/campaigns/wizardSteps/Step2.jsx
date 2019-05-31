@@ -73,7 +73,7 @@ class WizardStep2 extends Component {
         </div>
       )
     ) : (
-      <Tabs onChange={this.setActiveTab}>
+      <Tabs className='campaigns-wizard__tabs' onChange={this.setActiveTab}>
         <TabPane key='0' tab='Select groups'>
           {groupsStore.groupsWizardFetchAsync.isFetching ? (
             <div className='wrapper-center'>
@@ -83,7 +83,7 @@ class WizardStep2 extends Component {
             <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
           )}
         </TabPane>
-        <TabPane key='1' tab={<span>OLP<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></span>}>
+        <TabPane key='1' tab={<div>OLP<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></div>}>
           <WizardOLPGroupsListItem />
         </TabPane>
       </Tabs>

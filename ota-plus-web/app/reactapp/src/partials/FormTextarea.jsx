@@ -18,7 +18,7 @@ export default class FormTextarea extends Component {
   }
 
   render() {
-    const { title = '', name, placeholder = '', defaultValue, id, label = '', inputWidth = '100%', wrapperWidth = '100%', rows = 1, onChange = null } = this.props;
+    const { title = '', name, placeholder = '', isEditable = true, id, label = '', inputWidth = '100%', wrapperWidth = '100%', rows = 1, onChange = null } = this.props;    
     return (
       <div className='c-form__relative-wrapper' style={{ width: wrapperWidth }}>
         <label title={title} htmlFor={id} className='c-form__label'>
@@ -30,7 +30,7 @@ export default class FormTextarea extends Component {
             id={id}
             rows={rows}
             ref={input => (this.input = input)}
-            style={{ width: inputWidth, paddingLeft: '10px' }}
+            style={{ width: inputWidth, paddingLeft: isEditable ? '10px' : 0 }}
             className='c-form__input'
             onKeyUp={this.validateInput.bind(this)}
             placeholder={placeholder || ''}

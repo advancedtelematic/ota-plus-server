@@ -22,7 +22,7 @@ class ListItemVersion extends Component {
   };
 
   render() {
-    const { stores, version, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
+    const { stores, version, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
     const { softwareStore, featuresStore } = stores;
     const { compatibilityData } = softwareStore;
     const { alphaPlusEnabled } = featuresStore;
@@ -101,12 +101,7 @@ class ListItemVersion extends Component {
           </div>
           <div className='c-package__sw-wrapper'>
             <div className='c-package__hw-row'>
-              Installed on <span id={`package-${packageName}-installed-on-ecus-count-${version.id.version.substring(0, 8)}`}>{version.installedOnEcus}</span> ECU(s)
-            </div>
-          </div>
-          <div className='c-package__sw-wrapper'>
-            <div className='c-package__hw-row'>
-              <div className='c-package__subheading'>ECU types:</div>
+              <div className='c-package__sw-subtitle'>ECU types:</div>
               <div className='c-package__hw-value'>
                 {_.map(version.hardwareIds, (hardwareId, index) => (
                   <span className='app-label' key={index} id={`package-${packageName}-app-label-${version.id.version.substring(0, 8)}`}>
@@ -116,7 +111,7 @@ class ListItemVersion extends Component {
               </div>
             </div>
           </div>
-          {version.targetFormat ? (
+          {version.targetFormat && (
             <div className='c-package__sw-wrapper'>
               <div className='c-package__hw-row'>
                 <div className='c-package__sw-subtitle'>Format:</div>
@@ -127,7 +122,12 @@ class ListItemVersion extends Component {
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
+          <div className='c-package__sw-wrapper'>
+            <div className='c-package__subheading'>
+              Installed on <span id={`package-${packageName}-installed-on-ecus-count-${version.id.version.substring(0, 8)}`}>{version.installedOnEcus}</span> ECU(s)
+            </div>
+          </div>
         </div>
         <div className='c-package__inner-box'>
           <div className='c-package__comment'>
@@ -205,22 +205,19 @@ class ListItemVersion extends Component {
             <Dropdown hideSubmenu={this.hideSubmenu}>
               <li className='package-dropdown-item'>
                 <a className='package-dropdown-item' href='#' id='edit-comment' onClick={showEditComment.bind(this, version.filepath, version.comment)}>
-                  <img src='/assets/img/icons/edit_icon.svg' alt='Icon' />
-                  Edit comment
+                  {'Edit comment'}
                 </a>
               </li>
               {alphaPlusEnabled && (
                 <li className='package-dropdown-item'>
-                  <i className='icon icon-dependencies' />
                   <a className='package-dropdown-item' href='#' id='show-dependencies' onClick={showDependenciesManager.bind(this, version)}>
-                    Edit dependencies
+                    {'Edit dependencies'}
                   </a>
                 </li>
               )}
               <li className='package-dropdown-item'>
                 <a className='package-dropdown-item' href='#' id='delete-version' onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
-                  <img src='/assets/img/icons/trash_icon.svg' alt='Icon' />
-                  Delete version
+                  {'Delete version'}
                 </a>
               </li>
             </Dropdown>

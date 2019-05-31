@@ -292,11 +292,13 @@
   }
 
   .col-name {
-    width: 15%;
+    width: 46%;
+    text-align: left;
+    padding-right: 16px;
   }
 
   .col-progress {
-    width: 60%;
+    width: 34%;
   }
 
   .col-numbers {
@@ -337,8 +339,14 @@
   }
 
   &__item-progress-value {
-    background-color: $device-item-bg;
-    padding-right: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    position: absolute;
+    width: 40px;
+    left: 50%;
+    top: 3px;
+    margin-left: -20px;
   }
 
   &__item-progress-bar {
