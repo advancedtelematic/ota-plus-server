@@ -66,8 +66,9 @@ class InstallationReportView extends Component {
                 <div className='col-name'>{failure.code}</div>
                 <div className='col-progress'>
                   <div className='codes__item-progress-wrapper'>
-                    <div className='codes__item-progress-value'>{devicesTotal !== 0 ? progress + '%' : '100%'}</div>
-                    <div className='codes__item-progress-bar progress progress-bar' style={{ width: devicesTotal !== 0 ? progress + '%' : '100%' }} />
+                    <div className='codes__item-progress-bar progress progress-bar' style={{ width: devicesTotal !== 0 ? progress + '%' : '100%' }}>
+                      <div className='codes__item-progress-value'>{devicesTotal !== 0 ? progress + '%' : '100%'}</div>
+                    </div>
                   </div>
                 </div>
                 <div className='col-numbers'>

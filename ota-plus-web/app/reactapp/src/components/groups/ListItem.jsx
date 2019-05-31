@@ -75,25 +75,24 @@ class ListItem extends Component {
               <span />
               <span />
             </div>
-            {this.showEdit ? (
-              <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
-                <li className='package-dropdown-item'>
-                  <a
-                    className='package-dropdown-item'
-                    href='#'
-                    id='edit-comment'
-                    onClick={e => {
-                      e.preventDefault();
-                      selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart });
-                      this.showRenameModal();
-                    }}
-                  >
-                    <img src='/assets/img/icons/edit_icon.svg' alt='Icon' />
-                    Edit name
-                  </a>
-                </li>
+            {this.showEdit && (
+              <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>                
+                <a
+                  className='package-dropdown-item'
+                  href='#'
+                  id='edit-comment'
+                  onClick={e => {
+                    e.preventDefault();
+                    selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart: isSmart });
+                    this.showRenameModal();
+                  }}
+                >
+                  <li className='package-dropdown-item'>
+                    {'Edit name'}
+                  </li>
+                </a>
               </Dropdown>
-            ) : null}
+            )}
           </div>
           <div className='groups-panel__item-subtitle' id={'group-' + group.groupName + '-devices'}>
             {t('common.deviceWithCount', { count: group.devices.total })}

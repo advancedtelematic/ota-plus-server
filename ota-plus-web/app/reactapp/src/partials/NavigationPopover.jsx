@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { Avatar, Popover } from 'antd';
+import { Avatar } from 'antd';
 import NavigationProfile from './NavigationProfile';
 
 @inject('stores')
@@ -23,8 +23,8 @@ class NavigationPopover extends Component {
     this.visibleDropdown = false;
   };
 
-  changeVisibility = (visibility) => {
-    this.visibleDropdown = visibility;
+  showDropdown = () => {
+    this.visibleDropdown = true;
   };
 
   render() {
@@ -32,18 +32,8 @@ class NavigationPopover extends Component {
     const { userStore } = stores;
     const { user, userOrganizationName } = userStore;
     const settingsOnly = !uiUserProfileEdit && uiCredentialsDownload;
-
     const { fullName } = user;
     const initials = fullName ? (fullName.split(' ').map(name => name[0]).join(' ').toUpperCase()) : '';
-    const profileMenu = (
-      <NavigationProfile
-        hideDropdown={this.hideDropdown}
-        uiUserProfileEdit={uiUserProfileEdit}
-        uiCredentialsDownload={uiCredentialsDownload}
-        settingsOnly={settingsOnly}
-      />
-    );
-
     return (
       <div className="menu-login-clickable">
         <div className="navigation-name-organization">
@@ -52,24 +42,24 @@ class NavigationPopover extends Component {
             {userOrganizationName}
           </div>
         </div>
-        <Popover
-          content={profileMenu}
-          placement="bottomRight"
-          id="profile-dropdown"
-          trigger="click"
-          overlayClassName="dropdown-menu-popover"
-          visible={this.visibleDropdown}
-          onVisibleChange={this.changeVisibility}
-        >
+        <div onClick={this.showDropdown} id="profile-dropdown">
           <Avatar src={user.picture} className="ant-avatar-menu" id="icon-profile-min">
             {initials}
           </Avatar>
-          <span className="dots nav-dots" id="nav-menu">
+          <div className="dots nav-dots" id="nav-menu">
             <span />
             <span />
             <span />
-          </span>
-        </Popover>
+            {this.visibleDropdown && (
+              <NavigationProfile
+                hideDropdown={this.hideDropdown}
+                uiUserProfileEdit={uiUserProfileEdit}
+                uiCredentialsDownload={uiCredentialsDownload}
+                settingsOnly={settingsOnly}
+              />
+            )}
+          </div>
+        </div>
       </div>
     );
   }

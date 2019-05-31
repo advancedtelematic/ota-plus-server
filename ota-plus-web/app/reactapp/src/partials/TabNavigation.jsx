@@ -38,7 +38,6 @@ class TabNavigation extends Component {
       <Menu onClick={this.handleMenuClick}>
         {CAMPAIGNS_STATUSES.map(status => (
           <Menu.Item key={status}>
-            <Icon type="arrow-right" />
             {CAMPAIGNS_STATUS_TAB_TITLE[status]}
           </Menu.Item>
         ))}
@@ -176,7 +175,7 @@ class TabNavigation extends Component {
               </Form>
               <Button
                 htmlType="button"
-                className="ant-btn ant-btn-hero"
+                className="ant-btn ant-btn-outlined"
                 id="button-create-campaign"
                 onClick={(event) => {
                   event.preventDefault();

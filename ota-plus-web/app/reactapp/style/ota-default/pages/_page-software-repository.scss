@@ -159,7 +159,7 @@
     }
 
     &__sw-box {
-      flex-basis: 50%;
+      flex-basis: 75%;
       padding: 20px 25px;
       border-right: 1px solid #e7e7e8;
     }
@@ -171,13 +171,18 @@
 
     &__sw-subtitle {
       float: left;
-      width: 125px;
+      min-width: 90px;
+      width: 90px;
     }
 
     &__sw-value {
       @include textoverflowEllipsis;
       float: left;
       width: calc(100% - 125px);
+    }
+
+    &__hw-row {
+      display: flex;
     }
 
     &__hardware-box {

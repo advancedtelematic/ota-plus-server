@@ -25,7 +25,11 @@ class Step2 extends Component {
           errorMsg={updatesStore.updatesCreateAsync.status !== 200 && updatesStore.updatesCreateAsync.data && updatesStore.updatesCreateAsync.data.description}
         />
         <div className='updates-container clearfix'>
-          {showDetails ? <UpdateDetails updateItem={showDetails} isEditable={false} /> : <UpdatesWizardDetailList wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />}
+          {showDetails ? (
+            <UpdateDetails updateItem={showDetails} isEditable={false} />
+           ) : (
+            <UpdatesWizardDetailList wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />
+           )}
         </div>
       </div>
     );

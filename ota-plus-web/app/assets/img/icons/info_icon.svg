@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Info Icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Info-Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-9" transform="translate(0.000000, -1.000000)" fill="#00AFAA">
+            <path d="M0,12.4958942 C0,18.8489459 5.14641105,23.9974949 11.4979994,23.9974949 C17.8495877,23.9974949 23,18.8489459 23,12.4958942 C23,6.14444316 17.8495877,0.997494868 11.4979994,0.997494868 C5.14641105,0.997494868 0,6.14444316 0,12.4958942 Z" id="Stroke-5"></path>
+        </g>
+        <path d="M11.5052041,18.5 L11.5052041,8.79492188" id="Line-5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M11.5052041,5.5 L11.5052041,4.79492188" id="Line-5-Copy" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"></path>
+    </g>
+</svg>
