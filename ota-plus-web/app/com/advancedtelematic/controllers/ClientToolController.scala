@@ -156,7 +156,10 @@ class ClientToolController @Inject()(
         }
       }
       val authParams = if(conf.getOptional[String]("authplus.host").isDefined) {
-        await(oidcGateway.getUserInfo(accessToken).flatMap(ic => getOAuth2Params(namespace, ic.userId)))
+        // TODO OTA-2846 We need to revisit how we create and validate tokens in AuthPlus.
+        // In particular, what is the role of the userId here?
+        val userId = UserId("")
+        await(getOAuth2Params(namespace, userId))
       } else {
         AuthParams(noAuth = Some(true))
       }
