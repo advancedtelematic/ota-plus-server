@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { DeviceHeader, DeviceHardwarePanel, DevicePropertiesPanel, DeviceSoftwarePanel, DeviceOverviewPanel } from '../components/device';
 import { SoftwareCreateModal } from '../components/software';
+import { getDeviceHttpStatusErrorMessage } from '../helpers/deviceHelper';
 
 @inject('stores')
 @observer
@@ -176,10 +177,18 @@ class Device extends Component {
           </span>
         ) : (
           <div className='wrapper-center'>
-            <div className='device-offline-title'>Device never seen online.</div>
+            <div className='device-offline-title'>
+              {getDeviceHttpStatusErrorMessage(device.httpStatus)}
+            </div>
           </div>
         )}
-        {this.packageCreateModalShown ? <SoftwareCreateModal shown={this.packageCreateModalShown} hide={this.hidePackageCreateModal} fileDropped={this.fileDropped} /> : null}
+        {this.packageCreateModalShown && ( 
+          <SoftwareCreateModal 
+            shown={this.packageCreateModalShown} 
+            hide={this.hidePackageCreateModal} 
+            fileDropped={this.fileDropped} 
+          />
+        )}
       </span>
     );
   }
