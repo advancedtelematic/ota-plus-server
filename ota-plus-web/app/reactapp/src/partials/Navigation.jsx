@@ -8,26 +8,14 @@ import _ from 'lodash';
 
 import NavigationPopover from './NavigationPopover';
 import TabNavigation from './TabNavigation';
-import { assets } from '../config';
+import SupportMenu from './SupportMenu';
 
 @inject('stores')
 @observer
 class Navigation extends Component {
-  state = {
-    supportMenuVisible: false
-  };
-
-  toggleSupportMenu = (event) => {
-    this.setState(state => ({
-      supportMenuVisible: !state.supportMenuVisible
-    }));
-  };
 
   render() {
     const { uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, addNewWizard } = this.props;
-    const { supportMenuVisible } = this.state;
-    const linkButtonIcon = assets.LINK_BUTTON_ICON;
-
     return (
       <nav className='navbar navbar-inverse clearfix'>
         <div className='container clearfix'>
@@ -76,42 +64,11 @@ class Navigation extends Component {
                 <NavigationPopover uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload} />
               </div>
             )}
-            <div className={`support-menu ${supportMenuVisible ? 'support-menu--expanded' : null}`}>
-              <div className='support-menu-header' onClick={this.toggleSupportMenu}>
-                <div className='support-menu-header__separator' />
-                {!supportMenuVisible && (<span className='support-menu-header__arrows--left'>{'<<'}</span>)}
-                {'SUPPORT'}
-                {supportMenuVisible && (<span className='support-menu-header__arrows--right'>{'>>'}</span>)}
-              </div>
-              <div className='support-menu-body'>
-                <ul className='support-menu-links'>
-                  <li className='support-menu-links__link'>
-                    <a href='https://docs.ota.here.com/quickstarts/start-intro.html' rel='noopener noreferrer' target='_blank' id='get-started-link'>
-                      {'Get Started'}
-                      <img src={linkButtonIcon} alt='Icon' />
-                    </a>
-                  </li>
-                  <li className='support-menu-links__link'>
-                    <a href='https://docs.ota.here.com' rel='noopener noreferrer' target='_blank' id='docs-link'>
-                      {'Documentation'}
-                      <img src={linkButtonIcon} alt='Icon' />
-                    </a>
-                  </li>
-                  <li className='support-menu-links__link'>
-                    <a href='mailto:otaconnect.support@here.com' id='support-link'>
-                      {'Contact Support'}
-                      <img src={linkButtonIcon} alt='Icon' />
-                    </a>
-                  </li>
-                </ul>
-                <div className='support-menu-body__separator' />
-              </div>
-            </div>
+            <SupportMenu />
           </div>
         </div>
         {alphaPlusEnabled && location === 'page-software-repository' && <TabNavigation location={location} />}
         {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} />}
-        {supportMenuVisible && <div className="support-menu-mask" onClick={this.toggleSupportMenu} />}
       </nav>
     );
   }

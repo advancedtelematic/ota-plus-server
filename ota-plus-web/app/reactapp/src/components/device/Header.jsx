@@ -2,13 +2,13 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'lodash';
-import { Header as BaseHeader, Loader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
-import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
+import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
+import { FadeAnimation } from '../../utils';
 import NetworkInfo from './NetworkInfo';
+import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
+import { DEVICE_STATUSES } from '../../constants';
 
 @inject('stores')
 @observer
@@ -54,13 +54,13 @@ class Header extends Component {
     const activatedDate = new Date(device.activatedAt);
     let deviceStatus = 'Status unknown';
     switch (device.deviceStatus) {
-      case 'UpToDate':
+      case DEVICE_STATUSES.UP_TO_DATE:
         deviceStatus = 'Device synchronized';
         break;
-      case 'Outdated':
+      case DEVICE_STATUSES.OUTDATED:
         deviceStatus = 'Device unsynchronized';
         break;
-      case 'Error':
+      case DEVICE_STATUSES.ERROR:
         deviceStatus = 'Installation error';
         break;
       default:
@@ -70,36 +70,47 @@ class Header extends Component {
       <BaseHeader
         title={
           <FadeAnimation>
-            {!devicesStore.devicesOneFetchAsync.isFetching ? (
+            {!devicesStore.devicesOneFetchAsync.isFetching && (
               <div id='device-name' className='page-header__device-name'>
                 {device.deviceName}
               </div>
-            ) : null}
+            )}
           </FadeAnimation>
         }
         device={device}
         backButtonShown={true}
       >
         <FadeAnimation>
-          {!devicesStore.devicesOneFetchAsync.isFetching ? (
+          {!devicesStore.devicesOneFetchAsync.isFetching && (
             <span>
               <div className='page-header__device-report'>
                 <div className='page-header__device-report-items'>
                   <NetworkInfo data={devicesStore.deviceNetworkInfo} />
                   <div className='page-header__device-report-item' id='created-info'>
                     <span className='page-header__device-report-label'>Created</span>
-                    <div className='page-header__device-report-desc'>{createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}</div>
+                    <div className='page-header__device-report-desc'>
+                      {device.createdAt
+                        ? `${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`
+                        : 'Not reported'
+                      }
+                    </div>
                   </div>
                   <div className='page-header__device-report-item' id='activated-info'>
                     <span className='page-header__device-report-label'>Activated</span>
                     <div className='page-header__device-report-desc'>
-                      {device.activatedAt !== null ? <span>{activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}</span> : <span>Device not activated</span>}
+                      {device.activatedAt 
+                        ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}` 
+                        : 'Not reported'
+                      }
                     </div>
                   </div>
                   <div className='page-header__device-report-item page-header__device-report-item--last-seen' id='last-seen-online-info'>
                     <span className='page-header__device-report-label'>Last seen online</span>
                     <div className='page-header__device-report-desc'>
-                      {deviceStatus !== 'Status unknown' ? <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span> : <span>Never seen online</span>}
+                      {deviceStatus !== 'Status unknown' 
+                        ? `${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`
+                        : getDeviceHttpStatusErrorMessage(device.httpStatus)
+                      }
                     </div>
                   </div>
                 </div>
@@ -108,8 +119,7 @@ class Header extends Component {
                     <span />
                     <span />
                     <span />
-
-                    {this.headerMenuShown ? (
+                    {this.headerMenuShown && (
                       <Dropdown hideSubmenu={this.hideHeaderMenu} customClassName={'relative'}>
                         <li className='device-dropdown-item'>
                           <a className='device-dropdown-item' id='edit-device' onClick={this.showEditName}>
@@ -124,11 +134,11 @@ class Header extends Component {
                           </a>
                         </li>
                       </Dropdown>
-                    ) : null}
+                    )}
                   </div>
                 </div>
               </div>
-              {this.deleteConfirmationShown ? (
+              {this.deleteConfirmationShown && (
                 <ConfirmationModal
                   modalTitle={<div className='text-red'>Delete device</div>}
                   id='delete-device-confirmation-modal'
@@ -141,10 +151,17 @@ class Header extends Component {
                     </div>
                   }
                 />
-              ) : null}
-              {this.editNameShown ? <EditModal modalTitle={<div>Edit name</div>} shown={this.editNameShown} hide={this.hideEditName} device={device} /> : null}
+              )}
+              {this.editNameShown && (
+                <EditModal 
+                  modalTitle={<div>Edit name</div>} 
+                  shown={this.editNameShown} 
+                  hide={this.hideEditName} 
+                  device={device} 
+                />
+              )}
             </span>
-          ) : null}
+          )}
         </FadeAnimation>
       </BaseHeader>
     );
