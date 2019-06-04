@@ -5,7 +5,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import { API_FEATURES_FETCH } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { getStarted } from './data/newFeatures';
 
 export default class FeaturesStore {
   @observable featuresFetchAsync = {};
@@ -13,7 +12,6 @@ export default class FeaturesStore {
   @observable clientId = null;
   @observable alphaPlusEnabled = false;
   @observable alphaTestEnabled = false;
-  @observable getStarted = getStarted;
 
   constructor() {
     resetAsync(this.featuresFetchAsync);

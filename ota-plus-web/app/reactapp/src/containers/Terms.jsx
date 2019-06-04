@@ -92,7 +92,7 @@ class Terms extends Component {
                     userStore.acceptContract(terms && terms.contract)
                       .then((success) => {
                         if (success) {
-                          history.push('/get-started');
+                          history.push('/');
                         }
                       });
                   }}
