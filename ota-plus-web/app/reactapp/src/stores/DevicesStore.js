@@ -254,11 +254,12 @@ export default class DevicesStore {
               secondary: secondary,
             };
           }
-          this.devicesOneFetchAsync = handleAsyncSuccess(legacy);
+          that.devicesOneFetchAsync = handleAsyncSuccess(legacy);
         }),
       )
       .catch(error => {
-        this.devicesOneFetchAsync = handleAsyncError(error);
+        that.device.httpStatus = error.response.status;
+        that.devicesOneFetchAsync = handleAsyncError(error);
       });
   }
 
