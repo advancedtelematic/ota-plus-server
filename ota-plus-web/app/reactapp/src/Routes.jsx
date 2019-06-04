@@ -12,7 +12,6 @@ import {
   UpdatesPage,
   CampaignsPage,
   ImpactAnalysisPage,
-  GetStartedPage,
   ProfilePage,
   NoMatchPage,
   FireworksPage,
@@ -25,7 +24,6 @@ const userProfileEdit = document.getElementById('toggle-userProfileEdit').value 
 
 const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload }) => (
   <Switch>
-    <Route path='/get-started' component={GetStartedPage} />
     <Route 
       exact 
       path='/' 
