@@ -215,9 +215,10 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   def namespaceIsAllowed(userId: UserId, namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] =
     userOrganizations(userId).map(_.map(_.namespace)).map(_.contains(namespace))
 
-  def getNamespaceSetupStatus(namespace: Namespace): Future[Result] =
-    userProfileRequest(s"organizations/${namespace.get}/setup")
-      .transform(_.withMethod("GET"))
+  def organizationRequest(namespace: Namespace, method: String, path: String, body: Option[JsValue]): Future[Result] =
+    userProfileRequest(s"organizations/${namespace.get}/$path")
+      .transform(_.withMethod(method))
+      .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
       .execResult(apiExec)
 }
 
