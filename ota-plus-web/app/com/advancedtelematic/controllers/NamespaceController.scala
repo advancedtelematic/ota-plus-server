@@ -45,7 +45,7 @@ class NamespaceController @Inject()(val conf: Configuration,
       }
     }
 
-  def namespaceStatus: Action[AnyContent]= authAction.async { request =>
-    userProfileApi.getNamespaceSetupStatus(request.namespace)
+  def proxyRequest(path: String): Action[AnyContent]= authAction.async { request =>
+    userProfileApi.organizationRequest(request.namespace, request.method, path, request.body.asJson)
   }
 }

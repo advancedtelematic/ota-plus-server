@@ -45,4 +45,5 @@ PUT     /user/*path                       com.advancedtelematic.controllers.User
 
 # Namespaces AKA organizations
 GET     /organizations/:namespace/index   com.advancedtelematic.controllers.NamespaceController.switchNamespace(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
-GET     /organization/setup               com.advancedtelematic.controllers.NamespaceController.namespaceStatus
+GET     /organization/*path               com.advancedtelematic.controllers.NamespaceController.proxyRequest(path: String)
+POST    /organization/*path               com.advancedtelematic.controllers.NamespaceController.proxyRequest(path: String)
