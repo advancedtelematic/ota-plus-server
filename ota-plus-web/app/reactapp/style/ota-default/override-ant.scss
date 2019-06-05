@@ -45,6 +45,24 @@ h3 {
     }
   }
 
+  &-add-registered-user {
+    border: 2px solid $color-mint;
+    color: $color-mint;
+    background: transparent;
+    float: right;
+    margin-right: 10px;
+    &:focus {
+      border: 2px solid $color-mint;
+      color: $color-mint;
+      background: transparent;
+    }
+    &:hover {
+      border: 2px solid $color-darkgrey;
+      color: $color-darkgrey;
+      background: transparent;
+    }
+  }
+
   &-hero.drop-down {
     border: 2px solid $color-lightgrey;
     color: $color-white;
@@ -234,4 +252,25 @@ h3 {
 
 .ant-tooltip {
   font-family: 'Fira Sans', sans-serif;
+}
+
+
+.ant-radio {
+  vertical-align: baseline;
+}
+
+.ant-radio-inner:after {
+  background-color: $primary-color;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: $primary-color;
+}
+
+.ant-radio-input:focus+.ant-radio-inner {
+  border-color: $primary-color;
+}
+
+.ant-radio:hover .ant-radio-inner {
+  border-color: $primary-color;
 }

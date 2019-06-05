@@ -19,6 +19,12 @@ class Header extends Component {
             </div>
           </NavLink>
         ) : null}
+        <NavLink to='/profile/organization' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='organization-link'>
+          <div>
+            Organization
+            <span className='profile-nav__bottom-line' />
+          </div>
+        </NavLink>
         <NavLink to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
           <div>
             Usage
