@@ -28,6 +28,8 @@ export const API_USER_ACTIVE_DEVICE_COUNT = '/api/v1/active_device_count';
 export const API_USER_DEVICES_SEEN = '/api/v1/auditor/devices_seen_in';
 export const API_USER_ORGANIZATIONS = '/user/organizations';
 export const API_USER_ORGANIZATIONS_SWITCH_NAMESPACE = '/organizations/$namespace/index';
+export const API_USER_ORGANIZATIONS_ADD_USER = '/organization/users';
+export const API_USER_ORGANIZATIONS_GET_USERS = '/organization/tentative_users';
 
 /*
  *  Features

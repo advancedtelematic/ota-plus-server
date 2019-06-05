@@ -14,11 +14,14 @@ import {
   API_USER_DEVICES_SEEN,
   API_USER_CONTRACTS,
   API_USER_ORGANIZATIONS,
-  ORGANIZATION_NAMESPACE_COOKIE
+  API_USER_ORGANIZATIONS_ADD_USER,
+  API_USER_ORGANIZATIONS_GET_USERS,
+  ORGANIZATION_NAMESPACE_COOKIE,
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts';
+import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -31,6 +34,7 @@ export default class UserStore {
   @observable userOrganizationName = '';
   @observable userOrganizationNamespace = '';
   @observable userOrganizations = [];
+  @observable userOrganizationUsers = [];
   @observable contracts = {};
   @observable ifLogout = false;
 
@@ -41,28 +45,62 @@ export default class UserStore {
     this.activatedDevicesFetchAsync = observable.map();
     this.activeDevicesFetchAsync = observable.map();
     this.connectedDevicesFetchAsync = observable.map();
+    this.getOrganizationsAsync = observable.map();
+    this.getOrganizationUsersAsync = observable.map();
+    this.addUserToOrganizationAsync = observable.map();
     resetAsync(this.userFetchAsync);
     resetAsync(this.userUpdateAsync);
     resetAsync(this.userChangePasswordAsync);
     resetAsync(this.contractsFetchAsync);
     resetAsync(this.contractsAcceptAsync);
+    resetAsync(this.getOrganizationsAsync);
+    resetAsync(this.getOrganizationUsersAsync);
+    resetAsync(this.addUserToOrganizationAsync);
   }
 
   getOrganizations = async () => {
-    const response = await axios.get(API_USER_ORGANIZATIONS);
-    const { data } = await response;
-    this.userOrganizations = data;
-    const namespaceCookie = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
-    let userOrganization;
-    // we have to get organization based on cookie (if it exists) or default one by isCreator flag
-    if (namespaceCookie) {
-      userOrganization = data.find(organization => organization.namespace === namespaceCookie);
-    } else {
-      userOrganization = data.find(organization => organization.isCreator);
-      Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, userOrganization.namespace);
+    resetAsync(this.getOrganizationsAsync, true);
+    try {
+      const response = await axios.get(API_USER_ORGANIZATIONS);
+      const { data } = response;
+      this.userOrganizations = data;
+      const namespaceCookie = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
+      let userOrganization;
+      // we have to get organization based on cookie (if it exists) or default one by isCreator flag
+      if (namespaceCookie) {
+        userOrganization = data.find(organization => organization.namespace === namespaceCookie);
+      } else {
+        userOrganization = data.find(organization => organization.isCreator);
+        Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, userOrganization.namespace);
+      }
+      this.userOrganizationName = userOrganization.name;
+      this.userOrganizationNamespace = userOrganization.namespace;
+    } catch (error) {
+      this.getOrganizationsAsync = handleAsyncError(error);
     }
-    this.userOrganizationName = userOrganization.name;
-    this.userOrganizationNamespace = userOrganization.namespace;
+  };
+
+  getOrganizationUsers = async () => {
+    resetAsync(this.getOrganizationUsersAsync, true);
+    try {
+      const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS);
+      const { data } = response;
+      this.userOrganizationUsers = data;
+    } catch (error) {
+      this.getOrganizationUsersAsync = handleAsyncError(error);
+    }
+  };
+
+  addUserToOrganization = async (email) => {
+    resetAsync(this.addUserToOrganizationAsync, true);
+    try {
+      const response = await axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email });
+      if (response.status === HTTP_CODE_200_OK) {
+        this.getOrganizationUsers();
+      }
+    } catch (error) {
+      this.addUserToOrganizationAsync = handleAsyncError(error);
+    }
   };
 
   fetchUser() {
