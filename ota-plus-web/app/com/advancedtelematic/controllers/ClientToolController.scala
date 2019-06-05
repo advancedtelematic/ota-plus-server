@@ -11,13 +11,15 @@ import java.util.zip._
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
-import akka.stream.ActorMaterializer
+import akka.http.scaladsl.util.FastFuture
+import akka.stream.{ActorMaterializer, Materializer}
 import akka.util.ByteString
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
+import org.slf4j.LoggerFactory
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Writes}
@@ -84,6 +86,8 @@ class ClientToolController @Inject()(
 
   import ClientToolController._
 
+  private val _log = LoggerFactory.getLogger(this.getClass)
+
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   val cryptApi = new CryptApi(conf, clientExec)
@@ -102,6 +106,16 @@ class ClientToolController @Inject()(
   }
 
   type CredentialsData = ByteString
+
+  def getCryptClientCertificate(namespace: Namespace): Future[Option[CredentialsData]] =
+    cryptApi
+      .downloadClientCredentials(namespace.get)
+      .flatMap(_.consumeData)
+      .map(Some(_))
+      .recoverWith {
+        case RemoteApiError (res, _) if res.header.status == 404 =>
+          FastFuture.successful(None)
+      }
 
   def getCryptCredentials(namespace: Namespace, keyUuid: UUID) : Future[(Uri,CredentialsData)] = for {
     accountInfo <- cryptApi.getAccountInfo(namespace.get)
@@ -140,6 +154,15 @@ class ClientToolController @Inject()(
         val (gatewayUri, credentialsData) = await(getCryptCredentials(namespace, keyUUID))
         writeZipEntry("autoprov.url", gatewayUri.toString.getBytes)
         writeZipEntry("autoprov_credentials.p12", credentialsData.toArray)
+
+        val clientMTLSCert = await(getCryptClientCertificate(namespace))
+
+        clientMTLSCert match {
+          case Some(c) =>
+            writeZipEntry("client_auth.p12", c.toArray)
+          case None =>
+            _log.info(s"No client mTLS certificate available for $namespace, not included in zip")
+        }
       }
 
       writeZipEntry("api_gateway.url", apiGatewayUri.getBytes)

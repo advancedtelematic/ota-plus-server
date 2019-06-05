@@ -111,6 +111,18 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
       .execJson[DeviceRegistrationCredentials](apiExec)
   }
 
+  def downloadClientCredentials(accountName: String): Future[HttpEntity] = {
+    baseUri(s"/accounts/$accountName/credentials/client")
+      .transform(_.withMethod(GET))
+      .execResult(apiExec)
+      .transform {
+        case Success(res) if ! Status.isSuccessful(res.header.status) =>
+          Failure(RemoteApiError(res, s"Error status ${res.header.status} downloading client mTLS certs"))
+        case Success(res) => Success(res.body)
+        case Failure(exception) => Failure(exception)
+      }
+  }
+
   def downloadCredentials(accountName: String, id: UUID): Future[HttpEntity] = {
     baseUri(s"/accounts/$accountName/credentials/registration/$id")
       .transform(_.withMethod(GET))
