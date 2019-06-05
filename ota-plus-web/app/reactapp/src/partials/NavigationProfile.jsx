@@ -79,6 +79,12 @@ class NavigationProfile extends Component {
               </li>
             )}
             <li>
+              <Link to='/profile/organization' id='dropdown-link-organization' onClick={hideDropdown}>
+                <img src={assets.DEFAULT_TERMS_ICON} alt='Icon' />
+                {'Organization'}
+              </Link>
+            </li>
+            <li>
               <Link to='/profile/usage' id='dropdown-link-usage' onClick={hideDropdown}>
                 <img src={assets.DEFAULT_USAGE_ICON} alt='Icon' />
                 {'Usage'}

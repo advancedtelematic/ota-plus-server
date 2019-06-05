@@ -29,7 +29,7 @@ class SearchBar extends Component {
   };
 
   render() {
-    const { value, disabled, id, additionalClassName } = this.props;
+    const { value, disabled, id, additionalClassName, placeholder } = this.props;
     return (
       <div className={'search-box ' + (additionalClassName ? additionalClassName : '')}>
         <Input
@@ -39,6 +39,7 @@ class SearchBar extends Component {
           className='input-wrapper search'
           disabled={disabled}
           onChange={this.onChange}
+          placeholder={placeholder}
           prefix={<Icon type='search' />}
           suffix={<Icon type='close' onClick={this.clearInput} />}
         />

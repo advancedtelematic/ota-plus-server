@@ -18,7 +18,7 @@ import {
   SoftwareRepositoryAlpha,
   TermsAndConditions,
 } from './pages';
-import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './components/profile';
+import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys, ProfileOrganization } from './components/profile';
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
@@ -50,9 +50,10 @@ const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfile
       render={props => (
         <ProfilePage {...props} uiUserProfileMenu={uiUserProfileMenu} uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload}>
           <Switch>
-            <Route path='/profile/edit' component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-            <Route path='/profile/usage' component={ProfileUsage} />
-            <Route path='/profile/access-keys' render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
+            <Route path="/profile/edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
+            <Route path="/profile/organization" component={ProfileOrganization} />
+            <Route path="/profile/usage" component={ProfileUsage} />
+            <Route path="/profile/access-keys" render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
           </Switch>
         </ProfilePage>
       )}
