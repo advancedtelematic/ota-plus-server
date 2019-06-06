@@ -46,20 +46,21 @@ h3 {
   }
 
   &-add-registered-user {
-    border: 2px solid $color-mint;
-    color: $color-mint;
-    background: transparent;
+    background: $color-mint;
+    border: 0;
+    border-radius: 0;
+    color: $color-white;
     float: right;
+    font-size: 12px;
     margin-right: 10px;
+    width: 200px;
     &:focus {
-      border: 2px solid $color-mint;
-      color: $color-mint;
-      background: transparent;
+      background: $color-mint;
+      color: $color-white;
     }
     &:hover {
-      border: 2px solid $color-darkgrey;
-      color: $color-darkgrey;
-      background: transparent;
+      color: $color-white;
+      background: $switch-blue-color;
     }
   }
 
@@ -257,6 +258,7 @@ h3 {
 
 .ant-radio {
   vertical-align: baseline;
+  padding-top: 5px;
 }
 
 .ant-radio-inner:after {

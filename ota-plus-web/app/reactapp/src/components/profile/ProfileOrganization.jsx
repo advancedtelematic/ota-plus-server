@@ -1,12 +1,16 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Divider, Radio } from 'antd';
 import { Form } from 'formsy-antd';
+import Cookies from 'js-cookie';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
+import { observe } from 'mobx';
+
 import { SearchBar } from '../../partials';
+import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
 
 @inject('stores')
 @observer
@@ -17,16 +21,33 @@ class ProfileOrganization extends Component {
 
   constructor(props) {
     super(props);
+    const { userStore } = props.stores;
     this.state = {
+      organizationSelectedIndex: userStore.userOrganizations.findIndex(
+        organization => organization.namespace === userStore.userOrganizationNamespace
+      ),
       userEmail: '',
-      userEmailValid: false
+      userEmailError: false
     };
+    this.userOrganizationNamespaceHandler = observe(userStore, (change) => {
+      const { organizationSelectedIndex: stateOrganizationSelectedIndex } = this.state;
+      if (change.name === 'userOrganizationNamespace' && stateOrganizationSelectedIndex === -1) {
+        const organizationSelectedIndex = userStore.userOrganizations.findIndex(
+          organization => organization.namespace === userStore.userOrganizationNamespace
+        );
+        this.setState({ organizationSelectedIndex });
+      }
+    });
   }
 
   componentDidMount() {
     const { stores } = this.props;
     const { userStore } = stores;
     userStore.getOrganizationUsers();
+  }
+
+  componentWillUnmount() {
+    this.userOrganizationNamespaceHandler();
   }
 
   addRegisteredUser = (event) => {
@@ -36,15 +57,31 @@ class ProfileOrganization extends Component {
       const { stores } = this.props;
       const { userStore } = stores;
       userStore.addUserToOrganization(userEmail);
+    } else {
+      this.setState({ userEmailError: true });
+    }
+  };
+
+  organizationChangeCallback = (event) => {
+    const { value } = event.target;
+    const { stores } = this.props;
+    const { userStore } = stores;
+    const { namespace } = userStore.userOrganizations[value];
+    if (namespace) {
+      const pathOrigin = window.location.origin;
+      const subUrl = API_USER_ORGANIZATIONS_SWITCH_NAMESPACE.replace('$namespace', namespace);
+      const redirectUrl = `${pathOrigin}${subUrl}`;
+      Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, namespace);
+      window.location.replace(redirectUrl);
     }
   };
 
   userEmailChangeCallback = (value) => {
-    this.setState({ userEmail: value, userEmailValid: isEmail(value) });
+    this.setState({ userEmail: value, userEmailError: false });
   };
 
   render() {
-    const { userEmail, userEmailValid } = this.state;
+    const { organizationSelectedIndex, userEmail, userEmailError } = this.state;
     const { stores } = this.props;
     const { userStore } = stores;
     const namespace = userStore.userOrganizationNamespace;
@@ -53,19 +90,17 @@ class ProfileOrganization extends Component {
     return (
       <div className="profile-container" id="profile-organization">
         <span>
-          <div className="description">
-            Allow existing users to access the elements in the selected organization.
-          </div>
           <div className="section-header">
             <div className="column name-header">Organization Name</div>
             <div className="column id-header">Organization ID</div>
           </div>
-          {organizations.map(item => (
+          {organizations.map((item, index) => (
             <div className="organization-info" key={`organization-info-${item.namespace}`}>
               <div className={`column name ${item.namespace === namespace ? 'selected' : ''}`} id="organization-name">
-                <div
-                  className={`dot ${item.namespace !== namespace ? 'disabled' : 'selected'}`}
-                  id={`organization-checkbox-${item.namespace.toLowerCase()}`}
+                <Radio
+                  checked={index === organizationSelectedIndex}
+                  onChange={this.organizationChangeCallback}
+                  value={index}
                 />
                 {item.name}
               </div>
@@ -76,15 +111,16 @@ class ProfileOrganization extends Component {
           ))}
           <span>
             <div className="section-header adding-user">
-              <div className="column name-header">Add registered user</div>
+              <div className="column name-header">Members</div>
             </div>
             <div className="description">
               People you add here must have an OTA Connect account. If you are unsure check with that person first.
+              People in this list can collaborate on campaigns with other members in the organization.
             </div>
             <div className="adding-user-content">
               <Form className="adding-user-form" id="add-registered-user-form">
                 <SearchBar
-                  additionalClassName="white dark-border"
+                  additionalClassName={`white ${userEmailError ? 'error-border' : 'dark-border'}`}
                   changeAction={this.userEmailChangeCallback}
                   id="add-registered-user-search-bar"
                   placeholder={'Add by email address'}
@@ -94,7 +130,6 @@ class ProfileOrganization extends Component {
               <Button
                 htmlType="button"
                 className="ant-btn ant-btn-add-registered-user"
-                disabled={!userEmailValid}
                 id="button-add-registered-user"
                 onClick={this.addRegisteredUser}
               >
@@ -103,19 +138,16 @@ class ProfileOrganization extends Component {
             </div>
           </span>
           <span>
-            <div className="section-header adding-user">
-              <div className="column name-header">Added users</div>
-            </div>
-            <div className="description">
-              People in this list can collaborate on campaigns with other members in the organization.
-            </div>
-            {organizationUsers.map((item, index) => (
-              <div className="organization-info" key={`organization-info-user-${index}`}>
-                <div className="column name" id="organization-name">
-                  {item}
+            <Divider type="horizontal" />
+            <div className="email-list">
+              {organizationUsers.map((item, index) => (
+                <div className="organization-info" key={`organization-info-user-${index}`}>
+                  <div className="column name" id="organization-name">
+                    {item}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </span>
         </span>
       </div>
