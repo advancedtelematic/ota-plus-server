@@ -918,6 +918,10 @@ input {
     border: 1px solid $devices-groups-bg;
   }
 
+  &.error-border {
+    border: 1px solid $error-color;
+  }
+
   .input-wrapper {
     font-family: 'Fira Sans', sans-serif !important;
     width: 280px !important;
