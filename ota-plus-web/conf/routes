@@ -44,6 +44,7 @@ GET     /user/*path                       com.advancedtelematic.controllers.User
 PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 
 # Namespaces AKA organizations
+PATCH   /organization                     com.advancedtelematic.controllers.NamespaceController.proxyRequest(path="")
 GET     /organizations/:namespace/index   com.advancedtelematic.controllers.NamespaceController.switchNamespace(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
 GET     /organization/*path               com.advancedtelematic.controllers.NamespaceController.proxyRequest(path: String)
 POST    /organization/*path               com.advancedtelematic.controllers.NamespaceController.proxyRequest(path: String)
