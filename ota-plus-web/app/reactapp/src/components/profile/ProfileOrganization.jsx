@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
 import { observe } from 'mobx';
 
-import { SearchBar } from '../../partials';
+import EditOrganizationNameModal from './EditOrganizationNameModal';
+import { Dropdown, SearchBar } from '../../partials';
 import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
 
 @inject('stores')
@@ -23,6 +24,9 @@ class ProfileOrganization extends Component {
     super(props);
     const { userStore } = props.stores;
     this.state = {
+      menuEditShownIndex: -1,
+      menuEditShowMenu: false,
+      organization: undefined,
       organizationSelectedIndex: userStore.userOrganizations.findIndex(
         organization => organization.namespace === userStore.userOrganizationNamespace
       ),
@@ -80,13 +84,42 @@ class ProfileOrganization extends Component {
     this.setState({ userEmail: value, userEmailError: false });
   };
 
+  showHideOrganizationEditMenu = (value) => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    this.setState({ menuEditShownIndex: value });
+    const newOrganization = userStore.userOrganizations[value];
+    if (newOrganization) {
+      this.setState({ menuEditShownIndex: value, organization: newOrganization });
+    }
+  };
+
+  showOrganizationEditModal = (event) => {
+    if (event) {
+      event.preventDefault();
+    }
+    this.setState({ menuEditShowMenu: true });
+  };
+
+  hideOrganizationEditModal = () => {
+    this.setState({ menuEditShowMenu: false });
+  };
+
   render() {
-    const { organizationSelectedIndex, userEmail, userEmailError } = this.state;
+    const {
+      menuEditShownIndex,
+      menuEditShowMenu,
+      organization,
+      organizationSelectedIndex,
+      userEmail,
+      userEmailError
+    } = this.state;
     const { stores } = this.props;
     const { userStore } = stores;
     const namespace = userStore.userOrganizationNamespace;
     const organizations = userStore.userOrganizations;
     const organizationUsers = userStore.userOrganizationUsers;
+    const userCurrentNamespace = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
     return (
       <div className="profile-container" id="profile-organization">
         <span>
@@ -107,6 +140,26 @@ class ProfileOrganization extends Component {
               <div className="column id" id="organization-id">
                 {item.namespace}
               </div>
+              {item.namespace === userCurrentNamespace && (
+                <div
+                  className="dots relative organization"
+                  id="device-actions"
+                  onClick={() => this.showHideOrganizationEditMenu(index)}
+                >
+                  <span />
+                  <span />
+                  <span />
+                  {menuEditShownIndex === index && (
+                    <Dropdown hideSubmenu={() => this.showHideOrganizationEditMenu(-1)} customClassName={'relative'}>
+                      <li className="device-dropdown-item">
+                        <a className="device-dropdown-item" id="edit-device" onClick={this.showOrganizationEditModal}>
+                          {'Rename organization'}
+                        </a>
+                      </li>
+                    </Dropdown>
+                  )}
+                </div>
+              )}
             </div>
           ))}
           <span>
@@ -150,6 +203,18 @@ class ProfileOrganization extends Component {
             </div>
           </span>
         </span>
+        {menuEditShowMenu && (
+          <EditOrganizationNameModal
+            modalTitle={(
+              <div className="title">
+                {'Edit name'}
+              </div>
+            )}
+            shown={menuEditShowMenu}
+            hide={this.hideOrganizationEditModal}
+            organization={organization}
+          />
+        )}
       </div>
     );
   }

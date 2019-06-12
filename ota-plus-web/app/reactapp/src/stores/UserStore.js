@@ -16,6 +16,7 @@ import {
   API_USER_ORGANIZATIONS,
   API_USER_ORGANIZATIONS_ADD_USER,
   API_USER_ORGANIZATIONS_GET_USERS,
+  API_USER_ORGANIZATION_EDIT,
   ORGANIZATION_NAMESPACE_COOKIE,
 } from '../config';
 
@@ -45,6 +46,7 @@ export default class UserStore {
     this.activatedDevicesFetchAsync = observable.map();
     this.activeDevicesFetchAsync = observable.map();
     this.connectedDevicesFetchAsync = observable.map();
+    this.editOrganizationNameAsync = observable.map();
     this.getOrganizationsAsync = observable.map();
     this.getOrganizationUsersAsync = observable.map();
     this.addUserToOrganizationAsync = observable.map();
@@ -53,10 +55,23 @@ export default class UserStore {
     resetAsync(this.userChangePasswordAsync);
     resetAsync(this.contractsFetchAsync);
     resetAsync(this.contractsAcceptAsync);
+    resetAsync(this.editOrganizationNameAsync);
     resetAsync(this.getOrganizationsAsync);
     resetAsync(this.getOrganizationUsersAsync);
     resetAsync(this.addUserToOrganizationAsync);
   }
+
+  editOrganizationName = async (name) => {
+    resetAsync(this.editOrganizationNameAsync, true);
+    try {
+      const url = API_USER_ORGANIZATION_EDIT;
+      const response = await axios.patch(url, { name });
+      this.editOrganizationNameAsync = handleAsyncSuccess(response);
+      this.getOrganizations();
+    } catch (error) {
+      this.editOrganizationNameAsync = handleAsyncError(error);
+    }
+  };
 
   getOrganizations = async () => {
     resetAsync(this.getOrganizationsAsync, true);
@@ -75,6 +90,7 @@ export default class UserStore {
       }
       this.userOrganizationName = userOrganization.name;
       this.userOrganizationNamespace = userOrganization.namespace;
+      this.getOrganizationsAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getOrganizationsAsync = handleAsyncError(error);
     }
@@ -86,6 +102,7 @@ export default class UserStore {
       const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS);
       const { data } = response;
       this.userOrganizationUsers = data;
+      this.getOrganizationUsersAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getOrganizationUsersAsync = handleAsyncError(error);
     }
@@ -98,6 +115,7 @@ export default class UserStore {
       if (response.status === HTTP_CODE_200_OK) {
         this.getOrganizationUsers();
       }
+      this.addUserToOrganizationAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.addUserToOrganizationAsync = handleAsyncError(error);
     }
