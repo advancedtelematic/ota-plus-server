@@ -30,6 +30,7 @@ export const API_USER_ORGANIZATIONS = '/user/organizations';
 export const API_USER_ORGANIZATIONS_SWITCH_NAMESPACE = '/organizations/$namespace/index';
 export const API_USER_ORGANIZATIONS_ADD_USER = '/organization/users';
 export const API_USER_ORGANIZATIONS_GET_USERS = '/organization/tentative_users';
+export const API_USER_ORGANIZATION_EDIT = '/organization';
 
 /*
  *  Features

@@ -322,6 +322,13 @@ strong {
     top: 0;
     right: 0;
 
+    &.organization {
+      width: 5%;
+      height: 30px;
+      right: 0px;
+      top: 12px;
+      padding-right: 26px;
+    }
     span {
       background: $dashboard-header-button;
       height: 4px;
