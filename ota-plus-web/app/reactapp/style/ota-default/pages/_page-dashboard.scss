@@ -5,11 +5,11 @@
 
 #page-dashboard {
   background-color: $dashboard-bg;
+  width: 100%;
 }
 
 .dashboard {
   font-size: 12px;
-  height: calc(100vh - 50px);
   width: 100%;
   &__box {
     width: inherit;
@@ -67,12 +67,7 @@
   }
 
   &__list {
-    &:not(:last-child) {
-      margin-bottom: 5px;
-      @media all and (min-height:769px) {
-        margin-bottom: 5px;
-      }
-    }
+    margin-bottom: 5px;
   }
 
   &__list-item {

@@ -11,6 +11,7 @@ import { List, ListHeader } from '.';
 import Loader from '../../partials/Loader';
 
 import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB } from '../../config';
+import TabNavigation from '../../partials/TabNavigation';
 
 @inject('stores')
 @observer
@@ -72,7 +73,7 @@ class ContentPanel extends Component {
      * the correct campaign as expanded.
      */
     if (!_.isUndefined(highlight) && _.isString(highlight) && !_.isEmpty(highlight)) {
-      toggleCampaign({id: highlight});
+      toggleCampaign({ id: highlight });
     }
   };
 
@@ -93,14 +94,18 @@ class ContentPanel extends Component {
   };
 
   render() {
-    const { stores, showCancelCampaignModal, showDependenciesModal, showRetryModal, expandedCampaigns, toggleCampaign, addNewWizard } = this.props;
+    const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
+      stores, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
     const { campaignsFetchAsync } = campaignsStore;
     return (
-      <div className='campaigns' ref='list'>
-        <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
+      <span>
+        <div>
+          <TabNavigation showCreateCampaignModal={addNewWizard} location={'page-campaigns'} />
+          <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
+        </div>
         {campaignsFetchAsync[this.activeTab].isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : (
@@ -113,7 +118,7 @@ class ContentPanel extends Component {
             toggleCampaign={toggleCampaign}
           />
         )}
-        <div className='ant-pagination__wrapper clearfix'>
+        <div className="ant-pagination__wrapper clearfix">
           <Pagination
             defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
             // hideOnSinglePage
@@ -122,7 +127,7 @@ class ContentPanel extends Component {
             showTotal={this.showTotalTemplate}
           />
         </div>
-      </div>
+      </span>
     );
   }
 }

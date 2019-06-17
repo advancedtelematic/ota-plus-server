@@ -4,12 +4,14 @@
 @import '../mixins';
 
 #page-profile {
+  min-height: $main-content-height;
+  width: 100%;
 
   .profile-nav {
-    background-color: $device-item-bg;
-    height: 180px;
-    display: flex;
     align-items: center;
+    background-color: $device-item-bg;
+    display: flex;
+    height: $profile-header-height;
     padding: 0 40px;
     position: relative;
 
@@ -65,10 +67,10 @@
   }
 
   .profile-container {
-    height: calc(100vh - 230px);
     background-color: #fff;
+    min-height: $main-content-height-profile;
     padding: 40px;
-    overflow-y: auto;
+    overflow-y: hidden;
 
     .profile-container-empty {
       height: calc(100% - 50px);

@@ -4,7 +4,9 @@
 @import '../mixins';
 
 #page-devices {
-  height: calc(100vh - 50px);
+  height: $main-content-height;
+  min-height: 820px;
+  width: 100%;
 
   .groups-panel {
     background: $devices-groups-bg;

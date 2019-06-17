@@ -4,7 +4,9 @@
 @import '../mixins';
 
 #page-campaigns {
-  background-color: $dashboard-bg;
+  background-color: $color-white;
+  min-height: $main-content-height;
+  width: 100%;
 
   .content {
     .content-empty {
@@ -48,11 +50,9 @@
   width: 100%;
   display: block;
   position: relative;
-  background-color: $color-grey;
-  height: calc(100vh - 100px);
+  min-height: $main-content-height;
 
   &__header {
-    position: fixed;
     z-index: 2;
     color: $dashboard-header-text;
     font-size: 12px;
@@ -100,9 +100,8 @@
   &__list {
     background-color: #fff;
     position: relative;
-    top: 40px;
     overflow-y: auto;
-    height: calc(100% - 73px);
+    height: calc(100% - 123px);
 
     &--empty {
       background-color: #fff;

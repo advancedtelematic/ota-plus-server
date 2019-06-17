@@ -13,7 +13,7 @@ import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
 import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT } from '../config';
-import { Navigation, SizeVerify, UploadBox } from '../partials';
+import { LegalInfoFooter, Navigation, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
 
@@ -176,32 +176,37 @@ class Main extends Component {
 
     return (
       <span>
-        <Navigation
-          location={pageId}
-          toggleSWRepo={this.toggleSWRepo}
-          uiUserProfileEdit={this.uiUserProfileEdit}
-          switchToSWRepo={this.switchToSWRepo}
-          uiUserProfileMenu={this.uiUserProfileMenu}
-          uiCredentialsDownload={this.uiCredentialsDownload}
-          alphaPlusEnabled={alphaPlusEnabled}
-          addNewWizard={this.addNewWizard}
-        />
-        <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : undefined}>
-          <FadeAnimation>
-            <Routes
-              {...rest}
-              addNewWizard={this.addNewWizard}
-              uiUserProfileEdit={this.uiUserProfileEdit}
-              switchToSWRepo={this.switchToSWRepo}
-              uiAutoFeatureActivation={this.uiAutoFeatureActivation}
-              uiUserProfileMenu={this.uiUserProfileMenu}
-              uiCredentialsDownload={this.uiCredentialsDownload}
-            />
-          </FadeAnimation>
-          <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />
-          <UploadBox minimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} />
-          {this.wizards}
-          <Minimized uploadBoxMinimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} minimizedWizards={this.minimizedWizards} toggleWizard={this.toggleWizard} />
+        <div>
+          <Navigation
+            location={pageId}
+            toggleSWRepo={this.toggleSWRepo}
+            uiUserProfileEdit={this.uiUserProfileEdit}
+            switchToSWRepo={this.switchToSWRepo}
+            uiUserProfileMenu={this.uiUserProfileMenu}
+            uiCredentialsDownload={this.uiCredentialsDownload}
+            alphaPlusEnabled={alphaPlusEnabled}
+            addNewWizard={this.addNewWizard}
+          />
+          <div className="app-flex-container">
+            <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : undefined}>
+              <FadeAnimation>
+                <Routes
+                  {...rest}
+                  addNewWizard={this.addNewWizard}
+                  uiUserProfileEdit={this.uiUserProfileEdit}
+                  switchToSWRepo={this.switchToSWRepo}
+                  uiAutoFeatureActivation={this.uiAutoFeatureActivation}
+                  uiUserProfileMenu={this.uiUserProfileMenu}
+                  uiCredentialsDownload={this.uiCredentialsDownload}
+                />
+              </FadeAnimation>
+              <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />
+              <UploadBox minimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} />
+              {this.wizards}
+              <Minimized uploadBoxMinimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} minimizedWizards={this.minimizedWizards} toggleWizard={this.toggleWizard} />
+            </div>
+            <LegalInfoFooter />
+          </div>
         </div>
       </span>
     );
