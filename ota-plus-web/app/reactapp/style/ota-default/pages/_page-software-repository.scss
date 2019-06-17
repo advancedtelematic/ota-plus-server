@@ -4,8 +4,9 @@
 @import '../mixins';
 
 #page-software-repository {
-  background-color: $dashboard-bg;
-  height: calc(100% - 50px);
+  background-color: $color-white;
+  min-height: $main-content-height;
+  width: 100%;
 
   .ios-list {
     overflow-y: auto;

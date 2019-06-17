@@ -4,7 +4,8 @@
 @import '../mixins';
 
 #page-impact-analysis {
-  height: calc(100vh - 50px);
+  height: $main-content-height;
+  width: 100%;
 
   .content {
     position: relative;

@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import _ from 'lodash';
 
 import NavigationPopover from './NavigationPopover';
-import TabNavigation from './TabNavigation';
 import SupportMenu from './SupportMenu';
 
 @inject('stores')
@@ -15,7 +13,7 @@ import SupportMenu from './SupportMenu';
 class Navigation extends Component {
 
   render() {
-    const { uiUserProfileMenu, uiCredentialsDownload, location, uiUserProfileEdit, alphaPlusEnabled, addNewWizard } = this.props;
+    const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
     return (
       <nav className='navbar navbar-inverse clearfix'>
         <div className='container clearfix'>
@@ -67,8 +65,6 @@ class Navigation extends Component {
             <SupportMenu />
           </div>
         </div>
-        {alphaPlusEnabled && location === 'page-software-repository' && <TabNavigation location={location} />}
-        {location === 'page-campaigns' && <TabNavigation showCreateCampaignModal={addNewWizard} location={location} />}
       </nav>
     );
   }

@@ -4,8 +4,9 @@
 @import '../mixins';
 
 #page-updates {
-  background-color: $dashboard-bg;
-  height: calc(100vh - 50px);
+  background-color: $color-white;
+  min-height: $main-content-height;
+  width: 100%;
 
   .ios-list {
     height: calc(100% - 123px);

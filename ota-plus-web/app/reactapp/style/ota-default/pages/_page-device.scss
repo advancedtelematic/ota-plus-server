@@ -5,8 +5,8 @@
 
 #page-device {
   background: $dashboard-bg;
-  height: calc(100vh - 50px);
   font-size: 12px;
+  width: 100%;
 
   .device-offline-title {
     font-size: 24px;
@@ -751,7 +751,7 @@
 
     &__info {
       padding: 35px;
-      height: calc(100% - 50px);
+      height: $main-content-height;
       position: relative;
       display: flex;
       flex-direction: column;

@@ -190,7 +190,7 @@ class List extends Component {
     const { alphaPlusEnabled } = featuresStore;
 
     return (
-      <div className='ios-list' ref='list' style={{ height: `calc(100vh - ${alphaPlusEnabled ? '100px' : '50px'})` }}>
+      <div className='ios-list' ref='list' >
         <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
           {_.map(softwareStore.preparedPackages, (packages, letter) => (
             <div key={letter}>

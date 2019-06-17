@@ -509,6 +509,7 @@ input {
 #app {
   min-width: 1280px;
   height: 100vh;
+  overflow-y: hidden;
 }
 
 .navbar-inverse {
@@ -601,6 +602,7 @@ input {
     height: 49px;
     display: flex;
     position: absolute;
+    top: 0;
     right: 0;
     background-color: $devices-groups-bg;
   }
@@ -1784,12 +1786,13 @@ input {
 
 .terms {
   background-color: #f3f3f4;
-  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 10;
+  height: $main-content-height;
+  min-height: 600px;
 
   .checkbox-wrapper {
     margin: 50px 0;
@@ -1854,7 +1857,6 @@ input {
     display: flex !important;
     flex-direction: column;
     color: white;
-    height: 100vh;
 
     .logo {
       &--terms {
@@ -2142,4 +2144,60 @@ input {
 
 .gutter-bottom {
   margin-bottom: 32px;
+}
+
+.app-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: calc(100vh - #{$navigation-bar-height});
+  overflow-y: auto;
+}
+
+.legal-info-footer {
+  border-top: 1px solid #5E636A;
+  height: $footer-info-height;
+  position: static;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: $color-background-gray;
+  color: white;
+
+  .menu-container {
+    height: 12px;
+    width: 340px;
+    margin-left: 20px;
+    margin-top: 24px;
+    float: left;
+    display: inline-flex;
+
+    .divider {
+      background-color: #5E636A;
+      margin: 0px 12px;
+      width: 1px;
+    }
+    .menu-text {
+      color: #00AFAA;
+      font-family: "Fira Sans";
+      font-size: 10px;
+      font-weight: 300;
+    }
+  }
+
+  .company-container {
+    height: 12px;
+    width: 100px;
+    margin-right: 36px;
+    margin-top: 24px;
+    float: right;
+
+    .company-text {
+      color: $color-text-light;
+      float: right;
+      font-family: "Fira Sans";
+      font-size: 10px;
+      font-weight: 300;
+    }
+  }
 }
