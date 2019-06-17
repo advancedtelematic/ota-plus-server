@@ -84,6 +84,15 @@ class Updates extends Component {
           <span>
             <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
             <UpdateList showUpdateDetails={this.showUpdateDetails} />
+            <div className='ant-pagination__wrapper clearfix'>
+              <Pagination
+                current={pageNumber}
+                defaultPageSize={UPDATES_LIMIT_PER_PAGE}
+                onChange={this.onPageChange}
+                total={updatesStore.updatesTotalCount}
+                showTotal={this.showTotalTemplate}
+              />
+            </div>
           </span>
         ) : (
           <span>
@@ -102,17 +111,6 @@ class Updates extends Component {
               </div>
             </div>
           </span>
-        )}
-        {updatesStore.updatesTotalCount && (
-          <div className='ant-pagination__wrapper clearfix'>
-            <Pagination
-              current={pageNumber}
-              defaultPageSize={UPDATES_LIMIT_PER_PAGE}
-              onChange={this.onPageChange}
-              total={updatesStore.updatesTotalCount}
-              showTotal={this.showTotalTemplate}
-            />
-          </div>
         )}
         {this.createModalShown ? <UpdateCreateModal shown={this.createModalShown} hide={this.hideCreateModal} /> : null}
         {this.updateDetailsShown ? <UpdateCreateModal shown={this.updateDetailsShown} hide={this.hideUpdateDetails} showDetails={this.selectedUpdate} /> : null}

@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepositoryAlpha } from '../pages';
 import { SoftwareCreateModal, SoftwareHeader, SoftwareList, SoftwareDependenciesManager, SoftwareEditCommentModal } from '../components/software';
+import TabNavigation from '../partials/TabNavigation';
 
 @inject('stores')
 @observer
@@ -169,7 +170,8 @@ class Software extends Component {
 
   render() {
     const { stores, highlightedPackage } = this.props;
-    const { softwareStore } = stores;
+    const { featuresStore, softwareStore } = stores;
+    const { alphaPlusEnabled } = featuresStore;
     return (
       <span ref='component'>
         {softwareStore.packagesFetchAsync.isFetching ? (
@@ -178,6 +180,7 @@ class Software extends Component {
           </div>
         ) : softwareStore.packagesCount ? (
           <div className='packages-container'>
+            {alphaPlusEnabled && <TabNavigation location={'page-software-repository'} />}
             {!this.switchToSWRepo && <SoftwareHeader showCreateModal={this.showCreateModal} />}
             {!this.switchToSWRepo ? (
               <SoftwareList

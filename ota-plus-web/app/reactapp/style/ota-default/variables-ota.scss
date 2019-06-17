@@ -11,6 +11,7 @@ $color-orange: #fa9872;
 $color-grey: #eee;
 $color-white: #fff;
 $color-text-light: #9fa2a6;
+$color-background-gray: #3f454d;
 
 /* colors extended */
 $button-outline-color: #76E3DC;
@@ -19,7 +20,7 @@ $dashboard-grey: #9b9da2;
 $dashboard-header-text: #6a6d74;
 $dashboard-header-button: $primary-color;
 
-$devices-groups-bg: #3f454d;
+$devices-groups-bg: $color-background-gray;
 $devices-group-inactive: #b7b9bc;
 $devices-group-text: #9fa2a6;
 $device-hardware-header: #898b91;
@@ -51,6 +52,13 @@ $hardware-overlay-border: rgba(15, 22, 33, 0.1);
 $sw-repo-border-color: #cfd0d3;
 $confirm-modal-title: #d0021b;
 $olp-group-layer: $warning-color;
+
+//size constants
+$navigation-bar-height: 50px;
+$footer-info-height: 60px;
+$profile-header-height: 180px;
+$main-content-height: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height});
+$main-content-height-profile: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height} - #{$profile-header-height});
 
 //campaign stats
 $campaign-success-color: #44CA9D;

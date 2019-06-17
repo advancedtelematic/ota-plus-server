@@ -23,6 +23,7 @@ import ConfirmationModal from './ConfirmationModal';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
 import EditSoftwareModal from './EditSoftwareModal';
+import LegalInfoFooter from './LegalInfoFooter';
 import TimePicker from './TimePicker';
 
 export {
@@ -49,5 +50,6 @@ export {
   EditModal,
   EditCampaignModal,
   EditSoftwareModal,
+  LegalInfoFooter,
   TimePicker,
 };
