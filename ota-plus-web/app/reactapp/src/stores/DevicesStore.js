@@ -192,7 +192,7 @@ export default class DevicesStore {
     resetAsync(this.devicesLoadMoreAsync, true);
     this.devicesCurrentPage++;
     this.devicesOffset += limit;
-    let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
     if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
