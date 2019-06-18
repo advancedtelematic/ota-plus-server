@@ -1,30 +1,40 @@
 /** @format */
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import { Tag } from 'antd';
 
+@inject('stores')
 @observer
 class Header extends Component {
   render() {
-    const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit, stores } = this.props;
+    const { featuresStore } = stores;
+    const { alphaPlusEnabled } = featuresStore;
     const fullNavigation = (
       <div className='profile-nav__list'>
-        {uiUserProfileEdit ? (
+        {uiUserProfileEdit && (
           <NavLink to='/profile/edit' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='edit-profile-link'>
             <div>
               Edit profile
               <span className='profile-nav__bottom-line' />
             </div>
           </NavLink>
-        ) : null}
-        <NavLink to='/profile/organization' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='organization-link'>
-          <div>
-            Organization
-            <span className='profile-nav__bottom-line' />
-          </div>
-        </NavLink>
+        )}
+        {alphaPlusEnabled && (
+          <NavLink to='/profile/organization' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='organization-link'>
+            <div>
+              <span>
+                Organization
+                <Tag color='#48dad0' className='alpha-tag'>
+                  ALPHA
+                </Tag>
+              </span>
+              <span className='profile-nav__bottom-line' />
+            </div>
+          </NavLink>
+        )}
         <NavLink to='/profile/usage' activeClassName='profile-nav__list-item--active' className='profile-nav__list-item' id='usage-link'>
           <div>
             Usage

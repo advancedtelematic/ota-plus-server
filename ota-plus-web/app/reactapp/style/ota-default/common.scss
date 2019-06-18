@@ -219,9 +219,11 @@ strong {
     cursor: pointer;
     text-transform: none;
     &.primary {
+      color: $color-mint;
+    }
+    &.centered {
       display: flex;
       align-items: center;
-      color: $color-mint;
     }
   }
   &.relative {
@@ -235,11 +237,12 @@ strong {
 }
 
 .navigation-name-organization {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   flex-direction: column;
-  float: left;
   font-size: .8125rem;
   width: 220px;
+  margin-right: 12px;
   @media only screen and (max-width: 1430px) {
     max-width: 146px;
   }
@@ -255,10 +258,6 @@ strong {
     text-overflow: ellipsis;
     display: block;
     overflow: hidden;
-    @media only screen and (max-width: 1430px) {
-        display: inline-block;
-        max-width: 120px;
-    }
   }
 }
 
@@ -712,6 +711,7 @@ input {
 }
 
 .menu-login-clickable {
+  display: flex;
   padding: 5px 0 5px 2px;
   margin-right: 10px;
   width: 300px;
@@ -720,9 +720,8 @@ input {
   .ant-avatar-image {
     background: #ccc;
   }
-
   @media only screen and (max-width: 1430px) {
-    width: 220px;
+    max-width: 224px;
   }
 }
 
@@ -2131,7 +2130,7 @@ input {
     font-weight: 500;
     line-height: 1.2;
     padding: 0 6px 0;
-    margin-left: 3px;
+    margin-left: 4px;
   }
 }
 
