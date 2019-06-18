@@ -15,6 +15,13 @@
     padding: 0 40px;
     position: relative;
 
+    #organization-link {
+      width: auto;
+      .alpha-tag {
+        margin: 0 10px;
+      }
+    }
+
     &__title {
       color: $page-title-color;
       font-size: 44px;

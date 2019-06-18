@@ -65,11 +65,14 @@ class NavigationProfile extends Component {
                 </Link>
               </li>
             )}
-            <li>
-              <Link to='/profile/organization' id='dropdown-link-organization' onClick={hideDropdown}>
-                {'Organization'}
-              </Link>
-            </li>
+            {alphaPlusEnabled && (
+              <li>
+                <Link className='centered' to='/profile/organization' id='dropdown-link-organization' onClick={hideDropdown}>
+                  {'Organization'}
+                  <Tag color='#48dad0' className='alpha-tag--nav'>ALPHA</Tag>
+                </Link>
+              </li>
+            )}
             <li>
               <Link to='/profile/usage' id='dropdown-link-usage' onClick={hideDropdown}>
                 {'Usage'}
@@ -89,7 +92,7 @@ class NavigationProfile extends Component {
             </li>
             {alphaPlusEnabled && (
               <li className='clear-localstorage'>
-                <a className='primary' onClick={this.clearLocalStorage} id='reset-demo'>
+                <a className='primary centered' onClick={this.clearLocalStorage} id='reset-demo'>
                   {'Reset demo'}
                   <Tag color='#48dad0' className='alpha-tag--nav'>ALPHA</Tag>
                 </a>
