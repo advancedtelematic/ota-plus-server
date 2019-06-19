@@ -7,8 +7,7 @@ const Header = ({ showCreateGroupModal }) => {
   return (
     <div className='groups-panel__header'>
       <div className='groups-panel__title'>Groups</div>
-      <a href='#' className='add-button light' id='add-new-group' onClick={showCreateGroupModal}>
-        <span>+</span>
+      <a href='#' className='ant-btn ant-btn--sm ant-btn-outlined' id='add-new-group' onClick={showCreateGroupModal}>
         <span>Add group</span>
       </a>
     </div>

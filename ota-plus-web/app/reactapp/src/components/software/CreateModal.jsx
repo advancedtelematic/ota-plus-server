@@ -79,6 +79,17 @@ class CreateModal extends Component {
     const isSubmitEnabled = this.softwareName && this.softwareVersion && this.selectedHardwareIds.length && this.fileName;
     const directorForm = (
       <Form onValidSubmit={this.submitForm} id='software-create-form'>
+        <Row className='gutter-bottom'>
+          Upload new software versions to your software repository. Alternatively, you can also use the 
+          <a 
+            href='https://docs.ota.here.com/quickstarts/pushing-updates.html' 
+            rel='noopener noreferrer' 
+            target='_blank'
+          >
+            {' OTA Connect Client '}
+          </a>
+          to build and upload full software images.
+        </Row>
         <Row className='row'>
           <Col span={12}>
             <label className='c-form__label'>

@@ -27,7 +27,7 @@ class ContentPanelHeader extends Component {
           <div className='add-group-campaign'>
             <Button
               htmlType='button'
-              className='ant-btn-hero'
+              className='ant-btn-outlined'
               onClick={e => {
                 e.preventDefault();
                 addNewWizard('groups');

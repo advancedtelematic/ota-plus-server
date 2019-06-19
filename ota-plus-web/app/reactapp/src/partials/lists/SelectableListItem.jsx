@@ -12,8 +12,8 @@ class SelectableListItem extends Component {
     const { item, selected, onChange, showDetails, sourceType } = this.props;
 
     return (
-      <div className='item' id={`button-select-${item.type}-${item.name}`} title={item.name}>
-        <Checkbox checked={selected} id={`item-select-${item.type}-${item.name}`} onChange={e => onChange(item, e)} style={{ display: 'flex' }}>
+      <div className='item select-ecu-item' id={`button-select-${item.type}-${item.name}`} title={item.name}>
+        <Checkbox checked={selected} id={`item-select-${item.type}-${item.name}`} onChange={e => onChange(item, e)} style={{ display: 'flex', marginLeft: '12px' }}>
           <div className='item item__info'>
             <span className={`icon ${sourceType === 'external' ? 'icon--external' : 'icon--internal'}`} />
             <span className='name'>{item.name}</span>

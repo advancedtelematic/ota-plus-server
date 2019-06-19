@@ -29,7 +29,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  plugins: [new CleanWebpackPlugin(foldersToClean, cleaningOptions)],
+  plugins: [
+    new CleanWebpackPlugin(foldersToClean, cleaningOptions)
+  ],
   devtool: 'source-map',
   module: {
     rules: [
