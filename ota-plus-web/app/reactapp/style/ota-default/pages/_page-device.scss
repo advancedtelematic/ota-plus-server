@@ -475,15 +475,16 @@
     .ant-tabs-nav-container {
       padding-top: 10px;
       padding-left: 10px;
-      background-color: rgb(250, 250, 250);
+      background-color: $add-button-grey;
       height: 60px;
     }
 
     .ant-tabs-tab {
       width: 175px;
       text-align: center;
-      border-radius: 0;
-
+      border-radius: 3px 3px 0 0;
+      border: none;
+      background-color: transparent;
       font-weight: 500;
       color: #898b91;
       line-height: 47px;
@@ -493,8 +494,9 @@
       }
       &-active {
         color: black;
+        background-color: $color-white;
         &:after {
-          margin: -3px auto;
+          margin: -6px auto;
           content: '';
           display: block;
           width: 100px;

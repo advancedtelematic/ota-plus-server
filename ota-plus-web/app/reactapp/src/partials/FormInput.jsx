@@ -37,12 +37,12 @@ export default class FormInput extends Component {
     } = this.props;
     return (
       <div className='c-form__relative-wrapper' style={{ width: wrapperWidth }}>
-        {label.length ? (
+        {label.length > 0 && (
           <label title={title} htmlFor={id} className='c-form__label'>
-            {label || ''}
-            {showIcon ? <i className='c-form__icon fa fa-info' /> : ''}
+            {label}
+            {showIcon && <i className='c-form__icon fa fa-info' />}
           </label>
-        ) : null}
+        )}
         {showInput ? (
           <div className='c-form__input-wrapper'>
             {children}
@@ -60,7 +60,7 @@ export default class FormInput extends Component {
               placeholder={placeholder || ''}
               onChange={onChange}
             />
-            {statusIconShown ? <i className='fa fa-check c-form__select-icon' /> : null}
+            {statusIconShown && <i className='fa fa-check c-form__select-icon' />}
           </div>
         ) : (
           ''

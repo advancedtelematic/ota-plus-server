@@ -107,7 +107,7 @@ class Dashboard extends Component {
                 {this.packageSubmenuShown && (
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className='package-dropdown-item'>
-                      <a className='ant-btn ant-btn-plain package-dropdown-item' onClick={this.showSoftwareCreateModal}>
+                      <a onClick={this.showSoftwareCreateModal}>
                         {'Add software'}
                       </a>
                     </li>
@@ -137,7 +137,6 @@ class Dashboard extends Component {
                   <Dropdown hideSubmenu={this.hideCampaignSubmenu}>
                     <li className='campaign-dropdown-item'>
                       <a
-                        className='ant-btn ant-btn-plain campaign-dropdown-item'
                         onClick={e => {
                           e.preventDefault();
                           addNewWizard();

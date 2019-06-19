@@ -40,8 +40,8 @@ class SearchBar extends Component {
           disabled={disabled}
           onChange={this.onChange}
           placeholder={placeholder}
-          prefix={<Icon type='search' />}
-          suffix={<Icon type='close' onClick={this.clearInput} />}
+          prefix={<i className='fa fa-search icon-search' />}
+          suffix={<i className='fa fa-close icon-close' onClick={this.clearInput} />}
         />
       </div>
     );

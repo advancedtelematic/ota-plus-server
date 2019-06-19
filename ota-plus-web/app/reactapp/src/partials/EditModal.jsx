@@ -50,7 +50,7 @@ class EditModal extends Component {
           action={devicesStore.devicesRenameAsync}
           errorMsg={devicesStore.devicesRenameAsync.data ? devicesStore.devicesRenameAsync.data.description : null}
         />
-        <div className='row'>
+        <div>
           <div className='col-xs-12'>
             <FormInput
               onValid={this.enableButton.bind(this)}
@@ -66,7 +66,7 @@ class EditModal extends Component {
             />
           </div>
         </div>
-        <div className='row'>
+        <div>
           <div className='col-xs-12'>
             <div className='body-actions'>
               <button disabled={this.submitButtonDisabled || devicesStore.devicesRenameAsync.isFetching} className='btn-primary' id='add'>

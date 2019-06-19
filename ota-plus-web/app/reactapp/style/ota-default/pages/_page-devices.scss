@@ -406,12 +406,14 @@
       font-size: 14px;
       @include textoverflowEllipsis;
       position: relative;
+      margin-bottom: 2px;
     }
 
     &__device-subtitle {
-      font-size: 10px;
+      font-size: 11px;
       @include textoverflowEllipsis;
       color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1px;
     }
   }
 }

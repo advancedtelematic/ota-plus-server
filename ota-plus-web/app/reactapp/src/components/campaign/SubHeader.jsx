@@ -8,8 +8,6 @@ import { observable } from 'mobx';
 import { Button, Menu } from 'antd';
 import { DropdownMenu, EditCampaignModal } from '../../partials';
 
-import { assets } from '../../config';
-
 @inject('stores')
 @observer
 class SubHeader extends Component {
@@ -58,7 +56,6 @@ class SubHeader extends Component {
           <DropdownMenu placement='bottomRight'>
             <Menu.Item className="ant-dropdown-menu-item--clear">
               <Button htmlType='button' className='campaign__dropdown--item' id='edit-comment' onClick={this.showEditModal}>
-                <img src={assets.DEFAULT_EDIT_ICON} alt='Icon' />
                 {'Rename Campaign'}
               </Button>
             </Menu.Item>

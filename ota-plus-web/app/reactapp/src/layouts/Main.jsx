@@ -171,7 +171,7 @@ class Main extends Component {
     const { router } = this.context;
     const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
-    const { userStore, featuresStore } = stores;
+    const { featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
 
     return (

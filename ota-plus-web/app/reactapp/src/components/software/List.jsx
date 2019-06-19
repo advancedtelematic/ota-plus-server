@@ -233,7 +233,6 @@ class List extends Component {
                               <span />
                               <span />
                               <span />
-
                               {this.submenuIsShown && (
                                 <Dropdown hideSubmenu={this.hideSubmenu}>
                                   <li className='package-dropdown-item'>
@@ -247,8 +246,7 @@ class List extends Component {
                                         this.showDeleteModal();
                                       }}
                                     >
-                                      <img src='/assets/img/icons/trash_icon.svg' alt='Icon' />
-                                      Delete
+                                      {'Delete'}
                                     </a>
                                   </li>
                                 </Dropdown>

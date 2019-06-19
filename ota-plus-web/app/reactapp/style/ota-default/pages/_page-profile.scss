@@ -152,6 +152,10 @@
           width: 20%;
           padding-right: 15px;
           justify-content: flex-end;
+          .btn-link {
+            border: none;
+            box-shadow: none;
+          }
         }
       }
     }

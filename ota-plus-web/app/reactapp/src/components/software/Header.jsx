@@ -14,7 +14,7 @@ class Header extends Component {
         <div className="tab-navigation__buttons">
           <Button
             htmlType="button"
-            className="ant-btn ant-btn-hero"
+            className="ant-btn ant-btn-outlined"
             id="add-new-software"
             onClick={() => {
               showCreateModal(null);

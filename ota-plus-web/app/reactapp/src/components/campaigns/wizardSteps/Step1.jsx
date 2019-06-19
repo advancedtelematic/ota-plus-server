@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import { Row } from 'antd';
 import _ from 'lodash';
 import serialize from 'form-serialize';
 import { OTAForm, FormInput } from '../../../partials';
@@ -29,6 +30,9 @@ class WizardStep1 extends Component {
     return (
       <div className='step-wrapper'>
         <div>
+          <Row className='gutter-bottom'>
+            Use campaigns to push software updates to specific device groups. Before you continue, make sure that you've created the necessary updates and device groups.
+          </Row>
           <OTAForm formWidth='60%' id='add-campaign-name-form' onSubmit={e => e.preventDefault()}>
             <FormInput
               label='Name'
