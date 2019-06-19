@@ -453,7 +453,7 @@ export default class SoftwareStore {
     }
     this.ondeviceFilter = filter;
     return axios
-      .get(`${API_SOFTWARE_DEVICE_SOFTWARE}/${id}/packages?regex=${filter || ''}&limit=${this.ondevicePackagesLimit}&offset=${this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit}`)
+      .get(`${API_SOFTWARE_DEVICE_SOFTWARE}/${id}/packages?nameContains=${filter || ''}&limit=${this.ondevicePackagesLimit}&offset=${this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit}`)
       .then(response => {
         this.ondevicePackages = _.uniqBy(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
         switch (this.page) {
