@@ -36,7 +36,7 @@ export default class UserStore {
   @observable userOrganizationNamespace = '';
   @observable userOrganizations = [];
   @observable userOrganizationUsers = [];
-  @observable contracts = {};
+  @observable contracts = undefined;
   @observable ifLogout = false;
 
   constructor() {
@@ -150,12 +150,17 @@ export default class UserStore {
       )
       .catch(
         function(error) {
+          this.contracts = {};
           this.contractsFetchAsync = handleAsyncError(error);
         }.bind(this),
       );
   }
 
-  _isTermsAccepted() {
+  contractsCheckCompleted() {
+    return this.contracts || false;
+  }
+
+  isTermsAccepted() {
     const terms = _.find(this.contracts, obj => contracts.default[obj.contract]);
     return terms && terms.accepted ? true : false;
   }

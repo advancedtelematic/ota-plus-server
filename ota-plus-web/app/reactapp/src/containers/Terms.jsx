@@ -48,8 +48,9 @@ class Terms extends Component {
         </div>
       </div>
     );
+    const isTermsAccepted = userStore.isTermsAccepted();
     return (
-      <div className='terms'>
+      <div className={`terms ${isTermsAccepted ? '' : 'fill-screen'}`}>
         <div className='wrapper wrapper-center wrapper-responsive'>
           <div className='logo logo--terms'>
             <img src='/assets/img/HERE_pos.png' alt='HERE' />

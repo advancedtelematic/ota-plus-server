@@ -156,7 +156,7 @@ class Main extends Component {
     const { stores, history } = this.props;
     const { userStore } = stores;
     const { router } = this.context;
-    if (!userStore._isTermsAccepted() && !router.isActive('/')) {
+    if (!userStore.isTermsAccepted() && !router.isActive('/')) {
       history.push('/');
     }
   };
@@ -179,22 +179,25 @@ class Main extends Component {
     const { router } = this.context;
     const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
-    const { featuresStore } = stores;
+    const { featuresStore, userStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
-
+    const isTermsAccepted = userStore.isTermsAccepted();
+    const contractsCheckCompleted = userStore.contractsCheckCompleted();
     return (
       <span>
         <div>
-          <Navigation
-            location={pageId}
-            toggleSWRepo={this.toggleSWRepo}
-            uiUserProfileEdit={this.uiUserProfileEdit}
-            switchToSWRepo={this.switchToSWRepo}
-            uiUserProfileMenu={this.uiUserProfileMenu}
-            uiCredentialsDownload={this.uiCredentialsDownload}
-            alphaPlusEnabled={alphaPlusEnabled}
-            addNewWizard={this.addNewWizard}
-          />
+          {((contractsCheckCompleted && isTermsAccepted) || !this.uiUserProfileMenu) && (
+            <Navigation
+              location={pageId}
+              toggleSWRepo={this.toggleSWRepo}
+              uiUserProfileEdit={this.uiUserProfileEdit}
+              switchToSWRepo={this.switchToSWRepo}
+              uiUserProfileMenu={this.uiUserProfileMenu}
+              uiCredentialsDownload={this.uiCredentialsDownload}
+              alphaPlusEnabled={alphaPlusEnabled}
+              addNewWizard={this.addNewWizard}
+            />
+          )}
           <div className="app-flex-container">
             <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : undefined}>
               <FadeAnimation>
@@ -213,7 +216,9 @@ class Main extends Component {
               {this.wizards}
               <Minimized uploadBoxMinimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} minimizedWizards={this.minimizedWizards} toggleWizard={this.toggleWizard} />
             </div>
-            <LegalInfoFooter />
+            {contractsCheckCompleted && isTermsAccepted && (
+              <LegalInfoFooter />
+            )}
           </div>
         </div>
       </span>
