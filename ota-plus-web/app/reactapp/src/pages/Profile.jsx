@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { ProfileHeader } from '../components/profile';
-import Routes from '../Routes';
 
 const title = 'Profile';
 

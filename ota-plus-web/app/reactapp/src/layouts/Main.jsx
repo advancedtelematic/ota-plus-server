@@ -72,16 +72,24 @@ class Main extends Component {
   }
 
   componentWillMount() {
-    const { stores, history } = this.props;
-    const { userStore, featuresStore } = stores;
-    if (this.uiUserProfileMenu) {
-      userStore.fetchUser();
-      userStore.fetchContracts();
-      featuresStore.fetchFeatures();
-    }
+    const { history } = this.props;
     this.websocketHandler.init();
     window.atsGarageTheme = this.atsGarageTheme;
     history.listen(this.locationChange);
+  }
+
+  async componentDidMount() {
+    const { stores } = this.props;
+    const { userStore, featuresStore } = stores;
+    if (this.uiUserProfileMenu) {
+      await featuresStore.fetchFeatures();
+      userStore.fetchUser();
+      const { alphaPlusEnabled } = featuresStore;
+      if (alphaPlusEnabled) {
+        userStore.getOrganizations();
+      }
+      userStore.fetchContracts();
+    }
   }
 
   componentWillUnmount() {
