@@ -32,7 +32,7 @@ const LegalInfoFooter = () => (
       </a>
     </div>
     <div className="company-container">
-      <div className="company-text">@ 2019 HERE</div>
+      <div className="company-text">&copy; 2019 HERE</div>
     </div>
   </div>
 );
