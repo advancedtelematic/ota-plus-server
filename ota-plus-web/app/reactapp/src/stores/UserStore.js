@@ -129,7 +129,6 @@ export default class UserStore {
         function(response) {
           this.user = response.data;
           this.userFetchAsync = handleAsyncSuccess(response);
-          this.getOrganizations();
         }.bind(this),
       )
       .catch(
