@@ -99,9 +99,7 @@ class Updates extends Component {
             <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
             <div className='wrapper-center'>
               <div className='page-intro'>
-                <div>
-                  <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
-                </div>
+                <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
                 <div>{"You haven't created any updates yet."}</div>
                 <div>
                   <a href='#' className='add-button light' id='add-new-update' onClick={this.showCreateModal}>

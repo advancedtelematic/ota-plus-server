@@ -936,9 +936,15 @@ input {
 
 .page-intro {
   color: #fff;
+  background-color: black;
   font-size: 18px;
   text-align: center;
-
+  width: inherit;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   img {
     width: 75px;
     margin-bottom: 15px;

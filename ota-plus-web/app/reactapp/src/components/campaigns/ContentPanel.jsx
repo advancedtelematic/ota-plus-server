@@ -97,7 +97,7 @@ class ContentPanel extends Component {
     const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
       stores, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
-    const { campaignsFetchAsync } = campaignsStore;
+    const { campaignsFetchAsync, campaigns } = campaignsStore;
     return (
       <span>
         <div>
@@ -118,15 +118,16 @@ class ContentPanel extends Component {
             toggleCampaign={toggleCampaign}
           />
         )}
-        <div className="ant-pagination__wrapper clearfix">
-          <Pagination
-            defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
-            // hideOnSinglePage
-            onChange={this.onPageChange}
-            total={campaignsStore.count[this.activeTab]}
-            showTotal={this.showTotalTemplate}
-          />
-        </div>
+        {campaigns.length > 0 && (
+          <div className="ant-pagination__wrapper clearfix">
+            <Pagination
+              defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
+              onChange={this.onPageChange}
+              total={campaignsStore.count[this.activeTab]}
+              showTotal={this.showTotalTemplate}
+            />
+          </div>
+        )}
       </span>
     );
   }
