@@ -1799,6 +1799,13 @@ input {
   height: $main-content-height;
   min-height: 600px;
 
+  &.fill-screen {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 1050;
+  }
+
   .checkbox-wrapper {
     margin: 50px 0;
     display: flex;

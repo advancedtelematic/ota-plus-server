@@ -45,13 +45,15 @@ class Dashboard extends Component {
   render() {
     const { stores, addNewWizard, uiUserProfileMenu } = this.props;
     const { userStore, provisioningStore } = stores;
-    const isTermsAccepted = userStore._isTermsAccepted();
+    const isTermsAccepted = userStore.isTermsAccepted();
+    const contractsCheckCompleted = userStore.contractsCheckCompleted();
     const { sanityCheckCompleted } = provisioningStore;
     const renderDashboard = (
       <MetaData title={title}>
         <DashboardContainer addNewWizard={addNewWizard} />
       </MetaData>
     );
+
     const renderLoader = (
       <div className='wrapper-center'>
         <Loader />
@@ -60,23 +62,21 @@ class Dashboard extends Component {
 
     return (
       <FadeAnimation display='flex'>
-        {uiUserProfileMenu 
+        {uiUserProfileMenu
           ? isTermsAccepted
-            ? sanityCheckCompleted 
+            ? sanityCheckCompleted
               ? renderDashboard
-              : provisioningStore.namespaceSetupFetchAsync.isFetching 
+              : provisioningStore.namespaceSetupFetchAsync.isFetching
                 ? renderLoader
                 : <SanityCheckContainer />
-            : userStore.contractsFetchAsync.isFetching 
+            : userStore.contractsFetchAsync.isFetching
               ? renderLoader
-              : <Terms />
+              : (contractsCheckCompleted ? <Terms /> : renderLoader)
           : renderDashboard
         }
       </FadeAnimation>
     );
   }
 }
-
-
 
 export default Dashboard;
