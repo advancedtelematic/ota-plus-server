@@ -170,8 +170,7 @@ class Software extends Component {
 
   render() {
     const { stores, highlightedPackage } = this.props;
-    const { featuresStore, softwareStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { softwareStore } = stores;
     return (
       <span ref='component'>
         {softwareStore.packagesFetchAsync.isFetching ? (
@@ -180,8 +179,7 @@ class Software extends Component {
           </div>
         ) : softwareStore.packagesCount ? (
           <div className='packages-container'>
-            {alphaPlusEnabled && <TabNavigation location={'page-software-repository'} />}
-            {!this.switchToSWRepo && <SoftwareHeader showCreateModal={this.showCreateModal} />}
+            <SoftwareHeader showCreateModal={this.showCreateModal} switchToSWRepo={this.switchToSWRepo} />
             {!this.switchToSWRepo ? (
               <SoftwareList
                 onFileDrop={this.onFileDrop}
