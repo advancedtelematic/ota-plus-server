@@ -74,9 +74,6 @@ const connectionsData = {
   },
 };
 
-// eslint-disable-next-line max-len
-const smartGroupEmptyText = 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.';
-
 @inject('stores')
 @observer
 class ContentPanel extends Component {
@@ -125,7 +122,7 @@ class ContentPanel extends Component {
       this.deviceOffsetsFetchedCache.add(newOffset);
       await devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter, DEVICES_LIMIT_PER_PAGE, newOffset);
     }
-  }
+  };
 
   render() {
     const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard, t } = this.props;
@@ -161,7 +158,7 @@ class ContentPanel extends Component {
     });
     // this loader div should be kept because of react-infinite-scroller requirements
     const loader = (
-      <div className="loader" key={'infinite-scroller-loader-devices'}>
+      <div className="loader" key="infinite-scroller-loader-devices">
         {t('common.infinite_scroller.loader_content')}
       </div>
     );
@@ -179,10 +176,10 @@ class ContentPanel extends Component {
         <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
           <div
             className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}
-            ref={(ref) => this.scrollParentRef = ref}
+            ref={this.scrollParentRef}
           >
             <InfiniteScroll
-              className='wrapper-infinite-scroll'
+              className="wrapper-infinite-scroll"
               pageStart={0}
               loadMore={this.loadDevices}
               hasMore={devicesCurrentPage < devicesTotalCount / devicesLimit}

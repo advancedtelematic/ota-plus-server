@@ -174,7 +174,42 @@
 
 .create-group-modal {
   .group-name-input {
-    margin-bottom: 75px;
+    margin-bottom: 20px;
+  }
+  .file-input-container {
+    input[type='file'] {
+      opacity: 0;
+      cursor: pointer;
+      width: 80px;
+      height: 30px;
+      font-size: 0 !important;;
+      position: absolute;
+
+    }
+    .file-input-description {
+      height: 14px;
+      width: 391px;
+      color: $heading-color;
+      font-family: "Fira Sans";
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 14px;
+      margin-left: 2px;
+    }
+    .file-input-button {
+      pointer-events: none;
+      cursor: pointer;
+      width: 80px;
+      height: 20px;
+      color: $switch-blue-color;
+      font-family: "Fira Sans";
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
+      margin-left: 2px;
+      margin-top: 8px;
+      position: absolute;
+    }
   }
 }
 
