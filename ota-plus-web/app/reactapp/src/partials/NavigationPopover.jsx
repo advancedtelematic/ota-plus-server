@@ -50,16 +50,16 @@ class NavigationPopover extends Component {
             <span />
             <span />
             <span />
-            {this.visibleDropdown && (
-              <NavigationProfile
-                hideDropdown={this.hideDropdown}
-                uiUserProfileEdit={uiUserProfileEdit}
-                uiCredentialsDownload={uiCredentialsDownload}
-                settingsOnly={settingsOnly}
-              />
-            )}
           </div>
         </div>
+        {this.visibleDropdown && (
+          <NavigationProfile
+            hideDropdown={this.hideDropdown}
+            uiUserProfileEdit={uiUserProfileEdit}
+            uiCredentialsDownload={uiCredentialsDownload}
+            settingsOnly={settingsOnly}
+          />
+        )}
       </div>
     );
   }
