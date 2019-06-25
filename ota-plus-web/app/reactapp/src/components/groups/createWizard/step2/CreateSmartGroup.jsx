@@ -3,8 +3,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
-import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
+
 import SmartFilters from './SmartFilters';
+import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
+import { GROUP_DATA_TYPE_NAME } from '../../../../constants/groupConstants';
 
 const CreateSmartGroup = inject('stores')(
   observer(({ stores, wizardData, onStep2DataSelect }) => {
@@ -27,8 +29,8 @@ const CreateSmartGroup = inject('stores')(
                 title="Name"
                 label="Name"
                 placeholder="Name"
-                onChange={(e) => {
-                  onStep2DataSelect('name', e.target.value);
+                onChange={(event) => {
+                  onStep2DataSelect(GROUP_DATA_TYPE_NAME, event.target.value);
                 }}
               />
             </Col>

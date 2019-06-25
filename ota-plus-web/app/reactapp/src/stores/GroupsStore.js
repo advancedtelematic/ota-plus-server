@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {
   API_GROUPS_FETCH,
   API_GROUPS_CREATE,
+  API_GROUPS_CREATE_WITH_FILE,
   API_GROUPS_RENAME,
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_ADD_DEVICE,
@@ -282,6 +283,31 @@ export default class GroupsStore {
       })
       .catch((error) => {
         this.groupsCreateAsync = handleAsyncError(error);
+      });
+  }
+
+  createGroupWithFileData(data) {
+    const { file, name } = data;
+    resetAsync(this.groupsCreateAsync, true);
+    const url = API_GROUPS_CREATE_WITH_FILE.replace('$groupName', name);
+    const fileData = new FormData();
+    fileData.append('deviceIds', file);
+    fileData.append('type', 'file');
+    return axios
+      .post(url, fileData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        this.latestCreatedGroupId = response.data;
+        this.fetchGroups('groupsCreateFetchAsync');
+        this.groupsCreateAsync = handleAsyncSuccess(response);
+        return response;
+      })
+      .catch((error) => {
+        this.groupsCreateAsync = handleAsyncError(error);
+        return error.response;
       });
   }
 

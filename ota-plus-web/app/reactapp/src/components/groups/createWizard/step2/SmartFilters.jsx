@@ -6,7 +6,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
+
 import Filter from './Filter';
+import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
 
 const options = {
   nameFilterOptions: ['Device ID'],
@@ -98,9 +100,9 @@ class SmartFilters extends Component {
         return true;
       });
       groupsStore.fetchNumberOfDevicesByExpression(this.expressionForSmartGroup);
-      onStep2DataSelect('expression', this.expressionForSmartGroup);
+      onStep2DataSelect(GROUP_DATA_TYPE_EXPRESSION, this.expressionForSmartGroup);
     } else {
-      onStep2DataSelect('expression', '');
+      onStep2DataSelect(GROUP_DATA_TYPE_EXPRESSION, '');
     }
   };
 

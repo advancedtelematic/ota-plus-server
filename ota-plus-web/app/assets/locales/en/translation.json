@@ -40,7 +40,22 @@
     },
     "groups": {
         "not_in_a_fixed_group": "Not in a fixed group: ",
-        "rename_group": "Rename group"
+        "rename_group": "Rename group",
+        "creating": {
+            "button_title": "Create",
+            "file_uploading": {
+                "button_title": "Choose file",
+                "description": "Upload a list of provisioned device IDs in a CSV file or Text file (optional)",
+                "warnings": {
+                    "file_incorrect_title": "File contains formatting issues",
+                    "file_incorrect_description": "It looks like your file is in an incorrect format. VIN numbers must be separated by line breaks and there must be an empty line at the end of the file. Check your file for any formatting issues and try again.",
+                    "group_exist_title": "Group exists",
+                    "group_exist_description": "Group with the given name already exists."
+                }
+            },
+            "placeholder": "Name",
+            "title": "Group Name"
+        }
     },
     "software": {
         "uploading": {
