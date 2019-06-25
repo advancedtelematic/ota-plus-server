@@ -27,35 +27,37 @@ class Header extends Component {
     const { filterChangeCallback, showCreateModal, stores } = this.props;
     const { updatesStore } = stores;
     return (
-      <div>
-        <div className="tab-navigation">
-          <div className="tab-navigation__buttons">
-            <Form className="tab-navigation__form-search-updates-filter">
-              <SearchBar
-                value={updatesStore.updateFilter}
-                changeAction={filterChangeCallback}
-                id="search-updates-input"
-              />
-            </Form>
-            <Button
-              htmlType="button"
-              className="ant-btn ant-btn-outlined"
-              id="add-new-update"
-              onClick={() => {
-                showCreateModal(null);
-              }}
-            >
-              {'Create update'}
-            </Button>
+      <>
+        {updatesStore.updatesTotalCount > 0 && (
+          <div>
+            <div className="tab-navigation">
+              <div className="tab-navigation__buttons">
+                <Form className="tab-navigation__form-search-updates-filter">
+                  <SearchBar
+                    value={updatesStore.updateFilter}
+                    changeAction={filterChangeCallback}
+                    id="search-updates-input"
+                  />
+                </Form>
+                <Button
+                  htmlType="button"
+                  className="ant-btn ant-btn-outlined"
+                  id="add-new-update"
+                  onClick={() => {
+                    showCreateModal(null);
+                  }}
+                >
+                  {'Create update'}
+                </Button>
+              </div>
+            </div>
+            <SubHeader className="update-subheader">
+              <div className="update-subheader__item">Title</div>
+              <div className="update-subheader__item description">Internal description</div>
+            </SubHeader>
           </div>
-        </div>
-        {updatesStore.updatesTotalCount && (
-          <SubHeader className="update-subheader">
-            <div className="update-subheader__item">Title</div>
-            <div className="update-subheader__item description">Internal description</div>
-          </SubHeader>
         )}
-      </div>
+      </>
     );
   }
 }
