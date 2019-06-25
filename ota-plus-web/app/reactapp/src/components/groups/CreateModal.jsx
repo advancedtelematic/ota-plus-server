@@ -6,11 +6,23 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
 import _ from 'lodash';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
+import { withTranslation } from 'react-i18next';
 
+import { NOTIFICATION_ERROR_DURATION } from '../../config';
+import { HTTP_CODE_400_BAD_REQUEST, HTTP_CODE_409_CONFLICT } from '../../constants/httpCodes';
 import { OTAModal } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { Step1, Step2 } from './createWizard';
+import {
+  GROUP_DATA_TYPE_EXPRESSION,
+  GROUP_DATA_TYPE_FILE,
+  GROUP_DATA_TYPE_NAME,
+  GROUP_GROUP_TYPE_CLASSIC,
+  GROUP_GROUP_TYPE_DYNAMIC,
+  GROUP_GROUP_TYPE_SMART,
+  GROUP_GROUP_TYPE_STATIC
+} from '../../constants/groupConstants';
 
 const wizardSteps = [
   {
@@ -26,6 +38,7 @@ const wizardSteps = [
 ];
 
 const initialData = {
+  file: undefined,
   groupName: '',
   groupType: '',
   smartExpression: '',
@@ -47,6 +60,7 @@ class CreateModal extends Component {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     selectGroup: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -90,21 +104,43 @@ class CreateModal extends Component {
   };
 
   createGroup = () => {
-    const { groupName, groupType, smartExpression } = this.wizardData;
-    const { stores } = this.props;
+    const { file, groupName, groupType, smartExpression } = this.wizardData;
+    const { stores, t } = this.props;
     const { groupsStore } = stores;
-    if (groupType === 'classic') {
-      groupsStore.createGroup({
-        name: groupName,
-        groupType: 'static',
-        expression: null,
-      });
+    if (groupType === GROUP_GROUP_TYPE_CLASSIC) {
+      if (file) {
+        groupsStore.createGroupWithFileData({
+          name: groupName,
+          file
+        }).then((response) => {
+          const { status } = response;
+          if (status === HTTP_CODE_400_BAD_REQUEST) {
+            notification.error({
+              message: t('groups.creating.file_uploading.warnings.file_incorrect_title'),
+              description: t('groups.creating.file_uploading.warnings.file_incorrect_description'),
+              duration: NOTIFICATION_ERROR_DURATION
+            });
+          } if (status === HTTP_CODE_409_CONFLICT) {
+            notification.error({
+              message: t('groups.creating.file_uploading.warnings.group_exist_title'),
+              description: t('groups.creating.file_uploading.warnings.group_exist_description'),
+              duration: NOTIFICATION_ERROR_DURATION
+            });
+          }
+        });
+      } else {
+        groupsStore.createGroup({
+          name: groupName,
+          groupType: GROUP_GROUP_TYPE_STATIC,
+          expression: null,
+        });
+      }
     } else {
       // eslint-disable-next-line no-unused-vars
       const data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
       groupsStore.createGroup({
         name: groupName,
-        groupType: 'dynamic',
+        groupType: GROUP_GROUP_TYPE_DYNAMIC,
         expression: smartExpression,
       });
     }
@@ -122,8 +158,10 @@ class CreateModal extends Component {
         }
         break;
       case 1:
-        if ((groupType === 'classic' && groupName !== '')
-            || (groupType === 'smart' && groupName !== '' && smartExpression !== '')) {
+        if (
+          (groupType === GROUP_GROUP_TYPE_CLASSIC && groupName !== '')
+          || (groupType === GROUP_GROUP_TYPE_SMART && groupName !== '' && smartExpression !== '')
+        ) {
           this.markStepAsFinished();
         } else {
           this.markStepAsNotFinished();
@@ -141,10 +179,13 @@ class CreateModal extends Component {
 
   onStep2DataSelect = (type, data) => {
     switch (type) {
-      case 'name':
+      case GROUP_DATA_TYPE_FILE:
+        this.wizardData.file = data;
+        break;
+      case GROUP_DATA_TYPE_NAME:
         this.wizardData.groupName = data;
         break;
-      case 'expression':
+      case GROUP_DATA_TYPE_EXPRESSION:
         this.wizardData.smartExpression = data;
         break;
       default:
@@ -172,7 +213,7 @@ class CreateModal extends Component {
   }
 
   render() {
-    const { shown, hide } = this.props;
+    const { shown, hide, t } = this.props;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
@@ -190,7 +231,7 @@ class CreateModal extends Component {
               disabled={!currentStep.isFinished}
               onClick={this.createGroup}
             >
-              {'Create'}
+              {t('groups.creating.button_title')}
             </Button>
           ) : (
             <Button
@@ -224,4 +265,4 @@ class CreateModal extends Component {
   }
 }
 
-export default CreateModal;
+export default withTranslation()(CreateModal);

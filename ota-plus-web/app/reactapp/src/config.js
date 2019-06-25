@@ -68,6 +68,7 @@ export const API_ECUS_PUBLIC_KEY_FETCH = '/api/v1/admin/devices';
  */
 export const API_GROUPS_FETCH = '/api/v1/device_groups';
 export const API_GROUPS_CREATE = '/api/v1/device_groups';
+export const API_GROUPS_CREATE_WITH_FILE = '/api/v1/device_groups?groupName=$groupName';
 export const API_GROUPS_RENAME = '/api/v1/device_groups';
 export const API_GROUPS_DEVICES_FETCH = '/api/v1/device_groups';
 export const API_GROUPS_DETAIL = '/api/v1/device_groups';
@@ -244,3 +245,9 @@ export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
  */
 
 export const ORGANIZATION_NAMESPACE_COOKIE = 'ORGANIZATION_NAMESPACE_COOKIE';
+
+/**
+ * cookies
+ */
+
+export const NOTIFICATION_ERROR_DURATION = 5;
