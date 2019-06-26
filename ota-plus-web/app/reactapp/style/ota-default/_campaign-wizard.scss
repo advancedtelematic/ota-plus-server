@@ -83,6 +83,7 @@
               }
               &__info {
                 background-color: transparent;
+                border-bottom: none;
                 .name {
                   margin-right: 20px;
                 }
@@ -91,10 +92,12 @@
                 justify-content: flex-end;
                 font-weight: 500;
                 background-color: transparent;
+                border-bottom: none;
                 button {
                   border: none;
                   background-color: transparent;
                   color: $color-mint;
+                  box-shadow: none;
                 }
               }
               .btn-checkbox {
