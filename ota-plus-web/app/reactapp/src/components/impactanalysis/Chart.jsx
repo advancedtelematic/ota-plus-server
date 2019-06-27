@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 @inject('stores')
 @observer
@@ -51,7 +51,7 @@ class Chart extends Component {
           <li key={'color-' + stats.datasets[0].backgroundColor[index] + '-' + stats.datasets[0].backgroundColor[index]}>
             <div className='color-box' style={{ backgroundColor: stats.datasets[0].backgroundColor[index] }} />
             <div className='title-box'>{stats.datasets[0].label[index]}</div>
-            <div className='subtitle-box'>{t('common.deviceWithCount', { count: stat })}</div>
+            <div className='subtitle-box'>{t('devices.device_count', { count: stat })}</div>
           </li>
         );
       },
@@ -80,6 +80,7 @@ class Chart extends Component {
 
 Chart.propTypes = {
   stores: PropTypes.object,
+  t: PropTypes.func.isRequired
 };
 
-export default translate()(Chart);
+export default withTranslation()(Chart);

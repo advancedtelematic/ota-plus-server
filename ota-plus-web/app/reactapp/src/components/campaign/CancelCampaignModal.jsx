@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { translate } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import _ from 'lodash';
 
 import { Button } from 'antd';
@@ -63,16 +63,20 @@ class CancelCampaignModal extends Component {
             <div className='title' id='cancel-all-campaign-name'>
               {campaign.name}
             </div>
-            <div className='subtitle'>{t('common.deviceWithCount', { count: campaignsStore.overallCampaignStatistics.devicesCount })}</div>
+            <div className='subtitle'>
+              {t('devices.device_count', { count: campaignsStore.overallCampaignStatistics.devicesCount })}
+            </div>
           </div>
         </div>
         <span>
-          This campaign will not be executed on any further devices, <br />
-          and will be moved to <strong>Finished</strong>.
+          <Trans>
+            {t('campaigns.cancelling.warning')}
+          </Trans>
         </span>
+
         <div className='body-actions'>
           <Button htmlType='button' className='btn-primary' id='cancel-all-confirm' onClick={this.cancelCampaign}>
-            Confirm
+            {t('campaigns.cancelling.confirm')}
           </Button>
         </div>
       </span>
@@ -81,11 +85,11 @@ class CancelCampaignModal extends Component {
     );
     return (
       <OTAModal
-        title={"You're about to cancel a campaign"}
+        title={t('campaigns.cancelling.title')}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>
-              <img src={assets.DEFAULT_CLOSE_ICON} alt='Close' />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt={t('campaigns.cancelling.close')} />
             </div>
           </div>
         }
@@ -97,4 +101,4 @@ class CancelCampaignModal extends Component {
   }
 }
 
-export default translate()(CancelCampaignModal);
+export default withTranslation()(CancelCampaignModal);

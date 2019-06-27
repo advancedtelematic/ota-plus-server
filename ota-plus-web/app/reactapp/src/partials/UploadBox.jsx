@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Progress } from 'antd';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { SoftwareCancelUploadModal, SoftwareCancelAllUploadsModal } from '../components/software';
 import { ConvertTime, ConvertBytes } from '../utils';
@@ -70,21 +70,10 @@ class UploadBox extends Component {
   render() {
     const { t, minimized, toggleUploadBoxMode } = this.props;
     const { softwareStore } = this.props.stores;
-    const barOptions = {
-      strokeWidth: 18,
-      easing: 'easeInOut',
-      color: '#A7DCD4',
-      trailColor: '#eee',
-      trailWidth: 18,
-      svgStyle: null,
-    };
     let uploadFinished = true;
-    let totalSize = 0;
     let secondsRemaining = 0;
-    _.each(softwareStore.packagesUploading, upload => {
-      let uploadSize = upload.size / (1024 * 1024);
-      let uploadedSize = !isNaN(upload.uploaded) ? upload.uploaded / (1024 * 1024) : 0;
-      let uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
+    _.each(softwareStore.packagesUploading, (upload) => {
+      const uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
       let timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
       timeLeft = isFinite(timeLeft) ? timeLeft : secondsRemaining;
       secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
@@ -95,7 +84,7 @@ class UploadBox extends Component {
         <div className='subheading'>
           <div className='left'>
             {uploadFinished ? (
-              <span>Upload is finished</span>
+              <span>{t('software.uploading.upload_is_finished')}</span>
             ) : (
               <span id='timeleft'>
                 <ConvertTime seconds={secondsRemaining} />
@@ -135,11 +124,13 @@ class UploadBox extends Component {
                         <Progress type='circle' percent={upload.progress / 100} showInfo={false} width={24} strokeWidth={20} strokeColor={'#A7DCD4'} />
                       ) : upload.status == 'success' ? (
                         <span id='success'>
-                          <img src='/assets/img/icons/green_tick.svg' alt='Icon' /> Success
+                          <img src='/assets/img/icons/green_tick.svg' alt='Icon' />
+                          { t('software.uploading.success')}
                         </span>
                       ) : upload.status == 'error' ? (
                         <span id='error'>
-                          <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Error
+                          <i className='fa fa-exclamation-triangle' aria-hidden='true' />
+                          {t('software.uploading.error')}
                         </span>
                       ) : (
                         <span id='processing'>
@@ -152,11 +143,11 @@ class UploadBox extends Component {
                     <div className='col action'>
                       {upload.status === null ? (
                         <a href='#' onClick={this.showCancelUploadModal.bind(this, index)} id='cancel-upload'>
-                          cancel
+                          {t('software.uploading.cancel')}
                         </a>
                       ) : (
                         <a href='#' onClick={this.removeFromList.bind(this, index)} id='remove-from-list'>
-                          remove from list
+                          {t('software.uploading.remove_from_list')}
                         </a>
                       )}
                     </div>
@@ -171,7 +162,7 @@ class UploadBox extends Component {
         <SoftwareCancelAllUploadsModal shown={this.cancelAllUploadsModalShown} hide={this.hideCancelAllUploadsModal} ifClearUploads={this.ifClearUploads} softwareStore={softwareStore} />
       </div>
     );
-    const title = 'Uploading ' + t('common.softwareWithCount', { count: softwareStore.packagesUploading.length });
+    const title = t('software.uploading.uploading_software', { count: softwareStore.packagesUploading.length });
     return (
       <OTAModal
         title={title}
@@ -198,4 +189,4 @@ UploadBox.propTypes = {
   stores: PropTypes.object,
 };
 
-export default translate()(UploadBox);
+export default withTranslation()(UploadBox);
