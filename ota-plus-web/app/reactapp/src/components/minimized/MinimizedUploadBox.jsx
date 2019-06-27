@@ -1,22 +1,31 @@
 /** @format */
 
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
+
 import MinimizedBox from './MinimizedBox';
-import { translate } from 'react-i18next';
 
 const MinimizedUploadBox = inject('stores')(
   observer(({ t, uploadBoxMinimized, toggleUploadBoxMode, stores }) => {
     const { softwareStore } = stores;
-    const name = <span>Uploading {t('common.packageWithCount', { count: softwareStore.packagesUploading.length })}</span>;
+    const name = (
+      <span>
+        {t('software.uploading.uploading_software', { count: softwareStore.packagesUploading.length })}
+      </span>
+    );
     const actions = (
-      <a href='#' id='maximize-upload-box' title='Maximize upload box' onClick={toggleUploadBoxMode.bind(this)}>
-        <img src='/assets/img/icons/reopen.svg' alt='Icon' />
+      <a
+        href="#"
+        id="maximize-upload-box"
+        title={t('software.uploading.maximize_upload_box')}
+        onClick={toggleUploadBoxMode.bind(this)}
+      >
+        <img src="/assets/img/icons/reopen.svg" alt="Icon" />
       </a>
     );
     return uploadBoxMinimized ? <MinimizedBox name={name} actions={actions} /> : null;
   }),
 );
 
-export default translate()(MinimizedUploadBox);
+export default withTranslation()(MinimizedUploadBox);

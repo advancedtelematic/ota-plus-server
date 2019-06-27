@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { AsyncResponse } from '../../../partials';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
@@ -27,7 +27,7 @@ class WizardStep7 extends Component {
     const { packages } = softwareStore;
     return getUpdateDetails(mtuData, packages);
   }
-  
+
   render() {
     const { t, wizardData } = this.props;
     const { campaignsStore, groupsStore } = this.props.stores;
@@ -42,7 +42,7 @@ class WizardStep7 extends Component {
         />
         <div className='box-summary'>
           <div className='title'>
-            {'Software & Version'}
+            {t('campaigns.wizard.software_version')}
           </div>
           <div className='desc'>
             {updateDetails &&
@@ -53,13 +53,13 @@ class WizardStep7 extends Component {
                     <div className='update-container'>
                       <span className='director-updates'>
                         <div className='update-from'>
-                          <div className='text'>{'From:'}</div>
+                          <div className='text'>{t('campaigns.wizard.from')}</div>
                           <div className='value' id={'from-package-name-' + fromPackage}>
                             {fromPackage || NO_VERSION_INFO}
                           </div>
                         </div>
                         <div className='update-to'>
-                          <div className='text'>{'To:'}</div>
+                          <div className='text'>{t('campaigns.wizard.to')}</div>
                           <div className='value' id={'to-package-name-' + toPackage}>
                             {toPackage || NO_VERSION_INFO}
                           </div>
@@ -92,7 +92,7 @@ class WizardStep7 extends Component {
           </div>
         </div>
         <div className='box-summary groups'>
-          <div className='title'>{'Groups & Devices'}</div>
+          <div className='title'>{t('campaigns.wizard.groups_devices')}</div>
           <div className='desc'>
             <div className='wrapper-groups'>
               {_.map(wizardData.groups, (group, index) => {
@@ -104,7 +104,7 @@ class WizardStep7 extends Component {
                         {group.groupName}
                       </div>
                       <div className='subtitle' id='wizard-summary-group-devices'>
-                        {t('common.deviceWithCount', { count: groupsStore._getGroupDevicesCount(group) })}
+                        {t('devices.device_count', { count: groupsStore._getGroupDevicesCount(group) })}
                       </div>
                     </div>
                   </div>
@@ -123,4 +123,4 @@ WizardStep7.propTypes = {
   stores: PropTypes.object,
 };
 
-export default translate()(WizardStep7);
+export default withTranslation()(WizardStep7);

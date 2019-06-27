@@ -1,27 +1,61 @@
 {
-    "common": {
-        "device": "device",
-        "device_plural": "devices",
-        "deviceWithCount": "{{count}} device",
-        "deviceWithCount_plural": "{{count}} devices",
-        "group": "group",
-        "group_plural": "groups",
-        "groupWithCount": "{{count}} group",
-        "groupWithCount_plural": "{{count}} groups",
-        "software": "software",
-        "softwareWithCount": "{{count}} software",
-        "campaign": "campaign",
-        "campaign_plural": "campaigns",
-        "campaignWithCount": "{{count}} campaign",
-        "campaignWithCount_plural": "{{count}} campaigns",
-        "secondWithCount": "{{count}} second",
-        "secondWithCount_plural": "{{count}} seconds",
-        "minuteWithCount": "{{count}} minute",
-        "minuteWithCount_plural": "{{count}} minutes",
-        "hourWithCount": "{{count}} hour",
-        "hourWithCount_plural": "{{count}} hours"
+    "campaigns": {
+        "cancelling": {
+            "close": "Close",
+            "confirm": "Confirm",
+            "title": "You're about to cancel a campaign",
+            "warning": "This campaign will not be executed on any further devices, <br />and will be moved to <strong>Finished</strong>."
+        },
+        "wizard": {
+            "from": "From:",
+            "groups_devices": "Groups & Devices",
+            "software_version": "Software & Version",
+            "to": "To:",
+            "Version" : "Version:"
+        }
     },
-    "editprofile": {
-        "title": "Edit profile"
+    "dashboard": {
+    },
+    "devices": {
+        "device_count": "{{count}} device",
+        "device_count_plural": "{{count}} devices",
+        "statistics": {
+            "affected": "Affected",
+            "failed": "Failed: ",
+            "installing": "Installing: ",
+            "not_applicable": "Not applicable: ",
+            "processed": "Processed",
+            "show_dependencies": "Show dependencies",
+            "successful": "Successful: ",
+            "total_progress": "Total progress"
+        }
+    },
+    "groups": {
+        "not_in_a_fixed_group": "Not in a fixed group: ",
+        "rename_group": "Rename group"
+    },
+    "software": {
+        "uploading": {
+            "cancel": "Cancel",
+            "error": "Error",
+            "maximize_upload_box": "Maximize upload box",
+            "remove_from_list": "Remove from list",
+            "success": "Success",
+            "upload_is_finished": "Upload is finished",
+            "uploading_software": "Uploading {{count}} softwares"
+        }
+    },
+    "time": {
+        "second_count": "{{count}} seconds",
+        "minute_count": "{{count}} minutes",
+        "hour_count": "{{count}} hours"
+    },
+    "warnings": {
+        "sizeverify": {
+            "description_1": "HERE OTA Connect works best in a browser window that is at least <strong>{{width}} x {{height}}</strong>.<br/>",
+            "description_2": "You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.",
+            "title": "Tip",
+            "dontshow": "Don't show this again"
+        }
     }
 }

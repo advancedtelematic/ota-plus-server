@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
+import { withTranslation } from 'react-i18next';
+
 import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
 
@@ -20,6 +22,7 @@ class StatisticsDetails extends Component {
     showCancelCampaignModal: PropTypes.func,
     showDependenciesModal: PropTypes.func,
     hideCancel: PropTypes.bool,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -39,12 +42,8 @@ class StatisticsDetails extends Component {
     }
   };
 
-  pluralizeDevices = (amount) => {
-    return amount === 1 ? `${amount} device ` : `${amount} devices `;
-  };
-
   render() {
-    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel, showRetryModal } = this.props;
+    const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel, showRetryModal, t } = this.props;
     const { campaignsStore } = stores;
     const { campaign } = campaignsStore;
     const {
@@ -65,19 +64,19 @@ class StatisticsDetails extends Component {
         <CampaignSubHeader campaign={campaign} showCancelCampaignModal={showCancelCampaignModal} hideCancel={hideCancel} />
         <div className='statistics__wrapper'>
           <div className='statistics__progress'>
-            <div className='statistics__box-title'>{'Total progress'}</div>
+            <div className='statistics__box-title'>{t('devices.statistics.total_progress')}</div>
             <div className='statistics__blocks'>
               <div className='statistics__processed'>
                 <span className='statistics__count' id='campaign-detail-devices-stats-processed'>
                   {processedCount}
                 </span>
-                {'Processed'}
+                {t('devices.statistics.processed')}
               </div>
               <div className='statistics__affected'>
                 <span className='statistics__count' id='campaign-detail-devices-stats-affected'>
                   {affectedCount}
                 </span>
-                {'Affected'}
+                {t('devices.statistics.affected')}
               </div>
             </div>
             <div className='statistics__installation'>
@@ -91,37 +90,37 @@ class StatisticsDetails extends Component {
                 <div className='statistics__legend'>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--failure' />
-                    <span>Failed: </span>
+                    <span>{t('devices.statistics.failed')}</span>
                     <span id='target_stats_failure'>
-                      {`${this.pluralizeDevices(failedCount)} (${failedRate} %)`}
+                      {`${t('devices.device_count', { count: failedCount })} (${failedRate} %)`}
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--success' />
-                    <span>Successful: </span>
+                    <span>{t('devices.statistics.successful')}</span>
                     <span id='target_stats_success'>
-                      {`${this.pluralizeDevices(successCount)} (${successRate} %)`}
+                      {`${t('devices.device_count', { count: successCount })} (${successRate} %)`}
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--queued' />
-                    <span>Installing: </span>
+                    <span>{t('devices.statistics.installing')}</span>
                     <span id='target_stats_queued'>
-                      {`${this.pluralizeDevices(installingCount)} (${installingRate} %)`}
+                      {`${t('devices.device_count', { count: installingCount })} (${installingRate} %)`}
                     </span>
                   </div>
                   <div className='statistics__legend-item'>
                     <span className='statistics__legend-item-color statistics__legend-item-color--not-proceed' />
-                    <span>Not applicable: </span>
+                    <span>{t('devices.statistics.not_applicable')}</span>
                     <span id='target_stats_not_proceed'>
-                      {`${this.pluralizeDevices(notApplicableCount)} (${notApplicableRate} %)`}
+                      {`${t('devices.device_count', { count: notApplicableCount })} (${notApplicableRate} %)`}
                     </span>
                   </div>
                 </div>
               </div>
               <div className='statistics__dependencies'>
                 <a className='add-button' id='target_show_dependencies' onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                  <span>{'Show dependencies'}</span>
+                  <span>{t('devices.statistics.show dependencies')}</span>
                 </a>
               </div>
             </div>
@@ -134,4 +133,4 @@ class StatisticsDetails extends Component {
   }
 }
 
-export default StatisticsDetails;
+export default withTranslation()(StatisticsDetails);
