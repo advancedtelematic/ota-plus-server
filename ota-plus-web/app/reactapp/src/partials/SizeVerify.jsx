@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { FlatButton } from 'antd';
+import { withTranslation, Trans } from 'react-i18next';
 import Cookies from 'js-cookie';
 import OTAModal from './OTAModal';
 
@@ -16,12 +16,15 @@ class SizeVerify extends Component {
     window.addEventListener('resize', this.checkSize);
     this.checkSize();
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.checkSize);
   }
 
   checkSize = () => {
-    this.sizeVerifyHidden = Cookies.get('sizeVerifyHidden') == 1 || (window.innerWidth >= this.props.minWidth && window.innerHeight >= this.props.minHeight);
+    const { minWidth, minHeight } = this.props;
+    this.sizeVerifyHidden = Cookies.get('sizeVerifyHidden') === 1
+      || (window.innerWidth >= minWidth && window.innerHeight >= minHeight);
   };
 
   handleClick = () => {
@@ -31,22 +34,20 @@ class SizeVerify extends Component {
   };
 
   render() {
-    const { minWidth, minHeight } = this.props;
+    const { minWidth, minHeight, t } = this.props;
     const content = (
       <span className='body'>
         <div className='desc' style={{ textAlign: 'left' }}>
-          HERE OTA Connect works best in a browser window that is at least{' '}
-          <strong>
-            {minWidth} x {minHeight}
-          </strong>
-          . <br />
-          You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.
+          <Trans>
+            {t('warnings.sizeverify.description_1', { width: minWidth, height: minHeight })}
+          </Trans>
+          {t('warnings.sizeverify.description_2')}
         </div>
         <div className='body-actions'>
           <div className='wrapper-checkbox'>
             <input type='checkbox' name='dontShowAgain' id='size-verify-dismiss' value='1' ref='checkbox' />
             &nbsp;
-            <span>Don't show this again</span>
+            <span>{t('warnings.sizeverify.dontshow')}</span>
           </div>
           <button id='size-verify-confirm' className='btn-primary' onClick={this.handleClick}>
             OK
@@ -54,13 +55,14 @@ class SizeVerify extends Component {
         </div>
       </span>
     );
-    return <OTAModal title={'Tip'} content={content} visible={!this.sizeVerifyHidden} className='size-verify-modal' />;
+    return <OTAModal title={t('warnings.sizeverify.title')} content={content} visible={!this.sizeVerifyHidden} className='size-verify-modal' />;
   }
 }
 
 SizeVerify.propTypes = {
   minWidth: PropTypes.number,
   minHeight: PropTypes.number,
+  t: PropTypes.func.isRequired
 };
 
 SizeVerify.defaultProps = {
@@ -68,4 +70,4 @@ SizeVerify.defaultProps = {
   minHeight: 768,
 };
 
-export default SizeVerify;
+export default withTranslation()(SizeVerify);

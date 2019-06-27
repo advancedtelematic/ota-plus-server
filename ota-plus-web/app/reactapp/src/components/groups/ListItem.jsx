@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
 import RenameModal from './RenameModal';
 import { Dropdown } from '../../partials';
@@ -76,7 +76,7 @@ class ListItem extends Component {
               <span />
             </div>
             {this.showEdit && (
-              <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>                
+              <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
                 <a
                   className='package-dropdown-item'
                   href='#'
@@ -88,14 +88,14 @@ class ListItem extends Component {
                   }}
                 >
                   <li className='package-dropdown-item'>
-                    {'Rename group'}
+                    {t('groups.rename_group')}
                   </li>
                 </a>
               </Dropdown>
             )}
           </div>
           <div className='groups-panel__item-subtitle' id={'group-' + group.groupName + '-devices'}>
-            {t('common.deviceWithCount', { count: group.devices.total })}
+            {t('devices.device_count', { count: group.devices.total })}
           </div>
         </div>
         {this.renameModalShown ? <RenameModal shown={this.renameModalShown} hide={this.hideRenameModal} groupsStore={groupsStore} action='rename' modalTitle='Edit Group' buttonText='Save' /> : null}
@@ -112,6 +112,7 @@ ListItem.propTypes = {
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired,
   onDeviceDrop: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default translate()(DropTarget('device', groupTarget, collect)(ListItem));
+export default withTranslation()(DropTarget('device', groupTarget, collect)(ListItem));

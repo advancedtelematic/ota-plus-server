@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
 
 const groupTarget = {
@@ -27,7 +27,7 @@ function collect(connect, monitor) {
 @observer
 class ListItemArtificial extends Component {
   render() {
-    const { t, group, isSelected, selectGroup, isDND } = this.props;
+    const { t, group, isSelected, selectGroup } = this.props;
     const { isOver, connectDropTarget, stores } = this.props;
     const { groupsStore, devicesStore } = stores;
     return connectDropTarget(
@@ -44,7 +44,7 @@ class ListItemArtificial extends Component {
           <div className='groups-panel__item-desc'>
             <div className='groups-panel__item-title'>{group.friendlyName}</div>
             <div className='groups-panel__item-subtitle' id={'group-' + group.name + '-devices'}>
-              {t('common.deviceWithCount', { count: devicesStore.devicesInitialTotalCount })}
+              {t('devices.device_count', { count: devicesStore.devicesInitialTotalCount })}
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@ class ListItemArtificial extends Component {
               }}
             >
               <span>Not in a group: </span>
-              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_inAnyGroup })}</span>
+              <span>{t('devices.device_count', { count: devicesStore.devicesUngroupedCount_inAnyGroup })}</span>
             </div>
             <div
               className={
@@ -83,7 +83,7 @@ class ListItemArtificial extends Component {
               }}
             >
               <span>Not in a smart group: </span>
-              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_notInSmartGroup })}</span>
+              <span>{t('devices.device_count', { count: devicesStore.devicesUngroupedCount_notInSmartGroup })}</span>
             </div>
             <div
               className={
@@ -96,8 +96,8 @@ class ListItemArtificial extends Component {
                 selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInFixedGroup' });
               }}
             >
-              <span>Not in a fixed group: </span>
-              <span>{t('common.deviceWithCount', { count: devicesStore.devicesUngroupedCount_notInFixedGroup })}</span>
+              <span>{t('groups.not_in_a_fixed_group')}</span>
+              <span>{t('devices.device_count', { count: devicesStore.devicesUngroupedCount_notInFixedGroup })}</span>
             </div>
           </div>
         </div>
@@ -115,6 +115,7 @@ ListItemArtificial.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default translate()(DropTarget(props => (props.isDND ? 'device' : ''), groupTarget, collect)(ListItemArtificial));
+export default withTranslation()(DropTarget(props => (props.isDND ? 'device' : ''), groupTarget, collect)(ListItemArtificial));
