@@ -141,6 +141,7 @@ export const API_PROVISIONING_ACTIVATE = '/api/v1/provisioning/activate';
 export const API_PROVISIONING_DETAILS = '/api/v1/provisioning';
 export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
+export const API_PROVISIONING_DOWNLOAD = '/api/v1/clienttools/provisioning';
 
 /* default values, limits, definitions */
 /*

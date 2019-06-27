@@ -1,10 +1,19 @@
 /** @format */
 
 import { observable } from 'mobx';
+import { notification } from 'antd';
 import axios from 'axios';
-import { API_PROVISIONING_STATUS, API_PROVISIONING_ACTIVATE, API_PROVISIONING_DETAILS, API_PROVISIONING_KEYS_FETCH, API_PROVISIONING_KEY_CREATE, API_NAMESPACE_SETUP_STEPS } from '../config';
+import { 
+  API_PROVISIONING_STATUS, 
+  API_PROVISIONING_DOWNLOAD, 
+  API_PROVISIONING_DETAILS, 
+  API_PROVISIONING_KEYS_FETCH, 
+  API_PROVISIONING_KEY_CREATE, 
+  API_NAMESPACE_SETUP_STEPS 
+} from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'lodash';
+import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
 export default class ProvisioningStore {
   @observable provisioningStatusFetchAsync = {};
@@ -146,6 +155,24 @@ export default class ProvisioningStore {
           this.provisioningKeyCreateAsync = handleAsyncError(error);
         }.bind(this),
       );
+  }
+
+  downloadProvisioningKey = async (id) => {
+    const downloadUrl = `${API_PROVISIONING_DOWNLOAD}/${id}`;
+    try {
+      const { status } = await axios.get(downloadUrl);
+      if (status === HTTP_CODE_200_OK) {
+        location.href = downloadUrl;
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      notification.error({
+        message: 'Please try again later.',
+        description: 'If this is a new account, it may take some time to generate the keys for your repository. If the error persists, please try logging in again.',
+        duration: 6
+      });
+    }
   }
 
   _reset() {
