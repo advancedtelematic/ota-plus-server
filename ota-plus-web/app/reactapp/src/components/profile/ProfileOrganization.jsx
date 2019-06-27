@@ -207,7 +207,7 @@ class ProfileOrganization extends Component {
           <EditOrganizationNameModal
             modalTitle={(
               <div className="title">
-                {'Edit name'}
+                {'Rename organization'}
               </div>
             )}
             shown={menuEditShowMenu}
