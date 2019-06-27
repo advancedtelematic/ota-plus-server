@@ -88,7 +88,7 @@ class ListItem extends Component {
                   }}
                 >
                   <li className='package-dropdown-item'>
-                    {'Edit name'}
+                    {'Rename group'}
                   </li>
                 </a>
               </Dropdown>

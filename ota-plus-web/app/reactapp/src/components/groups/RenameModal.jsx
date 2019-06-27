@@ -83,7 +83,7 @@ class RenameModal extends Component {
     );
     return (
       <OTAModal
-        title={<div>Edit name</div>}
+        title={<div>Rename group</div>}
         topActions={
           <div className='top-actions flex-end'>
             <div className='modal-close' onClick={hide}>

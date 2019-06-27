@@ -185,7 +185,7 @@ class Devices extends Component {
         )}
         {this.editNameShown && (
           <EditModal 
-            modalTitle={<div>Edit name</div>} 
+            modalTitle={<div>Rename device</div>} 
             shown={this.editNameShown} 
             hide={this.hideEditName} 
             device={this.itemToEdit} 

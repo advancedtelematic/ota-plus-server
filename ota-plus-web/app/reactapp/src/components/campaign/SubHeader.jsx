@@ -5,14 +5,15 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 
-import { Button, Menu } from 'antd';
-import { DropdownMenu, EditCampaignModal } from '../../partials';
+import { Button } from 'antd';
+import { EditCampaignModal, Dropdown } from '../../partials';
 
 @inject('stores')
 @observer
 class SubHeader extends Component {
   @observable campaignName = '';
   @observable editModal = false;
+  @observable showDropdown = false;
 
   static propTypes = {
     campaign: PropTypes.object.isRequired,
@@ -39,6 +40,10 @@ class SubHeader extends Component {
     this.editModal = false;
   };
 
+  toggleDropdown = () => {
+    this.showDropdown = !this.showDropdown;
+  }
+
   render() {
     const { campaign, showCancelCampaignModal } = this.props;
     const { name } = campaign;
@@ -53,18 +58,25 @@ class SubHeader extends Component {
               </Button>
             </div>
           )}
-          <DropdownMenu placement='bottomRight'>
-            <Menu.Item className="ant-dropdown-menu-item--clear">
-              <Button htmlType='button' className='campaign__dropdown--item' id='edit-comment' onClick={this.showEditModal}>
-                {'Rename Campaign'}
-              </Button>
-            </Menu.Item>
-          </DropdownMenu>
+          <div className='dots relative' id='campaign-actions' onClick={this.toggleDropdown}>
+            <span />
+            <span />
+            <span />
+            {this.showDropdown && (
+              <Dropdown hideSubmenu={this.hideEditModal} customClassName={'relative'}>
+                <li className='device-dropdown-item'>
+                  <a className='device-dropdown-item' id='rename-campaign' onClick={this.showEditModal}>
+                    {'Rename campaign'}
+                  </a>
+                </li>
+              </Dropdown>
+            )}
+          </div>
         </div>
         <EditCampaignModal 
           modalTitle={
             <div className='title'>
-              {'Edit name'}
+              {'Rename campaign'}
             </div>
           } 
           shown={this.editModal} 
