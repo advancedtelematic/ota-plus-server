@@ -101,7 +101,7 @@ strong {
     height: 100%;
     top: 0;
     right: 10px;
-
+    pointer-events: none;
     &--big {
       img.edit {
         width: 20px;
@@ -128,17 +128,20 @@ strong {
     cursor: pointer;
 
     &--edit {
+      line-height: 44px;
       opacity: 0;
       cursor: auto;
     }
 
     &--cancel {
       width: 12px;
+      pointer-events: auto;
     }
 
     &--save {
       width: 12px;
       margin-right: 5px;
+      pointer-events: auto;
     }
   }
 }

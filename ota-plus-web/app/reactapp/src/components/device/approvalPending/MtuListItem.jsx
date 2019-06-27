@@ -19,7 +19,7 @@ class MtuListItem extends Component {
               <span id={'update-id-' + campaign.id}>{campaign.name}</span>
             </div>
             <div>
-              <button id='cancel-mtu' className='overview-panel__cancel-update' onClick={cancelApprovalPendingCampaign.bind(this, campaign.id)}>
+              <button id='cancel-mtu' className='ant-btn ant-btn--sm ant-btn-error' onClick={cancelApprovalPendingCampaign.bind(this, campaign.id)}>
                 Cancel
               </button>
             </div>

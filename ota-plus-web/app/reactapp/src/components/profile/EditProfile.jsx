@@ -157,7 +157,7 @@ class EditProfile extends Component {
 
                   <div className='rename-box__actions rename-box__actions--big'>
                     {this.renameDisabled ? (
-                      <img src='/assets/img/icons/black/edit_pencil.svg' className='rename-box__icon rename-box__icon--edit edit' alt='Icon' />
+                      <div className='rename-box__icon--edit edit'>{'Rename'}</div>
                     ) : (
                       <span className='rename-box__user-actions'>
                         {this.newNameLength ? <img src='/assets/img/icons/black/tick.svg' className='rename-box__icon rename-box__icon--save save' alt='Icon' onClick={this.rename} /> : null}
