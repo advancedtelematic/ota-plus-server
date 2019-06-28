@@ -28,7 +28,7 @@ class Header extends Component {
     const { updatesStore } = stores;
     return (
       <>
-        {updatesStore.updatesTotalCount > 0 && (
+        {(updatesStore.updatesTotalCount > 0 || updatesStore.updateFilter.length) && (
           <div>
             <div className="tab-navigation">
               <div className="tab-navigation__buttons">

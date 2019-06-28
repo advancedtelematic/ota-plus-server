@@ -181,6 +181,7 @@ export const PACKAGES_DEFAULT_TAB = 'compact';
  * campaigns
  */
 
+export const CAMPAIGNS_PAGE_NUMBER_DEFAULT = 1;
 export const CAMPAIGNS_LIMIT_LATEST = 4;
 export const CAMPAIGNS_LIMIT_PER_PAGE = 10;
 export const CAMPAIGNS_STATUS_ALL = 'all';
