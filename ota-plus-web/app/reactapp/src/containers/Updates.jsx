@@ -80,7 +80,7 @@ class Updates extends Component {
           <div className='wrapper-center'>
             <Loader />
           </div>
-        ) : updatesStore.updatesTotalCount ? (
+        ) : (updatesStore.updatesTotalCount || updatesStore.updateFilter.length) ? (
           <span>
             <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
             <UpdateList showUpdateDetails={this.showUpdateDetails} />
