@@ -37,11 +37,13 @@ const initialCurrentStepId = 0;
 @observer
 class CreateModal extends Component {
   @observable wizardData = initialData;
+
   @observable currentStepId = initialCurrentStepId;
+
   @observable steps = wizardSteps;
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     selectGroup: PropTypes.func.isRequired,
@@ -50,7 +52,11 @@ class CreateModal extends Component {
   constructor(props) {
     super(props);
     const { groupsStore } = props.stores;
-    this.createHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsCreateAsync', this.handleGroupCreated.bind(this));
+    this.createHandler = new AsyncStatusCallbackHandler(
+      groupsStore,
+      'groupsCreateAsync',
+      this.handleGroupCreated.bind(this)
+    );
   }
 
   componentWillUnmount() {
@@ -65,6 +71,7 @@ class CreateModal extends Component {
     this.steps[this.currentStepId].isFinished = false;
   };
 
+  // eslint-disable-next-line max-len
   verifyIfPreviousStepsFinished = stepId => !_.find(this.steps, (step, index) => index <= stepId && step.isFinished === false);
 
   isLastStep = () => this.currentStepId === this.steps.length - 1;
@@ -84,8 +91,8 @@ class CreateModal extends Component {
 
   createGroup = () => {
     const { groupName, groupType, smartExpression } = this.wizardData;
-
-    const { groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { groupsStore } = stores;
     if (groupType === 'classic') {
       groupsStore.createGroup({
         name: groupName,
@@ -93,7 +100,8 @@ class CreateModal extends Component {
         expression: null,
       });
     } else {
-      let data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
+      // eslint-disable-next-line no-unused-vars
+      const data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
       groupsStore.createGroup({
         name: groupName,
         groupType: 'dynamic',
@@ -101,23 +109,6 @@ class CreateModal extends Component {
       });
     }
   };
-
-  handleGroupCreated() {
-    const { groupName, groupType } = this.wizardData;
-
-    const { groupsStore } = this.props.stores;
-    let data = null;
-    let isSmart = false;
-    if (groupType === 'classic') {
-      data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
-    } else {
-      isSmart = true;
-      groupsStore.fetchExpressionForSelectedGroup(groupsStore.latestCreatedGroupId);
-    }
-    this.props.selectGroup({ type: 'real', groupName, id: groupsStore.latestCreatedGroupId, isSmart });
-    groupsStore._prepareGroups(groupsStore.groups);
-    this.props.hide();
-  }
 
   validateStep = (id) => {
     const { groupName, groupType, smartExpression } = this.wizardData;
@@ -131,7 +122,8 @@ class CreateModal extends Component {
         }
         break;
       case 1:
-        if ((groupType === 'classic' && groupName !== '') || (groupType === 'smart' && groupName !== '' && smartExpression !== '')) {
+        if ((groupType === 'classic' && groupName !== '')
+            || (groupType === 'smart' && groupName !== '' && smartExpression !== '')) {
           this.markStepAsFinished();
         } else {
           this.markStepAsNotFinished();
@@ -158,16 +150,37 @@ class CreateModal extends Component {
       default:
         break;
     }
-
     this.validateStep(this.currentStepId);
   };
+
+  handleGroupCreated() {
+    const { groupName, groupType } = this.wizardData;
+    const { stores, selectGroup, hide } = this.props;
+    const { groupsStore } = stores;
+    // eslint-disable-next-line no-unused-vars
+    let data = null;
+    let isSmart = false;
+    if (groupType === 'classic') {
+      data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
+    } else {
+      isSmart = true;
+      groupsStore.fetchExpressionForSelectedGroup(groupsStore.latestCreatedGroupId);
+    }
+    selectGroup({ type: 'real', groupName, id: groupsStore.latestCreatedGroupId, isSmart });
+    groupsStore.prepareGroups(groupsStore.groups);
+    hide();
+  }
 
   render() {
     const { shown, hide } = this.props;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {<currentStep.class groupType={this.wizardData.groupType} onStep1DataSelect={this.onStep1DataSelect} onStep2DataSelect={this.onStep2DataSelect} />}
+        {<currentStep.class
+          groupType={this.wizardData.groupType}
+          onStep1DataSelect={this.onStep1DataSelect}
+          onStep2DataSelect={this.onStep2DataSelect}
+        />}
         <div className="body-actions">
           {this.isLastStep() ? (
             <Button
@@ -196,13 +209,13 @@ class CreateModal extends Component {
     return (
       <OTAModal
         title={<div>Create new group</div>}
-        topActions={
+        topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
               <img src="/assets/img/icons/close.svg" alt="Icon" id="create-group-modal_close-icon" />
             </div>
           </div>
-        }
+        )}
         className="create-group-modal"
         content={step}
         visible={shown}

@@ -9,4 +9,13 @@ import SoftwareCancelAllUploadsModal from './CancelAllUploadsModal';
 import SoftwareDependenciesManager from './DependenciesManager';
 import SoftwareEditCommentModal from './EditCommentModal';
 
-export { SoftwareCreateModal, PackageBlacklistModal, SoftwareHeader, SoftwareList, SoftwareCancelUploadModal, SoftwareCancelAllUploadsModal, SoftwareDependenciesManager, SoftwareEditCommentModal };
+export {
+  SoftwareCreateModal,
+  PackageBlacklistModal,
+  SoftwareHeader,
+  SoftwareList,
+  SoftwareCancelUploadModal,
+  SoftwareCancelAllUploadsModal,
+  SoftwareDependenciesManager,
+  SoftwareEditCommentModal
+};

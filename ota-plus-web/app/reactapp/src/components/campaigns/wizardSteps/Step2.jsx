@@ -17,8 +17,8 @@ class WizardStep2 extends Component {
   @observable activeTabId = 0;
 
   static propTypes = {
-    stores: PropTypes.object,
-    wizardData: PropTypes.object,
+    stores: PropTypes.shape({}),
+    wizardData: PropTypes.shape({}),
     markStepAsFinished: PropTypes.func.isRequired,
     markStepAsNotFinished: PropTypes.func.isRequired,
   };
@@ -30,11 +30,11 @@ class WizardStep2 extends Component {
     this.setActiveTab(0);
   }
 
-  setActiveTab = id => {
+  setActiveTab = (id) => {
     this.activeTabId = id;
   };
 
-  setWizardData = groupId => {
+  setWizardData = (groupId) => {
     const { stores, wizardData, markStepAsFinished, markStepAsNotFinished } = this.props;
     const { groupsStore } = stores;
     const { groups } = wizardData;
@@ -63,7 +63,7 @@ class WizardStep2 extends Component {
 
     return !alphaPlusEnabled ? (
       groupsStore.groupsWizardFetchAsync.isFetching ? (
-        <div className='wrapper-center'>
+        <div className="wrapper-center">
           <Loader />
         </div>
       ) : (
@@ -73,17 +73,25 @@ class WizardStep2 extends Component {
         </div>
       )
     ) : (
-      <Tabs className='campaigns-wizard__tabs' onChange={this.setActiveTab}>
-        <TabPane key='0' tab='Select groups'>
+      <Tabs className="campaigns-wizard__tabs" onChange={this.setActiveTab}>
+        <TabPane key="0" tab="Select groups">
           {groupsStore.groupsWizardFetchAsync.isFetching ? (
-            <div className='wrapper-center'>
+            <div className="wrapper-center">
               <Loader />
             </div>
           ) : (
             <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
           )}
         </TabPane>
-        <TabPane key='1' tab={<div>OLP<Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag></div>}>
+        <TabPane
+          key="1"
+          tab={(
+            <div>
+                OLP
+              <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
+            </div>
+            )}
+        >
           <WizardOLPGroupsListItem />
         </TabPane>
       </Tabs>

@@ -18,6 +18,11 @@ const fakeOLP = {
 class OLPGroupsListItem extends Component {
   @observable automaticCampaign = false;
 
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
   toggleAutomaticCampaign = () => {
     this.automaticCampaign = !this.automaticCampaign;
   };
@@ -25,26 +30,29 @@ class OLPGroupsListItem extends Component {
   render() {
     return (
       <span>
-        <div className='ios-list' ref='list'>
-          <div className='fake-header'>V</div>
-          <div className='header' />
-          <div className='item'>
+        <div className="ios-list" ref={this.listRef}>
+          <div className="fake-header">V</div>
+          <div className="header" />
+          <div className="item">
             <Checkbox />
-            <div className='element-box olpgroup'>
-              <div className='desc'>
-                <div className='title'>{fakeOLP.groupName}</div>
-                <div className='subtitle'>
-                  <span className='layer'>Layer</span>
-                  <span className='versioned'>Versioned</span>
-                  <span>Layer ID: {fakeOLP.layerID}</span>
+            <div className="element-box olpgroup">
+              <div className="desc">
+                <div className="title">{fakeOLP.groupName}</div>
+                <div className="subtitle">
+                  <span className="layer">Layer</span>
+                  <span className="versioned">Versioned</span>
                   <span>
-                    <a href={fakeOLP.link} rel='noopener noreferrer' target='_blank'>
-                      <div className='link-icon' />
+                    Layer ID:
+                    {fakeOLP.layerID}
+                  </span>
+                  <span>
+                    <a href={fakeOLP.link} rel="noopener noreferrer" target="_blank">
+                      <div className="link-icon" />
                     </a>
                   </span>
                 </div>
               </div>
-              <div className='automatic-campaign' onClick={this.toggleAutomaticCampaign}>
+              <div className="automatic-campaign" onClick={this.toggleAutomaticCampaign}>
                 <div>
                   automatic campaign
                   <div className={`switch${this.automaticCampaign ? ' switchOn' : ''}`} />
@@ -54,7 +62,12 @@ class OLPGroupsListItem extends Component {
           </div>
         </div>
         <VelocityTransitionGroup enter={{ animation: 'slideDown' }} leave={{ animation: 'slideUp' }}>
-          {this.automaticCampaign && <div className='automatic-campaign-tip'>{'Automatically publish to new matching devices'}</div>}
+          {this.automaticCampaign
+            && (
+              <div className="automatic-campaign-tip">
+                {'Automatically publish to new matching devices'}
+              </div>
+            )}
         </VelocityTransitionGroup>
       </span>
     );

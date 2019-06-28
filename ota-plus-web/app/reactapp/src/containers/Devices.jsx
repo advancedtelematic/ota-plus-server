@@ -14,27 +14,32 @@ import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
 @observer
 class Devices extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
   };
 
   @observable
   createModalShown = false;
+
   @observable
   createGroupModalShown = false;
+
   @observable
   deleteConfirmationShown = false;
+
   @observable
   itemToDelete = null;
+
   @observable
   itemToEdit = null;
+
   @observable
   editNameShown = false;
 
   constructor(props) {
     super(props);
     const { groupsStore, devicesStore } = props.stores;
-    this.fetchUngroupedDevicesHandler = observe(groupsStore, change => {
+    this.fetchUngroupedDevicesHandler = observe(groupsStore, (change) => {
       if (change.name === 'groupsFetchDevicesAsync' && change.object[change.name].isFetching === false) {
         devicesStore.fetchUngroupedDevicesCount();
       }
@@ -45,14 +50,15 @@ class Devices extends Component {
     this.fetchUngroupedDevicesHandler();
   }
 
-  showCreateGroupModal = e => {
+  showCreateGroupModal = (e) => {
     if (e) e.preventDefault();
     this.createGroupModalShown = true;
   };
 
-  hideCreateGroupModal = e => {
+  hideCreateGroupModal = (e) => {
     if (e) e.preventDefault();
-    const { groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { groupsStore } = stores;
     this.createGroupModalShown = false;
     resetAsync(groupsStore.groupsCreateAsync);
   };
@@ -73,16 +79,17 @@ class Devices extends Component {
     this.editNameShown = false;
   };
 
-  deleteDevice = e => {
+  deleteDevice = (e) => {
     if (e) e.preventDefault();
+    const { stores } = this.props;
     const deviceUuid = this.itemToDelete.uuid;
-    const { devicesStore, groupsStore } = this.props.stores;
+    const { devicesStore, groupsStore } = stores;
     devicesStore.deleteDevice(deviceUuid).then(() => {
       const foundGroup = _.find(groupsStore.groups, group => group.devices.values.indexOf(deviceUuid) > -1);
       if (foundGroup) {
-        foundGroup.devices.total--;
+        foundGroup.devices.total -= 1;
       }
-      devicesStore.devicesInitialTotalCount--;
+      devicesStore.devicesInitialTotalCount -= 1;
       this.hideDeleteConfirmation();
     });
   };
@@ -91,8 +98,9 @@ class Devices extends Component {
     this.deleteConfirmationShown = false;
   };
 
-  selectGroup = group => {
-    const { devicesStore, groupsStore } = this.props.stores;
+  selectGroup = (group) => {
+    const { stores } = this.props;
+    const { devicesStore, groupsStore } = stores;
     groupsStore.selectedGroup = group;
     const groupId = group.id || null;
     const ungrouped = group.ungrouped || null;
@@ -103,7 +111,8 @@ class Devices extends Component {
   };
 
   onDeviceDrop = (device, groupId) => {
-    const { groupsStore, devicesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { groupsStore, devicesStore } = stores;
     devicesStore.fetchUngroupedDevicesCount();
     if (device.groupId !== groupId && device.groupId) {
       groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
@@ -115,35 +124,37 @@ class Devices extends Component {
 
   changeSort = (sort, e) => {
     if (e) e.preventDefault();
-    const { devicesStore } = this.props.stores;
-    devicesStore._prepareDevices(sort);
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    devicesStore.prepareDevices(sort);
   };
 
   changeFilter = (filter, e) => {
     if (e) e.preventDefault();
-    const { devicesStore, groupsStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, groupsStore } = stores;
     const groupId = groupsStore.selectedGroup.id;
     const ungrouped = groupsStore.selectedGroup.ungrouped || null;
     devicesStore.fetchDevices(filter, groupId, ungrouped);
   };
 
   render() {
-    const { addNewWizard } = this.props;
-    const { devicesStore } = this.props.stores;
+    const { addNewWizard, stores } = this.props;
+    const { devicesStore } = stores;
     const { devicesInitialTotalCount } = devicesStore;
 
     return (
       <span>
         {!devicesInitialTotalCount && devicesStore.devicesFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : devicesInitialTotalCount ? (
           <span>
-            <DevicesGroupsPanel 
-              showCreateGroupModal={this.showCreateGroupModal} 
-              selectGroup={this.selectGroup} 
-              onDeviceDrop={this.onDeviceDrop} 
+            <DevicesGroupsPanel
+              showCreateGroupModal={this.showCreateGroupModal}
+              selectGroup={this.selectGroup}
+              onDeviceDrop={this.onDeviceDrop}
             />
             <DevicesContentPanel
               changeSort={this.changeSort}
@@ -154,41 +165,47 @@ class Devices extends Component {
             />
           </span>
         ) : (
-          <div className='wrapper-center'>
-            <div className='page-intro'>
+          <div className="wrapper-center">
+            <div className="page-intro">
               <div>
-                <img src='/assets/img/icons/white/devices.svg' alt='Icon' />
+                <img src="/assets/img/icons/white/devices.svg" alt="Icon" />
               </div>
               <div>{'You currently have no devices to manage. Try provisioning some devices first.'}</div>
-              <a href='https://docs.atsgarage.com/quickstarts/start-intro.html' className='add-button light' id='add-new-device' target='_blank'>
+              <a
+                href="https://docs.atsgarage.com/quickstarts/start-intro.html"
+                className="add-button light"
+                id="add-new-device"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <span>{'+ Add new device'}</span>
               </a>
             </div>
           </div>
         )}
         {this.createGroupModalShown && (
-          <GroupsCreateModal 
-            shown={this.createGroupModalShown} 
-            hide={this.hideCreateGroupModal} 
-            selectGroup={this.selectGroup} 
+          <GroupsCreateModal
+            shown={this.createGroupModalShown}
+            hide={this.hideCreateGroupModal}
+            selectGroup={this.selectGroup}
           />
         )}
         {this.deleteConfirmationShown && (
           <ConfirmationModal
-            modalTitle={<div className='text-red'>Delete device</div>}
-            id='delete-device-confirmation-modal'
+            modalTitle={<div className="text-red">Delete device</div>}
+            id="delete-device-confirmation-modal"
             shown={this.deleteConfirmationShown}
             hide={this.hideDeleteConfirmation}
             deleteItem={this.deleteDevice}
-            topText={<div className='delete-modal-top-text'>Device will be removed.</div>}
+            topText={<div className="delete-modal-top-text">Device will be removed.</div>}
           />
         )}
         {this.editNameShown && (
-          <EditModal 
-            modalTitle={<div>Rename device</div>} 
-            shown={this.editNameShown} 
-            hide={this.hideEditName} 
-            device={this.itemToEdit} 
+          <EditModal
+            modalTitle={<div>Rename device</div>}
+            shown={this.editNameShown}
+            hide={this.hideEditName}
+            device={this.itemToEdit}
           />
         )}
       </span>

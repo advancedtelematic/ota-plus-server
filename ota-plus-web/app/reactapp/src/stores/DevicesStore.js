@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
 import { observable, computed, extendObservable } from 'mobx';
@@ -26,49 +27,87 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
+
   @observable devicesByFilterFetchAsync = {};
+
   @observable devicesLoadMoreAsync = {};
+
   @observable devicesDeleteAsync = {};
+
   @observable devicesOneFetchAsync = {};
+
   @observable devicesOneNetworkInfoFetchAsync = {};
+
   @observable devicesCountFetchAsync = {};
+
   @observable devicesDirectorAttributesFetchAsync = {};
+
   @observable devicesDirectorHashesFetchAsync = {};
+
   @observable devicesCreateAsync = {};
+
   @observable devicesRenameAsync = {};
+
   @observable mtuCreateAsync = {};
+
   @observable mtuFetchAsync = {};
+
   @observable mtuCancelAsync = {};
+
   @observable eventsFetchAsync = {};
+
   @observable approvalPendingCampaignsFetchAsync = {};
+
   @observable ungroupedDevicesCountFetchAsync = {};
+
   @observable devices = [];
+
   @observable devicesTotalCount = null;
+
   @observable devicesInitialTotalCount = null;
+
   @observable ungroupedDevicesInitialTotalCount = 0;
-  @observable devicesUngroupedCount_inAnyGroup = 0;
-  @observable devicesUngroupedCount_notInSmartGroup = 0;
-  @observable devicesUngroupedCount_notInFixedGroup = 0;
+
+  @observable devicesUngroupedCountInAnyGroup = 0;
+
+  @observable devicesUngroupedCountNotInSmartGroup = 0;
+
+  @observable devicesUngroupedCountNotInFixedGroup = 0;
+
   @observable devicesCurrentPage = 1;
+
   @observable devicesOffset = 0;
+
   @observable devicesFilter = '';
+
   @observable devicesGroupFilter = null;
+
   @observable devicesSort = 'asc';
+
   @observable device = {};
+
   @observable deviceApprovalPendingCampaigns = {
     campaigns: [],
   };
+
   @observable deviceEvents = [];
+
   @observable deviceNetworkInfo = {
     local_ipv4: null,
     mac: null,
     hostname: null,
   };
+
   @observable deviceCurrentStatusFetchAsync = {};
+
   @observable multiTargetUpdates = [];
+
   @observable multiTargetUpdatesSaved = [];
+
   @observable directorDevicesCount = 0;
+
   @observable directorDevicesIds = [];
+
   @observable currentDeviceStatus = null;
 
   constructor() {
@@ -92,9 +131,7 @@ export default class DevicesStore {
   }
 
   @computed get lastDevices() {
-    return _.sortBy(this.devices, device => {
-      return device.lastSeen;
-    })
+    return _.sortBy(this.devices, device => device.lastSeen)
       .reverse()
       .slice(0, 10);
   }
@@ -102,18 +139,18 @@ export default class DevicesStore {
   deleteDevice(id) {
     resetAsync(this.devicesDeleteAsync, true);
     return axios
-      .delete(API_DEVICES_DELETE + '/' + id)
-      .then(response => {
+      .delete(`${API_DEVICES_DELETE}/${id}`)
+      .then((response) => {
         this.devices = _.without(
           this.devices,
           _.find(this.devices, {
             uuid: id,
           }),
         );
-        this._prepareDevices();
+        this.prepareDevices();
         this.devicesDeleteAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.devicesDeleteAsync = handleAsyncError(error);
       });
   }
@@ -128,19 +165,21 @@ export default class DevicesStore {
     if (groupId && groupId === 'ungrouped') {
       switch (ungrouped) {
         case 'inAnyGroup':
-          apiAddress += `&grouped=false`;
+          apiAddress += '&grouped=false';
           break;
         case 'notInSmartGroup':
-          apiAddress += `&grouped=false&groupType=dynamic`;
+          apiAddress += '&grouped=false&groupType=dynamic';
           break;
         case 'notInFixedGroup':
-          apiAddress += `&grouped=false&groupType=static`;
+          apiAddress += '&grouped=false&groupType=static';
+          break;
+        default:
           break;
       }
     } else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
       .get(apiAddress)
-      .then(response => {
+      .then((response) => {
         this.devices = response.data.values;
         this.devicesTotalCount = response.data.total;
         if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
@@ -149,20 +188,22 @@ export default class DevicesStore {
         if (groupId && groupId === 'ungrouped') {
           switch (ungrouped) {
             case 'inAnyGroup':
-              this.devicesUngroupedCount_inAnyGroup = response.data.total;
+              this.devicesUngroupedCountInAnyGroup = response.data.total;
               break;
             case 'notInSmartGroup':
-              this.devicesUngroupedCount_notInSmartGroup = response.data.total;
+              this.devicesUngroupedCountNotInSmartGroup = response.data.total;
               break;
             case 'notInFixedGroup':
-              this.devicesUngroupedCount_notInFixedGroup = response.data.total;
+              this.devicesUngroupedCountNotInFixedGroup = response.data.total;
+              break;
+            default:
               break;
           }
         }
-        this._prepareDevices();
+        this.prepareDevices();
         this[async] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
@@ -177,13 +218,13 @@ export default class DevicesStore {
       .all([axios.get(`${API_DEVICES_SEARCH}?grouped=false`), axios.get(`${API_DEVICES_SEARCH}?grouped=false&groupType=dynamic`), axios.get(`${API_DEVICES_SEARCH}?grouped=false&groupType=static`)])
       .then(
         axios.spread((inAnyGroup, notInSmartGroup, notInFixedGroup) => {
-          this.devicesUngroupedCount_inAnyGroup = inAnyGroup.data.total;
-          this.devicesUngroupedCount_notInSmartGroup = notInSmartGroup.data.total;
-          this.devicesUngroupedCount_notInFixedGroup = notInFixedGroup.data.total;
-          this[async] = handleAsyncSuccess(response);
+          this.devicesUngroupedCountInAnyGroup = inAnyGroup.data.total;
+          this.devicesUngroupedCountNotInSmartGroup = notInSmartGroup.data.total;
+          this.devicesUngroupedCountNotInFixedGroup = notInFixedGroup.data.total;
+          this[async] = handleAsyncSuccess();
         }),
       )
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
@@ -191,7 +232,7 @@ export default class DevicesStore {
   loadMoreDevices = (filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE, newOffset) => {
     resetAsync(this.devicesLoadMoreAsync, true);
     let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${newOffset}`;
-    if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
+    if (groupId && groupId === 'ungrouped') apiAddress += '&grouped=false';
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
       .get(apiAddress)
@@ -199,7 +240,7 @@ export default class DevicesStore {
         this.devicesCurrentPage += 1;
         this.devicesOffset = newOffset;
         this.devices = _.uniqBy(this.devices.concat(response.data.values), item => item.uuid);
-        this._prepareDevices();
+        this.prepareDevices();
         this.devicesLoadMoreAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
@@ -207,7 +248,7 @@ export default class DevicesStore {
       });
   }
 
-  _addDevice(data) {
+  addDevice(data) {
     this.devices.push({
       activatedAt: data.timestamp,
       createdAt: data.timestamp,
@@ -221,42 +262,38 @@ export default class DevicesStore {
     if (this.devicesInitialTotalCount === null) {
       this.devicesInitialTotalCount = 0;
     }
-    this.devicesInitialTotalCount++;
-    this._prepareDevices();
+    this.devicesInitialTotalCount += 1;
+    this.prepareDevices();
   }
 
   fetchDevice(id) {
     resetAsync(this.devicesOneFetchAsync, true);
-    let that = this;
+    const that = this;
     return axios
       .all([
-        axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true'),
-        axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id, {
-          validateStatus: function(status) {
+        axios.get(`${API_DEVICES_DEVICE_DETAILS}/${id}?status=true`),
+        axios.get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`, {
+          validateStatus(status) {
             return status === 200 || status === 404;
           },
         }),
       ])
       .then(
-        axios.spread(function(legacy, director) {
+        axios.spread((legacy, director) => {
           that.device = legacy.data;
           if (director.data.code !== 'missing_device') {
             that.device.isDirector = true;
-            let primary = _.filter(director.data, (data, index) => {
-              return data.primary;
-            });
-            let secondary = _.filter(director.data, (data, index) => {
-              return !data.primary;
-            });
+            const primary = _.filter(director.data, data => data.primary);
+            const secondary = _.filter(director.data, data => !data.primary);
             that.device.directorAttributes = {
               primary: _.first(primary),
-              secondary: secondary,
+              secondary,
             };
           }
           that.devicesOneFetchAsync = handleAsyncSuccess(legacy);
         }),
       )
-      .catch(error => {
+      .catch((error) => {
         that.device.httpStatus = error.response.status;
         that.devicesOneFetchAsync = handleAsyncError(error);
       });
@@ -266,27 +303,28 @@ export default class DevicesStore {
     resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
     if (!isFromWs || (isFromWs && this.device.uuid === id)) {
       return axios
-        .get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
-        .then(response => {
+        .get(`${API_DEVICES_NETWORK_INFO}/${id}/system_info/network`)
+        .then((response) => {
           this.deviceNetworkInfo = response.data;
           this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
         })
-        .catch(error => {
+        .catch((error) => {
           this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
         });
     }
+    return null;
   }
 
   createMultiTargetUpdate(data, id) {
-    let updateObject = this._prepareUpdateObject(data);
+    const updateObject = this.prepareUpdateObject(data);
     resetAsync(this.mtuCreateAsync, true);
     return axios
       .post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
-      .then(response => {
-        let updateIdentifier = response.data;
+      .then((response) => {
+        const updateIdentifier = response.data;
         let status = null;
         if (updateIdentifier.length) {
-          let after = _.after(
+          const after = _.after(
             status === 'success',
             () => {
               this.fetchMultiTargetUpdates(id);
@@ -295,51 +333,49 @@ export default class DevicesStore {
             this,
           );
           axios
-            .put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
-            .then(function(multiTargetResponse) {
+            .put(`${API_CREATE_MULTI_TARGET_UPDATE}/${id}/multi_target_update/${updateIdentifier}`)
+            .then(() => {
               status = 'success';
               after();
             })
-            .catch(function() {
+            .catch(() => {
               status = 'error';
               after();
             });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.mtuCreateAsync = handleAsyncError(error);
       });
   }
 
-  _prepareUpdateObject(data) {
-    return {
-      targets: {
-        [data.hardwareId]: {
-          to: {
-            target: data.target,
-            checksum: {
-              method: 'sha256',
-              hash: data.hash,
-            },
-            targetLength: data.targetLength,
+  prepareUpdateObject = data => ({
+    targets: {
+      [data.hardwareId]: {
+        to: {
+          target: data.target,
+          checksum: {
+            method: 'sha256',
+            hash: data.hash,
           },
-          targetFormat: data.targetFormat,
-          generateDiff: data.generateDiff,
+          targetLength: data.targetLength,
         },
+        targetFormat: data.targetFormat,
+        generateDiff: data.generateDiff,
       },
-    };
-  }
+    },
+  });
 
   fetchMultiTargetUpdates(id) {
     resetAsync(this.mtuFetchAsync, true);
     return axios
-      .get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
-      .then(response => {
-        let data = response.data;
-        let after = _.after(
+      .get(`${API_FETCH_MULTI_TARGET_UPDATES}/${id}/queue`)
+      .then((response) => {
+        const { data } = response;
+        const after = _.after(
           data.length,
           () => {
-            this._fetchCurrentStatus(id);
+            this.fetchCurrentStatus(id);
             this.multiTargetUpdates = response.data;
             this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
             this.mtuFetchAsync = handleAsyncSuccess(response);
@@ -347,18 +383,18 @@ export default class DevicesStore {
           this,
         );
         if (data.length) {
-          _.each(data, (item, index) => {
+          _.each(data, (item) => {
             item.device = id;
             item.status = 'waiting';
             if (item.correlationId && item.correlationId.search('urn:here-ota:campaign:') >= 0) {
-              let campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
-              let afterCampaign = _.after(
+              const campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
+              const afterCampaign = _.after(
                 data.length,
                 () => {
                   axios
-                    .get(API_UPDATES_SEARCH + '/' + item.campaign.update.id)
-                    .then(response => {
-                      let update = response.data;
+                    .get(`${API_UPDATES_SEARCH}/${item.campaign.update.id}`)
+                    .then((res) => {
+                      const update = res.data;
                       item.campaign = Object.assign(item.campaign, {
                         update: {
                           id: update.uuid,
@@ -376,9 +412,9 @@ export default class DevicesStore {
               );
 
               axios
-                .get(API_CAMPAIGNS_FETCH_SINGLE + '/' + campaignId)
-                .then(response => {
-                  let campaign = response.data;
+                .get(`${API_CAMPAIGNS_FETCH_SINGLE}/${campaignId}`)
+                .then((res) => {
+                  const campaign = res.data;
                   item.campaign = {
                     id: campaign.id,
                     name: campaign.name,
@@ -399,7 +435,7 @@ export default class DevicesStore {
           after();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.mtuFetchAsync = handleAsyncError(error);
       });
   }
@@ -407,12 +443,12 @@ export default class DevicesStore {
   fetchEvents(id, async = 'eventsFetchAsync') {
     resetAsync(this[async], true);
     return axios
-      .get(API_DEVICES_SEARCH + '/' + id + '/events')
-      .then(response => {
+      .get(`${API_DEVICES_SEARCH}/${id}/events`)
+      .then((response) => {
         this.deviceEvents = response.data;
         this[async] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
@@ -420,10 +456,10 @@ export default class DevicesStore {
   fetchApprovalPendingCampaigns(id, async = 'approvalPendingCampaignsFetchAsync') {
     resetAsync(this[async], true);
     return axios
-      .get(API_DEVICE_APPROVAL_PENDING_CAMPAIGNS + '/' + id + '/campaigns')
-      .then(response => {
-        let data = response.data;
-        let after = _.after(
+      .get(`${API_DEVICE_APPROVAL_PENDING_CAMPAIGNS}/${id}/campaigns`)
+      .then((response) => {
+        const { data } = response;
+        const after = _.after(
           data.campaigns.length,
           () => {
             this.deviceApprovalPendingCampaigns = response.data;
@@ -432,15 +468,15 @@ export default class DevicesStore {
           this,
         );
         if (data.campaigns.length) {
-          _.each(data.campaigns, item => {
+          _.each(data.campaigns, (item) => {
             let status = null;
-            let afterCampaign = _.after(
+            const afterCampaign = _.after(
               status === 'success',
               () => {
                 axios
-                  .get(API_UPDATES_SEARCH + '/' + item.update.id)
-                  .then(response => {
-                    let update = response.data;
+                  .get(`${API_UPDATES_SEARCH}/${item.update.id}`)
+                  .then((res) => {
+                    const update = res.data;
                     item.update = {
                       id: update.uuid,
                       description: update.description,
@@ -455,9 +491,9 @@ export default class DevicesStore {
               this,
             );
             axios
-              .get(API_CAMPAIGNS_FETCH_SINGLE + '/' + item.id)
-              .then(response => {
-                let campaign = response.data;
+              .get(`${API_CAMPAIGNS_FETCH_SINGLE}/${item.id}`)
+              .then((res) => {
+                const campaign = res.data;
                 item.update = {
                   id: campaign.update,
                 };
@@ -473,19 +509,19 @@ export default class DevicesStore {
           after();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
 
-  _findMtu(id) {
+  findMtu(id) {
     return this.multiTargetUpdates.find(update => update.device === id);
   }
 
-  _updateStatus(id, status) {
+  updateStatus(id, status) {
     if (this.multiTargetUpdates.length) {
-      const update = this._findMtu(id);
-      update['status'] = status;
+      const update = this.findMtu(id);
+      update.status = status;
     }
   }
 
@@ -494,15 +530,15 @@ export default class DevicesStore {
     return axios
       .post(API_CANCEL_MULTI_TARGET_UPDATE, data)
       .then(
-        function(response) {
+        (response) => {
           this.fetchMultiTargetUpdates(this.device.uuid);
           this.mtuCancelAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.mtuCancelAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -511,128 +547,118 @@ export default class DevicesStore {
     return axios
       .post(API_CANCEL_MULTI_TARGET_UPDATE, data)
       .then(
-        function(response) {
+        (response) => {
           this.mtuCancelAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.mtuCancelAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   fetchDevicesCount() {
     resetAsync(this.devicesCountFetchAsync, true);
-    let that = this;
+    const that = this;
     return axios
       .all([axios.get(API_DEVICES_SEARCH), axios.get(API_DIRECTOR_DEVICES_SEARCH)])
       .then(
-        axios.spread(function(all, director) {
-          let allDevicesCount = all.data.total;
+        axios.spread((all, director) => {
           that.directorDevicesCount = director.data.total;
           that.directorDevicesIds = director.data.values;
           that.devicesCountFetchAsync = handleAsyncSuccess(all);
         }),
       )
-      .catch(error => {
+      .catch((error) => {
         that.devicesCountFetchAsync = handleAsyncError(error);
       });
   }
 
-  _fetchCurrentStatus(id) {
+  fetchCurrentStatus(id) {
     resetAsync(this.deviceCurrentStatusFetchAsync, true);
     return axios
-      .get(API_DEVICES_DEVICE_DETAILS + '/' + id)
-      .then(response => {
+      .get(`${API_DEVICES_DEVICE_DETAILS}/${id}`)
+      .then((response) => {
         this.device.deviceStatus = response.data.deviceStatus;
         this.deviceCurrentStatusFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.deviceCurrentStatusFetchAsync = handleAsyncError(error);
       });
   }
 
   fetchDirectorAttributes(id) {
-    let device = this._getDevice(id);
+    const device = this.getDevice(id);
     if (!_.isEmpty(this.device) && this.device.uuid === id) {
       resetAsync(this.devicesDirectorAttributesFetchAsync, true);
       return axios
-        .get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-        .then(response => {
-          let primary = _.filter(response.data, (data, index) => {
-            return data.primary;
-          });
-          let secondary = _.filter(response.data, (data, index) => {
-            return !data.primary;
-          });
+        .get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`)
+        .then((response) => {
+          const primary = _.filter(response.data, data => data.primary);
+          const secondary = _.filter(response.data, data => !data.primary);
           extendObservable(this.device, {
             directorAttributes: {
               primary: _.first(primary),
-              secondary: secondary,
+              secondary,
             },
           });
           this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
         })
-        .catch(error => {
+        .catch((error) => {
           this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
         });
-    } else if (device) {
+    } if (device) {
       resetAsync(this.devicesDirectorAttributesFetchAsync, true);
       return axios
-        .get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-        .then(response => {
-          let primary = _.filter(response.data, (data, index) => {
-            return data.primary;
-          });
-          let secondary = _.filter(response.data, (data, index) => {
-            return !data.primary;
-          });
+        .get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`)
+        .then((response) => {
+          const primary = _.filter(response.data, data => data.primary);
+          const secondary = _.filter(response.data, data => !data.primary);
           extendObservable(device, {
             directorAttributes: {
               primary: _.first(primary),
-              secondary: secondary,
+              secondary,
             },
           });
           this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
         })
-        .catch(error => {
+        .catch((error) => {
           this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
         });
     }
+    return true;
   }
 
   fetchPrimaryAndSecondaryFilepaths(id) {
     resetAsync(this.devicesDirectorHashesFetchAsync, true);
     return axios
-      .get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-      .then(response => {
-        let filepaths = _.map(response.data, (item, i) => {
-          return item.image.filepath;
-        });
+      .get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`)
+      .then((response) => {
+        const filepaths = _.map(response.data, item => item.image.filepath);
         this.devicesDirectorHashesFetchAsync = handleAsyncSuccess(response);
         return filepaths;
       })
-      .catch(error => {
+      .catch((error) => {
         this.devicesDirectorHashesFetchAsync = handleAsyncError(error);
       });
   }
 
-  _getPrimaryFilepath() {
+  getPrimaryFilepath() {
     return this.device.directorAttributes.primary.image.filepath;
   }
 
-  _getPrimarySerial() {
+  getPrimarySerial() {
     return this.device.directorAttributes.primary.id;
   }
 
-  _getPrimaryHardwareId() {
+  getPrimaryHardwareId() {
     return this.device.directorAttributes.primary.hardwareId;
   }
 
-  _getSecondaryFilepathsBySerial(serial) {
-    let filepaths = [];
-    _.map(this.device.directorAttributes.secondary, (secondary, index) => {
+  getSecondaryFilepathsBySerial(serial) {
+    const filepaths = [];
+    _.map(this.device.directorAttributes.secondary, (secondary,) => {
       if (secondary.id === serial) {
         filepaths.push(secondary.image.filepath);
       }
@@ -640,16 +666,16 @@ export default class DevicesStore {
     return filepaths;
   }
 
-  _getPrimaryByHardwareId(hardwareId) {
+  getPrimaryByHardwareId(hardwareId) {
     if (this.device.directorAttributes.primary.hardwareId === hardwareId) {
       return this.device.directorAttributes.primary;
     }
     return null;
   }
 
-  _getSecondaryBySerial(serial) {
+  getSecondaryBySerial(serial) {
     let secondaryObject = {};
-    _.each(this.device.directorAttributes.secondary, (secondary, index) => {
+    _.each(this.device.directorAttributes.secondary, (secondary,) => {
       if (secondary.id === serial) {
         secondaryObject = secondary;
       }
@@ -661,10 +687,10 @@ export default class DevicesStore {
     resetAsync(this.devicesCreateAsync, true);
     return axios
       .post(API_DEVICES_CREATE, data)
-      .then(response => {
+      .then((response) => {
         this.devicesCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.devicesCreateAsync = handleAsyncError(error);
       });
   }
@@ -672,23 +698,23 @@ export default class DevicesStore {
   renameDevice(id, data) {
     resetAsync(this.devicesRenameAsync, true);
     return axios
-      .put(API_DEVICES_RENAME + '/' + id, data)
-      .then(response => {
+      .put(`${API_DEVICES_RENAME}/${id}`, data)
+      .then((response) => {
         this.devicesRenameAsync = handleAsyncSuccess(response);
         if (this.device.uuid === id) {
           this.device.deviceName = data.deviceName;
         } else {
-          let device = _.find(this.devices, device => device.uuid === id);
+          const device = _.find(this.devices, singleDevice => singleDevice.uuid === id);
           device.deviceName = data.deviceName;
         }
         this.fetchDevicesCount();
       })
-      .catch(error => {
+      .catch((error) => {
         this.devicesRenameAsync = handleAsyncError(error);
       });
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.devicesFetchAsync);
     resetAsync(this.devicesByFilterFetchAsync);
     resetAsync(this.devicesLoadMoreAsync);
@@ -725,12 +751,12 @@ export default class DevicesStore {
     this.directorDevicesIds = [];
   }
 
-  _getDevice(id) {
+  getDevice(id) {
     return _.find(this.devices, { uuid: id });
   }
 
-  _updateDeviceData(id, data) {
-    let device = this._getDevice(id);
+  updateDeviceData(id, data) {
+    const device = this.getDevice(id);
     if (!_.isEmpty(this.device)) {
       if (this.device.uuid === id) {
         _.each(data, (value, attr) => {
@@ -744,13 +770,13 @@ export default class DevicesStore {
     }
   }
 
-  _prepareDevices(devicesSort = this.devicesSort) {
+  prepareDevices(devicesSort = this.devicesSort) {
     this.devicesSort = devicesSort;
     this.devices = this.devices.slice().sort((a, b) => {
-      let aName = a.deviceName;
-      let bName = b.deviceName;
-      if (devicesSort !== 'undefined' && devicesSort == 'desc') return bName.localeCompare(aName);
-      else return aName.localeCompare(bName);
+      const aName = a.deviceName;
+      const bName = b.deviceName;
+      if (devicesSort !== 'undefined' && devicesSort === 'desc') return bName.localeCompare(aName);
+      return aName.localeCompare(bName);
     });
   }
 }

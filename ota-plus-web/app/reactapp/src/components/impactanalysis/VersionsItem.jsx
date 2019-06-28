@@ -9,18 +9,20 @@ class VersionsItem extends Component {
   render() {
     const { version } = this.props;
     return (
-      <li className='version-item'>
-        <div className='column' title={version.packageId.version}>
+      <li className="version-item">
+        <div className="column" title={version.packageId.version}>
           {version.packageId.version}
         </div>
-        <div className='column'>{version.statistics.deviceCount !== null ? version.statistics.deviceCount : null}</div>
+        <div className="column">
+          {version.statistics.deviceCount !== null ? version.statistics.deviceCount : null}
+        </div>
       </li>
     );
   }
 }
 
 VersionsItem.propTypes = {
-  version: PropTypes.object.isRequired,
+  version: PropTypes.shape({}).isRequired,
 };
 
 export default VersionsItem;

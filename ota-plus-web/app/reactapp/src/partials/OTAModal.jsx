@@ -5,14 +5,24 @@ import React from 'react';
 
 import { Modal } from 'antd';
 
-const OTAModal = ({ title, topActions, content, actions, visible, className, titleClassName, hideOnClickOutside, onRequestClose, width }) => (
+const OTAModal = ({
+  title,
+  topActions,
+  content,
+  visible,
+  className,
+  titleClassName,
+  hideOnClickOutside,
+  onRequestClose,
+  width
+}) => (
   <Modal
-    title={
+    title={(
       <div className={`heading${titleClassName || ''}`}>
-        <div className='heading__inner'>{title}</div>
+        <div className="heading__inner">{title}</div>
         {topActions}
       </div>
-    }
+    )}
     className={`dialog ${className || ''}`}
     closable={false} /* disable default close button to allow custom topActions */
     visible={visible}
@@ -30,10 +40,20 @@ const OTAModal = ({ title, topActions, content, actions, visible, className, tit
 );
 
 OTAModal.propTypes = {
-  title: PropTypes.any,
-  topActions: PropTypes.any,
-  content: PropTypes.any.isRequired,
-  actions: PropTypes.array,
+  title: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string
+  ]),
+  topActions: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ]),
+  content: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ]),
   visible: PropTypes.bool,
   className: PropTypes.string,
   titleClassName: PropTypes.string,
@@ -43,7 +63,6 @@ OTAModal.propTypes = {
 };
 
 OTAModal.defaultProps = {
-  actions: [],
   visible: false,
   hideOnClickOutside: true,
   width: '50vw',

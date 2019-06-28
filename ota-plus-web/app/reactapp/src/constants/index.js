@@ -3,16 +3,16 @@
  */
 
 export const CAMPAIGN_RETRY_STATUS_TOOLTIPS = {
-    not_launched: 'You can retry the update installation',
-    launched: 'Retrying the update installation',
-    waiting: 'Please, wait to retry the update installation',
-    finished: 'Retry cycle finished'
+  not_launched: 'You can retry the update installation',
+  launched: 'Retrying the update installation',
+  waiting: 'Please, wait to retry the update installation',
+  finished: 'Retry cycle finished'
 };
 export const CAMPAIGN_RETRY_STATUSES = {
-    NOT_LAUNCHED: 'not_launched',
-    LAUNCHED: 'launched',
-    WAITING: 'waiting',
-    FINISHED: 'finished'
+  NOT_LAUNCHED: 'not_launched',
+  LAUNCHED: 'launched',
+  WAITING: 'waiting',
+  FINISHED: 'finished'
 };
 
 /*
@@ -38,27 +38,27 @@ export const ARTIFICIAL = 'artificial';
  */
 
 export const DEVICE_STATUSES = {
-    ERROR: 'Error',
-    OUTDATED: 'Outdated',
-    UP_TO_DATE: 'UpToDate'
+  ERROR: 'Error',
+  OUTDATED: 'Outdated',
+  UP_TO_DATE: 'UpToDate'
 };
 
 /*
  *  Web events
  */
 
- export const WEB_EVENTS = {
-    DEVICE_CREATED: 'DeviceCreated',
-    DEVICE_EVENT_MESSAGE: 'DeviceEventMessage',
-    DEVICE_SEEN: 'DeviceSeen',
-    DEVICE_SYSTEM_INFO_CHANGED: 'DeviceSystemInfoChanged',
-    DEVICE_UPDATE_STATUS: 'DeviceUpdateStatus',
-    PACKAGE_BLACKLISTED: 'PackageBlacklisted',
-    TUF_TARGET_ADDED: 'TufTargetAdded',
-    UPDATE_SPEC: 'UpdateSpec'
+export const WEB_EVENTS = {
+  DEVICE_CREATED: 'DeviceCreated',
+  DEVICE_EVENT_MESSAGE: 'DeviceEventMessage',
+  DEVICE_SEEN: 'DeviceSeen',
+  DEVICE_SYSTEM_INFO_CHANGED: 'DeviceSystemInfoChanged',
+  DEVICE_UPDATE_STATUS: 'DeviceUpdateStatus',
+  PACKAGE_BLACKLISTED: 'PackageBlacklisted',
+  TUF_TARGET_ADDED: 'TufTargetAdded',
+  UPDATE_SPEC: 'UpdateSpec'
 };
 export const UPDATE_STATUSES = {
-    DOWNLOADING: 'downloading',
-    FINISHED: 'Finished',
-    INSTALLING: 'installing'
+  DOWNLOADING: 'downloading',
+  FINISHED: 'Finished',
+  INSTALLING: 'installing'
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
 import _ from 'lodash';
@@ -17,19 +18,19 @@ const resetAsync = (obj, isFetching = false) => {
 };
 
 const resetAll = (asyncCollection, isFetching = false) => {
-  _.each(asyncCollection, async => {
+  _.each(asyncCollection, (async) => {
     resetAsync(async, isFetching);
   });
 };
 
 const handleAsyncSuccess = response => ({
-    status: 'success',
-    code: response.status,
-    data: response.data,
-    isFetching: false,
+  status: 'success',
+  code: response.status,
+  data: response.data,
+  isFetching: false,
 });
 
-const handleAsyncError = error => {
+const handleAsyncError = (error) => {
   error.response = error.response || { status: null, data: {} };
 
   if (error.response.status === 401) {

@@ -12,11 +12,13 @@ import { EditCampaignModal, Dropdown } from '../../partials';
 @observer
 class SubHeader extends Component {
   @observable campaignName = '';
+
   @observable editModal = false;
+
   @observable showDropdown = false;
 
   static propTypes = {
-    campaign: PropTypes.object.isRequired,
+    campaign: PropTypes.shape({}).isRequired,
     showCancelCampaignModal: PropTypes.func,
   };
 
@@ -31,7 +33,7 @@ class SubHeader extends Component {
     this.campaignName = campaign.name;
   }
 
-  showEditModal = e => {
+  showEditModal = (e) => {
     e.preventDefault();
     this.editModal = true;
   };
@@ -48,24 +50,29 @@ class SubHeader extends Component {
     const { campaign, showCancelCampaignModal } = this.props;
     const { name } = campaign;
     return (
-      <div className='statistics__campaign-name'>
+      <div className="statistics__campaign-name">
         <h3>{campaign.name}</h3>
-        <div className='statistics__campaign-actions'>
+        <div className="statistics__campaign-actions">
           {(campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled') && (
-            <div className='cancel-campaign'>
-              <Button htmlType='button' id='campaign-detail-cancel-all' className='delete-button fixed-width' onClick={showCancelCampaignModal}>
+            <div className="cancel-campaign">
+              <Button
+                htmlType="button"
+                id="campaign-detail-cancel-all"
+                className="delete-button fixed-width"
+                onClick={showCancelCampaignModal}
+              >
                 Cancel campaign
               </Button>
             </div>
           )}
-          <div className='dots relative' id='campaign-actions' onClick={this.toggleDropdown}>
+          <div className="dots relative" id="campaign-actions" onClick={this.toggleDropdown}>
             <span />
             <span />
             <span />
             {this.showDropdown && (
-              <Dropdown hideSubmenu={this.hideEditModal} customClassName={'relative'}>
-                <li className='device-dropdown-item'>
-                  <a className='device-dropdown-item' id='rename-campaign' onClick={this.showEditModal}>
+              <Dropdown hideSubmenu={this.hideEditModal} customClassName="relative">
+                <li className="device-dropdown-item">
+                  <a className="device-dropdown-item" id="rename-campaign" onClick={this.showEditModal}>
                     {'Rename campaign'}
                   </a>
                 </li>
@@ -73,21 +80,19 @@ class SubHeader extends Component {
             )}
           </div>
         </div>
-        <EditCampaignModal 
-          modalTitle={
-            <div className='title'>
+        <EditCampaignModal
+          modalTitle={(
+            <div className="title">
               {'Rename campaign'}
             </div>
-          } 
-          shown={this.editModal} 
-          hide={this.hideEditModal} 
-          defaultValue={name} 
+          )}
+          shown={this.editModal}
+          hide={this.hideEditModal}
+          defaultValue={name}
         />
       </div>
     );
   }
 }
-
-SubHeader.propTypes = {};
 
 export default SubHeader;

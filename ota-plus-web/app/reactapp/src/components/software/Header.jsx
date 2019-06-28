@@ -42,9 +42,7 @@ class Header extends Component {
     softwareStore.activeTab = tab;
   };
 
-  isActive = (tab) => {
-    return (tab === this.activeTab ? 'tab-navigation__link--active' : '');
-  };
+  isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   render() {
     const { showCreateModal, stores, switchToSWRepo } = this.props;

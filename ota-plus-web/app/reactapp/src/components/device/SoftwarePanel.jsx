@@ -2,11 +2,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
 import { SoftwareList } from './software';
-import _ from 'lodash';
 
 const title = 'Software';
 const noSearchResults = 'No matching software found.';
@@ -15,15 +13,23 @@ const noSearchResults = 'No matching software found.';
 @observer
 class SoftwarePanel extends Component {
   render() {
-    const { togglePackageAutoUpdate, onFileDrop, showPackageDetails, triggerPackages, expandedPackageName, togglePackage } = this.props;
-    const { softwareStore } = this.props.stores;
+    const {
+      togglePackageAutoUpdate,
+      onFileDrop,
+      showPackageDetails,
+      triggerPackages,
+      expandedPackageName,
+      togglePackage,
+      stores
+    } = this.props;
+    const { softwareStore } = stores;
     return (
-      <div className='software-panel'>
-        <div className='software-panel__header darkgrey-header'>{title}</div>
-        <div className='software-panel__wrapper'>
+      <div className="software-panel">
+        <div className="software-panel__header darkgrey-header">{title}</div>
+        <div className="software-panel__wrapper">
           <span>
             {softwareStore.packagesFetchAsync.isFetching ? (
-              <div className='wrapper-center'>
+              <div className="wrapper-center">
                 <Loader />
               </div>
             ) : Object.keys(softwareStore.preparedPackages).length ? (
@@ -36,7 +42,7 @@ class SoftwarePanel extends Component {
                 togglePackage={togglePackage}
               />
             ) : (
-              <div className='wrapper-center'>{noSearchResults}</div>
+              <div className="wrapper-center">{noSearchResults}</div>
             )}
           </span>
         </div>
@@ -46,10 +52,13 @@ class SoftwarePanel extends Component {
 }
 
 SoftwarePanel.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   togglePackageAutoUpdate: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
   showPackageDetails: PropTypes.func.isRequired,
+  triggerPackages: PropTypes.bool,
+  expandedPackageName: PropTypes.string,
+  togglePackage: PropTypes.func
 };
 
 export default SoftwarePanel;

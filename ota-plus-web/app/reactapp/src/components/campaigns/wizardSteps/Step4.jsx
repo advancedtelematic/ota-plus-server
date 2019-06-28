@@ -19,11 +19,13 @@ const metadataTypes = {
 @observer
 class WizardStep4 extends Component {
   @observable notify = null;
+
   @observable approvalNeeded = null;
+
   @observable wizardMetadata = {};
 
   static propTypes = {
-    wizardData: PropTypes.object.isRequired,
+    wizardData: PropTypes.shape({}).isRequired,
     setWizardData: PropTypes.func.isRequired,
     markStepAsFinished: PropTypes.func.isRequired,
     setApprove: PropTypes.func.isRequired,
@@ -61,7 +63,7 @@ class WizardStep4 extends Component {
     setApprove(this.approvalNeeded);
   };
 
-  _parseTime = timeObject => {
+  parseTime = (timeObject) => {
     let timeString = '';
     _.each(timeObject, (value, key) => {
       timeString += `${value}${key !== 'seconds' ? ':' : null}`;
@@ -69,20 +71,20 @@ class WizardStep4 extends Component {
     return `${moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds')}`;
   };
 
-  _getTimeFromSeconds = seconds => new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+  getTimeFromSeconds = seconds => new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
 
-  getPreparationTime = time => {
-    const timeString = this._parseTime(time);
+  getPreparationTime = (time) => {
+    const timeString = this.parseTime(time);
     this.addToWizardData(metadataTypes.PRE_DUR, timeString);
   };
 
-  getInstallationTime = time => {
-    const timeString = this._parseTime(time);
+  getInstallationTime = (time) => {
+    const timeString = this.parseTime(time);
     this.addToWizardData(metadataTypes.INSTALL_DUR, timeString);
   };
 
   clearInput = () => {
-    this.inputRef.value = '';
+    this.inputRef.current.value = '';
   };
 
   render() {
@@ -91,68 +93,84 @@ class WizardStep4 extends Component {
     const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
 
     return (
-      <div className='distribution-settings'>
-        <div className='checkboxes'>
-          <div className='flex-row'>
-            <button type='button' className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`} onClick={this.toggleNotify} />
+      <div className="distribution-settings">
+        <div className="checkboxes">
+          <div className="flex-row">
+            <button
+              type="button"
+              className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
+              onClick={this.toggleNotify}
+            />
             <span>{"Don't request driver's consent"}</span>
           </div>
-          <div className='flex-row'>
-            <button type='button' className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`} onClick={this.toggleApprove} />
+          <div className="flex-row">
+            <button
+              type="button"
+              className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
+              onClick={this.toggleApprove}
+            />
             <span>{"Request driver's consent"}</span>
           </div>
         </div>
-        <div className='description'>
-          <div className='search-box'>
+        <div className="description">
+          <div className="search-box">
             {alphaTest && (
               <>
                 <FormInput
-                  label='Notification Text'
-                  id='internal_reuse-text'
-                  placeholder='Re-use text from'
-                  getInputRef={ref => {
+                  label="Notification Text"
+                  id="internal_reuse-text"
+                  placeholder="Re-use text from"
+                  getInputRef={(ref) => {
                     this.inputRef = ref;
                   }}
-                  wrapperWidth='50%'
+                  wrapperWidth="50%"
                 >
-                  <i className='fa fa-search icon-search icon-search--alpha' />
-                  <i className='fa fa-close icon-close icon-close--alpha' onClick={this.clearInput} />
+                  <i className="fa fa-search icon-search icon-search--alpha" />
+                  <i className="fa fa-close icon-close icon-close--alpha" onClick={this.clearInput} />
                 </FormInput>
-                <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>
+                <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
               </>
             )}
           </div>
           <FormTextarea
-            rows='5'
+            rows="5"
             label={!alphaTest && 'Notification Text'}
-            id='internal_driver-description'
+            id="internal_driver-description"
             defaultValue={DESCRIPTION || ''}
             onValid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
             onInvalid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
           />
         </div>
-        <div className='translations'>
+        <div className="translations">
           {alphaTest && (
-            <div className='flex-row'>
-              <span className='bold' id='approved-translations-0'>
+            <div className="flex-row">
+              <span className="bold" id="approved-translations-0">
                 {'Approved translations: 0'}
               </span>
-              <button type='button' className='btn-bordered' id='translations-view_button'>
+              <button type="button" className="btn-bordered" id="translations-view_button">
                 {'Translation view'}
               </button>
             </div>
           )}
-          <div className='estimations'>
-            <div className='estimation'>
-              <span className='title'>{'Estimated time to prepare this update:'}</span>
-              <span className='time-value'>
-                <TimePicker defaultValue={this._getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00')} id={`timepicker_${metadataTypes.PRE_DUR}`} onValid={this.getPreparationTime} />
+          <div className="estimations">
+            <div className="estimation">
+              <span className="title">{'Estimated time to prepare this update:'}</span>
+              <span className="time-value">
+                <TimePicker
+                  defaultValue={this.getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00')}
+                  id={`timepicker_${metadataTypes.PRE_DUR}`}
+                  onValid={this.getPreparationTime}
+                />
               </span>
             </div>
-            <div className='estimation'>
-              <span className='title'>{'Estimated time to install this update:'}</span>
-              <span className='time-value'>
-                <TimePicker defaultValue={this._getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')} id={`timepicker_${metadataTypes.INSTALL_DUR}`} onValid={this.getInstallationTime} />
+            <div className="estimation">
+              <span className="title">{'Estimated time to install this update:'}</span>
+              <span className="time-value">
+                <TimePicker
+                  defaultValue={this.getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
+                  id={`timepicker_${metadataTypes.INSTALL_DUR}`}
+                  onValid={this.getInstallationTime}
+                />
               </span>
             </div>
           </div>

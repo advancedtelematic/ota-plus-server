@@ -1,5 +1,6 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Row, Col } from 'antd';
 import { Form } from 'formsy-antd';
@@ -14,16 +15,17 @@ import { contains } from '../../../utils/Helpers';
 @observer
 class Step1 extends Component {
   componentWillMount() {
-    const { hardwareStore } = this.props.stores;
+    const { stores } = this.props;
+    const { hardwareStore } = stores;
     hardwareStore.fetchHardwareIds();
   }
 
   render() {
-    const { hardwareStore } = this.props.stores;
-    const { wizardData, onStep1DataSelect } = this.props;
+    const { wizardData, onStep1DataSelect, stores } = this.props;
+    const { hardwareStore } = stores;
 
-    let hardwareList = [];
-    _.each(hardwareStore.hardwareIds, id => {
+    const hardwareList = [];
+    _.each(hardwareStore.hardwareIds, (id) => {
       hardwareList.push({
         type: 'hardware',
         name: id,
@@ -31,54 +33,55 @@ class Step1 extends Component {
     });
 
     return (
-      <Form id='update-create-form'>
-        <Row className='row name-container'>
+      <Form id="update-create-form">
+        <Row className="row name-container">
           <Col span={12}>
             <FormInput
-              label='Update Name'
-              placeholder='Name'
-              name='updateName'
-              id='create-new-update-name'
+              label="Update Name"
+              placeholder="Name"
+              name="updateName"
+              id="create-new-update-name"
               defaultValue={wizardData.name}
-              onChange={e => {
+              onChange={(e) => {
                 onStep1DataSelect('name', e.target.value);
               }}
             />
           </Col>
           <Col span={12}>
             <FormTextarea
-              label='Description'
-              placeholder='Type here'
+              label="Description"
+              placeholder="Type here"
               rows={5}
-              name='updateDescription'
-              id='create-new-update-description'
+              name="updateDescription"
+              id="create-new-update-description"
               defaultValue={wizardData.description}
-              onChange={e => {
+              onChange={(e) => {
                 onStep1DataSelect('description', e.target.value);
               }}
             />
           </Col>
         </Row>
-        <Row className='row hardware-container'>
+        <Row className="row hardware-container">
           <Col span={24}>
-            <label className='c-form__label'>{'Select ECU types'}</label>
-            <div className='ids-list'>
+            <label className="c-form__label">{'Select ECU types'}</label>
+            <div className="ids-list">
               {hardwareStore.hardwareIdsFetchAsync.isFetching ? (
-                <div className='wrapper-center'>
+                <div className="wrapper-center">
                   <Loader />
                 </div>
               ) : (
-                _.map(hardwareList, item => {
+                _.map(hardwareList, (item) => {
                   const { selectedHardwares } = wizardData;
                   const selected = contains(selectedHardwares, item, 'hardware');
+                  // eslint-disable-next-line no-param-reassign
                   item.type = 'hardware';
                   return (
                     <SelectableListItem
                       key={item.name}
                       item={item}
                       selected={selected}
-                      onChange={item => {
-                        onStep1DataSelect('hardwareId', item);
+                      onChange={(listItem) => {
+                        onStep1DataSelect('hardwareId', listItem);
                       }}
                     />
                   );
@@ -91,5 +94,11 @@ class Step1 extends Component {
     );
   }
 }
+
+Step1.propTypes = {
+  wizardData: PropTypes.shape({}),
+  onStep1DataSelect: PropTypes.func,
+  stores: PropTypes.shape({})
+};
 
 export default Step1;

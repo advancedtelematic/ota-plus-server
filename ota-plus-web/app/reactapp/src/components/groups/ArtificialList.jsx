@@ -27,13 +27,23 @@ const groupsArtificial = [
 
 const ArtificialList = inject('stores')(
   observer(({ selectGroup, onDeviceDrop, stores }) => {
-    const { devicesStore, groupsStore } = stores;
+    const { groupsStore } = stores;
 
     return (
-      <div className='groups-panel__artificial-list'>
-        {_.map(groupsArtificial, group => {
-          const isSelected = groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.groupName === group.name;
-          return <ListItemArtificial group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} isDND={group.isDND} key={group.name} />;
+      <div className="groups-panel__artificial-list">
+        {_.map(groupsArtificial, (group) => {
+          const { type, groupName } = groupsStore.selectedGroup;
+          const isSelected = type === 'artificial' && groupName === group.name;
+          return (
+            <ListItemArtificial
+              group={group}
+              selectGroup={selectGroup}
+              isSelected={isSelected}
+              onDeviceDrop={onDeviceDrop}
+              isDND={group.isDND}
+              key={group.name}
+            />
+          );
         })}
       </div>
     );
@@ -41,7 +51,7 @@ const ArtificialList = inject('stores')(
 );
 
 ArtificialList.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   selectGroup: PropTypes.func.isRequired,
   onDeviceDrop: PropTypes.func.isRequired,
 };

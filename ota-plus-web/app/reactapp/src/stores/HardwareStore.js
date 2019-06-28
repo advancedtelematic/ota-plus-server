@@ -1,6 +1,7 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
-import { observable, isObservableArray } from 'mobx';
+import { observable } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
 import { API_ECUS_FETCH, API_ECUS_PUBLIC_KEY_FETCH, API_HARDWARE_IDS_FETCH } from '../config';
@@ -8,15 +9,25 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 
 export default class HardwareStore {
   @observable hardwareFetchAsync = {};
+
   @observable hardwareFetchWsAsync = {};
+
   @observable hardwarePublicKeyFetchAsync = {};
+
   @observable hardwareIdsFetchAsync = {};
+
   @observable hardware = [];
+
   @observable filteredHardware = [];
+
   @observable publicKey = {};
+
   @observable hardwareIds = [];
+
   @observable hardwareIdsLimit = 1000;
+
   @observable hardwareIdsCurrentPage = 0;
+
   @observable hardwareFilter = '';
 
   @observable activeEcu = {
@@ -35,22 +46,22 @@ export default class HardwareStore {
     return axios
       .get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
       .then(
-        function(response) {
-          let hardware = response.data;
+        (response) => {
+          const hardware = response.data;
           if (!_.isEmpty(hardware)) {
-            this._prepareHardware(hardware);
+            this.prepareHardware(hardware);
           }
           this.hardwareFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.hardwareFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
-  _filterHardware(filter) {
+  filterHardware(filter) {
     this.hardwareFilter = filter;
     let searchResults = [];
     _.each(this.hardware, (objects, index) => {
@@ -60,8 +71,8 @@ export default class HardwareStore {
           value
             .toString()
             .toLowerCase()
-            .indexOf(filter.toLowerCase()) >= 0 ||
-          property
+            .indexOf(filter.toLowerCase()) >= 0
+          || property
             .toString()
             .toLowerCase()
             .indexOf(filter.toLowerCase()) >= 0
@@ -79,26 +90,22 @@ export default class HardwareStore {
         }
       });
     });
-    searchResults = _.groupBy(searchResults, prop => {
-      return prop.id;
-    });
-    this._prepareFilteredHardware(searchResults);
+    searchResults = _.groupBy(searchResults, prop => prop.id);
+    this.prepareFilteredHardware(searchResults);
   }
 
-  _prepareFilteredHardware(searchResults) {
+  prepareFilteredHardware(searchResults) {
     let pairs = [];
-    _.each(searchResults, (properties, id) => {
-      _.each(properties, (value, property) => {
+    _.each(searchResults, (properties,) => {
+      _.each(properties, (value,) => {
         pairs.push(value);
       });
     });
-    pairs = _.groupBy(pairs, prop => {
-      return prop.id;
-    });
-    let final = [];
-    _.each(pairs, (pair, id) => {
-      let convert = {};
-      _.each(pair, (obj, index) => {
+    pairs = _.groupBy(pairs, prop => prop.id);
+    const final = [];
+    _.each(pairs, (pair,) => {
+      const convert = {};
+      _.each(pair, (obj,) => {
         _.each(obj, (o, i) => {
           convert[i] = o;
         });
@@ -108,16 +115,14 @@ export default class HardwareStore {
     this.filteredHardware = final;
   }
 
-  _capitalize(string) {
-    return string.toUpperCase();
-  }
+  capitalize = string => string.toUpperCase();
 
-  _prepareHardware(data) {
-    let that = this;
-    let pairs = {};
+  prepareHardware(data) {
+    const that = this;
+    const pairs = {};
     if (_.isArray(data)) {
-      _.each(data, (obj, index) => {
-        let name = obj.description ? this._capitalize(obj.description) : this._capitalize(obj.class);
+      _.each(data, (obj,) => {
+        const name = obj.description ? this.capitalize(obj.description) : this.capitalize(obj.class);
         obj.name = name;
         if (obj.capabilities) {
           _.each(obj.capabilities, (value, property) => {
@@ -132,15 +137,15 @@ export default class HardwareStore {
         that.hardware.push(obj);
         that.filteredHardware.push(obj);
         if (obj.children) {
-          that._prepareHardware(obj.children);
+          that.prepareHardware(obj.children);
         }
       });
     } else {
       _.each(data, (value, property) => {
         pairs[property] = value;
-        pairs['name'] = data.description ? this._capitalize(data.description) : this._capitalize(data.class);
+        pairs.name = data.description ? this.capitalize(data.description) : this.capitalize(data.class);
         if (property === 'children') {
-          that._prepareHardware(data.children);
+          that.prepareHardware(data.children);
         }
       });
       that.hardware.push(pairs);
@@ -155,36 +160,36 @@ export default class HardwareStore {
     return axios
       .get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecus/public_key?ecu_serial=${ecuId}`)
       .then(
-        function(response) {
+        (response) => {
           this.publicKey = response.data;
           this.hardwarePublicKeyFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.hardwarePublicKeyFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
   fetchHardwareIds() {
     resetAsync(this.hardwareIdsFetchAsync, true);
     return axios
-      .get(`${API_HARDWARE_IDS_FETCH}` + '?limit=' + this.hardwareIdsLimit + '&offset=' + this.hardwareIdsCurrentPage * this.hardwareIdsLimit)
+      .get(`${API_HARDWARE_IDS_FETCH}?limit=${this.hardwareIdsLimit}&offset=${this.hardwareIdsCurrentPage * this.hardwareIdsLimit}`)
       .then(
-        function(response) {
+        (response) => {
           this.hardwareIds = response.data.values;
           this.hardwareIdsFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.hardwareIdsFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.hardwareFetchAsync);
     resetAsync(this.hardwareFetchWsAsync);
     resetAsync(this.hardwarePublicKeyFetchAsync);
@@ -195,7 +200,7 @@ export default class HardwareStore {
     this.hardwareIdsCurrentPage = 0;
   }
 
-  _resetPublicKey() {
+  resetPublicKey() {
     resetAsync(this.hardwarePublicKeyFetchAsync);
     this.publicKey = {};
   }

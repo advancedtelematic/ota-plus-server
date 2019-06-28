@@ -5,7 +5,7 @@ import React from 'react';
 import { GroupsHeader, GroupsList, GroupsArtificialList } from '../groups';
 
 const GroupsPanel = ({ showCreateGroupModal, selectGroup, onDeviceDrop }) => (
-  <div className='groups-panel'>
+  <div className="groups-panel">
     <GroupsHeader showCreateGroupModal={showCreateGroupModal} />
     <GroupsArtificialList selectGroup={selectGroup} onDeviceDrop={onDeviceDrop} />
     <GroupsList selectGroup={selectGroup} onDeviceDrop={onDeviceDrop} />

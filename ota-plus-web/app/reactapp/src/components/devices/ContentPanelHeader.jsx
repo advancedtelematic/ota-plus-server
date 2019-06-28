@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Form } from 'formsy-antd';
-import  { Button } from 'antd';
+import { Button } from 'antd';
 import { SubHeader, SearchBar } from '../../partials';
 
 @inject('stores')
 @observer
 class ContentPanelHeader extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     devicesFilter: PropTypes.string,
     changeFilter: PropTypes.func.isRequired,
     addNewWizard: PropTypes.func,
@@ -24,11 +24,11 @@ class ContentPanelHeader extends Component {
     return (
       <SubHeader>
         {selectedGroup.id && selectedGroup.id !== 'ungrouped' && (
-          <div className='add-group-campaign'>
+          <div className="add-group-campaign">
             <Button
-              htmlType='button'
-              className='ant-btn-outlined'
-              onClick={e => {
+              htmlType="button"
+              className="ant-btn-outlined"
+              onClick={(e) => {
                 e.preventDefault();
                 addNewWizard('groups');
               }}
@@ -38,7 +38,7 @@ class ContentPanelHeader extends Component {
           </div>
         )}
         <Form>
-          <SearchBar value={devicesFilter} changeAction={changeFilter} id='search-devices-input' />
+          <SearchBar value={devicesFilter} changeAction={changeFilter} id="search-devices-input" />
         </Form>
       </SubHeader>
     );

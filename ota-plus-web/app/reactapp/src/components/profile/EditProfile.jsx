@@ -14,8 +14,11 @@ import { AsyncStatusCallbackHandler } from '../../utils';
 @observer
 class EditProfile extends Component {
   @observable renameDisabled = true;
+
   @observable oldName = '';
+
   @observable newName = '';
+
   @observable newNameLength = 0;
 
   constructor(props) {
@@ -23,6 +26,7 @@ class EditProfile extends Component {
     const { userStore } = props.stores;
     this.renameHandler = new AsyncStatusCallbackHandler(userStore, 'userUpdateAsync', this.handleResponse.bind(this));
   }
+
   componentWillReceiveProps(nextProps) {
     const { userStore } = nextProps.stores;
     if (userStore.user.fullName) {
@@ -32,21 +36,23 @@ class EditProfile extends Component {
       this.newNameLength = userStore.user.fullName.length;
     }
   }
+
   componentWillUnmount() {
-    const { userStore } = this.props.stores;
+    const { stores } = this.props;
+    const { userStore } = stores;
     resetAsync(userStore.userUpdateAsync);
     resetAsync(userStore.userChangePasswordAsync);
     this.renameHandler();
   }
 
-  changePassword = e => {
+  changePassword = (e) => {
     if (e) e.preventDefault();
     const { stores } = this.props;
     const { userStore } = stores;
     userStore.changePassword();
   };
 
-  enableRename = e => {
+  enableRename = (e) => {
     if (this.renameDisabled) {
       this.renameDisabled = false;
       this.focusTextInput();
@@ -62,12 +68,12 @@ class EditProfile extends Component {
     this.clickableArea.classList.remove('hide');
   };
 
-  userTypesName = e => {
+  userTypesName = (e) => {
     this.newName = e.target.value;
     this.newNameLength = e.target.value.length;
   };
 
-  keyPressed = e => {
+  keyPressed = (e) => {
     if (e.key === 'Enter') {
       this.rename();
     }
@@ -100,53 +106,59 @@ class EditProfile extends Component {
     const { stores } = this.props;
     const { userStore } = stores;
     return (
-      <div className='profile-container' id='edit-profile'>
+      <div className="profile-container" id="edit-profile">
         {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
-            <Loader className='dark' />
+          <div className="wrapper-center">
+            <Loader className="dark" />
           </div>
         ) : (
           <span>
             <AsyncResponse
-              handledStatus='all'
+              handledStatus="all"
               action={userStore.userUpdateAsync}
               errorMsg={userStore.userUpdateAsync.data ? userStore.userUpdateAsync.data.description : null}
-              successMsg='Profile has been updated.'
+              successMsg="Profile has been updated."
             />
             <AsyncResponse
-              handledStatus='all'
+              handledStatus="all"
               action={userStore.userChangePasswordAsync}
-              errorMsg={userStore.userChangePasswordAsync.data ? userStore.userChangePasswordAsync.data.description : null}
-              successMsg='An email with password resetting instructions has been sent to your email account.'
+              errorMsg={
+                userStore.userChangePasswordAsync.data ? userStore.userChangePasswordAsync.data.description : null
+              }
+              successMsg="An email with password resetting instructions has been sent to your email account."
             />
-            <div className='section-header'>
-              <div className='column' />
-              <div className='column name-header'>Name</div>
-              <div className='column'>Mail</div>
-              <div className='column' />
+            <div className="section-header">
+              <div className="column" />
+              <div className="column name-header">Name</div>
+              <div className="column">Mail</div>
+              <div className="column" />
             </div>
-            <div className='user-info'>
-              <div className='column'>
+            <div className="user-info">
+              <div className="column">
                 {window.atsGarageTheme ? (
-                  <Avatar src={userStore.user.picture ? userStore.user.picture : '/assets/img/icons/profile.png'} className='icon-profile' id='user-avatar' />
+                  <Avatar
+                    src={userStore.user.picture ? userStore.user.picture : '/assets/img/icons/profile.png'}
+                    className="icon-profile"
+                    id="user-avatar"
+                  />
                 ) : (
-                  <Avatar src='/assets/img/icons/Settings_Icon_big.svg' className='icon-profile' id='user-avatar' />
+                  <Avatar src="/assets/img/icons/Settings_Icon_big.svg" className="icon-profile" id="user-avatar" />
                 )}
               </div>
-              <div className='column name' id='user-name'>
-                <div className='rename-box'>
+              <div className="column name" id="user-name">
+                <div className="rename-box">
                   <div
                     onClick={this.enableRename}
-                    ref={clickableArea => {
+                    ref={(clickableArea) => {
                       this.clickableArea = clickableArea;
                     }}
-                    className='rename-box__clickable-area'
+                    className="rename-box__clickable-area"
                   />
 
                   <input
-                    className='rename-box__input rename-box__input--black'
-                    type='text'
-                    ref={input => {
+                    className="rename-box__input rename-box__input--black"
+                    type="text"
+                    ref={(input) => {
                       this.renameInput = input;
                     }}
                     disabled
@@ -155,23 +167,40 @@ class EditProfile extends Component {
                     onChange={this.userTypesName}
                   />
 
-                  <div className='rename-box__actions rename-box__actions--big'>
+                  <div className="rename-box__actions rename-box__actions--big">
                     {this.renameDisabled ? (
-                      <div className='rename-box__icon--edit edit'>{'Rename'}</div>
+                      <div className="rename-box__icon--edit edit">{'Rename'}</div>
                     ) : (
-                      <span className='rename-box__user-actions'>
-                        {this.newNameLength ? <img src='/assets/img/icons/black/tick.svg' className='rename-box__icon rename-box__icon--save save' alt='Icon' onClick={this.rename} /> : null}
-                        <img src='/assets/img/icons/black/cancel-thin.svg' alt='Icon' className='rename-box__icon rename-box__icon--cancel cancel' onClick={this.cancelRename} />
+                      <span className="rename-box__user-actions">
+                        {this.newNameLength ? (
+                          <img
+                            src="/assets/img/icons/black/tick.svg"
+                            className="rename-box__icon rename-box__icon--save save"
+                            alt="Icon"
+                            onClick={this.rename}
+                          />
+                        ) : null}
+                        <img
+                          src="/assets/img/icons/black/cancel-thin.svg"
+                          alt="Icon"
+                          className="rename-box__icon rename-box__icon--cancel cancel"
+                          onClick={this.cancelRename}
+                        />
                       </span>
                     )}
                   </div>
                 </div>
               </div>
-              <div className='column email' id='user-email'>
+              <div className="column email" id="user-email">
                 {userStore.user.email}
               </div>
-              <div className='column'>
-                <Button htmlType='button' className='btn-link add-button' id='change-password-link' onClick={this.changePassword}>
+              <div className="column">
+                <Button
+                  htmlType="button"
+                  className="btn-link add-button"
+                  id="change-password-link"
+                  onClick={this.changePassword}
+                >
                   Change password
                 </Button>
               </div>
@@ -182,5 +211,9 @@ class EditProfile extends Component {
     );
   }
 }
+
+EditProfile.propTypes = {
+  stores: PropTypes.shape({})
+};
 
 export default EditProfile;

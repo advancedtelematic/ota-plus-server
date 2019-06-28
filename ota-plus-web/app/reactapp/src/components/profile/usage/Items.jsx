@@ -13,22 +13,18 @@ import NoHistoryItem from './NoHistoryItem';
 @observer
 class Items extends Component {
   @observable active = 0;
+
   @observable direction = '';
 
-  constructor(props) {
-    super(props);
-  }
   generateElements() {
-    const { months } = this.props;
-    const { userStore } = this.props.stores;
-    const inversedMonthUsageKeys = _.sortBy(months, month => {
-      return month;
-    }).reverse();
+    const { months, stores } = this.props;
+    const { userStore } = stores;
+    const inversedMonthUsageKeys = _.sortBy(months, month => month).reverse();
 
-    let elements = [];
+    const elements = [];
     const firstDate = moment(inversedMonthUsageKeys[inversedMonthUsageKeys.length - 1], 'YYYYMM');
 
-    for (var i = 0; i <= months.length; i++) {
+    for (let i = 0; i <= months.length; i += 1) {
       if (i < months.length) {
         const objKey = inversedMonthUsageKeys[i];
         const usage = {
@@ -50,14 +46,15 @@ class Items extends Component {
     }
     return elements;
   }
+
   render() {
     return <div>{this.generateElements()}</div>;
   }
 }
 
 Items.propTypes = {
-  stores: PropTypes.object,
-  months: PropTypes.array.isRequired,
+  stores: PropTypes.shape({}),
+  months: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Items;

@@ -13,7 +13,7 @@ const title = 'Updates';
 @observer
 class Updates extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
   };
 
   componentWillMount() {
@@ -26,7 +26,7 @@ class Updates extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { updatesStore } = stores;
-    updatesStore._reset();
+    updatesStore.reset();
   }
 
   render() {

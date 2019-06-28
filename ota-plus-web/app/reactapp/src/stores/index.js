@@ -11,4 +11,15 @@ import FeaturesStore from './FeaturesStore';
 import ProvisioningStore from './ProvisioningStore';
 import UpdatesStore from './UpdatesStore';
 
-export { UserStore, DevicesStore, HardwareStore, GroupsStore, SoftwareStore, CampaignsStore, ImpactAnalysisStore, FeaturesStore, ProvisioningStore, UpdatesStore };
+export {
+  UserStore,
+  DevicesStore,
+  HardwareStore,
+  GroupsStore,
+  SoftwareStore,
+  CampaignsStore,
+  ImpactAnalysisStore,
+  FeaturesStore,
+  ProvisioningStore,
+  UpdatesStore
+};

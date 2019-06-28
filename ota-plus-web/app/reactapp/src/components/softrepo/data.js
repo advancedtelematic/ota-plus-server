@@ -25,7 +25,8 @@ export const roles = {
       },
       snapshot: {
         expires: '12-12-2018 14:15',
-        keys: ['ca22f6e876e25ac2f6415ec79ec5fb88f18259a4676f4317148a02701eaeb936', '31f0249019697a3d2f8ae97211b6f168aa7b71abc58e06453af83777df69e74d'],
+        keys: ['ca22f6e876e25ac2f6415ec79ec5fb88f18259a4676f4317148a02701eaeb936',
+          '31f0249019697a3d2f8ae97211b6f168aa7b71abc58e06453af83777df69e74d'],
         thresholds: { 'n/d': 1 },
         warnings: [],
         errors: [],
@@ -44,7 +45,8 @@ export const roles = {
         authorises: {
           BSCH: {
             expires: '12-12-2018 14:15',
-            keys: ['e1a84816df7bde2d3f68f66b918d96117355f7c5c4540216a6cdb719251cbb4e', '186a92d443b893b25a7066c81818fee46faabd419122835047579acac800d390'],
+            keys: ['e1a84816df7bde2d3f68f66b918d96117355f7c5c4540216a6cdb719251cbb4e',
+              '186a92d443b893b25a7066c81818fee46faabd419122835047579acac800d390'],
             thresholds: { 'n/d': 1 },
             warnings: [],
             errors: [],
@@ -604,6 +606,7 @@ export const packages = {
         role: 'PL-BT-446 Bluetooth auto-grid',
         keys: ['z1', 'z2', 'z3', 'z4', 'z5'],
         warnings: [],
+        // eslint-disable-next-line max-len
         errors: ['Failure rate >50% -- 1 pending AS-OFF Campaign -- ERR-INST--DPKG "Not enough space on disk to unarchive image".'],
         stats: {
           groups: {

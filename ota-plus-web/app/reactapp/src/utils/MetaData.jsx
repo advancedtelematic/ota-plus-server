@@ -5,16 +5,16 @@ import React, { Component } from 'react';
 import { APP_TITLE } from '../config';
 
 class MetaData extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
-    document.title = APP_TITLE + ' - ' + this.props.title;
-    if (this.props.keywords) document.querySelector('meta[name="keywords"]').setAttribute('content', this.props.keywords);
-    if (this.props.description) document.querySelector('meta[name="description"]').setAttribute('content', this.props.description);
+    const { title, keywords, description } = this.props;
+    document.title = `${APP_TITLE} - ${title}`;
+    if (keywords) document.querySelector('meta[name="keywords"]').setAttribute('content', keywords);
+    if (description) document.querySelector('meta[name="description"]').setAttribute('content', description);
   }
+
   render() {
-    return <span className={'content' + (this.props.className ? ' ' + this.props.className : '')}>{this.props.children}</span>;
+    const { className, children } = this.props;
+    return <span className={`content${className ? ` ${className}` : ''}`}>{children}</span>;
   }
 }
 
@@ -23,6 +23,11 @@ MetaData.propTypes = {
   keywords: PropTypes.string,
   description: PropTypes.string,
   className: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ])
 };
 
 export default MetaData;

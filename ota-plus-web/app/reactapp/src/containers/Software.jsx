@@ -7,40 +7,64 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
-import { SoftwareRepositoryAlpha } from '../pages';
-import { SoftwareCreateModal, SoftwareHeader, SoftwareList, SoftwareDependenciesManager, SoftwareEditCommentModal } from '../components/software';
-import TabNavigation from '../partials/TabNavigation';
+import SoftwareRepositoryAlpha from '../pages/SoftwareRepositoryAlpha';
+import {
+  SoftwareCreateModal,
+  SoftwareHeader,
+  SoftwareList,
+  SoftwareDependenciesManager,
+  SoftwareEditCommentModal
+} from '../components/software';
 
 @inject('stores')
 @observer
 class Software extends Component {
   @observable createModalShown = false;
+
   @observable fileUploaderModalShown = false;
+
   @observable fileDropped = null;
+
   @observable copied = false;
+
   @observable dependenciesModalShown = false;
+
   @observable dependenciesManagerShown = false;
+
   @observable activeVersionFilepath = null;
+
   @observable activeManagerVersion = null;
+
   @observable deleteConfirmationShown = false;
+
   @observable expandedPackageName = null;
+
   @observable itemToDelete = null;
+
   @observable editCommentShown = false;
+
   @observable activeComment = '';
+
   @observable activePackageFilepath = '';
+
   @observable switchToSWRepo = false;
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     highlightedPackage: PropTypes.string,
   };
+
+  constructor(props) {
+    super(props);
+    this.componentRef = React.createRef();
+  }
 
   componentDidMount() {
     const { stores } = this.props;
     const { softwareStore, featuresStore } = stores;
 
     if (featuresStore.alphaPlusEnabled) {
-      this.cancelObserveTabChange = observe(softwareStore, change => {
+      this.cancelObserveTabChange = observe(softwareStore, (change) => {
         this.applyTab(change);
       });
       onBecomeObserved(this, 'switchToSWRepo', this.resumeScope);
@@ -53,7 +77,7 @@ class Software extends Component {
     }
   }
 
-  @action setActive = tab => {
+  @action setActive = (tab) => {
     const { stores } = this.props;
     const { softwareStore } = stores;
 
@@ -68,7 +92,7 @@ class Software extends Component {
     this.setActive(softwareStore.activeTab);
   };
 
-  applyTab = change => {
+  applyTab = (change) => {
     const { name, newValue } = change;
 
     if (name === 'activeTab') {
@@ -83,18 +107,18 @@ class Software extends Component {
     this.activePackageFilepath = filepath;
   };
 
-  hideEditComment = e => {
+  hideEditComment = (e) => {
     if (e) e.preventDefault();
     this.editCommentShown = false;
     this.activeComment = '';
     this.activePackageFilepath = null;
   };
 
-  setExpandedPackageName = name => {
+  setExpandedPackageName = (name) => {
     this.expandedPackageName = name;
   };
 
-  deleteItem = e => {
+  deleteItem = (e) => {
     const { stores } = this.props;
     const { softwareStore } = stores;
     if (e) e.preventDefault();
@@ -108,7 +132,7 @@ class Software extends Component {
     this.deleteConfirmationShown = true;
   };
 
-  hideDeleteConfirmation = e => {
+  hideDeleteConfirmation = (e) => {
     if (e) e.preventDefault();
     this.deleteConfirmationShown = false;
   };
@@ -119,7 +143,7 @@ class Software extends Component {
     this.activeVersionFilepath = activeVersionFilepath;
   };
 
-  hideDependenciesModal = e => {
+  hideDependenciesModal = (e) => {
     if (e) e.preventDefault();
     this.dependenciesModalShown = false;
     this.activeVersionFilepath = null;
@@ -131,7 +155,7 @@ class Software extends Component {
     this.activeManagerVersion = activeManagerVersion;
   };
 
-  hideDependenciesManager = e => {
+  hideDependenciesManager = (e) => {
     if (e) e.preventDefault();
     this.dependenciesManagerShown = false;
     this.activeManagerVersion = null;
@@ -143,28 +167,28 @@ class Software extends Component {
     this.fileDropped = files ? files[0] : null;
   };
 
-  showFileUploaderModal = e => {
+  showFileUploaderModal = (e) => {
     if (e) e.preventDefault();
     this.fileUploaderModalShown = true;
   };
 
-  hideFileUploaderModal = e => {
+  hideFileUploaderModal = (e) => {
     if (e) e.preventDefault();
     this.fileUploaderModalShown = false;
   };
 
-  handleCopy = e => {
+  handleCopy = (e) => {
     if (e) e.preventDefault();
     this.copied = true;
   };
 
-  hideCreateModal = e => {
+  hideCreateModal = (e) => {
     if (e) e.preventDefault();
     this.createModalShown = false;
     this.fileDropped = null;
   };
 
-  onFileDrop = files => {
+  onFileDrop = (files) => {
     this.showCreateModal(files);
   };
 
@@ -172,13 +196,13 @@ class Software extends Component {
     const { stores, highlightedPackage } = this.props;
     const { softwareStore } = stores;
     return (
-      <span ref='component'>
+      <span ref={this.componentRef}>
         {softwareStore.packagesFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : softwareStore.packagesCount ? (
-          <div className='packages-container'>
+          <div className="packages-container">
             <SoftwareHeader showCreateModal={this.showCreateModal} switchToSWRepo={this.switchToSWRepo} />
             {!this.switchToSWRepo ? (
               <SoftwareList
@@ -196,50 +220,85 @@ class Software extends Component {
             )}
           </div>
         ) : (
-          <div className='wrapper-center'>
-            <div className='page-intro'>
+          <div className="wrapper-center">
+            <div className="page-intro">
               <div>
-                <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
+                <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
               </div>
               <div>{"You haven't created any software yet."}</div>
               <div>
-                <a href='#' className='add-button light' id='add-new-software' onClick={this.showCreateModal.bind(this, null)}>
+                <a
+                  href="#"
+                  className="add-button light"
+                  id="add-new-software"
+                  onClick={this.showCreateModal.bind(this, null)}
+                >
                   <span>{'+ Add new software'}</span>
                 </a>
               </div>
             </div>
           </div>
         )}
-        {this.createModalShown && <SoftwareCreateModal shown={this.createModalShown} hide={this.hideCreateModal} fileDropped={this.fileDropped} />}
+        {this.createModalShown && (
+        <SoftwareCreateModal
+          shown={this.createModalShown}
+          hide={this.hideCreateModal}
+          fileDropped={this.fileDropped}
+        />
+        )}
         {this.deleteConfirmationShown && (
           <ConfirmationModal
-            modalTitle={
-              <div className='text-red' id='delete-software-title'>
+            modalTitle={(
+              <div className="text-red" id="delete-software-title">
                 Delete software
               </div>
-            }
+            )}
             shown={this.deleteConfirmationShown}
             hide={this.hideDeleteConfirmation}
             deleteItem={this.deleteItem}
-            topText={
-              <div className='delete-modal-top-text' id='delete-software-top-text'>
-                Remove <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b> v.
-                <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>{this.itemToDelete}</b> permanently?
+            topText={(
+              <div className="delete-modal-top-text" id="delete-software-top-text">
+                {'Remove '}
+                <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b>
+                {' v.'}
+                <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>
+                  {this.itemToDelete}
+                </b>
+                {' permanently?'}
               </div>
-            }
-            bottomText={
-              <div className='delete-modal-bottom-text' id='delete-software-bottom-text'>
-                If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.
+            )}
+            bottomText={(
+              <div className="delete-modal-bottom-text" id="delete-software-bottom-text">
+                {'If the software is part of any active campaigns, any devices that haven\'t '}
+                {'installed it will fail the campaign.'}
               </div>
-            }
+            )}
             showDetailedInfo
           />
         )}
-        {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeVersionFilepath} />}
-        {this.dependenciesManagerShown && (
-          <SoftwareDependenciesManager shown={this.dependenciesManagerShown} hide={this.hideDependenciesManager} packages={softwareStore.preparedPackages} activePackage={this.activeManagerVersion} />
+        {this.dependenciesModalShown && (
+          <DependenciesModal
+            shown={this.dependenciesModalShown}
+            hide={this.hideDependenciesModal}
+            activeItemName={this.activeVersionFilepath}
+          />
         )}
-        {this.editCommentShown && <SoftwareEditCommentModal shown={this.editCommentShown} hide={this.hideEditComment} comment={this.activeComment} filepath={this.activePackageFilepath} />}
+        {this.dependenciesManagerShown && (
+          <SoftwareDependenciesManager
+            shown={this.dependenciesManagerShown}
+            hide={this.hideDependenciesManager}
+            packages={softwareStore.preparedPackages}
+            activePackage={this.activeManagerVersion}
+          />
+        )}
+        {this.editCommentShown && (
+          <SoftwareEditCommentModal
+            shown={this.editCommentShown}
+            hide={this.hideEditComment}
+            comment={this.activeComment}
+            filepath={this.activePackageFilepath}
+          />
+        )}
       </span>
     );
   }

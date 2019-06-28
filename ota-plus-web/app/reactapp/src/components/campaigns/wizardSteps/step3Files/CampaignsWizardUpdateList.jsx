@@ -13,8 +13,8 @@ import InfiniteScroll from '../../../../utils/InfiniteScroll';
 @observer
 class CampaignsWizardUpdateList extends Component {
   static propTypes = {
-    stores: PropTypes.object,
-    selectedUpdate: PropTypes.array,
+    stores: PropTypes.shape({}),
+    selectedUpdate: PropTypes.arrayOf(PropTypes.shape({})),
     toggleSelection: PropTypes.func.isRequired,
     showUpdateDetails: PropTypes.func.isRequired,
   };
@@ -31,12 +31,12 @@ class CampaignsWizardUpdateList extends Component {
     const updatesAvailable = !!Object.keys(updatesStore.preparedUpdatesWizard).length;
 
     return (
-      <div className='row update-container' id='update-container'>
-        <div className='col-xs-12'>
-          <div className='ios-list'>
+      <div className="row update-container" id="update-container">
+        <div className="col-xs-12">
+          <div className="ios-list">
             {updatesAvailable ? (
               <InfiniteScroll
-                className='wrapper-infinite-scroll'
+                className="wrapper-infinite-scroll"
                 hasMore={updatesStore.hasMoreWizardUpdates}
                 isLoading={updatesStore.updatesWizardFetchAsync.isFetching}
                 useWindow={false}
@@ -47,20 +47,32 @@ class CampaignsWizardUpdateList extends Component {
               >
                 {_.map(updatesStore.preparedUpdatesWizard, (updates, firstLetter) => (
                   <div key={firstLetter}>
-                    <div className='header'>{firstLetter}</div>
+                    <div className="header">{firstLetter}</div>
                     {_.map(updates, (update, index) => {
                       const selected = contains(selectedUpdate, update, 'update');
                       return (
-                        <SelectableListItem key={index} item={update} selected={selected} onChange={this.onChangeSelected} showDetails={showUpdateDetails} sourceType={update.source.sourceType} />
+                        <SelectableListItem
+                          key={index}
+                          item={update}
+                          selected={selected}
+                          onChange={this.onChangeSelected}
+                          showDetails={showUpdateDetails}
+                          sourceType={update.source.sourceType}
+                        />
                       );
                     })}
                   </div>
                 ))}
               </InfiniteScroll>
             ) : (
-              <div className='error'>
-                <p>{'No updates found. Create some updates first.'}</p>
-                <p>{'If you’re working with a customized version of OTA Connect, contact your administrator. They might need to map your updates to your devices first.'}</p>
+              <div className="error">
+                <p>
+                  {'No updates found. Create some updates first.'}
+                </p>
+                <p>
+                  {'If you’re working with a customized version of OTA Connect, contact your administrator.'}
+                  {'They might need to map your updates to your devices first.'}
+                </p>
               </div>
             )}
           </div>

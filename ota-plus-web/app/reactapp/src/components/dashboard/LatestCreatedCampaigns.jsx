@@ -14,7 +14,7 @@ import { CAMPAIGNS_LIMIT_LATEST } from '../../config';
 @observer
 class LatestCreatedCampaigns extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
   };
 
@@ -22,7 +22,7 @@ class LatestCreatedCampaigns extends Component {
     this.resumeScope();
   }
 
-  createCampaign = e => {
+  createCampaign = (e) => {
     const { addNewWizard } = this.props;
     e.preventDefault();
     addNewWizard();
@@ -46,12 +46,11 @@ class LatestCreatedCampaigns extends Component {
     return (
       <span style={{ height: '100%' }}>
         {campaignsLatestFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : latestCampaigns.length ? (
-          _.map(latestCampaigns, campaign =>
-            <LatestCreatedCampaignItem campaign={campaign} key={campaign.id} />)
+          _.map(latestCampaigns, campaign => <LatestCreatedCampaignItem campaign={campaign} key={campaign.id} />)
         ) : (
           <NoItems itemType="campaign" createItem={this.createCampaign} />
         )}

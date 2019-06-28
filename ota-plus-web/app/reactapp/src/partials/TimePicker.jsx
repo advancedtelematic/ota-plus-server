@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 
 const populateArray = (min, max) => {
   const array = [];
-  for (let i = min; i < max; i++) {
+  for (let i = min; i < max; i += 1) {
     array.push(i);
   }
   return array;
@@ -22,6 +22,7 @@ const timeArrays = {
 @observer
 class TimePicker extends Component {
   @observable selectedType = null;
+
   @observable selectedTimeValue = {
     hours: '00',
     minutes: '00',
@@ -34,7 +35,7 @@ class TimePicker extends Component {
     onValid: PropTypes.func,
   };
 
-  showOptions = type => {
+  showOptions = (type) => {
     this.selectedType = type;
   };
 
@@ -51,27 +52,26 @@ class TimePicker extends Component {
     const { id, defaultValue } = this.props;
     const times = defaultValue.split(':');
 
-    const select = type =>
-      type === this.selectedType ? (
-        <select className={`c-time-picker_${this.selectedType}`} onChange={this.selectOption.bind(this, this.selectedType)}>
-          {timeArrays[this.selectedType].map((value, key) => (
-            <option value={value} key={key}>
-              {value}
-            </option>
-          ))}
-        </select>
-      ) : null;
+    const select = type => (type === this.selectedType ? (
+      <select className={`c-time-picker_${this.selectedType}`} onChange={this.selectOption.bind(this, this.selectedType)}>
+        {timeArrays[this.selectedType].map((value, key) => (
+          <option value={value} key={key}>
+            {value}
+          </option>
+        ))}
+      </select>
+    ) : null);
 
     return (
-      <div className='c-time-picker' id={id}>
-        <div className='c-time-picker__time-value' id={`${id}-value`}>
-          <div className='c-time-picker__hours' onClick={this.showOptions.bind(this, 'hours')} id={`${id}-hours`}>
-            {times[0] || hours}:{select('hours')}
+      <div className="c-time-picker" id={id}>
+        <div className="c-time-picker__time-value" id={`${id}-value`}>
+          <div className="c-time-picker__hours" onClick={this.showOptions.bind(this, 'hours')} id={`${id}-hours`}>
+            {`${times[0] || hours}:${select('hours')}`}
           </div>
-          <div className='c-time-picker__minutes' onClick={this.showOptions.bind(this, 'minutes')} id={`${id}-minutes`}>
-            {times[1] || minutes}:{select('minutes')}
+          <div className="c-time-picker__minutes" onClick={this.showOptions.bind(this, 'minutes')} id={`${id}-minutes`}>
+            {`${times[1] || minutes}:${select('minutes')}`}
           </div>
-          <div className='c-time-picker__seconds' onClick={this.showOptions.bind(this, 'seconds')} id={`${id}-seconds`}>
+          <div className="c-time-picker__seconds" onClick={this.showOptions.bind(this, 'seconds')} id={`${id}-seconds`}>
             {times[2] || seconds}
             {select('seconds')}
           </div>

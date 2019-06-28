@@ -12,6 +12,11 @@ import OTAModal from './OTAModal';
 class SizeVerify extends Component {
   @observable sizeVerifyHidden = true;
 
+  constructor(props) {
+    super(props);
+    this.checkboxRef = React.createRef();
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.checkSize);
     this.checkSize();
@@ -28,7 +33,7 @@ class SizeVerify extends Component {
   };
 
   handleClick = () => {
-    const dontShowAgain = this.refs.checkbox.checked;
+    const dontShowAgain = this.checkboxRef.current.checked;
     if (dontShowAgain) Cookies.set('sizeVerifyHidden', 1);
     this.sizeVerifyHidden = true;
   };
@@ -36,26 +41,33 @@ class SizeVerify extends Component {
   render() {
     const { minWidth, minHeight, t } = this.props;
     const content = (
-      <span className='body'>
-        <div className='desc' style={{ textAlign: 'left' }}>
+      <span className="body">
+        <div className="desc" style={{ textAlign: 'left' }}>
           <Trans>
             {t('warnings.sizeverify.description_1', { width: minWidth, height: minHeight })}
           </Trans>
           {t('warnings.sizeverify.description_2')}
         </div>
-        <div className='body-actions'>
-          <div className='wrapper-checkbox'>
-            <input type='checkbox' name='dontShowAgain' id='size-verify-dismiss' value='1' ref='checkbox' />
+        <div className="body-actions">
+          <div className="wrapper-checkbox">
+            <input type="checkbox" name="dontShowAgain" id="size-verify-dismiss" value="1" ref={this.checkboxRef} />
             &nbsp;
             <span>{t('warnings.sizeverify.dontshow')}</span>
           </div>
-          <button id='size-verify-confirm' className='btn-primary' onClick={this.handleClick}>
+          <button type="button" id="size-verify-confirm" className="btn-primary" onClick={this.handleClick}>
             OK
           </button>
         </div>
       </span>
     );
-    return <OTAModal title={t('warnings.sizeverify.title')} content={content} visible={!this.sizeVerifyHidden} className='size-verify-modal' />;
+    return (
+      <OTAModal
+        title={t('warnings.sizeverify.title')}
+        content={content}
+        visible={!this.sizeVerifyHidden}
+        className="size-verify-modal"
+      />
+    );
   }
 }
 

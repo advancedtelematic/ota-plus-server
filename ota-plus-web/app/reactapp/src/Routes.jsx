@@ -22,44 +22,62 @@ import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys, ProfileOrganizatio
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
-const Routes = ({ addNewWizard, uiUserProfileEdit, switchToSWRepo, uiUserProfileMenu, uiAutoFeatureActivation, uiCredentialsDownload }) => (
+const Routes = ({
+  addNewWizard,
+  uiUserProfileEdit,
+  switchToSWRepo,
+  uiUserProfileMenu,
+  uiAutoFeatureActivation,
+  uiCredentialsDownload
+}) => (
   <Switch>
-    <Route 
-      exact 
-      path='/' 
+    <Route
+      exact
+      path="/"
       render={props => (
-        <DashboardPage 
-          {...props} 
+        <DashboardPage
+          {...props}
           addNewWizard={addNewWizard}
-          uiAutoFeatureActivation={uiAutoFeatureActivation} 
+          uiAutoFeatureActivation={uiAutoFeatureActivation}
           uiUserProfileMenu={uiUserProfileMenu}
         />
       )}
     />
-    <Route path='/fireworks' component={FireworksPage} />
-    <Route path='/devices' render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
-    <Route path='/device/:id' component={DevicePage} />
-    <Route path='/software-repository/:packageName?' render={props => <SoftwareRepositoryPage {...props} switchToSWRepo={switchToSWRepo} />} />
-    <Route path='/updates/:updateName?' component={UpdatesPage} />
-    <Route path='/campaigns/:campaignId?' render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
-    <Route path='/impact-analysis' component={ImpactAnalysisPage} />
-    <Route path='/software-repository-alpha' component={SoftwareRepositoryAlpha} />
-    <Route path='/policy' component={TermsAndConditions} />
+    <Route path="/fireworks" component={FireworksPage} />
+    <Route path="/devices" render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
+    <Route path="/device/:id" component={DevicePage} />
     <Route
-      path='/profile'
+      path="/software-repository/:packageName?"
+      render={props => <SoftwareRepositoryPage {...props} switchToSWRepo={switchToSWRepo} />}
+    />
+    <Route path="/updates/:updateName?" component={UpdatesPage} />
+    <Route path="/campaigns/:campaignId?" render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
+    <Route path="/impact-analysis" component={ImpactAnalysisPage} />
+    <Route path="/software-repository-alpha" component={SoftwareRepositoryAlpha} />
+    <Route path="/policy" component={TermsAndConditions} />
+    <Route
+      path="/profile"
       render={props => (
-        <ProfilePage {...props} uiUserProfileMenu={uiUserProfileMenu} uiUserProfileEdit={uiUserProfileEdit} uiCredentialsDownload={uiCredentialsDownload}>
+        <ProfilePage
+          {...props}
+          uiUserProfileMenu={uiUserProfileMenu}
+          uiUserProfileEdit={uiUserProfileEdit}
+          uiCredentialsDownload={uiCredentialsDownload}
+        >
           <Switch>
             <Route path="/profile/edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
             <Route path="/profile/organization" component={ProfileOrganization} />
             <Route path="/profile/usage" component={ProfileUsage} />
-            <Route path="/profile/access-keys" render={props => <ProfileAccessKeys {...props} uiCredentialsDownload={uiCredentialsDownload} />} />
+            <Route
+              path="/profile/access-keys"
+              render={ownProps => <ProfileAccessKeys {...ownProps} uiCredentialsDownload={uiCredentialsDownload} />}
+            />
           </Switch>
         </ProfilePage>
       )}
     />
 
-    <Route path='*' component={NoMatchPage} />
+    <Route path="*" component={NoMatchPage} />
   </Switch>
 );
 
