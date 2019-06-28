@@ -120,7 +120,7 @@ class StatisticsDetails extends Component {
               </div>
               <div className='statistics__dependencies'>
                 <a className='add-button' id='target_show_dependencies' onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                  <span>{t('devices.statistics.show dependencies')}</span>
+                  <span>{t('devices.statistics.show_dependencies')}</span>
                 </a>
               </div>
             </div>
