@@ -15,7 +15,7 @@ const title = 'Dashboard';
 @observer
 class Dashboard extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
     uiAutoFeatureActivation: PropTypes.bool,
     uiUserProfileMenu: PropTypes.bool
@@ -37,9 +37,9 @@ class Dashboard extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { devicesStore, softwareStore, campaignsStore } = stores;
-    devicesStore._reset();
-    softwareStore._reset();
-    campaignsStore._reset();
+    devicesStore.reset();
+    softwareStore.reset();
+    campaignsStore.reset();
   }
 
   render() {
@@ -55,13 +55,13 @@ class Dashboard extends Component {
     );
 
     const renderLoader = (
-      <div className='wrapper-center'>
+      <div className="wrapper-center">
         <Loader />
       </div>
     );
 
     return (
-      <FadeAnimation display='flex'>
+      <FadeAnimation display="flex">
         {uiUserProfileMenu
           ? isTermsAccepted
             ? sanityCheckCompleted

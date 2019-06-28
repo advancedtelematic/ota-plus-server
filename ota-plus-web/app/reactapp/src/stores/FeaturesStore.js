@@ -8,9 +8,13 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 
 export default class FeaturesStore {
   @observable featuresFetchAsync = {};
+
   @observable features = [];
+
   @observable clientId = null;
+
   @observable alphaPlusEnabled = false;
+
   @observable alphaTestEnabled = false;
 
   constructor() {
@@ -21,7 +25,7 @@ export default class FeaturesStore {
     resetAsync(this.featuresFetchAsync, true);
     return axios
       .get(API_FEATURES_FETCH)
-      .then(response => {
+      .then((response) => {
         this.features = response.data;
         if (_.includes(response.data, 'alphaplus')) {
           this.alphaPlusEnabled = true;
@@ -32,12 +36,12 @@ export default class FeaturesStore {
 
         this.featuresFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.featuresFetchAsync = handleAsyncError(error);
       });
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.featuresFetchAsync);
   }
 }

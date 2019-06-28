@@ -9,12 +9,12 @@ import { OTAModal } from '../../../partials';
 const Tooltip = ({ shown, hide }) => {
   const content = (
     <div>
-      <div className='text-center'>
-        HERE OTA Connect automatically provisions and activates your devices the first time they come online. Here, you can create and manage the provisioning keys linked to your account.
+      <div className="text-center">
+        {'HERE OTA Connect automatically provisions and activates your devices the first time they come online. '}
+        {'Here, you can create and manage the provisioning keys linked to your account.'}
       </div>
-
-      <div className='body-actions'>
-        <Button htmlType='button' className='btn-primary' onClick={hide} id='provisioning-keys-got-it'>
+      <div className="body-actions">
+        <Button htmlType="button" className="btn-primary" onClick={hide} id="provisioning-keys-got-it">
           Got it
         </Button>
       </div>
@@ -23,14 +23,14 @@ const Tooltip = ({ shown, hide }) => {
 
   return (
     <OTAModal
-      title={
-        <div className='heading'>
-          <div className='internal'>Provisioning Keys</div>
+      title={(
+        <div className="heading">
+          <div className="internal">Provisioning Keys</div>
         </div>
-      }
+      )}
       content={content}
       visible={shown}
-      className='provisioning-key-tooltip'
+      className="provisioning-key-tooltip"
     />
   );
 };

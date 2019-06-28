@@ -16,15 +16,17 @@ class Device extends Component {
   sequencerShown = false;
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
+    match: PropTypes.shape({})
   };
 
   componentDidMount() {
-    const { softwareStore, devicesStore } = this.props.stores;
-    const { params } = this.props.match;
+    const { stores, match } = this.props;
+    const { softwareStore, devicesStore } = stores;
+    const { params } = match;
     softwareStore.page = 'device';
     devicesStore.fetchDevice(params.id);
     softwareStore.fetchPackages();
@@ -36,10 +38,11 @@ class Device extends Component {
   }
 
   componentWillUnmount() {
-    const { softwareStore, devicesStore, hardwareStore } = this.props.stores;
-    devicesStore._reset();
-    softwareStore._reset();
-    hardwareStore._reset();
+    const { stores } = this.props;
+    const { softwareStore, devicesStore, hardwareStore } = stores;
+    devicesStore.reset();
+    softwareStore.reset();
+    hardwareStore.reset();
   }
 
   render() {

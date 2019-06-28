@@ -26,17 +26,29 @@ import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
 export default class UserStore {
   @observable userFetchAsync = {};
+
   @observable contractsFetchAsync = {};
+
   @observable contractsAcceptAsync = {};
+
   @observable userUpdateAsync = {};
+
   @observable userChangePasswordAsync = {};
+
   @observable userActiveDeviceCountFetch = {};
+
   @observable user = {};
+
   @observable userOrganizationName = '';
+
   @observable userOrganizationNamespace = '';
+
   @observable userOrganizations = [];
+
   @observable userOrganizationUsers = [];
+
   @observable contracts = undefined;
+
   @observable ifLogout = false;
 
   constructor() {
@@ -126,15 +138,15 @@ export default class UserStore {
     return axios
       .get(API_USER_DETAILS)
       .then(
-        function(response) {
+        (response) => {
           this.user = response.data;
           this.userFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.userFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -143,16 +155,16 @@ export default class UserStore {
     return axios
       .get(API_USER_CONTRACTS)
       .then(
-        function(response) {
+        (response) => {
           this.contracts = response.data;
           this.contractsFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.contracts = {};
           this.contractsFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -162,7 +174,7 @@ export default class UserStore {
 
   isTermsAccepted() {
     const terms = _.find(this.contracts, obj => contracts.default[obj.contract]);
-    return terms && terms.accepted ? true : false;
+    return !!(terms && terms.accepted);
   }
 
   acceptContract(path) {
@@ -170,12 +182,12 @@ export default class UserStore {
     resetAsync(this.contractsAcceptAsync, true);
     return axios
       .put(`${API_USER_CONTRACTS}/${encodedPath}`)
-      .then(response => {
+      .then((response) => {
         this.fetchContracts();
-          this.contractsAcceptAsync = handleAsyncSuccess(response);
-          return true;
+        this.contractsAcceptAsync = handleAsyncSuccess(response);
+        return true;
       })
-      .catch(error => {
+      .catch((error) => {
         this.contractsAcceptAsync = handleAsyncError(error);
         return false;
       });
@@ -187,15 +199,15 @@ export default class UserStore {
     return axios
       .put(API_USER_UPDATE, data)
       .then(
-        function(response) {
+        (response) => {
           this.fetchUser();
           this.userUpdateAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.userUpdateAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -205,14 +217,14 @@ export default class UserStore {
     return axios
       .post(API_USER_CHANGE_PASSWORD)
       .then(
-        function(response) {
+        (response) => {
           this.userChangePasswordAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.userChangePasswordAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -220,17 +232,17 @@ export default class UserStore {
     const objKey = startTime.format('YYYYMM');
     resetAsync(this.activatedDevicesFetchAsync.get(objKey), true);
     return axios
-      .get(API_USER_ACTIVE_DEVICE_COUNT + '?start=' + encodeURIComponent(startTime.toISOString()) + '&end=' + encodeURIComponent(endTime.toISOString()))
+      .get(`${API_USER_ACTIVE_DEVICE_COUNT}?start=${encodeURIComponent(startTime.toISOString())}&end=${encodeURIComponent(endTime.toISOString())}`)
       .then(
-        function(response) {
+        (response) => {
           this.activatedDevices.set(objKey, response.data);
           this.activatedDevicesFetchAsync.set(objKey, handleAsyncSuccess(response));
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.activatedDevicesFetchAsync.set(objKey, handleAsyncError(error));
-        }.bind(this),
+        },
       );
   }
 
@@ -238,40 +250,40 @@ export default class UserStore {
     const objKey = startTime.format('YYYYMM');
     resetAsync(this.activeDevicesFetchAsync.get(objKey), true);
     return axios
-      .get(API_USER_ACTIVE_DEVICE_COUNT + '?start=' + encodeURIComponent(new Date(0).toISOString()) + '&end=' + encodeURIComponent(endTime.toISOString()))
+      .get(`${API_USER_ACTIVE_DEVICE_COUNT}?start=${encodeURIComponent(new Date(0).toISOString())}&end=${encodeURIComponent(endTime.toISOString())}`)
       .then(
-        function(response) {
+        (response) => {
           this.activeDevices.set(objKey, response.data);
           this.activeDevicesFetchAsync.set(objKey, handleAsyncSuccess(response));
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.activeDevicesFetchAsync.set(objKey, handleAsyncError(error));
-        }.bind(this),
+        },
       );
   }
 
   fetchConnectedDeviceCount(year, month) {
-    const objKey = year + '' + month;
+    const objKey = `${year}${month}`;
     resetAsync(this.connectedDevicesFetchAsync.get(objKey), true);
     return axios
-      .get(API_USER_DEVICES_SEEN + '/' + year + '/' + month)
+      .get(`${API_USER_DEVICES_SEEN}/${year}/${month}`)
       .then(
-        function(response) {
+        (response) => {
           this.connectedDevices.set(objKey, response.data);
           this.connectedDevicesFetchAsync.set(objKey, handleAsyncSuccess(response));
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.connectedDevicesFetchAsync.set(objKey, handleAsyncError(error));
-        }.bind(this),
+        },
       );
   }
 
-  _setUsageInitial(startTime, monthsCount) {
-    for (let i = 0; i <= monthsCount; i++) {
+  setUsageInitial(startTime, monthsCount) {
+    for (let i = 0; i <= monthsCount; i += 1) {
       const startTimeTmp = moment(startTime).add(i, 'months');
       const objKey = startTimeTmp.format('YYYYMM');
       this.activatedDevices.set(objKey, {});
@@ -286,11 +298,11 @@ export default class UserStore {
     }
   }
 
-  _deleteCookie(name) {
-    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  _deleteCookie = (name) => {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
   }
 
-  _logout() {
+  logout() {
     this.ifLogout = true;
   }
 }

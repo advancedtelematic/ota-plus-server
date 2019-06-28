@@ -2,27 +2,30 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { contains } from '../../utils/Helpers';
 import SelectableListItem from './SelectableListItem';
 
-const headerHeight = 28;
-
 @observer
 class SelectableList extends Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
   render() {
     const { items, selectedItems, onItemSelect } = this.props;
     return (
-      <div className='ios-list' ref='list'>
+      <div className="ios-list" ref={this.listRef}>
         {items ? (
-          _.map(items, item => {
+          _.map(items, (item) => {
             const isSelected = contains(selectedItems, item);
             return <SelectableListItem key={item} item={item} onItemSelect={onItemSelect} selected={isSelected} />;
           })
         ) : (
-          <span className='content-empty'>
-            <div className='wrapper-center'>{'No matching items found.'}</div>
+          <span className="content-empty">
+            <div className="wrapper-center">{'No matching items found.'}</div>
           </span>
         )}
       </div>
@@ -37,8 +40,8 @@ class SelectableList extends Component {
  */
 
 SelectableList.propTypes = {
-  items: PropTypes.array.isRequired,
-  selectedItems: PropTypes.object.isRequired,
+  items: PropTypes.shape({}).isRequired,
+  selectedItems: PropTypes.shape({}).isRequired,
   onItemSelect: PropTypes.func.isRequired,
 };
 

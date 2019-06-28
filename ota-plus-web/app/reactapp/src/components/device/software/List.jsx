@@ -9,26 +9,33 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
-import { Loader } from '../../../partials';
 import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
+// eslint-disable-next-line max-len
 const autoUpdateInfo = 'Automatic update activated. The latest version of this package will automatically be installed on this device.';
 
 @inject('stores')
 @observer
 class List extends Component {
   @observable firstShownIndex = 0;
+
   @observable lastShownIndex = 50;
+
   @observable fakeHeaderLetter = null;
+
   @observable fakeHeaderTopPosition = 0;
+
   @observable tmpIntervalId = null;
+
   @observable preparedPackages = {};
 
   constructor(props) {
     super(props);
+    this.listRef = React.createRef();
+    this.dropzoneRef = React.createRef();
     const { softwareStore } = props.stores;
-    this.packagesChangeHandler = observe(softwareStore, change => {
+    this.packagesChangeHandler = observe(softwareStore, (change) => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -38,45 +45,32 @@ class List extends Component {
       }
     });
   }
+
+  componentDidMount() {
+    this.listRef.current.addEventListener('scroll', this.listScroll);
+    this.listScroll();
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { softwareStore } = nextProps.stores;
     if (nextProps.triggerPackages) {
       this.selectPackagesToDisplay();
       this.addUnmanagedPackage();
     }
   }
-  componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
-    this.listScroll();
-  }
+
   componentWillUnmount() {
     this.packagesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
-  }
-  highlightInstalledPackage(pack) {
-    const { animatedScroll } = this.props;
-    const list = this.refs.list;
-    if (list) {
-      let top = null;
-      const scrollTop = list.scrollTop;
-      if (pack.unmanaged) {
-        top = document.querySelector('.software-panel__item-unmanaged').getBoundingClientRect().top;
-      } else {
-        top = document.getElementById('button-package-' + pack.id.name).getBoundingClientRect().top;
-      }
-      const scrollTo = scrollTop + top - 225;
-      animatedScroll(list, scrollTo, 800);
-    }
+    this.listRef.current.removeEventListener('scroll', this.listScroll);
   }
 
   generateHeadersPositions = () => {
-    const headers = this.refs.list.getElementsByClassName('header');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const headers = this.listRef.current.getElementsByClassName('header');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       headers,
-      header => {
-        let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (header) => {
+        const position = header.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -85,13 +79,13 @@ class List extends Component {
   };
 
   generateItemsPositions = () => {
-    const items = this.refs.list.getElementsByClassName('item');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const items = this.listRef.current.getElementsByClassName('item');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       items,
-      item => {
-        let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (item) => {
+        const position = item.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -100,11 +94,11 @@ class List extends Component {
   };
 
   listScroll = () => {
-    if (this.refs.list) {
+    if (this.listRef.current) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
-      let scrollTop = this.refs.list.scrollTop;
-      let listHeight = this.refs.list.getBoundingClientRect().height;
+      let { scrollTop } = this.listRef.current;
+      const listHeight = this.listRef.current.getBoundingClientRect().height;
       let newFakeHeaderLetter = this.fakeHeaderLetter;
       let firstShownIndex = null;
       let lastShownIndex = null;
@@ -114,10 +108,11 @@ class List extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(this.preparedPackages)[index];
             return true;
-          } else if (scrollTop >= position - headerHeight) {
+          } if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
             return true;
           }
+          return null;
         },
         this,
       );
@@ -139,34 +134,55 @@ class List extends Component {
     }
   };
 
-  startIntervalListScroll() {
-    clearInterval(this.tmpIntervalId);
-    const that = this;
-    let intervalId = setInterval(() => {
-      that.listScroll();
-    }, 10);
-    this.tmpIntervalId = intervalId;
-  }
-  stopIntervalListScroll() {
-    clearInterval(this.tmpIntervalId);
-    this.tmpIntervalId = null;
-  }
-  clearArray(array) {
+  /* eslint-disable no-param-reassign */
+  clearArray = (array) => {
     _.map(array, (item, index) => {
       if (!array[index].length) {
         delete array[index];
       }
     });
   }
+
+  highlightInstalledPackage(pack) {
+    const { animatedScroll } = this.props;
+    if (this.listRef.current) {
+      let top = null;
+      const { scrollTop } = this.listRef.current;
+      if (pack.unmanaged) {
+        const { top: newTop } = document.querySelector('.software-panel__item-unmanaged').getBoundingClientRect();
+        top = newTop;
+      } else {
+        const { top: newTop } = document.getElementById(`button-package-${pack.id.name}`).getBoundingClientRect();
+        top = newTop;
+      }
+      const scrollTo = scrollTop + top - 225;
+      animatedScroll(this.listRef.current, scrollTo, 800);
+    }
+  }
+
+  startIntervalListScroll() {
+    clearInterval(this.tmpIntervalId);
+    const that = this;
+    const intervalId = setInterval(() => {
+      that.listScroll();
+    }, 10);
+    this.tmpIntervalId = intervalId;
+  }
+
+  stopIntervalListScroll() {
+    clearInterval(this.tmpIntervalId);
+    this.tmpIntervalId = null;
+  }
+
   selectPackagesToDisplay() {
-    const { devicesStore, softwareStore, hardwareStore } = this.props.stores;
-    let preparedPackages = softwareStore.preparedPackages;
-    let dirPacks = {};
+    const { stores } = this.props;
+    const { devicesStore, softwareStore, hardwareStore } = stores;
+    const dirPacks = {};
     _.map(softwareStore.preparedPackages, (packages, letter) => {
       dirPacks[letter] = [];
-      _.map(packages, (pack, index) => {
-        let filteredVersions = [];
-        _.each(pack.versions, (version, i) => {
+      _.map(packages, (pack) => {
+        const filteredVersions = [];
+        _.each(pack.versions, (version) => {
           if (_.includes(version.hardwareIds, hardwareStore.activeEcu.hardwareId)) {
             filteredVersions.push(version);
           }
@@ -175,22 +191,19 @@ class List extends Component {
           pack.versions = filteredVersions;
           dirPacks[letter].push(pack);
         }
-        _.map(pack.versions, (version, ind) => {
+        _.map(pack.versions, (version) => {
           if (hardwareStore.activeEcu.type === 'primary') {
-            if (version.filepath === devicesStore._getPrimaryFilepath()) {
-              let packAdded = _.some(dirPacks[letter], (item, index) => {
-                return item.packageName == version.id.name;
-              });
+            if (version.filepath === devicesStore.getPrimaryFilepath()) {
+              const packAdded = _.some(dirPacks[letter], item => item.packageName === version.id.name);
               if (!packAdded) {
                 dirPacks[letter].push(pack);
               }
             }
           } else {
-            _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj, ind) => {
-              if (version.filepath === secondaryObj.image.filepath && hardwareStore.activeEcu.serial === secondaryObj.id) {
-                let packAdded = _.some(dirPacks[letter], (item, index) => {
-                  return item.packageName == version.id.name;
-                });
+            _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj) => {
+              if (version.filepath === secondaryObj.image.filepath
+                && hardwareStore.activeEcu.serial === secondaryObj.id) {
+                const packAdded = _.some(dirPacks[letter], item => item.packageName === version.id.name);
                 if (!packAdded) {
                   dirPacks[letter].push(pack);
                 }
@@ -203,29 +216,31 @@ class List extends Component {
     this.clearArray(dirPacks);
     this.preparedPackages = dirPacks;
   }
+
   addUnmanagedPackage() {
-    const { devicesStore, softwareStore, hardwareStore } = this.props.stores;
-    let preparedPackages = this.preparedPackages;
+    const { stores } = this.props;
+    const { devicesStore, softwareStore, hardwareStore } = stores;
+    const { preparedPackages } = this;
     let ecuObject = null;
     switch (hardwareStore.activeEcu.type) {
       case 'secondary':
-        ecuObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
+        ecuObject = devicesStore.getSecondaryBySerial(hardwareStore.activeEcu.serial);
         break;
       case 'primary':
-        ecuObject = devicesStore._getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
+        ecuObject = devicesStore.getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
         break;
       default:
         break;
     }
-    const filepath = ecuObject.image.filepath;
+    const { filepath } = ecuObject.image;
     const hash = ecuObject.image.hash.sha256;
-    const size = ecuObject.image.size;
-    const pack = softwareStore._getInstalledPackage(filepath, hardwareStore.activeEcu.hardwareId);
+    const { size } = ecuObject.image;
+    const pack = softwareStore.getInstalledPackage(filepath, hardwareStore.activeEcu.hardwareId);
     if (!pack) {
-      let unmanagedPack = {
-        filepath: filepath,
-        size: size,
-        hash: hash,
+      const unmanagedPack = {
+        filepath,
+        size,
+        hash,
         unmanaged: true,
       };
       if (_.isUndefined(preparedPackages['#'])) {
@@ -234,11 +249,13 @@ class List extends Component {
       preparedPackages['#'].push(unmanagedPack);
     }
   }
+
   checkQueued(version) {
-    const { devicesStore, hardwareStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore, hardwareStore } = stores;
     let queuedPackage = null;
-    let serial = hardwareStore.activeEcu.serial;
-    _.each(devicesStore.multiTargetUpdates, (update, i) => {
+    const { serial } = hardwareStore.activeEcu;
+    _.each(devicesStore.multiTargetUpdates, (update) => {
       if (!_.isEmpty(update.targets[serial])) {
         if (update.targets[serial].image.filepath === version.filepath) {
           queuedPackage = version.filepath;
@@ -247,16 +264,18 @@ class List extends Component {
     });
     return queuedPackage;
   }
+
   checkInstalled(version) {
-    const { devicesStore, hardwareStore } = this.props.stores;
-    const device = devicesStore.device;
+    const { stores } = this.props;
+    const { devicesStore, hardwareStore } = stores;
+    const { device } = devicesStore;
     let installedPackage = null;
     if (hardwareStore.activeEcu.type === 'primary') {
-      if (version.filepath === devicesStore._getPrimaryFilepath()) {
+      if (version.filepath === devicesStore.getPrimaryFilepath()) {
         installedPackage = version.id.version;
       }
     } else {
-      _.each(device.directorAttributes.secondary, (secondaryObj, ind) => {
+      _.each(device.directorAttributes.secondary, (secondaryObj) => {
         if (secondaryObj.id === hardwareStore.activeEcu.serial && version.filepath === secondaryObj.image.filepath) {
           installedPackage = version.id.version;
         }
@@ -264,107 +283,131 @@ class List extends Component {
     }
     return installedPackage;
   }
+  /* eslint-enable no-param-reassign */
+
   render() {
-    const { onFileDrop, togglePackageAutoUpdate, showPackageDetails, expandedPackageName, togglePackage } = this.props;
-    const { devicesStore } = this.props.stores;
+    const {
+      onFileDrop,
+      togglePackageAutoUpdate,
+      showPackageDetails,
+      expandedPackageName,
+      togglePackage,
+      stores
+    } = this.props;
+    const { devicesStore } = stores;
     const { device } = devicesStore;
-    const preparedPackages = this.preparedPackages;
+    const { preparedPackages } = this;
     return (
-      <div className='ios-list' ref='list'>
-        <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
-          <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
+      <div className="ios-list" ref={this.listRef}>
+        <Dropzone
+          ref={this.dropzoneRef}
+          onDrop={onFileDrop}
+          multiple={false}
+          disableClick
+          className="dnd-zone"
+          activeClassName="dnd-zone-active"
+        >
+          <div className="fake-header" style={{ top: this.fakeHeaderTopPosition }}>
             {this.fakeHeaderLetter}
           </div>
-          {_.map(preparedPackages, (packages, letter) => {
-            return (
-              <span key={letter}>
-                <div className='header'>{letter}</div>
-                {_.map(packages, (pack, index) => {
-                  const that = this;
-                  let queuedPackage = null;
-                  let installedPackage = null;
-                  _.each(pack.versions, (version, i) => {
-                    if (!installedPackage) {
-                      installedPackage = this.checkInstalled(version);
-                    }
-                    if (!queuedPackage) {
-                      queuedPackage = this.checkQueued(version);
-                    }
-                  });
-                  return (
-                    <span key={index}>
-                      <ListItem
-                        pack={pack}
-                        device={device}
-                        queuedPackage={queuedPackage}
-                        installedPackage={installedPackage}
-                        isSelected={expandedPackageName === pack.packageName}
-                        togglePackage={togglePackage}
-                        toggleAutoInstall={togglePackageAutoUpdate}
-                        showPackageDetails={showPackageDetails}
-                      />
-                      <VelocityTransitionGroup
-                        enter={{
-                          animation: 'slideDown',
-                          begin: () => {
-                            that.startIntervalListScroll();
-                          },
-                          complete: () => {
-                            that.stopIntervalListScroll();
-                          },
-                        }}
-                        leave={{
-                          animation: 'slideUp',
-                          begin: () => {
-                            that.startIntervalListScroll();
-                          },
-                          complete: () => {
-                            that.stopIntervalListScroll();
-                          },
-                        }}
-                      >
-                        {expandedPackageName === pack.packageName ? (
-                          <ul className='software-panel__details'>
-                            <li>
-                              <VelocityTransitionGroup
-                                enter={{
-                                  animation: 'slideDown',
-                                  begin: () => {
-                                    that.startIntervalListScroll();
-                                  },
-                                  complete: () => {
-                                    that.stopIntervalListScroll();
-                                  },
-                                }}
-                                leave={{
-                                  animation: 'slideUp',
-                                  begin: () => {
-                                    that.startIntervalListScroll();
-                                  },
-                                  complete: () => {
-                                    that.stopIntervalListScroll();
-                                  },
-                                }}
-                              >
-                                {pack.isAutoInstallEnabled ? <div className='software-panel__auto-update-tip'>{autoUpdateInfo}</div> : null}
-                              </VelocityTransitionGroup>
-                            </li>
-                            <li>
-                              <ul className='software-panel__versions'>
-                                {_.map(pack.versions, (version, i) => {
-                                  return <ListItemVersion version={version} queuedPackage={queuedPackage} installedPackage={installedPackage} showPackageDetails={showPackageDetails} key={i} />;
-                                })}
-                              </ul>
-                            </li>
-                          </ul>
-                        ) : null}
-                      </VelocityTransitionGroup>
-                    </span>
-                  );
-                })}
-              </span>
-            );
-          })}
+          {_.map(preparedPackages, (packages, letter) => (
+            <span key={letter}>
+              <div className="header">{letter}</div>
+              {_.map(packages, (pack, index) => {
+                const that = this;
+                let queuedPackage = null;
+                let installedPackage = null;
+                _.each(pack.versions, (version) => {
+                  if (!installedPackage) {
+                    installedPackage = this.checkInstalled(version);
+                  }
+                  if (!queuedPackage) {
+                    queuedPackage = this.checkQueued(version);
+                  }
+                });
+                return (
+                  <span key={index}>
+                    <ListItem
+                      pack={pack}
+                      device={device}
+                      queuedPackage={queuedPackage}
+                      installedPackage={installedPackage}
+                      isSelected={expandedPackageName === pack.packageName}
+                      togglePackage={togglePackage}
+                      toggleAutoInstall={togglePackageAutoUpdate}
+                      showPackageDetails={showPackageDetails}
+                    />
+                    <VelocityTransitionGroup
+                      enter={{
+                        animation: 'slideDown',
+                        begin: () => {
+                          that.startIntervalListScroll();
+                        },
+                        complete: () => {
+                          that.stopIntervalListScroll();
+                        },
+                      }}
+                      leave={{
+                        animation: 'slideUp',
+                        begin: () => {
+                          that.startIntervalListScroll();
+                        },
+                        complete: () => {
+                          that.stopIntervalListScroll();
+                        },
+                      }}
+                    >
+                      {expandedPackageName === pack.packageName ? (
+                        <ul className="software-panel__details">
+                          <li>
+                            <VelocityTransitionGroup
+                              enter={{
+                                animation: 'slideDown',
+                                begin: () => {
+                                  that.startIntervalListScroll();
+                                },
+                                complete: () => {
+                                  that.stopIntervalListScroll();
+                                },
+                              }}
+                              leave={{
+                                animation: 'slideUp',
+                                begin: () => {
+                                  that.startIntervalListScroll();
+                                },
+                                complete: () => {
+                                  that.stopIntervalListScroll();
+                                },
+                              }}
+                            >
+                              {pack.isAutoInstallEnabled ? (
+                                <div className="software-panel__auto-update-tip">
+                                  {autoUpdateInfo}
+                                </div>
+                              ) : null}
+                            </VelocityTransitionGroup>
+                          </li>
+                          <li>
+                            <ul className="software-panel__versions">
+                              {_.map(pack.versions, (version, i) => (
+                                <ListItemVersion
+                                  version={version}
+                                  queuedPackage={queuedPackage}
+                                  installedPackage={installedPackage}
+                                  showPackageDetails={showPackageDetails}
+                                  key={i}
+                                />
+                              ))}
+                            </ul>
+                          </li>
+                        </ul>
+                      ) : null}
+                    </VelocityTransitionGroup>
+                  </span>
+                );
+              })}
+            </span>
+          ))}
         </Dropzone>
       </div>
     );
@@ -372,10 +415,14 @@ class List extends Component {
 }
 
 List.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   onFileDrop: PropTypes.func.isRequired,
   togglePackageAutoUpdate: PropTypes.func.isRequired,
   showPackageDetails: PropTypes.func.isRequired,
+  triggerPackages: PropTypes.func,
+  animatedScroll: PropTypes.func,
+  expandedPackageName: PropTypes.string,
+  togglePackage: PropTypes.func
 };
 
 export default withAnimatedScroll(List);

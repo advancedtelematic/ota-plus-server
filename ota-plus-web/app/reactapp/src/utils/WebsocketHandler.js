@@ -9,34 +9,35 @@ const WebsocketHandler = function (wsUrl, stores) {
   this.init = function () {
     this.websocket = new WebSocket(wsUrl);
 
-    this.websocket.onopen = function() {
+    this.websocket.onopen = function () {
       console.log('WebSocket: OPEN');
     };
 
-    this.websocket.onmessage = function(msg) {
+    this.websocket.onmessage = function (msg) {
       const eventObj = JSON.parse(msg.data);
       const { type, event: data } = eventObj;
       const { campaignsStore, devicesStore, softwareStore } = stores;
       console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
       switch (type) {
         case WEB_EVENTS.DEVICE_SEEN:
-          devicesStore._updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
+          devicesStore.updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
           if (window.location.href.indexOf('/device/') > -1) {
             devicesStore.fetchDirectorAttributes(data.uuid);
-            devicesStore._updateStatus(data.uuid, UPDATE_STATUSES.DOWNLOADING);
+            devicesStore.updateStatus(data.uuid, UPDATE_STATUSES.DOWNLOADING);
           }
           break;
         case WEB_EVENTS.DEVICE_UPDATE_STATUS:
-          devicesStore._updateDeviceData(data.device, { deviceStatus: data.status });
+          devicesStore.updateDeviceData(data.device, { deviceStatus: data.status });
           break;
         case WEB_EVENTS.DEVICE_CREATED:
-          devicesStore._addDevice(data);
-          if (document.cookie.indexOf('fireworksPageAcknowledged') == -1 && devicesStore.devicesInitialTotalCount === 1) {
+          devicesStore.addDevice(data);
+          if (document.cookie.indexOf('fireworksPageAcknowledged') === -1
+            && devicesStore.devicesInitialTotalCount === 1) {
             window.location = '#/fireworks';
           }
           break;
         case WEB_EVENTS.TUF_TARGET_ADDED:
-          softwareStore._addPackage(data);
+          softwareStore.addPackage(data);
           break;
         case WEB_EVENTS.PACKAGE_BLACKLISTED:
           softwareStore.fetchBlacklist();
@@ -60,23 +61,23 @@ const WebsocketHandler = function (wsUrl, stores) {
           devicesStore.fetchDeviceNetworkInfo(data.uuid, { isFromWs: true });
           break;
         case WEB_EVENTS.DEVICE_EVENT_MESSAGE:
-          devicesStore._updateStatus(data.deviceUuid, UPDATE_STATUSES.INSTALLING);
+          devicesStore.updateStatus(data.deviceUuid, UPDATE_STATUSES.INSTALLING);
           devicesStore.fetchEvents(data.deviceUuid);
           break;
         default:
-          console.log('Unhandled event type: ' + eventObj.type);
+          console.log(`Unhandled event type: ${eventObj.type}`);
           break;
       }
     };
 
-    this.websocket.onclose = function(msg) {
+    this.websocket.onclose = function (msg) {
       console.log(`WebSocket: CLOSE - msg.code: ${msg.code}, stop: ${stop}`);
       if (msg.code === 1006 && !stop) {
         base.init();
       }
     };
 
-    this.websocket.onerror = function(msg) {
+    this.websocket.onerror = function (msg) {
       console.log('WebSocket: ERROR - msg: ', msg);
       console.log(msg);
       stop = true;
@@ -84,7 +85,7 @@ const WebsocketHandler = function (wsUrl, stores) {
     };
   };
 
-  this.destroy = function() {
+  this.destroy = function () {
     this.websocket.close();
   };
 };

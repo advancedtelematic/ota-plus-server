@@ -16,7 +16,7 @@ const title = 'Devices';
 @observer
 class Devices extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
   };
 
@@ -34,8 +34,8 @@ class Devices extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { devicesStore, groupsStore } = stores;
-    devicesStore._reset();
-    groupsStore._reset();
+    devicesStore.reset();
+    groupsStore.reset();
   }
 
   render() {

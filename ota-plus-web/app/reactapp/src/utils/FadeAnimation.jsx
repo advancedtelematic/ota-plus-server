@@ -1,25 +1,28 @@
 /** @format */
 
 import PropTypes from 'prop-types';
-import React, { Component, defaultProps } from 'react';
+import React from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
 
-class FadeAnimation extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { runOnMount } = this.props;
-    return (
-      <VelocityTransitionGroup component='span' enter={{ animation: 'fadeIn', display: this.props.display }} leave={{ animation: 'fadeOut', display: this.props.display }} runOnMount={runOnMount}>
-        {this.props.children}
-      </VelocityTransitionGroup>
-    );
-  }
-}
+const FadeAnimation = ({ runOnMount, display, children }) => (
+  <VelocityTransitionGroup
+    component="span"
+    enter={{ animation: 'fadeIn', display }}
+    leave={{ animation: 'fadeOut', display }}
+    runOnMount={runOnMount}
+  >
+    {children}
+  </VelocityTransitionGroup>
+);
 
 FadeAnimation.propTypes = {
   display: PropTypes.string,
+  runOnMount: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ])
 };
 
 FadeAnimation.defaultProps = {

@@ -13,8 +13,8 @@ import { Loader } from '../../partials';
 @observer
 class List extends Component {
   render() {
-    const { selectGroup, onDeviceDrop } = this.props;
-    const { groupsStore } = this.props.stores;
+    const { selectGroup, onDeviceDrop, stores } = this.props;
+    const { groupsStore } = stores;
     return (
       <span>
         <VelocityTransitionGroup
@@ -25,16 +25,16 @@ class List extends Component {
             animation: 'slideUp',
             duration: 400,
           }}
-          component='span'
+          component="span"
         >
-          <div className='groups-panel__default-list'>
+          <div className="groups-panel__default-list">
             {groupsStore.groupsFetchAsync.isFetching ? (
-              <div className='wrapper-center'>
+              <div className="wrapper-center">
                 <Loader />
               </div>
             ) : (
               <InfiniteScroll
-                className='wrapper-infinite-scroll'
+                className="wrapper-infinite-scroll"
                 hasMore={groupsStore.hasMoreGroups}
                 isLoading={groupsStore.groupsFetchAsync.isFetching}
                 useWindow={false}
@@ -43,16 +43,24 @@ class List extends Component {
                 }}
               >
                 {!_.isEmpty(groupsStore.preparedGroups)
-                  ? _.map(groupsStore.preparedGroups, groups => {
-                      return _.map(groups, (group, index) => {
-                        const isSelected = groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName;
-                        let isSmart = false;
-                        if (group.groupType === 'dynamic') {
-                          isSmart = true;
-                        }
-                        return <ListItem group={group} selectGroup={selectGroup} isSelected={isSelected} onDeviceDrop={onDeviceDrop} key={group.groupName} isSmart={isSmart} />;
-                      });
-                    })
+                  ? _.map(groupsStore.preparedGroups, groups => _.map(groups, (group) => {
+                    const { type, groupName } = groupsStore.selectedGroup;
+                    const isSelected = type === 'real' && groupName === group.groupName;
+                    let isSmart = false;
+                    if (group.groupType === 'dynamic') {
+                      isSmart = true;
+                    }
+                    return (
+                      <ListItem
+                        group={group}
+                        selectGroup={selectGroup}
+                        isSelected={isSelected}
+                        onDeviceDrop={onDeviceDrop}
+                        key={group.groupName}
+                        isSmart={isSmart}
+                      />
+                    );
+                  }))
                   : null}
               </InfiniteScroll>
             )}
@@ -64,7 +72,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   selectGroup: PropTypes.func.isRequired,
   onDeviceDrop: PropTypes.func.isRequired,
 };

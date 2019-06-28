@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const SubHeader = props => {
+const SubHeader = (props) => {
   const { children, className, shouldSubHeaderBeHidden } = props;
 
   return (
@@ -15,7 +15,7 @@ const SubHeader = props => {
 
 SubHeader.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  children: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   shouldSubHeaderBeHidden: PropTypes.bool,
 };
 

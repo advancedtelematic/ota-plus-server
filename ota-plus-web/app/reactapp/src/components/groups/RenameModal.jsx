@@ -14,29 +14,16 @@ import { OTAModal, AsyncResponse, OTAForm, FormInput } from '../../partials';
 @observer
 class RenameModal extends Component {
   @observable submitButtonDisabled = true;
-  enableButton = () => {
-    this.submitButtonDisabled = false;
-  };
-  disableButton = () => {
-    this.submitButtonDisabled = true;
-  };
-  submitForm = e => {
-    if (e) e.preventDefault();
-    const { stores } = this.props;
-    const { groupsStore } = stores;
-    const data = serialize(document.querySelector('#group-rename-form'), { hash: true });
-    groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
-  };
-  handleRenameResponse = () => {
-    const { hide } = this.props;
-    hide();
-  };
 
   constructor(props) {
     super(props);
     const { groupsStore } = props.stores;
 
-    this.renameHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsRenameAsync', this.handleRenameResponse.bind(this));
+    this.renameHandler = new AsyncStatusCallbackHandler(
+      groupsStore,
+      'groupsRenameAsync',
+      this.handleRenameResponse.bind(this)
+    );
   }
 
   componentWillMount() {
@@ -47,33 +34,63 @@ class RenameModal extends Component {
     this.renameHandler();
   }
 
+  enableButton = () => {
+    this.submitButtonDisabled = false;
+  };
+
+  disableButton = () => {
+    this.submitButtonDisabled = true;
+  };
+
+  submitForm = (e) => {
+    if (e) e.preventDefault();
+    const { stores } = this.props;
+    const { groupsStore } = stores;
+    const data = serialize(document.querySelector('#group-rename-form'), { hash: true });
+    groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
+  };
+
+  handleRenameResponse = () => {
+    const { hide } = this.props;
+    hide();
+  };
+
   render() {
     const { stores, shown, hide } = this.props;
     const { groupsStore } = stores;
     const form = (
-      <OTAForm onSubmit={this.submitForm} id='group-rename-form'>
-        <AsyncResponse handledStatus='error' action={groupsStore.groupsRenameAsync} errorMsg={groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null} />
-        <Row className='row'>
+      <OTAForm onSubmit={this.submitForm} id="group-rename-form">
+        <AsyncResponse
+          handledStatus="error"
+          action={groupsStore.groupsRenameAsync}
+          errorMsg={groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null}
+        />
+        <Row className="row">
           <Col span={16}>
-            <div className='group-name-input'>
+            <div className="group-name-input">
               <FormInput
                 onValid={this.enableButton}
                 onInvalid={this.disableButton}
-                name='groupName'
-                className='input-wrapper'
+                name="groupName"
+                className="input-wrapper"
                 isEditable={!groupsStore.groupsRenameAsync.isFetching}
-                title='Group Name'
-                label='Group Name'
-                placeholder='Name'
+                title="Group Name"
+                label="Group Name"
+                placeholder="Name"
                 defaultValue={groupsStore.selectedGroup.groupName}
               />
             </div>
           </Col>
         </Row>
-        <Row className='row'>
+        <Row className="row">
           <Col span={24}>
-            <div className='body-actions'>
-              <button disabled={this.submitButtonDisabled || groupsStore.groupsRenameAsync.isFetching} className='btn-primary' id='add'>
+            <div className="body-actions">
+              <button
+                type="button"
+                disabled={this.submitButtonDisabled || groupsStore.groupsRenameAsync.isFetching}
+                className="btn-primary"
+                id="add"
+              >
                 Edit
               </button>
             </div>
@@ -84,14 +101,14 @@ class RenameModal extends Component {
     return (
       <OTAModal
         title={<div>Rename group</div>}
-        topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+        topActions={(
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
+              <img src="/assets/img/icons/close.svg" alt="Icon" />
             </div>
           </div>
-        }
-        className='create-group-modal'
+        )}
+        className="create-group-modal"
         content={form}
         visible={shown}
       />
@@ -102,7 +119,7 @@ class RenameModal extends Component {
 RenameModal.propTypes = {
   shown: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default RenameModal;

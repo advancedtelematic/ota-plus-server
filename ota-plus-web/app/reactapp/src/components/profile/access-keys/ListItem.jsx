@@ -7,10 +7,6 @@ import { observer, inject } from 'mobx-react';
 @inject('stores')
 @observer
 class ListItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   onDownload = () => {
     const { provisioningKey, stores } = this.props;
     const { provisioningStore } = stores;
@@ -22,23 +18,23 @@ class ListItem extends Component {
     const validFrom = new Date(provisioningKey.validFrom);
     const validUntil = new Date(provisioningKey.validUntil);
     return (
-      <div className='box' id={'key-' + provisioningKey.description}>
-        <div className='column'>
+      <div className="box" id={`key-${provisioningKey.description}`}>
+        <div className="column">
           {provisioningKey.description}
         </div>
-        <div className='column'>
+        <div className="column">
           {`Start date: ${validFrom.toDateString()}  ${validFrom.toLocaleTimeString()}`}
         </div>
-        <div className='column'>
+        <div className="column">
           {`End date: ${validUntil.toDateString()} ${validUntil.toLocaleTimeString()}`}
         </div>
-        <div className='column'>
-          <img 
-            src='/assets/img/icons/download_key.svg' 
-            className='download-key-link' 
-            id={`download-key-link-${provisioningKey.description}`} 
-            alt='Icon' 
-            onClick={this.onDownload} 
+        <div className="column">
+          <img
+            src="/assets/img/icons/download_key.svg"
+            className="download-key-link"
+            id={`download-key-link-${provisioningKey.description}`}
+            alt="Icon"
+            onClick={this.onDownload}
           />
         </div>
       </div>
@@ -47,7 +43,8 @@ class ListItem extends Component {
 }
 
 ListItem.propTypes = {
-  provisioningKey: PropTypes.object.isRequired,
+  stores: PropTypes.shape({}),
+  provisioningKey: PropTypes.shape({}).isRequired,
 };
 
 export default ListItem;

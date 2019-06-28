@@ -11,20 +11,23 @@ import { InfiniteScroll } from '../../../utils';
 @observer
 class MtuList extends Component {
   render() {
-    const { device } = this.props;
-    const { softwareStore, devicesStore } = this.props.stores;
+    const { device, stores } = this.props;
+    const { softwareStore, devicesStore } = stores;
     const emptyHistory = (
-      <div className='wrapper-center'>
-        <span className={'overview-panel__empty'}>
+      <div className="wrapper-center">
+        <span className="overview-panel__empty">
           {'This device hasn\'t installed any updates yet.'}
         </span>
       </div>
     );
     return (
-      <ul className='overview-panel__list'>
+      <ul className="overview-panel__list">
         <InfiniteScroll
-          className='wrapper-infinite-scroll'
-          hasMore={softwareStore.packagesHistoryCurrentPage < softwareStore.packagesHistoryTotalCount / softwareStore.packagesHistoryLimit}
+          className="wrapper-infinite-scroll"
+          hasMore={
+            softwareStore.packagesHistoryCurrentPage
+            < (softwareStore.packagesHistoryTotalCount / softwareStore.packagesHistoryLimit)
+          }
           isLoading={softwareStore.packagesHistoryFetchAsync.isFetching}
           useWindow={false}
           loadMore={() => {
@@ -33,13 +36,17 @@ class MtuList extends Component {
         >
           {softwareStore.packagesHistory.length
             ? _.map(softwareStore.packagesHistory, (historyItem, index) => {
-                let itemEvents = devicesStore.deviceEvents.filter(el => {
+              if (!_.isEmpty(devicesStore.deviceEvents)) {
+                const itemEvents = devicesStore.deviceEvents.filter((el) => {
                   if (el.payload.correlationId) {
                     return el.payload.correlationId === historyItem.correlationId;
                   }
+                  return null;
                 });
                 return <MtuListItem item={historyItem} key={index} events={itemEvents} />;
-              })
+              }
+              return null;
+            })
             : emptyHistory}
         </InfiniteScroll>
       </ul>
@@ -48,8 +55,8 @@ class MtuList extends Component {
 }
 
 MtuList.propTypes = {
-  stores: PropTypes.object,
-  device: PropTypes.object.isRequired,
+  stores: PropTypes.shape({}),
+  device: PropTypes.shape({}).isRequired,
 };
 
 export default MtuList;

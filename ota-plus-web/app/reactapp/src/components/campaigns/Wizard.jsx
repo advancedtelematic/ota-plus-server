@@ -10,7 +10,15 @@ import Form from 'formsy-antd';
 import { Button, Tag } from 'antd';
 import { OTAModal, Loader, SearchBar } from '../../partials';
 import UpdateDetails from '../updates/UpdateDetails';
-import { WizardStep1, WizardStep2, WizardStep3, WizardStep4, WizardStep5, WizardStep6, WizardStep7 } from './wizardSteps';
+import {
+  WizardStep1,
+  WizardStep2,
+  WizardStep3,
+  WizardStep4,
+  WizardStep5,
+  WizardStep6,
+  WizardStep7
+} from './wizardSteps';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -124,42 +132,99 @@ const initialFilterValue = null;
 @observer
 class Wizard extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     skipStep: PropTypes.string,
-    minimizedWizards: PropTypes.array,
+    minimizedWizards: PropTypes.arrayOf(PropTypes.shape({})),
     wizardIdentifier: PropTypes.number,
     hideWizard: PropTypes.func,
     toggleWizard: PropTypes.func,
   };
+
   @observable currentStepId = initialCurrentStepId;
+
   @observable wizardSteps = [];
+
   @observable wizardData = initialWizardData;
+
   @observable filterValue = initialFilterValue;
+
   @observable currentDetails = null;
+
   @observable rawSelectedPacks = [];
+
   @observable approvalNeeded = false;
+
   versions = {};
-  toggleFullScreen = e => {
+
+  constructor(props) {
+    super(props);
+    const { campaignsStore, featuresStore } = props.stores;
+
+    this.wizardSteps = featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep;
+
+    this.campaignCreatedHandler = observe(campaignsStore, (change) => {
+      if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
+        const wizardMinimized = _.find(props.minimizedWizards, wizard => wizard.id === props.wizardIdentifier);
+        if (!wizardMinimized) {
+          if (change.object[change.name].status !== 'error') {
+            this.handleCampaignCreated();
+          }
+        }
+      }
+    });
+  }
+
+  componentWillMount() {
+    const { stores, skipStep, wizardIdentifier } = this.props;
+    const { groupsStore } = stores;
+    const { selectedGroup } = groupsStore;
+
+    if (skipStep) {
+      this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
+      groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
+        this.wizardData.groups = this.wizardData.groups.concat(selectedGroup);
+      });
+    }
+
+    const matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${wizardIdentifier}`));
+    if (matrixFromStorage) {
+      localStorage.removeItem(`matrix-${wizardIdentifier}`);
+    }
+  }
+
+  componentWillUnmount() {
+    this.campaignCreatedHandler();
+  }
+
+  toggleFullScreen = (e) => {
     const { stores } = this.props;
     const { campaignsStore } = stores;
     if (e) e.preventDefault();
-    if (!campaignsStore.fullScreenMode) campaignsStore._showFullScreen();
-    else campaignsStore._hideFullScreen();
+    if (!campaignsStore.fullScreenMode) {
+      campaignsStore.showFullScreen();
+    } else {
+      campaignsStore.hideFullScreen();
+    }
   };
+
   isFirstStep = () => this.currentStepId === 0;
+
   isLastStep = () => this.currentStepId === this.wizardSteps.length - 1;
+
   prevStep = () => {
     if (!this.isFirstStep()) {
       this.currentStepId = this.currentStepId - 1;
       this.filterValue = initialFilterValue;
     }
   };
+
   nextStep = () => {
     if (this.verifyIfPreviousStepsFinished(this.currentStepId) && !this.isLastStep()) {
       this.currentStepId = this.currentStepId + 1;
       this.filterValue = initialFilterValue;
     }
   };
+
   jumpToStep = (stepId, e) => {
     e.preventDefault();
     if (stepId < this.currentStepId || this.verifyIfPreviousStepsFinished(stepId - 1)) {
@@ -167,19 +232,26 @@ class Wizard extends Component {
       this.filterValue = initialFilterValue;
     }
   };
+
+  // eslint-disable-next-line max-len
   verifyIfPreviousStepsFinished = stepId => !_.find(this.wizardSteps, (step, index) => index <= stepId && step.isFinished === false);
+
   markStepAsFinished = () => {
     this.wizardSteps[this.currentStepId].isFinished = true;
   };
+
   markStepAsNotFinished = () => {
     this.wizardSteps[this.currentStepId].isFinished = false;
   };
-  setWizardData = data => {
+
+  setWizardData = (data) => {
     Object.assign(this.wizardData, data);
   };
-  setApprove = boolean => {
+
+  setApprove = (boolean) => {
     this.approvalNeeded = boolean;
   };
+
   launch = () => {
     const { stores, wizardIdentifier } = this.props;
     const { campaignsStore } = stores;
@@ -214,7 +286,7 @@ class Wizard extends Component {
     campaignsStore.fetchStatusCounts();
   };
 
-  changeFilter = (filterValue)=> {
+  changeFilter = (filterValue) => {
     this.filterValue = filterValue;
   };
 
@@ -245,46 +317,6 @@ class Wizard extends Component {
     return currentMetadata;
   };
 
-  constructor(props) {
-    super(props);
-    const { campaignsStore, featuresStore } = props.stores;
-
-    this.wizardSteps = featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep;
-
-    this.campaignCreatedHandler = observe(campaignsStore, change => {
-      if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
-        const wizardMinimized = _.find(props.minimizedWizards, wizard => wizard.id === props.wizardIdentifier);
-        if (!wizardMinimized) {
-          if (change.object[change.name].status !== 'error') {
-            this.handleCampaignCreated();
-          }
-        }
-      }
-    });
-  }
-
-  componentWillMount() {
-    const { stores, skipStep, wizardIdentifier } = this.props;
-    const { groupsStore } = stores;
-    const { selectedGroup } = groupsStore;
-
-    if (skipStep) {
-      this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
-      groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
-        this.wizardData.groups = this.wizardData.groups.concat(selectedGroup);
-      });
-    }
-
-    const matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${wizardIdentifier}`));
-    if (matrixFromStorage) {
-      localStorage.removeItem(`matrix-${wizardIdentifier}`);
-    }
-  }
-
-  componentWillUnmount() {
-    this.campaignCreatedHandler();
-  }
-
   render() {
     const { stores, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
     const { campaignsStore, featuresStore } = stores;
@@ -294,10 +326,10 @@ class Wizard extends Component {
     const wizardMinimized = _.find(minimizedWizards, wizard => wizard.id === wizardIdentifier);
 
     const modalContent = this.currentDetails ? (
-      <div className='campaigns-wizard'>
-        <div className='draggable-content'>
-          <div className='internal-body'>
-            <div className='content-step'>
+      <div className="campaigns-wizard">
+        <div className="draggable-content">
+          <div className="internal-body">
+            <div className="content-step">
               <UpdateDetails updateItem={this.currentDetails} isEditable={false} />
             </div>
           </div>
@@ -305,30 +337,30 @@ class Wizard extends Component {
       </div>
     ) : (
       <div className={`campaigns-wizard campaigns-wizard-${wizardIdentifier}${campaignsStore.fullScreenMode ? ' full-screen' : ''}`}>
-        <div className='draggable-content'>
-          <div className='internal-body'>
-            <div className='stepper'>
-              <div className='wrapper-steps-no'>
+        <div className="draggable-content">
+          <div className="internal-body">
+            <div className="stepper">
+              <div className="wrapper-steps-no">
                 {_.map(this.wizardSteps, (step, index) => (
                   <div className={`step${this.currentStepId === index ? ' active' : ''}`} key={`wizard-step-${index}`}>
                     <button
-                      type='button'
-                      className='dot'
-                      onClick={e => {
+                      type="button"
+                      className="dot"
+                      onClick={(e) => {
                         this.jumpToStep(index, e);
                       }}
                     >
                       {index + 1}
                     </button>
-                    <div className='stepnum'>{step.title}</div>
-                    {(alphaPlusEnabled && step.hasAlphaTag) && <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>}
+                    <div className="stepnum">{step.title}</div>
+                    {(alphaPlusEnabled && step.hasAlphaTag) && <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>}
                   </div>
                 ))}
               </div>
             </div>
             <div className={`content-step step-${currentStep.name}`}>
               {campaignsStore.campaignsSingleFetchAsync.isFetching ? (
-                <div className='wrapper-center'>
+                <div className="wrapper-center">
                   <Loader />
                 </div>
               ) : (
@@ -352,18 +384,30 @@ class Wizard extends Component {
               )}
               {currentStep.isSearchBarShown && (
                 <Form>
-                  <SearchBar value={this.filterValue} changeAction={this.changeFilter} id='wizard-search-package' />
+                  <SearchBar value={this.filterValue} changeAction={this.changeFilter} id="wizard-search-package" />
                 </Form>
               )}
             </div>
-            <div className='body-actions'>
-              <div className='wrapper-confirm'>
+            <div className="body-actions">
+              <div className="wrapper-confirm">
                 {this.isLastStep() ? (
-                  <Button htmlType='button' className='btn-primary btn-red' id='wizard-launch-button' onClick={this.launch} disabled={!currentStep.isFinished}>
+                  <Button
+                    htmlType="button"
+                    className="btn-primary btn-red"
+                    id="wizard-launch-button"
+                    onClick={this.launch}
+                    disabled={!currentStep.isFinished}
+                  >
                     Launch
                   </Button>
                 ) : (
-                  <Button htmlType='button' className='btn-primary' id='next-step' onClick={this.nextStep} disabled={!currentStep.isFinished}>
+                  <Button
+                    htmlType="button"
+                    className="btn-primary"
+                    id="next-step"
+                    onClick={this.nextStep}
+                    disabled={!currentStep.isFinished}
+                  >
                     Next
                   </Button>
                 )}
@@ -371,36 +415,40 @@ class Wizard extends Component {
             </div>
           </div>
         </div>
-        <div id='dropdown-render' />
+        <div id="dropdown-render" />
       </div>
     );
     return (
       <OTAModal
         title={!this.currentDetails ? 'Add new campaign' : 'Campaign update details'}
-        topActions={
-          <div className='top-actions'>
-            <div className='wizard-minimize' onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)} id='minimize-wizard'>
-              <img src='/assets/img/icons/minimize.svg' alt='Icon' />
+        topActions={(
+          <div className="top-actions">
+            <div
+              className="wizard-minimize"
+              onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)}
+              id="minimize-wizard"
+            >
+              <img src="/assets/img/icons/minimize.svg" alt="Icon" />
             </div>
             <div className={`toggle-fullscreen${campaignsStore.fullScreenMode ? ' on' : ' off'}`} onClick={this.toggleFullScreen}>
               {campaignsStore.fullScreenMode ? (
-                <img src='/assets/img/icons/exit-fullscreen.svg' alt='Icon' id='exit-fullscreen-wizard' />
+                <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
               ) : (
-                <img src='/assets/img/icons/maximize.svg' alt='Icon' id='enter-fullscreen-wizard' />
+                <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
               )}
             </div>
             <div
-              id='close-wizard'
-              className='wizard-close'
-              onClick={e => {
+              id="close-wizard"
+              className="wizard-close"
+              onClick={(e) => {
                 if (this.currentDetails) this.hideUpdateDetails();
                 else hideWizard(wizardIdentifier, e);
               }}
             >
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+              <img src="/assets/img/icons/close.svg" alt="Icon" />
             </div>
           </div>
-        }
+)}
         content={modalContent}
         visible={!wizardMinimized}
         onRequestClose={() => {

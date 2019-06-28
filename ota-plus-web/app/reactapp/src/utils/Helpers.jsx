@@ -26,9 +26,9 @@ const contains = (objects, item, compareAs) => {
   return _.isObject(_.find(objects, compare));
 };
 
-const prepareUpdateObject = data => {
+const prepareUpdateObject = (data) => {
   const targets = {};
-  _.each(data, item => {
+  _.each(data, (item) => {
     targets[item.hardwareId] = {
       from: {
         target: item.from.target,

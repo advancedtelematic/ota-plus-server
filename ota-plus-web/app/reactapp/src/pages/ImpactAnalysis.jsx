@@ -12,7 +12,7 @@ const title = 'Impact analysis';
 @observer
 class ImpactAnalysis extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
   };
 
   componentDidMount() {

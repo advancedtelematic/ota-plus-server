@@ -9,7 +9,6 @@ import LinkWrapper from './LinkWrapper';
 import ConvertTime from './ConvertTime';
 import ConvertBytes from './ConvertBytes';
 import InfiniteScroll from './InfiniteScroll';
-// import PageFactory from './PageFactory';
 
 export {
   FadeAnimation,
@@ -20,6 +19,5 @@ export {
   LinkWrapper,
   ConvertTime,
   ConvertBytes,
-  InfiniteScroll,
-  // PageFactory,
+  InfiniteScroll
 };

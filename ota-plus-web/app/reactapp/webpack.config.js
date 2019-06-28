@@ -8,8 +8,6 @@ const jsOutput = 'assets/js';
 const cssOutput = 'assets/css';
 
 const isProduction = process.env.NODE_ENV === 'development';
-/** must be the file containing ant.design's variables */
-const themeColors = './css/ota-default/variables-ant.scss';
 
 const cleaningOptions = {
   root: path.resolve(__dirname, '..'),
@@ -21,7 +19,11 @@ const foldersToClean = [jsOutput, cssOutput];
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  entry: [resolve(__dirname, 'src/main.jsx'), resolve(__dirname, 'style/style.scss'), resolve(__dirname, 'style/unlogged.scss')],
+  entry: [
+    resolve(__dirname, 'src/main.jsx'),
+    resolve(__dirname, 'style/style.scss'),
+    resolve(__dirname, 'style/unlogged.scss')
+  ],
   output: {
     path: resolve(__dirname, '..', jsOutput),
     filename: 'app.js',
@@ -35,12 +37,6 @@ module.exports = {
   devtool: 'source-map',
   module: {
     rules: [
-      /*{
-                enforce: "pre",
-                test: /.(js|jsx)?$/,
-                exclude: /node_modules/,
-                loader: "eslint-loader",
-            },*/
       {
         test: /.(js|jsx)?$/,
         exclude: /node_modules/,

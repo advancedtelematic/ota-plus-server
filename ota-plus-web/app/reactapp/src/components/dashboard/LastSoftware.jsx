@@ -2,10 +2,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Loader } from '../../partials';
 import _ from 'lodash';
+import { Loader } from '../../partials';
 import LastSoftwareItem from './LastSoftwareItem';
 import NoItems from './NoItems';
 
@@ -13,22 +12,20 @@ import NoItems from './NoItems';
 @observer
 class LastSoftware extends Component {
   render() {
-    const { showSoftwareCreateModal } = this.props;
-    const { softwareStore } = this.props.stores;
+    const { showSoftwareCreateModal, stores } = this.props;
+    const { softwareStore } = stores;
 
     const { lastPackages } = softwareStore;
     return (
       <span style={{ height: '100%' }}>
         {softwareStore.packagesFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
-            <Loader className='dark' />
+          <div className="wrapper-center">
+            <Loader className="dark" />
           </div>
         ) : Object.keys(lastPackages).length ? (
-          _.map(lastPackages, (pack, index) => {
-            return <LastSoftwareItem key={index} pack={pack} />;
-          })
+          _.map(lastPackages, (pack, index) => <LastSoftwareItem key={index} pack={pack} />)
         ) : (
-          <NoItems itemType={'package'} createItem={showSoftwareCreateModal} />
+          <NoItems itemType="package" createItem={showSoftwareCreateModal} />
         )}
       </span>
     );
@@ -36,7 +33,8 @@ class LastSoftware extends Component {
 }
 
 LastSoftware.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
+  showSoftwareCreateModal: PropTypes.func.isRequired,
 };
 
 export default LastSoftware;

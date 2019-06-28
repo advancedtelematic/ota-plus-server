@@ -27,15 +27,16 @@ class Updates extends Component {
 
   constructor(props) {
     super(props);
+    this.componentRef = React.createRef();
     this.state = { pageNumber: PAGE_NUMBER_DEFAULT };
   }
 
-  showCreateModal = e => {
+  showCreateModal = (e) => {
     if (e) e.preventDefault();
     this.createModalShown = true;
   };
 
-  hideCreateModal = e => {
+  hideCreateModal = (e) => {
     if (e) e.preventDefault();
     this.createModalShown = false;
   };
@@ -46,7 +47,7 @@ class Updates extends Component {
     this.selectedUpdate = update;
   };
 
-  hideUpdateDetails = e => {
+  hideUpdateDetails = (e) => {
     if (e) e.preventDefault();
     this.updateDetailsShown = false;
   };
@@ -72,19 +73,20 @@ class Updates extends Component {
 
   render() {
     const { pageNumber } = this.state;
-    const { updatesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { updatesStore } = stores;
     const { isFetching } = updatesStore.updatesFetchAsync;
     return (
-      <span ref='component'>
+      <span ref={this.componentRef}>
         {isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : (updatesStore.updatesTotalCount || updatesStore.updateFilter.length) ? (
           <span>
             <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
             <UpdateList showUpdateDetails={this.showUpdateDetails} />
-            <div className='ant-pagination__wrapper clearfix'>
+            <div className="ant-pagination__wrapper clearfix">
               <Pagination
                 current={pageNumber}
                 defaultPageSize={UPDATES_LIMIT_PER_PAGE}
@@ -97,12 +99,12 @@ class Updates extends Component {
         ) : (
           <span>
             <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
-            <div className='wrapper-center'>
-              <div className='page-intro'>
-                <img src='/assets/img/icons/white/packages.svg' alt='Icon' />
+            <div className="wrapper-center">
+              <div className="page-intro">
+                <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
                 <div>{"You haven't created any updates yet."}</div>
                 <div>
-                  <a href='#' className='add-button light' id='add-new-update' onClick={this.showCreateModal}>
+                  <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>
                     <span>{'Create Update'}</span>
                   </a>
                 </div>
@@ -110,15 +112,26 @@ class Updates extends Component {
             </div>
           </span>
         )}
-        {this.createModalShown ? <UpdateCreateModal shown={this.createModalShown} hide={this.hideCreateModal} /> : null}
-        {this.updateDetailsShown ? <UpdateCreateModal shown={this.updateDetailsShown} hide={this.hideUpdateDetails} showDetails={this.selectedUpdate} /> : null}
+        {this.createModalShown ? (
+          <UpdateCreateModal
+            shown={this.createModalShown}
+            hide={this.hideCreateModal}
+          />
+        ) : null}
+        {this.updateDetailsShown ? (
+          <UpdateCreateModal
+            shown={this.updateDetailsShown}
+            hide={this.hideUpdateDetails}
+            showDetails={this.selectedUpdate}
+          />
+        ) : null}
       </span>
     );
   }
 }
 
 Updates.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default Updates;

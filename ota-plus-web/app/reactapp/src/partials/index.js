@@ -13,7 +13,7 @@ import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
-import { OTAForm } from './OTAForm';
+import OTAForm from './OTAForm';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';

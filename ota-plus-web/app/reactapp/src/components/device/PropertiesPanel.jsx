@@ -15,11 +15,11 @@ class PropertiesPanel extends Component {
     const { stores, installPackage } = this.props;
     const { softwareStore } = stores;
     return (
-      <div className='properties-panel'>
-        <div className='properties-panel__header darkgrey-header'>{title}</div>
-        <div className='properties-panel__wrapper'>
+      <div className="properties-panel">
+        <div className="properties-panel__header darkgrey-header">{title}</div>
+        <div className="properties-panel__wrapper">
           {softwareStore.packagesFetchAsync.isFetching ? (
-            <div className='wrapper-center'>
+            <div className="wrapper-center">
               <Loader />
             </div>
           ) : (
@@ -32,7 +32,7 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   installPackage: PropTypes.func.isRequired,
 };
 

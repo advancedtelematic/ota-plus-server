@@ -12,8 +12,8 @@ const title = 'Software Repository';
 @observer
 class SoftwareRepository extends Component {
   static propTypes = {
-    stores: PropTypes.object.isRequired,
-    match: PropTypes.object,
+    stores: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}),
   };
 
   componentDidMount() {
@@ -26,7 +26,7 @@ class SoftwareRepository extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { softwareStore } = stores;
-    softwareStore._reset();
+    softwareStore.reset();
   }
 
   render() {

@@ -36,7 +36,7 @@ class ListItemVersion extends Component {
       };
     }
 
-    /* 
+    /*
      *  ToDo: according to softwareStore._getAllStorage()
      */
     let versionCompatibilityData = null;
@@ -46,65 +46,69 @@ class ListItemVersion extends Component {
 
     const directorBlock = (
       <span>
-        <div className='c-package__sw-box'>
-          <div className='c-package__heading'>Version</div>
-          <div className='c-package__sw-wrapper'>
+        <div className="c-package__sw-box">
+          <div className="c-package__heading">Version</div>
+          <div className="c-package__sw-wrapper">
             {version.customExists ? (
               <span>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Version:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-version-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Version:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-version-${version.id.version.substring(0, 8)}`}>
                     {version.id.version}
                   </span>
                 </div>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Created at:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-created-at-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Created at:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-created-at-${version.id.version.substring(0, 8)}`}>
                     {moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
                   </span>
                 </div>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Updated at:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-updated-at-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Updated at:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-updated-at-${version.id.version.substring(0, 8)}`}>
                     {moment(version.updatedAt).format('ddd MMM DD YYYY, h:mm:ss A')}
                   </span>
                 </div>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Hash:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Hash:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
                     {version.packageHash}
                   </span>
                 </div>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Length:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Length:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
                     {version.targetLength}
                   </span>
                 </div>
               </span>
             ) : (
               <span>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Hash:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Hash:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
                     {version.packageHash}
                   </span>
                 </div>
-                <div className='c-package__sw-row'>
-                  <span className='c-package__sw-subtitle'>Length:</span>
-                  <span className='c-package__sw-value' id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
+                <div className="c-package__sw-row">
+                  <span className="c-package__sw-subtitle">Length:</span>
+                  <span className="c-package__sw-value" id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
                     {version.targetLength}
                   </span>
                 </div>
               </span>
             )}
           </div>
-          <div className='c-package__sw-wrapper'>
-            <div className='c-package__hw-row'>
-              <div className='c-package__sw-subtitle'>ECU types:</div>
-              <div className='c-package__hw-value'>
+          <div className="c-package__sw-wrapper">
+            <div className="c-package__hw-row">
+              <div className="c-package__sw-subtitle">ECU types:</div>
+              <div className="c-package__hw-value">
                 {_.map(version.hardwareIds, (hardwareId, index) => (
-                  <span className='app-label' key={index} id={`package-${packageName}-app-label-${version.id.version.substring(0, 8)}`}>
+                  <span
+                    className="app-label"
+                    key={index}
+                    id={`package-${packageName}-app-label-${version.id.version.substring(0, 8)}`}
+                  >
                     {hardwareId}
                   </span>
                 ))}
@@ -112,43 +116,57 @@ class ListItemVersion extends Component {
             </div>
           </div>
           {version.targetFormat && (
-            <div className='c-package__sw-wrapper'>
-              <div className='c-package__hw-row'>
-                <div className='c-package__sw-subtitle'>Format:</div>
-                <div className='c-package__hw-value'>
-                  <span className='app-label' id={`package-${packageName}-app-format-${version.id.version.substring(0, 8)}`}>
+            <div className="c-package__sw-wrapper">
+              <div className="c-package__hw-row">
+                <div className="c-package__sw-subtitle">Format:</div>
+                <div className="c-package__hw-value">
+                  <span
+                    className="app-label"
+                    id={`package-${packageName}-app-format-${version.id.version.substring(0, 8)}`}
+                  >
                     {version.targetFormat}
                   </span>
                 </div>
               </div>
             </div>
           )}
-          <div className='c-package__sw-wrapper'>
-            <div className='c-package__subheading'>
-              Installed on <span id={`package-${packageName}-installed-on-ecus-count-${version.id.version.substring(0, 8)}`}>{version.installedOnEcus}</span> ECU(s)
+          <div className="c-package__sw-wrapper">
+            <div className="c-package__subheading">
+              {'Installed on '}
+              <span id={`package-${packageName}-installed-on-ecus-count-${version.id.version.substring(0, 8)}`}>
+                {version.installedOnEcus}
+              </span>
+              {' ECU(s)'}
             </div>
           </div>
         </div>
-        <div className='c-package__inner-box'>
-          <div className='c-package__comment'>
-            <div className='c-package__heading'>Comment</div>
-            <textarea className='c-package__comment-value' name='comment-stick' rows='5' value={version.comment} disabled id={`package-${packageName}-comment-${version.id.version.substring(0, 8)}`} />
+        <div className="c-package__inner-box">
+          <div className="c-package__comment">
+            <div className="c-package__heading">Comment</div>
+            <textarea
+              className="c-package__comment-value"
+              name="comment-stick"
+              rows="5"
+              value={version.comment}
+              disabled
+              id={`package-${packageName}-comment-${version.id.version.substring(0, 8)}`}
+            />
           </div>
           {alphaPlusEnabled && (
-            <div className='c-package__manager'>
-              <div className='c-package__heading'>Dependencies</div>
-              <div className='c-package__manager-content'>
+            <div className="c-package__manager">
+              <div className="c-package__heading">Dependencies</div>
+              <div className="c-package__manager-content">
                 {versionCompatibilityData && versionCompatibilityData.required.length && (
-                  <div className='c-package__relations' id='required'>
-                    <div className='c-package__heading'>Required</div>
+                  <div className="c-package__relations" id="required">
+                    <div className="c-package__heading">Required</div>
                     {_.map(versionCompatibilityData.required, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
-                        <div className='c-package__relation-item' key={i}>
-                          <span className='c-package__relation-name' id={`required-${pack.id.name}`}>
+                        <div className="c-package__relation-item" key={i}>
+                          <span className="c-package__relation-name" id={`required-${pack.id.name}`}>
                             {pack.id.name}
                           </span>
-                          <span className='c-package__relation-version' id={`required-${pack.id.version}`}>
+                          <span className="c-package__relation-version" id={`required-${pack.id.version}`}>
                             {pack.id.version}
                           </span>
                         </div>
@@ -157,16 +175,16 @@ class ListItemVersion extends Component {
                   </div>
                 )}
                 {versionCompatibilityData && versionCompatibilityData.incompatibles.length && (
-                  <div className='c-package__relations' id='not-compatible'>
-                    <div className='c-package__heading'>Not compatible:</div>
+                  <div className="c-package__relations" id="not-compatible">
+                    <div className="c-package__heading">Not compatible:</div>
                     {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
-                        <div className='c-package__relation-item' key={i}>
-                          <span className='c-package__relation-name' id={`not-compatible-${pack.id.name}`}>
+                        <div className="c-package__relation-item" key={i}>
+                          <span className="c-package__relation-name" id={`not-compatible-${pack.id.name}`}>
                             {pack.id.name}
                           </span>
-                          <span className='c-package__relation-version' id={`not-compatible-${pack.id.version}`}>
+                          <span className="c-package__relation-version" id={`not-compatible-${pack.id.version}`}>
                             {pack.id.version}
                           </span>
                         </div>
@@ -175,16 +193,16 @@ class ListItemVersion extends Component {
                   </div>
                 )}
                 {versionCompatibilityData && versionCompatibilityData.requiredBy.length && (
-                  <div className='c-package__relations' id='required-by'>
-                    <div className='c-package__heading'>Required by:</div>
+                  <div className="c-package__relations" id="required-by">
+                    <div className="c-package__heading">Required by:</div>
                     {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
-                        <div className='c-package__relation-item' key={i}>
-                          <span className='c-package__relation-name' id={`required-by-${pack.id.version}`}>
+                        <div className="c-package__relation-item" key={i}>
+                          <span className="c-package__relation-name" id={`required-by-${pack.id.version}`}>
                             {pack.id.name}
                           </span>
-                          <span className='c-package__relation-version' id={`required-by-${pack.id.version}`}>
+                          <span className="c-package__relation-version" id={`required-by-${pack.id.version}`}>
                             {pack.id.version}
                           </span>
                         </div>
@@ -196,27 +214,46 @@ class ListItemVersion extends Component {
             </div>
           )}
         </div>
-        <div className='dots' onClick={this.showSubmenu} id={`package-${packageName}-comment-overlay-${version.id.version.substring(0, 8)}`}>
+        <div
+          className="dots"
+          onClick={this.showSubmenu}
+          id={`package-${packageName}-comment-overlay-${version.id.version.substring(0, 8)}`}
+        >
           <span />
           <span />
           <span />
 
           {this.isShown && (
             <Dropdown hideSubmenu={this.hideSubmenu}>
-              <li className='package-dropdown-item'>
-                <a className='package-dropdown-item' href='#' id='edit-comment' onClick={showEditComment.bind(this, version.filepath, version.comment)}>
+              <li className="package-dropdown-item">
+                <a
+                  className="package-dropdown-item"
+                  href="#"
+                  id="edit-comment"
+                  onClick={showEditComment.bind(this, version.filepath, version.comment)}
+                >
                   {'Edit comment'}
                 </a>
               </li>
               {alphaPlusEnabled && (
-                <li className='package-dropdown-item'>
-                  <a className='package-dropdown-item' href='#' id='show-dependencies' onClick={showDependenciesManager.bind(this, version)}>
+                <li className="package-dropdown-item">
+                  <a
+                    className="package-dropdown-item"
+                    href="#"
+                    id="show-dependencies"
+                    onClick={showDependenciesManager.bind(this, version)}
+                  >
                     {'Edit dependencies'}
                   </a>
                 </li>
               )}
-              <li className='package-dropdown-item'>
-                <a className='package-dropdown-item' href='#' id='delete-version' onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
+              <li className="package-dropdown-item">
+                <a
+                  className="package-dropdown-item"
+                  href="#"
+                  id="delete-version"
+                  onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}
+                >
                   {'Delete version'}
                 </a>
               </li>
@@ -227,7 +264,12 @@ class ListItemVersion extends Component {
     );
     return (
       <span>
-        <li className='c-package__version-item' data-installed={version.installedOnEcus} style={borderStyle} id={`package-${packageName}-version`}>
+        <li
+          className="c-package__version-item"
+          data-installed={version.installedOnEcus}
+          style={borderStyle}
+          id={`package-${packageName}-version`}
+        >
           {directorBlock}
         </li>
       </span>
@@ -236,8 +278,11 @@ class ListItemVersion extends Component {
 }
 
 ListItemVersion.propTypes = {
-  version: PropTypes.object.isRequired,
-  stores: PropTypes.object,
+  version: PropTypes.shape({}).isRequired,
+  stores: PropTypes.shape({}),
+  showDependenciesManager: PropTypes.func,
+  showDeleteConfirmation: PropTypes.func,
+  showEditComment: PropTypes.func
 };
 
 export default ListItemVersion;

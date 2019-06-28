@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
 import { VelocityTransitionGroup } from 'velocity-react';
-import { Statistics, CampaignSummary } from '.';
+import Statistics from './Statistics';
+import CampaignSummary from './CampaignSummary';
 
 import { assets } from '../../config';
 
