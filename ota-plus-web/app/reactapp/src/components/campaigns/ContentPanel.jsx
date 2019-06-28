@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { List, ListHeader } from '.';
 import Loader from '../../partials/Loader';
 
-import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB } from '../../config';
+import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB, CAMPAIGNS_PAGE_NUMBER_DEFAULT } from '../../config';
 import TabNavigation from '../../partials/TabNavigation';
 
 @inject('stores')
@@ -33,9 +33,13 @@ class ContentPanel extends Component {
     super(props);
     const { stores } = props;
     const { campaignsStore } = stores;
+    this.state = { pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT };
 
     this.cancelObserveTabChange = observe(campaignsStore, change => {
       this.applyTab(change);
+      if (change.name === 'campaignsFilter') {
+        this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
+      }
     });
 
     onBecomeObserved(this, 'activeTab', this.resumeScope);
@@ -51,6 +55,7 @@ class ContentPanel extends Component {
   };
 
   onPageChange = (page, pageSize) => {
+    this.setState({ pageNumber: page });
     this.fetchCampaignsData(page, pageSize);
   };
 
@@ -61,7 +66,8 @@ class ContentPanel extends Component {
     const { campaignsStore } = stores;
 
     this.setActive(campaignsStore.activeTab);
-    this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
+    this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
+    this.fetchCampaignsData(CAMPAIGNS_PAGE_NUMBER_DEFAULT, CAMPAIGNS_LIMIT_PER_PAGE);
 
     /**
      * Since data set of latest active campaigns is a subset of all campaigns in general
@@ -82,6 +88,7 @@ class ContentPanel extends Component {
 
     if (name === 'activeTab') {
       this.setActive(newValue);
+      this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
       this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
     }
   };
@@ -94,10 +101,12 @@ class ContentPanel extends Component {
   };
 
   render() {
+    const { pageNumber } = this.state;
     const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
       stores, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
     const { campaignsFetchAsync, campaigns } = campaignsStore;
+
     return (
       <span>
         <div>
@@ -121,6 +130,7 @@ class ContentPanel extends Component {
         {campaigns.length > 0 && (
           <div className="ant-pagination__wrapper clearfix">
             <Pagination
+              current={pageNumber}
               defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
               onChange={this.onPageChange}
               total={campaignsStore.count[this.activeTab]}
