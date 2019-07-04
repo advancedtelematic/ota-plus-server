@@ -58,7 +58,7 @@ export default class DevicesStore {
   @observable deviceApprovalPendingCampaigns = {
     campaigns: [],
   };
-  @observable deviceEvents = {};
+  @observable deviceEvents = [];
   @observable deviceNetworkInfo = {
     local_ipv4: null,
     mac: null,
