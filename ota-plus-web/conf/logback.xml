@@ -1,3 +1,14 @@
 <configuration>
   <include resource="logback-libats.xml"/>
+
+  <appender name="json-appender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="com.advancedtelematic.libats.logging.JsonEncoder">
+      <msgIsJson>true</msgIsJson>
+    </encoder>
+  </appender>
+
+  <logger name="com.advancedtelematic.libats.http.logging.RequestLoggingActor" level="INFO" additivity="false">
+    <appender-ref ref="json-appender" />
+  </logger>
+
 </configuration>
