@@ -58,7 +58,7 @@ export default class DevicesStore {
   @observable deviceApprovalPendingCampaigns = {
     campaigns: [],
   };
-  @observable deviceEvents = {};
+  @observable deviceEvents = [];
   @observable deviceNetworkInfo = {
     local_ipv4: null,
     mac: null,
@@ -188,22 +188,21 @@ export default class DevicesStore {
       });
   }
 
-  loadMoreDevices(filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE) {
+  loadMoreDevices = (filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE, newOffset) => {
     resetAsync(this.devicesLoadMoreAsync, true);
-    this.devicesCurrentPage++;
-    this.devicesOffset += limit;
-    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${newOffset}`;
     if (groupId && groupId === 'ungrouped') apiAddress += `&grouped=false`;
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
       .get(apiAddress)
-      .then(response => {
-        // TODO: lodash uniq doesn't seem to work properly under certain conditions
-        this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
+      .then((response) => {
+        this.devicesCurrentPage += 1;
+        this.devicesOffset = newOffset;
+        this.devices = _.uniqBy(this.devices.concat(response.data.values), item => item.uuid);
         this._prepareDevices();
         this.devicesLoadMoreAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.devicesLoadMoreAsync = handleAsyncError(error);
       });
   }

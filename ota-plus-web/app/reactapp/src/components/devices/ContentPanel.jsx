@@ -3,15 +3,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { observe } from 'mobx';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+import InfiniteScroll from 'react-infinite-scroller';
+
 import DeviceItem from './Item';
 import BarChart from './BarChart';
 import Stats from './Stats';
 import ContentPanelHeader from './ContentPanelHeader';
 import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
-import { InfiniteScroll } from '../../utils';
 import { ARTIFICIAL } from '../../constants';
+import { DEVICES_LIMIT_PER_PAGE } from '../../config';
 
 const connections = {
   live: {
@@ -79,7 +83,25 @@ class ContentPanel extends Component {
     showDeleteConfirmation: PropTypes.func,
     showEditName: PropTypes.func,
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.deviceOffsetsFetchedCache = new Set();
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    this.cancelObserveDevicesStoreChange = observe(devicesStore, (change) => {
+      if (change.name === 'devicesTotalCount' || change.name === 'devicesFilter') {
+        // we have to clean the cache when device count or filter has changed
+        this.deviceOffsetsFetchedCache.clear();
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.cancelObserveDevicesStoreChange();
+  }
 
   goToDetails = (deviceId, e) => {
     const { router } = this.context;
@@ -87,21 +109,59 @@ class ContentPanel extends Component {
     router.history.push(`/device/${deviceId}`);
   };
 
+  loadDevices = async () => {
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    const {
+      devicesFilter,
+      devicesGroupFilter,
+      devicesOffset
+    } = devicesStore;
+    const newOffset = devicesOffset + DEVICES_LIMIT_PER_PAGE;
+    if (!this.deviceOffsetsFetchedCache.has(newOffset)) {
+      this.deviceOffsetsFetchedCache.add(newOffset);
+      await devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter, DEVICES_LIMIT_PER_PAGE, newOffset);
+    }
+  }
+
   render() {
-    const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
+    const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard, t } = this.props;
     const { devicesStore, featuresStore, groupsStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
-    const { 
+    const {
       devices,
       devicesCurrentPage,
-      devicesFilter, 
-      devicesGroupFilter,
+      devicesFilter,
       devicesLimit,
       devicesTotalCount
     } = devicesStore;
     const { selectedGroup } = groupsStore;
     const { type, isSmart } = selectedGroup;
 
+    const items = [];
+
+    _.map(devices, (device, index) => {
+      items.push(
+        <DeviceItem
+          device={device}
+          goToDetails={this.goToDetails}
+          showDeleteConfirmation={showDeleteConfirmation}
+          showEditName={showEditName}
+          key={`device-item-${index}-${device.uuid}`}
+          stores={{
+            devicesStore,
+            featuresStore,
+            groupsStore,
+          }}
+        />
+      );
+    });
+    // this loader div should be kept because of react-infinite-scroller requirements
+    const loader = (
+      <div className="loader" key={'infinite-scroller-loader-devices'}>
+        {t('common.infinite_scroller.loader_content')}
+      </div>
+    );
     return (
       <div className='devices-panel'>
         <ContentPanelHeader devicesFilter={devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
@@ -114,16 +174,19 @@ class ContentPanel extends Component {
             <ContentPanelSubheader />
           ))}
         <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
-          <div className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}>
+          <div
+            className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}
+            ref={(ref) => this.scrollParentRef = ref}
+          >
             <InfiniteScroll
               className='wrapper-infinite-scroll'
+              pageStart={0}
+              loadMore={this.loadDevices}
               hasMore={devicesCurrentPage < devicesTotalCount / devicesLimit}
-              isLoading={devicesStore.devicesFetchAsync.isFetching}
               useWindow={false}
-              loadMore={() => {
-                devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter);
-              }}
-              threshold={100}
+              getScrollParent={() => this.scrollParentRef}
+              loader={loader}
+              threshold={250}
             >
               {devicesStore.devicesFetchAsync.isFetching && (
                 <div className='wrapper-center'>
@@ -131,28 +194,17 @@ class ContentPanel extends Component {
                 </div>
               )}
               {devices.length ? (
-                _.map(devices, device => (
-                  <DeviceItem
-                    device={device}
-                    goToDetails={this.goToDetails}
-                    showDeleteConfirmation={showDeleteConfirmation}
-                    showEditName={showEditName}
-                    key={device.uuid}
-                    stores={{
-                      devicesStore,
-                      featuresStore,
-                      groupsStore,
-                    }}
-                  />
-                ))
+                <div>
+                  {items}
+                </div>
               ) : (
                 <div className='wrapper-center'>
                   <div className='devices-panel__list-empty'>
                     {type === ARTIFICIAL
-                      ? 'All your devices are grouped. Good work!'
-                      : isSmart 
-                          ? 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.' 
-                          : 'This group is empty. Please, drag and drop devices here.'
+                      ? t('devices.all_grouped')
+                      : isSmart
+                        ? t('devices.empty_group_smart')
+                        : t('devices.empty_group_fixed')
                     }
                   </div>
                 </div>
@@ -210,4 +262,4 @@ ContentPanel.wrappedComponent.contextTypes = {
   router: PropTypes.object.isRequired,
 };
 
-export default ContentPanel;
+export default withTranslation()(ContentPanel);
