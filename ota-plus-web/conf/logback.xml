@@ -1,24 +1,3 @@
 <configuration>
-    
-  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
-
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%.-1level|%d{HH:mm:ss.SSS}|%logger{36}|%message%n%exception</pattern>
-    </encoder>
-  </appender>
-
-  <!--
-    The logger name is typically the Java/Scala package name.
-    This configures the log level to log at for a package and its children packages.
-  -->
-  <logger name="play" level="INFO" />
-  <logger name="application" level="DEBUG" />
-  <logger name="com.advancedtelematic" level="DEBUG" />
-  <logger name="audit" level="INFO" />
-
-  <root level="${rootLevel:-INFO}">
-    <appender-ref ref="STDOUT" />
-  </root>
-
+  <include resource="logback-libats.xml"/>
 </configuration>
