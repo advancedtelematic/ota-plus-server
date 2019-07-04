@@ -2,7 +2,7 @@ object Version {
   val Akka = "2.5.9"
   val JsonWebSecurity = "0.4.5"
   val MockWs = "2.6.2"
-  val LibAts = "0.2.1-17-g08f3ea9"
+  val LibAts = "0.3.0-18-g104ed2d"
   val LibTuf = "0.4.0-10-ge535619"
   val Netty = "4.1.19.Final"
   val ScalaCheck = "1.13.4"
@@ -26,7 +26,8 @@ object Dependencies {
   lazy val jose4j = "org.bitbucket.b_c" % "jose4j" % Version.Jose4j
   val LibAts = Set(
     "com.advancedtelematic" %% "libats",
-    "com.advancedtelematic" %% "libats-messaging"
+    "com.advancedtelematic" %% "libats-messaging",
+    "com.advancedtelematic" %% "libats-logging"
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
