@@ -11,7 +11,7 @@ import { FadeAnimation } from '../utils';
 @observer
 class Fireworks extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
   };
 
   componentWillMount() {
@@ -32,16 +32,18 @@ class Fireworks extends Component {
   render() {
     return (
       <FadeAnimation>
-        <div className='wrapper-center'>
-          <div className='fireworks'>
-            <div className='fireworks__title'>CONGRATULATIONS</div>
-            <div className='fireworks__body'>
-              <img className='fireworks__icon' src='/assets/img/icons/fireworks_check.svg' alt='Image' />
-              <div className='fireworks__subtitle'>Your first device is online!</div>
-              <div className='fireworks__text'>Every time you build a new image, you can send it to this device over the air.</div>
+        <div className="wrapper-center">
+          <div className="fireworks">
+            <div className="fireworks__title">CONGRATULATIONS</div>
+            <div className="fireworks__body">
+              <img className="fireworks__icon" src="/assets/img/icons/fireworks_check.svg" alt="Image" />
+              <div className="fireworks__subtitle">Your first device is online!</div>
+              <div className="fireworks__text">
+                Every time you build a new image, you can send it to this device over the air.
+              </div>
             </div>
-            <div className='fireworks__action'>
-              <button className='fireworks__button btn-primary' onClick={this.acknowledgeFireworks}>
+            <div className="fireworks__action">
+              <button type="button" className="fireworks__button btn-primary" onClick={this.acknowledgeFireworks}>
                 Go to my device
               </button>
             </div>
@@ -53,7 +55,7 @@ class Fireworks extends Component {
 }
 
 Fireworks.wrappedComponent.contextTypes = {
-  router: PropTypes.object.isRequired,
+  router: PropTypes.shape({}).isRequired,
 };
 
 export default Fireworks;

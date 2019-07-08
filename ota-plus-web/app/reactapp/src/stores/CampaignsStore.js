@@ -23,7 +23,7 @@ import {
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
 } from '../config';
-import { CAMPAIGN_RETRY_STATUSES } from '../constants'
+import { CAMPAIGN_RETRY_STATUSES } from '../constants';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { prepareUpdateObject } from '../utils/Helpers';
 import { getOverallCampaignStatistics } from '../helpers/campaignHelper';
@@ -46,29 +46,51 @@ export default class CampaignsStore {
     finished: 0,
     cancelled: 0,
   };
+
   @observable campaignsLatestFetchAsync = {};
+
   @observable campaignsSafeFetchAsync = {};
+
   @observable campaignsSingleFetchAsync = {};
+
   @observable campaignsSingleSafeFetchAsync = {};
+
   @observable campaignsSingleStatisticsFetchAsync = {};
+
   @observable campaignsSingleSafeStatisticsFetchAsync = {};
+
   @observable campaignsSingleRetryAsync = {};
+
   @observable campaignsCreateAsync = {};
+
   @observable campaignsLaunchAsync = {};
+
   @observable campaignsRenameAsync = {};
+
   @observable campaignsCancelAsync = {};
+
   @observable campaignsCancelRequestAsync = {};
+
   @observable campaignsMtuCreateAsync = {};
+
   @observable campaigns = [];
+
   @observable preparedCampaigns = [];
+
   @observable overallCampaignsCount = null;
+
   @observable campaignsFilter = '';
+
   @observable campaignsSort = 'asc';
+
   @observable campaign = {};
+
   @observable campaignData = {};
 
   @observable fullScreenMode = false;
+
   @observable transitionsEnabled = true;
+
   @observable limitCampaigns = CAMPAIGNS_LIMIT_PER_PAGE;
 
   @observable latestCampaigns = [];
@@ -76,7 +98,7 @@ export default class CampaignsStore {
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
 
   constructor() {
-    CAMPAIGNS_STATUSES.forEach(status => {
+    CAMPAIGNS_STATUSES.forEach((status) => {
       resetAsync(this.campaignsFetchAsync[status]);
     });
     resetAsync(this.campaignsSafeFetchAsync);
@@ -98,16 +120,16 @@ export default class CampaignsStore {
     resetAsync(this.campaignsMtuCreateAsync, true);
     return axios
       .post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
-      .then(response => {
+      .then((response) => {
         this.campaignData.mtuId = response.data;
         this.campaignsMtuCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsMtuCreateAsync = handleAsyncError(error);
       });
   }
 
-  _fetch(status = '', offset = 0, latestOnly = false, limit = null) {
+  fetch(status = '', offset = 0, latestOnly = false, limit = null) {
     const limitThisRequest = limit || this.limitCampaigns;
     if (latestOnly) {
       return axios.get(`${API_CAMPAIGNS_FETCH}?limit=${limitThisRequest}`);
@@ -118,25 +140,21 @@ export default class CampaignsStore {
     return axios.get(`${API_CAMPAIGNS_FETCH}?status=${status}&nameContains=${this.campaignsFilter.toLowerCase()}&limit=${limitThisRequest}&offset=${offset}`);
   }
 
-  _fetchCampaign(id) {
-    return axios.get(`${ API_CAMPAIGNS_FETCH_SINGLE }/${ id }`);
-  }
+  fetchCampaignSingle = id => axios.get(`${API_CAMPAIGNS_FETCH_SINGLE}/${id}`);
 
-  fetchCampaignStatistics(id) {
-    return axios.get(`${ API_CAMPAIGNS_STATISTICS_SINGLE }/${ id }/stats`);
-  }
+  fetchCampaignStatistics = id => axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`);
 
   fetchStatusCounts() {
     const isFetching = true;
-    CAMPAIGNS_STATUSES.forEach(status => {
+    CAMPAIGNS_STATUSES.forEach((status) => {
       resetAsync(this.campaignsFetchAsync[status], isFetching);
 
-      this._fetch(status)
-        .then(response => {
+      this.fetch(status)
+        .then((response) => {
           this.count[status] = response.data.total;
           this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
         })
-        .catch(error => {
+        .catch((error) => {
           this.campaignsFetchAsync[status] = handleAsyncError(error);
         });
     });
@@ -164,7 +182,7 @@ export default class CampaignsStore {
     resetAll(this[async]);
     resetAsync(this[async][status], true);
 
-    return this._fetch(status, dataOffset)
+    return this.fetch(status, dataOffset)
       .then((response) => {
         const campaigns = response && response.data && response.data.values;
         this.campaigns = campaigns;
@@ -181,7 +199,7 @@ export default class CampaignsStore {
     const latestOnly = true;
     this.latestCampaigns = [];
     resetAsync(this.campaignsLatestFetchAsync, true);
-    return this._fetch('', 0, latestOnly, limit)
+    return this.fetch('', 0, latestOnly, limit)
       .then((response) => {
         const campaigns = response && response.data && response.data.values;
         this.latestCampaigns = campaigns;
@@ -195,8 +213,8 @@ export default class CampaignsStore {
 
   fetchCampaign(id, mainAsync = 'campaignsSingleFetchAsync', statsAsync = 'campaignsSingleStatisticsFetchAsync') {
     resetAsync(this[mainAsync], true);
-    return this._fetchCampaign(id)
-      .then(response => {
+    return this.fetchCampaignSingle(id)
+      .then((response) => {
         resetAsync(this[statsAsync], true);
         axios
           .all([
@@ -210,12 +228,12 @@ export default class CampaignsStore {
               this[statsAsync] = handleAsyncSuccess(fromCampaignsAPI);
             }),
           )
-          .catch(statsError => {
+          .catch((statsError) => {
             this[statsAsync] = handleAsyncError(statsError);
           });
         this[mainAsync] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this[mainAsync] = handleAsyncError(error);
       });
   }
@@ -224,11 +242,11 @@ export default class CampaignsStore {
     resetAsync(this.campaignsCreateAsync, true);
     return axios
       .post(API_CAMPAIGNS_CREATE, data)
-      .then(response => {
+      .then((response) => {
         this.campaignData.campaignId = response.data;
         this.campaignsCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsCreateAsync = handleAsyncError(error);
       });
   }
@@ -236,11 +254,11 @@ export default class CampaignsStore {
   launchCampaign(id) {
     resetAsync(this.campaignsLaunchAsync, true);
     return axios
-      .post(`${ API_CAMPAIGNS_LAUNCH }/${ id }/launch`)
-      .then(response => {
+      .post(`${API_CAMPAIGNS_LAUNCH}/${id}/launch`)
+      .then((response) => {
         this.campaignsLaunchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsLaunchAsync = handleAsyncError(error);
       });
   }
@@ -250,16 +268,17 @@ export default class CampaignsStore {
     const retryFailure = _.find(this.campaign.statistics.failures, singleFailure => singleFailure.code === failureCode);
     return axios
       .post(`${API_CAMPAIGNS_RETRY_SINGLE}/${id}/retry-failed`, { failureCode })
-      .then(response => {
+      .then((response) => {
         this.campaignsSingleRetryAsync = handleAsyncSuccess(response);
-        _.each(this.campaign.statistics.failures, singleFailure => {
+        _.each(this.campaign.statistics.failures, (singleFailure) => {
           if (singleFailure.code !== failureCode) {
+            // eslint-disable-next-line no-param-reassign
             singleFailure.retryStatus = CAMPAIGN_RETRY_STATUSES.WAITING;
           }
         });
         retryFailure.retryStatus = CAMPAIGN_RETRY_STATUSES.LAUNCHED;
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsSingleRetryAsync = handleAsyncError(error);
       });
   }
@@ -267,13 +286,13 @@ export default class CampaignsStore {
   renameCampaign(id, data) {
     resetAsync(this.campaignsRenameAsync, true);
     return axios
-      .put(`${ API_CAMPAIGNS_RENAME }/${ id }`, data)
-      .then(response => {
+      .put(`${API_CAMPAIGNS_RENAME}/${id}`, data)
+      .then((response) => {
         const campaign = _.find(this.campaigns, singleCampaign => singleCampaign.id === id);
         campaign.name = data.name;
         this.campaignsRenameAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsRenameAsync = handleAsyncError(error);
       });
   }
@@ -281,11 +300,11 @@ export default class CampaignsStore {
   cancelCampaign(id) {
     resetAsync(this.campaignsCancelAsync, true);
     return axios
-      .post(`${ API_CAMPAIGNS_CANCEL }/${ id }/cancel`)
-      .then(response => {
+      .post(`${API_CAMPAIGNS_CANCEL}/${id}/cancel`)
+      .then((response) => {
         this.campaignsCancelAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsCancelAsync = handleAsyncError(error);
       });
   }
@@ -293,16 +312,16 @@ export default class CampaignsStore {
   cancelCampaignRequest(id) {
     resetAsync(this.campaignsCancelRequestAsync, true);
     return axios
-      .put(`${ API_CAMPAIGNS_CANCEL_REQUEST }/${ id }/cancel`)
-      .then(response => {
+      .put(`${API_CAMPAIGNS_CANCEL_REQUEST}/${id}/cancel`)
+      .then((response) => {
         this.campaignsCancelRequestAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.campaignsCancelRequestAsync = handleAsyncError(error);
       });
   }
 
-  _prepareCampaigns() {
+  prepareCampaigns() {
     this.preparedCampaigns = this.campaigns.sort((a, b) => {
       const aName = a.name;
       const bName = b.name;
@@ -314,12 +333,12 @@ export default class CampaignsStore {
     return _.find(this.campaigns, { id });
   }
 
-  _showFullScreen() {
+  showFullScreen() {
     this.fullScreenMode = true;
     this.transitionsEnabled = false;
   }
 
-  _hideFullScreen() {
+  hideFullScreen() {
     this.fullScreenMode = false;
     const that = this;
     setTimeout(() => {
@@ -336,12 +355,12 @@ export default class CampaignsStore {
     this.campaign = {};
   }
 
-  _resetFullScreen() {
+  resetFullScreen() {
     this.fullScreenMode = false;
     this.transitionsEnabled = true;
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.campaignsFetchAsyncAll);
     resetAsync(this.campaignsSafeFetchAsync);
     resetAsync(this.campaignsSingleFetchAsync);

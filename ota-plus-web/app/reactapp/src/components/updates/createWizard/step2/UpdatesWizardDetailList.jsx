@@ -1,7 +1,6 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -13,19 +12,24 @@ import UpdatesWizardDetailListItem from './UpdatesWizardDetailListItem';
 @observer
 class UpdatesWizardDetailList extends Component {
   render() {
-    const { wizardData, onStep2DataSelect } = this.props;
-    const { softwareStore } = this.props.stores;
-    const selectedHardwares = wizardData.selectedHardwares;
+    const { wizardData, onStep2DataSelect, stores } = this.props;
+    const { softwareStore } = stores;
+    const { selectedHardwares } = wizardData;
     return (
       <span>
         {softwareStore.packagesFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : (
-          _.map(selectedHardwares, item => {
-            return <UpdatesWizardDetailListItem key={item.name} item={item} wizardData={wizardData} onStep2DataSelect={onStep2DataSelect} />;
-          })
+          _.map(selectedHardwares, item => (
+            <UpdatesWizardDetailListItem
+              key={item.name}
+              item={item}
+              wizardData={wizardData}
+              onStep2DataSelect={onStep2DataSelect}
+            />
+          ))
         )}
       </span>
     );
@@ -33,7 +37,9 @@ class UpdatesWizardDetailList extends Component {
 }
 
 UpdatesWizardDetailList.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
+  wizardData: PropTypes.shape({}),
+  onStep2DataSelect: PropTypes.func,
 };
 
 export default UpdatesWizardDetailList;

@@ -12,12 +12,14 @@ class Dropdown extends React.Component {
       PropTypes.element,
       PropTypes.array
     ]),
-    customStyles: PropTypes.object,
+    customStyles: PropTypes.shape({}),
     customClassName: PropTypes.string,
+    hideSubmenu: PropTypes.func
   };
 
   handleClickOutside = () => {
-    this.props.hideSubmenu();
+    const { hideSubmenu } = this.props;
+    hideSubmenu();
   };
 
   render() {

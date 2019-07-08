@@ -31,19 +31,25 @@ class OverviewPanel extends Component {
   }
 
   render() {
-    const { stores, cancelMtuUpdate, activeTabId, setOverviewPanelActiveTabId, cancelApprovalPendingCampaign } = this.props;
+    const {
+      stores,
+      cancelMtuUpdate,
+      activeTabId,
+      setOverviewPanelActiveTabId,
+      cancelApprovalPendingCampaign
+    } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
     return (
-      <div className='overview-panel'>
-        <Tabs type={'card'} onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
-          <TabPane tab='History' id='installation-history' key={'0'}>
+      <div className="overview-panel">
+        <Tabs type="card" onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
+          <TabPane tab="History" id="installation-history" key="0">
             <HistoryMtuList device={device} />
           </TabPane>
-          <TabPane tab='Queue' id='queued-packages' key={'1'}>
+          <TabPane tab="Queue" id="queued-packages" key="1">
             <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
           </TabPane>
-          <TabPane tab='Approval pending' id='approval-pending-campaigns' key={'2'}>
+          <TabPane tab="Approval pending" id="approval-pending-campaigns" key="2">
             <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />
           </TabPane>
         </Tabs>
@@ -53,9 +59,11 @@ class OverviewPanel extends Component {
 }
 
 OverviewPanel.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   activeTabId: PropTypes.string.isRequired,
   setOverviewPanelActiveTabId: PropTypes.func.isRequired,
+  cancelMtuUpdate: PropTypes.func.isRequired,
+  cancelApprovalPendingCampaign: PropTypes.func.isRequired
 };
 
 export default OverviewPanel;

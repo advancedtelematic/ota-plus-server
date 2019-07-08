@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
 import { observable, computed } from 'mobx';
@@ -30,48 +31,83 @@ export default class SoftwareStore {
   @observable packagesDeleteAsync = {};
 
   @observable packagesFetchAsync = {};
+
   @observable packagesSafeFetchAsync = {};
+
   @observable packagesCreateAsync = {};
+
   @observable packagesBlacklistFetchAsync = {};
+
   @observable packagesOneBlacklistedFetchAsync = {};
+
   @observable packagesBlacklistAsync = {};
+
   @observable packagesUpdateBlacklistedAsync = {};
+
   @observable packagesRemoveFromBlacklistAsync = {};
+
   @observable packagesAffectedDevicesCountFetchAsync = {};
+
   @observable packagesOndeviceFetchAsync = {};
+
   @observable packagesAutoInstalledFetchAsync = {};
+
   @observable packagesHistoryFetchAsync = {};
+
   @observable packagesEnableAutoInstallAsync = {};
+
   @observable packagesDisableAutoInstallAsync = {};
+
   @observable commentsFetchAsync = {};
+
   @observable commentUpdateAsync = {};
 
   @observable page = null;
+
   @observable packages = [];
+
   @observable preparedPackages = [];
+
   @observable packagesSort = 'asc';
+
   @observable preparedOndevicePackages = {};
+
   @observable packagesOndeviceSort = 'asc';
+
   @observable packagesUploading = [];
+
   @observable blacklist = [];
+
   @observable preparedBlacklist = [];
+
   @observable blacklistedPackage = {};
+
   @observable affectedDevicesCount = {};
+
   @observable autoInstalledPackages = [];
 
   @observable ondevicePackages = [];
+
   @observable ondevicePackagesCurrentPage = 0;
+
   @observable ondevicePackagesTotalCount = null;
+
   @observable ondevicePackagesLimit = 25;
+
   @observable ondeviceFilter = '';
 
   @observable packagesHistory = [];
+
   @observable packagesHistoryFilter = '';
+
   @observable packagesHistoryCurrentPage = 0;
+
   @observable packagesHistoryTotalCount = null;
+
   @observable packagesHistoryLimit = 10;
 
   @observable expandedPackage = null;
+
   @observable compatibilityData = [];
 
   @observable activeTab = PACKAGES_DEFAULT_TAB;
@@ -102,7 +138,7 @@ export default class SoftwareStore {
       .delete(`${API_DELETE_SOFTWARE}/${filepath}`)
       .then((response) => {
         this.packagesDeleteAsync = handleAsyncSuccess(response);
-        this._removePackage(filepath);
+        this.removePackage(filepath);
       })
       .catch((error) => {
         this.packagesDeleteAsync = handleAsyncError(error);
@@ -114,7 +150,7 @@ export default class SoftwareStore {
     const store = this;
     function request() {
       store.deletePackage(versions[index].filepath).then(() => {
-        index++;
+        index += 1;
         if (index >= versions.length) {
           return 'done';
         }
@@ -124,19 +160,19 @@ export default class SoftwareStore {
     return request();
   }
 
-  _removePackage(filepath) {
+  removePackage(filepath) {
     this.packages = _.filter(this.packages, pack => pack.filepath !== filepath);
-    this._preparePackages();
+    this.preparePackages();
   }
 
   fetchComments() {
     resetAsync(this.commentsFetchAsync, true);
     return axios
       .get(API_SOFTWARE_COMMENTS)
-      .then(response => {
-        this._prepareComments(response.data);
+      .then((response) => {
+        this.prepareComments(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         this.commentsFetchAsync = handleAsyncError(error);
       });
   }
@@ -144,10 +180,10 @@ export default class SoftwareStore {
   updateComment(filepath, data) {
     return axios
       .put(`${API_SOFTWARE_COMMENTS}/${filepath}`, { comment: data })
-      .then(response => {
-        this._updatePackageComment(filepath, data);
+      .then(() => {
+        this.updatePackageComment(filepath, data);
       })
-      .catch(error => {
+      .catch((error) => {
         this.commentUpdateAsync = handleAsyncError(error);
       });
   }
@@ -159,30 +195,30 @@ export default class SoftwareStore {
       .get(API_SOFTWARE)
       .then((response) => {
         const packages = response.data.signed.targets;
-        that._formatPackages(packages);
+        that.formatPackages(packages);
         that.fetchComments();
-        const filepaths = that._getFilepaths();
+        const filepaths = that.getFilepaths();
         axios
           .post(API_SOFTWARE_COUNT_INSTALLED_ECUS, filepaths)
           .then((resp) => {
-            that._prepareFilePaths(resp.data);
+            that.prepareFilePaths(resp.data);
             switch (that.page) {
               case 'device':
-                that._prepareDevicePackages();
+                that.prepareDevicePackages();
                 break;
               default:
-                that._preparePackages();
+                that.preparePackages();
                 break;
             }
             that[async] = handleAsyncSuccess(response);
           })
-          .catch((e) => {
+          .catch(() => {
             switch (that.page) {
               case 'device':
-                that._prepareDevicePackages();
+                that.prepareDevicePackages();
                 break;
               default:
-                that._preparePackages();
+                that.preparePackages();
                 break;
             }
             that[async] = handleAsyncSuccess(response);
@@ -197,13 +233,13 @@ export default class SoftwareStore {
     this.fetchPackages('packagesFetchAsync', limit);
   }
 
-  _getFilepaths() {
+  getFilepaths() {
     return {
       filepaths: this.packages.map(pack => pack.filepath),
     };
   }
 
-  _prepareFilePaths(filepaths) {
+  prepareFilePaths(filepaths) {
     _.each(this.packages, (pack) => {
       _.each(filepaths, (installedOn, filepath) => {
         if (pack.filepath === filepath) {
@@ -213,9 +249,9 @@ export default class SoftwareStore {
     });
   }
 
-  _prepareComments(comments) {
-    _.each(this.packages, pack => {
-      _.each(comments, obj => {
+  prepareComments(comments) {
+    _.each(this.packages, (pack) => {
+      _.each(comments, (obj) => {
         if (obj.filename === pack.filepath) {
           pack.comment = obj.comment;
         }
@@ -223,7 +259,7 @@ export default class SoftwareStore {
     });
   }
 
-  _formatPackages(packages) {
+  formatPackages(packages) {
     const packs = [];
     _.each(packages, (pack, filepath) => {
       const formattedPack = {
@@ -256,17 +292,17 @@ export default class SoftwareStore {
 
     const deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
     const deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
-    this.packages = _.filter(packs, pack => !_.includes(deletedPackageNames, pack.id.name) && !_.includes(deletedVersions, pack.id.version));
+    this.packages = _.filter(
+      packs, pack => !_.includes(deletedPackageNames, pack.id.name) && !_.includes(deletedVersions, pack.id.version)
+    );
   }
 
-  _updatePackageComment(filepath, comment) {
+  updatePackageComment(filepath, comment) {
     const result = _.find(this.packages, pack => pack.filepath === filepath);
     result.comment = comment;
   }
 
-  _packageURI(entryName, name, version, hardwareIds) {
-    return `${API_UPLOAD_SOFTWARE}/${entryName}?name=${encodeURIComponent(name)}&version=${encodeURIComponent(version)}&hardwareIds=${hardwareIds}`;
-  }
+  packageURI = (entryName, name, version, hardwareIds) => `${API_UPLOAD_SOFTWARE}/${entryName}?name=${encodeURIComponent(name)}&version=${encodeURIComponent(version)}&hardwareIds=${hardwareIds}`;
 
   createPackage(data, formData, hardwareIds) {
     const source = axios.CancelToken.source();
@@ -296,13 +332,13 @@ export default class SoftwareStore {
       cancelToken: source.token,
     };
     const entryName = `${data.packageName}_${data.version}`;
-    const request = axios
-      .put(this._packageURI(entryName, data.packageName, data.version, hardwareIds), formData, config)
-      .then(response => {
+    axios
+      .put(this.packageURI(entryName, data.packageName, data.version, hardwareIds), formData, config)
+      .then((response) => {
         uploadObj.status = 'success';
         this.packagesCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         uploadObj.status = 'error';
         this.packagesCreateAsync = handleAsyncError(error);
       });
@@ -313,7 +349,7 @@ export default class SoftwareStore {
     resetAsync(this.packagesBlacklistFetchAsync, true);
     return axios
       .get(API_PACKAGES_BLACKLIST_FETCH)
-      .then(response => {
+      .then((response) => {
         if (ifWithStats) {
           const blacklist = response.data;
           if (blacklist.length) {
@@ -322,14 +358,14 @@ export default class SoftwareStore {
               () => {
                 this.blacklist = blacklist;
                 if (ifPrepareBlacklist) {
-                  this._prepareBlacklist();
+                  this.prepareBlacklist();
                 }
                 switch (this.page) {
                   case 'device':
-                    this._prepareDevicePackages();
+                    this.prepareDevicePackages();
                     break;
                   case 'packages':
-                    this._preparePackages(this.packagesSort, true);
+                    this.preparePackages(this.packagesSort, true);
                     break;
                   default:
                     break;
@@ -338,14 +374,14 @@ export default class SoftwareStore {
               },
               this,
             );
-            _.each(blacklist, (pack, index) => {
+            _.each(blacklist, (pack,) => {
               axios
                 .get(`${API_PACKAGES_COUNT_DEVICE_AND_GROUP}/${pack.packageId.name}/${pack.packageId.version}`)
-                .then(count => {
+                .then((count) => {
                   pack.statistics = count.data;
                   after();
                 })
-                .catch(err => {
+                .catch(() => {
                   pack.statistics = {};
                   after();
                 });
@@ -353,7 +389,7 @@ export default class SoftwareStore {
           } else {
             this.blacklist = blacklist;
             if (ifPrepareBlacklist) {
-              this._preparePackages(this.packagesSort, true);
+              this.preparePackages(this.packagesSort, true);
             }
             this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
           }
@@ -361,11 +397,11 @@ export default class SoftwareStore {
           this.blacklist = response.data;
           switch (this.page) {
             case 'device':
-              this._prepareDevicePackages();
-              this._prepareOndevicePackages();
+              this.prepareDevicePackages();
+              this.prepareOndevicePackages();
               break;
             case 'packages':
-              this._preparePackages();
+              this.preparePackages();
               break;
             default:
               break;
@@ -373,7 +409,7 @@ export default class SoftwareStore {
           this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesBlacklistFetchAsync = handleAsyncError(error);
       });
   }
@@ -383,11 +419,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesOneBlacklistedFetchAsync, true);
     return axios
       .get(`${API_PACKAGES_PACKAGE_BLACKLISTED_FETCH}/${data.name}/${data.version}`, data.details)
-      .then(response => {
+      .then((response) => {
         this.blacklistedPackage = response.data;
         this.packagesOneBlacklistedFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesOneBlacklistedFetchAsync = handleAsyncError(error);
       });
   }
@@ -396,10 +432,10 @@ export default class SoftwareStore {
     resetAsync(this.packagesBlacklistAsync, true);
     return axios
       .post(API_PACKAGES_BLACKLIST, data)
-      .then(response => {
+      .then((response) => {
         this.packagesBlacklistAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesBlacklistAsync = handleAsyncError(error);
       });
   }
@@ -408,11 +444,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesUpdateBlacklistedAsync, true);
     return axios
       .put(API_PACKAGES_UPDATE_BLACKLISTED, data)
-      .then(response => {
+      .then((response) => {
         this.fetchBlacklist();
         this.packagesUpdateBlacklistedAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesUpdateBlacklistedAsync = handleAsyncError(error);
       });
   }
@@ -421,11 +457,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesRemoveFromBlacklistAsync, true);
     return axios
       .delete(`${API_PACKAGES_REMOVE_FROM_BLACKLIST}/${data.name}/${data.version}`)
-      .then(response => {
+      .then((response) => {
         this.fetchBlacklist();
         this.packagesRemoveFromBlacklistAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesRemoveFromBlacklistAsync = handleAsyncError(error);
       });
   }
@@ -434,11 +470,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesAffectedDevicesCountFetchAsync, true);
     return axios
       .get(`${API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH}/${data.name}/${data.version}/preview`)
-      .then(response => {
+      .then((response) => {
         this.affectedDevicesCount = response.data;
         this.packagesAffectedDevicesCountFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesAffectedDevicesCountFetchAsync = handleAsyncError(error);
       });
   }
@@ -454,12 +490,14 @@ export default class SoftwareStore {
     this.ondeviceFilter = filter;
     return axios
       .get(`${API_SOFTWARE_DEVICE_SOFTWARE}/${id}/packages?nameContains=${filter || ''}&limit=${this.ondevicePackagesLimit}&offset=${this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit}`)
-      .then(response => {
-        this.ondevicePackages = _.uniqBy(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
+      .then((response) => {
+        this.ondevicePackages = _.uniqBy(
+          this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name
+        );
         switch (this.page) {
           case 'device':
-            this._prepareOndevicePackages();
-            this.ondevicePackagesCurrentPage++;
+            this.prepareOndevicePackages();
+            this.ondevicePackagesCurrentPage += 1;
             this.ondevicePackagesTotalCount = response.data.total;
             break;
           default:
@@ -467,7 +505,7 @@ export default class SoftwareStore {
         }
         this.packagesOndeviceFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesOndeviceFetchAsync = handleAsyncError(error);
       });
   }
@@ -476,18 +514,18 @@ export default class SoftwareStore {
     resetAsync(this.packagesAutoInstalledFetchAsync, true);
     return axios
       .get(`${API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL}/${deviceId}/ecus/${ecuSerial}/auto_update`)
-      .then(response => {
+      .then((response) => {
         this.autoInstalledPackages = response.data;
         switch (this.page) {
           case 'device':
-            this._prepareDevicePackages();
+            this.prepareDevicePackages();
             break;
           default:
             break;
         }
         this.packagesAutoInstalledFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesAutoInstalledFetchAsync = handleAsyncError(error);
       });
   }
@@ -500,20 +538,20 @@ export default class SoftwareStore {
     }
     this.packagesHistoryFilter = filter;
     return axios
-      .get(`${API_SOFTWARE_DEVICE_HISTORY}/${id}/installation_history` + `?limit=1000`)
-      .then(response => {
+      .get(`${API_SOFTWARE_DEVICE_HISTORY}/${id}/installation_history?limit=1000`)
+      .then((response) => {
         const data = response.data.values;
         const after = _.after(
           data.length,
           () => {
-            this.packagesHistoryCurrentPage++;
+            this.packagesHistoryCurrentPage += 1;
             this.packagesHistoryTotalCount = response.data.total;
             this.packagesHistory = _.uniqBy(this.packagesHistory.concat(data), item => item.correlationId);
-            this._preparePackagesHistory();
+            this.preparePackagesHistory();
           },
           this,
         );
-        _.each(data, (item, index) => {
+        _.each(data, (item,) => {
           if (item.correlationId && item.correlationId.search('urn:here-ota:campaign:') >= 0) {
             const campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
             const afterCampaign = _.after(
@@ -521,8 +559,8 @@ export default class SoftwareStore {
               () => {
                 axios
                   .get(`${API_UPDATES_SEARCH}/${item.campaign.update.id}`)
-                  .then(response => {
-                    const update = response.data;
+                  .then((res) => {
+                    const update = res.data;
                     item.campaign = Object.assign(item.campaign, {
                       update: {
                         id: update.uuid,
@@ -541,8 +579,8 @@ export default class SoftwareStore {
 
             axios
               .get(`${API_CAMPAIGNS_FETCH_SINGLE}/${campaignId}`)
-              .then(response => {
-                const campaign = response.data;
+              .then((res) => {
+                const campaign = res.data;
                 item.campaign = {
                   id: campaign.id,
                   name: campaign.name,
@@ -561,12 +599,12 @@ export default class SoftwareStore {
         });
         this.packagesHistoryFetchAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesHistoryFetchAsync = handleAsyncError(error);
       });
   }
 
-  _preparePackagesHistory() {
+  preparePackagesHistory() {
     this.packagesHistory = _.sortBy(this.packagesHistory, pack => pack.receivedAt).reverse();
   }
 
@@ -574,11 +612,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesEnableAutoInstallAsync, true);
     return axios
       .put(`${API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL}/${deviceId}/ecus/${ecuSerial}/auto_update/${targetName}`)
-      .then(response => {
+      .then((response) => {
         this.fetchAutoInstalledPackages(deviceId, ecuSerial);
         this.packagesEnableAutoInstallAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesEnableAutoInstallAsync = handleAsyncError(error);
       });
   }
@@ -587,11 +625,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesDisableAutoInstallAsync, true);
     return axios
       .delete(`${API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL}/${deviceId}/ecus/${ecuSerial}/auto_update/${packageName}`)
-      .then(response => {
+      .then((response) => {
         this.fetchAutoInstalledPackages(deviceId, ecuSerial);
         this.packagesDisableAutoInstallAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.packagesDisableAutoInstallAsync = handleAsyncError(error);
       });
   }
@@ -600,17 +638,17 @@ export default class SoftwareStore {
     return _.find(this.packages, pack => pack.id.name === data.name && pack.id.version === data.version);
   }
 
-  _getInstalledPackage(filepath, hardwareId) {
+  getInstalledPackage(filepath, hardwareId) {
     const filteredPacks = _.filter(this.packages, pack => (_.includes(pack.hardwareIds, hardwareId) ? pack : null));
     const result = _.find(filteredPacks, pack => pack.filepath === filepath);
     if (result) {
       result.isInstalled = true;
       return result;
     }
-    return this._getReportedPackage(filepath, hardwareId);
+    return this.getReportedPackage(filepath, hardwareId);
   }
 
-  _getReportedPackage(filepath, hardwareId) {
+  getReportedPackage(filepath,) {
     const result = _.find(this.packages, pack => pack.filepath === filepath);
     if (result) {
       result.isInstalled = true;
@@ -619,16 +657,16 @@ export default class SoftwareStore {
     return null;
   }
 
-  _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
-    const packages = this.packages;
+  preparePackages(packagesSort = this.packagesSort) {
+    const { packages } = this;
     const groupedPackages = {};
     let sortedPackages = {};
     this.packagesSort = packagesSort;
     _.each(
       packages,
-      (obj, index) => {
+      (obj,) => {
         if (_.isUndefined(groupedPackages[obj.id.name])) {
-          groupedPackages[obj.id.name] = new Object();
+          groupedPackages[obj.id.name] = {};
           groupedPackages[obj.id.name].versions = [];
           groupedPackages[obj.id.name].packageName = obj.id.name;
           groupedPackages[obj.id.name].name = obj.id.name;
@@ -645,55 +683,58 @@ export default class SoftwareStore {
     };
     Object.keys(groupedPackages)
       .sort((a, b) => {
-        if (packagesSort !== 'undefined' && packagesSort == 'desc') {
+        if (packagesSort !== 'undefined' && packagesSort === 'desc') {
           return b.localeCompare(a);
         }
         return a.localeCompare(b);
       })
-      .forEach(key => {
+      .forEach((key) => {
         let firstLetter = key.charAt(0).toUpperCase();
         firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-        if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
+        if ((firstLetter !== '#' && _.isUndefined(sortedPackages[firstLetter]))
+          || !(sortedPackages[firstLetter] instanceof Array)) {
           sortedPackages[firstLetter] = [];
         }
-        if (firstLetter != '#') {
+        if (firstLetter !== '#') {
           sortedPackages[firstLetter].push(groupedPackages[key]);
         } else {
           specialGroup['#'].push(groupedPackages[key]);
         }
       });
     if (!_.isEmpty(specialGroup['#'])) {
-      sortedPackages = packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup);
+      sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+        ? Object.assign(specialGroup, sortedPackages)
+        : Object.assign(sortedPackages, specialGroup);
     }
     this.preparedPackages = sortedPackages;
   }
 
-  _prepareDevicePackages(packagesSort = this.packagesSort) {
+  prepareDevicePackages(packagesSort = this.packagesSort) {
     this.packagesSort = packagesSort;
     const packages = JSON.parse(JSON.stringify(this.packages));
 
     if (packages.length) {
-      const autoInstalledPackages = this.autoInstalledPackages;
-      const blacklist = this.blacklist;
+      const { autoInstalledPackages } = this;
+      const { blacklist } = this;
       const groupedPackages = {};
       let sortedPackages = {};
       const parsedBlacklist = [];
 
-      _.each(blacklist, pack => {
+      _.each(blacklist, (pack) => {
         parsedBlacklist[`${pack.packageId.name}-${pack.packageId.version}`] = {
           isBlackListed: true,
           comment: pack.comment,
         };
       });
 
-      _.each(packages, packInstalled => {
+      _.each(packages, (packInstalled) => {
         if (!_.isUndefined(parsedBlacklist[`${packInstalled.id.name}-${packInstalled.id.version}`])) {
           packInstalled.isBlackListed = true;
         }
         if (autoInstalledPackages.indexOf(packInstalled.id.name) > -1) packInstalled.isAutoInstallEnabled = true;
       });
 
-      _.each(packages, (pack, index) => {
+      _.each(packages, (pack,) => {
         if (_.isUndefined(groupedPackages[pack.id.name]) || !(groupedPackages[pack.id.name] instanceof Object)) {
           groupedPackages[pack.id.name] = {
             versions: [],
@@ -711,20 +752,23 @@ export default class SoftwareStore {
       const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
-          if (packagesSort !== 'undefined' && packagesSort == 'desc') return b.localeCompare(a);
+          if (packagesSort !== 'undefined' && packagesSort === 'desc') return b.localeCompare(a);
           return a.localeCompare(b);
         })
-        .forEach(key => {
+        .forEach((key) => {
           let firstLetter = key.charAt(0).toUpperCase();
           firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
+          if ((firstLetter !== '#' && _.isUndefined(sortedPackages[firstLetter]))
+            || !(sortedPackages[firstLetter] instanceof Array)) {
             sortedPackages[firstLetter] = [];
           }
-          if (firstLetter != '#') sortedPackages[firstLetter].push(groupedPackages[key]);
+          if (firstLetter !== '#') sortedPackages[firstLetter].push(groupedPackages[key]);
           else specialGroup['#'].push(groupedPackages[key]);
         });
       if (!_.isEmpty(specialGroup['#'])) {
-        sortedPackages = packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup);
+        sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+          ? Object.assign(specialGroup, sortedPackages)
+          : Object.assign(sortedPackages, specialGroup);
       }
       this.preparedPackages = sortedPackages;
     } else {
@@ -732,7 +776,7 @@ export default class SoftwareStore {
     }
   }
 
-  _prepareOndevicePackages(packagesSort = this.packagesOndeviceSort) {
+  prepareOndevicePackages(packagesSort = this.packagesOndeviceSort) {
     this.packagesOndeviceSort = packagesSort;
     if (this.ondevicePackages.length) {
       const packages = [];
@@ -740,11 +784,11 @@ export default class SoftwareStore {
       let sortedPackages = {};
       const parsedBlacklist = [];
 
-      _.each(this.blacklist, pack => {
+      _.each(this.blacklist, (pack) => {
         parsedBlacklist[`${pack.packageId.name}-${pack.packageId.version}`] = true;
       });
 
-      _.each(this.ondevicePackages, pack => {
+      _.each(this.ondevicePackages, (pack) => {
         if (pack.packageId !== 'undefined') {
           const newPack = {
             name: pack.packageId.name,
@@ -764,7 +808,7 @@ export default class SoftwareStore {
 
       _.each(
         packages,
-        (obj, index) => {
+        (obj,) => {
           const objKey = `${obj.name}_${obj.version}`;
           groupedPackages[objKey] = obj;
         },
@@ -774,20 +818,23 @@ export default class SoftwareStore {
       const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
-          if (packagesSort !== 'undefined' && packagesSort == 'desc') return b.localeCompare(a);
+          if (packagesSort !== 'undefined' && packagesSort === 'desc') return b.localeCompare(a);
           return a.localeCompare(b);
         })
-        .forEach(key => {
+        .forEach((key) => {
           let firstLetter = key.charAt(0).toUpperCase();
           firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-          if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
+          if ((firstLetter !== '#' && _.isUndefined(sortedPackages[firstLetter]))
+            || !(Array.isArray(sortedPackages[firstLetter]))) {
             sortedPackages[firstLetter] = [];
           }
-          if (firstLetter != '#') sortedPackages[firstLetter].push(groupedPackages[key]);
+          if (firstLetter !== '#') sortedPackages[firstLetter].push(groupedPackages[key]);
           else specialGroup['#'].push(groupedPackages[key]);
         });
       if (!_.isEmpty(specialGroup['#'])) {
-        sortedPackages = packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup);
+        sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+          ? Object.assign(specialGroup, sortedPackages)
+          : Object.assign(sortedPackages, specialGroup);
       }
 
       this.preparedOndevicePackages = sortedPackages;
@@ -796,12 +843,12 @@ export default class SoftwareStore {
     }
   }
 
-  _prepareBlacklist() {
+  prepareBlacklist() {
     let groupedPackages = {};
     let sortedPackages = {};
     _.each(this.blacklist, (obj, index) => {
       if (_.isUndefined(groupedPackages[obj.packageId.name])) {
-        groupedPackages[obj.packageId.name] = new Object();
+        groupedPackages[obj.packageId.name] = {};
         groupedPackages[obj.packageId.name] = {
           versions: [],
           packageName: obj.packageId.name,
@@ -809,9 +856,13 @@ export default class SoftwareStore {
           groupIds: [],
         };
       }
-      groupedPackages[obj.packageId.name].deviceCount += !_.isUndefined(obj.statistics.deviceCount) ? obj.statistics.deviceCount : 0;
+      groupedPackages[obj.packageId.name].deviceCount += !_.isUndefined(obj.statistics.deviceCount)
+        ? obj.statistics.deviceCount
+        : 0;
       if (!_.isUndefined(obj.statistics.groupIds)) {
-        groupedPackages[obj.packageId.name].groupIds = _.union(groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds);
+        groupedPackages[obj.packageId.name].groupIds = _.union(
+          groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds
+        );
       }
       groupedPackages[obj.packageId.name].versions.push(this.blacklist[index]);
     });
@@ -823,14 +874,15 @@ export default class SoftwareStore {
     groupedPackages.sort();
 
     const specialGroup = { '#': [] };
-    _.each(groupedPackages, (pack, key) => {
+    _.each(groupedPackages, (pack,) => {
       let firstLetter = pack.packageName.charAt(0).toUpperCase();
 
       firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-      if ((firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter])) || !(sortedPackages[firstLetter] instanceof Array)) {
+      if ((firstLetter !== '#' && _.isUndefined(sortedPackages[firstLetter]))
+        || !(sortedPackages[firstLetter] instanceof Array)) {
         sortedPackages[firstLetter] = [];
       }
-      if (firstLetter != '#') sortedPackages[firstLetter].push(pack);
+      if (firstLetter !== '#') sortedPackages[firstLetter].push(pack);
       else specialGroup['#'].push(pack);
     });
     if (!_.isEmpty(specialGroup['#'])) {
@@ -841,7 +893,7 @@ export default class SoftwareStore {
     this.preparedBlacklistRaw = groupedPackages;
   }
 
-  _resetBlacklistActions() {
+  resetBlacklistActions() {
     resetAsync(this.packagesOneBlacklistedFetchAsync);
     resetAsync(this.packagesBlacklistAsync);
     resetAsync(this.packagesUpdateBlacklistedAsync);
@@ -851,7 +903,7 @@ export default class SoftwareStore {
     this.affectedDevicesCount = {};
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.packagesDeleteAsync);
     resetAsync(this.packagesFetchAsync);
     resetAsync(this.packagesSafeFetchAsync);
@@ -901,12 +953,12 @@ export default class SoftwareStore {
   /*
    * ToDo: refactoring of messy localStorage accesses
    */
-  _getAllStorage() {
+  getAllStorage = () => {
     const values = [];
     const keys = Object.keys(localStorage);
 
     let i = keys.length;
-    while (i--) {
+    while (i > 0) {
       try {
         // localStorage can hold different data from another application
         values.push(JSON.parse(localStorage.getItem(keys[i])));
@@ -914,15 +966,16 @@ export default class SoftwareStore {
         // at least console output in case of error
         console.debug(e);
       }
+      i -= 1;
     }
     return values;
   }
 
-  _handleCompatibles() {
-    this.compatibilityData = this._getAllStorage();
+  handleCompatibles() {
+    this.compatibilityData = this.getAllStorage();
   }
 
-  _addPackage(pack) {
+  addPackage(pack) {
     const name = pack.custom ? pack.custom.name : pack.filename;
     const version = pack.custom ? pack.custom.version : pack.checksum.hash;
     const hardwareIds = pack.custom ? pack.custom.hardwareIds : [];
@@ -948,7 +1001,7 @@ export default class SoftwareStore {
       vendor: null,
       comment: 'Default comment',
     };
-    const found = _.find(this.packages, pack => pack.id.name === name && pack.id.version === version);
+    const found = _.find(this.packages, singlePack => singlePack.id.name === name && singlePack.id.version === version);
     if (found) {
       found.hardwareIds = hardwareIds;
     } else {
@@ -956,10 +1009,10 @@ export default class SoftwareStore {
     }
     switch (this.page) {
       case 'device':
-        this._prepareDevicePackages();
+        this.prepareDevicePackages();
         break;
       default:
-        this._preparePackages();
+        this.preparePackages();
         break;
     }
   }

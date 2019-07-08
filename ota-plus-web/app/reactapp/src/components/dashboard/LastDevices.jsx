@@ -18,8 +18,8 @@ class LastDevices extends Component {
     return (
       <span style={{ height: '100%' }}>
         {devicesStore.devicesFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
-            <Loader className='dark' />
+          <div className="wrapper-center">
+            <Loader className="dark" />
           </div>
         ) : Object.keys(lastDevices).length ? (
           _.map(lastDevices, (device, index) => <LastDevicesItem key={device.uuid} index={index} device={device} />)
@@ -32,7 +32,7 @@ class LastDevices extends Component {
 }
 
 LastDevices.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default LastDevices;

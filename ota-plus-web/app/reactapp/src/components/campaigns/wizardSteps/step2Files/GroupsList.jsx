@@ -11,20 +11,25 @@ import { InfiniteScroll } from '../../../../utils';
 @observer
 class GroupsList extends Component {
   static propTypes = {
-    stores: PropTypes.object,
-    chosenGroups: PropTypes.array.isRequired,
+    stores: PropTypes.shape({}),
+    chosenGroups: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     setWizardData: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
 
   render() {
     const { stores, chosenGroups, setWizardData } = this.props;
     const { groupsStore } = stores;
     const wizardGroupsAvailable = Object.keys(groupsStore.preparedWizardGroups).length;
     return (
-      <div className='ios-list' ref='list'>
+      <div className="ios-list" ref={this.listRef}>
         {wizardGroupsAvailable ? (
           <InfiniteScroll
-            className='wrapper-infinite-scroll'
+            className="wrapper-infinite-scroll"
             hasMore={groupsStore.hasMoreWizardGroups}
             isLoading={groupsStore.groupsWizardFetchAsync.isFetching}
             useWindow={false}
@@ -34,7 +39,7 @@ class GroupsList extends Component {
           >
             {_.map(groupsStore.preparedWizardGroups, (groups, letter) => (
               <div key={letter}>
-                <div className='header'>{letter}</div>
+                <div className="header">{letter}</div>
                 {_.map(groups, (group, index) => {
                   const isChosen = !!_.find(chosenGroups, { id: group.id });
                   return <GroupsListItem key={index} group={group} setWizardData={setWizardData} isChosen={isChosen} />;
@@ -43,7 +48,7 @@ class GroupsList extends Component {
             ))}
           </InfiniteScroll>
         ) : (
-          <div className='wrapper-center'>{'No groups found.'}</div>
+          <div className="wrapper-center">{'No groups found.'}</div>
         )}
       </div>
     );

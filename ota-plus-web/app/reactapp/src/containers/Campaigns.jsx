@@ -15,34 +15,39 @@ import { CampaignCancelCampaignModal } from '../components/campaign';
 @observer
 class Campaigns extends Component {
   @observable cancelCampaignModalShown = false;
+
   @observable dependenciesModalShown = false;
+
   @observable retryModalShown = false;
+
   @observable activeCampaign = null;
+
   @observable failureforRetry = null;
+
   @observable expandedCampaigns = [];
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     highlight: PropTypes.string,
     addNewWizard: PropTypes.func,
   };
 
-  toggle = campaign => {
+  toggle = (campaign) => {
     if (!_.isEqual(this.expandedCampaigns.pop(), campaign)) {
       this.expandedCampaigns.push(campaign);
     }
   };
 
-  showWizard = campaignId => {
+  showWizard = (campaignId) => {
     this.campaignIdToAction = campaignId;
   };
 
-  showCancelCampaignModal = e => {
+  showCancelCampaignModal = (e) => {
     if (e) e.preventDefault();
     this.cancelCampaignModalShown = true;
   };
 
-  hideCancelCampaignModal = e => {
+  hideCancelCampaignModal = (e) => {
     if (e) e.preventDefault();
     const { stores } = this.props;
     const { campaignsStore } = stores;
@@ -56,7 +61,7 @@ class Campaigns extends Component {
     this.activeCampaign = activeCampaign;
   };
 
-  hideDependenciesModal = e => {
+  hideDependenciesModal = (e) => {
     if (e) e.preventDefault();
     this.dependenciesModalShown = false;
     this.activeCampaign = null;
@@ -68,7 +73,7 @@ class Campaigns extends Component {
     this.failureforRetry = failure;
   };
 
-  hideRetryModal = e => {
+  hideRetryModal = (e) => {
     if (e) e.preventDefault();
     this.retryModalShown = false;
     this.activeCampaign = null;
@@ -78,13 +83,13 @@ class Campaigns extends Component {
     if (e) e.preventDefault();
     const { stores } = this.props;
     const { campaignsStore } = stores;
-    campaignsStore._prepareCampaigns(campaignsStore.campaignsFilter, sort);
+    campaignsStore.prepareCampaigns(campaignsStore.campaignsFilter, sort);
   };
 
-  changeFilter = filter => {
+  changeFilter = (filter) => {
     const { stores } = this.props;
     const { campaignsStore } = stores;
-    campaignsStore._prepareCampaigns(filter, campaignsStore.campaignsSort);
+    campaignsStore.prepareCampaigns(filter, campaignsStore.campaignsSort);
   };
 
   render() {
@@ -102,9 +107,24 @@ class Campaigns extends Component {
           showDependenciesModal={this.showDependenciesModal}
           showRetryModal={this.showRetryModal}
         />
-        <CampaignCancelCampaignModal shown={this.cancelCampaignModalShown} hide={this.hideCancelCampaignModal} />
-        {this.dependenciesModalShown && <DependenciesModal shown={this.dependenciesModalShown} hide={this.hideDependenciesModal} activeItemName={this.activeCampaign} />}
-        {this.retryModalShown && <RetryModal shown={this.retryModalShown} hide={this.hideRetryModal} failureforRetry={this.failureforRetry}/>}
+        <CampaignCancelCampaignModal
+          shown={this.cancelCampaignModalShown}
+          hide={this.hideCancelCampaignModal}
+        />
+        {this.dependenciesModalShown && (
+          <DependenciesModal
+            shown={this.dependenciesModalShown}
+            hide={this.hideDependenciesModal}
+            activeItemName={this.activeCampaign}
+          />
+        )}
+        {this.retryModalShown && (
+          <RetryModal
+            shown={this.retryModalShown}
+            hide={this.hideRetryModal}
+            failureforRetry={this.failureforRetry}
+          />
+        )}
       </>
     );
   }

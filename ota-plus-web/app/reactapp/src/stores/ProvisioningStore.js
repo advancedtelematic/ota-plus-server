@@ -3,32 +3,45 @@
 import { observable } from 'mobx';
 import { notification } from 'antd';
 import axios from 'axios';
-import { 
-  API_PROVISIONING_STATUS, 
-  API_PROVISIONING_DOWNLOAD, 
-  API_PROVISIONING_DETAILS, 
-  API_PROVISIONING_KEYS_FETCH, 
-  API_PROVISIONING_KEY_CREATE, 
-  API_NAMESPACE_SETUP_STEPS 
+import _ from 'lodash';
+import {
+  API_PROVISIONING_STATUS,
+  API_PROVISIONING_DOWNLOAD,
+  API_PROVISIONING_DETAILS,
+  API_PROVISIONING_KEYS_FETCH,
+  API_PROVISIONING_KEY_CREATE,
+  API_NAMESPACE_SETUP_STEPS
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import _ from 'lodash';
 import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
 export default class ProvisioningStore {
   @observable provisioningStatusFetchAsync = {};
+
   @observable provisioningActivateAsync = {};
+
   @observable namespaceSetupFetchAsync = {};
+
   @observable provisioningDetailsFetchAsync = {};
+
   @observable provisioningKeysFetchAsync = {};
+
   @observable provisioningKeyCreateAsync = {};
+
   @observable provisioningStatus = {};
+
   @observable provisioningDetails = {};
+
   @observable initialProvisioningKeys = [];
+
   @observable provisioningKeys = [];
+
   @observable provisioningKeysSort = 'asc';
+
   @observable preparedProvisioningKeys = [];
+
   @observable provisioningFilter = '';
+
   @observable sanityCheckCompleted = false;
 
   constructor() {
@@ -40,25 +53,25 @@ export default class ProvisioningStore {
     resetAsync(this.provisioningKeyCreateAsync);
   }
 
-  _filterProvisioningKeys(filter) {
+  filterProvisioningKeys(filter) {
     this.provisioningFilter = filter;
-    let searchResults = [];
-    let found = _.each(this.initialProvisioningKeys, function(key, index) {
-      return key.description.indexOf(filter) >= 0 ? searchResults.push(key) : null;
-    });
+    const searchResults = [];
+    _.each(this.initialProvisioningKeys, key => (
+      key.description.indexOf(filter) >= 0 ? searchResults.push(key) : null
+    ));
     this.provisioningKeys = searchResults;
-    this._prepareProvisioningKeys();
+    this.prepareProvisioningKeys();
   }
 
-  _prepareProvisioningKeys(sort = this.provisioningKeysSort) {
+  prepareProvisioningKeys(sort = this.provisioningKeysSort) {
     this.provisioningKeysSort = sort;
-    let keys = this.provisioningKeys;
+    const keys = this.provisioningKeys;
 
     this.preparedProvisioningKeys = keys.sort((a, b) => {
-      let aName = a.description;
-      let bName = b.description;
-      if (sort !== 'undefined' && sort == 'desc') return bName.localeCompare(aName);
-      else return aName.localeCompare(bName);
+      const aName = a.description;
+      const bName = b.description;
+      if (sort !== 'undefined' && sort === 'desc') return bName.localeCompare(aName);
+      return aName.localeCompare(bName);
     });
   }
 
@@ -67,19 +80,19 @@ export default class ProvisioningStore {
     return axios
       .get(API_PROVISIONING_STATUS)
       .then(
-        function(response) {
+        (response) => {
           this.provisioningStatus = response.data;
           if (response.data.active) {
             this.fetchProvisioningDetails();
             this.fetchProvisioningKeys();
           }
           this.provisioningStatusFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.provisioningStatusFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -88,19 +101,19 @@ export default class ProvisioningStore {
     return axios
       .get(API_NAMESPACE_SETUP_STEPS)
       .then(
-        function(response) {
+        (response) => {
           this.sanityCheckCompleted = true;
           this.namespaceSetupFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           const that = this;
           setTimeout(() => {
             that.namespaceSetup();
           }, 800);
           this.namespaceSetupFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -109,15 +122,15 @@ export default class ProvisioningStore {
     return axios
       .get(API_PROVISIONING_DETAILS)
       .then(
-        function(response) {
+        (response) => {
           this.provisioningDetails = response.data;
           this.provisioningDetailsFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.provisioningDetailsFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -126,17 +139,17 @@ export default class ProvisioningStore {
     return axios
       .get(API_PROVISIONING_KEYS_FETCH)
       .then(
-        function(response) {
+        (response) => {
           this.initialProvisioningKeys = response.data;
           this.provisioningKeys = response.data;
-          this._prepareProvisioningKeys();
+          this.prepareProvisioningKeys();
           this.provisioningKeysFetchAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.provisioningKeysFetchAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -145,15 +158,15 @@ export default class ProvisioningStore {
     return axios
       .post(API_PROVISIONING_KEY_CREATE, data)
       .then(
-        function(response) {
+        (response) => {
           this.fetchProvisioningKeys();
           this.provisioningKeyCreateAsync = handleAsyncSuccess(response);
-        }.bind(this),
+        },
       )
       .catch(
-        function(error) {
+        (error) => {
           this.provisioningKeyCreateAsync = handleAsyncError(error);
-        }.bind(this),
+        },
       );
   }
 
@@ -162,6 +175,7 @@ export default class ProvisioningStore {
     try {
       const { status } = await axios.get(downloadUrl);
       if (status === HTTP_CODE_200_OK) {
+        // eslint-disable-next-line no-restricted-globals
         location.href = downloadUrl;
       } else {
         throw new Error();
@@ -169,13 +183,14 @@ export default class ProvisioningStore {
     } catch (error) {
       notification.error({
         message: 'Please try again later.',
+        // eslint-disable-next-line max-len
         description: 'If this is a new account, it may take some time to generate the keys for your repository. If the error persists, please try logging in again.',
         duration: 6
       });
     }
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.provisioningStatusFetchAsync);
     resetAsync(this.namespaceSetupFetchAsync);
     resetAsync(this.provisioningActivateAsync);

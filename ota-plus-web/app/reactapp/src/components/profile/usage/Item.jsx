@@ -9,12 +9,9 @@ import { Loader } from '../../../partials';
 @inject('stores')
 @observer
 class Item extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentWillMount() {
-    const { fetch, date } = this.props;
-    const { userStore } = this.props.stores;
+    const { fetch, date, stores } = this.props;
+    const { userStore } = stores;
     if (fetch.active.status === null && !fetch.active.isFetching) {
       const startTime = date;
       const startTimeTmp = moment(startTime);
@@ -24,21 +21,22 @@ class Item extends Component {
       userStore.fetchConnectedDeviceCount(startTimeTmp.format('YYYY'), startTimeTmp.format('MM'));
     }
   }
+
   render() {
     const { usage, fetch, date } = this.props;
     const dateFormatted = date.format('MMM YYYY');
     return (
-      <div className='box'>
-        <div className='column' id={'month-' + dateFormatted}>
+      <div className="box">
+        <div className="column" id={`month-${dateFormatted}`}>
           {dateFormatted}
         </div>
-        <div className='column' id={`target_total_activated_devices_${dateFormatted}`}>
+        <div className="column" id={`target_total_activated_devices_${dateFormatted}`}>
           {fetch.active.isFetching ? <Loader size={20} thickness={2.5} /> : usage.active}
         </div>
-        <div className='column' id={`target_total_activated_devices_this_month_${dateFormatted}`}>
+        <div className="column" id={`target_total_activated_devices_this_month_${dateFormatted}`}>
           {fetch.activated.isFetching ? <Loader size={20} thickness={2.5} /> : usage.activated}
         </div>
-        <div className='column' id={`target_total_connected_devices_this_month_${dateFormatted}`}>
+        <div className="column" id={`target_total_connected_devices_this_month_${dateFormatted}`}>
           {fetch.connected.isFetching ? <Loader size={20} thickness={2.5} /> : usage.connected.numberOfDevices}
         </div>
       </div>
@@ -47,10 +45,10 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  usage: PropTypes.object.isRequired,
-  fetch: PropTypes.object.isRequired,
-  stores: PropTypes.object,
-  date: PropTypes.object.isRequired,
+  usage: PropTypes.shape({}).isRequired,
+  fetch: PropTypes.shape({}).isRequired,
+  stores: PropTypes.shape({}),
+  date: PropTypes.shape({}).isRequired,
 };
 
 export default Item;

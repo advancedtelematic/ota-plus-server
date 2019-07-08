@@ -19,29 +19,71 @@ const headerHeight = 28;
 @observer
 class List extends Component {
   @observable firstShownIndex = 0;
+
   @observable lastShownIndex = 50;
+
   @observable fakeHeaderLetter = null;
+
   @observable fakeHeaderTopPosition = 0;
+
   @observable tmpIntervalId = null;
+
   @observable submenuIsShown = false;
+
   @observable editModal = false;
+
   @observable deleteModal = false;
+
   @observable packVersions = [];
+
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+    this.dropzoneRef = React.createRef();
+    const { softwareStore } = props.stores;
+    this.packagesChangeHandler = observe(softwareStore, (change) => {
+      if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
+        const that = this;
+        setTimeout(() => {
+          that.listScroll();
+        }, 50);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.listRef.current.addEventListener('scroll', this.listScroll);
+    this.listScroll();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { highlightedPackage } = this.props;
+    if (nextProps.highlightedPackage !== highlightedPackage) {
+      this.highlightPackage(nextProps.highlightedPackage);
+    }
+  }
+
+  componentWillUnmount() {
+    this.packagesChangeHandler();
+    this.listRef.current.removeEventListener('scroll', this.listScroll);
+  }
+
   hideEditModal = () => {
     this.editModal = false;
   };
+
   showEditModal = () => {
     this.editModal = true;
   };
 
   generateHeadersPositions = () => {
-    const headers = this.refs.list.getElementsByClassName('header');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const headers = this.listRef.current.getElementsByClassName('header');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       headers,
-      header => {
-        let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (header) => {
+        const position = header.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -50,13 +92,13 @@ class List extends Component {
   };
 
   generateItemsPositions = () => {
-    const items = this.refs.list.getElementsByClassName('item');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const items = this.listRef.current.getElementsByClassName('item');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       items,
-      item => {
-        let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (item) => {
+        const position = item.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -65,12 +107,13 @@ class List extends Component {
   };
 
   listScroll = () => {
-    const { softwareStore } = this.props.stores;
-    if (this.refs.list) {
+    const { stores } = this.props;
+    const { softwareStore } = stores;
+    if (this.listRef.current) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
-      let scrollTop = this.refs.list.scrollTop;
-      let listHeight = this.refs.list.getBoundingClientRect().height;
+      let { scrollTop } = this.listRef.current;
+      const listHeight = this.listRef.current.getBoundingClientRect().height;
       let newFakeHeaderLetter = this.fakeHeaderLetter;
       let firstShownIndex = null;
       let lastShownIndex = null;
@@ -80,10 +123,11 @@ class List extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(softwareStore.preparedPackages)[index];
             return true;
-          } else if (scrollTop >= position - headerHeight) {
+          } if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
             return true;
           }
+          return true;
         },
         this,
       );
@@ -105,13 +149,13 @@ class List extends Component {
     }
   };
 
-  highlightPackage = pack => {
+  highlightPackage = (pack) => {
     const { animatedScroll, setExpandedPackageName } = this.props;
-    if (this.refs.list && pack) {
+    if (this.listRef.current && pack) {
       setExpandedPackageName(pack);
-      const currentScrollTop = this.refs.list.scrollTop;
-      const elementCoords = document.getElementById('button-package-' + pack).getBoundingClientRect();
-      let scrollTo = currentScrollTop + elementCoords.top - 150;
+      const currentScrollTop = this.listRef.current.scrollTop;
+      const elementCoords = document.getElementById(`button-package-${pack}`).getBoundingClientRect();
+      const scrollTo = currentScrollTop + elementCoords.top - 150;
       setTimeout(() => {
         animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
       }, 400);
@@ -119,10 +163,10 @@ class List extends Component {
   };
 
   togglePackage = (packageName, e) => {
-    const { expandedPackageName, setExpandedPackageName } = this.props;
-    const { softwareStore } = this.props.stores;
+    const { expandedPackageName, setExpandedPackageName, stores } = this.props;
+    const { softwareStore } = stores;
     if (e) e.preventDefault();
-    softwareStore._handleCompatibles();
+    softwareStore.handleCompatibles();
     setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
   };
 
@@ -130,7 +174,7 @@ class List extends Component {
     this.submenuIsShown = false;
   };
 
-  showSubmenu = versions => {
+  showSubmenu = () => {
     this.submenuIsShown = true;
   };
 
@@ -142,38 +186,9 @@ class List extends Component {
     this.deleteModal = false;
   };
 
-  constructor(props) {
-    super(props);
-    const { softwareStore } = props.stores;
-    this.packagesChangeHandler = observe(softwareStore, change => {
-      if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
-        const that = this;
-        setTimeout(() => {
-          that.listScroll();
-        }, 50);
-      }
-    });
-  }
-
-  componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
-    this.listScroll();
-  }
-
-  componentWillUnmount() {
-    this.packagesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.highlightedPackage !== this.props.highlightedPackage) {
-      this.highlightPackage(nextProps.highlightedPackage);
-    }
-  }
-
   startIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
-    let intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       this.listScroll();
     }, 10);
     this.tmpIntervalId = intervalId;
@@ -185,19 +200,34 @@ class List extends Component {
   }
 
   render() {
-    const { stores, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
-    const { softwareStore, featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const {
+      stores,
+      onFileDrop,
+      highlightedPackage,
+      showDependenciesModal,
+      showDependenciesManager,
+      showDeleteConfirmation,
+      expandedPackageName,
+      showEditComment
+    } = this.props;
+    const { softwareStore } = stores;
 
     return (
-      <div className='ios-list' ref='list' >
-        <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
+      <div className="ios-list" ref={this.listRef}>
+        <Dropzone
+          ref={this.dropzoneRef}
+          onDrop={onFileDrop}
+          multiple={false}
+          disableClick
+          className="dnd-zone"
+          activeClassName="dnd-zone-active"
+        >
           {_.map(softwareStore.preparedPackages, (packages, letter) => (
             <div key={letter}>
               {_.map(packages, (pack, index) => {
                 const that = this;
                 return (
-                  <span key={index} className='c-package'>
+                  <span key={index} className="c-package">
                     <ListItem
                       pack={pack}
                       expandedPackageName={expandedPackageName}
@@ -226,21 +256,21 @@ class List extends Component {
                       }}
                     >
                       {expandedPackageName === pack.packageName && (
-                        <div className='c-package__details'>
-                          <div className='c-package__main-name'>
+                        <div className="c-package__details">
+                          <div className="c-package__main-name">
                             <span>{pack.packageName}</span>
-                            <div className='dots' id='package-menu' onClick={() => this.showSubmenu()}>
+                            <div className="dots" id="package-menu" onClick={() => this.showSubmenu()}>
                               <span />
                               <span />
                               <span />
                               {this.submenuIsShown && (
                                 <Dropdown hideSubmenu={this.hideSubmenu}>
-                                  <li className='package-dropdown-item'>
+                                  <li className="package-dropdown-item">
                                     <a
-                                      className='package-dropdown-item'
-                                      href='#'
-                                      id='edit-comment'
-                                      onClick={e => {
+                                      className="package-dropdown-item"
+                                      href="#"
+                                      id="edit-comment"
+                                      onClick={(e) => {
                                         e.preventDefault();
                                         this.packVersions = pack.versions;
                                         this.showDeleteModal();
@@ -253,25 +283,23 @@ class List extends Component {
                               )}
                             </div>
                           </div>
-                          <div className='c-package__versions-wrapper'>
-                            <div className='c-package__chart'>
-                              <div className='c-package__heading'>Distribution by devices</div>
+                          <div className="c-package__versions-wrapper">
+                            <div className="c-package__chart">
+                              <div className="c-package__heading">Distribution by devices</div>
                               <SoftwareVersionsStats pack={pack} />
                             </div>
-                            <ul className='c-package__versions' id='versions'>
-                              {_.map(pack.versions, (version, i) => {
-                                return (
-                                  <ListItemVersion
-                                    pack={pack}
-                                    version={version}
-                                    showDependenciesModal={showDependenciesModal}
-                                    showDependenciesManager={showDependenciesManager}
-                                    showDeleteConfirmation={showDeleteConfirmation}
-                                    showEditComment={showEditComment}
-                                    key={i}
-                                  />
-                                );
-                              })}
+                            <ul className="c-package__versions" id="versions">
+                              {_.map(pack.versions, (version, i) => (
+                                <ListItemVersion
+                                  pack={pack}
+                                  version={version}
+                                  showDependenciesModal={showDependenciesModal}
+                                  showDependenciesManager={showDependenciesManager}
+                                  showDeleteConfirmation={showDeleteConfirmation}
+                                  showEditComment={showEditComment}
+                                  key={i}
+                                />
+                              ))}
                             </ul>
                           </div>
                         </div>
@@ -285,28 +313,29 @@ class List extends Component {
         </Dropzone>
         {this.deleteModal ? (
           <ConfirmationModal
-            modalTitle={
-              <div className='text-red' id='delete-all-versions-title'>
+            modalTitle={(
+              <div className="text-red" id="delete-all-versions-title">
                 Delete all versions
               </div>
-            }
+            )}
             hide={this.hideDeleteModal}
             shown={this.deleteModal}
             deleteItem={() => {
               softwareStore.deleteAllVersions(this.packVersions);
               this.hideDeleteModal();
             }}
-            topText={
-              <div className='delete-modal-top-text' id='delete-all-versions-top-text'>
+            topText={(
+              <div className="delete-modal-top-text" id="delete-all-versions-top-text">
                 All software versions will be removed.
               </div>
-            }
-            bottomText={
-              <div className='delete-modal-bottom-text' id='delete-all-versions-bottom-text'>
-                If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.
+            )}
+            bottomText={(
+              <div className="delete-modal-bottom-text" id="delete-all-versions-bottom-text">
+                {'If the software is part of any active campaigns,'}
+                {' any devices that haven\'t installed it will fail the campaign.'}
               </div>
-            }
-            showDetailedInfo={true}
+            )}
+            showDetailedInfo
           />
         ) : null}
       </div>
@@ -315,9 +344,16 @@ class List extends Component {
 }
 
 List.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   onFileDrop: PropTypes.func.isRequired,
   highlightedPackage: PropTypes.string,
+  showDependenciesModal: PropTypes.func,
+  showDependenciesManager: PropTypes.func,
+  showDeleteConfirmation: PropTypes.func,
+  expandedPackageName: PropTypes.string,
+  showEditComment: PropTypes.func,
+  setExpandedPackageName: PropTypes.func,
+  animatedScroll: PropTypes.func
 };
 
 export default withAnimatedScroll(List);

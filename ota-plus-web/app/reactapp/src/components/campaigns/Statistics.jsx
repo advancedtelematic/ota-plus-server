@@ -10,11 +10,12 @@ import StatisticsDetails from './StatisticsDetails';
 @observer
 class Statistics extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     campaignId: PropTypes.string,
     showCancelCampaignModal: PropTypes.func,
     showDependenciesModal: PropTypes.func,
     hideCancel: PropTypes.bool,
+    showRetryModal: PropTypes.func
   };
 
   componentWillMount() {
@@ -28,13 +29,19 @@ class Statistics extends Component {
     const { campaignsStore } = stores;
     return (
       <div>
-        {campaignsStore.campaignsSingleFetchAsync.isFetching || campaignsStore.campaignsSingleStatisticsFetchAsync.isFetching ? (
-          <div className='wrapper-center wrapper-center--dark'>
-            <Loader />
-          </div>
-        ) : (
-          <StatisticsDetails showCancelCampaignModal={showCancelCampaignModal} showDependenciesModal={showDependenciesModal} showRetryModal={showRetryModal} hideCancel={hideCancel} />
-        )}
+        {campaignsStore.campaignsSingleFetchAsync.isFetching
+          || campaignsStore.campaignsSingleStatisticsFetchAsync.isFetching ? (
+            <div className="wrapper-center wrapper-center--dark">
+              <Loader />
+            </div>
+          ) : (
+            <StatisticsDetails
+              showCancelCampaignModal={showCancelCampaignModal}
+              showDependenciesModal={showDependenciesModal}
+              showRetryModal={showRetryModal}
+              hideCancel={hideCancel}
+            />
+          )}
       </div>
     );
   }

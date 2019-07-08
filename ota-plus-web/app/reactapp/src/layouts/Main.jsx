@@ -21,25 +21,32 @@ import { Minimized } from '../components/minimized';
 @observer
 class Main extends Component {
   static propTypes = {
-    stores: PropTypes.object,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object,
+    stores: PropTypes.shape({}),
+    location: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({}),
   };
 
   @observable
   wizards = [];
+
   @observable
   minimizedWizards = [];
+
   @observable
   uploadBoxMinimized = false;
+
   @observable
   uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === 'true';
+
   @observable
   uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === 'true';
+
   @observable
   uiUserProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
+
   @observable
   uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === 'true';
+
   @observable
   atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
 
@@ -47,7 +54,7 @@ class Main extends Component {
     super(props);
     const { common } = axios.defaults.headers;
     common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
-    axios.interceptors.response.use(null, error => {
+    axios.interceptors.response.use(null, (error) => {
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
         this.callFakeWsHandler();
         doLogout();
@@ -63,7 +70,7 @@ class Main extends Component {
       campaignsStore,
       groupsStore,
     });
-    this.logoutHandler = observe(userStore, change => {
+    this.logoutHandler = observe(userStore, (change) => {
       if (change.name === 'ifLogout' && change.object[change.name]) {
         this.callFakeWsHandler();
         doLogout();
@@ -135,7 +142,7 @@ class Main extends Component {
     if (e) e.preventDefault();
     this.wizards = _.filter(this.wizards, wizard => parseInt(wizard.key, 10) !== parseInt(wizardIdentifier, 10));
     this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, minimized => minimized.id === wizardIdentifier), 1);
-    campaignsStore._resetFullScreen();
+    campaignsStore.resetFullScreen();
   };
 
   callFakeWsHandler = () => {
@@ -161,7 +168,7 @@ class Main extends Component {
     }
   };
 
-  toggleUploadBoxMode = e => {
+  toggleUploadBoxMode = (e) => {
     if (e) e.preventDefault();
     this.uploadBoxMinimized = !this.uploadBoxMinimized;
   };
@@ -170,7 +177,7 @@ class Main extends Component {
     this.switchToSWRepo = !this.switchToSWRepo;
   };
 
-  navigate = path => {
+  navigate = (path) => {
     const { history } = this.props;
     history.push(path);
   };
@@ -214,7 +221,12 @@ class Main extends Component {
               <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />
               <UploadBox minimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} />
               {this.wizards}
-              <Minimized uploadBoxMinimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} minimizedWizards={this.minimizedWizards} toggleWizard={this.toggleWizard} />
+              <Minimized
+                uploadBoxMinimized={this.uploadBoxMinimized}
+                toggleUploadBoxMode={this.toggleUploadBoxMode}
+                minimizedWizards={this.minimizedWizards}
+                toggleWizard={this.toggleWizard}
+              />
             </div>
             {contractsCheckCompleted && isTermsAccepted && (
               <LegalInfoFooter />
@@ -227,7 +239,7 @@ class Main extends Component {
 }
 
 Main.wrappedComponent.contextTypes = {
-  router: PropTypes.object.isRequired,
+  router: PropTypes.shape({}).isRequired,
 };
 
 export default withRouter(Main);

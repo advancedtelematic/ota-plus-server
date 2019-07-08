@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
 import PropTypes from 'prop-types';
@@ -9,7 +10,6 @@ import { Sankey } from 'react-vis';
 
 import { Button, Tag } from 'antd';
 import OTAModal from './OTAModal';
-import Loader from './Loader';
 import { AsyncStatusCallbackHandler } from '../utils';
 import { getSHA256Hash } from '../utils/Helpers';
 
@@ -23,17 +23,25 @@ const sankeyAlign = 'left';
 @observer
 class DependenciesModal extends Component {
   @observable loaded = false;
+
   @observable packages = [];
+
   @observable devices = [];
+
   @observable nodes = [];
+
   @observable links = [];
+
   @observable itemsToHighlight = [];
+
   @observable showOnlyActive = true;
+
   @observable sankeyWidth = 1000;
+
   @observable sankeyHeight = 700;
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     status: PropTypes.string,
     hide: PropTypes.func,
     activeItemName: PropTypes.string,
@@ -43,11 +51,23 @@ class DependenciesModal extends Component {
   constructor(props) {
     super(props);
     const { devicesStore, softwareStore, campaignsStore } = props.stores;
-    this.devicesFetchHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
-    this.campaignsFetchHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
-    this.packagesFetchHandler = new AsyncStatusCallbackHandler(softwareStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
+    this.devicesFetchHandler = new AsyncStatusCallbackHandler(
+      devicesStore,
+      'devicesFetchAsync',
+      this.devicesFetched.bind(this)
+    );
+    this.campaignsFetchHandler = new AsyncStatusCallbackHandler(
+      campaignsStore,
+      'campaignsSafeFetchAsync',
+      this.campaignsFetched.bind(this)
+    );
+    this.packagesFetchHandler = new AsyncStatusCallbackHandler(
+      softwareStore,
+      'packagesFetchAsync',
+      this.packagesFetched.bind(this)
+    );
 
-    this.sankeyModeHandler = observe(this, change => {
+    this.sankeyModeHandler = observe(this, (change) => {
       if (change.object.showOnlyActive === false) {
         this.formatData(true);
       }
@@ -74,7 +94,7 @@ class DependenciesModal extends Component {
     this.devicesFetchHandler();
     this.campaignsFetchHandler();
     this.packagesFetchHandler();
-    devicesStore._reset();
+    devicesStore.reset();
     window.removeEventListener('resize', this.resizeSankey);
   }
 
@@ -98,7 +118,7 @@ class DependenciesModal extends Component {
     this.highlightSources(linkData.source.targetLinks, opacity);
   };
 
-  onLinkClick = linkData => {
+  onLinkClick = (linkData) => {
     const { router } = this.context;
     const { stores, hide } = this.props;
     const { campaignsStore } = stores;
@@ -126,6 +146,8 @@ class DependenciesModal extends Component {
 
     router.push(path);
   };
+
+  // eslint-disable-next-line max-len
   getCampaignStatus = campaign => (campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other');
 
   showFullGraph() {
@@ -134,7 +156,7 @@ class DependenciesModal extends Component {
 
   highlightTargets(data, opacity) {
     const paths = document.querySelectorAll('path');
-    _.each(data, link => {
+    _.each(data, (link) => {
       const ix = link.index;
       paths[ix].setAttribute('opacity', opacity);
       if (link.target.sourceLinks) {
@@ -145,7 +167,7 @@ class DependenciesModal extends Component {
 
   highlightSources(data, opacity) {
     const paths = document.querySelectorAll('path');
-    _.each(data, link => {
+    _.each(data, (link) => {
       const ix = link.index;
       paths[ix].setAttribute('opacity', opacity);
       if (link.source.targetLinks) {
@@ -157,9 +179,9 @@ class DependenciesModal extends Component {
   devicesFetched() {
     const { stores } = this.props;
     const { devicesStore } = stores;
-    _.each(devicesStore.devices, device => {
+    _.each(devicesStore.devices, (device) => {
       devicesStore.fetchMultiTargetUpdates(device.uuid);
-      devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then(filepaths => {
+      devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then((filepaths) => {
         device.installedFilepaths = filepaths;
       });
     });
@@ -174,15 +196,15 @@ class DependenciesModal extends Component {
   campaignsFetched() {
     const { stores } = this.props;
     const { devicesStore, softwareStore } = stores;
-    _.each(devicesStore.multiTargetUpdatesSaved, mtuUpdate => {
+    _.each(devicesStore.multiTargetUpdatesSaved, (mtuUpdate) => {
       const packageHash = getSHA256Hash(mtuUpdate);
-      const pack = _.find(softwareStore.packages, pack => pack.packageHash === packageHash);
+      const pack = _.find(softwareStore.packages, singlePack => singlePack.packageHash === packageHash);
       this.packages.push(pack);
     });
-    _.each(devicesStore.devices, device => {
+    _.each(devicesStore.devices, (device) => {
       const filepaths = device.installedFilepaths;
-      _.each(filepaths, filepath => {
-        const pack = _.find(softwareStore.packages, pack => pack.filepath === filepath);
+      _.each(filepaths, (filepath) => {
+        const pack = _.find(softwareStore.packages, singlePack => singlePack.filepath === filepath);
         if (!_.isUndefined(pack)) {
           this.packages.push(pack);
         }
@@ -199,9 +221,9 @@ class DependenciesModal extends Component {
     let devicesWithQueue = [];
     let devicesWithInstalled = [];
 
-    _.each(source, pack => {
+    _.each(source, (pack) => {
       pack.mtus = [];
-      _.each(devicesStore.multiTargetUpdatesSaved, mtu => {
+      _.each(devicesStore.multiTargetUpdatesSaved, (mtu) => {
         mtu.type = 'queue';
         const packageHash = getSHA256Hash(mtu);
         if (pack.packageHash === packageHash) {
@@ -209,9 +231,9 @@ class DependenciesModal extends Component {
         }
       });
 
-      _.each(devicesStore.devices, device => {
+      _.each(devicesStore.devices, (device) => {
         const filepaths = device.installedFilepaths;
-        _.each(filepaths, filepath => {
+        _.each(filepaths, (filepath) => {
           if (pack.filepath === filepath) {
             const mtu = {
               type: 'history',
@@ -223,18 +245,18 @@ class DependenciesModal extends Component {
       });
 
       const pushedCampaigns = [];
-      _.each(pack.mtus, mtu => {
+      _.each(pack.mtus, (mtu) => {
         mtu.campaigns = [];
         mtu.queuedOn = [];
         mtu.installedOn = [];
-        _.each(campaignsStore.campaigns, campaign => {
+        _.each(campaignsStore.campaigns, (campaign) => {
           const { updateId } = mtu;
           if (campaign.update === updateId && pushedCampaigns.indexOf(campaign.update) === -1) {
             mtu.campaigns.push(campaign);
             pushedCampaigns.push(campaign.update);
           }
         });
-        _.each(devicesStore.devices, device => {
+        _.each(devicesStore.devices, (device) => {
           if (device.uuid === mtu.device) {
             mtu.deviceName = device.deviceName;
 
@@ -259,12 +281,12 @@ class DependenciesModal extends Component {
     devicesWithInstalled = _.uniqBy(devicesWithInstalled, device => device.uuid);
     const localDevices = [];
 
-    _.each(devicesWithQueue, device => {
+    _.each(devicesWithQueue, (device) => {
       const dev = Object.assign({}, device);
       dev.section = 'queued';
       localDevices.push(dev);
     });
-    _.each(devicesWithInstalled, device => {
+    _.each(devicesWithInstalled, (device) => {
       const dev = Object.assign({}, device);
       dev.section = 'installed';
       localDevices.push(dev);
@@ -281,7 +303,7 @@ class DependenciesModal extends Component {
       },
     ];
 
-    _.map(source, item => {
+    _.map(source, (item) => {
       const packObj = {
         name: `${item.id.name.substring(0, 15)} - ${item.id.version.substring(0, 5)}`,
         originalName: item.id.name,
@@ -291,14 +313,14 @@ class DependenciesModal extends Component {
         installedOn: [],
         campaign: null,
       };
-      _.map(item.mtus, mtu => {
+      _.map(item.mtus, (mtu) => {
         if (mtu.queuedOn.length) {
           packObj.queuedOn.push(mtu.queuedOn[0]);
         }
         if (mtu.installedOn.length) {
           packObj.installedOn.push(mtu.installedOn[0]);
         }
-        _.map(mtu.campaigns, campaign => {
+        _.map(mtu.campaigns, (campaign) => {
           nodes.push({
             originalName: campaign.name,
             name: `${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`,
@@ -313,7 +335,7 @@ class DependenciesModal extends Component {
       packObj.installedOn = _.uniqBy(packObj.installedOn, device => device.uuid);
       nodes.push(packObj);
     });
-    _.map(this.devices, device => {
+    _.map(this.devices, (device) => {
       nodes.push({
         name: device.deviceName.substring(0, 15) + (device.section === 'queued' ? '(queued on)' : '(installed on)'),
         originalName: device.deviceName,
@@ -356,7 +378,8 @@ class DependenciesModal extends Component {
           break;
         case 'pack':
           currentPackIndex = _.indexOf(packIndexes, index);
-          nextPackIndex = packIndexes[++currentPackIndex];
+          currentPackIndex += 1;
+          nextPackIndex = packIndexes[currentPackIndex];
           if (_.isUndefined(nextPackIndex)) {
             nextPackIndex = Object.keys(nodes).length;
           }
@@ -365,8 +388,8 @@ class DependenciesModal extends Component {
           const installedOn = node.installedOn; //eslint-disable-line
           const campaign = node.campaign; //eslint-disable-line
 
-          _.map(queuedOn, device => {
-            const foundDevice = _.find(nodes, node => node.name === `${device.deviceName.substring(0, 15)}(queued on)`);
+          _.map(queuedOn, (device) => {
+            const foundDevice = _.find(nodes, singleNode => singleNode.name === `${device.deviceName.substring(0, 15)}(queued on)`);
             if (foundDevice) {
               links.push({
                 source: index,
@@ -378,8 +401,8 @@ class DependenciesModal extends Component {
             }
           });
 
-          _.map(installedOn, device => {
-            const foundDevice = _.find(nodes, node => node.name === `${device.deviceName.substring(0, 15)}(installed on)`);
+          _.map(installedOn, (device) => {
+            const foundDevice = _.find(nodes, singleNode => singleNode.name === `${device.deviceName.substring(0, 15)}(installed on)`);
             if (foundDevice) {
               links.push({
                 source: index,
@@ -392,7 +415,7 @@ class DependenciesModal extends Component {
           });
 
           if (campaign) {
-            const foundCampaign = _.find(nodes, node => node.name === `${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`);
+            const foundCampaign = _.find(nodes, singleNode => singleNode.name === `${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`);
             links.push({
               source: index,
               target: nodes.indexOf(foundCampaign),
@@ -420,13 +443,13 @@ class DependenciesModal extends Component {
       const itemsToHighlight = [];
       const { activeItemName } = this.props;
 
-      _.map(source, item => {
+      _.map(source, (item) => {
         if (activeItemName === item.filepath) {
           itemsToHighlight.push(item);
         }
 
-        _.map(item.mtus, mtu => {
-          _.map(mtu.campaigns, campaign => {
+        _.map(item.mtus, (mtu) => {
+          _.map(mtu.campaigns, (campaign) => {
             if (activeItemName === campaign.name) {
               itemsToHighlight.push(item);
             }
@@ -445,7 +468,7 @@ class DependenciesModal extends Component {
     const packs = [];
     const campaigns = [];
     const devices = [];
-    _.each(this.nodes, node => {
+    _.each(this.nodes, (node) => {
       switch (node.type) {
         case 'pack':
           packs.push(node.name);
@@ -460,7 +483,7 @@ class DependenciesModal extends Component {
           break;
       }
     });
-    _.each(allTextElements, item => {
+    _.each(allTextElements, (item) => {
       item.style.transition = 'transform 0.5s';
       if (_.includes(packs, decodeURI(item.innerHTML))) {
         item.style.transform = 'translate(-30px)';
@@ -484,9 +507,9 @@ class DependenciesModal extends Component {
       this.sankeyModeHandler();
     }
     if (this.showOnlyActive) {
-      _.each(this.packages, pack => {
+      _.each(this.packages, (pack) => {
         pack.mtus = [];
-        _.each(devicesStore.multiTargetUpdatesSaved, mtu => {
+        _.each(devicesStore.multiTargetUpdatesSaved, (mtu) => {
           mtu.type = 'queue';
           const packageHash = getSHA256Hash(mtu);
           if (pack.packageHash === packageHash) {
@@ -494,9 +517,9 @@ class DependenciesModal extends Component {
           }
         });
 
-        _.each(pack.mtus, mtu => {
+        _.each(pack.mtus, (mtu) => {
           mtu.campaigns = [];
-          _.each(campaignsStore.campaigns, campaign => {
+          _.each(campaignsStore.campaigns, (campaign) => {
             const { updateId } = mtu;
             if (campaign.update === updateId) {
               mtu.campaigns.push(campaign);
@@ -508,14 +531,14 @@ class DependenciesModal extends Component {
       const activePackages = [];
       const { activeItemName } = this.props;
 
-      _.map(this.packages, item => {
+      _.map(this.packages, (item) => {
         if (activeItemName === item.filepath) {
           activePackages.push(item);
         }
 
         const pushedPackages = [];
-        _.map(item.mtus, mtu => {
-          _.map(mtu.campaigns, campaign => {
+        _.map(item.mtus, (mtu) => {
+          _.map(mtu.campaigns, (campaign) => {
             if (activeItemName === campaign.name && pushedPackages.indexOf(item.filepath) === -1) {
               activePackages.push(item);
               pushedPackages.push(item.filepath);
@@ -539,25 +562,25 @@ class DependenciesModal extends Component {
   highlightActiveItems() {
     const dataToFind = [];
 
-    _.each(this.itemsToHighlight, pack => {
+    _.each(this.itemsToHighlight, (pack) => {
       const packName = pack.id.name.substring(0, 15);
       const packVersion = pack.id.version.substring(0, 5);
       const packString = `${packName} - ${packVersion}`;
       dataToFind.push(packString);
       dataToFind.push('targets.json');
 
-      _.each(pack.mtus, mtu => {
+      _.each(pack.mtus, (mtu) => {
         const deviceStatus = mtu.queuedOn.length ? 'queued on' : 'installed on';
         dataToFind.push(`${mtu.deviceName.substring(0, 15)}(${deviceStatus})`);
 
-        _.each(mtu.campaigns, campaign => {
+        _.each(mtu.campaigns, (campaign) => {
           dataToFind.push(`${campaign.name.substring(0, 15)}(${this.getCampaignStatus(campaign)})`);
         });
       });
     });
 
     const allTextElements = document.querySelectorAll('text');
-    _.each(allTextElements, item => {
+    _.each(allTextElements, (item) => {
       if (_.includes(dataToFind, decodeURI(item.innerHTML))) {
         item.style.fontSize = '21px';
       } else if (dataToFind.length) {
@@ -579,10 +602,10 @@ class DependenciesModal extends Component {
               links={toJS(this.links)}
               width={this.sankeyWidth}
               height={this.sankeyHeight}
-              onLinkMouseOver={e => {
+              onLinkMouseOver={(e) => {
                 this.onLinkMouseAction(this, 'in', e);
               }}
-              onLinkMouseOut={e => {
+              onLinkMouseOut={(e) => {
                 this.onLinkMouseAction(this, 'out', e);
               }}
               onLinkClick={() => {
@@ -599,41 +622,43 @@ class DependenciesModal extends Component {
             />
           </div>
         ) : (
-          <div className='wrapper-center'>This item is not on the chart.</div>
+          <div className="wrapper-center">This item is not on the chart.</div>
         )}
 
         {this.showOnlyActive && (
-          <div className='body-actions'>
-            <Button htmlType='button' className='btn-primary' onClick={this.showFullGraph}>
+          <div className="body-actions">
+            <Button htmlType="button" className="btn-primary" onClick={this.showFullGraph}>
               Show all
             </Button>
           </div>
         ) }
       </span>
     ) : (
-      <div className='wrapper-center'>
+      <div className="wrapper-center">
         Currently no dependency conflicts.
       </div>
     );
 
     return (
       <OTAModal
-        title={<span>
-                {'Dependencies'}
-                <Tag color='#48dad0' className='alpha-tag alpha-tag--gutter-horizontal'>
-                  {'ALPHA'}
-                </Tag>
-              </span>}
-        topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
-              <img src={assets.DEFAULT_CLOSE_ICON} alt='Icon' />
+        title={(
+          <span>
+            {'Dependencies'}
+            <Tag color="#48dad0" className="alpha-tag alpha-tag--gutter-horizontal">
+              {'ALPHA'}
+            </Tag>
+          </span>
+        )}
+        topActions={(
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
-        }
+        )}
         content={content}
         visible={shown}
-        className='dependencies-modal'
+        className="dependencies-modal"
         hideOnClickOutside
         onRequestClose={hide}
       />
@@ -642,11 +667,11 @@ class DependenciesModal extends Component {
 }
 
 DependenciesModal.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 DependenciesModal.wrappedComponent.contextTypes = {
-  router: PropTypes.object.isRequired,
+  router: PropTypes.shape({}).isRequired,
 };
 
 export default DependenciesModal;

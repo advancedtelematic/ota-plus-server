@@ -1,6 +1,13 @@
 {
-  "plugins": ["react", "prettier"],
-  "extends": ["eslint-config-airbnb-base", "eslint-config-airbnb-base/rules/strict", "airbnb/rules/react"],
+  "plugins": [
+    "react",
+    "prettier"
+  ],
+  "extends": [
+    "eslint-config-airbnb-base",
+    "eslint-config-airbnb-base/rules/strict",
+    "airbnb/rules/react"
+  ],
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
@@ -19,18 +26,24 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "moduleDirectory": ["node_modules", "src"]
+        "moduleDirectory": [
+          "node_modules",
+          "src"
+        ]
       }
     }
   },
   "rules": {
-    "comma-dangle": ["error", {
-      "arrays": "only-multiline",
-      "objects": "only-multiline",
-      "imports": "only-multiline",
-      "exports": "only-multiline",
-      "functions": "ignore"
-    }],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "only-multiline",
+        "objects": "only-multiline",
+        "imports": "only-multiline",
+        "exports": "only-multiline",
+        "functions": "ignore"
+      }
+    ],
     "linebreak-style": 0,
     "max-len": [
       2,
@@ -41,11 +54,32 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "object-curly-newline": [2, { "consistent": true }],
+    "object-curly-newline": [
+      2,
+      {
+        "consistent": true
+      }
+    ],
+    "no-nested-ternary": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
-    "react/jsx-curly-brace-presence": [1, { "props": "never", "children": "ignore" }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] } ],
-    "react/no-array-index-key": 0
+    "react/jsx-curly-brace-presence": [
+      1,
+      {
+        "props": "never",
+        "children": "ignore"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "react/no-array-index-key": 0,
+    "react/require-default-props": 0
   }
 }

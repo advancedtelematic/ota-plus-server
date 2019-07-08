@@ -1,5 +1,7 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
@@ -15,7 +17,9 @@ const options = {
 @observer
 class SmartFilters extends Component {
   @observable lastGivenId = 1;
+
   @observable expressionForSmartGroup = '';
+
   @observable filters = [
     {
       id: 1,
@@ -36,7 +40,7 @@ class SmartFilters extends Component {
     this.setExpressionForSmartGroup();
   };
 
-  removeFilter = id => {
+  removeFilter = (id) => {
     if (this.filters.length > 1) {
       this.filters = _.filter(this.filters, el => el.id !== id);
     }
@@ -44,7 +48,7 @@ class SmartFilters extends Component {
   };
 
   setType = (id, value) => {
-    this.filters.forEach(el => {
+    this.filters.forEach((el) => {
       if (el.id === id) {
         switch (value) {
           case 'contains':
@@ -66,7 +70,7 @@ class SmartFilters extends Component {
   selectOperationType = (e, id, type) => {
     e.preventDefault();
 
-    this.filters.forEach(el => {
+    this.filters.forEach((el) => {
       if (el.id === id) {
         el.operation = type;
       }
@@ -81,16 +85,17 @@ class SmartFilters extends Component {
 
   setExpressionForSmartGroup = () => {
     this.expressionForSmartGroup = '';
-    const { onStep2DataSelect } = this.props;
+    const { onStep2DataSelect, stores } = this.props;
 
-    let stepValid = _.every(this.filters, el => el.expression.length >= 1);
+    const stepValid = _.every(this.filters, el => el.expression.length >= 1);
 
-    const { groupsStore } = this.props.stores;
+    const { groupsStore } = stores;
 
     if (stepValid) {
       this.filters.map((el, index) => {
         if (index !== 0) this.expressionForSmartGroup += ` ${el.operation} `;
         this.expressionForSmartGroup += el.expression;
+        return true;
       });
       groupsStore.fetchNumberOfDevicesByExpression(this.expressionForSmartGroup);
       onStep2DataSelect('expression', this.expressionForSmartGroup);
@@ -100,49 +105,62 @@ class SmartFilters extends Component {
   };
 
   render() {
-    const { layout } = this.props;
-    const { numberOfDevicesByExpression } = this.props.stores.groupsStore;
+    const { stores } = this.props;
+    const { numberOfDevicesByExpression } = stores.groupsStore;
 
     return (
-      <div className='filters'>
-        <div className='filters--devices__number'>
-          <span className='title'>Number of devices:</span>
-          <span className='devices-number'>{this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'} Devices</span>
+      <div className="filters">
+        <div className="filters--devices__number">
+          <span className="title">Number of devices:</span>
+          <span className="devices-number">
+            {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
+            {' '}
+            Devices
+          </span>
         </div>
-
-        {_.map(this.filters, (filter, index) => {
-          return (
-            <div key={filter.id}>
-              {index !== 0 && (
-                <div className='filters--operations'>
-                  <div className='filters--operations__single' onClick={e => this.selectOperationType(e, filter.id, 'and')}>
-                    <button id='filter--operation-and' className={`btn-radio ${filter.operation === 'and' ? ' checked' : ''}`} />
-                    <span>And</span>
-                  </div>
-                  <div className='filters--operations__single' onClick={e => this.selectOperationType(e, filter.id, 'or')}>
-                    <button id='filter-operation-or' className={`btn-radio ${filter.operation === 'or' ? ' checked' : ''}`} />
-                    <span>Or</span>
-                  </div>
-                </div>
-              )}
-              <div>
-                <Filter
-                  options={options}
-                  layout={layout}
-                  id={filter.id}
-                  addFilter={this.addFilter}
-                  removeFilter={this.removeFilter}
-                  setType={this.setType}
-                  type={filter.type}
-                  setExpressionForSingleFilter={this.setExpressionForSingleFilter}
+        {_.map(this.filters, (filter, index) => (
+          <div key={filter.id}>
+            {index !== 0 && (
+            <div className="filters--operations">
+              <div className="filters--operations__single" onClick={e => this.selectOperationType(e, filter.id, 'and')}>
+                <button
+                  type="button"
+                  id="filter--operation-and"
+                  className={`btn-radio ${filter.operation === 'and' ? ' checked' : ''}`}
                 />
+                <span>And</span>
+              </div>
+              <div className="filters--operations__single" onClick={e => this.selectOperationType(e, filter.id, 'or')}>
+                <button
+                  type="button"
+                  id="filter-operation-or"
+                  className={`btn-radio ${filter.operation === 'or' ? ' checked' : ''}`}
+                />
+                <span>Or</span>
               </div>
             </div>
-          );
-        })}
+            )}
+            <div>
+              <Filter
+                options={options}
+                id={filter.id}
+                addFilter={this.addFilter}
+                removeFilter={this.removeFilter}
+                setType={this.setType}
+                type={filter.type}
+                setExpressionForSingleFilter={this.setExpressionForSingleFilter}
+              />
+            </div>
+          </div>
+        ))}
       </div>
     );
   }
 }
+
+SmartFilters.propTypes = {
+  onStep2DataSelect: PropTypes.func,
+  stores: PropTypes.shape({})
+};
 
 export default SmartFilters;

@@ -11,7 +11,7 @@ import { OTAForm, FormInput } from '../../../partials';
 @observer
 class WizardStep1 extends Component {
   static propTypes = {
-    wizardData: PropTypes.object.isRequired,
+    wizardData: PropTypes.shape({}).isRequired,
     markStepAsFinished: PropTypes.func.isRequired,
     markStepAsNotFinished: PropTypes.func.isRequired,
   };
@@ -28,19 +28,20 @@ class WizardStep1 extends Component {
     const { wizardData } = this.props;
     const { name: campaignName } = wizardData;
     return (
-      <div className='step-wrapper'>
+      <div className="step-wrapper">
         <div>
-          <Row className='gutter-bottom'>
-            Use campaigns to push software updates to specific device groups. Before you continue, make sure that you've created the necessary updates and device groups.
+          <Row className="gutter-bottom">
+            Use campaigns to push software updates to specific device groups.
+            Before you continue, make sure that you&apos;ve created the necessary updates and device groups.
           </Row>
-          <OTAForm formWidth='60%' id='add-campaign-name-form' onSubmit={e => e.preventDefault()}>
+          <OTAForm formWidth="60%" id="add-campaign-name-form" onSubmit={e => e.preventDefault()}>
             <FormInput
-              label='Name'
-              name='name'
-              placeholder='Name'
-              id='add-campaign-name-form-input'
+              label="Name"
+              name="name"
+              placeholder="Name"
+              id="add-campaign-name-form-input"
               showIcon={false}
-              title='Select campaign name'
+              title="Select campaign name"
               previousValue={campaignName}
               onValid={this.changeCampaignName}
               onInvalid={this.changeCampaignName}

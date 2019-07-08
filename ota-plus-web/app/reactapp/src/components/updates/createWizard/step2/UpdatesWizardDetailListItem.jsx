@@ -8,14 +8,16 @@ import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import { FormSelect } from '../../../../partials';
 import { Row, Col, Checkbox } from 'antd';
+import { FormSelect } from '../../../../partials';
 
 @inject('stores')
 @observer
 class UpdatesWizardDetailListItem extends Component {
   @observable fromVersions = [];
+
   @observable toVersions = [];
+
   @observable updateFromAny = false;
 
   constructor(props) {
@@ -25,25 +27,24 @@ class UpdatesWizardDetailListItem extends Component {
   }
 
   formatVersions = (type, name) => {
-    const { softwareStore } = this.props.stores;
+    const { stores } = this.props;
+    const { softwareStore } = stores;
     const { preparedPackages } = softwareStore;
     let versions = null;
-    _.each(preparedPackages, packs => {
+    _.each(preparedPackages, (packs) => {
       const found = _.find(packs, pack => pack.name === name);
       if (found) {
-        versions = found.versions;
+        const { versions: foundVersions } = found;
+        versions = foundVersions;
       }
     });
-    const formattedData =
-      versions &&
-      versions.map(version => {
-        return {
-          text: `${version.id.version} Created at: ${moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}`,
-          id: version.id.version,
-          value: version.filepath,
-          version,
-        };
-      });
+    const formattedData = versions
+      && versions.map(version => ({
+        text: `${version.id.version} Created at: ${moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}`,
+        id: version.id.version,
+        value: version.filepath,
+        version,
+      }));
     if (type === 'from') {
       this.fromVersions = formattedData;
     } else {
@@ -60,26 +61,27 @@ class UpdatesWizardDetailListItem extends Component {
   };
 
   render() {
-    const { item, wizardData, onStep2DataSelect } = this.props;
-    const { softwareStore } = this.props.stores;
+    const { item, wizardData, onStep2DataSelect, stores } = this.props;
+    const { softwareStore } = stores;
     const { update } = wizardData;
-    const { fromPack, toPack, fromVersion, toVersion } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
-    let uniqPackages = _.uniqBy(softwareStore.packages, item => {
-      return item.id.name;
-    });
+    const {
+      fromPack,
+      toPack,
+      fromVersion,
+      toVersion
+    } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
+    const uniqPackages = _.uniqBy(softwareStore.packages, pack => pack.id.name);
 
-    const packages = _.map(uniqPackages, item => {
-      return {
-        text: item.id.name,
-        id: item.id.name,
-        value: item.id.name,
-        item,
-      };
-    });
+    const packages = _.map(uniqPackages, pack => ({
+      text: pack.id.name,
+      id: pack.id.name,
+      value: pack.id.name,
+      pack,
+    }));
 
     return (
-      <div className='update-block'>
-        <Row className='hardware-type'>
+      <div className="update-block">
+        <Row className="hardware-type">
           <Col span={24}>{item.name}</Col>
         </Row>
         <Row className="no-sw-version">
@@ -89,16 +91,17 @@ class UpdatesWizardDetailListItem extends Component {
             </Checkbox>
             {this.updateFromAny && (
               <span className="no-sw-version__warning">
-                {'If you select this option, you’ll be upgrading to the new version on all ECUs . Bear in mind that older software versions might not upgrade properly due to version incompatibility.'}
+                {'If you select this option, you’ll be upgrading to the new version on all ECUs. '}
+                {'Bear in mind that older software versions might not upgrade properly due to version incompatibility.'}
               </span>
             )}
           </Col>
         </Row>
-        <Row className='header'>
+        <Row className="header">
           <Col span={12}>From</Col>
           <Col span={12}>To</Col>
         </Row>
-        <Row className='packages'>
+        <Row className="packages">
           <Form>
             <Col span={12}>
               <FormSelect
@@ -106,14 +109,14 @@ class UpdatesWizardDetailListItem extends Component {
                 ref={this.fromPackageSelect}
                 disabled={this.updateFromAny}
                 options={packages}
-                label='Software'
+                label="Software"
                 multiple={false}
-                wrapperWidth='100%'
+                wrapperWidth="100%"
                 visibleFieldsCount={5}
-                appendMenuToBodyTag={true}
+                appendMenuToBodyTag
                 placeholder={this.updateFromAny ? 'Any software version' : 'Select from software'}
                 defaultValue={!this.updateFromAny && fromPack && fromPack.id && fromPack.id.name}
-                onChange={value => {
+                onChange={(value) => {
                   if (value && value.id) {
                     this.formatVersions('from', value.id);
                     onStep2DataSelect(item, 'fromPack', value.item);
@@ -125,14 +128,14 @@ class UpdatesWizardDetailListItem extends Component {
               <FormSelect
                 id={`${item.name}-to-software`}
                 options={packages}
-                label='Software'
+                label="Software"
                 multiple={false}
-                wrapperWidth='100%'
+                wrapperWidth="100%"
                 visibleFieldsCount={5}
-                appendMenuToBodyTag={true}
-                placeholder='Select to software'
+                appendMenuToBodyTag
+                placeholder="Select to software"
                 defaultValue={toPack && toPack.id && toPack.id.name}
-                onChange={value => {
+                onChange={(value) => {
                   if (value && value.id) {
                     this.formatVersions('to', value.id);
                     onStep2DataSelect(item, 'toPack', value.item);
@@ -142,7 +145,7 @@ class UpdatesWizardDetailListItem extends Component {
             </Col>
           </Form>
         </Row>
-        <Row className='versions'>
+        <Row className="versions">
           <Form>
             <Col span={12}>
               <FormSelect
@@ -150,13 +153,13 @@ class UpdatesWizardDetailListItem extends Component {
                 ref={this.fromVersionSelect}
                 disabled={this.updateFromAny}
                 options={this.fromVersions}
-                appendMenuToBodyTag={true}
-                label='Version'
+                appendMenuToBodyTag
+                label="Version"
                 multiple={false}
                 placeholder={this.updateFromAny ? 'Any software version' : 'Select from version'}
                 visibleFieldsCount={5}
                 defaultValue={!this.updateFromAny && fromVersion && fromVersion.id && fromVersion.id.version}
-                onChange={value => {
+                onChange={(value) => {
                   if (value && value.version) {
                     onStep2DataSelect(item, 'fromVersion', value.version);
                   }
@@ -167,13 +170,13 @@ class UpdatesWizardDetailListItem extends Component {
               <FormSelect
                 id={`${item.name}-to-version`}
                 options={this.toVersions}
-                appendMenuToBodyTag={true}
-                label='Version'
+                appendMenuToBodyTag
+                label="Version"
                 multiple={false}
-                placeholder='Select to version'
+                placeholder="Select to version"
                 visibleFieldsCount={5}
                 defaultValue={toVersion && toVersion.id && toVersion.id.version}
-                onChange={value => {
+                onChange={(value) => {
                   if (value && value.version) {
                     onStep2DataSelect(item, 'toVersion', value.version);
                   }
@@ -188,9 +191,9 @@ class UpdatesWizardDetailListItem extends Component {
 }
 
 UpdatesWizardDetailListItem.propTypes = {
-  stores: PropTypes.object,
-  item: PropTypes.object,
-  wizardData: PropTypes.object,
+  stores: PropTypes.shape({}),
+  item: PropTypes.shape({}),
+  wizardData: PropTypes.shape({}),
   onStep2DataSelect: PropTypes.func,
 };
 

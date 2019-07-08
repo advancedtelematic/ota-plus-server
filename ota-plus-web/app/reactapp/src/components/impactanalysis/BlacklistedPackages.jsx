@@ -5,9 +5,9 @@ import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { Tag } from 'antd';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
-import { Tag } from 'antd';
 
 const headerHeight = 30;
 
@@ -15,16 +15,22 @@ const headerHeight = 30;
 @observer
 class BlacklistedPackages extends Component {
   @observable firstShownIndex = 0;
+
   @observable lastShownIndex = 50;
+
   @observable expandedPackage = null;
+
   @observable fakeHeaderTopPosition = null;
+
   @observable fakeHeaderLetter = '';
+
   @observable tmpIntervalId = null;
 
   constructor(props) {
     super(props);
+    this.listRef = React.createRef();
     const { softwareStore } = props.stores;
-    this.packagesChangeHandler = observe(softwareStore, change => {
+    this.packagesChangeHandler = observe(softwareStore, (change) => {
       if (change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -33,23 +39,25 @@ class BlacklistedPackages extends Component {
       }
     });
   }
+
   componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener('scroll', this.listScroll);
     this.listScroll();
   }
+
   componentWillUnmount() {
     this.packagesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener('scroll', this.listScroll);
   }
 
   generateHeadersPositions = () => {
-    const headers = this.refs.list.getElementsByClassName('header');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const headers = this.listRef.current.getElementsByClassName('header');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       headers,
-      header => {
-        let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (header) => {
+        const position = header.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -58,13 +66,13 @@ class BlacklistedPackages extends Component {
   };
 
   generateItemsPositions = () => {
-    const items = this.refs.list.getElementsByClassName('item');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const items = this.listRef.current.getElementsByClassName('item');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       items,
-      item => {
-        let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (item) => {
+        const position = item.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -73,12 +81,13 @@ class BlacklistedPackages extends Component {
   };
 
   listScroll = () => {
-    const { softwareStore } = this.props.stores;
-    if (this.refs.list) {
+    const { stores } = this.props;
+    const { softwareStore } = stores;
+    if (this.listRef.current) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
-      let scrollTop = this.refs.list.scrollTop;
-      let listHeight = this.refs.list.getBoundingClientRect().height;
+      let { scrollTop } = this.listRef.current;
+      const listHeight = this.listRef.current.getBoundingClientRect().height;
       let newFakeHeaderLetter = this.fakeHeaderLetter;
       let firstShownIndex = null;
       let lastShownIndex = null;
@@ -88,10 +97,12 @@ class BlacklistedPackages extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(softwareStore.preparedBlacklist)[index];
             return true;
-          } else if (scrollTop >= position - headerHeight) {
+          }
+          if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
             return true;
           }
+          return false;
         },
         this,
       );
@@ -113,52 +124,54 @@ class BlacklistedPackages extends Component {
     }
   };
 
-  togglePackage = name => {
+  togglePackage = (name) => {
     this.expandedPackage = this.expandedPackage !== name ? name : null;
   };
 
   render() {
-    const { softwareStore } = this.props.stores;
+    const { stores } = this.props;
+    const { softwareStore } = stores;
     const blacklist = softwareStore.preparedBlacklist;
     return (
-      <div className='blacklisted-packages-panel'>
-        <div className='section-header'>
+      <div className="blacklisted-packages-panel">
+        <div className="section-header">
           Blacklisted packages
-          <Tag color='#48dad0' className='alpha-tag'>
+          <Tag color="#48dad0" className="alpha-tag">
             ALPHA
           </Tag>
         </div>
-        <div className='ios-list' ref='list'>
-          <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
-            <div className='left-box'>{this.fakeHeaderLetter}</div>
-            <div className='right-box'>Impacted devices</div>
+        <div className="ios-list" ref={this.listRef}>
+          <div className="fake-header" style={{ top: this.fakeHeaderTopPosition }}>
+            <div className="left-box">{this.fakeHeaderLetter}</div>
+            <div className="right-box">Impacted devices</div>
           </div>
-          {_.map(blacklist, (packs, letter) => {
-            return (
-              <span key={letter}>
-                <div className='header'>
-                  <div className='left-box'>{letter}</div>
-                  <div className='right-box'>Impacted devices</div>
-                </div>
-                {_.map(packs, (pack, index) => {
-                  return (
-                    <span key={index} className='key'>
-                      <button
-                        className={'item' + (this.expandedPackage == pack.packageName ? ' selected' : '')}
-                        id={'impact-analysis-blacklisted-' + pack.packageName}
-                        onClick={this.togglePackage.bind(this, pack.packageName)}
-                        key={pack.packageName}
-                      >
-                        <div title={pack.packageName}>{pack.packageName}</div>
-                        <div>{pack.deviceCount}</div>
-                      </button>
-                      <SlideAnimation changeDisplay={false}>{this.expandedPackage == pack.packageName ? <Versions versions={pack.versions} /> : null}</SlideAnimation>
-                    </span>
-                  );
-                })}
-              </span>
-            );
-          })}
+          {_.map(blacklist, (packs, letter) => (
+            <span key={letter}>
+              <div className="header">
+                <div className="left-box">{letter}</div>
+                <div className="right-box">Impacted devices</div>
+              </div>
+              {_.map(packs, (pack, index) => (
+                <span key={index} className="key">
+                  <button
+                    type="button"
+                    className={`item${this.expandedPackage === pack.packageName ? ' selected' : ''}`}
+                    id={`impact-analysis-blacklisted-${pack.packageName}`}
+                    onClick={this.togglePackage.bind(this, pack.packageName)}
+                    key={pack.packageName}
+                  >
+                    <div title={pack.packageName}>{pack.packageName}</div>
+                    <div>{pack.deviceCount}</div>
+                  </button>
+                  <SlideAnimation changeDisplay={false}>
+                    {this.expandedPackage === pack.packageName ? (
+                      <Versions versions={pack.versions} />
+                    ) : null}
+                  </SlideAnimation>
+                </span>
+              ))}
+            </span>
+          ))}
         </div>
       </div>
     );
@@ -166,7 +179,7 @@ class BlacklistedPackages extends Component {
 }
 
 BlacklistedPackages.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default BlacklistedPackages;
