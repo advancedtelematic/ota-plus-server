@@ -150,7 +150,7 @@ class ProfileOrganization extends Component {
                   <span />
                   <span />
                   {menuEditShownIndex === index && (
-                    <Dropdown hideSubmenu={() => this.showHideOrganizationEditMenu(-1)} customClassName={'relative'}>
+                    <Dropdown hideSubmenu={() => this.showHideOrganizationEditMenu(-1)} customClassName="relative">
                       <li className="device-dropdown-item">
                         <a className="device-dropdown-item" id="edit-device" onClick={this.showOrganizationEditModal}>
                           {'Rename organization'}
@@ -176,7 +176,7 @@ class ProfileOrganization extends Component {
                   additionalClassName={`white ${userEmailError ? 'error-border' : 'dark-border'}`}
                   changeAction={this.userEmailChangeCallback}
                   id="add-registered-user-search-bar"
-                  placeholder={'Add by email address'}
+                  placeholder="Add by email address"
                   value={userEmail}
                 />
               </Form>

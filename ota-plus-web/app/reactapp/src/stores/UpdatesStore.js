@@ -14,28 +14,41 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 
 export default class UpdatesStore {
   @observable updatesFetchAsync = {};
+
   @observable updatesSafeFetchAsync = {};
+
   @observable updatesLoadMoreAsync = {};
+
   @observable updatesMtuCreateAsync = {};
+
   @observable updatesCreateAsync = {};
+
   @observable updatesFetchMtuIdAsync = {};
+
   @observable updatesWizardFetchAsync = {};
 
   @observable updates = [];
+
   @observable updateFilter = '';
+
   @observable updatesLimitPage = UPDATES_LIMIT_PER_PAGE;
 
   @observable updatesTotalCount = 0;
 
   @observable preparedUpdates = {};
+
   @observable lastCreatedMtuId = null;
+
   @observable currentMtuData = {};
 
   @observable updatesWizard = [];
 
   @observable preparedUpdatesWizard = {};
-  @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD; // 5
+
+  @observable updatesLimitWizard = LIMIT_UPDATES_WIZARD;
+
   @observable updatesOffsetWizard = 0;
+
   @observable hasMoreWizardUpdates = false;
 
   constructor() {
@@ -49,21 +62,21 @@ export default class UpdatesStore {
   }
 
   createMultiTargetUpdate(data) {
-    let updateObject = this._prepareUpdateObject(data);
+    const updateObject = this.prepareUpdateObject(data);
     resetAsync(this.updatesMtuCreateAsync, true);
     return axios
       .post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
-      .then(response => {
+      .then((response) => {
         this.lastCreatedMtuId = response.data;
         this.updatesMtuCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.updatesMtuCreateAsync = handleAsyncError(error);
       });
   }
 
-  _prepareUpdateObject(data) {
-    let targets = {};
+  prepareUpdateObject = (data) => {
+    const targets = {};
     _.each(data, (values, hwId) => {
       targets[hwId] = {
         ...(!values.updateFromAny && {
@@ -97,11 +110,11 @@ export default class UpdatesStore {
     resetAsync(this.updatesCreateAsync, true);
     return axios
       .post(API_UPDATES_CREATE, data)
-      .then(response => {
+      .then((response) => {
         this.fetchUpdates('updatesSafeFetchAsync');
         this.updatesCreateAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.updatesCreateAsync = handleAsyncError(error);
       });
   }
@@ -117,10 +130,10 @@ export default class UpdatesStore {
       .then((response) => {
         this.updates = response.data.values;
         this.updatesTotalCount = response.data.total;
-        this._prepareUpdates();
+        this.prepareUpdates();
         this[async] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
@@ -131,31 +144,31 @@ export default class UpdatesStore {
     const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
     return axios
       .get(apiAddress)
-      .then(response => {
+      .then((response) => {
         this.updatesWizard = response.data.values;
-        this._prepareUpdates('wizard');
+        this.prepareUpdates('wizard');
         this[async] = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this[async] = handleAsyncError(error);
       });
   }
 
   loadMoreWizardUpdates(async = 'updatesWizardLoadMoreAsync') {
     resetAsync(this[async], true);
-    let apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard + this.updatesLimitWizard}`;
+    const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard + this.updatesLimitWizard}`;
 
     return axios
       .get(apiAddress)
-      .then(response => {
+      .then((response) => {
         this.updatesWizard = _.uniqBy(this.updatesWizard.concat(response.data.values), item => item.uuid);
-        this._prepareUpdates('wizard');
+        this.prepareUpdates('wizard');
         this[async] = handleAsyncSuccess(response);
 
         this.updatesWizardOffset = response.data.offset;
         this.hasMoreWizardUpdates = this.updatesWizardOffset < response.data.total;
       })
-      .catch(error => {
+      .catch((error) => {
         this.updatesLoadMoreAsync = handleAsyncError(error);
       });
   }
@@ -171,17 +184,17 @@ export default class UpdatesStore {
       return;
     }
 
-    return axios
+    axios
       .get(apiAddress)
-      .then(response => {
+      .then((response) => {
         this.currentMtuData = {
-          mtuId: mtuId,
+          mtuId,
           data: response.data,
         };
 
         this.updatesFetchMtuIdAsync = handleAsyncSuccess(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.currentMtuData = {};
         this.updatesFetchMtuIdAsync = handleAsyncError(error);
       });
@@ -191,7 +204,7 @@ export default class UpdatesStore {
     return _.sortBy(updates, update => update.name.toLowerCase());
   }
 
-  _prepareUpdates(mode = null) {
+  prepareUpdates(mode = null) {
     const updates = mode === 'wizard' ? this.sortUpdates(this.updatesWizard) : this.updates;
     const specialGroup = {
       '#': [],
@@ -201,7 +214,8 @@ export default class UpdatesStore {
     updates.forEach((update, index) => {
       let firstLetter = update.name.charAt(0).toUpperCase();
       firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-      if ((firstLetter !== '#' && _.isUndefined(sortedUpdates[firstLetter])) || !Array.isArray(sortedUpdates[firstLetter])) {
+      if ((firstLetter !== '#' && _.isUndefined(sortedUpdates[firstLetter]))
+        || !Array.isArray(sortedUpdates[firstLetter])) {
         sortedUpdates[firstLetter] = [];
       }
       if (firstLetter !== '#') {
@@ -226,7 +240,7 @@ export default class UpdatesStore {
     this.fetchUpdates('updatesFetchAsync', 0);
   }
 
-  _reset() {
+  reset() {
     resetAsync(this.updatesFetchAsync);
     resetAsync(this.updatesSafeFetchAsync);
     resetAsync(this.updatesLoadMoreAsync);

@@ -30,12 +30,14 @@ export default class InfiniteScroll extends Component {
   };
 
   componentDidMount() {
-    this.pageLoaded = this.props.pageStart;
+    const { pageStart } = this.props;
+    this.pageLoaded = pageStart;
     this.attachScrollListener();
   }
 
   componentDidUpdate() {
-    if (this.props.hasMore) {
+    const { hasMore } = this.props;
+    if (hasMore) {
       this.attachScrollListener();
     } else {
       this.detachScrollListener();
@@ -47,8 +49,38 @@ export default class InfiniteScroll extends Component {
   }
 
   setDefaultLoader(loader) {
-    this._defaultLoader = loader;
+    this.defaultLoader = loader;
   }
+
+  scrollListener = () => {
+    const el = this.scrollComponent;
+    const scrollEl = window;
+    let scrollOffset;
+    const { useWindow, isReverse, threshold, loadMore, isLoading, hasMore } = this.props;
+    if (useWindow) {
+      const scrollTop = scrollEl.pageYOffset !== undefined
+        ? scrollEl.pageYOffset
+        : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+      if (isReverse) {
+        scrollOffset = scrollTop;
+      } else {
+        scrollOffset = this.calculateTopPosition(el) + el.offsetHeight - (scrollTop + window.innerHeight);
+      }
+    } else if (isReverse) {
+      scrollOffset = el.parentNode.scrollTop;
+    } else {
+      scrollOffset = el.scrollHeight - el.parentNode.scrollTop - el.parentNode.clientHeight;
+    }
+    if (scrollOffset < Number(threshold)) {
+      this.detachScrollListener();
+      // Call loadMore after detachScrollListener to allow for non-async loadMore functions
+      if (typeof loadMore === 'function' && !isLoading) {
+        if (hasMore) {
+          loadMore.call();
+        }
+      }
+    }
+  };
 
   calculateTopPosition(el) {
     if (!el) {
@@ -57,52 +89,26 @@ export default class InfiniteScroll extends Component {
     return el.offsetTop + this.calculateTopPosition(el.offsetParent);
   }
 
-  scrollListener = () => {
-    const el = this.scrollComponent;
-    const scrollEl = window;
-    let scrollOffset;
-
-    if (this.props.useWindow) {
-      const scrollTop = scrollEl.pageYOffset !== undefined ? scrollEl.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-      if (this.props.isReverse) {
-        scrollOffset = scrollTop;
-      } else {
-        scrollOffset = this.calculateTopPosition(el) + el.offsetHeight - (scrollTop + window.innerHeight);
-      }
-    } else if (this.props.isReverse) {
-      scrollOffset = el.parentNode.scrollTop;
-    } else {
-      scrollOffset = el.scrollHeight - el.parentNode.scrollTop - el.parentNode.clientHeight;
-    }
-    if (scrollOffset < Number(this.props.threshold)) {
-      this.detachScrollListener();
-      // Call loadMore after detachScrollListener to allow for non-async loadMore functions
-      if (typeof this.props.loadMore === 'function' && !this.props.isLoading) {
-        if (this.props.hasMore) {
-          this.props.loadMore.call();
-        }
-      }
-    }
-  };
-
   attachScrollListener() {
-    if (!this.props.hasMore) {
+    const { useWindow, hasMore, initialLoad } = this.props;
+    if (!hasMore) {
       return;
     }
     let scrollEl = window;
-    if (this.props.useWindow === false) {
+    if (useWindow === false) {
       scrollEl = this.scrollComponent.parentNode;
     }
     scrollEl.addEventListener('scroll', this.scrollListener);
     scrollEl.addEventListener('resize', this.scrollListener);
-    if (this.props.initialLoad) {
+    if (initialLoad) {
       this.scrollListener();
     }
   }
 
   detachScrollListener() {
+    const { useWindow } = this.props;
     let scrollEl = window;
-    if (this.props.useWindow === false) {
+    if (useWindow === false) {
       scrollEl = this.scrollComponent.parentNode;
     }
     scrollEl.removeEventListener('scroll', this.scrollListener);
@@ -110,10 +116,23 @@ export default class InfiniteScroll extends Component {
   }
 
   render() {
-    const { children, hasMore, useWindow, pageStart, loadMore, initialLoad, threshold, isReverse, element, isLoading, loader, ...props } = this.props;
-    props.ref = node => {
+    const {
+      children,
+      hasMore,
+      useWindow,
+      pageStart,
+      loadMore,
+      initialLoad,
+      threshold,
+      isReverse,
+      element,
+      isLoading,
+      loader,
+      ...props
+    } = this.props;
+    props.ref = (node) => {
       this.scrollComponent = node;
     };
-    return React.createElement(element, props, children, isLoading && (loader || this._defaultLoader));
+    return React.createElement(element, props, children, isLoading && (loader || this.defaultLoader));
   }
 }

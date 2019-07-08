@@ -12,8 +12,8 @@ class DropdownMenu extends React.Component {
   @observable visible = false;
 
   static propTypes = {
-    children: PropTypes.object,
-    customStyles: PropTypes.object,
+    children: PropTypes.shape({}),
+    customStyles: PropTypes.shape({}),
     customClassName: PropTypes.string,
     placement: PropTypes.string,
   };
@@ -22,8 +22,14 @@ class DropdownMenu extends React.Component {
     const { children, placement, customStyles, customClassName } = this.props;
     const menu = <Menu>{children}</Menu>;
     return (
-      <Dropdown overlay={menu} trigger={['click']} placement={placement} overlayStyle={customStyles} overlayClassName={customClassName}>
-        <span className='dots' id='campaign-menu'>
+      <Dropdown
+        overlay={menu}
+        trigger={['click']}
+        placement={placement}
+        overlayStyle={customStyles}
+        overlayClassName={customClassName}
+      >
+        <span className="dots" id="campaign-menu">
           <span />
           <span />
           <span />

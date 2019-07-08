@@ -4,21 +4,20 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router';
-import _ from 'lodash';
 
 @inject('stores')
 @observer
 class LatestCreatedCampaignItem extends Component {
   static propTypes = {
-    stores: PropTypes.object,
-    campaign: PropTypes.object,
-    history: PropTypes.object.isRequired,
+    stores: PropTypes.shape({}),
+    campaign: PropTypes.shape({}),
+    history: PropTypes.shape({}).isRequired,
   };
 
   /*
    * ToDo: onClick handler is workaround but should be switched using router and proper path to navigate
    */
-  onClick = e => {
+  onClick = (e) => {
     const { stores, campaign, history } = this.props;
     const { campaignsStore } = stores;
     if (e) e.preventDefault();
@@ -28,7 +27,7 @@ class LatestCreatedCampaignItem extends Component {
     history.push(`/campaigns/${campaign.id}`);
   };
 
-  getBriefKeyData = campaign => {
+  getBriefKeyData = (campaign) => {
     const { summary } = campaign;
     const keyData = {
       totalFailed: summary ? summary.failed : 0,
@@ -46,12 +45,14 @@ class LatestCreatedCampaignItem extends Component {
     const keyData = this.getBriefKeyData(campaign);
 
     return (
-      <div className='dashboard__list-item' title={campaign.name} id={`link-campaign__wizard-${campaign.id}`} onClick={this.onClick}>
-        <div className='dashboard__body-col'>{campaign.name}</div>
-        <div className='dashboard__body-col'>
-          {keyData.totalFinished}/{keyData.totalAffected}
+      <div className="dashboard__list-item" title={campaign.name} id={`link-campaign__wizard-${campaign.id}`} onClick={this.onClick}>
+        <div className="dashboard__body-col">{campaign.name}</div>
+        <div className="dashboard__body-col">
+          {`${keyData.totalFinished}/${keyData.totalAffected}`}
         </div>
-        <div className='dashboard__body-col'>{keyData.failureRate}%</div>
+        <div className="dashboard__body-col">
+          {`${keyData.failureRate}%`}
+        </div>
       </div>
     );
   }

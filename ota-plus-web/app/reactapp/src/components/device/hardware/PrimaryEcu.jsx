@@ -4,23 +4,27 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PublicKeyPopover from './PublicKeyPopover';
-import _ from 'lodash';
 import DeviceHardwareOverlay from './Overlay';
 
 @inject('stores')
 @observer
 class PrimaryEcu extends Component {
-  onEcuClick = e => {
-    if (e) e.preventDefault();
-    const { selectEcu } = this.props;
-    const { devicesStore } = this.props.stores;
-    selectEcu(devicesStore._getPrimaryHardwareId(), devicesStore._getPrimarySerial(), devicesStore._getPrimaryFilepath(), 'primary');
-  };
-
   constructor(props) {
     super(props);
     this.onEcuClick = this.onEcuClick.bind(this);
   }
+
+  onEcuClick = (e) => {
+    if (e) e.preventDefault();
+    const { selectEcu, stores } = this.props;
+    const { devicesStore } = stores;
+    selectEcu(
+      devicesStore.getPrimaryHardwareId(),
+      devicesStore.getPrimarySerial(),
+      devicesStore.getPrimaryFilepath(),
+      'primary'
+    );
+  };
 
   render() {
     const {
@@ -32,26 +36,35 @@ class PrimaryEcu extends Component {
       changePopoverVisibility,
       popoverShown,
       device,
-      selectEcu,
       copyPublicKey,
       publicKeyCopied,
+      stores
     } = this.props;
-    const { devicesStore } = this.props.stores;
+    const { devicesStore } = stores;
     return (
       <>
-        <a href='#' className={'hardware-panel__ecu' + (active ? ' hardware-panel__ecu--selected' : '')} id='hardware-primary-details' onClick={this.onEcuClick.bind(this)}>
-          <div className='hardware-panel__ecu-desc'>
+        <a
+          href="#"
+          className={`hardware-panel__ecu${active ? ' hardware-panel__ecu--selected' : ''}`}
+          id="hardware-primary-details"
+          onClick={this.onEcuClick}
+        >
+          <div className="hardware-panel__ecu-desc">
             <span>
               {'Type: '}
-              <span id='hardware-type-primary' className='hardware-panel__hardware-label app-label'>
-                {devicesStore._getPrimaryHardwareId()}
+              <span id="hardware-type-primary" className="hardware-panel__hardware-label app-label">
+                {devicesStore.getPrimaryHardwareId()}
               </span>
               <br />
-              {'Identifier: '} <span id='hardware-identifier-value'>{devicesStore._getPrimarySerial()}</span>
+              {'Identifier: '}
+              <span id="hardware-identifier-value">{devicesStore.getPrimarySerial()}</span>
             </span>
           </div>
-          <div className='hardware-panel__ecu-actions'>
-            <div className='hardware-panel__ecu-action hardware-panel__ecu-action--details' id='hardware-details-icon-primary'>
+          <div className="hardware-panel__ecu-actions">
+            <div
+              className="hardware-panel__ecu-action hardware-panel__ecu-action--details"
+              id="hardware-details-icon-primary"
+            >
               <DeviceHardwareOverlay
                 hardwareOverlayShown={hardwareOverlayShown}
                 changeHardwareOverlayVisibility={changeHardwareOverlayVisibility}
@@ -61,9 +74,9 @@ class PrimaryEcu extends Component {
                 active={active}
               />
             </div>
-            <div className='hardware-panel__ecu-action hardware-panel__ecu-action--key' id='hardware-key-icon-primary'>
+            <div className="hardware-panel__ecu-action hardware-panel__ecu-action--key" id="hardware-key-icon-primary">
               <PublicKeyPopover
-                serial={devicesStore._getPrimarySerial()}
+                serial={devicesStore.getPrimarySerial()}
                 device={devicesStore.device}
                 handleCopy={copyPublicKey}
                 changePopoverVisibility={changePopoverVisibility}
@@ -81,13 +94,17 @@ class PrimaryEcu extends Component {
 
 PrimaryEcu.propTypes = {
   active: PropTypes.bool,
-  handleCopy: PropTypes.func,
-  handleRequestClose: PropTypes.func,
-  handleTouchTap: PropTypes.func,
-  popoverShown: PropTypes.bool,
-  copied: PropTypes.bool,
+  popoverShown: PropTypes.bool.isRequired,
   selectEcu: PropTypes.func,
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
+  showPackageBlacklistModal: PropTypes.func,
+  onFileDrop: PropTypes.func,
+  changeHardwareOverlayVisibility: PropTypes.func,
+  hardwareOverlayShown: PropTypes.bool,
+  changePopoverVisibility: PropTypes.func,
+  device: PropTypes.shape({}),
+  copyPublicKey: PropTypes.func,
+  publicKeyCopied: PropTypes.bool.isRequired,
 };
 
 export default PrimaryEcu;

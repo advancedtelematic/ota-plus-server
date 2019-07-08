@@ -19,30 +19,30 @@ import { DEVICES_LIMIT_PER_PAGE } from '../../config';
 
 const connections = {
   live: {
-    '0': 560,
-    '1': 300,
-    '2': 245,
-    '3': 198,
-    '4': 237,
-    '5': 564,
-    '6': 2545,
-    '7': 3253,
-    '8': 5284,
-    '9': 4573,
-    '10': 3142,
-    '11': 2573,
-    '12': 1642,
-    '13': 3573,
-    '14': 3235,
-    '15': 3463,
-    '16': 4074,
-    '17': 5036,
-    '18': 4546,
-    '19': 4055,
-    '20': 2573,
-    '21': 2024,
-    '22': 944,
-    '23': 553,
+    0: 560,
+    1: 300,
+    2: 245,
+    3: 198,
+    4: 237,
+    5: 564,
+    6: 2545,
+    7: 3253,
+    8: 5284,
+    9: 4573,
+    10: 3142,
+    11: 2573,
+    12: 1642,
+    13: 3573,
+    14: 3235,
+    15: 3463,
+    16: 4074,
+    17: 5036,
+    18: 4546,
+    19: 4055,
+    20: 2573,
+    21: 2024,
+    22: 944,
+    23: 553,
   },
   limit: '6.000',
   max: '5.603',
@@ -74,11 +74,14 @@ const connectionsData = {
   },
 };
 
+// eslint-disable-next-line max-len
+const smartGroupEmptyText = 'This smart group isn\'t matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.';
+
 @inject('stores')
 @observer
 class ContentPanel extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     changeFilter: PropTypes.func.isRequired,
     showDeleteConfirmation: PropTypes.func,
     showEditName: PropTypes.func,
@@ -163,11 +166,11 @@ class ContentPanel extends Component {
       </div>
     );
     return (
-      <div className='devices-panel'>
+      <div className="devices-panel">
         <ContentPanelHeader devicesFilter={devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
-        {isSmart &&
-          (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
-            <div className='wrapper-center'>
+        {isSmart
+          && (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
+            <div className="wrapper-center">
               <Loader />
             </div>
           ) : (
@@ -189,7 +192,7 @@ class ContentPanel extends Component {
               threshold={250}
             >
               {devicesStore.devicesFetchAsync.isFetching && (
-                <div className='wrapper-center'>
+                <div className="wrapper-center">
                   <Loader />
                 </div>
               )}
@@ -198,8 +201,8 @@ class ContentPanel extends Component {
                   {items}
                 </div>
               ) : (
-                <div className='wrapper-center'>
-                  <div className='devices-panel__list-empty'>
+                <div className="wrapper-center">
+                  <div className="devices-panel__list-empty">
                     {type === ARTIFICIAL
                       ? t('devices.all_grouped')
                       : isSmart
@@ -212,40 +215,40 @@ class ContentPanel extends Component {
             </InfiniteScroll>
           </div>
           {alphaPlusEnabled && (
-            <div className='devices-panel__dashboard'>
-              <div className='devices-panel__title devices-panel__title--margin'>{'Dashboard (BETA)'}</div>
-              <div className='devices-panel__top-wrapper'>
-                <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>{'Simultaneous connections'}</div>
+            <div className="devices-panel__dashboard">
+              <div className="devices-panel__title devices-panel__title--margin">{'Dashboard (BETA)'}</div>
+              <div className="devices-panel__top-wrapper">
+                <div className="devices-panel__dashboard-top">
+                  <div className="devices-panel__title">{'Simultaneous connections'}</div>
                   {'560/600'}
-                  <div className='devices-panel__dashboard-top-icon' />
+                  <div className="devices-panel__dashboard-top-icon" />
                 </div>
-                <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>{'Total devices'}</div>
+                <div className="devices-panel__dashboard-top">
+                  <div className="devices-panel__title">{'Total devices'}</div>
                   {'134.000'}
                 </div>
-                <div className='devices-panel__dashboard-top'>
-                  <div className='devices-panel__title'>{'Total connections'}</div>
+                <div className="devices-panel__dashboard-top">
+                  <div className="devices-panel__title">{'Total connections'}</div>
                   {'69.000'}
-                  <div className='devices-panel__dashboard-top-icon' />
+                  <div className="devices-panel__dashboard-top-icon" />
                 </div>
               </div>
-              <div className='devices-panel__dashboard-bottom'>
-                <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>{'Live connections'}</div>
-                  <div className='devices-panel__dashboard-data'>
+              <div className="devices-panel__dashboard-bottom">
+                <div className="devices-panel__dashboard-content">
+                  <div className="devices-panel__title">{'Live connections'}</div>
+                  <div className="devices-panel__dashboard-data">
                     <BarChart connections={connections} />
                   </div>
                 </div>
-                <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>{'Certificate rollover'}</div>
-                  <div className='devices-panel__dashboard-data'>
+                <div className="devices-panel__dashboard-content">
+                  <div className="devices-panel__title">{'Certificate rollover'}</div>
+                  <div className="devices-panel__dashboard-data">
                     <Stats data={certificateRolloverData.stats} indicatorColors />
                   </div>
                 </div>
-                <div className='devices-panel__dashboard-content'>
-                  <div className='devices-panel__title'>{'Connections'}</div>
-                  <div className='devices-panel__dashboard-data'>
+                <div className="devices-panel__dashboard-content">
+                  <div className="devices-panel__title">{'Connections'}</div>
+                  <div className="devices-panel__dashboard-data">
                     <Stats data={connectionsData.stats} indicatorColors={false} />
                   </div>
                 </div>
@@ -259,7 +262,7 @@ class ContentPanel extends Component {
 }
 
 ContentPanel.wrappedComponent.contextTypes = {
-  router: PropTypes.object.isRequired,
+  router: PropTypes.shape({}).isRequired,
 };
 
 export default withTranslation()(ContentPanel);

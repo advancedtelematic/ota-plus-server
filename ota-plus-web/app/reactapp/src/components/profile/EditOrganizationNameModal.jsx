@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 
 import { Button } from 'antd';
 import OTAModal from '../../partials/OTAModal';
-import { OTAForm } from '../../partials/OTAForm';
+import OTAForm from '../../partials/OTAForm';
 import FormInput from '../../partials/FormInput';
 
 import AsyncResponse from '../../partials/AsyncResponse';

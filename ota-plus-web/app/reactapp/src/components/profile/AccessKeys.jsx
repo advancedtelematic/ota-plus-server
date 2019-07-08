@@ -2,11 +2,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Loader } from '../../partials';
 import { MetaData } from '../../utils';
-import { ProvisioningContainer } from '../../containers';
+import ProvisioningContainer from '../../containers/Provisioning';
 
 const title = 'Access keys';
 
@@ -14,16 +12,20 @@ const title = 'Access keys';
 @observer
 class AccessKeys extends Component {
   componentWillMount() {
-    const { provisioningStore } = this.props.stores;
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
     provisioningStore.fetchProvisioningStatus();
   }
+
   componentWillUnmount() {
-    const { provisioningStore } = this.props.stores;
-    provisioningStore._reset();
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
+    provisioningStore.reset();
   }
+
   render() {
     return (
-      <div className='profile-container' id='provisioning'>
+      <div className="profile-container" id="provisioning">
         <MetaData title={title}>
           <ProvisioningContainer />
         </MetaData>
@@ -31,5 +33,9 @@ class AccessKeys extends Component {
     );
   }
 }
+
+AccessKeys.propTypes = {
+  stores: PropTypes.shape({})
+};
 
 export default AccessKeys;

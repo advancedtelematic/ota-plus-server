@@ -16,10 +16,10 @@ import { assets } from '../../config';
 @observer
 class CancelCampaignModal extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}).isRequired,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    t: PropTypes.func,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -53,17 +53,21 @@ class CancelCampaignModal extends Component {
     const content = !_.isEmpty(campaign) ? (
       <span>
         <AsyncResponse
-          handledStatus='error'
+          handledStatus="error"
           action={campaignsStore.campaignsCancelAsync}
-          errorMsg={campaignsStore.campaignsCancelAsync.data ? campaignsStore.campaignsCancelAsync.data.description : null}
+          errorMsg={
+            campaignsStore.campaignsCancelAsync.data
+              ? campaignsStore.campaignsCancelAsync.data.description
+              : null
+          }
         />
-        <div className='element-box campaign'>
-          <div className='icon' />
-          <div className='desc'>
-            <div className='title' id='cancel-all-campaign-name'>
+        <div className="element-box campaign">
+          <div className="icon" />
+          <div className="desc">
+            <div className="title" id="cancel-all-campaign-name">
               {campaign.name}
             </div>
-            <div className='subtitle'>
+            <div className="subtitle">
               {t('devices.device_count', { count: campaignsStore.overallCampaignStatistics.devicesCount })}
             </div>
           </div>
@@ -73,9 +77,8 @@ class CancelCampaignModal extends Component {
             {t('campaigns.cancelling.warning')}
           </Trans>
         </span>
-
-        <div className='body-actions'>
-          <Button htmlType='button' className='btn-primary' id='cancel-all-confirm' onClick={this.cancelCampaign}>
+        <div className="body-actions">
+          <Button htmlType="button" className="btn-primary" id="cancel-all-confirm" onClick={this.cancelCampaign}>
             {t('campaigns.cancelling.confirm')}
           </Button>
         </div>
@@ -86,16 +89,16 @@ class CancelCampaignModal extends Component {
     return (
       <OTAModal
         title={t('campaigns.cancelling.title')}
-        topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
+        topActions={(
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
               <img src={assets.DEFAULT_CLOSE_ICON} alt={t('campaigns.cancelling.close')} />
             </div>
           </div>
-        }
+        )}
         content={content}
         visible={shown}
-        className='cancel-campaign-modal'
+        className="cancel-campaign-modal"
       />
     );
   }

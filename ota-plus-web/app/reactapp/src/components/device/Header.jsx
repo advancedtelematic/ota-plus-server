@@ -14,40 +14,52 @@ import { DEVICE_STATUSES } from '../../constants';
 @observer
 class Header extends Component {
   @observable deleteConfirmationShown = false;
+
   @observable editNameShown = false;
+
   @observable headerMenuShown = false;
 
-  showDeleteConfirmation = e => {
+  showDeleteConfirmation = (e) => {
     if (e) e.preventDefault();
     this.deleteConfirmationShown = true;
   };
+
   hideDeleteConfirmation = () => {
     this.deleteConfirmationShown = false;
   };
-  showEditName = e => {
+
+  showEditName = (e) => {
     if (e) e.preventDefault();
     this.editNameShown = true;
   };
+
   hideEditName = () => {
     this.editNameShown = false;
   };
+
   hideHeaderMenu = () => {
     this.headerMenuShown = false;
   };
+
   toggleHeaderMenu = () => {
     this.headerMenuShown = true;
   };
-  deleteDevice = e => {
+
+  deleteDevice = (e) => {
     if (e) e.preventDefault();
-    const { devicesStore } = this.props.stores;
+    const { router } = this.context;
+    const { stores } = this.props;
+    const { devicesStore } = stores;
     const { device } = devicesStore;
-    const { history } = this.context.router;
+    const { history } = router;
     devicesStore.deleteDevice(device.uuid).then(() => {
       history.push('/devices');
     });
   };
+
   render() {
-    const { devicesStore } = this.props.stores;
+    const { stores } = this.props;
+    const { devicesStore } = stores;
     const { device } = devicesStore;
     const lastSeenDate = new Date(device.lastSeen);
     const createdDate = new Date(device.createdAt);
@@ -68,66 +80,69 @@ class Header extends Component {
     }
     return (
       <BaseHeader
-        title={
+        title={(
           <FadeAnimation>
             {!devicesStore.devicesOneFetchAsync.isFetching && (
-              <div id='device-name' className='page-header__device-name'>
-                {device.deviceName}
-              </div>
+            <div id="device-name" className="page-header__device-name">
+              {device.deviceName}
+            </div>
             )}
           </FadeAnimation>
-        }
+)}
         device={device}
-        backButtonShown={true}
+        backButtonShown
       >
         <FadeAnimation>
           {!devicesStore.devicesOneFetchAsync.isFetching && (
             <span>
-              <div className='page-header__device-report'>
-                <div className='page-header__device-report-items'>
+              <div className="page-header__device-report">
+                <div className="page-header__device-report-items">
                   <NetworkInfo data={devicesStore.deviceNetworkInfo} />
-                  <div className='page-header__device-report-item' id='created-info'>
-                    <span className='page-header__device-report-label'>Created</span>
-                    <div className='page-header__device-report-desc'>
+                  <div className="page-header__device-report-item" id="created-info">
+                    <span className="page-header__device-report-label">Created</span>
+                    <div className="page-header__device-report-desc">
                       {device.createdAt
                         ? `${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`
                         : 'Not reported'
                       }
                     </div>
                   </div>
-                  <div className='page-header__device-report-item' id='activated-info'>
-                    <span className='page-header__device-report-label'>Activated</span>
-                    <div className='page-header__device-report-desc'>
-                      {device.activatedAt 
-                        ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}` 
+                  <div className="page-header__device-report-item" id="activated-info">
+                    <span className="page-header__device-report-label">Activated</span>
+                    <div className="page-header__device-report-desc">
+                      {device.activatedAt
+                        ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}`
                         : 'Not reported'
                       }
                     </div>
                   </div>
-                  <div className='page-header__device-report-item page-header__device-report-item--last-seen' id='last-seen-online-info'>
-                    <span className='page-header__device-report-label'>Last seen online</span>
-                    <div className='page-header__device-report-desc'>
-                      {deviceStatus !== 'Status unknown' 
+                  <div
+                    className="page-header__device-report-item page-header__device-report-item--last-seen"
+                    id="last-seen-online-info"
+                  >
+                    <span className="page-header__device-report-label">Last seen online</span>
+                    <div className="page-header__device-report-desc">
+                      {deviceStatus !== 'Status unknown'
                         ? `${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`
                         : getDeviceHttpStatusErrorMessage(device.httpStatus)
                       }
                     </div>
                   </div>
                 </div>
-                <div className='page-header__actions'>
-                  <div className='dots relative' id='device-actions' onClick={this.toggleHeaderMenu}>
+                <div className="page-header__actions">
+                  <div className="dots relative" id="device-actions" onClick={this.toggleHeaderMenu}>
                     <span />
                     <span />
                     <span />
                     {this.headerMenuShown && (
-                      <Dropdown hideSubmenu={this.hideHeaderMenu} customClassName={'relative'}>
-                        <li className='device-dropdown-item'>
-                          <a className='device-dropdown-item' id='edit-device' onClick={this.showEditName}>
+                      <Dropdown hideSubmenu={this.hideHeaderMenu} customClassName="relative">
+                        <li className="device-dropdown-item">
+                          <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
                             {'Rename device'}
                           </a>
                         </li>
-                        <li className='device-dropdown-item'>
-                          <a className='device-dropdown-item' id='delete-device' onClick={this.showDeleteConfirmation}>
+                        <li className="device-dropdown-item">
+                          <a className="device-dropdown-item" id="delete-device" onClick={this.showDeleteConfirmation}>
                             Delete device
                           </a>
                         </li>
@@ -138,24 +153,24 @@ class Header extends Component {
               </div>
               {this.deleteConfirmationShown && (
                 <ConfirmationModal
-                  modalTitle={<div className='text-red'>Delete device</div>}
-                  id='delete-device-confirmation-modal'
+                  modalTitle={<div className="text-red">Delete device</div>}
+                  id="delete-device-confirmation-modal"
                   shown={this.deleteConfirmationShown}
                   hide={this.hideDeleteConfirmation}
                   deleteItem={this.deleteDevice}
-                  topText={
-                    <div className='delete-modal-top-text' id='delete-device-confirmation-modal-text'>
+                  topText={(
+                    <div className="delete-modal-top-text" id="delete-device-confirmation-modal-text">
                       Device will be removed.
                     </div>
-                  }
+)}
                 />
               )}
               {this.editNameShown && (
-                <EditModal 
-                  modalTitle={<div>Rename device</div>} 
-                  shown={this.editNameShown} 
-                  hide={this.hideEditName} 
-                  device={device} 
+                <EditModal
+                  modalTitle={<div>Rename device</div>}
+                  shown={this.editNameShown}
+                  hide={this.hideEditName}
+                  device={device}
                 />
               )}
             </span>
@@ -167,11 +182,11 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 Header.wrappedComponent.contextTypes = {
-  router: PropTypes.object.isRequired,
+  router: PropTypes.shape({}).isRequired,
 };
 
 export default Header;

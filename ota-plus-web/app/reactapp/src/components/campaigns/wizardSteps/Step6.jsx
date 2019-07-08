@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
-import { Sequencer } from '../../../partials';
 import { observable } from 'mobx';
+import { Sequencer } from '../../../partials';
 
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
 import { NO_VERSION_INFO } from '../../../constants';
@@ -17,8 +17,8 @@ class WizardStep6 extends Component {
   updateDetails = [];
 
   static propTypes = {
-    stores: PropTypes.object,
-    wizardData: PropTypes.object,
+    stores: PropTypes.shape({}),
+    wizardData: PropTypes.shape({}),
     wizardIdentifier: PropTypes.number,
   };
 
@@ -38,9 +38,9 @@ class WizardStep6 extends Component {
     this.updateDetails = getUpdateDetails(mtuData, packages);
   }
 
-  prepareVersionData = () => { 
+  prepareVersionData = () => {
     const versions = [];
-    _.each(this.updateDetails, targetDetails => {
+    _.each(this.updateDetails, (targetDetails) => {
       const { hardwareId, fromVersion, toPackage, toVersion, toTarget, checksum } = targetDetails;
       versions.push({
         hardwareId,
@@ -59,15 +59,15 @@ class WizardStep6 extends Component {
     const versions = this.prepareVersionData();
 
     return versions.length ? (
-      <Sequencer 
-        campaignsStore={campaignsStore} 
-        wizardIdentifier={wizardIdentifier} 
-        data={versions} 
-        entity='campaign' 
-        readOnly={false} 
+      <Sequencer
+        campaignsStore={campaignsStore}
+        wizardIdentifier={wizardIdentifier}
+        data={versions}
+        entity="campaign"
+        readOnly={false}
       />
     ) : (
-      <div className='wrapper-center'>{'Live installation progress is not available for this update.'}</div>
+      <div className="wrapper-center">{'Live installation progress is not available for this update.'}</div>
     );
   }
 }

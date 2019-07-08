@@ -10,21 +10,25 @@ import MtuListItem from './MtuListItem';
 @observer
 class MtuList extends Component {
   render() {
-    const { cancelApprovalPendingCampaign } = this.props;
-    const { devicesStore } = this.props.stores;
+    const { cancelApprovalPendingCampaign, stores } = this.props;
+    const { devicesStore } = stores;
     const emptyApprovalPending = (
-      <div className='wrapper-center'>
-        <span className={'overview-panel__empty'}>
+      <div className="wrapper-center">
+        <span className="overview-panel__empty">
           {'There aren\'t any updates that are waiting for approval on this device.'}
         </span>
       </div>
     );
     return (
-      <ul className={'overview-panel__list' + (!devicesStore.deviceApprovalPendingCampaigns.campaigns.length ? ' empty' : '')}>
+      <ul className={`overview-panel__list${!devicesStore.deviceApprovalPendingCampaigns.campaigns.length ? ' empty' : ''}`}>
         {devicesStore.deviceApprovalPendingCampaigns.campaigns.length
-          ? _.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => {
-              return <MtuListItem key={index} campaign={campaign} cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />;
-            })
+          ? _.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => (
+            <MtuListItem
+              key={index}
+              campaign={campaign}
+              cancelApprovalPendingCampaign={cancelApprovalPendingCampaign}
+            />
+          ))
           : emptyApprovalPending}
       </ul>
     );
@@ -32,7 +36,7 @@ class MtuList extends Component {
 }
 
 MtuList.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
   cancelApprovalPendingCampaign: PropTypes.func.isRequired,
 };
 

@@ -5,9 +5,7 @@ import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
-import { SubHeader, SearchBar, Loader } from '../../../../partials';
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../../../utils';
 
@@ -18,16 +16,24 @@ const noSearchResults = 'No matching packages found.';
 @observer
 class InstalledList extends Component {
   @observable firstShownIndex = 0;
+
   @observable lastShownIndex = 50;
+
   @observable fakeHeaderLetter = null;
+
   @observable fakeHeaderTopPosition = 0;
+
   @observable expandedPackageName = null;
+
   @observable tmpIntervalId = null;
 
   constructor(props) {
     super(props);
-    const { softwareStore } = this.props.stores;
-    this.packagesChangeHandler = observe(softwareStore, change => {
+    this.listRef = React.createRef();
+    this.dropzoneRef = React.createRef();
+    const { stores } = this.props;
+    const { softwareStore } = stores;
+    this.packagesChangeHandler = observe(softwareStore, (change) => {
       if (change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -36,23 +42,25 @@ class InstalledList extends Component {
       }
     });
   }
+
   componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener('scroll', this.listScroll);
     this.listScroll();
   }
+
   componentWillUnmount() {
     this.packagesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener('scroll', this.listScroll);
   }
 
   generateHeadersPositions = () => {
-    const headers = this.refs.list.getElementsByClassName('header');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const headers = this.listRef.current.getElementsByClassName('header');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       headers,
-      header => {
-        let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (header) => {
+        const position = header.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -61,13 +69,13 @@ class InstalledList extends Component {
   };
 
   generateItemsPositions = () => {
-    const items = this.refs.list.getElementsByClassName('item');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const items = this.listRef.current.getElementsByClassName('item');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       items,
-      item => {
-        let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (item) => {
+        const position = item.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -76,12 +84,13 @@ class InstalledList extends Component {
   };
 
   listScroll = () => {
-    const { softwareStore } = this.props.stores;
-    if (this.refs.list) {
+    const { stores } = this.props;
+    const { softwareStore } = stores;
+    if (this.listRef.current) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
-      let scrollTop = this.refs.list.scrollTop;
-      let listHeight = this.refs.list.getBoundingClientRect().height;
+      let { scrollTop } = this.listRef.current;
+      const listHeight = this.listRef.current.getBoundingClientRect().height;
       let newFakeHeaderLetter = this.fakeHeaderLetter;
       let firstShownIndex = null;
       let lastShownIndex = null;
@@ -91,10 +100,12 @@ class InstalledList extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(softwareStore.preparedOndevicePackages)[index];
             return true;
-          } else if (scrollTop >= position - headerHeight) {
+          }
+          if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
             return true;
           }
+          return false;
         },
         this,
       );
@@ -119,24 +130,31 @@ class InstalledList extends Component {
   startIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
     const that = this;
-    let intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       that.listScroll();
     }, 10);
     this.tmpIntervalId = intervalId;
   }
+
   stopIntervalListScroll() {
     clearInterval(this.tmpIntervalId);
     this.tmpIntervalId = null;
   }
+
   render() {
-    const { device, showPackageBlacklistModal, onFileDrop } = this.props;
-    const { softwareStore } = this.props.stores;
+    const { device, showPackageBlacklistModal, onFileDrop, stores } = this.props;
+    const { softwareStore } = stores;
+    const {
+      ondevicePackagesCurrentPage,
+      ondevicePackagesTotalCount,
+      ondevicePackagesLimit
+    } = softwareStore;
     return (
       <span>
-        <div className='ios-list' ref='list'>
+        <div className="ios-list" ref={this.listRef}>
           <InfiniteScroll
-            className='wrapper-infinite-scroll'
-            hasMore={softwareStore.ondevicePackagesCurrentPage < softwareStore.ondevicePackagesTotalCount / softwareStore.ondevicePackagesLimit}
+            className="wrapper-infinite-scroll"
+            hasMore={ondevicePackagesCurrentPage < ondevicePackagesTotalCount / ondevicePackagesLimit}
             isLoading={softwareStore.packagesOndeviceFetchAsync.isFetching}
             useWindow={false}
             loadMore={() => {
@@ -144,23 +162,32 @@ class InstalledList extends Component {
             }}
           >
             {Object.keys(softwareStore.preparedOndevicePackages).length ? (
-              <Dropzone ref='dropzone' onDrop={onFileDrop} multiple={false} disableClick={true} className='dnd-zone' activeClassName={'dnd-zone-active'}>
-                <div className='fake-header' style={{ top: this.fakeHeaderTopPosition }}>
+              <Dropzone
+                ref={this.dropzoneRef}
+                onDrop={onFileDrop}
+                multiple={false}
+                disableClick
+                className="dnd-zone"
+                activeClassName="dnd-zone-active"
+              >
+                <div className="fake-header" style={{ top: this.fakeHeaderTopPosition }}>
                   {this.fakeHeaderLetter}
                 </div>
-                {_.map(softwareStore.preparedOndevicePackages, (packages, letter) => {
-                  return (
-                    <span key={letter}>
-                      <div className='header'>{letter}</div>
-                      {_.map(packages, (pack, index) => {
-                        return <ListItem pack={pack} showPackageBlacklistModal={showPackageBlacklistModal} key={index} />;
-                      })}
-                    </span>
-                  );
-                })}
+                {_.map(softwareStore.preparedOndevicePackages, (packages, letter) => (
+                  <span key={letter}>
+                    <div className="header">{letter}</div>
+                    {_.map(packages, (pack, index) => (
+                      <ListItem
+                        pack={pack}
+                        showPackageBlacklistModal={showPackageBlacklistModal}
+                        key={index}
+                      />
+                    ))}
+                  </span>
+                ))}
               </Dropzone>
             ) : (
-              <div className='wrapper-center' style={{ height: '100%' }}>
+              <div className="wrapper-center" style={{ height: '100%' }}>
                 {noSearchResults}
               </div>
             )}
@@ -172,8 +199,8 @@ class InstalledList extends Component {
 }
 
 InstalledList.propTypes = {
-  stores: PropTypes.object,
-  device: PropTypes.object.isRequired,
+  stores: PropTypes.shape({}),
+  device: PropTypes.shape({}).isRequired,
   showPackageBlacklistModal: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
 };

@@ -13,14 +13,16 @@ import { OTAModal, OTAForm, FormTextarea } from '../../partials';
 @observer
 class EditCommentModal extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     filepath: PropTypes.string,
     hide: PropTypes.func,
     comment: PropTypes.string,
     shown: PropTypes.bool,
   };
+
   @observable submitButtonDisabled = false;
-  submitForm = e => {
+
+  submitForm = (e) => {
     const { stores, filepath, hide } = this.props;
     const { softwareStore } = stores;
     if (e) e.preventDefault();
@@ -40,27 +42,32 @@ class EditCommentModal extends Component {
   render() {
     const { comment, hide, shown } = this.props;
     const form = (
-      <OTAForm onSubmit={this.submitForm} id='comment-edit-form'>
-        <Row className='row'>
+      <OTAForm onSubmit={this.submitForm} id="comment-edit-form">
+        <Row className="row">
           <Col span={24}>
             <FormTextarea
               onValid={this.enableButton}
               onInvalid={this.disableButton}
-              name='comment'
-              className='input-wrapper'
+              name="comment"
+              className="input-wrapper"
               isEditable
-              title='Comment'
-              label='Comment'
-              placeholder='Comment'
+              title="Comment"
+              label="Comment"
+              placeholder="Comment"
               defaultValue={comment}
               rows={5}
             />
           </Col>
         </Row>
-        <Row className='row'>
+        <Row className="row">
           <Col span={24}>
-            <div className='body-actions'>
-              <button disabled={this.submitButtonDisabled} className='btn-primary' id='add'>
+            <div className="body-actions">
+              <button
+                type="button"
+                disabled={this.submitButtonDisabled}
+                className="btn-primary"
+                id="add"
+              >
                 Save Comment
               </button>
             </div>
@@ -70,15 +77,15 @@ class EditCommentModal extends Component {
     );
     return (
       <OTAModal
-        title='Edit comment'
-        topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+        title="Edit comment"
+        topActions={(
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
+              <img src="/assets/img/icons/close.svg" alt="Icon" />
             </div>
           </div>
-        }
-        className='edit-comment-modal'
+        )}
+        className="edit-comment-modal"
         content={form}
         visible={shown}
       />

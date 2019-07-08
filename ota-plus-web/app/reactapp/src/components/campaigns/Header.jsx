@@ -9,7 +9,7 @@ class Header extends Component {
   render() {
     return (
       <SubHeader>
-        <a className='add-button grey-button' id='add-new-campaign'>
+        <a className="add-button grey-button" id="add-new-campaign">
           <span>{'Create Campaign'}</span>
         </a>
       </SubHeader>

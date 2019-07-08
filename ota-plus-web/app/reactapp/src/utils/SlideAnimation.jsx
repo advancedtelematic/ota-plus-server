@@ -1,31 +1,28 @@
 /** @format */
 
 import PropTypes from 'prop-types';
-import React, { Component, defaultProps } from 'react';
+import React from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
 
-class SlideAnimation extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { display, changeDisplay, runOnMount } = this.props;
-    return (
-      <VelocityTransitionGroup
-        enter={{ animation: 'slideDown', display: changeDisplay ? display : undefined }}
-        leave={{ animation: 'slideUp', display: changeDisplay ? display : undefined }}
-        runOnMount={runOnMount}
-      >
-        {this.props.children}
-      </VelocityTransitionGroup>
-    );
-  }
-}
+const SlideAnimation = ({ display, changeDisplay, runOnMount, children }) => (
+  <VelocityTransitionGroup
+    enter={{ animation: 'slideDown', display: changeDisplay ? display : undefined }}
+    leave={{ animation: 'slideUp', display: changeDisplay ? display : undefined }}
+    runOnMount={runOnMount}
+  >
+    {children}
+  </VelocityTransitionGroup>
+);
 
 SlideAnimation.propTypes = {
   display: PropTypes.string,
   changeDisplay: PropTypes.bool,
   runOnMount: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ])
 };
 
 SlideAnimation.defaultProps = {

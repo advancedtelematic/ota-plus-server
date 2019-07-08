@@ -9,8 +9,8 @@ import Items from './usage/Items';
 const startTime = moment([2017, 0, 1]);
 const currentTime = moment();
 const monthsCount = currentTime.diff(startTime, 'months');
-let months = [];
-for (var i = 0; i <= monthsCount; i++) {
+const months = [];
+for (let i = 0; i <= monthsCount; i += 1) {
   const date = moment(startTime).add(i, 'months');
   months.push(date.format('YYYYMM'));
 }
@@ -19,14 +19,16 @@ for (var i = 0; i <= monthsCount; i++) {
 @observer
 class Usage extends Component {
   componentWillMount() {
-    const { userStore } = this.props.stores;
-    userStore._setUsageInitial(startTime, monthsCount);
+    const { stores } = this.props;
+    const { userStore } = stores;
+    userStore.setUsageInitial(startTime, monthsCount);
     this.fetchUsage();
   }
 
   fetchUsage = () => {
-    const { userStore } = this.props.stores;
-    for (var i = monthsCount; i >= monthsCount - 2; i--) {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    for (let i = monthsCount; i >= monthsCount - 2; i -= 1) {
       const startTimeTmp = moment(startTime).add(i, 'months');
       const endTimeTmp = moment(startTimeTmp).add(1, 'months');
       userStore.fetchActivatedDeviceCount(startTimeTmp, endTimeTmp);
@@ -37,14 +39,14 @@ class Usage extends Component {
 
   render() {
     return (
-      <div className='profile-container' id='usage'>
-        <div className='section-header'>
-          <div className='column'>Date</div>
-          <div className='column'>Total activated devices</div>
-          <div className='column'>New devices activated this month</div>
-          <div className='column'>Devices connected this month</div>
+      <div className="profile-container" id="usage">
+        <div className="section-header">
+          <div className="column">Date</div>
+          <div className="column">Total activated devices</div>
+          <div className="column">New devices activated this month</div>
+          <div className="column">Devices connected this month</div>
         </div>
-        <div className='usage-info'>
+        <div className="usage-info">
           <Items months={months} />
         </div>
       </div>
@@ -53,7 +55,7 @@ class Usage extends Component {
 }
 
 Usage.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default Usage;

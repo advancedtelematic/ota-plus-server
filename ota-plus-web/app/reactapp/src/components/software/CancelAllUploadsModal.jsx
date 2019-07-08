@@ -2,15 +2,14 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button } from 'antd';
 import _ from 'lodash';
 import { inject } from 'mobx-react';
-import { OTAModal } from '../../partials';
+import OTAModal from '../../partials/OTAModal';
 
 @inject('stores')
 class CancelAllUploadsModal extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     ifClearUploads: PropTypes.bool.isRequired,
@@ -21,7 +20,7 @@ class CancelAllUploadsModal extends Component {
     const { softwareStore } = stores;
     _.each(
       softwareStore.packagesUploading,
-      upload => {
+      (upload) => {
         upload.source.cancel();
       },
       this,
@@ -35,11 +34,11 @@ class CancelAllUploadsModal extends Component {
     const content = (
       <span>
         Your uploads are not complete. Would you like to cancel all ongoing uploads?
-        <div className='body-actions'>
-          <a onClick={hide} className='link-cancel'>
+        <div className="body-actions">
+          <a onClick={hide} className="link-cancel">
             Continue uploads
           </a>
-          <a className='btn-primary' id='cancel-all-uploads' onClick={this.cancelAllUploads}>
+          <a className="btn-primary" id="cancel-all-uploads" onClick={this.cancelAllUploads}>
             Cancel uploads
           </a>
         </div>
@@ -47,17 +46,17 @@ class CancelAllUploadsModal extends Component {
     );
     return (
       <OTAModal
-        title='Cancel all uploads?'
-        topActions={
-          <div className='top-actions flex-end'>
-            <div className='modal-close' onClick={hide}>
-              <img src='/assets/img/icons/close.svg' alt='Icon' />
+        title="Cancel all uploads?"
+        topActions={(
+          <div className="top-actions flex-end">
+            <div className="modal-close" onClick={hide}>
+              <img src="/assets/img/icons/close.svg" alt="Icon" />
             </div>
           </div>
-        }
+        )}
         content={content}
         visible={shown}
-        className='cancel-upload-modal'
+        className="cancel-upload-modal"
       />
     );
   }

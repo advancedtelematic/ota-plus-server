@@ -3,7 +3,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Input } from 'formsy-antd';
-import { Icon } from 'antd';
 import { SEARCH_REFRESH_TIMEOUT } from '../constants';
 
 class SearchBar extends Component {
@@ -13,10 +12,11 @@ class SearchBar extends Component {
   }
 
   clearInput = () => {
-    this.props.changeAction('');
+    const { changeAction } = this.props;
+    changeAction('');
   };
 
-  onChange = value => {
+  onChange = (value) => {
     const { changeAction } = this.props;
     const filter = value;
     if (this.searchTimeout) {
@@ -31,17 +31,17 @@ class SearchBar extends Component {
   render() {
     const { value, disabled, id, additionalClassName, placeholder } = this.props;
     return (
-      <div className={'search-box ' + (additionalClassName ? additionalClassName : '')}>
+      <div className={`search-box ${additionalClassName || ''}`}>
         <Input
-          name='filterValue'
+          name="filterValue"
           value={value}
           id={id}
-          className='input-wrapper search'
+          className="input-wrapper search"
           disabled={disabled}
           onChange={this.onChange}
           placeholder={placeholder}
-          prefix={<i className='fa fa-search icon-search' />}
-          suffix={<i className='fa fa-close icon-close' onClick={this.clearInput} />}
+          prefix={<i className="fa fa-search icon-search" />}
+          suffix={<i className="fa fa-close icon-close" onClick={this.clearInput} />}
         />
       </div>
     );
@@ -52,6 +52,9 @@ SearchBar.propTypes = {
   value: PropTypes.string,
   changeAction: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  id: PropTypes.string,
+  additionalClassName: PropTypes.string,
+  placeholder: PropTypes.string
 };
 
 SearchBar.defaultProps = {

@@ -16,14 +16,16 @@ import * as contracts from '../../../assets/contracts';
 @observer
 class Terms extends Component {
   @observable termsAccepted = false;
+
   @observable showModal = false;
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     checked: PropTypes.bool,
+    history: PropTypes.shape({})
   };
 
-  toggleModal = e => {
+  toggleModal = (e) => {
     e.preventDefault();
     this.showModal = !this.showModal;
   };
@@ -36,13 +38,24 @@ class Terms extends Component {
     terms = terms || { contract: contracts.defaultName };
     const htmlDoc = terms && terms.contract ? { __html: contracts.default[terms.contract] } : null;
     const contractModalContent = (
-      <div className='modal-wrapper'>
-        <div className='overflow' dangerouslySetInnerHTML={htmlDoc} />
-        <div className='body-actions' style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button htmlType='button' type='primary' className='back' id='modal-back-button' onClick={this.toggleModal}>
+      <div className="modal-wrapper">
+        <div className="overflow" dangerouslySetInnerHTML={htmlDoc} />
+        <div className="body-actions" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            htmlType="button"
+            type="primary"
+            className="back"
+            id="modal-back-button"
+            onClick={this.toggleModal}
+          >
             {'Back'}
           </Button>
-          <Button htmlType='button' type='primary' id='modal-accept-button' onClick={() => userStore.acceptContract(terms.contract)}>
+          <Button
+            htmlType="button"
+            type="primary"
+            id="modal-accept-button"
+            onClick={() => userStore.acceptContract(terms.contract)}
+          >
             {'I agree'}
           </Button>
         </div>
@@ -51,44 +64,57 @@ class Terms extends Component {
     const isTermsAccepted = userStore.isTermsAccepted();
     return (
       <div className={`terms ${isTermsAccepted ? '' : 'fill-screen'}`}>
-        <div className='wrapper wrapper-center wrapper-responsive'>
-          <div className='logo logo--terms'>
-            <img src='/assets/img/HERE_pos.png' alt='HERE' />
+        <div className="wrapper wrapper-center wrapper-responsive">
+          <div className="logo logo--terms">
+            <img src="/assets/img/HERE_pos.png" alt="HERE" />
           </div>
-          <div className='title title--terms'>This is a 90-day trial, for evaluation purposes only</div>
-          <p className='subtitle--terms'>
-            The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for the purposes of allowing you to test the service internally during the Trial Period.
+          <div className="title title--terms">This is a 90-day trial, for evaluation purposes only</div>
+          <p className="subtitle--terms">
+            The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only
+             for the purposes of allowing you to test the service internally during the Trial Period.
           </p>
-          <div className='checkbox-wrapper'>
+          <div className="checkbox-wrapper">
             {!terms.accepted && (
               <Checkbox
                 checked={this.termsAccepted}
-                onChange={ () => { this.termsAccepted = !this.termsAccepted; }}
+                onChange={() => { this.termsAccepted = !this.termsAccepted; }}
               />
             )}
             <div>
               I agree to HERE Location Platform Services Online
-              <a id='service-terms-link' rel='noopener noreferrer' target='_blank' href='https://developer.here.com/terms-and-conditions'>
+              <a
+                id="service-terms-link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://developer.here.com/terms-and-conditions"
+              >
                 {' '}
-                terms and conditions{' '}
+                terms and conditions
+                {' '}
               </a>
-              and{' '}
-              <a rel='noopener noreferrer' target='_blank' id='privacy-policy-link' href='https://legal.here.com/en-gb/privacy'>
+              and
+              {' '}
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+                id="privacy-policy-link"
+                href="https://legal.here.com/en-gb/privacy"
+              >
                 privacy policy
               </a>
-              <div className='agreed--terms'>{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
+              <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
             </div>
           </div>
           {!terms.accepted && (
-            <div className='steps'>
-              <a href='/login' className='back btn-primary' id='terms-btn-back'>
+            <div className="steps">
+              <a href="/login" className="back btn-primary" id="terms-btn-back">
                 Back
               </a>
               {this.termsAccepted ? (
                 <Button
-                  htmlType='button'
-                  className='next btn-primary'
-                  id='terms-btn-continue'
+                  htmlType="button"
+                  className="next btn-primary"
+                  id="terms-btn-continue"
                   onClick={() => {
                     userStore.acceptContract(terms && terms.contract)
                       .then((success) => {
@@ -101,7 +127,13 @@ class Terms extends Component {
                   Continue
                 </Button>
               ) : (
-                <Button htmlType='button' type='primary' className='next' id='terms-btn-continue_disabled' disabled>
+                <Button
+                  htmlType="button"
+                  type="primary"
+                  className="next"
+                  id="terms-btn-continue_disabled"
+                  disabled
+                >
                   Continue
                 </Button>
               )}

@@ -6,15 +6,16 @@ import { observer } from 'mobx-react';
 
 @observer
 class LinkWrapper extends Component {
-  handleClick = e => {
+  handleClick = (e) => {
     e.preventDefault();
-    this.props.onClick(e);
+    const { onClick } = this.props;
+    onClick(e);
   };
 
   render() {
     const { children, id } = this.props;
     return (
-      <a href='#' onClick={this.handleClick} id={id}>
+      <a href="#" onClick={this.handleClick} id={id}>
         {children}
       </a>
     );
@@ -22,7 +23,13 @@ class LinkWrapper extends Component {
 }
 
 LinkWrapper.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string
+  ]),
+  id: PropTypes.string,
+  onClick: PropTypes.func
 };
 
 export default LinkWrapper;

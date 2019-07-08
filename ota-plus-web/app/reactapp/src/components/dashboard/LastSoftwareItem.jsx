@@ -9,20 +9,20 @@ import { observer } from 'mobx-react';
 class LastSoftwareItem extends Component {
   render() {
     const { pack } = this.props;
-    const link = 'software-repository/' + pack.id.name;
+    const link = `software-repository/${pack.id.name}`;
     const createdDate = new Date(pack.createdAt);
     return (
-      <Link to={`${link}`} className='dashboard__list-item' title={pack.id.name + ' ' + pack.id.version} id={'link-software-' + pack.uuid}>
-        <div className='dashboard__body-col'>{pack.id.name}</div>
-        <div className='dashboard__body-col'>{pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}</div>
-        <div className='dashboard__body-col'>{createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}</div>
+      <Link to={`${link}`} className="dashboard__list-item" title={`${pack.id.name} ${pack.id.version}`} id={`link-software-${pack.uuid}`}>
+        <div className="dashboard__body-col">{pack.id.name}</div>
+        <div className="dashboard__body-col">{pack.id.version.length > 10 ? `${pack.id.version.substring(0, 10)}...` : pack.id.version}</div>
+        <div className="dashboard__body-col">{`${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`}</div>
       </Link>
     );
   }
 }
 
 LastSoftwareItem.propTypes = {
-  pack: PropTypes.object.isRequired,
+  pack: PropTypes.shape({}).isRequired,
 };
 
 export default LastSoftwareItem;

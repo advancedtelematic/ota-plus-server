@@ -8,12 +8,13 @@ import { Form } from 'formsy-antd';
 import { action, observable } from 'mobx';
 
 import { CAMPAIGNS_STATUSES, CAMPAIGNS_STATUS_TAB_TITLE, CAMPAIGNS_DEFAULT_TAB } from '../config';
-import { SearchBar } from './index';
+import SearchBar from './SearchBar';
 
 @inject('stores')
 @observer
 class TabNavigation extends Component {
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
+
   @observable campaignsFilter = '';
 
   static propTypes = {

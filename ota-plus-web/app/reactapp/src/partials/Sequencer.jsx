@@ -29,15 +29,18 @@ const TERMINATION_PROGRESS_TIME = 4;
 @observer
 class Sequencer extends Component {
   @observable destinationElement = null;
+
   @observable selectedElement = null;
+
   @observable campaignUpdates = [];
+
   @observable updateMatrix = [];
 
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     wizardIdentifier: PropTypes.number,
     entity: PropTypes.string,
-    data: PropTypes.array,
+    data: PropTypes.arrayOf(PropTypes.shape({})),
     readOnly: PropTypes.bool,
   };
 
@@ -45,10 +48,10 @@ class Sequencer extends Component {
     const { wizardIdentifier } = this.props;
     const matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${wizardIdentifier}`));
     if (_.isEmpty(matrixFromStorage)) {
-      this._createCampaignUpdates();
-      this._createMatrix();
+      this.createCampaignUpdates();
+      this.createMatrix();
     } else {
-      this._createCampaignUpdates(matrixFromStorage[0]);
+      this.createCampaignUpdates(matrixFromStorage[0]);
       this.updateMatrix = matrixFromStorage;
     }
   }
@@ -62,7 +65,7 @@ class Sequencer extends Component {
   }
 
   selectAction = (actionType, value) => {
-    _.each(this.campaignUpdates, version => {
+    _.each(this.campaignUpdates, (version) => {
       if (version.name === value.name) {
         extendObservable(version, { selectedAction: actionType });
         extendObservable(value, { selectedAction: actionType });
@@ -70,17 +73,17 @@ class Sequencer extends Component {
     });
   };
 
-  _createCampaignUpdates = (data = null) => {
+  createCampaignUpdates = (data = null) => {
     const { data: propsData } = this.props;
     const updates = data || propsData;
     const campaignUpdates = [];
-    _.map(updates, element => {
+    _.map(updates, (element) => {
       campaignUpdates.push({ ...element });
     });
     this.campaignUpdates = campaignUpdates;
   };
 
-  _createMatrix = () => {
+  createMatrix = () => {
     const { campaignUpdates } = this;
     let alreadyCreated = false;
 
@@ -92,19 +95,19 @@ class Sequencer extends Component {
     }
 
     if (campaignUpdates.length >= 2) {
-      for (let i = 0; i < campaignUpdates.length; i++) {
+      for (let i = 0; i < campaignUpdates.length; i += 1) {
         updatesMatrix[i] = [];
 
         if (i === 0 && !alreadyCreated) {
           alreadyCreated = true;
 
-          _.map(campaignUpdates, packageItem => {
+          _.map(campaignUpdates, (packageItem) => {
             updatesMatrix[i].push(packageItem);
           });
 
-          columnNumber++;
+          columnNumber += 1;
         } else {
-          for (let k = 0; k < campaignUpdates.length; k++) {
+          for (let k = 0; k < campaignUpdates.length; k += 1) {
             updatesMatrix[i][k] = [];
           }
         }
@@ -126,7 +129,7 @@ class Sequencer extends Component {
     }
   };
 
-  highlightAvailableSpaces = selectedElementRow => {
+  highlightAvailableSpaces = (selectedElementRow) => {
     const nextRow = $(`.${FLEX_ROW}--${selectedElementRow + 1}`);
     const prevRow = $(`.${FLEX_ROW}--${selectedElementRow - 1}`);
 
@@ -140,7 +143,7 @@ class Sequencer extends Component {
   resetHighlightedSpaces = () => {
     const emptyNodes = $(`.${EMPTY_NODE}`);
 
-    _.each(emptyNodes, val => {
+    _.each(emptyNodes, (val) => {
       val.classList.remove(EMPTY_NODE_HIGHLIGHTED);
     });
   };
@@ -170,7 +173,7 @@ class Sequencer extends Component {
     const initialSourceRow = source.row;
     let targetColumn = initialTargetColumn;
     const targetRow = initialTargetRow;
-    for (let i = 0; i < updatesMatrix.length; i++) {
+    for (let i = 0; i < updatesMatrix.length; i += 1) {
       if (_.isEmpty(updatesMatrix[targetRow][i])) {
         targetColumn = i;
         break;
@@ -186,85 +189,120 @@ class Sequencer extends Component {
     const updatesArray = this.campaignUpdates;
     const numberOfPhases = updatesArray.length;
     const initPhase = (
-      <div className='c-sequencer__wrapper'>
-        <div className='c-sequencer__init'>Phase 1</div>
-        <div className='c-sequencer__flexrow c-sequencer__flexrow--default-phase'>
+      <div className="c-sequencer__wrapper">
+        <div className="c-sequencer__init">Phase 1</div>
+        <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
           <div
-            className='c-sequencer__starter-point'
-            onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, { column: -1, row: -1, value: {} }) : null}
+            className="c-sequencer__starter-point"
+            onClick={
+              !_.isNull(this.selectedElement) && this.selectedElement.row > 0
+                ? this.moveElement.bind(this, { column: -1, row: -1, value: {} })
+                : null
+            }
           >
-            <div className='c-sequencer__text'>Init</div>
-            {readOnly ? <SequencerProgress delay={0} duration={INIT_PROGRESS_TIME} className='c-sequencer__progress c-sequencer__progress--default-phase' /> : null}
+            <div className="c-sequencer__text">Init</div>
+            {readOnly ? (
+              <SequencerProgress
+                delay={0}
+                duration={INIT_PROGRESS_TIME}
+                className="c-sequencer__progress c-sequencer__progress--default-phase"
+              />
+            ) : null}
           </div>
-          <div className='c-sequencer__init' style={{ visibility: 'hidden' }}>
+          <div className="c-sequencer__init" style={{ visibility: 'hidden' }}>
             Phase 1
           </div>
         </div>
       </div>
     );
     const terminationPhase = (
-      <div className='c-sequencer__wrapper'>
-        <div className='c-sequencer__termination'>Phase {numberOfPhases + 2}</div>
-        <div className='c-sequencer__flexrow c-sequencer__flexrow--default-phase'>
-          <div className='c-sequencer__end-point' onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, { column: -1, row: -1, value: {} }) : null}>
-            <div className='c-sequencer__text'>Termination</div>
+      <div className="c-sequencer__wrapper">
+        <div className="c-sequencer__termination">
+          {`Phase ${numberOfPhases + 2}`}
+        </div>
+        <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
+          <div
+            className="c-sequencer__end-point"
+            onClick={
+              !_.isNull(this.selectedElement) && this.selectedElement.row > 0
+                ? this.moveElement.bind(this, { column: -1, row: -1, value: {} })
+                : null
+            }
+          >
+            <div className="c-sequencer__text">Termination</div>
             {readOnly ? (
               <SequencerProgress
                 delay={INIT_PROGRESS_TIME + PHASE_PROGRESS_TIME * numberOfPhases}
                 duration={TERMINATION_PROGRESS_TIME}
-                className='c-sequencer__progress c-sequencer__progress--default-phase'
+                className="c-sequencer__progress c-sequencer__progress--default-phase"
               />
             ) : null}
           </div>
-          <div className='c-sequencer__termination' style={{ visibility: 'hidden' }}>
-            Phase {updatesArray.length + 2}
+          <div className="c-sequencer__termination" style={{ visibility: 'hidden' }}>
+            {`Phase ${updatesArray.length + 2}`}
           </div>
         </div>
       </div>
     );
     return (
-      <div className='c-sequencer'>
+      <div className="c-sequencer">
         {initPhase}
         {_.map(updatesArray, (val, rowIndex) => {
           const rowIsEmpty = _.find(updatesMatrix[rowIndex], obj => !_.isEmpty(obj));
           return (
-            <div key={rowIndex} className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
-              <span className='c-sequencer__phase'>Phase {rowIndex + 2}</span>
-              <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
+            <div
+              key={rowIndex}
+              className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}
+            >
+              <span className="c-sequencer__phase">
+                {`Phase ${rowIndex + 2}`}
+              </span>
+              <div
+                className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`}
+                key={rowIndex}
+              >
                 {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0
                   ? _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
-                      if (!_.isEmpty(value)) {
-                        return (
-                          <SequencerItem
-                            value={value}
-                            delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
-                            duration={PHASE_PROGRESS_TIME}
-                            selectSlot={this.selectSlot}
-                            selectedElement={this.selectedElement}
-                            deselectSlot={this.deselectSlot}
-                            selectAction={this.selectAction}
-                            row={rowIndex}
-                            column={columnIndex}
-                            key={`${rowIndex}-${columnIndex}`}
-                            readOnly={readOnly}
-                          />
-                        );
-                      }
+                    if (!_.isEmpty(value)) {
                       return (
-                        <div
-                          className='c-sequencer__empty-node'
-                          onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
+                        <SequencerItem
+                          value={value}
+                          delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
+                          duration={PHASE_PROGRESS_TIME}
+                          selectSlot={this.selectSlot}
+                          selectedElement={this.selectedElement}
+                          deselectSlot={this.deselectSlot}
+                          selectAction={this.selectAction}
+                          row={rowIndex}
+                          column={columnIndex}
                           key={`${rowIndex}-${columnIndex}`}
+                          readOnly={readOnly}
                         />
                       );
-                    })
-                  : _.map(updatesArray, (value, columnIndex) => (
+                    }
+                    return (
                       <div
-                        className='c-sequencer__empty-node'
-                        onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value }) : null}
+                        className="c-sequencer__empty-node"
+                        onClick={
+                          !_.isNull(this.selectedElement)
+                            ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value })
+                            : null
+                        }
                         key={`${rowIndex}-${columnIndex}`}
                       />
-                    ))}
+                    );
+                  })
+                  : _.map(updatesArray, (value, columnIndex) => (
+                    <div
+                      className="c-sequencer__empty-node"
+                      onClick={
+                        !_.isNull(this.selectedElement)
+                          ? this.moveElement.bind(this, { column: columnIndex, row: rowIndex, value })
+                          : null
+                      }
+                      key={`${rowIndex}-${columnIndex}`}
+                    />
+                  ))}
               </div>
             </div>
           );

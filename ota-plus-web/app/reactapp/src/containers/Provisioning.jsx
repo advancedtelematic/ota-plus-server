@@ -6,59 +6,72 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
-import { ProvisioningTooltip, ProvisioningHeader, ProvisioningList, ProvisioningCreateModal } from '../components/profile/access-keys';
+import {
+  ProvisioningTooltip,
+  ProvisioningHeader,
+  ProvisioningList,
+  ProvisioningCreateModal
+} from '../components/profile/access-keys';
 
 @inject('stores')
 @observer
 class Provisioning extends Component {
   @observable
   tooltipShown = false;
+
   @observable
   createModalShown = false;
 
-  showTooltip = e => {
+  showTooltip = (e) => {
     if (e) e.preventDefault();
     this.tooltipShown = true;
   };
 
-  hideTooltip = e => {
+  hideTooltip = (e) => {
     if (e) e.preventDefault();
     this.tooltipShown = false;
   };
 
-  showCreateModal = e => {
+  showCreateModal = (e) => {
     if (e) e.preventDefault();
     this.createModalShown = true;
   };
 
-  hideCreateModal = e => {
+  hideCreateModal = (e) => {
     if (e) e.preventDefault();
-    const { provisioningStore } = this.props.stores;
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
     this.createModalShown = false;
     resetAsync(provisioningStore.provisioningKeyCreateAsync);
   };
 
-  changeFilter = filter => {
-    const { provisioningStore } = this.props.stores;
-    provisioningStore._filterProvisioningKeys(filter);
+  changeFilter = (filter) => {
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
+    provisioningStore.filterProvisioningKeys(filter);
   };
 
   render() {
-    const { provisioningStore } = this.props.stores;
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
     return (
       <span>
         {provisioningStore.provisioningStatusFetchAsync.isFetching ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : provisioningStore.provisioningStatus.active ? (
           <span>
-            <ProvisioningHeader showCreateModal={this.showCreateModal} provisioningFilter={provisioningStore.provisioningFilter} changeFilter={this.changeFilter} />
+            <ProvisioningHeader
+              showCreateModal={this.showCreateModal}
+              provisioningFilter={provisioningStore.provisioningFilter}
+              changeFilter={this.changeFilter}
+            />
             <ProvisioningList showTooltip={this.showTooltip} />
           </span>
         ) : (
-          <div className='wrapper-center'>
-            <div className='page-intro'>
+          <div className="wrapper-center">
+            <div className="page-intro">
               <div>Provisioning not activated.</div>
             </div>
           </div>
@@ -72,7 +85,7 @@ class Provisioning extends Component {
 }
 
 Provisioning.propTypes = {
-  stores: PropTypes.object,
+  stores: PropTypes.shape({}),
 };
 
 export default Provisioning;

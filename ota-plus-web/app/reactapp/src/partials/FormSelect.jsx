@@ -15,39 +15,41 @@ class FormSelect extends Component {
     };
   }
 
-  _attachEventListener = () => {
+  attachEventListener = () => {
     const self = this;
     const body = $('body');
 
+    // eslint-disable-next-line no-underscore-dangle
     if ($._data(body[0], 'events') && $._data(body[0], 'events').click) {
-      self._detachEventListener();
+      self.detachEventListener();
     } else {
-      body.on('click', e => {
-        if (e.target.className !== 'c-form__option ' && e.target.className !== 'c-form__option c-form__option--selected') {
+      body.on('click', (e) => {
+        if (e.target.className !== 'c-form__option '
+          && e.target.className !== 'c-form__option c-form__option--selected') {
           self.toggleMenu();
         }
       });
     }
   };
 
-  _detachEventListener = () => {
+  detachEventListener = () => {
     $('body').unbind('click');
   };
 
-  toggleMenu = e => {
+  toggleMenu = (e) => {
     const { appendMenuToBodyTag } = this.props;
     const existContainer = document.getElementById('dropdown-render-container');
 
     if (existContainer) {
       existContainer.parentNode.removeChild(existContainer);
     }
-
+    const { showDropDown } = this.state;
     this.setState(
       {
-        showDropDown: !this.state.showDropDown,
+        showDropDown: !showDropDown,
       },
       () => {
-        this._attachEventListener();
+        this.attachEventListener();
       },
     );
 
@@ -56,7 +58,7 @@ class FormSelect extends Component {
     }
   };
 
-  appendSelectFieldsToBody = e => {
+  appendSelectFieldsToBody = (e) => {
     const { multiple = true, options, id, visibleFieldsCount = options.length > 1 ? options.length : 2 } = this.props;
     const { showDropDown, selectedOptions } = this.state;
     const renderContainer = document.createElement('div');
@@ -75,9 +77,9 @@ class FormSelect extends Component {
           width: inputPosition.width,
           height: options.length > 1 ? 'auto' : '35px',
         }}
-        className='c-form__select'
+        className="c-form__select"
         multiple={multiple}
-        id='dropdown'
+        id="dropdown"
       >
         {options.map((value, index) => {
           const selected = _.includes(selectedOptions, value);
@@ -94,13 +96,18 @@ class FormSelect extends Component {
                 {option.text}
               </option>
             );
-          } else {
-            return (
-              <option key={index} onClick={this.selectOption.bind(this, value)} id={`${id}-${value}`} className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`} value={value}>
-                {value}
-              </option>
-            );
           }
+          return (
+            <option
+              key={index}
+              onClick={this.selectOption.bind(this, value)}
+              id={`${id}-${value}`}
+              className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
+              value={value}
+            >
+              {value}
+            </option>
+          );
         })}
       </select>
     );
@@ -113,12 +120,12 @@ class FormSelect extends Component {
   };
 
   selectOption = (value, e) => {
-    const { appendMenuToBodyTag, multiple } = this.props;
+    const { appendMenuToBodyTag, multiple, onChange } = this.props;
     if (appendMenuToBodyTag) {
       e.target.classList.toggle('c-form__option--selected');
     }
-
-    let options = this.state.selectedOptions;
+    const { selectedOptions } = this.state;
+    let options = selectedOptions;
     if (_.isArray(options)) {
       if (_.includes(options, value)) {
         options = _.without(options, value);
@@ -132,12 +139,12 @@ class FormSelect extends Component {
       this.setState({
         selectedOptions: value,
       });
-      this.props.onChange(value);
+      onChange(value);
     } else {
       this.setState({
         selectedOptions: options,
       });
-      this.props.onChange(options);
+      onChange(options);
     }
   };
 
@@ -169,32 +176,36 @@ class FormSelect extends Component {
             ? defaultValue
             : '';
     return (
-      <div className='c-form__wrapper' style={{ width: wrapperWidth }}>
-        {label ? <label className='c-form__label'>{label}</label> : null}
-        <div className='c-form__relative-input'>
+      <div className="c-form__wrapper" style={{ width: wrapperWidth }}>
+        {label ? <label className="c-form__label">{label}</label> : null}
+        <div className="c-form__relative-input">
           <input
             className={`c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}`}
-            type='text'
+            type="text"
             style={{ width: inputWidth }}
             value={inputValue}
             placeholder={placeholder}
             onClick={this.toggleMenu}
             onChange={onChange}
             id={id}
-            autoComplete='off'
+            autoComplete="off"
             name={name}
             disabled={disabled}
           />
-          {inputValue.length ? <i className={`fa fa-check c-form__select-icon`} /> : <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`} />}
+          {inputValue.length ? (
+            <i
+              className="fa fa-check c-form__select-icon"
+            />
+          ) : <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`} />}
           {showDropDown && !appendMenuToBodyTag ? (
             <select
               size={visibleFieldsCount}
               style={{
                 height: options.length > 1 ? 'auto' : '35px',
               }}
-              className='c-form__select'
+              className="c-form__select"
               multiple={multiple}
-              id={'select-' + id}
+              id={`select-${id}`}
             >
               {options.map((value, index) => {
                 const selected = _.includes(selectedOptions, value);
@@ -211,13 +222,18 @@ class FormSelect extends Component {
                       {option.text}
                     </option>
                   );
-                } else {
-                  return (
-                    <option key={index} onClick={this.selectOption.bind(this, value)} id={`${id}-${value}`} className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`} value={value}>
-                      {value}
-                    </option>
-                  );
                 }
+                return (
+                  <option
+                    key={index}
+                    onClick={this.selectOption.bind(this, value)}
+                    id={`${id}-${value}`}
+                    className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
+                    value={value}
+                  >
+                    {value}
+                  </option>
+                );
               })}
             </select>
           ) : (
@@ -244,6 +260,12 @@ FormSelect.propTypes = {
       value: PropTypes.string,
     }),
   ]).isRequired,
+  onChange: PropTypes.func,
+  inputWidth: PropTypes.string,
+  wrapperWidth: PropTypes.string,
+  defaultValue: PropTypes.string,
+  name: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default FormSelect;

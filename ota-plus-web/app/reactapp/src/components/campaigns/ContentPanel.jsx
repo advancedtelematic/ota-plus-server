@@ -7,7 +7,8 @@ import { action, observable, observe, onBecomeObserved } from 'mobx';
 
 import { Pagination } from 'antd';
 import _ from 'lodash';
-import { List, ListHeader } from '.';
+import ListHeader from './ListHeader';
+import List from './List';
 import Loader from '../../partials/Loader';
 
 import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB, CAMPAIGNS_PAGE_NUMBER_DEFAULT } from '../../config';
@@ -19,8 +20,8 @@ class ContentPanel extends Component {
   @observable activeTab = CAMPAIGNS_DEFAULT_TAB;
 
   static propTypes = {
-    stores: PropTypes.object,
-    expandedCampaigns: PropTypes.array,
+    stores: PropTypes.shape({}),
+    expandedCampaigns: PropTypes.arrayOf(PropTypes.shape({})),
     highlight: PropTypes.string,
     addNewWizard: PropTypes.func,
     showCancelCampaignModal: PropTypes.func,
@@ -35,7 +36,7 @@ class ContentPanel extends Component {
     const { campaignsStore } = stores;
     this.state = { pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT };
 
-    this.cancelObserveTabChange = observe(campaignsStore, change => {
+    this.cancelObserveTabChange = observe(campaignsStore, (change) => {
       this.applyTab(change);
       if (change.name === 'campaignsFilter') {
         this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
@@ -110,7 +111,7 @@ class ContentPanel extends Component {
     return (
       <span>
         <div>
-          <TabNavigation showCreateCampaignModal={addNewWizard} location={'page-campaigns'} />
+          <TabNavigation showCreateCampaignModal={addNewWizard} location="page-campaigns" />
           <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
         </div>
         {campaignsFetchAsync[this.activeTab].isFetching ? (

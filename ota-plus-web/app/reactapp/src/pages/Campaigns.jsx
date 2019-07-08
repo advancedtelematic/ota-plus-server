@@ -13,9 +13,9 @@ const title = 'Campaigns';
 @observer
 class Campaigns extends Component {
   static propTypes = {
-    stores: PropTypes.object,
+    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
-    match: PropTypes.object,
+    match: PropTypes.shape({}),
   };
 
   componentDidMount() {
@@ -27,9 +27,9 @@ class Campaigns extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { campaignsStore, softwareStore, groupsStore } = stores;
-    campaignsStore._reset();
-    softwareStore._reset();
-    groupsStore._reset();
+    campaignsStore.reset();
+    softwareStore.reset();
+    groupsStore.reset();
   }
 
   render() {

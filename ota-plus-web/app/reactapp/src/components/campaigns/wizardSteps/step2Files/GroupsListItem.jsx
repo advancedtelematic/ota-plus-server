@@ -14,8 +14,8 @@ class GroupsListItem extends Component {
   @observable automaticCampaign = false;
 
   static propTypes = {
-    stores: PropTypes.object,
-    group: PropTypes.object.isRequired,
+    stores: PropTypes.shape({}),
+    group: PropTypes.shape({}).isRequired,
     setWizardData: PropTypes.func.isRequired,
     isChosen: PropTypes.bool.isRequired,
   };
@@ -29,8 +29,8 @@ class GroupsListItem extends Component {
     const { groupName, groupType, id: groupId } = group;
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
-    const countDevices = groupsStore._getGroupDevicesCount(group);
-    const isPlural = countDevices > 1; 
+    const countDevices = groupsStore.getGroupDevicesCount(group);
+    const isPlural = countDevices > 1;
 
     return (
       <div>
@@ -42,24 +42,25 @@ class GroupsListItem extends Component {
             }}
           />
           <div
-            className='element-box group'
+            className="element-box group"
             onClick={() => {
               setWizardData(groupId);
             }}
           >
             <div className={`icon icon--${groupType === 'static' ? 'default' : 'smart'}`} />
-            <div className='desc'>
-              <div className='title'>{groupName}</div>
-              <div className='subtitle'>
+            <div className="desc">
+              <div className="title">{groupName}</div>
+              <div className="subtitle">
                 {`${countDevices} ${isPlural ? 'devices' : 'device'}`}
               </div>
             </div>
           </div>
           {alphaPlusEnabled && groupType === 'dynamic' && (
-            <div className='automatic-campaign' onClick={this.toggleAutomaticCampaign}>
+            <div className="automatic-campaign" onClick={this.toggleAutomaticCampaign}>
               <div>
-                <span>{'automatic campaign'}
-                  <Tag color='#48dad0' className='alpha-tag'>ALPHA</Tag>
+                <span>
+                  {'automatic campaign'}
+                  <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
                 </span>
                 <div className={`switch${this.automaticCampaign ? ' switchOn' : ''}`} />
               </div>
@@ -67,7 +68,13 @@ class GroupsListItem extends Component {
           )}
         </div>
         <VelocityTransitionGroup enter={{ animation: 'slideDown' }} leave={{ animation: 'slideUp' }}>
-          {this.automaticCampaign && <div className='automatic-campaign-tip'>{'Automatically publish to new matching devices'}</div>}
+          {this.automaticCampaign
+            && (
+              <div className="automatic-campaign-tip">
+                {'Automatically publish to new matching devices'}
+              </div>
+            )
+          }
         </VelocityTransitionGroup>
       </div>
     );

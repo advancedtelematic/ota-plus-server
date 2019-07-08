@@ -3,11 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
 import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
-import { Loader } from '../../../partials';
-import { FadeAnimation } from '../../../utils';
 
 @observer
 class StatsBlock extends Component {
@@ -24,7 +21,7 @@ class StatsBlock extends Component {
 
     let colorIndex = -1;
     let statsPackIndex = 0;
-    let stats = {
+    const stats = {
       datasets: [
         {
           data: [],
@@ -47,8 +44,8 @@ class StatsBlock extends Component {
     _.each(data, (version, index) => {
       if (version.installedOnEcus > 0 || version) {
         if (statsPackIndex < availableColors.length) {
-          colorIndex++;
-          statsPackIndex++;
+          colorIndex += 1;
+          statsPackIndex += 1;
           if (type === 'groups' || type === 'results') {
             stats.datasets[0].data.push(version);
             stats.datasets[0].label.push(index);
@@ -56,26 +53,34 @@ class StatsBlock extends Component {
             stats.datasets[0].hoverBackgroundColor.push(availableColors[colorIndex]);
           } else {
             stats.datasets[0].data.push(version.installedOnEcus);
-            stats.datasets[0].label.push(type === 'devices' ? index : statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version);
+            stats.datasets[0].label.push(
+              type === 'devices' ? index : statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version
+            );
             stats.datasets[0].backgroundColor.push(availableColors[colorIndex]);
             stats.datasets[0].hoverBackgroundColor.push(availableColors[colorIndex]);
           }
         } else if (statsPackIndex >= availableColors.length) {
-          stats.datasets[0].data[availableColors.length - 1] = version.installedOnEcus + stats.datasets[0].data[availableColors.length - 1];
+          const installedCount = version.installedOnEcus + stats.datasets[0].data[availableColors.length - 1];
+          stats.datasets[0].data[availableColors.length - 1] = installedCount;
         }
         if (!type) {
+          // eslint-disable-next-line no-param-reassign
           version.color = availableColors[colorIndex];
         }
       }
       installedOnEcusTotal += version.installedOnEcus;
     });
     const content = (
-      <div className='chart-panel' id={'package-' + pack.packageName + '-stats'}>
+      <div className="chart-panel" id={`package-${pack.packageName}-stats`}>
         <div className={installedOnEcusTotal ? 'wrapper-center' : 'wrapper-center'}>
           <div className={installedOnEcusTotal ? 'total-count' : 'hide'}>{installedOnEcusTotal}</div>
-          {type === 'results' ? <div className='total-count'>{stats.datasets[0].data[1]}%</div> : ''}
+          {type === 'results' ? (
+            <div className="total-count">
+              {`${stats.datasets[0].data[1]}%`}
+            </div>
+          ) : ''}
           {stats.datasets[0].data.length ? (
-            <div className='canvas-wrapper'>
+            <div className="canvas-wrapper">
               <Doughnut
                 data={stats}
                 width={size.width || 250}
@@ -84,33 +89,33 @@ class StatsBlock extends Component {
                   cutoutPercentage: 60,
                 }}
               />
-              <div className='colors-info'>
+              <div className="colors-info">
                 {type
-                  ? _.map(stats.datasets[0].label, (label, index) => {
-                      return (
-                        <p key={index}>
-                          <span className='square' style={{ backgroundColor: `${stats.datasets[0].backgroundColor[index]}` }} />
-                          {label}
-                        </p>
-                      );
-                    })
+                  ? _.map(stats.datasets[0].label, (label, index) => (
+                    <p key={index}>
+                      <span className="square" style={{ backgroundColor: `${stats.datasets[0].backgroundColor[index]}` }} />
+                      {label}
+                    </p>
+                  ))
                   : ''}
               </div>
             </div>
           ) : (
-            <div id={'package-' + pack.packageName + '-not-installed'} style={{ textAlign: 'left' }}>
+            <div id={`package-${pack.packageName}-not-installed`} style={{ textAlign: 'left' }}>
               This software has not been installed yet.
             </div>
           )}
         </div>
       </div>
     );
-    return <div className='packages-stats'>{content}</div>;
+    return <div className="packages-stats">{content}</div>;
   }
 }
 
 StatsBlock.propTypes = {
-  pack: PropTypes.object.isRequired,
+  pack: PropTypes.shape({}).isRequired,
+  size: PropTypes.shape({}),
+  type: PropTypes.string
 };
 
 StatsBlock.defaultProps = {

@@ -1,5 +1,6 @@
 /** @format */
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, observe } from 'mobx';
@@ -13,14 +14,18 @@ const headerHeight = 30;
 @observer
 class List extends Component {
   @observable firstShownIndex = 0;
+
   @observable lastShownIndex = 50;
+
   @observable fakeHeaderLetter = null;
+
   @observable fakeHeaderTopPosition = 0;
 
   constructor(props) {
     super(props);
+    this.listRef = React.createRef();
     const { updatesStore } = props.stores;
-    this.updatesChangeHandler = observe(updatesStore, change => {
+    this.updatesChangeHandler = observe(updatesStore, (change) => {
       if (change.name === 'preparedUpdates' && !_.isMatch(change.oldValue, change.object[change.name])) {
         const that = this;
         setTimeout(() => {
@@ -31,23 +36,23 @@ class List extends Component {
   }
 
   componentDidMount() {
-    this.refs.list.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener('scroll', this.listScroll);
     this.listScroll();
   }
 
   componentWillUnmount() {
     this.updatesChangeHandler();
-    this.refs.list.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener('scroll', this.listScroll);
   }
 
   generateHeadersPositions = () => {
-    const headers = this.refs.list.getElementsByClassName('header');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const headers = this.listRef.current.getElementsByClassName('header');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       headers,
-      header => {
-        let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (header) => {
+        const position = header.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -56,13 +61,13 @@ class List extends Component {
   };
 
   generateItemsPositions = () => {
-    const items = this.refs.list.getElementsByClassName('item');
-    const wrapperPosition = this.refs.list.getBoundingClientRect();
-    let positions = [];
+    const items = this.listRef.current.getElementsByClassName('item');
+    const wrapperPosition = this.listRef.current.getBoundingClientRect();
+    const positions = [];
     _.each(
       items,
-      item => {
-        let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+      (item) => {
+        const position = item.getBoundingClientRect().top - wrapperPosition.top + this.listRef.current.scrollTop;
         positions.push(position);
       },
       this,
@@ -71,12 +76,13 @@ class List extends Component {
   };
 
   listScroll = () => {
-    const { updatesStore } = this.props.stores;
-    if (this.refs.list) {
+    const { stores } = this.props;
+    const { updatesStore } = stores;
+    if (this.listRef.current) {
       const headersPositions = this.generateHeadersPositions();
       const itemsPositions = this.generateItemsPositions();
-      let scrollTop = this.refs.list.scrollTop;
-      let listHeight = this.refs.list.getBoundingClientRect().height;
+      let { scrollTop } = this.listRef.current;
+      const listHeight = this.listRef.current.getBoundingClientRect().height;
       let newFakeHeaderLetter = this.fakeHeaderLetter;
       let firstShownIndex = null;
       let lastShownIndex = null;
@@ -86,10 +92,12 @@ class List extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(updatesStore.preparedUpdates)[index];
             return true;
-          } else if (scrollTop >= position - headerHeight) {
+          }
+          if (scrollTop >= position - headerHeight) {
             scrollTop -= scrollTop - (position - headerHeight);
             return true;
           }
+          return false;
         },
         this,
       );
@@ -112,28 +120,33 @@ class List extends Component {
   };
 
   render() {
-    const { showUpdateDetails } = this.props;
-    const { updatesStore } = this.props.stores;
+    const { showUpdateDetails, stores } = this.props;
+    const { updatesStore } = stores;
     return (
-      <div className='ios-list' id='list-updates' ref='list'>
+      <div className="ios-list" id="list-updates" ref={this.listRef}>
         {!_.isEmpty(updatesStore.preparedUpdates) ? (
-          _.map(updatesStore.preparedUpdates, (updates, letter) => {
-            return (
-              <span key={letter}>
-                {_.map(updates, (update, index) => {
-                  return <ListItem key={index} update={update} showUpdateDetails={showUpdateDetails} />;
-                })}
-              </span>
-            );
-          })
+          _.map(updatesStore.preparedUpdates, (updates, letter) => (
+            <span key={letter}>
+              {_.map(updates, (update, index) => (
+                <ListItem
+                  key={index}
+                  update={update}
+                  showUpdateDetails={showUpdateDetails}
+                />
+              ))}
+            </span>
+          ))
         ) : (
-          <div className='wrapper-center'>{'No updates found.'}</div>
+          <div className="wrapper-center">{'No updates found.'}</div>
         )}
       </div>
     );
   }
 }
 
-List.propTypes = {};
+List.propTypes = {
+  stores: PropTypes.shape({}),
+  showUpdateDetails: PropTypes.func
+};
 
 export default List;

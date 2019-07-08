@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /** @format */
 
 import PropTypes from 'prop-types';
@@ -12,12 +13,14 @@ import { Loader, OTAForm, FormSelect, FormInput } from '../../../partials';
 @observer
 class WizardStep5 extends Component {
   @observable blocks = [];
+
   @observable isLoading = false;
+
   @observable selectedVersions = [];
 
   static propTypes = {
-    stores: PropTypes.object,
-    wizardData: PropTypes.object.isRequired,
+    stores: PropTypes.shape({}),
+    wizardData: PropTypes.shape({}).isRequired,
     markStepAsFinished: PropTypes.func.isRequired,
     selectVersion: PropTypes.func,
     addToCampaign: PropTypes.func,
@@ -36,7 +39,7 @@ class WizardStep5 extends Component {
     const { stores } = this.props;
     const { updatesStore } = stores;
     const { currentMtuData: mtu } = updatesStore;
-    _.each(mtu.data, data => {
+    _.each(mtu.data, (data) => {
       const { checksum: toVersion, target: toPackage } = data.to;
       this.selectedVersions.push({
         packName: toPackage,
@@ -49,7 +52,7 @@ class WizardStep5 extends Component {
     const { stores } = this.props;
     const { updatesStore } = stores;
     const { currentMtuData: mtu } = updatesStore;
-    _.each(mtu.data, data => {
+    _.each(mtu.data, (data) => {
       const { checksum: toVersion, target: toPackage } = data.to;
       this.checkVersion({
         packName: toPackage,
@@ -58,7 +61,7 @@ class WizardStep5 extends Component {
     });
   };
 
-  checkVersion = data => {
+  checkVersion = (data) => {
     const { stores, markStepAsFinished } = this.props;
     const { softwareStore } = stores;
     this.fetchSelectedVersions();
@@ -68,9 +71,9 @@ class WizardStep5 extends Component {
       const requiredPackages = objWithRelations.required;
       const incompatiblePackages = objWithRelations.incompatibles;
       if (requiredPackages) {
-        _.each(requiredPackages, filepath => {
+        _.each(requiredPackages, (filepath) => {
           let skipAdd = false;
-          _.each(this.selectedVersions, version => {
+          _.each(this.selectedVersions, (version) => {
             if (version.filepath === filepath) {
               skipAdd = true;
             }
@@ -89,9 +92,9 @@ class WizardStep5 extends Component {
         });
       }
       if (incompatiblePackages) {
-        _.each(incompatiblePackages, filepath => {
+        _.each(incompatiblePackages, (filepath) => {
           let isTryingToInstall = false;
-          _.each(this.selectedVersions, version => {
+          _.each(this.selectedVersions, (version) => {
             if (version.filepath === filepath) {
               isTryingToInstall = true;
             }
@@ -116,9 +119,9 @@ class WizardStep5 extends Component {
     }
   };
 
-  addBlock = data => {
+  addBlock = (data) => {
     let shouldAdd = true;
-    _.each(this.blocks, block => {
+    _.each(this.blocks, (block) => {
       if (block.parentPack === data.childPack) {
         shouldAdd = false;
       }
@@ -128,24 +131,23 @@ class WizardStep5 extends Component {
     }
   };
 
-  getPackVersions = packName => {
+  getPackVersions = (packName) => {
     const { stores } = this.props;
     const { softwareStore } = stores;
     let matchedVersions = [];
-    _.each(softwareStore.preparedPackages, packs => {
-      _.each(packs, pack => {
+    _.each(softwareStore.preparedPackages, (packs) => {
+      _.each(packs, (pack) => {
         matchedVersions = pack.packageName === packName ? pack.versions : [];
       });
     });
     return matchedVersions;
   };
 
-  formatVersions = packName =>
-    this.getPackVersions(packName).map(version => ({
-      id: version.id.version,
-      text: version.id.version,
-      value: version.filepath,
-    }));
+  formatVersions = packName => this.getPackVersions(packName).map(version => ({
+    id: version.id.version,
+    text: version.id.version,
+    value: version.filepath,
+  }));
 
   onParentVersionChange = (data, event) => {
     const { selectVersion } = this.props;
@@ -175,79 +177,94 @@ class WizardStep5 extends Component {
     // this.checkVersions();
     const isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
     return (
-      <div className='content'>
+      <div className="content">
         {this.blocks.length ? (
           isOneIncompatible ? (
-            <div className='top-alert danger' id='compatibility-issue'>
-              <img src='/assets/img/icons/white/manager-danger.png' alt='Icon' />
+            <div className="top-alert danger" id="compatibility-issue">
+              <img src="/assets/img/icons/white/manager-danger.png" alt="Icon" />
               {'Compatibility issue'}
             </div>
           ) : (
-            <div className='top-alert warning' id='missing-dependencies'>
-              <img src='/assets/img/icons/white/manager-warning.png' alt='Icon' />
+            <div className="top-alert warning" id="missing-dependencies">
+              <img src="/assets/img/icons/white/manager-warning.png" alt="Icon" />
               {'Missing dependencies'}
             </div>
           )
         ) : (
-          <div className='top-alert success' id='success'>
-            <img src='/assets/img/icons/white/manager-success.png' alt='Icon' />
+          <div className="top-alert success" id="success">
+            <img src="/assets/img/icons/white/manager-success.png" alt="Icon" />
             {'Dependencies check'}
           </div>
         )}
         {this.isLoading ? (
-          <div className='wrapper-center'>
+          <div className="wrapper-center">
             <Loader />
           </div>
         ) : this.blocks.length ? (
           <span>
             {_.map(this.blocks, (block, index) => (
-              <section className='pair' key={index}>
-                <div className='item'>
-                  <OTAForm formWidth='100%' flexDirection='row' customStyles={{ justifyContent: 'space-between' }}>
-                    <FormInput isEditable={false} defaultValue={block.parentPack} label='Package' wrapperWidth='49%' />
+              <section className="pair" key={index}>
+                <div className="item">
+                  <OTAForm formWidth="100%" flexDirection="row" customStyles={{ justifyContent: 'space-between' }}>
+                    <FormInput isEditable={false} defaultValue={block.parentPack} label="Package" wrapperWidth="49%" />
                     <FormSelect
-                      id='from-pack-versions'
+                      id="from-pack-versions"
                       options={this.formatVersions(block.parentPack)}
                       visibleFieldsCount={this.formatVersions(block.parentPack).length}
-                      label='Version'
-                      wrapperWidth='49%'
+                      label="Version"
+                      wrapperWidth="49%"
                       defaultValue={block.parentFilepath}
-                      onChange={() =>
-                        this.onParentVersionChange(
-                          {
-                            type: 'to',
-                            packageName: block.parentPack,
-                          },
-                          this,
-                        )
+                      onChange={() => this.onParentVersionChange(
+                        {
+                          type: 'to',
+                          packageName: block.parentPack,
+                        },
+                        this,
+                      )
                       }
                     />
                   </OTAForm>
                 </div>
                 {block.isCompatible ? (
-                  <div className='status required' id='required'>
+                  <div className="status required" id="required">
                     {'Requires:'}
                   </div>
                 ) : (
-                  <div className='status incompatible' id='incompatible'>
+                  <div className="status incompatible" id="incompatible">
                     {'Not compatible with:'}
                   </div>
                 )}
 
-                <div className='item'>
-                  <OTAForm formWidth='100%' flexDirection='row' customStyles={{ justifyContent: 'space-between' }}>
-                    <FormInput isEditable={false} defaultValue={block.childPack} label='Package' wrapperWidth='49%' />
-                    <FormInput isEditable={false} defaultValue={block.childRequiredVersion} label='Version' wrapperWidth='49%' />
+                <div className="item">
+                  <OTAForm formWidth="100%" flexDirection="row" customStyles={{ justifyContent: 'space-between' }}>
+                    <FormInput isEditable={false} defaultValue={block.childPack} label="Package" wrapperWidth="49%" />
+                    <FormInput
+                      isEditable={false}
+                      defaultValue={block.childRequiredVersion}
+                      label="Version"
+                      wrapperWidth="49%"
+                    />
                   </OTAForm>
                 </div>
-                <div className='add'>
+                <div className="add">
                   {block.isCompatible ? (
-                    <button type='button' id='add-to-campaign' className='add-button light' onClick={addToCampaign.bind(this, block.childPack)}>
+                    <button
+                      type="button"
+                      id="add-to-campaign"
+                      className="add-button light"
+                      onClick={addToCampaign.bind(this, block.childPack)}
+                    >
                       <span>+</span>
                       <span>{'Add to campaign'}</span>
                     </button>
                   ) : (
-                    <button type='button' href='#' id='change-version' className='add-button light' onClick={addToCampaign.bind(this, block.childPack)}>
+                    <button
+                      type="button"
+                      href="#"
+                      id="change-version"
+                      className="add-button light"
+                      onClick={addToCampaign.bind(this, block.childPack)}
+                    >
                       <span>+</span>
                       <span>{'Change version'}</span>
                     </button>
@@ -257,9 +274,9 @@ class WizardStep5 extends Component {
             ))}
           </span>
         ) : (
-          <div className='wrapper-center'>
-            <div className='step-pass' id='step-pass'>
-              <img src='/assets/img/icons/manager-success.svg' alt='Icon' />
+          <div className="wrapper-center">
+            <div className="step-pass" id="step-pass">
+              <img src="/assets/img/icons/manager-success.svg" alt="Icon" />
               {'No dependency issues'}
             </div>
           </div>

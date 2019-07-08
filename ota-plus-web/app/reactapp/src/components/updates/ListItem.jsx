@@ -10,16 +10,21 @@ class ListItem extends Component {
     const { update, showUpdateDetails } = this.props;
     const { sourceType } = update.source;
     return (
-      <div className='c-update'>
-        <div className='c-update__item item'>
-          <div className='c-update__teaser' id={`update_item_${update.name}`}>
-            <div className='c-update__name'>
-              <div className={'c-update__icon ' + (sourceType === 'external' ? 'c-update__icon--external' : 'c-update__icon--internal')} />
+      <div className="c-update">
+        <div className="c-update__item item">
+          <div className="c-update__teaser" id={`update_item_${update.name}`}>
+            <div className="c-update__name">
+              <div className={`c-update__icon ${sourceType === 'external' ? 'c-update__icon--external' : 'c-update__icon--internal'}`} />
               <span>{update.name}</span>
             </div>
-            <div className='c-update__hash'>{update.description}</div>
-            <div className='c-update__edit'>
-              <a href='#' className='add-button' id={'edit-update-' + update.name} onClick={showUpdateDetails.bind(this, update)}>
+            <div className="c-update__hash">{update.description}</div>
+            <div className="c-update__edit">
+              <a
+                href="#"
+                className="add-button"
+                id={`edit-update-${update.name}`}
+                onClick={showUpdateDetails.bind(this, update)}
+              >
                 <span>{'More details'}</span>
               </a>
             </div>
@@ -31,7 +36,7 @@ class ListItem extends Component {
 }
 
 ListItem.propTypes = {
-  update: PropTypes.object.isRequired,
+  update: PropTypes.shape({}).isRequired,
   showUpdateDetails: PropTypes.func.isRequired,
 };
 
