@@ -12,7 +12,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import scala.concurrent.ExecutionContext
 
 class CryptApiSpec extends PlaySpec with GuiceOneAppPerSuite with ScalaFutures {
-  implicit val tracer = new TestZipkinTraceService()
+  implicit val tracer = new NoOpZipkinTraceService()
   implicit val noTraceData = TraceData(tracer.tracing.tracer().newTrace())
 
   implicit override lazy val app: Application =
