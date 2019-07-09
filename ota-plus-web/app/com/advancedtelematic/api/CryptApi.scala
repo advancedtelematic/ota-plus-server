@@ -57,7 +57,8 @@ object DeviceRegistrationCredentials {
     )(DeviceRegistrationCredentials.apply, unlift(DeviceRegistrationCredentials.unapply))
 }
 
-class CryptApi(conf: Configuration, apiExec: ApiClientExec)(implicit exec: ExecutionContext, tracer: ZipkinTraceServiceLike) {
+class CryptApi(conf: Configuration, apiExec: ApiClientExec)
+              (implicit exec: ExecutionContext, tracer: ZipkinTraceServiceLike) {
   import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.Methods._
 
   def baseRequest(path: String)(implicit traceData: TraceData): ApiRequest =
@@ -69,7 +70,8 @@ class CryptApi(conf: Configuration, apiExec: ApiClientExec)(implicit exec: Execu
     baseRequest(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)
   }
 
-  def getAccount[T](accountName: String, parseT: JsValue => JsResult[T])(implicit traceData: TraceData): Future[Option[T]] = {
+  def getAccount[T](accountName: String, parseT: JsValue => JsResult[T])
+                   (implicit traceData: TraceData): Future[Option[T]] = {
     baseRequest(s"/accounts/$accountName")
       .transform(_.withMethod(GET))
       .execResponse(apiExec)
@@ -97,7 +99,8 @@ class CryptApi(conf: Configuration, apiExec: ApiClientExec)(implicit exec: Execu
   def getAccountGatewayUri(accountInfo: CryptAccountInfo) =
     Uri("https", Uri.Authority(accountInfo.hostName, gatewayPort))
 
-  def getCredentials(accountName: String)(implicit traceData: TraceData): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
+  def getCredentials(accountName: String)
+                    (implicit traceData: TraceData): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
     getAccount(accountName, x =>
       (x \ "deviceRegistrationCredentials").validate[Map[String, DeviceRegistrationCredentials]])
       .map(_.map(_.values.toSeq))

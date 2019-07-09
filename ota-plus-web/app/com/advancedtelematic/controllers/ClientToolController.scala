@@ -104,7 +104,8 @@ class ClientToolController @Inject()(
 
   type CredentialsData = ByteString
 
-  def getCryptCredentials(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[(Uri,CredentialsData)] = for {
+  def getCryptCredentials(namespace: Namespace, keyUuid: UUID)
+                         (implicit traceData: TraceData): Future[(Uri,CredentialsData)] = for {
     accountInfo <- cryptApi.getAccountInfo(namespace.get)
     gatewayUri = cryptApi.getAccountGatewayUri(accountInfo.getOrElse(throw AccountNotActivated(namespace.get)))
     credentials <- cryptApi.downloadCredentials(namespace.get, keyUuid)
@@ -113,7 +114,8 @@ class ClientToolController @Inject()(
 
   type RootJsonData = ByteString
 
-  def getTufRepoCredentials(namespace: Namespace)(implicit traceData: TraceData): Future[(RootJsonData,Seq[TufKeyPair])] = for {
+  def getTufRepoCredentials(namespace: Namespace)
+                           (implicit traceData: TraceData): Future[(RootJsonData,Seq[TufKeyPair])] = for {
     result <- repoServerApi.rootJsonResult(namespace)
     body <- result.body.consumeData(materializer)
     repoId = if (result.header.status == play.api.http.Status.OK) {
