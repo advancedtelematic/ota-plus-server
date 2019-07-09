@@ -55,7 +55,7 @@ libraryDependencies ++= Seq(
   Dependencies.LibTuf,
   Dependencies.LibTufServer,
   Dependencies.jose4j,
-  "io.zipkin.brave.play" %% "play-zipkin-tracing-play" % "3.0.1",
+  "io.zipkin.brave.play" %% "play-zipkin-tracing-play" % "3.0.2-SNAPSHOT",
 ) ++
 Dependencies.TestFrameworks ++
 Dependencies.LibAts
