@@ -6,6 +6,7 @@ import java.util.UUID
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.model.Uri.{NamedHost, Path}
+import brave.play.{TraceData, ZipkinTraceServiceLike}
 import play.api.Configuration
 import play.api.http.{HttpEntity, Status}
 import play.api.libs.json._
@@ -56,19 +57,20 @@ object DeviceRegistrationCredentials {
     )(DeviceRegistrationCredentials.apply, unlift(DeviceRegistrationCredentials.unapply))
 }
 
-class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: ExecutionContext) {
+class CryptApi(conf: Configuration, apiExec: ApiClientExec)(implicit exec: ExecutionContext, tracer: ZipkinTraceServiceLike) {
   import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.Methods._
 
-  val baseUri = ApiRequest.base(conf.underlying.getString("crypt.uri"))
+  def baseRequest(path: String)(implicit traceData: TraceData): ApiRequest =
+    ApiRequest.traced("crypt", conf.underlying.getString("crypt.uri")  + path)
 
   val gatewayPort = conf.get[Option[Int]]("crypt.gateway.port").getOrElse(443)
 
-  def registerAccount(accountName: String): Future[CryptAccountInfo] = {
-    baseUri(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)
+  def registerAccount(accountName: String)(implicit traceData: TraceData): Future[CryptAccountInfo] = {
+    baseRequest(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)
   }
 
-  def getAccount[T](accountName: String, parseT: JsValue => JsResult[T]): Future[Option[T]] = {
-    baseUri(s"/accounts/$accountName")
+  def getAccount[T](accountName: String, parseT: JsValue => JsResult[T])(implicit traceData: TraceData): Future[Option[T]] = {
+    baseRequest(s"/accounts/$accountName")
       .transform(_.withMethod(GET))
       .execResponse(apiExec)
       .flatMap[Option[T]] { response =>
@@ -88,14 +90,14 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
     }
   }
 
-  def getAccountInfo(accountName: String): Future[Option[CryptAccountInfo]] = {
+  def getAccountInfo(accountName: String)(implicit traceData: TraceData): Future[Option[CryptAccountInfo]] = {
     getAccount(accountName, _.validate[CryptAccountInfo])
   }
 
   def getAccountGatewayUri(accountInfo: CryptAccountInfo) =
     Uri("https", Uri.Authority(accountInfo.hostName, gatewayPort))
 
-  def getCredentials(accountName: String): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
+  def getCredentials(accountName: String)(implicit traceData: TraceData): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
     getAccount(accountName, x =>
       (x \ "deviceRegistrationCredentials").validate[Map[String, DeviceRegistrationCredentials]])
       .map(_.map(_.values.toSeq))
@@ -103,16 +105,16 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
 
   def credentialsRegistration(accountName: String,
                               description: String,
-                              ttl: Long): Future[DeviceRegistrationCredentials] = {
+                              ttl: Long)(implicit traceData: TraceData): Future[DeviceRegistrationCredentials] = {
     val requestBody = Json.obj("description" -> description, "ttl" -> ttl)
-    baseUri(s"/accounts/$accountName/credentials/registration")
+    baseRequest(s"/accounts/$accountName/credentials/registration")
       .transform(_.withMethod(POST))
       .transform(_.withBody(requestBody))
       .execJson[DeviceRegistrationCredentials](apiExec)
   }
 
-  def downloadCredentials(accountName: String, id: UUID): Future[HttpEntity] = {
-    baseUri(s"/accounts/$accountName/credentials/registration/$id")
+  def downloadCredentials(accountName: String, id: UUID)(implicit traceData: TraceData): Future[HttpEntity] = {
+    baseRequest(s"/accounts/$accountName/credentials/registration/$id")
       .transform(_.withMethod(GET))
       .execResult(apiExec)
       .transform {

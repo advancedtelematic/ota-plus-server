@@ -1,5 +1,7 @@
 package com.advancedtelematic.controllers
 
+import brave.play.ZipkinTraceServiceLike
+import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
 import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
@@ -19,14 +21,15 @@ final case class UserId(id: String) extends AnyVal
 class UserProfileController @Inject()(val conf: Configuration,
                                       val ws: WSClient,
                                       val clientExec: ApiClientExec,
+                                      implicit val tracer: ZipkinTraceServiceLike,
                                       authAction: IdentityAction,
                                       accessTokenBuilder: AccessTokenBuilder,
                                       oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
     extends AbstractController(components)
-    with ApiClientSupport {
+    with ApiClientSupport with ZipkinTraceImplicits {
 
-  def getUserProfile: Action[AnyContent] = authAction.async { request =>
+  def getUserProfile: Action[AnyContent] = authAction.async { implicit request =>
     val fut = for {
       claims  <- oidcGateway.getUserInfo(request.accessToken)
       profile <- userProfileApi.getUser(claims.userId)
@@ -64,7 +67,7 @@ class UserProfileController @Inject()(val conf: Configuration,
     } yield Ok(EmptyContent())
   }
 
-  def updateUserProfile(): Action[JsValue] = authAction.async(components.parsers.json) { request =>
+  def updateUserProfile(): Action[JsValue] = authAction.async(components.parsers.json) { implicit request =>
     import com.advancedtelematic.JsResultSyntax._
     (request.body \ "name").validate[String].toEither match {
       case Right(newName) =>
@@ -85,13 +88,13 @@ class UserProfileController @Inject()(val conf: Configuration,
     }
   }
 
-  def updateBillingInfo(): Action[JsValue] = authAction.async(components.parsers.json) { request =>
+  def updateBillingInfo(): Action[JsValue] = authAction.async(components.parsers.json) { implicit request =>
     userProfileApi.updateBillingInfo(request.idToken.userId, request.queryString, request.body)
   }
 
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
 
-  def getFeatures(): Action[AnyContent] = authAction.async { request =>
+  def getFeatures(): Action[AnyContent] = authAction.async { implicit request =>
     userProfileApi
       .getFeatures(request.namespace)
       .map { features =>
@@ -104,7 +107,7 @@ class UserProfileController @Inject()(val conf: Configuration,
       }
   }
 
-  def proxyRequest(path: String): Action[AnyContent] = authAction.async { request =>
+  def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
     userProfileApi.userProfileRequest(request.idToken.userId, request.method, path)
   }
 

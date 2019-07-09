@@ -13,6 +13,8 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
+import brave.play.{TraceData, ZipkinTraceServiceLike}
+import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction}
@@ -21,7 +23,6 @@ import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Writes}
-import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.async.Async.{async, await}
@@ -73,14 +74,14 @@ object ClientToolController {
 @Singleton
 class ClientToolController @Inject()(
     val conf: Configuration,
-    val ws: WSClient,
     val authAction: ApiAuthAction,
     val clientExec: ApiClientExec,
+    implicit val tracer: ZipkinTraceServiceLike,
     oidcGateway: OidcGateway,
     tokenBuilder: AccessTokenBuilder,
     components: ControllerComponents)
     (implicit executionContext: ExecutionContext, actorSystem: ActorSystem)
-  extends AbstractController(components) with OtaPlusConfig with ApiClientSupport {
+  extends AbstractController(components) with OtaPlusConfig with ApiClientSupport with ZipkinTraceImplicits {
 
   import ClientToolController._
 
@@ -88,14 +89,14 @@ class ClientToolController @Inject()(
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def getOAuth2Params(namespace: Namespace, userId: UserId) : Future[AuthParams] = {
+  def getOAuth2Params(namespace: Namespace, userId: UserId)(implicit traceData: TraceData) : Future[AuthParams] = {
     val accessToken = tokenBuilder.mkToken(userId.id, Instant.now().plus(1, ChronoUnit.MINUTES), Set())
     userProfileApi.getFeature(namespace, FeatureName("treehub"))
       .flatMap { feat =>
         feat.client_id match {
           case Some(id) => for {
             secret <- authPlusApi.fetchSecret(id, accessToken)
-          } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri, id.toString, secret)))
+          } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri.uri, id.toString, secret)))
           case None => Future.successful(AuthParams(noAuth = Some(true)))
         }
       }
@@ -103,7 +104,7 @@ class ClientToolController @Inject()(
 
   type CredentialsData = ByteString
 
-  def getCryptCredentials(namespace: Namespace, keyUuid: UUID) : Future[(Uri,CredentialsData)] = for {
+  def getCryptCredentials(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[(Uri,CredentialsData)] = for {
     accountInfo <- cryptApi.getAccountInfo(namespace.get)
     gatewayUri = cryptApi.getAccountGatewayUri(accountInfo.getOrElse(throw AccountNotActivated(namespace.get)))
     credentials <- cryptApi.downloadCredentials(namespace.get, keyUuid)
@@ -112,7 +113,7 @@ class ClientToolController @Inject()(
 
   type RootJsonData = ByteString
 
-  def getTufRepoCredentials(namespace: Namespace) : Future[(RootJsonData,Seq[TufKeyPair])] = for {
+  def getTufRepoCredentials(namespace: Namespace)(implicit traceData: TraceData): Future[(RootJsonData,Seq[TufKeyPair])] = for {
     result <- repoServerApi.rootJsonResult(namespace)
     body <- result.body.consumeData(materializer)
     repoId = if (result.header.status == play.api.http.Status.OK) {
@@ -124,6 +125,7 @@ class ClientToolController @Inject()(
   } yield (body, targetKeys)
 
   private def writeZip(namespace: Namespace, accessToken: AccessToken, keyUUID: UUID, zip: ZipOutputStream)
+                      (implicit traceData: TraceData)
     : Future[Unit] = {
 
     import io.circe.syntax._
@@ -142,11 +144,11 @@ class ClientToolController @Inject()(
         writeZipEntry("autoprov_credentials.p12", credentialsData.toArray)
       }
 
-      writeZipEntry("api_gateway.url", apiGatewayUri.getBytes)
+      writeZipEntry("api_gateway.url", apiGatewayUri.uri.getBytes)
 
       if(conf.getOptional[String]("repo.pub.host").isDefined) {
         val (rootJson, targetKeys) = await(getTufRepoCredentials(namespace))
-        writeZipEntry("tufrepo.url", repoPubApiUri.getBytes)
+        writeZipEntry("tufrepo.url", repoPubApiUri.uri.getBytes)
         writeZipEntry("root.json", rootJson.toArray)
 
         def numberSuffix(i: Int) = if (i > 0) i.toString else ""
@@ -165,7 +167,7 @@ class ClientToolController @Inject()(
       }
 
       writeZipEntry("treehub.json", Json.prettyPrint(Json.toJson(
-        AllParams(authParams, OSTreeParams(treehubPubApiUri)))).getBytes())
+        AllParams(authParams, OSTreeParams(treehubPubApiUri.uri)))).getBytes())
     }
   }
 

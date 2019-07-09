@@ -1,5 +1,7 @@
 package com.advancedtelematic.controllers
 
+import brave.play.ZipkinTraceServiceLike
+import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.{IdentityAction, SessionCodecs}
 import com.advancedtelematic.libats.data.DataType.Namespace
@@ -15,9 +17,10 @@ import scala.concurrent.ExecutionContext
 class NamespaceController @Inject()(val conf: Configuration,
                                     val ws: WSClient,
                                     val clientExec: ApiClientExec,
+                                    implicit val tracer: ZipkinTraceServiceLike,
                                     authAction: IdentityAction,
                                     components: ControllerComponents)(implicit exec: ExecutionContext)
-  extends AbstractController(components) with ApiClientSupport {
+  extends AbstractController(components) with ApiClientSupport with ZipkinTraceImplicits {
 
   private val log = Logger(this.getClass)
   private val redirectToIndex = Redirect(com.advancedtelematic.controllers.routes.Application.index())
@@ -28,7 +31,7 @@ class NamespaceController @Inject()(val conf: Configuration,
       override def unbind(key: String, ns: Namespace): String = ns.get
   }
 
-  def switchNamespace(namespace: Namespace): Action[AnyContent] = authAction.async { request =>
+  def switchNamespace(namespace: Namespace): Action[AnyContent] = authAction.async { implicit request =>
     val userId = request.idToken.userId
       userProfileApi.namespaceIsAllowed(userId, namespace).map {
         case false =>
@@ -45,7 +48,7 @@ class NamespaceController @Inject()(val conf: Configuration,
       }
     }
 
-  def proxyRequest(path: String): Action[AnyContent]= authAction.async { request =>
+  def proxyRequest(path: String): Action[AnyContent]= authAction.async { implicit request =>
     userProfileApi.organizationRequest(request.namespace, request.method, path, request.body.asJson)
   }
 }

@@ -1,5 +1,6 @@
 package com.advancedtelematic.provisioning
 
+import brave.play.TraceData
 import com.advancedtelematic.api.{ApiClientExec, CryptApi}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -11,6 +12,9 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import scala.concurrent.ExecutionContext
 
 class CryptApiSpec extends PlaySpec with GuiceOneAppPerSuite with ScalaFutures {
+  implicit val tracer = new TestZipkinTraceService()
+  implicit val noTraceData = TraceData(tracer.tracing.tracer().newTrace())
+
   implicit override lazy val app: Application =
     new GuiceApplicationBuilder().configure("crypt.uri" -> MockCrypt.CryptHost).build()
 

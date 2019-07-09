@@ -7,9 +7,10 @@ package com.advancedtelematic.controllers
 
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.advancedtelematic.api.{ApiVersion, OtaPlusConfig}
-import com.advancedtelematic.auth.{AccessTokenBuilder,
-  AuthorizedSessionRequest, IdentityAction, OAuthConfig, UiAuthAction}
+import brave.play.implicits.ZipkinTraceImplicits
+import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
+import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
+import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, IdentityAction, OAuthConfig, UiAuthAction}
 import javax.inject.{Inject, Singleton}
 import org.slf4j.LoggerFactory
 import play.api._
@@ -49,13 +50,14 @@ object UiToggles {
  *
  */
 @Singleton
-class Application @Inject() (ws: WSClient,
+class Application @Inject() (ws: TraceWSClient,
+                             val tracer: ZipkinTraceServiceLike,
                              components: ControllerComponents,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
                              val apiAuth: IdentityAction,
                              tokenBuilder: AccessTokenBuilder)
-  extends AbstractController(components) with I18nSupport with OtaPlusConfig {
+  extends AbstractController(components) with I18nSupport with OtaPlusConfig with ZipkinTraceImplicits {
 
   import ApiVersion.ApiVersion
 
@@ -76,7 +78,7 @@ class Application @Inject() (ws: WSClient,
    * @param path The path of the request
    * @return The service to proxy to
    */
-  private def apiByPath(version: ApiVersion, path: String) : Option[String] = {
+  private def apiByPath(version: ApiVersion, path: String) : Option[OtaApiUri] = {
     val pathComponents = path.split("/").toList
 
     val proxiedPrefixes = coreProxiedPrefixes orElse
@@ -90,7 +92,7 @@ class Application @Inject() (ws: WSClient,
     proxiedPrefixes.lift((version, pathComponents))
   }
 
-  type Dispatcher = PartialFunction[(ApiVersion, List[String]), String]
+  type Dispatcher = PartialFunction[(ApiVersion, List[String]), OtaApiUri]
 
   private val auditorProxiedPrefixes: Dispatcher = {
     case (_, "auditor" :: "devices_seen_in" :: _) => auditorApiUri
@@ -155,13 +157,12 @@ class Application @Inject() (ws: WSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: String, req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
-
+  private def proxyTo(apiUri: OtaApiUri)(implicit req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
     val allowedHeaders = Seq("content-type")
     def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase)) +
           ("x-ats-namespace" -> req.namespace.get)
 
-    val wreq = ws.url(apiUri + req.path)
+    val wreq = ws.url(apiUri.serviceName, apiUri.uri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
       .withQueryStringParameters(req.queryString.toArray.flatMap{ case (nm, xs) => xs.map(nm -> _) } :_*)
@@ -189,9 +190,9 @@ class Application @Inject() (ws: WSClient,
    * @return
    */
   def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
-    apiAuth.async(bodySource) { req =>
+    apiAuth.async(bodySource) { implicit req =>
       apiByPath(version, path) match {
-        case Some(p) => proxyTo(p, req)
+        case Some(p) => proxyTo(p)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
       }
     }
