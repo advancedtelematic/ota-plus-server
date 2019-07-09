@@ -10,7 +10,13 @@ import akka.util.ByteString
 import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
-import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, IdentityAction, OAuthConfig, UiAuthAction}
+import com.advancedtelematic.auth.{
+  AccessTokenBuilder,
+  AuthorizedSessionRequest,
+  IdentityAction,
+  OAuthConfig,
+  UiAuthAction
+}
 import javax.inject.{Inject, Singleton}
 import org.slf4j.LoggerFactory
 import play.api._
@@ -157,10 +163,12 @@ class Application @Inject() (ws: TraceWSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: OtaApiUri)(implicit req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
+  private def proxyTo(apiUri: OtaApiUri)
+                     (implicit req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
     val allowedHeaders = Seq("content-type")
-    def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase)) +
-          ("x-ats-namespace" -> req.namespace.get)
+    def passHeaders(hdrs: Headers) =
+      hdrs.toSimpleMap
+        .filter(h => allowedHeaders.contains(h._1.toLowerCase)) + ("x-ats-namespace" -> req.namespace.get)
 
     val wreq = ws.url(apiUri.serviceName, apiUri.uri + req.path)
       .withFollowRedirects(false)

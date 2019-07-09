@@ -23,9 +23,8 @@ class NamespaceFromUserProfile @Inject()(val conf: Configuration,
                                          val ws: WSClient,
                                          val clientExec: ApiClientExec,
                                          val tracer: ZipkinTraceServiceLike)
-                                        (implicit ec: ExecutionContext) extends NamespaceProvider with ApiClientSupport {
-
-
+                                        (implicit ec: ExecutionContext)
+  extends NamespaceProvider with ApiClientSupport {
 
   override def apply(tokens: Tokens): Future[Namespace] = {
     implicit val traceData = TraceData(tracer.tracing.tracer().newTrace())

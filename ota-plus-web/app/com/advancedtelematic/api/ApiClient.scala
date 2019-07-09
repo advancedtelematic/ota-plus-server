@@ -129,7 +129,8 @@ trait ApiRequest { self =>
 /**
   * Controllers extending [[ApiClientSupport]] access [[AuthPlusApi]] endpoints using a singleton.
   */
-class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig {
+class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec)
+                 (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig {
   /**
     * The response is json for `com.advancedtelematic.authplus.client.ClientInformationResponse`
     * for a ClientID:
@@ -145,7 +146,8 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit 
       .execJsonValue(apiExec)
   }
 
-  def fetchSecret(clientID: UUID, token: AccessToken)(implicit ec: ExecutionContext, traceData: TraceData): Future[String] = {
+  def fetchSecret(clientID: UUID, token: AccessToken)
+                 (implicit ec: ExecutionContext, traceData: TraceData): Future[String] = {
     fetchClientInfo(clientID, token).flatMap { parsed =>
       val t2: Try[String] = Try((parsed \ "client_secret").validate[String].get)
       Future.fromTry(t2)
@@ -189,7 +191,8 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   def getFeatures(namespace: Namespace)(implicit traceData: TraceData): Future[Seq[FeatureName]] =
     userProfileRequest("organizations/" + namespace.get + "/features").execJson[Seq[FeatureName]](apiExec)
 
-  def activateFeature(namespace: Namespace, feature: FeatureName, clientId: UUID)(implicit traceData: TraceData): Future[Result] = {
+  def activateFeature(namespace: Namespace, feature: FeatureName, clientId: UUID)
+                     (implicit traceData: TraceData): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
     userProfileRequest(s"organizations/${namespace.get}/features")
@@ -197,14 +200,16 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .execResult(apiExec)
   }
 
-  def updateDisplayName(userId: UserId, newName: String)(implicit executionContext: ExecutionContext, traceData: TraceData): Future[Done] = {
+  def updateDisplayName(userId: UserId, newName: String)
+                       (implicit executionContext: ExecutionContext, traceData: TraceData): Future[Done] = {
     val request = userProfileRequest(s"users/${userId.id}/displayname").transform(
       _.withMethod("PUT").withBody(JsString(newName))
     ).build
     apiExec.runSafe(request).map(_ => Done)
   }
 
-  def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)(implicit traceData: TraceData): Future[Result] =
+  def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)
+                          (implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"users/${userId.id}/billing_info")
       .transform(
         _.withMethod("PUT")
@@ -221,10 +226,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .transform(_.withMethod("GET"))
       .execJson[Set[UserOrganization]](apiExec)
 
-  def namespaceIsAllowed(userId: UserId, namespace: Namespace)(implicit ec: ExecutionContext, traceData: TraceData): Future[Boolean] =
+  def namespaceIsAllowed(userId: UserId, namespace: Namespace)
+                        (implicit ec: ExecutionContext, traceData: TraceData): Future[Boolean] =
     userOrganizations(userId).map(_.map(_.namespace)).map(_.contains(namespace))
 
-  def organizationRequest(namespace: Namespace, method: String, path: String, body: Option[JsValue])(implicit traceData: TraceData): Future[Result] =
+  def organizationRequest(namespace: Namespace, method: String, path: String, body: Option[JsValue])
+                         (implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"organizations/${namespace.get}/$path")
       .transform(_.withMethod(method))
       .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
@@ -243,11 +250,13 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implici
       .execResult(apiExec)
 }
 
-class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig {
+class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec)
+                  (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig {
   private def request(path: String)(implicit traceData: TraceData) =
     ApiRequest.traced("keyserver", keyServerApiUri.uri + "/api/v1/" + path)
 
-  def targetKeys(repoId: String)(implicit ec: ExecutionContext, mat: Materializer, traceData: TraceData): Future[Seq[TufKeyPair]] = {
+  def targetKeys(repoId: String)
+                (implicit ec: ExecutionContext, mat: Materializer, traceData: TraceData): Future[Seq[TufKeyPair]] = {
     // using circe since there is a decoder for it in the lib
     import io.circe.{parser => CirceParser}
 
