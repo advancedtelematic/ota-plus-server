@@ -30,6 +30,7 @@ class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionConte
   protected def logRequest(requestHeader: RequestHeader, resultCode: Int, startTime: Long): Unit = {
     val endTime = System.currentTimeMillis
     val serviceTime = endTime - startTime
+    val traceId = requestHeader.headers.get("x-b3-traceid").map("traceid" -> _).toMap
 
     val metrics = Map(
       "service_name" -> serviceName,
@@ -37,7 +38,7 @@ class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionConte
       "path" -> requestHeader.path,
       "stime" -> serviceTime.toString,
       "status" -> resultCode.toString
-    )
+    ) ++ traceId
 
     val msg = metrics.toList.map { case (m, v) => s"$m=$v"}.mkString(" ")
 
