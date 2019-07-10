@@ -31,6 +31,6 @@ class OtaPlusFilters  @Inject() (
                                   zipkinTraceFilter: ZipkinTraceFilter
                         ) extends HttpFilters {
 
-  val filters = Seq(securityHeadersFilter, csrfFilter, log, zipkinTraceFilter, b3HeaderPropagation)
+  val filters = Seq(securityHeadersFilter, csrfFilter, zipkinTraceFilter, log, b3HeaderPropagation)
 }
 
