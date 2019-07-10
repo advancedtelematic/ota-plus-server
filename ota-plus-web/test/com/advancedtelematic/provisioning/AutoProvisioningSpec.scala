@@ -73,7 +73,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/status")
           .withFollowRedirects(false)
-          .withHttpHeaders("Cookie" -> makeSessionCookie("not|registered"), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie("not-registered"), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
