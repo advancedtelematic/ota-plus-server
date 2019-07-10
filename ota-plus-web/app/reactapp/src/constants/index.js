@@ -32,6 +32,7 @@ export const NO_VERSION_INFO = 'No information / Any';
  */
 
 export const ARTIFICIAL = 'artificial';
+export const GROUP_ALL = 'all';
 
 /*
  *  Web events
