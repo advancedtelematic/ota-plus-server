@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { action, observable, observe, onBecomeObserved } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-
+import { withTranslation } from 'react-i18next';
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import SoftwareRepositoryAlpha from '../pages/SoftwareRepositoryAlpha';
 import {
@@ -52,6 +52,7 @@ class Software extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     highlightedPackage: PropTypes.string,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -193,7 +194,7 @@ class Software extends Component {
   };
 
   render() {
-    const { stores, highlightedPackage } = this.props;
+    const { stores, highlightedPackage, t } = this.props;
     const { softwareStore } = stores;
     return (
       <span ref={this.componentRef}>
@@ -225,7 +226,7 @@ class Software extends Component {
               <div>
                 <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
               </div>
-              <div>{"You haven't created any software yet."}</div>
+              <div>{t('software.empty.no_software')}</div>
               <div>
                 <a
                   href="#"
@@ -233,7 +234,7 @@ class Software extends Component {
                   id="add-new-software"
                   onClick={this.showCreateModal.bind(this, null)}
                 >
-                  <span>{'+ Add new software'}</span>
+                  <span>{t('software.empty.add_new')}</span>
                 </a>
               </div>
             </div>
@@ -250,7 +251,7 @@ class Software extends Component {
           <ConfirmationModal
             modalTitle={(
               <div className="text-red" id="delete-software-title">
-                Delete software
+                {t('software.action_buttons.delete_software')}
               </div>
             )}
             shown={this.deleteConfirmationShown}
@@ -258,19 +259,18 @@ class Software extends Component {
             deleteItem={this.deleteItem}
             topText={(
               <div className="delete-modal-top-text" id="delete-software-top-text">
-                {'Remove '}
+                {t('software.delete_soft_version.top_text.p1')}
                 <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b>
-                {' v.'}
+                {t('software.delete_soft_version.top_text.p2')}
                 <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>
                   {this.itemToDelete}
                 </b>
-                {' permanently?'}
+                {t('software.delete_soft_version.top_text.p3')}
               </div>
             )}
             bottomText={(
               <div className="delete-modal-bottom-text" id="delete-software-bottom-text">
-                {'If the software is part of any active campaigns, any devices that haven\'t '}
-                {'installed it will fail the campaign.'}
+                {t('software.delete_soft_version.bottom_text')}
               </div>
             )}
             showDetailedInfo
@@ -304,4 +304,4 @@ class Software extends Component {
   }
 }
 
-export default Software;
+export default withTranslation()(Software);

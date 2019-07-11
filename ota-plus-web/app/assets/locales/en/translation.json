@@ -17,7 +17,8 @@
     "common": {
         "infinite_scroller": {
             "loader_content": "..."
-        }
+        },
+        "more_info": "More info"
     },
     "dashboard": {
         "campaigns": {
@@ -104,6 +105,100 @@
         "softwares": "Software Repository"
     },
     "software": {
+        "action_buttons": {
+            "add_software": "Add software",
+            "delete_version": "Delete version",
+            "delete_software": "Delete software",
+            "edit_comment": "Edit comment",
+            "edit_dependencies": "Edit dependencies",
+            "save_comment": "Save comment"
+        },
+        "blacklist_modal": {
+            "bottom_text": "On the <strong>Impact analysis tab</strong>, you can view which of your devices already have the blacklisted version of the package installed, letting you proactivly troubleshoot and update those devices to a fixed version, or roll them back to an older version.",
+            "confirm": "Confirm",
+            "edit_title": "Edit blacklisted package",
+            "remove": "Remove from blacklist",
+            "save_comment": "Save comment",
+            "title": "Blacklist",
+            "top_text": "With HERE OTA Connect, you can <strong>blacklist</strong> problem packages, ensuring they won’t get installed on any of your devices."
+        },
+        "cancel_upload": {
+            "multiple": {
+                "cancel": "Cancel uploads",
+                "continue": "Continue uploads",
+                "title": "Cancel all uploads?",
+                "warning": "Your uploads are not complete. Would you like to cancel all ongoing uploads?"
+            },
+            "single": {
+                "cancel": "Cancel upload",
+                "continue": "Continue upload",
+                "title": "Cancel upload?",
+                "warning": "Your upload is not complete. Would you like to cancel the upload?"
+            }
+        },
+        "create_modal": {
+            "add": "Add",
+            "choose_file": "Choose file",
+            "ecu_types": "ECU Types",
+            "ecu_types_placeholder": "Select ECU types",
+            "intro_1": "Upload new software versions to your software repository. Alternatively, you can also use the ",
+            "intro_2": " to build and upload full software images.",
+            "intro_link": "OTA Connect Client",
+            "software_name": "Software Name",
+            "software_name_placeholder": "Name",
+            "title": "Add new software",
+            "version": "Version",
+            "version_placeholder": "Select version"
+        },
+        "delete_soft_modal": {
+            "title": "Delete all versions",
+            "warnings": {
+                "bottom": "If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.",
+                "top": "All software versions will be removed."
+            }
+        },
+        "delete_soft_version": {
+            "bottom_text": "If the software is part of any active campaigns, any devices that haven't installed it will fail the campaign.",
+            "top_text": {
+                "p1": "Remove ",
+                "p2": " v.",
+                "p3": " permanently?"
+            }            
+        },
+        "dependencies": {
+            "edit": "Edit",
+            "mandatory": "Mandatory",
+            "modal_title": "Dependencies management",
+            "not_compatible": "Not compatible:",            
+            "not_compatible_no_colon": "Not compatible",
+            "required": "Required:",
+            "required_by": "Required by:",
+            "required_by_no_colon": "Required by",
+            "title": "Dependencies"
+        },
+        "details": {
+            "created_at": "Created at:",
+            "comment": "Comment",
+            "distribution_by_devices": "Distribution by devices",
+            "ecu_types": "ECU types:",
+            "format": "Format:",
+            "hash": "Hash:",
+            "length": "Length:",
+            "no_comment": "No comment",
+            "updated_at": "Updated at:",
+            "version": "Version:",
+            "version_no_colon": "Version"
+        },
+        "empty": {
+            "add_new": "+ Add new software",
+            "no_software": "You haven't created any software yet."
+        },
+        "installed_on_count": "Installed on {{count}} ECU(s)",
+        "not_installed": "This software has not been installed yet.",
+        "tabs": {
+            "advanced": "Advanced",
+            "compact": "Compact"
+        },
         "uploading": {
             "cancel": "Cancel",
             "error": "Error",
@@ -112,7 +207,9 @@
             "success": "Success",
             "upload_is_finished": "Upload is finished",
             "uploading_software": "Uploading {{count}} softwares"
-        }
+        },
+        "versions_count": "{{count}} version",
+        "versions_count_plural": "{{count}} versions"
     },
     "time": {
         "second_count": "{{count}} seconds",

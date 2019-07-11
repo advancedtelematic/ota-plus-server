@@ -6,7 +6,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
 import _ from 'lodash';
-
+import { withTranslation, Trans } from 'react-i18next';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { OTAModal, AsyncResponse, Loader, FormTextarea, OTAForm } from '../../partials';
 
@@ -20,6 +20,7 @@ class BlacklistModal extends Component {
     hide: PropTypes.func.isRequired,
     blacklistAction: PropTypes.shape({}).isRequired,
     stores: PropTypes.shape({}),
+    t: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -101,7 +102,7 @@ class BlacklistModal extends Component {
   };
 
   render() {
-    const { stores, shown, hide, blacklistAction } = this.props;
+    const { stores, shown, hide, blacklistAction, t } = this.props;
     const { softwareStore } = stores;
     const { packagesUpdateBlacklistedAsync, packagesRemoveFromBlacklistAsync, packagesBlacklistAsync } = softwareStore;
     const content = (
@@ -129,23 +130,17 @@ class BlacklistModal extends Component {
         {blacklistAction.mode === 'add' && (
           <div>
             <div className="top-text">
-              With HERE OTA Connect, you can
-              {' '}
-              <strong>blacklist</strong>
-              {' '}
-              problem packages, ensuring they won’t get installed on any of your devices.
+              <Trans>
+                {t('software.blacklist_modal.top_text')}
+              </Trans>
             </div>
             <div className="bottom-text">
-              On the
-              {' '}
-              <strong>Impact analysis tab</strong>
-              , you can view which of your devices already have the blacklisted version of the package installed
-              , letting you proactivly troubleshoot and
-              update those devices to a fixed version, or roll them back to an older version.
+              <Trans>
+                {t('software.blacklist_modal.bottom_text')}
+              </Trans>
             </div>
           </div>
         )}
-
         <div className="row">
           <div className="col-xs-12">
             {softwareStore.packagesOneBlacklistedFetchAsync.isFetching ? (
@@ -166,7 +161,7 @@ class BlacklistModal extends Component {
                 {blacklistAction.mode === 'edit' ? (
                   <div className="subactions">
                     <a className="add-button" onClick={this.removeFromBlacklist}>
-                      Remove from Blacklist
+                      {t('software.blacklist_modal.remove')}
                     </a>
                   </div>
                 ) : null}
@@ -187,7 +182,10 @@ class BlacklistModal extends Component {
                   || packagesRemoveFromBlacklistAsync.isFetching
                 }
               >
-                {blacklistAction.mode === 'edit' ? 'Save Comment' : 'Confirm'}
+                {blacklistAction.mode === 'edit'
+                  ? t('software.blacklist_modal.save_comment')
+                  : t('software.blacklist_modal.confirm')
+                }
               </button>
             </div>
           </div>
@@ -196,7 +194,10 @@ class BlacklistModal extends Component {
     );
     return (
       <OTAModal
-        title={blacklistAction.mode === 'edit' ? 'Edit blacklisted package' : 'Blacklist'}
+        title={blacklistAction.mode === 'edit'
+          ? t('software.blacklist_modal.edit_title')
+          : t('software.blacklist_modal.title')
+        }
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
@@ -212,4 +213,4 @@ class BlacklistModal extends Component {
   }
 }
 
-export default BlacklistModal;
+export default withTranslation()(BlacklistModal);

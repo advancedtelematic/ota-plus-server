@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Tag } from 'antd';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 import { OTAModal } from '../../partials';
 
 @inject('stores')
@@ -19,6 +20,7 @@ class DependenciesManager extends Component {
     packages: PropTypes.shape({}),
     shown: PropTypes.bool,
     hide: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -119,7 +121,7 @@ class DependenciesManager extends Component {
   };
 
   render() {
-    const { stores, shown, hide, packages, activePackage } = this.props;
+    const { stores, shown, hide, packages, activePackage, t } = this.props;
     const { softwareStore } = stores;
 
     const requiredBy = [];
@@ -160,7 +162,7 @@ class DependenciesManager extends Component {
                           id={`other-pack-mandatory-${version.id.version}`}
                           onClick={this.addVersion.bind(this, versionString)}
                         >
-                          Mandatory
+                          {t('software.dependencies.mandatory')}
                           <span className="manager-modal__pack-status manager-modal__pack-status--orange" />
                         </span>
                       ) : this.obj.incompatibles.indexOf(versionString) > -1 ? (
@@ -169,7 +171,7 @@ class DependenciesManager extends Component {
                           id={`other-pack-incompatible-${version.id.version}`}
                           onClick={this.addVersion.bind(this, versionString)}
                         >
-                          Not compatible
+                          {t('software.dependencies.not_compatible_no_colon')}
                           <span className="manager-modal__pack-status manager-modal__pack-status--red" />
                         </span>
                       ) : requiredBy.indexOf(versionString) > -1 ? (
@@ -177,7 +179,7 @@ class DependenciesManager extends Component {
                           className="manager-modal__pack-status-title"
                           id={`other-pack-required-by-${version.id.version}`}
                         >
-                          Required by
+                          {t('software.dependencies.required_by_no_colon')}
                           <span className="manager-modal__pack-status manager-modal__pack-status--green" />
                         </span>
                       ) : (
@@ -186,7 +188,7 @@ class DependenciesManager extends Component {
                           id={`other-pack-not-selected-${version.id.version}`}
                           onClick={this.addVersion.bind(this, versionString)}
                         >
-                          Edit
+                          {t('software.dependencies.edit')}
                           <span className="manager-modal__pack-status manager-modal__pack-status--white" />
                         </span>
                       )}
@@ -203,7 +205,7 @@ class DependenciesManager extends Component {
       <OTAModal
         title={(
           <span>
-            Dependencies management
+            {t('software.dependencies.modal_title')}
             <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
           </span>
         )}
@@ -224,4 +226,4 @@ class DependenciesManager extends Component {
   }
 }
 
-export default DependenciesManager;
+export default withTranslation()(DependenciesManager);

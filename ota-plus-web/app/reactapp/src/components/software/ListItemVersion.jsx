@@ -6,6 +6,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 import { Dropdown } from '../../partials';
 
 @inject('stores')
@@ -22,7 +23,7 @@ class ListItemVersion extends Component {
   };
 
   render() {
-    const { stores, version, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
+    const { stores, version, showDependenciesManager, showDeleteConfirmation, showEditComment, t } = this.props;
     const { softwareStore, featuresStore } = stores;
     const { compatibilityData } = softwareStore;
     const { alphaPlusEnabled } = featuresStore;
@@ -47,36 +48,36 @@ class ListItemVersion extends Component {
     const directorBlock = (
       <span>
         <div className="c-package__sw-box">
-          <div className="c-package__heading">Version</div>
+          <div className="c-package__heading">{t('software.details.version_no_colon')}</div>
           <div className="c-package__sw-wrapper">
             {version.customExists ? (
               <span>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Version:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.version')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-version-${version.id.version.substring(0, 8)}`}>
                     {version.id.version}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Created at:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.created_at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-created-at-${version.id.version.substring(0, 8)}`}>
                     {moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Updated at:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.updated_at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-updated-at-${version.id.version.substring(0, 8)}`}>
                     {moment(version.updatedAt).format('ddd MMM DD YYYY, h:mm:ss A')}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Hash:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.hash')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
                     {version.packageHash}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Length:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.length')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
                     {version.targetLength}
                   </span>
@@ -85,13 +86,13 @@ class ListItemVersion extends Component {
             ) : (
               <span>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Hash:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.hash')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-hash-${version.id.version.substring(0, 8)}`}>
                     {version.packageHash}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">Length:</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.length')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-target-length-${version.id.version.substring(0, 8)}`}>
                     {version.targetLength}
                   </span>
@@ -101,7 +102,7 @@ class ListItemVersion extends Component {
           </div>
           <div className="c-package__sw-wrapper">
             <div className="c-package__hw-row">
-              <div className="c-package__sw-subtitle">ECU types:</div>
+              <div className="c-package__sw-subtitle">{t('software.details.ecu_types')}</div>
               <div className="c-package__hw-value">
                 {_.map(version.hardwareIds, (hardwareId, index) => (
                   <span
@@ -118,7 +119,7 @@ class ListItemVersion extends Component {
           {version.targetFormat && (
             <div className="c-package__sw-wrapper">
               <div className="c-package__hw-row">
-                <div className="c-package__sw-subtitle">Format:</div>
+                <div className="c-package__sw-subtitle">{t('software.details.format')}</div>
                 <div className="c-package__hw-value">
                   <span
                     className="app-label"
@@ -132,17 +133,15 @@ class ListItemVersion extends Component {
           )}
           <div className="c-package__sw-wrapper">
             <div className="c-package__subheading">
-              {'Installed on '}
               <span id={`package-${packageName}-installed-on-ecus-count-${version.id.version.substring(0, 8)}`}>
-                {version.installedOnEcus}
+                {t('software.installed_on_count', { count: version.installedOnEcus })}
               </span>
-              {' ECU(s)'}
             </div>
           </div>
         </div>
         <div className="c-package__inner-box">
           <div className="c-package__comment">
-            <div className="c-package__heading">Comment</div>
+            <div className="c-package__heading">{t('software.details.comment')}</div>
             <textarea
               className="c-package__comment-value"
               name="comment-stick"
@@ -154,11 +153,11 @@ class ListItemVersion extends Component {
           </div>
           {alphaPlusEnabled && (
             <div className="c-package__manager">
-              <div className="c-package__heading">Dependencies</div>
+              <div className="c-package__heading">{t('software.dependencies.title')}</div>
               <div className="c-package__manager-content">
                 {versionCompatibilityData && versionCompatibilityData.required.length && (
                   <div className="c-package__relations" id="required">
-                    <div className="c-package__heading">Required</div>
+                    <div className="c-package__heading">{t('software.dependencies.required')}</div>
                     {_.map(versionCompatibilityData.required, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
@@ -176,7 +175,7 @@ class ListItemVersion extends Component {
                 )}
                 {versionCompatibilityData && versionCompatibilityData.incompatibles.length && (
                   <div className="c-package__relations" id="not-compatible">
-                    <div className="c-package__heading">Not compatible:</div>
+                    <div className="c-package__heading">{t('software.dependencies.not_compatible')}</div>
                     {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
@@ -194,7 +193,7 @@ class ListItemVersion extends Component {
                 )}
                 {versionCompatibilityData && versionCompatibilityData.requiredBy.length && (
                   <div className="c-package__relations" id="required-by">
-                    <div className="c-package__heading">Required by:</div>
+                    <div className="c-package__heading">{t('software.dependencies.required_by')}</div>
                     {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
                       const pack = _.find(softwareStore.packages, item => item.filepath === filepath);
                       return (
@@ -222,7 +221,6 @@ class ListItemVersion extends Component {
           <span />
           <span />
           <span />
-
           {this.isShown && (
             <Dropdown hideSubmenu={this.hideSubmenu}>
               <li className="package-dropdown-item">
@@ -232,7 +230,7 @@ class ListItemVersion extends Component {
                   id="edit-comment"
                   onClick={showEditComment.bind(this, version.filepath, version.comment)}
                 >
-                  {'Edit comment'}
+                  {t('software.action_buttons.edit_comment')}
                 </a>
               </li>
               {alphaPlusEnabled && (
@@ -243,7 +241,7 @@ class ListItemVersion extends Component {
                     id="show-dependencies"
                     onClick={showDependenciesManager.bind(this, version)}
                   >
-                    {'Edit dependencies'}
+                    {t('software.action_buttons.edit_dependencies')}
                   </a>
                 </li>
               )}
@@ -254,7 +252,7 @@ class ListItemVersion extends Component {
                   id="delete-version"
                   onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}
                 >
-                  {'Delete version'}
+                  {t('software.action_buttons.delete_version')}
                 </a>
               </li>
             </Dropdown>
@@ -282,7 +280,8 @@ ListItemVersion.propTypes = {
   stores: PropTypes.shape({}),
   showDependenciesManager: PropTypes.func,
   showDeleteConfirmation: PropTypes.func,
-  showEditComment: PropTypes.func
+  showEditComment: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default ListItemVersion;
+export default withTranslation()(ListItemVersion);
