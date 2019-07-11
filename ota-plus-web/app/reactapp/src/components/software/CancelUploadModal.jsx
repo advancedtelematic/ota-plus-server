@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
-
+import { withTranslation } from 'react-i18next';
 import OTAModal from '../../partials/OTAModal';
 
 @inject('stores')
@@ -13,6 +13,7 @@ class CancelUploadModal extends Component {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     uploadIndex: PropTypes.number,
+    t: PropTypes.func.isRequired
   };
 
   cancelUpload = () => {
@@ -23,23 +24,23 @@ class CancelUploadModal extends Component {
   };
 
   render() {
-    const { shown, hide } = this.props;
+    const { shown, hide, t } = this.props;
     const content = (
       <span>
-        Your upload is not complete. Would you like to cancel the upload?
+        {t('software.cancel_upload.single.warning')}
         <div className="body-actions">
           <a onClick={hide} className="link-cancel">
-            Continue upload
+            {t('software.cancel_upload.single.continue')}
           </a>
           <a className="btn-primary" id="cancel-upload" onClick={this.cancelUpload}>
-            Cancel upload
+            {t('software.cancel_upload.single.cancel')}
           </a>
         </div>
       </span>
     );
     return (
       <OTAModal
-        title="Cancel upload?"
+        title={t('software.cancel_upload.single.title')}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
@@ -55,4 +56,4 @@ class CancelUploadModal extends Component {
   }
 }
 
-export default CancelUploadModal;
+export default withTranslation()(CancelUploadModal);

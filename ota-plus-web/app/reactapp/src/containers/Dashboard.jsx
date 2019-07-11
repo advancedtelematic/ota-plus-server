@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-
 import { LatestCreatedCampaigns, LastDevices, LastSoftware } from '../components/dashboard';
 import { Dropdown } from '../partials';
 import { SoftwareCreateModal } from '../components/software';

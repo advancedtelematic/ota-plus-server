@@ -5,11 +5,12 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
+import { withTranslation } from 'react-i18next';
 
 @observer
 class StatsBlock extends Component {
   render() {
-    const { pack, size, type } = this.props;
+    const { pack, size, type, t } = this.props;
     let availableColors = [];
     if (type === 'groups' || type === 'devices') {
       availableColors = ['#FA9D00', '#069F71', '#670195', '#B7B9BC'];
@@ -102,7 +103,7 @@ class StatsBlock extends Component {
             </div>
           ) : (
             <div id={`package-${pack.packageName}-not-installed`} style={{ textAlign: 'left' }}>
-              This software has not been installed yet.
+              {t('software.not_installed')}
             </div>
           )}
         </div>
@@ -115,11 +116,12 @@ class StatsBlock extends Component {
 StatsBlock.propTypes = {
   pack: PropTypes.shape({}).isRequired,
   size: PropTypes.shape({}),
-  type: PropTypes.string
+  type: PropTypes.string,
+  t: PropTypes.func.isRequired
 };
 
 StatsBlock.defaultProps = {
   size: { width: '250', height: '250' },
 };
 
-export default StatsBlock;
+export default withTranslation()(StatsBlock);

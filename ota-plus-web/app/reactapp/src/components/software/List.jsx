@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
@@ -208,7 +209,8 @@ class List extends Component {
       showDependenciesManager,
       showDeleteConfirmation,
       expandedPackageName,
-      showEditComment
+      showEditComment,
+      t
     } = this.props;
     const { softwareStore } = stores;
 
@@ -276,7 +278,7 @@ class List extends Component {
                                         this.showDeleteModal();
                                       }}
                                     >
-                                      {'Delete'}
+                                      {t('software.action_buttons.delete_software')}
                                     </a>
                                   </li>
                                 </Dropdown>
@@ -285,7 +287,9 @@ class List extends Component {
                           </div>
                           <div className="c-package__versions-wrapper">
                             <div className="c-package__chart">
-                              <div className="c-package__heading">Distribution by devices</div>
+                              <div className="c-package__heading">
+                                {t('software.details.distribution_by_devices')}
+                              </div>
                               <SoftwareVersionsStats pack={pack} />
                             </div>
                             <ul className="c-package__versions" id="versions">
@@ -315,7 +319,7 @@ class List extends Component {
           <ConfirmationModal
             modalTitle={(
               <div className="text-red" id="delete-all-versions-title">
-                Delete all versions
+                {t('software.delete_soft_modal.title')}
               </div>
             )}
             hide={this.hideDeleteModal}
@@ -326,13 +330,12 @@ class List extends Component {
             }}
             topText={(
               <div className="delete-modal-top-text" id="delete-all-versions-top-text">
-                All software versions will be removed.
+                {t('software.delete_soft_modal.warnings.top')}
               </div>
             )}
             bottomText={(
               <div className="delete-modal-bottom-text" id="delete-all-versions-bottom-text">
-                {'If the software is part of any active campaigns,'}
-                {' any devices that haven\'t installed it will fail the campaign.'}
+                {t('software.delete_soft_modal.warnings.bottom')}
               </div>
             )}
             showDetailedInfo
@@ -353,7 +356,8 @@ List.propTypes = {
   expandedPackageName: PropTypes.string,
   showEditComment: PropTypes.func,
   setExpandedPackageName: PropTypes.func,
-  animatedScroll: PropTypes.func
+  animatedScroll: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default withAnimatedScroll(List);
+export default withTranslation()(withAnimatedScroll(List));
