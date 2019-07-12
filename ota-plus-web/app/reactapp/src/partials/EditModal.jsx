@@ -55,7 +55,7 @@ class EditModal extends Component {
     const { shown, hide, modalTitle, device, stores } = this.props;
     const { devicesStore } = stores;
     const form = (
-      <OTAForm onSubmit={() => this.submitForm()} id="edit-name-form">
+      <OTAForm id="edit-name-form">
         <AsyncResponse
           handledStatus="error"
           id="edit-device-name__alert"
@@ -83,11 +83,12 @@ class EditModal extends Component {
             <div className="body-actions">
               <button
                 type="button"
+                onClick={() => this.submitForm()}
                 disabled={this.submitButtonDisabled || devicesStore.devicesRenameAsync.isFetching}
                 className="btn-primary"
                 id="add"
               >
-                Edit
+                {'Rename'}
               </button>
             </div>
           </div>
