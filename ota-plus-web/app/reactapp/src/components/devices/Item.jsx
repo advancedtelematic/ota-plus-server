@@ -46,8 +46,7 @@ class Item extends Component {
     this.menuShown = true;
   };
 
-  hideMenu = (e) => {
-    e.preventDefault();
+  hideMenu = () => {
     this.menuShown = false;
   };
 
