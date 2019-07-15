@@ -86,7 +86,7 @@ class RenameModal extends Component {
           <Col span={24}>
             <div className="body-actions">
               <button
-                type="button"
+                type="submit"
                 disabled={this.submitButtonDisabled || groupsStore.groupsRenameAsync.isFetching}
                 className="btn-primary"
                 id="add"

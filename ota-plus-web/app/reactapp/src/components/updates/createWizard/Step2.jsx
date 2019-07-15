@@ -45,7 +45,10 @@ class Step2 extends Component {
 Step2.propTypes = {
   wizardData: PropTypes.shape({}),
   onStep2DataSelect: PropTypes.func,
-  showDetails: PropTypes.bool,
+  showDetails: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.bool
+  ]),
   stores: PropTypes.shape({})
 };
 

@@ -263,7 +263,10 @@ FormSelect.propTypes = {
   onChange: PropTypes.func,
   inputWidth: PropTypes.string,
   wrapperWidth: PropTypes.string,
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]),
   name: PropTypes.string,
   disabled: PropTypes.bool
 };

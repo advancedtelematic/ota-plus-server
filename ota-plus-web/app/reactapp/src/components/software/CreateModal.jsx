@@ -184,7 +184,7 @@ class CreateModal extends Component {
           <Col span={24}>
             <div className="body-actions">
               <button
-                type="button"
+                type="submit"
                 className="btn-primary"
                 disabled={!isSubmitEnabled}
                 id="add-new-package-confirm"

@@ -419,7 +419,7 @@ List.propTypes = {
   onFileDrop: PropTypes.func.isRequired,
   togglePackageAutoUpdate: PropTypes.func.isRequired,
   showPackageDetails: PropTypes.func.isRequired,
-  triggerPackages: PropTypes.func,
+  triggerPackages: PropTypes.bool,
   animatedScroll: PropTypes.func,
   expandedPackageName: PropTypes.string,
   togglePackage: PropTypes.func
