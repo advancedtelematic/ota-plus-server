@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 
 import NavigationPopover from './NavigationPopover';
 import SupportMenu from './SupportMenu';
@@ -12,7 +13,7 @@ import SupportMenu from './SupportMenu';
 @observer
 class Navigation extends Component {
   render() {
-    const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { uiUserProfileMenu, t, uiCredentialsDownload, uiUserProfileEdit } = this.props;
     return (
       <nav className="navbar navbar-inverse clearfix">
         <div className="container clearfix">
@@ -24,32 +25,32 @@ class Navigation extends Component {
               <ul className="nav navbar-nav">
                 <li>
                   <NavLink exact to="/" activeClassName="active" id="link-dashboard">
-                    {'Dashboard'}
+                    {t('navigation.dashboard')}
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/devices" activeClassName="active" id="link-devices">
-                    {'Devices'}
+                    {t('navigation.devices')}
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/software-repository" activeClassName="active" id="link-software-repository">
-                    {'Software Repository'}
+                    {t('navigation.softwares')}
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/updates" activeClassName="active" id="link-updates">
-                    {'Updates'}
+                    {t('navigation.updates')}
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/campaigns" activeClassName="active" id="link-campaigns">
-                    {'Campaigns'}
+                    {t('navigation.campaigns')}
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/impact-analysis" activeClassName="active" id="link-impact-analysis">
-                    {'Impact analysis'}
+                    {t('navigation.impact_analysis')}
                   </NavLink>
                 </li>
               </ul>
@@ -74,9 +75,10 @@ class Navigation extends Component {
 
 Navigation.propTypes = {
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired,
   uiUserProfileEdit: PropTypes.bool.isRequired,
   uiUserProfileMenu: PropTypes.bool.isRequired,
   uiCredentialsDownload: PropTypes.bool.isRequired,
 };
 
-export default Navigation;
+export default withTranslation()(Navigation);

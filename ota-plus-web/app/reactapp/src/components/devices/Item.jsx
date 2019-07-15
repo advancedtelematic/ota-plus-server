@@ -6,7 +6,10 @@ import { DragSource } from 'react-dnd';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import { Dropdown } from '../../partials';
+import { DEVICE_STATUSES } from '../../constants/deviceConstants';
 
 const deviceSource = {
   beginDrag(props) {
@@ -52,21 +55,21 @@ class Item extends Component {
 
   render() {
     const semiTransparent = 0.4;
-    const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
+    const { device, goToDetails, showDeleteConfirmation, showEditName, t } = this.props;
     const { uuid, deviceId, deviceName, deviceStatus, lastSeen } = device;
     const { isDragging, connectDragSource } = this.props;
     const opacity = isDragging ? semiTransparent : 1;
     const lastSeenDate = new Date(lastSeen);
-    let deviceStatusMessage = 'Status unknown';
+    let deviceStatusMessage = t('devices.statuses.unknown');
     switch (deviceStatus) {
-      case 'UpToDate':
-        deviceStatusMessage = 'Device synchronized';
+      case DEVICE_STATUSES.UP_TO_DATE:
+        deviceStatusMessage = t('devices.statuses.synchronized');
         break;
-      case 'Outdated':
-        deviceStatusMessage = 'Device unsynchronized';
+      case DEVICE_STATUSES.OUTDATED:
+        deviceStatusMessage = t('devices.statuses.unsynchronized');
         break;
-      case 'Error':
-        deviceStatusMessage = 'Installation error';
+      case DEVICE_STATUSES.ERROR:
+        deviceStatusMessage = t('devices.statuses.error');
         break;
       default:
         break;
@@ -95,7 +98,7 @@ class Item extends Component {
                 id="edit-device"
                 onClick={showEditName.bind(this, device)}
               >
-                {'Rename device'}
+                {t('devices.rename')}
               </a>
             </li>
             <li className="device-dropdown-item">
@@ -104,7 +107,7 @@ class Item extends Component {
                 id="delete-device"
                 onClick={showDeleteConfirmation.bind(this, device)}
               >
-                {'Delete device'}
+                {t('devices.delete')}
               </a>
             </li>
           </Dropdown>
@@ -117,14 +120,19 @@ class Item extends Component {
             {deviceName}
           </div>
           <div className="devices-panel__device-subtitle" title={deviceId} id={deviceId}>
-            ID:
-            {' '}
-            {deviceId}
+            {t('devices.id_item', { id: deviceId })}
           </div>
           <div className="devices-panel__device-subtitle">
-            {deviceStatusMessage !== 'Status unknown'
-              ? <span>{`Last seen: ${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`}</span>
-              : <span>{'Never seen online'}</span>
+            {deviceStatusMessage !== t('devices.statuses.unknown')
+              ? (
+                <span>
+                  {
+                    t('devices.last_seen_item',
+                      { date: lastSeenDate.toDateString(), time: lastSeenDate.toLocaleTimeString() })
+                  }
+                </span>
+              )
+              : <span>{t('devices.never_seen_online')}</span>
             }
           </div>
         </div>
@@ -140,7 +148,8 @@ Item.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   showDeleteConfirmation: PropTypes.func,
-  showEditName: PropTypes.func
+  showEditName: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default DragSource('device', deviceSource, collect)(Item);
+export default DragSource('device', deviceSource, collect)(withTranslation()(Item));

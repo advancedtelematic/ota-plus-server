@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
+import { withTranslation } from 'react-i18next';
+
 import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
-import { DEVICE_STATUSES } from '../../constants';
+import { DEVICE_STATUSES } from '../../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -58,22 +60,22 @@ class Header extends Component {
   };
 
   render() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
     const lastSeenDate = new Date(device.lastSeen);
     const createdDate = new Date(device.createdAt);
     const activatedDate = new Date(device.activatedAt);
-    let deviceStatus = 'Status unknown';
+    let deviceStatus = t('devices.statuses.unknown');
     switch (device.deviceStatus) {
       case DEVICE_STATUSES.UP_TO_DATE:
-        deviceStatus = 'Device synchronized';
+        deviceStatus = t('devices.statuses.synchronized');
         break;
       case DEVICE_STATUSES.OUTDATED:
-        deviceStatus = 'Device unsynchronized';
+        deviceStatus = t('devices.statuses.unsynchronized');
         break;
       case DEVICE_STATUSES.ERROR:
-        deviceStatus = 'Installation error';
+        deviceStatus = t('devices.statuses.error');
         break;
       default:
         break;
@@ -103,7 +105,7 @@ class Header extends Component {
                     <div className="page-header__device-report-desc">
                       {device.createdAt
                         ? `${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`
-                        : 'Not reported'
+                        : t('devices.statistics.not_reported')
                       }
                     </div>
                   </div>
@@ -112,7 +114,7 @@ class Header extends Component {
                     <div className="page-header__device-report-desc">
                       {device.activatedAt
                         ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}`
-                        : 'Not reported'
+                        : t('devices.statistics.not_reported')
                       }
                     </div>
                   </div>
@@ -122,7 +124,7 @@ class Header extends Component {
                   >
                     <span className="page-header__device-report-label">Last seen online</span>
                     <div className="page-header__device-report-desc">
-                      {deviceStatus !== 'Status unknown'
+                      {deviceStatus !== t('devices.statuses.unknown')
                         ? `${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`
                         : getDeviceHttpStatusErrorMessage(device.httpStatus)
                       }
@@ -138,12 +140,12 @@ class Header extends Component {
                       <Dropdown hideSubmenu={this.hideHeaderMenu} customClassName="relative">
                         <li className="device-dropdown-item">
                           <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
-                            {'Rename device'}
+                            {t('devices.rename')}
                           </a>
                         </li>
                         <li className="device-dropdown-item">
                           <a className="device-dropdown-item" id="delete-device" onClick={this.showDeleteConfirmation}>
-                            Delete device
+                            {t('devices.delete')}
                           </a>
                         </li>
                       </Dropdown>
@@ -160,7 +162,7 @@ class Header extends Component {
                   deleteItem={this.deleteDevice}
                   topText={(
                     <div className="delete-modal-top-text" id="delete-device-confirmation-modal-text">
-                      Device will be removed.
+                      {t('devices.delete_confirmation')}
                     </div>
 )}
                 />
@@ -183,10 +185,11 @@ class Header extends Component {
 
 Header.propTypes = {
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
 Header.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired,
+  router: PropTypes.shape({}).isRequired
 };
 
-export default Header;
+export default withTranslation()(Header);
