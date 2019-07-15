@@ -28,7 +28,7 @@ class SizeVerify extends Component {
 
   checkSize = () => {
     const { minWidth, minHeight } = this.props;
-    this.sizeVerifyHidden = Cookies.get('sizeVerifyHidden') === 1
+    this.sizeVerifyHidden = Cookies.get('sizeVerifyHidden') === '1'
       || (window.innerWidth >= minWidth && window.innerHeight >= minHeight);
   };
 
