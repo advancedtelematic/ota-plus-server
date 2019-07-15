@@ -1,23 +1,30 @@
 /** @format */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import { Button } from 'antd';
+import { withTranslation } from 'react-i18next';
 
-const NoItems = ({ itemType, createItem = null }) => (
-  <div className="dashboard__items-empty">
-    <span>
-      {`No ${itemType}'s to show`}
-    </span>
-    <Button htmlType="button" className="ant-btn ant-btn-plain add-button" onClick={createItem}>
-      {`Create a new ${itemType}`}
-    </Button>
-  </div>
-);
+class NoItems extends Component {
+  render() {
+    const { createItem, itemType, t } = this.props;
+    return (
+      <div className="dashboard__items-empty">
+        <span>
+          {t('dashboard.no_items.description', { type: itemType })}
+        </span>
+        <Button htmlType="button" className="ant-btn ant-btn-plain add-button" onClick={createItem}>
+          {t('dashboard.no_items.create_new', { type: itemType })}
+        </Button>
+      </div>
+    );
+  }
+}
 
 NoItems.propTypes = {
-  itemType: PropTypes.string,
   createItem: PropTypes.func,
+  itemType: PropTypes.string,
+  t: PropTypes.func.isRequired
 };
 
-export default NoItems;
+export default withTranslation()(NoItems);

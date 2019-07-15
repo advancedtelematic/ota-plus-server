@@ -20,23 +20,61 @@
         }
     },
     "dashboard": {
+        "campaigns": {
+            "create": "Create Campaign",
+            "failure_rate": "Failure rate",
+            "finished": "Finished",
+            "last_created": "Last created campaigns",
+            "view_all": "View all"
+        },
+        "devices": {
+            "add": "Add device",
+            "last_created": "Last created devices",
+            "seen_online": "Seen online",
+            "status": "Status",
+            "view_all": "View all"
+        },
+        "no_items": {
+            "create_new": "Create a new {{type}}",
+            "description": "No {{type}}'s to show"
+        },
+        "software": {
+            "add": "Add software",
+            "created_at": "Created at",
+            "last_added": "Last added software",
+            "version": "Version",
+            "view_all": "View all"
+        }
     },
     "devices": {
         "all_grouped": "All your devices are grouped. Good work!",
         "empty_group_fixed": "This group is empty. Please, drag and drop devices here.",
         "empty_group_smart": "This smart group isn't matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.",
+        "delete": "Delete device",
+        "delete_confirmation": "Device will be removed.",
         "device_count": "{{count}} device",
         "device_count_plural": "{{count}} devices",
+        "id_item": "ID: {{id}}",
+        "last_seen_item": "Last seen: {{date}} {{time}}",
+        "never_seen_online": "Never seen online",
+        "statuses": {
+            "error": "Installation error",
+            "synchronized": "Device synchronized",
+            "unknown": "Status unknown",
+            "unsynchronized": "Device unsynchronized"
+        },
         "statistics": {
             "affected": "Affected",
             "failed": "Failed: ",
             "installing": "Installing: ",
             "not_applicable": "Not applicable: ",
+            "not_reported": "Not reported",
             "processed": "Processed",
             "show_dependencies": "Show dependencies",
             "successful": "Successful: ",
             "total_progress": "Total progress"
-        }
+        },
+        "rename": "Rename device"
     },
     "groups": {
         "not_in_a_fixed_group": "Not in a fixed group: ",
@@ -56,6 +94,14 @@
             "placeholder": "Name",
             "title": "Group Name"
         }
+    },
+    "navigation": {
+        "campaigns": "Campaigns",
+        "dashboard": "Dashboard",
+        "devices": "Devices",
+        "impact_analysis": "Impact analysis",
+        "updates": "Updates",
+        "softwares": "Software Repository"
     },
     "software": {
         "uploading": {

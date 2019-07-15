@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
+
 import { LatestCreatedCampaigns, LastDevices, LastSoftware } from '../components/dashboard';
 import { Dropdown } from '../partials';
 import { SoftwareCreateModal } from '../components/software';
@@ -21,6 +23,7 @@ class Dashboard extends Component {
 
   static propTypes = {
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   showSoftwareCreateModal = (e) => {
@@ -64,15 +67,15 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { addNewWizard } = this.props;
+    const { addNewWizard, t } = this.props;
     return (
       <div className="dashboard">
         <div className="dashboard__box">
           <div className="dashboard__list dashboard__list--devices">
             <div className="dashboard__heading">
-              <div className="dashboard__heading-col">{'Last created devices'}</div>
-              <div className="dashboard__heading-col">{'Seen online'}</div>
-              <div className="dashboard__heading-col">{'Status'}</div>
+              <div className="dashboard__heading-col">{t('dashboard.devices.last_created')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.devices.seen_online')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.devices.status')}</div>
               <div className="dots" id="devices-menu" onClick={this.showDeviceSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
                 <span />
@@ -88,11 +91,11 @@ class Dashboard extends Component {
                         target="_blank"
                         onClick={e => e.stopPropagation()}
                       >
-                        {'Add device'}
+                        {t('dashboard.devices.add')}
                       </a>
                     </li>
                     <li className="device-dropdown-item">
-                      <NavLink to="/devices">{'View all'}</NavLink>
+                      <NavLink to="/devices">{t('dashboard.devices.view_all')}</NavLink>
                     </li>
                   </Dropdown>
                 )}
@@ -104,9 +107,9 @@ class Dashboard extends Component {
           </div>
           <div className="dashboard__list dashboard__list--software">
             <div className="dashboard__heading">
-              <div className="dashboard__heading-col">{'Last added software'}</div>
-              <div className="dashboard__heading-col">{'Version'}</div>
-              <div className="dashboard__heading-col">{'Created at'}</div>
+              <div className="dashboard__heading-col">{t('dashboard.software.last_added')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.software.version')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.software.created_at')}</div>
               <div className="dots" id="software-menu" onClick={this.showPackageSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
                 <span />
@@ -116,11 +119,11 @@ class Dashboard extends Component {
                   <Dropdown hideSubmenu={this.hidePackageSubmenu}>
                     <li className="package-dropdown-item">
                       <a onClick={this.showSoftwareCreateModal}>
-                        {'Add software'}
+                        {t('dashboard.software.add')}
                       </a>
                     </li>
                     <li className="package-dropdown-item">
-                      <NavLink to="/software-repository">{'View all'}</NavLink>
+                      <NavLink to="/software-repository">{t('dashboard.software.view_all')}</NavLink>
                     </li>
                   </Dropdown>
                 )}
@@ -132,9 +135,9 @@ class Dashboard extends Component {
           </div>
           <div className="dashboard__list dashboard__list--campaigns">
             <div className="dashboard__heading">
-              <div className="dashboard__heading-col">{'Last created campaigns'}</div>
-              <div className="dashboard__heading-col">{'Finished'}</div>
-              <div className="dashboard__heading-col">{'Failure rate'}</div>
+              <div className="dashboard__heading-col">{t('dashboard.campaigns.last_created')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.campaigns.finished')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.campaigns.failure_rate')}</div>
               <div className="dots" id="campaigns-menu" onClick={this.showCampaignSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}
                 <span />
@@ -150,11 +153,11 @@ class Dashboard extends Component {
                           addNewWizard();
                         }}
                       >
-                        {'Create Campaign'}
+                        {t('dashboard.campaigns.create')}
                       </a>
                     </li>
                     <li className="campaign-dropdown-item">
-                      <NavLink to="/campaigns">{'View all'}</NavLink>
+                      <NavLink to="/campaigns">{t('dashboard.campaigns.view_all')}</NavLink>
                     </li>
                   </Dropdown>
                 )}
@@ -176,4 +179,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withTranslation()(Dashboard);
