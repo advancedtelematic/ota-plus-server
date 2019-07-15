@@ -63,7 +63,7 @@ class EditCommentModal extends Component {
           <Col span={24}>
             <div className="body-actions">
               <button
-                type="button"
+                type="submit"
                 disabled={this.submitButtonDisabled}
                 className="btn-primary"
                 id="add"
