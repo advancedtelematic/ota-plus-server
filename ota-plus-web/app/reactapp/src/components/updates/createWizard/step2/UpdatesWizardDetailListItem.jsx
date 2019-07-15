@@ -76,7 +76,7 @@ class UpdatesWizardDetailListItem extends Component {
       text: pack.id.name,
       id: pack.id.name,
       value: pack.id.name,
-      pack,
+      item,
     }));
 
     return (

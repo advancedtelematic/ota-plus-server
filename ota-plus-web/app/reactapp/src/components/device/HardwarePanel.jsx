@@ -53,7 +53,6 @@ class HardwarePanel extends Component {
   };
 
   changePopoverVisibility = (id, visibility) => {
-    this.popoverShownFor = id;
     this.hardwareOverlayShown = false;
     this.popoverShownFor = visibility ? id : false;
     if (!visibility) {

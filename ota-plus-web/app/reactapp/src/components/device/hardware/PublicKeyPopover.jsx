@@ -63,7 +63,7 @@ class PublicKeyPopover extends Component {
         overlayClassName="hardware-pk-popover"
         visible={popoverShown}
         content={content}
-        onVisibleChange={() => changePopoverVisibility(serial)}
+        onVisibleChange={visible => changePopoverVisibility(serial, visible)}
       >
         {active ? (
           <img src="/assets/img/icons/white/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />

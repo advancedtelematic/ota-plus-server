@@ -273,7 +273,10 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
   shown: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
-  showDetails: PropTypes.shape({}),
+  showDetails: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.bool
+  ]),
   stores: PropTypes.shape({}),
 };
 
