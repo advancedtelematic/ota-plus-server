@@ -34,16 +34,6 @@ export const NO_VERSION_INFO = 'No information / Any';
 export const ARTIFICIAL = 'artificial';
 
 /*
- *  Device
- */
-
-export const DEVICE_STATUSES = {
-  ERROR: 'Error',
-  OUTDATED: 'Outdated',
-  UP_TO_DATE: 'UpToDate'
-};
-
-/*
  *  Web events
  */
 
