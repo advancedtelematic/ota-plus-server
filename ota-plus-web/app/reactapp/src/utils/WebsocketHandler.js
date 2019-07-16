@@ -1,6 +1,6 @@
 /** @format */
 
-import { WEB_EVENTS, UPDATE_STATUSES } from '../constants';
+import { WEB_EVENTS, UPDATE_STATUSES, ARTIFICIAL, GROUP_ALL } from '../constants';
 
 const WebsocketHandler = function (wsUrl, stores) {
   console.log(`WebSocket: wsUrl: ${wsUrl}`);
@@ -16,7 +16,8 @@ const WebsocketHandler = function (wsUrl, stores) {
     this.websocket.onmessage = function (msg) {
       const eventObj = JSON.parse(msg.data);
       const { type, event: data } = eventObj;
-      const { campaignsStore, devicesStore, softwareStore } = stores;
+      const { campaignsStore, devicesStore, groupsStore, softwareStore } = stores;
+      const { type: groupType, groupName } = groupsStore.selectedGroup;
       console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
       switch (type) {
         case WEB_EVENTS.DEVICE_SEEN:
@@ -30,7 +31,9 @@ const WebsocketHandler = function (wsUrl, stores) {
           devicesStore.updateDeviceData(data.device, { deviceStatus: data.status });
           break;
         case WEB_EVENTS.DEVICE_CREATED:
-          devicesStore.addDevice(data);
+          if (groupType === ARTIFICIAL && groupName === GROUP_ALL) {
+            devicesStore.addDevice(data);
+          }
           if (document.cookie.indexOf('fireworksPageAcknowledged') === -1
             && devicesStore.devicesInitialTotalCount === 1) {
             window.location = '#/fireworks';
