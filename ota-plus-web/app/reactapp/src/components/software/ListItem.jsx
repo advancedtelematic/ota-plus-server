@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 @observer
 class ListItem extends Component {
@@ -27,7 +28,7 @@ class ListItem extends Component {
   };
 
   render() {
-    const { pack, togglePackage, expandedPackageName } = this.props;
+    const { pack, togglePackage, expandedPackageName, t } = this.props;
     const installedOnEcus = this.countInstalledOnEcus();
     const packVersionsNumber = this.countPackVersionsNumber();
     const directorBlock = (
@@ -36,16 +37,16 @@ class ListItem extends Component {
           {pack.packageName}
         </div>
         <div className="c-package__versions-nr" id={`package-${pack.packageName}-versions-count`}>
-          {packVersionsNumber === 1 ? `${packVersionsNumber} version` : `${packVersionsNumber} versions`}
+          {t('software.versions_count', { count: packVersionsNumber })}
         </div>
         <div className="c-package__installed">
           <span id={`package-${pack.packageName}-installed-on-ecus`}>
-            {'Installed on '}
-            <span id={`package-${pack.packageName}-installed-on-ecus-count`}>{installedOnEcus}</span>
-            {' Ecu(s)'}
+            <span id={`package-${pack.packageName}-installed-on-ecus-count`}>
+              {t('software.installed_on_count', { count: installedOnEcus })}
+            </span>
           </span>
         </div>
-        <div className="c-package__more-info">More info</div>
+        <div className="c-package__more-info">{t('common.more_info')}</div>
       </div>
     );
     return expandedPackageName === pack.packageName ? (
@@ -75,7 +76,8 @@ ListItem.propTypes = {
   togglePackage: PropTypes.func.isRequired,
   highlightedPackage: PropTypes.string,
   highlightPackage: PropTypes.func,
-  expandedPackageName: PropTypes.string
+  expandedPackageName: PropTypes.string,
+  t: PropTypes.func.isRequired
 };
 
-export default ListItem;
+export default withTranslation()(ListItem);

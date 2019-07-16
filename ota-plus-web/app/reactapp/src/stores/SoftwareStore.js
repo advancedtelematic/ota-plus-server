@@ -957,7 +957,7 @@ export default class SoftwareStore {
     const values = [];
     const keys = Object.keys(localStorage);
 
-    let i = keys.length;
+    let i = keys.length - 1;
     while (i > 0) {
       try {
         // localStorage can hold different data from another application

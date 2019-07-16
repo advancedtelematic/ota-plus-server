@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Tag } from 'antd';
 import { action } from 'mobx';
+import { withTranslation } from 'react-i18next';
 
 @inject('stores')
 @observer
@@ -12,7 +13,8 @@ class Header extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     showCreateModal: PropTypes.func.isRequired,
-    switchToSWRepo: PropTypes.bool.isRequired
+    switchToSWRepo: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -45,7 +47,7 @@ class Header extends Component {
   isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   render() {
-    const { showCreateModal, stores, switchToSWRepo } = this.props;
+    const { showCreateModal, stores, switchToSWRepo, t } = this.props;
     const { featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     return (
@@ -58,7 +60,7 @@ class Header extends Component {
               }}
               className={`tab-navigation__link ${this.isActive('compact')}`}
             >
-              <span>{'Compact'}</span>
+              <span>{t('software.tabs.compact')}</span>
             </li>
             <li
               onClick={() => {
@@ -67,7 +69,7 @@ class Header extends Component {
               className={`tab-navigation__link ${this.isActive('advanced')}`}
             >
               <span>
-                {'Advanced'}
+                {t('software.tabs.advanced')}
                 <Tag color="#48dad0" className="alpha-tag">
                   ALPHA
                 </Tag>
@@ -86,7 +88,7 @@ class Header extends Component {
                 showCreateModal(null);
               }}
             >
-              {'Add software'}
+              {t('software.action_buttons.add_software')}
             </Button>
           </div>
         )}
@@ -95,4 +97,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withTranslation()(Header);

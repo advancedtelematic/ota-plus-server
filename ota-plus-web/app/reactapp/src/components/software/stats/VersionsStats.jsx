@@ -6,6 +6,7 @@ import { observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
+import { withTranslation } from 'react-i18next';
 
 @observer
 class VersionsStats extends Component {
@@ -74,7 +75,7 @@ class VersionsStats extends Component {
   };
 
   render() {
-    const { pack } = this.props;
+    const { pack, t } = this.props;
     return (
       <div className="c-package__stats">
         <div id={`package-${pack.packageName}-stats`}>
@@ -97,7 +98,7 @@ class VersionsStats extends Component {
             </div>
           ) : (
             <div id={`package-${pack.packageName}-not-installed`} className="not-installed">
-              This software has not been installed yet.
+              {t('software.not_installed')}
             </div>
           )}
         </div>
@@ -108,6 +109,7 @@ class VersionsStats extends Component {
 
 VersionsStats.propTypes = {
   pack: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default VersionsStats;
+export default withTranslation()(VersionsStats);
