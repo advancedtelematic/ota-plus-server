@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
-
+import { withTranslation } from 'react-i18next';
 import { Row, Col } from 'antd';
 import { OTAModal, OTAForm, FormTextarea } from '../../partials';
 
@@ -18,6 +18,7 @@ class EditCommentModal extends Component {
     hide: PropTypes.func,
     comment: PropTypes.string,
     shown: PropTypes.bool,
+    t: PropTypes.func.isRequired
   };
 
   @observable submitButtonDisabled = false;
@@ -40,7 +41,7 @@ class EditCommentModal extends Component {
   };
 
   render() {
-    const { comment, hide, shown } = this.props;
+    const { comment, hide, shown, t } = this.props;
     const form = (
       <OTAForm onSubmit={this.submitForm} id="comment-edit-form">
         <Row className="row">
@@ -68,7 +69,7 @@ class EditCommentModal extends Component {
                 className="btn-primary"
                 id="add"
               >
-                Save Comment
+                {t('software.action_buttons.save_comment')}
               </button>
             </div>
           </Col>
@@ -77,7 +78,7 @@ class EditCommentModal extends Component {
     );
     return (
       <OTAModal
-        title="Edit comment"
+        title={t('software.action_buttons.edit_comment')}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
@@ -93,4 +94,4 @@ class EditCommentModal extends Component {
   }
 }
 
-export default EditCommentModal;
+export default withTranslation()(EditCommentModal);

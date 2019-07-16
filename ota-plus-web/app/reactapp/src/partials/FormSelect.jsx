@@ -265,7 +265,8 @@ FormSelect.propTypes = {
   wrapperWidth: PropTypes.string,
   defaultValue: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.bool
+    PropTypes.bool,
+    PropTypes.arrayOf(PropTypes.string)
   ]),
   name: PropTypes.string,
   disabled: PropTypes.bool

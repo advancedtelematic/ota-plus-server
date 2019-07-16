@@ -8,7 +8,7 @@ import { Form, Input } from 'formsy-antd';
 import { Row, Col, Button, Input as TextInput } from 'antd';
 import serialize from 'form-serialize';
 import _ from 'lodash';
-
+import { withTranslation } from 'react-i18next';
 import { OTAModal, Loader, FormSelect } from '../../partials';
 
 @inject('stores')
@@ -82,7 +82,7 @@ class CreateModal extends Component {
   };
 
   render() {
-    const { stores, shown, hide, fileDropped } = this.props;
+    const { stores, shown, hide, fileDropped, t } = this.props;
     const { hardwareStore } = stores;
     const isSubmitEnabled = this.softwareName
                             && this.softwareVersion
@@ -91,37 +91,37 @@ class CreateModal extends Component {
     const directorForm = (
       <Form onValidSubmit={this.submitForm} id="software-create-form">
         <Row className="gutter-bottom">
-          Upload new software versions to your software repository. Alternatively, you can also use the
+          {t('software.create_modal.intro_1')}
           <a
             href="https://docs.ota.here.com/quickstarts/pushing-updates.html"
             rel="noopener noreferrer"
             target="_blank"
           >
-            {' OTA Connect Client '}
+            {t('software.create_modal.intro_link')}
           </a>
-          to build and upload full software images.
+          {t('software.create_modal.intro_2')}
         </Row>
         <Row className="row">
           <Col span={12}>
             <label className="c-form__label">
-              {'Software Name'}
+              {t('software.create_modal.software_name')}
             </label>
             <TextInput
               id="add-new-software-name"
               className="c-form__input c-form__input--antd"
-              placeholder="Name"
+              placeholder={t('software.create_modal.software_name_placeholder')}
               name="packageName"
               onChange={this.onInputChange('softwareName')}
             />
           </Col>
           <Col span={12}>
             <label className="c-form__label">
-              {'Version'}
+              {t('software.create_modal.version')}
             </label>
             <TextInput
               id="add-new-software-version"
               className="c-form__input c-form__input--antd"
-              placeholder="Select version"
+              placeholder={t('software.create_modal.version_placeholder')}
               name="version"
               onChange={this.onInputChange('softwareVersion')}
             />
@@ -136,9 +136,9 @@ class CreateModal extends Component {
                 <FormSelect
                   multiple
                   appendMenuToBodyTag
-                  label="ECU Types"
+                  label={t('software.create_modal.ecu_types')}
                   id="ecu-types-select"
-                  placeholder="Select ECU types"
+                  placeholder={t('software.create_modal.ecu_types_placeholder')}
                   onChange={this.selectHardwareIds}
                   visibleFieldsCount={4}
                   defaultValue={_.isArray(this.selectedHardwareIds) ? this.selectedHardwareIds : null}
@@ -158,7 +158,7 @@ class CreateModal extends Component {
                   onClick={this.onFileUploadClick}
                   id="choose-software"
                 >
-                  <span>Choose file</span>
+                  <span>{t('software.create_modal.choose_file')}</span>
                 </Button>
               )}
               <div className="file-name">{(fileDropped && fileDropped.name) || this.fileName}</div>
@@ -189,7 +189,7 @@ class CreateModal extends Component {
                 disabled={!isSubmitEnabled}
                 id="add-new-package-confirm"
               >
-                Add
+                {t('software.create_modal.add')}
               </button>
             </div>
           </Col>
@@ -198,7 +198,7 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title="Add new software"
+        title={t('software.create_modal.title')}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
@@ -219,6 +219,7 @@ CreateModal.propTypes = {
   hide: PropTypes.func.isRequired,
   stores: PropTypes.shape({}),
   fileDropped: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default CreateModal;
+export default withTranslation()(CreateModal);
