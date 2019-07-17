@@ -84,12 +84,10 @@
             "button_title": "Create",
             "file_uploading": {
                 "button_title": "Choose file",
-                "description": "Upload a list of provisioned device IDs in a CSV file or Text file (optional)",
+                "description": "Upload a list of provisioned device IDs in a Text file.",
+                "file_not_selected": "File not selected",
                 "warnings": {
-                    "file_incorrect_title": "File contains formatting issues",
-                    "file_incorrect_description": "It looks like your file is in an incorrect format. VIN numbers must be separated by line breaks and there must be an empty line at the end of the file. Check your file for any formatting issues and try again.",
-                    "group_exist_title": "Group exists",
-                    "group_exist_description": "Group with the given name already exists."
+                    "only_extension_file_description": "Please upload .txt file"
                 }
             },
             "placeholder": "Name",
@@ -163,13 +161,13 @@
                 "p1": "Remove ",
                 "p2": " v.",
                 "p3": " permanently?"
-            }            
+            }
         },
         "dependencies": {
             "edit": "Edit",
             "mandatory": "Mandatory",
             "modal_title": "Dependencies management",
-            "not_compatible": "Not compatible:",            
+            "not_compatible": "Not compatible:",
             "not_compatible_no_colon": "Not compatible",
             "required": "Required:",
             "required_by": "Required by:",
