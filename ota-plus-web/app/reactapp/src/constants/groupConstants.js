@@ -11,4 +11,5 @@ export const GROUP_GROUP_TYPE_SMART = 'smart';
 export const GROUP_GROUP_TYPE_STATIC = 'static';
 
 /* Group input file accept filters */
-export const GROUP_INPUT_FILE_ACCEPT_FILTER = '.csv,.txt';
+export const GROUP_INPUT_FILE_ACCEPT_EXTENSION = '.txt';
+export const GROUP_INPUT_FILE_ACCEPT_FILTER = 'text/plain';

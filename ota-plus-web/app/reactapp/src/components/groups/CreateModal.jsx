@@ -6,11 +6,9 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
 import _ from 'lodash';
-import { Button, notification } from 'antd';
+import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { NOTIFICATION_ERROR_DURATION } from '../../config';
-import { HTTP_CODE_400_BAD_REQUEST, HTTP_CODE_409_CONFLICT } from '../../constants/httpCodes';
 import { OTAModal } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { Step1, Step2 } from './createWizard';
@@ -105,28 +103,13 @@ class CreateModal extends Component {
 
   createGroup = () => {
     const { file, groupName, groupType, smartExpression } = this.wizardData;
-    const { stores, t } = this.props;
+    const { stores } = this.props;
     const { groupsStore } = stores;
     if (groupType === GROUP_GROUP_TYPE_CLASSIC) {
       if (file) {
         groupsStore.createGroupWithFileData({
           name: groupName,
           file
-        }).then((response) => {
-          const { status } = response;
-          if (status === HTTP_CODE_400_BAD_REQUEST) {
-            notification.error({
-              message: t('groups.creating.file_uploading.warnings.file_incorrect_title'),
-              description: t('groups.creating.file_uploading.warnings.file_incorrect_description'),
-              duration: NOTIFICATION_ERROR_DURATION
-            });
-          } if (status === HTTP_CODE_409_CONFLICT) {
-            notification.error({
-              message: t('groups.creating.file_uploading.warnings.group_exist_title'),
-              description: t('groups.creating.file_uploading.warnings.group_exist_description'),
-              duration: NOTIFICATION_ERROR_DURATION
-            });
-          }
         });
       } else {
         groupsStore.createGroup({
