@@ -1,5 +1,7 @@
 package com.advancedtelematic.controllers
 
+import java.util.UUID
+
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
@@ -105,6 +107,10 @@ class UserProfileController @Inject()(val conf: Configuration,
           Ok(Json.toJson(Seq.empty[FeatureName]))
         case RemoteApiError(r, _) => r
       }
+  }
+
+  def getUserCredentialsBundle(keyUuid: UUID): Action[AnyContent] = authAction.async { implicit request =>
+    userProfileApi.getCredentialsBundle(request.namespace, keyUuid)
   }
 
   def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
