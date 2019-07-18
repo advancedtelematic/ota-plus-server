@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 @inject('stores')
 @observer
@@ -17,13 +18,15 @@ class ListItemVersion extends Component {
   isPackageBlacklisted(version) {
     const { stores } = this.props;
     const { softwareStore } = stores;
-    // eslint-disable-next-line max-len
-    const isPackageBlacklisted = _.find(softwareStore.blacklist, dev => dev.packageId.name === version.id.name && dev.packageId.version === version.id.version);
+    const isPackageBlacklisted = _.find(
+      softwareStore.blacklist,
+      dev => dev.packageId.name === version.id.name && dev.packageId.version === version.id.version
+    );
     return isPackageBlacklisted || false;
   }
 
   render() {
-    const { version, queuedPackage, installedPackage, stores } = this.props;
+    const { version, queuedPackage, installedPackage, stores, t } = this.props;
     const { softwareStore } = stores;
     const blacklistedPackage = this.isPackageBlacklisted(version);
     const isSelected = version.filepath === softwareStore.expandedPackage.filepath;
@@ -35,13 +38,13 @@ class ListItemVersion extends Component {
       >
         <div className="software-panel__version-left">
           <div className="software-panel__version-block">
-            <span className="software-panel__version-subtitle">Hash / version:</span>
+            <span className="software-panel__version-subtitle">{t('devices.software.hash_version')}</span>
             <span className="software-panel__version-value" id={`version-value-${version.id.version.substring(0, 8)}`}>
               {version.id.version}
             </span>
           </div>
           <div className="software-panel__version-block">
-            <span className="software-panel__version-subtitle">Created at:</span>
+            <span className="software-panel__version-subtitle">{t('devices.software.created_at')}</span>
             <span className="software-panel__version-value">
               {moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
             </span>
@@ -80,7 +83,8 @@ ListItemVersion.propTypes = {
   version: PropTypes.shape({}).isRequired,
   queuedPackage: PropTypes.string,
   installedPackage: PropTypes.string,
-  showPackageDetails: PropTypes.func
+  showPackageDetails: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default ListItemVersion;
+export default withTranslation()(ListItemVersion);

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 const activeColor = '#48DAD0';
 const inActiveColor = '#F3F3F4';
@@ -12,7 +13,7 @@ const inActiveColor = '#F3F3F4';
 @observer
 class Barchart extends Component {
   render() {
-    const { connections } = this.props;
+    const { connections, t } = this.props;
     const currentHour = moment().hour();
     const currentMinutes = moment().minutes();
 
@@ -57,25 +58,25 @@ class Barchart extends Component {
         <div className="legends">
           <ul className="value-legend">
             <li>
-              <div className="title-box">limit:</div>
+              <div className="title-box">{t('devices.dashboard.limit')}</div>
               <div>{connections.limit}</div>
             </li>
             <li>
-              <div className="title-box">peak:</div>
+              <div className="title-box">{t('devices.dashboard.peak')}</div>
               <div>{connections.max}</div>
             </li>
             <li>
-              <div className="title-box">avg:</div>
+              <div className="title-box">{t('devices.dashboard.avg')}</div>
               <div>{connections.avg}</div>
             </li>
           </ul>
           <ul className="color-legend">
             <li>
-              <div className="title-box">Reported</div>
+              <div className="title-box">{t('devices.dashboard.reported')}</div>
               <div className="color-box" style={{ backgroundColor: activeColor }} />
             </li>
             <li>
-              <div className="title-box">Forecast</div>
+              <div className="title-box">{t('devices.dashboard.forecast')}</div>
               <div className="color-box" style={{ backgroundColor: inActiveColor }} />
             </li>
           </ul>
@@ -86,7 +87,8 @@ class Barchart extends Component {
 }
 
 Barchart.propTypes = {
-  connections: PropTypes.shape({})
+  connections: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default Barchart;
+export default withTranslation()(Barchart);

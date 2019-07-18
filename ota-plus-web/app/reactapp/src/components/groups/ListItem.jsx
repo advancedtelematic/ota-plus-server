@@ -6,13 +6,15 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
+
+import { GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
 import RenameModal from './RenameModal';
 import { Dropdown } from '../../partials';
 
 const groupTarget = {
   drop(props, monitor) {
     const device = monitor.getItem();
-    if (props.group.groupType === 'static') {
+    if (props.group.groupType === GROUP_GROUP_TYPE_STATIC) {
       props.onDeviceDrop(device, props.group.id);
     }
   },
@@ -89,7 +91,7 @@ class ListItem extends Component {
                   }}
                 >
                   <li className="package-dropdown-item">
-                    {t('groups.rename_group')}
+                    {t('groups.renaming.rename_group')}
                   </li>
                 </a>
               </Dropdown>
@@ -105,8 +107,8 @@ class ListItem extends Component {
             hide={this.hideRenameModal}
             groupsStore={groupsStore}
             action="rename"
-            modalTitle="Edit Group"
-            buttonText="Save"
+            modalTitle={t('groups.edit_group')}
+            buttonText={t('groups.save')}
           />
         ) : null}
       </div>,

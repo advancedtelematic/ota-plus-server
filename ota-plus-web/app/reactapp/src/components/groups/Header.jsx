@@ -2,8 +2,9 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 
-const Header = ({ showCreateGroupModal }) => (
+const Header = ({ showCreateGroupModal, t }) => (
   <div className="groups-panel__header">
     <div className="groups-panel__title">Groups</div>
     <a
@@ -12,13 +13,14 @@ const Header = ({ showCreateGroupModal }) => (
       id="add-new-group"
       onClick={showCreateGroupModal}
     >
-      <span>Add group</span>
+      <span>{t('groups.add_group')}</span>
     </a>
   </div>
 );
 
 Header.propTypes = {
   showCreateGroupModal: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default Header;
+export default withTranslation()(Header);

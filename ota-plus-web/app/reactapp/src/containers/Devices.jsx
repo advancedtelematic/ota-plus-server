@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { GroupsCreateModal } from '../components/groups';
@@ -14,8 +16,9 @@ import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
 @observer
 class Devices extends Component {
   static propTypes = {
-    stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
+    stores: PropTypes.shape({}),
+    t: PropTypes.func.isRequired,
   };
 
   @observable
@@ -139,7 +142,7 @@ class Devices extends Component {
   };
 
   render() {
-    const { addNewWizard, stores } = this.props;
+    const { addNewWizard, stores, t } = this.props;
     const { devicesStore } = stores;
     const { devicesInitialTotalCount } = devicesStore;
 
@@ -170,7 +173,7 @@ class Devices extends Component {
               <div>
                 <img src="/assets/img/icons/white/devices.svg" alt="Icon" />
               </div>
-              <div>{'You currently have no devices to manage. Try provisioning some devices first.'}</div>
+              <div>{t('devices.empty.no_devices')}</div>
               <a
                 href="https://docs.atsgarage.com/quickstarts/start-intro.html"
                 className="add-button light"
@@ -178,7 +181,7 @@ class Devices extends Component {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span>{'+ Add new device'}</span>
+                <span>{t('devices.empty.add_new')}</span>
               </a>
             </div>
           </div>
@@ -213,4 +216,4 @@ class Devices extends Component {
   }
 }
 
-export default Devices;
+export default withTranslation()(Devices);

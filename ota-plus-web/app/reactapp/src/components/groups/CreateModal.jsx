@@ -25,12 +25,10 @@ import {
 const wizardSteps = [
   {
     class: Step1,
-    name: 'Choose group type',
     isFinished: false,
   },
   {
     class: Step2,
-    name: 'Pass group data',
     isFinished: false,
   },
 ];
@@ -83,8 +81,9 @@ class CreateModal extends Component {
     this.steps[this.currentStepId].isFinished = false;
   };
 
-  // eslint-disable-next-line max-len
-  verifyIfPreviousStepsFinished = stepId => !_.find(this.steps, (step, index) => index <= stepId && step.isFinished === false);
+  verifyIfPreviousStepsFinished = stepId => !_.find(
+    this.steps, (step, index) => index <= stepId && step.isFinished === false
+  );
 
   isLastStep = () => this.currentStepId === this.steps.length - 1;
 
@@ -184,7 +183,7 @@ class CreateModal extends Component {
     // eslint-disable-next-line no-unused-vars
     let data = null;
     let isSmart = false;
-    if (groupType === 'classic') {
+    if (groupType === GROUP_GROUP_TYPE_CLASSIC) {
       data = serialize(document.querySelector('#classic-group-create-form'), { hash: true });
     } else {
       isSmart = true;
@@ -224,7 +223,7 @@ class CreateModal extends Component {
               id="next"
               onClick={this.nextStep}
             >
-              Next
+              {t('groups.creating.next')}
             </Button>
           )}
         </div>
@@ -232,7 +231,7 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={<div>Create new group</div>}
+        title={<div>{t('groups.creating.create_new_group')}</div>}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>

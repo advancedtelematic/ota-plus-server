@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
 
@@ -11,7 +13,7 @@ import Loader from '../../../partials/Loader';
 @observer
 class MtuListItem extends Component {
   render() {
-    const { update, cancelMtuUpdate, events, stores } = this.props;
+    const { update, cancelMtuUpdate, events, stores, t } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
     const devicePrimaryEcu = device.directorAttributes.primary;
@@ -26,7 +28,7 @@ class MtuListItem extends Component {
             <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
               <div>
                 <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header--title__label">
-                  Campaign:
+                  {t('devices.mtu.common.campaign')}
                 </span>
                 <span id={`update-id-${correlationId}`}>{campaign.name}</span>
               </div>
@@ -37,20 +39,20 @@ class MtuListItem extends Component {
                   className="ant-btn ant-btn--sm ant-btn-error"
                   onClick={cancelMtuUpdate.bind(this, correlationId)}
                 >
-                  Cancel
+                  {t('devices.mtu.common.cancel')}
                 </button>
               </div>
             </div>
             <div className="overview-panel__item-header--update">
               <div className="overview-panel__item-header--update__name">
                 <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header__label">
-                  Update&nbsp;name:
+                  {t('devices.mtu.common.update_name')}
                 </span>
                 <span id={`update-id-${correlationId}`}>{campaign.update.name}</span>
               </div>
               <div className="overview-panel__item-header--update__description">
                 <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header__label">
-                  Update&nbsp;description:
+                  {t('devices.mtu.common.update_description')}
                 </span>
                 <span id={`update-id-${correlationId}`}>{campaign.update.description}</span>
               </div>
@@ -61,7 +63,7 @@ class MtuListItem extends Component {
             <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
               <div>
                 <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header--title__label">
-                    Single-device update
+                  {t('devices.mtu.common.single_device_update')}
                 </span>
               </div>
               <div>
@@ -71,7 +73,7 @@ class MtuListItem extends Component {
                   className="ant-btn ant-btn--sm ant-btn-error"
                   onClick={cancelMtuUpdate.bind(this, correlationId)}
                 >
-                    Cancel
+                  {t('devices.mtu.common.cancel')}
                 </button>
               </div>
             </div>
@@ -94,18 +96,18 @@ class MtuListItem extends Component {
             const { length } = target.image.fileinfo;
             return (
               <div className="overview-panel__operation overview-panel__operation__queued" key={hash}>
-                <div className="overview-panel__label overview-panel__label--queued">Queued</div>
+                <div className="overview-panel__label overview-panel__label--queued">{t('common.statuses.queued')}</div>
                 <div className="overview-panel__operation-info">
                   <div className="overview-panel__operation-info-line">
                     <div className="overview-panel__operation-info-block">
                       <span id={`ecu-serial-title-${correlationId}`} className="overview-panel__operation-info--label">
-                        ECU&nbsp;type:
+                        {t('devices.mtu.common.ecu_type')}
                       </span>
                       <span id={`ecu-serial-${correlationId}`}>{hardwareId}</span>
                     </div>
                     <div className="overview-panel__operation-info-block">
                       <span id={`ecu-serial-title-${correlationId}`} className="overview-panel__operation-info--label">
-                        ECU&nbsp;identifier:
+                        {t('devices.mtu.common.ecu_identifier')}
                       </span>
                       <span id={`ecu-serial-${correlationId}`}>{serial}</span>
                     </div>
@@ -113,14 +115,14 @@ class MtuListItem extends Component {
                   <div className="overview-panel__operation-info-line">
                     <div className="overview-panel__operation-info-block">
                       <span id={`target-title-${correlationId}`} className="overview-panel__operation-info--label">
-                        Target:
+                        {t('devices.mtu.common.target')}
                       </span>
                       <span id={`target-${correlationId}`}>{filepath}</span>
                     </div>
                     {length !== 0 ? (
                       <div className="overview-panel__operation-info-block">
                         <span id={`length-title-${correlationId}`} className="overview-panel__operation-info--label">
-                          Length:
+                          {t('devices.mtu.common.length')}
                         </span>
                         <span id={`length-${correlationId}`}>
                           {length.toLocaleString()}
@@ -153,7 +155,8 @@ MtuListItem.propTypes = {
   stores: PropTypes.shape({}),
   update: PropTypes.shape({}),
   cancelMtuUpdate: PropTypes.func,
-  events: PropTypes.arrayOf(PropTypes.shape({}))
+  events: PropTypes.arrayOf(PropTypes.shape({})),
+  t: PropTypes.func.isRequired
 };
 
-export default MtuListItem;
+export default withTranslation()(MtuListItem);

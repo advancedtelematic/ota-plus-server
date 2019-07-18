@@ -3,14 +3,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
+
 import PublicKeyPopover from './PublicKeyPopover';
+import { ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 
 @observer
 class SecondaryEcu extends Component {
   onEcuClick = (ecu, e) => {
     if (e) e.preventDefault();
     const { selectEcu, changeHardwareOverlayVisibility } = this.props;
-    selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');
+    selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, ECU_TYPE_SECONDARY);
     changeHardwareOverlayVisibility.bind(this, false);
   };
 
@@ -23,7 +26,8 @@ class SecondaryEcu extends Component {
       popoverShown,
       copyPublicKey,
       publicKeyCopied,
-      index
+      index,
+      t
     } = this.props;
     return (
       <>
@@ -34,12 +38,12 @@ class SecondaryEcu extends Component {
           onClick={this.onEcuClick.bind(this, ecu)}
         >
           <div className="hardware-panel__ecu-desc">
-            {'Type: '}
+            {t('devices.hardware.type')}
             <span id={`hardware-type-secondary-${index}`} className="hardware-panel__hardware-label app-label">
               {ecu.hardwareId}
             </span>
             <br />
-            {'Identifier: '}
+            {t('devices.hardware.identifier')}
             <span id={`hardware-identifier-${ecu.id}`}>{ecu.id}</span>
           </div>
           <div className="hardware-panel__ecu-actions" id={`hardware-key-icon-secondary-${ecu.id}`}>
@@ -71,7 +75,8 @@ SecondaryEcu.propTypes = {
   changePopoverVisibility: PropTypes.func,
   copyPublicKey: PropTypes.func,
   publicKeyCopied: PropTypes.bool,
-  index: PropTypes.number
+  index: PropTypes.number,
+  t: PropTypes.func.isRequired
 };
 
-export default SecondaryEcu;
+export default withTranslation()(SecondaryEcu);

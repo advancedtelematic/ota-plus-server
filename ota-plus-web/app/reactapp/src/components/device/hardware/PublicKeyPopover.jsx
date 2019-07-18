@@ -6,6 +6,8 @@ import { observer, inject } from 'mobx-react';
 import { Popover } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { VelocityTransitionGroup } from 'velocity-react';
+import { withTranslation } from 'react-i18next';
+
 import { Loader } from '../../../partials';
 
 @inject('stores')
@@ -24,21 +26,21 @@ class PublicKeyPopover extends Component {
   }
 
   render() {
-    const { changePopoverVisibility, handleCopy, popoverShown, copied, serial, active, stores } = this.props;
+    const { changePopoverVisibility, handleCopy, popoverShown, copied, serial, active, stores, t } = this.props;
     const { hardwareStore } = stores;
     const content = (
       <div>
         {!hardwareStore.hardwarePublicKeyFetchAsync.isFetching && hardwareStore.publicKey.keyval ? (
           <span>
             <div className="heading">
-              <div className="internal">Public key</div>
+              <div className="internal">{t('devices.hardware.public_key')}</div>
             </div>
             <div className="body">
               <pre>{hardwareStore.publicKey.keyval.public}</pre>
             </div>
             <div className="actions">
               <CopyToClipboard text={hardwareStore.publicKey.keyval.public} onCopy={() => handleCopy(serial)}>
-                <button type="button" className="btn-primary">Copy to clipboard</button>
+                <button type="button" className="btn-primary">{t('devices.hardware.copy_to_clipboard')}</button>
               </CopyToClipboard>
               <VelocityTransitionGroup
                 enter={{
@@ -48,7 +50,7 @@ class PublicKeyPopover extends Component {
                   animation: 'fadeOut',
                 }}
               >
-                {copied ? <span className="clipboard-copied">(Public key copied)</span> : null}
+                {copied ? <span className="clipboard-copied">{t('devices.hardware.public_key_copied')}</span> : null}
               </VelocityTransitionGroup>
             </div>
           </span>
@@ -83,7 +85,8 @@ PublicKeyPopover.propTypes = {
   popoverShown: PropTypes.bool.isRequired,
   copied: PropTypes.bool.isRequired,
   changePopoverVisibility: PropTypes.func,
-  handleCopy: PropTypes.func
+  handleCopy: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default PublicKeyPopover;
+export default withTranslation()(PublicKeyPopover);

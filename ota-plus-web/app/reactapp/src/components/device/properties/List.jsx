@@ -5,12 +5,9 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import moment from 'moment';
+import { withTranslation } from 'react-i18next';
 
-const install = 'Install';
-const installed = 'Installed';
-const notInstalled = 'Not Installed';
-const blacklisted = 'Blacklisted';
-const queued = 'Queued';
+import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -31,10 +28,10 @@ class List extends Component {
     const { stores } = this.props;
     const { devicesStore, hardwareStore } = stores;
     let isInstalled = false;
-    if (hardwareStore.activeEcu.type === 'primary' && devicesStore.getPrimaryFilepath() === version.filepath) {
+    if (hardwareStore.activeEcu.type === ECU_TYPE_PRIMARY && devicesStore.getPrimaryFilepath() === version.filepath) {
       isInstalled = true;
     }
-    if (hardwareStore.activeEcu.type === 'secondary') {
+    if (hardwareStore.activeEcu.type === ECU_TYPE_SECONDARY) {
       const { serial } = hardwareStore.activeEcu;
       if (_.includes(devicesStore.getSecondaryFilepathsBySerial(serial), version.filepath)) {
         isInstalled = true;
@@ -59,7 +56,7 @@ class List extends Component {
   }
 
   render() {
-    const { installPackage, stores } = this.props;
+    const { installPackage, stores, t } = this.props;
     const { softwareStore, devicesStore } = stores;
 
     const isPackageBlacklisted = false;
@@ -77,12 +74,12 @@ class List extends Component {
     }
     const unmanagedPackage = (
       <div className="wrapper-center">
-        {'This software was installed outside of OTA Connect so there are no details to display.'}
+        {t('devices.mtu.properties.installed_outside_ota_description')}
       </div>
     );
     const noPackage = (
       <div className="wrapper-center absolute-position">
-        Select the package version to see its details.
+        {t('devices.mtu.properties.select_package_description')}
       </div>
     );
     return (
@@ -96,7 +93,9 @@ class List extends Component {
               <div className="properties-panel__info-status">
                 {isPackageBlacklisted && isPackageInstalled ? (
                   <div>
-                    <span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>{installed}</span>
+                    <span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
+                      {t('common.statuses.installed')}
+                    </span>
                     <img
                       className="properties-panel__info-status-icon"
                       src="/assets/img/icons/red_cross.svg"
@@ -106,7 +105,9 @@ class List extends Component {
                   </div>
                 ) : isPackageBlacklisted ? (
                   <div>
-                    <span id={this.generateIdTag('blacklisted', expandedPackage)}>{blacklisted}</span>
+                    <span id={this.generateIdTag('blacklisted', expandedPackage)}>
+                      {t('common.statuses.blacklisted')}
+                    </span>
                     <img
                       className="properties-panel__info-status-icon"
                       src="/assets/img/icons/ban_red.png"
@@ -116,7 +117,9 @@ class List extends Component {
                   </div>
                 ) : isPackageQueued ? (
                   <div>
-                    <span id={this.generateIdTag('queued', expandedPackage)}>{queued}</span>
+                    <span id={this.generateIdTag('queued', expandedPackage)}>
+                      {t('common.statuses.queued')}
+                    </span>
                     <span className="fa-stack queued">
                       <i
                         className="properties-panel__info-status-icon
@@ -129,7 +132,7 @@ class List extends Component {
                   </div>
                 ) : isPackageInstalled ? (
                   <div>
-                    <span id="image-installed-checkmark">{installed}</span>
+                    <span id="image-installed-checkmark">{t('common.statuses.installed')}</span>
                     <img
                       className="properties-panel__info-status-icon"
                       src="/assets/img/icons/green_tick.svg"
@@ -138,19 +141,23 @@ class List extends Component {
                     />
                   </div>
                 ) : (
-                  <div id={this.generateIdTag('not-installed', expandedPackage)}>{notInstalled}</div>
+                  <div id={this.generateIdTag('not-installed', expandedPackage)}>
+                    {t('common.statuses.not_installed')}
+                  </div>
                 )}
               </div>
             </div>
             <div className="properties-panel__info-data">
               <span>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">Name:</span>
+                  <span className="properties-panel__info-data-subtitle">
+                    {t('devices.mtu.properties.name')}
+                  </span>
                   <span
                     className="properties-panel__info-data-value"
                     id={this.generateIdTag('version-name-value', expandedPackage)}
                   >
-                    {expandedPackage.customExists ? expandedPackage.id.name : 'Not reported'}
+                    {expandedPackage.customExists ? expandedPackage.id.name : t('devices.mtu.properties.not_reported')}
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
@@ -252,18 +259,26 @@ class List extends Component {
               })}
               disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
             >
-              {install}
+              {t('devices.mtu.properties.install')}
             </button>
           </div>
         )}
         {isPackageBlacklisted && isPackageInstalled ? (
-          <div className="properties-panel__bottom-status properties-panel__bottom-status--red">{installed}</div>
+          <div className="properties-panel__bottom-status properties-panel__bottom-status--red">
+            {t('common.statuses.installed')}
+          </div>
         ) : isPackageBlacklisted ? (
-          <div className="properties-panel__bottom-status properties-panel__bottom-status--red">{blacklisted}</div>
+          <div className="properties-panel__bottom-status properties-panel__bottom-status--red">
+            {t('common.statuses.blacklisted')}
+          </div>
         ) : isPackageQueued ? (
-          <div className="properties-panel__bottom-status properties-panel__bottom-status--orange">{queued}</div>
+          <div className="properties-panel__bottom-status properties-panel__bottom-status--orange">
+            {t('common.statuses.queued')}
+          </div>
         ) : isPackageInstalled && (
-          <div className="properties-panel__bottom-status properties-panel__bottom-status--green">{installed}</div>
+          <div className="properties-panel__bottom-status properties-panel__bottom-status--green">
+            {t('common.statuses.installed')}
+          </div>
         )}
       </span>
     );
@@ -271,8 +286,9 @@ class List extends Component {
 }
 
 List.propTypes = {
-  stores: PropTypes.shape({}),
   installPackage: PropTypes.func.isRequired,
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default List;
+export default withTranslation()(List);

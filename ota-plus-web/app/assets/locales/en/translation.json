@@ -18,7 +18,13 @@
         "infinite_scroller": {
             "loader_content": "..."
         },
-        "more_info": "More info"
+        "more_info": "More info",
+        "statuses": {
+            "blacklisted": "Blacklisted",
+            "installed": "Installed",
+            "not_installed": "Not Installed",
+            "queued": "Queued"
+        }
     },
     "dashboard": {
         "campaigns": {
@@ -49,15 +55,127 @@
     },
     "devices": {
         "all_grouped": "All your devices are grouped. Good work!",
+        "dashboard": {
+            "avg": "avg:",
+            "certificate_rollover": "Certificate rollover",
+            "connections": "Connections",
+            "create_campaign": "Create campaign",
+            "forecast": "Forecast",
+            "limit": "limit:",
+            "live_connections": "Live connections",
+            "peak": "peak:",
+            "reported": "Reported",
+            "simultaneous_connections": "Simultaneous connections",
+            "title": "Dashboard (BETA)",
+            "total_connections": "Total connections",
+            "total_devices": "Total devices"
+        },
+        "empty": {
+            "add_new": "+ Add new device",
+            "no_devices": "You currently have no devices to manage. Try provisioning some devices first."
+        },
         "empty_group_fixed": "This group is empty. Please, drag and drop devices here.",
         "empty_group_smart": "This smart group isn't matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.",
         "delete": "Delete device",
         "delete_confirmation": "Device will be removed.",
         "device_count": "{{count}} device",
         "device_count_plural": "{{count}} devices",
+        "hardware": {
+            "activated": "Activated",
+            "close": "Close",
+            "copy_to_clipboard": "Copy to clipboard",
+            "created": "Created",
+            "got_it": "Got it",
+            "hardware": "Hardware",
+            "identifier": "Identifier: ",
+            "last_seen_online": "Last seen online",
+            "no_ecus": "None reported",
+            "no_hardware_reported": "This device hasn’t reported any information about its hardware or system components yet.",
+            "no_packages": "No matching packages found.",
+            "no_search_results": "No search results",
+            "overview": "OVERVIEW",
+            "packages": "Packages",
+            "primary_ecus_title": "Primary ECU",
+            "public_key": "Public key",
+            "public_key_copied": "(Public key copied)",
+            "reports_by_ecu": "Reports by this ECU",
+            "result_code": "Result code ",
+            "secondary_ecus_title": "Secondary ECUs",
+            "secondary_ecus_description": [
+                "<p>In many connected mobility domains, most notably in automotive, it is common to have a device, ",
+                "vehicle, or platform that has multiple independent micro-controllers or other devices networked together. ",
+                "HERE OTA Connect is built to handle updates to those other micro-controllers even if they don't have an ",
+                "internet connection, or are too resource-constrained to run a full updater client themselves. ",
+                "The device that has a direct internet connection – the one running the HERE OTA Connect client ",
+                "– is called the \"Primary ECU\", and is able to distribute firmware updates to ",
+                "secondary ECUs.</p>",
+                "<p>The term <strong>ECU</strong> comes from automotive, and stands for <strong>Electronic Control Unit.</strong></p>",
+                "<p>If you don't have multiple devices to update from one primary/master device, ",
+                "you don't need to worry about this functionality. </p>"
+                ],
+            "title": "Hardware",
+            "type": "Type: "
+        },
         "id_item": "ID: {{id}}",
+        "installation_events": {
+            "download_completed": "Download completed:",
+            "download_failed": "Download failed:",
+            "download_start": "Download start:",
+            "installation_completed": "Installation completed:",
+            "installation_failed": "Installation failed:",
+            "installation_start": "Installation start:"
+        },
         "last_seen_item": "Last seen: {{date}} {{time}}",
+        "mtu": {
+            "approval_pending": {
+                "distribution_settings": "Distribution Settings:",
+                "estimated_time_to_install": "Estimated time to install this update :",
+                "estimated_time_to_prepare": "Estimated time to prepare this update",
+                "no_updates": "There aren't any updates that are waiting for approval on this device.",
+                "notification_text": "Notification Text:"
+            },
+            "common": {
+                "campaign": "Campaign:",
+                "cancel": "Cancel",
+                "ecu_identifier": "ECU identifier:",
+                "ecu_type": "ECU type:",
+                "length": "Length:",
+                "single_device_update": "Single-device update",
+                "target": "Target:",
+                "update_description": "Update description:",
+                "update_name": "Update name:"
+            },
+            "history": {
+                "no_updates": "This device hasn't installed any updates yet.",
+                "received_at": "Received at:"
+            },
+            "properties": {
+                "created_at": "Created at:",
+                "install": "Install",
+                "installed_outside_ota_description": "This software was installed outside of OTA Connect so there are no details to display.",
+                "name": "Name:",
+                "not_reported": "Not reported",
+                "select_package_description": "Select the package version to see its details."
+            },
+            "queue": {
+                "no_updates": "There aren't any updates queued for this device."
+            }
+        },
+        "network": {
+            "hostname": "Hostname",
+            "ip": "IP",
+            "mac": "MAC"
+        },
         "never_seen_online": "Never seen online",
+        "software": {
+            "auto": "Auto",
+            "automatic_update": "Automatic update",
+            "auto_update_info": "Automatic update activated. The latest version of this package will automatically be installed on this device.",
+            "created_at": "Created at:",
+            "hash_version": "Hash / version:",
+            "no_results": "No matching software found.",
+            "title": "Software"
+        },
         "statuses": {
             "error": "Installation error",
             "synchronized": "Device synchronized",
@@ -78,10 +196,11 @@
         "rename": "Rename device"
     },
     "groups": {
-        "not_in_a_fixed_group": "Not in a fixed group: ",
-        "rename_group": "Rename group",
+        "add_group": "Add group",
+        "all_devices": "All devices",
         "creating": {
             "button_title": "Create",
+            "create_new_group": "Create new group",
             "file_uploading": {
                 "button_title": "Choose file",
                 "description": "Upload a list of provisioned device IDs in a Text file.",
@@ -90,9 +209,23 @@
                     "only_extension_file_description": "Please upload .txt file"
                 }
             },
+            "fixed_group_title": "Fixed group",
+            "fixed_group_teaser": "A group that contains a fixed list of devices. To add devices, you drag and drop them from the device view.",
+            "next": "Next",
             "placeholder": "Name",
+            "smart_group_title": "Smart group",
+            "smart_group_teaser": "A group that is based on a device filter. New devices are automatically added if they match the filter criteria.",
             "title": "Group Name"
-        }
+        },
+        "edit_group": "Edit Group",
+        "not_in_a_fixed_group": "Not in a fixed group: ",
+        "renaming": {
+            "group_name": "Group Name",
+            "name": "Name",
+            "rename_group": "Rename group"
+        },
+        "save": "Save",
+        "ungrouped_devices": "Ungrouped devices"
     },
     "navigation": {
         "campaigns": "Campaigns",

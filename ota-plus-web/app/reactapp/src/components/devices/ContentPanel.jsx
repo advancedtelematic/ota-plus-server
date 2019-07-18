@@ -213,38 +213,38 @@ class ContentPanel extends Component {
           </div>
           {alphaPlusEnabled && (
             <div className="devices-panel__dashboard">
-              <div className="devices-panel__title devices-panel__title--margin">{'Dashboard (BETA)'}</div>
+              <div className="devices-panel__title devices-panel__title--margin">{t('devices.dashboard.title')}</div>
               <div className="devices-panel__top-wrapper">
                 <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{'Simultaneous connections'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.simultaneous_connections')}</div>
                   {'560/600'}
                   <div className="devices-panel__dashboard-top-icon" />
                 </div>
                 <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{'Total devices'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.total_devices')}</div>
                   {'134.000'}
                 </div>
                 <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{'Total connections'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.total_connections')}</div>
                   {'69.000'}
                   <div className="devices-panel__dashboard-top-icon" />
                 </div>
               </div>
               <div className="devices-panel__dashboard-bottom">
                 <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{'Live connections'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.live_connections')}</div>
                   <div className="devices-panel__dashboard-data">
                     <BarChart connections={connections} />
                   </div>
                 </div>
                 <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{'Certificate rollover'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.certificate_rollover')}</div>
                   <div className="devices-panel__dashboard-data">
                     <Stats data={certificateRolloverData.stats} indicatorColors />
                   </div>
                 </div>
                 <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{'Connections'}</div>
+                  <div className="devices-panel__title">{t('devices.dashboard.connections')}</div>
                   <div className="devices-panel__dashboard-data">
                     <Stats data={connectionsData.stats} indicatorColors={false} />
                   </div>

@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import moment from 'moment';
+import { withTranslation } from 'react-i18next';
+
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
 
@@ -12,7 +14,7 @@ import Loader from '../../../partials/Loader';
 @observer
 class MtuListItem extends Component {
   render() {
-    const { item, events, stores } = this.props;
+    const { item, events, stores, t } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
     const devicePrimaryEcu = device.directorAttributes.primary;
@@ -27,7 +29,7 @@ class MtuListItem extends Component {
               <div className="overview-panel__item-header--title">
                 <div>
                   <span id={`update-id-title-${item.correlationId}`} className="overview-panel__item-header--title__label">
-                    Campaign:
+                    {t('devices.mtu.common.campaign')}
                   </span>
                   <span id={`update-id-${item.correlationId}`}>{item.campaign.name}</span>
                 </div>
@@ -35,13 +37,13 @@ class MtuListItem extends Component {
               <div className="overview-panel__item-header--update">
                 <div className="overview-panel__item-header--update__name">
                   <span id={`update-id-title-${item.correlationId}`} className="overview-panel__item-header__label">
-                    Update&nbsp;name:
+                    {t('devices.mtu.common.update_name')}
                   </span>
                   <span id={`update-id-${item.correlationId}`}>{item.campaign.update.name}</span>
                 </div>
                 <div className="overview-panel__item-header--update__description">
                   <span id={`update-id-title-${item.correlationId}`} className="overview-panel__item-header__label">
-                    Update&nbsp;description:
+                    {t('devices.mtu.common.update_description')}
                   </span>
                   <span id={`update-id-${item.correlationId}`}>{item.campaign.update.description}</span>
                 </div>
@@ -51,14 +53,14 @@ class MtuListItem extends Component {
             <div className="overview-panel__item-header--title">
               <div>
                 <span id={`update-id-title-${item.correlationId}`} className="overview-panel__item-header--title__label">
-                  Single-device update
+                  {t('devices.mtu.common.single_device_update')}
                 </span>
               </div>
             </div>
           )}
           <div className="overview-panel__item-header__created">
             <span id={`received-at-title-${item.correlationId}`} className="overview-panel__item-header__label">
-              Received at:
+              {t('devices.mtu.history.received_at')}
             </span>
             <span id={`received-at-${item.correlationId}`}>
               {moment(item.eventTime ? item.eventTime : item.receivedAt)
@@ -85,13 +87,13 @@ class MtuListItem extends Component {
                   <div className="overview-panel__operation-info-line">
                     <div className="overview-panel__operation-info-block">
                       <span id={`hardwareId-title-${hardwareId}`} className="overview-panel__operation-info--label">
-                        ECU&nbsp;type:
+                        {t('devices.mtu.common.ecu_type')}
                       </span>
                       <span id={`hardwareId-${hardwareId}`}>{hardwareId}</span>
                     </div>
                     <div className="overview-panel__operation-info-block">
                       <span id={`ecu-serial-title-${item.correlationId}`} className="overview-panel__operation-info--label">
-                        ECU&nbsp;identifier:
+                        {t('devices.mtu.common.ecu_identifier')}
                       </span>
                       <span id={`ecu-serial-${item.correlationId}`}>{ecuSerial}</span>
                     </div>
@@ -99,7 +101,7 @@ class MtuListItem extends Component {
                   <div className="overview-panel__operation-info-line">
                     <div className="overview-panel__operation-info-block">
                       <span id={`target-title-${item.correlationId}`} className="overview-panel__operation-info--label">
-                        Target:
+                        {t('devices.mtu.common.target')}
                       </span>
                       <span id={`target-${item.correlationId}`}>{ecuReport.target.join()}</span>
                     </div>
@@ -118,7 +120,7 @@ class MtuListItem extends Component {
                   <div
                     className={`overview-panel__status-code ${ecuReport.result.success ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}
                   >
-                    <span>{'Result code '}</span>
+                    <span>{t('devices.hardware.result_code')}</span>
                     <span className="overview-panel__status-code-value" id={`result-code-${item.correlationId}`}>
                       {ecuReport.result.code}
                     </span>
@@ -135,7 +137,7 @@ class MtuListItem extends Component {
           <div
             className={`overview-panel__status-code ${item.result.success ? 'overview-panel__status-code--success' : 'overview-panel__status-code--error'}`}
           >
-            <span>{'Result code '}</span>
+            <span>{t('devices.hardware.result_code')}</span>
             <span className="overview-panel__status-code-value" id={`result-code-${item.correlationId}`}>
               {item.result.code}
             </span>
@@ -150,9 +152,10 @@ class MtuListItem extends Component {
 }
 
 MtuListItem.propTypes = {
-  stores: PropTypes.shape({}),
+  events: PropTypes.arrayOf(PropTypes.shape({})),
   item: PropTypes.shape({}),
-  events: PropTypes.arrayOf(PropTypes.shape({}))
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default MtuListItem;
+export default withTranslation()(MtuListItem);

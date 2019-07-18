@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Form } from 'formsy-antd';
 import { Button } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import { SubHeader, SearchBar } from '../../partials';
 
 @inject('stores')
@@ -15,10 +17,11 @@ class ContentPanelHeader extends Component {
     devicesFilter: PropTypes.string,
     changeFilter: PropTypes.func.isRequired,
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   render() {
-    const { stores, devicesFilter, changeFilter, addNewWizard } = this.props;
+    const { stores, devicesFilter, changeFilter, addNewWizard, t } = this.props;
     const { groupsStore } = stores;
     const { selectedGroup } = groupsStore;
     return (
@@ -33,7 +36,7 @@ class ContentPanelHeader extends Component {
                 addNewWizard('groups');
               }}
             >
-              {'Create campaign'}
+              {t('devices.dashboard.create_campaign')}
             </Button>
           </div>
         )}
@@ -45,4 +48,4 @@ class ContentPanelHeader extends Component {
   }
 }
 
-export default ContentPanelHeader;
+export default withTranslation()(ContentPanelHeader);

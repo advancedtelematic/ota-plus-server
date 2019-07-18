@@ -5,14 +5,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import { DeviceHardwareSecondaryEcuDetails, DevicePrimaryEcu, DeviceSecondaryEcu } from './hardware';
 import { FadeAnimation } from '../../utils';
 import { PackageBlacklistModal } from '../software';
-
-const title = 'Hardware';
-const primaryEcusTitle = 'Primary Ecu';
-const secondaryEcusTitle = 'Secondary Ecus';
-const noEcus = 'None reported';
 
 @inject('stores')
 @observer
@@ -94,13 +91,13 @@ class HardwarePanel extends Component {
   };
 
   render() {
-    const { selectEcu, onFileDrop, ECUselected, stores } = this.props;
+    const { selectEcu, onFileDrop, ECUselected, stores, t } = this.props;
     const { devicesStore, hardwareStore } = stores;
     const { device } = devicesStore;
     const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore.getPrimaryHardwareId();
     const primaryEcus = (
       <span>
-        <div className="hardware-panel__title">{primaryEcusTitle}</div>
+        <div className="hardware-panel__title">{t('devices.hardware.primary_ecus_title')}</div>
         <DevicePrimaryEcu
           showPackageBlacklistModal={this.showPackageBlacklistModal}
           onFileDrop={onFileDrop}
@@ -119,7 +116,7 @@ class HardwarePanel extends Component {
     const secondaryEcus = (
       <span>
         <div className="hardware-panel__title">
-          {secondaryEcusTitle}
+          {t('devices.hardware.secondary_ecus_title')}
           {isPrimaryEcuActive ? (
             <img
               src="/assets/img/icons/black/questionmark.svg"
@@ -156,7 +153,7 @@ class HardwarePanel extends Component {
           ))
         ) : (
           <div className="hardware-panel__no-ecus" id="hardware-secondary-not-available">
-            {noEcus}
+            {t('devices.hardware.no_ecus')}
           </div>
         )}
       </span>
@@ -167,9 +164,11 @@ class HardwarePanel extends Component {
           className={`hardware-panel__overview ${!ECUselected ? 'hardware-panel__overview--selected' : ''}`}
           onClick={this.onSelectQueue}
         >
-          <button type="button" className="hardware-panel__overview-button">OVERVIEW</button>
+          <button type="button" className="hardware-panel__overview-button">
+            {t('devices.hardware.overview')}
+          </button>
         </div>
-        <div className="hardware-panel__header">{title}</div>
+        <div className="hardware-panel__header">{t('devices.hardware.title')}</div>
         <div className="hardware-panel__wrapper">
           <div className="hardware-panel__primary">{primaryEcus}</div>
           <div className="hardware-panel__secondaries">{secondaryEcus}</div>
@@ -199,7 +198,8 @@ HardwarePanel.propTypes = {
   selectEcu: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
   selectQueue: PropTypes.func,
-  ECUselected: PropTypes.bool
+  ECUselected: PropTypes.bool,
+  t: PropTypes.func.isRequired
 };
 
-export default HardwarePanel;
+export default withTranslation()(HardwarePanel);

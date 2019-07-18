@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 
-import { DEVICE_STATUSES } from '../../constants/deviceConstants';
+import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 
 @observer
 class LastDevicesItem extends Component {
@@ -16,13 +16,13 @@ class LastDevicesItem extends Component {
     const lastSeenDate = new Date(device.lastSeen);
     let deviceStatus = t('devices.statuses.unknown');
     switch (device.deviceStatus) {
-      case DEVICE_STATUSES.UP_TO_DATE:
+      case DEVICE_STATUS_UP_TO_DATE:
         deviceStatus = t('devices.statuses.synchronized');
         break;
-      case DEVICE_STATUSES.OUTDATED:
+      case DEVICE_STATUS_OUTDATED:
         deviceStatus = t('devices.statuses.unsynchronized');
         break;
-      case DEVICE_STATUSES.ERROR:
+      case DEVICE_STATUS_ERROR:
         deviceStatus = t('devices.statuses.error');
         break;
       default:

@@ -3,8 +3,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
+
 import PublicKeyPopover from './PublicKeyPopover';
 import DeviceHardwareOverlay from './Overlay';
+import { ECU_TYPE_PRIMARY } from '../../../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -22,7 +25,7 @@ class PrimaryEcu extends Component {
       devicesStore.getPrimaryHardwareId(),
       devicesStore.getPrimarySerial(),
       devicesStore.getPrimaryFilepath(),
-      'primary'
+      ECU_TYPE_PRIMARY
     );
   };
 
@@ -38,7 +41,8 @@ class PrimaryEcu extends Component {
       device,
       copyPublicKey,
       publicKeyCopied,
-      stores
+      stores,
+      t
     } = this.props;
     const { devicesStore } = stores;
     return (
@@ -51,12 +55,12 @@ class PrimaryEcu extends Component {
         >
           <div className="hardware-panel__ecu-desc">
             <span>
-              {'Type: '}
+              {t('devices.hardware.type')}
               <span id="hardware-type-primary" className="hardware-panel__hardware-label app-label">
                 {devicesStore.getPrimaryHardwareId()}
               </span>
               <br />
-              {'Identifier: '}
+              {t('devices.hardware.identifier')}
               <span id="hardware-identifier-value">{devicesStore.getPrimarySerial()}</span>
             </span>
           </div>
@@ -105,6 +109,7 @@ PrimaryEcu.propTypes = {
   device: PropTypes.shape({}),
   copyPublicKey: PropTypes.func,
   publicKeyCopied: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default PrimaryEcu;
+export default withTranslation()(PrimaryEcu);

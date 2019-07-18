@@ -6,6 +6,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
 import { Row, Col } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { OTAModal, AsyncResponse, OTAForm, FormInput } from '../../partials';
@@ -56,7 +57,7 @@ class RenameModal extends Component {
   };
 
   render() {
-    const { stores, shown, hide } = this.props;
+    const { stores, shown, hide, t } = this.props;
     const { groupsStore } = stores;
     const form = (
       <OTAForm onSubmit={this.submitForm} id="group-rename-form">
@@ -74,9 +75,9 @@ class RenameModal extends Component {
                 name="groupName"
                 className="input-wrapper"
                 isEditable={!groupsStore.groupsRenameAsync.isFetching}
-                title="Group Name"
-                label="Group Name"
-                placeholder="Name"
+                title={t('groups.renaming.group_name')}
+                label={t('groups.renaming.group_name')}
+                placeholder={t('groups.renaming.name')}
                 defaultValue={groupsStore.selectedGroup.groupName}
               />
             </div>
@@ -120,6 +121,7 @@ RenameModal.propTypes = {
   shown: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default RenameModal;
+export default withTranslation()(RenameModal);
