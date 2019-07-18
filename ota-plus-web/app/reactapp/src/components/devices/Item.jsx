@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import { Dropdown } from '../../partials';
-import { DEVICE_STATUSES } from '../../constants/deviceConstants';
+import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 
 const deviceSource = {
   beginDrag(props) {
@@ -62,13 +62,13 @@ class Item extends Component {
     const lastSeenDate = new Date(lastSeen);
     let deviceStatusMessage = t('devices.statuses.unknown');
     switch (deviceStatus) {
-      case DEVICE_STATUSES.UP_TO_DATE:
+      case DEVICE_STATUS_UP_TO_DATE:
         deviceStatusMessage = t('devices.statuses.synchronized');
         break;
-      case DEVICE_STATUSES.OUTDATED:
+      case DEVICE_STATUS_OUTDATED:
         deviceStatusMessage = t('devices.statuses.unsynchronized');
         break;
-      case DEVICE_STATUSES.ERROR:
+      case DEVICE_STATUS_ERROR:
         deviceStatusMessage = t('devices.statuses.error');
         break;
       default:

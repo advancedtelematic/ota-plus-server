@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
@@ -11,12 +13,12 @@ import { InfiniteScroll } from '../../../utils';
 @observer
 class MtuList extends Component {
   render() {
-    const { device, stores } = this.props;
+    const { device, stores, t } = this.props;
     const { softwareStore, devicesStore } = stores;
     const emptyHistory = (
       <div className="wrapper-center">
         <span className="overview-panel__empty">
-          {'This device hasn\'t installed any updates yet.'}
+          {t('devices.mtu.history.no_updates')}
         </span>
       </div>
     );
@@ -55,8 +57,9 @@ class MtuList extends Component {
 }
 
 MtuList.propTypes = {
-  stores: PropTypes.shape({}),
   device: PropTypes.shape({}).isRequired,
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default MtuList;
+export default withTranslation()(MtuList);

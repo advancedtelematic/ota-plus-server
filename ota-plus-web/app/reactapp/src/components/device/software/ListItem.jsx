@@ -3,19 +3,21 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 
 @observer
 class ListItem extends Component {
   render() {
     const {
-      pack,
       device,
-      queuedPackage,
       installedPackage,
       isSelected,
-      togglePackage,
+      pack,
+      queuedPackage,
+      showPackageDetails,
       toggleAutoInstall,
-      showPackageDetails
+      togglePackage,
+      t
     } = this.props;
     return !pack.unmanaged ? (
       <span>
@@ -36,35 +38,49 @@ class ListItem extends Component {
                 <span>
                   {pack.isAutoInstallEnabled ? (
                     <div className="software-panel__labels">
-                      <div className="software-panel__label software-panel__label--auto-update">Auto</div>
-                      <div className="software-panel__label software-panel__label--queued">Queued</div>
+                      <div className="software-panel__label software-panel__label--auto-update">
+                        {t('devices.software.auto')}
+                      </div>
+                      <div className="software-panel__label software-panel__label--queued">
+                        {t('common.statuses.queued')}
+                      </div>
                     </div>
                   ) : (
                     <div className="software-panel__labels">
-                      <div className="software-panel__label software-panel__label--queued">Queued</div>
+                      <div className="software-panel__label software-panel__label--queued">
+                        {t('common.statuses.queued')}
+                      </div>
                     </div>
                   )}
                 </span>
               ) : installedPackage ? (
                 pack.isAutoInstallEnabled ? (
                   <div className="software-panel__labels">
-                    <div className="software-panel__label software-panel__label--auto-update">Auto</div>
-                    <div className="software-panel__label software-panel__label--installed">Installed</div>
+                    <div className="software-panel__label software-panel__label--auto-update">
+                      {t('devices.software.auto')}
+                    </div>
+                    <div className="software-panel__label software-panel__label--installed">
+                      {t('common.statuses.installed')}
+                    </div>
                   </div>
                 ) : (
                   <div className="software-panel__labels">
-                    <div className="software-panel__label software-panel__label--installed">Installed</div>
+                    <div className="software-panel__label software-panel__label--installed">
+                      {t('common.statuses.installed')}
+                    </div>
                   </div>
                 )
               ) : pack.isAutoInstallEnabled ? (
                 <div className="software-panel__labels">
-                  <div className="software-panel__label software-panel__label--auto-update">Auto</div>
+                  <div className="software-panel__label software-panel__label--auto-update">
+                    {t('devices.software.auto')}
+                  </div>
                 </div>
               ) : null
             ) : null}
             {isSelected ? (
               <div className="software-panel__auto-update">
-                Automatic update
+                {t('devices.software.automatic_update')}
                 <div
                   className={`switch${pack.isAutoInstallEnabled ? ' switchOn' : ''}`}
                   id="auto-install-switch"
@@ -103,14 +119,15 @@ class ListItem extends Component {
 }
 
 ListItem.propTypes = {
-  pack: PropTypes.shape({}).isRequired,
   device: PropTypes.shape({}).isRequired,
-  queuedPackage: PropTypes.string,
   installedPackage: PropTypes.string,
   isSelected: PropTypes.bool.isRequired,
-  togglePackage: PropTypes.func.isRequired,
-  toggleAutoInstall: PropTypes.func.isRequired,
+  pack: PropTypes.shape({}).isRequired,
+  queuedPackage: PropTypes.string,
   showPackageDetails: PropTypes.func.isRequired,
+  toggleAutoInstall: PropTypes.func.isRequired,
+  togglePackage: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default ListItem;
+export default withTranslation()(ListItem);

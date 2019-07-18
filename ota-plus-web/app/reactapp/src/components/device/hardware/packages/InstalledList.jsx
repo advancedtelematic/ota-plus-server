@@ -6,11 +6,12 @@ import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Dropzone from 'react-dropzone';
+import { withTranslation } from 'react-i18next';
+
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../../../utils';
 
-const headerHeight = 28;
-const noSearchResults = 'No matching packages found.';
+const HEADER_HEIGHT = 28;
 
 @inject('stores')
 @observer
@@ -101,8 +102,8 @@ class InstalledList extends Component {
             newFakeHeaderLetter = Object.keys(softwareStore.preparedOndevicePackages)[index];
             return true;
           }
-          if (scrollTop >= position - headerHeight) {
-            scrollTop -= scrollTop - (position - headerHeight);
+          if (scrollTop >= position - HEADER_HEIGHT) {
+            scrollTop -= scrollTop - (position - HEADER_HEIGHT);
             return true;
           }
           return false;
@@ -142,7 +143,7 @@ class InstalledList extends Component {
   }
 
   render() {
-    const { device, showPackageBlacklistModal, onFileDrop, stores } = this.props;
+    const { device, showPackageBlacklistModal, onFileDrop, stores, t } = this.props;
     const { softwareStore } = stores;
     const {
       ondevicePackagesCurrentPage,
@@ -188,7 +189,7 @@ class InstalledList extends Component {
               </Dropzone>
             ) : (
               <div className="wrapper-center" style={{ height: '100%' }}>
-                {noSearchResults}
+                {t('devices.hardware.no_packages')}
               </div>
             )}
           </InfiniteScroll>
@@ -203,6 +204,7 @@ InstalledList.propTypes = {
   device: PropTypes.shape({}).isRequired,
   showPackageBlacklistModal: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default InstalledList;
+export default withTranslation()(InstalledList);
