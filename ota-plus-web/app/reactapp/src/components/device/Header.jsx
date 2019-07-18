@@ -10,7 +10,7 @@ import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '..
 import { FadeAnimation } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
-import { DEVICE_STATUSES } from '../../constants/deviceConstants';
+import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -68,13 +68,13 @@ class Header extends Component {
     const activatedDate = new Date(device.activatedAt);
     let deviceStatus = t('devices.statuses.unknown');
     switch (device.deviceStatus) {
-      case DEVICE_STATUSES.UP_TO_DATE:
+      case DEVICE_STATUS_UP_TO_DATE:
         deviceStatus = t('devices.statuses.synchronized');
         break;
-      case DEVICE_STATUSES.OUTDATED:
+      case DEVICE_STATUS_OUTDATED:
         deviceStatus = t('devices.statuses.unsynchronized');
         break;
-      case DEVICE_STATUSES.ERROR:
+      case DEVICE_STATUS_ERROR:
         deviceStatus = t('devices.statuses.error');
         break;
       default:
@@ -101,7 +101,7 @@ class Header extends Component {
                 <div className="page-header__device-report-items">
                   <NetworkInfo data={devicesStore.deviceNetworkInfo} />
                   <div className="page-header__device-report-item" id="created-info">
-                    <span className="page-header__device-report-label">Created</span>
+                    <span className="page-header__device-report-label">{t('devices.hardware.created')}</span>
                     <div className="page-header__device-report-desc">
                       {device.createdAt
                         ? `${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`
@@ -110,7 +110,7 @@ class Header extends Component {
                     </div>
                   </div>
                   <div className="page-header__device-report-item" id="activated-info">
-                    <span className="page-header__device-report-label">Activated</span>
+                    <span className="page-header__device-report-label">{t('devices.hardware.activated')}</span>
                     <div className="page-header__device-report-desc">
                       {device.activatedAt
                         ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}`
@@ -122,7 +122,7 @@ class Header extends Component {
                     className="page-header__device-report-item page-header__device-report-item--last-seen"
                     id="last-seen-online-info"
                   >
-                    <span className="page-header__device-report-label">Last seen online</span>
+                    <span className="page-header__device-report-label">{t('devices.hardware.last_seen_online')}</span>
                     <div className="page-header__device-report-desc">
                       {deviceStatus !== t('devices.statuses.unknown')
                         ? `${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`

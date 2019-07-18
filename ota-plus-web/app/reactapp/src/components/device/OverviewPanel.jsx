@@ -10,6 +10,10 @@ import { ApprovalPendingMtuList } from './approvalPending';
 
 const { TabPane } = Tabs;
 
+const OVERVIEW_PANEL_TAB_ID_0 = '0';
+const OVERVIEW_PANEL_TAB_ID_1 = '1';
+const OVERVIEW_PANEL_TAB_ID_2 = '2';
+
 @inject('stores')
 @observer
 class OverviewPanel extends Component {
@@ -17,17 +21,17 @@ class OverviewPanel extends Component {
     const { stores, setOverviewPanelActiveTabId } = this.props;
     const { devicesStore } = stores;
     if (devicesStore.deviceApprovalPendingCampaigns.campaigns.length) {
-      setOverviewPanelActiveTabId('2');
+      setOverviewPanelActiveTabId(OVERVIEW_PANEL_TAB_ID_2);
     } else if (devicesStore.multiTargetUpdates.length) {
-      setOverviewPanelActiveTabId('1');
+      setOverviewPanelActiveTabId(OVERVIEW_PANEL_TAB_ID_1);
     } else {
-      setOverviewPanelActiveTabId('0');
+      setOverviewPanelActiveTabId(OVERVIEW_PANEL_TAB_ID_0);
     }
   }
 
   componentWillUnmount() {
     const { setOverviewPanelActiveTabId } = this.props;
-    setOverviewPanelActiveTabId('0');
+    setOverviewPanelActiveTabId(OVERVIEW_PANEL_TAB_ID_0);
   }
 
   render() {
@@ -43,13 +47,13 @@ class OverviewPanel extends Component {
     return (
       <div className="overview-panel">
         <Tabs type="card" onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
-          <TabPane tab="History" id="installation-history" key="0">
+          <TabPane tab="History" id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
             <HistoryMtuList device={device} />
           </TabPane>
-          <TabPane tab="Queue" id="queued-packages" key="1">
+          <TabPane tab="Queue" id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
             <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
           </TabPane>
-          <TabPane tab="Approval pending" id="approval-pending-campaigns" key="2">
+          <TabPane tab="Approval pending" id="approval-pending-campaigns" key={OVERVIEW_PANEL_TAB_ID_2}>
             <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />
           </TabPane>
         </Tabs>

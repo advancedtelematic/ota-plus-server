@@ -5,9 +5,9 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
-const headerHeight = 28;
-const noSearchResults = 'No search results';
+const HEADER_HEIGHT = 28;
 
 @observer
 class ReportedList extends Component {
@@ -94,8 +94,8 @@ class ReportedList extends Component {
             const { hardware } = this.props;
             newFakeHeaderText = hardware[index].name;
             return true;
-          } if (scrollTop >= position - headerHeight) {
-            scrollTop -= scrollTop - (position - headerHeight);
+          } if (scrollTop >= position - HEADER_HEIGHT) {
+            scrollTop -= scrollTop - (position - HEADER_HEIGHT);
             return true;
           }
           return true;
@@ -122,7 +122,7 @@ class ReportedList extends Component {
 
 
   render() {
-    const { hardware } = this.props;
+    const { hardware, t } = this.props;
     _.map(hardware, (obj) => {
       if (Object.prototype.hasOwnProperty.call(obj, 'showId') && !obj.showId) {
         /* eslint-disable no-param-reassign */
@@ -171,7 +171,7 @@ class ReportedList extends Component {
       </ul>
     ) : (
       <div className="wrapper-center" style={{ height: '100%' }}>
-        {noSearchResults}
+        {t('devices.hardware.no_search_results')}
       </div>
     );
     return result;
@@ -180,6 +180,7 @@ class ReportedList extends Component {
 
 ReportedList.propTypes = {
   hardware: PropTypes.shape({}).isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default ReportedList;
+export default withTranslation()(ReportedList);

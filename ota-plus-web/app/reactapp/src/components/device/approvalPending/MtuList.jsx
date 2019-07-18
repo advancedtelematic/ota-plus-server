@@ -4,18 +4,20 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import MtuListItem from './MtuListItem';
 
 @inject('stores')
 @observer
 class MtuList extends Component {
   render() {
-    const { cancelApprovalPendingCampaign, stores } = this.props;
+    const { cancelApprovalPendingCampaign, stores, t } = this.props;
     const { devicesStore } = stores;
     const emptyApprovalPending = (
       <div className="wrapper-center">
         <span className="overview-panel__empty">
-          {'There aren\'t any updates that are waiting for approval on this device.'}
+          {t('devices.mtu.approval_pending.no_updates')}
         </span>
       </div>
     );
@@ -36,8 +38,9 @@ class MtuList extends Component {
 }
 
 MtuList.propTypes = {
-  stores: PropTypes.shape({}),
   cancelApprovalPendingCampaign: PropTypes.func.isRequired,
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default MtuList;
+export default withTranslation()(MtuList);

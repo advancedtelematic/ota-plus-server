@@ -145,7 +145,7 @@ Filter.propTypes = {
   setExpressionForSingleFilter: PropTypes.func,
   removeFilter: PropTypes.func,
   addFilter: PropTypes.func,
-  id: PropTypes.string,
+  id: PropTypes.number,
   options: PropTypes.shape({}),
   type: PropTypes.string
 };

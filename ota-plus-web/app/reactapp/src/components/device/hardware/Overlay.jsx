@@ -6,12 +6,11 @@ import { observer, inject } from 'mobx-react';
 import { observable, isObservableArray } from 'mobx';
 import { Popover } from 'antd';
 import { Form } from 'formsy-antd';
+import { withTranslation } from 'react-i18next';
+
 import DeviceHardwareReportedList from './ReportedList';
 import { DeviceHardwarePackagesInstalledList } from './packages';
 import { Loader, SubHeader, SearchBar } from '../../../partials';
-
-
-const noHardwareReported = 'This device hasn’t reported any information about its hardware or system components yet.';
 
 @inject('stores')
 @observer
@@ -59,7 +58,8 @@ class Overlay extends Component {
       showPackageBlacklistModal,
       onFileDrop,
       active,
-      stores
+      stores,
+      t
     } = this.props;
     const { hardwareStore, softwareStore } = stores;
     const content = (
@@ -67,10 +67,10 @@ class Overlay extends Component {
         <SubHeader>
           <div className="nav">
             <div className={`item${this.hardwareInfoShown ? ' active' : ''}`} onClick={this.showHardwareInfo}>
-              <span id="show-hardware">Hardware</span>
+              <span id="show-hardware">{t('devices.hardware.hardware')}</span>
             </div>
             <div className={`item${!this.hardwareInfoShown ? ' active' : ''}`} onClick={this.showPackagesList}>
-              <span id="show-packages">Packages</span>
+              <span id="show-packages">{t('devices.hardware.packages')}</span>
             </div>
           </div>
           <Form>
@@ -101,7 +101,7 @@ class Overlay extends Component {
           ) : (
             !Object.keys(hardwareStore.hardware).length
           )) ? (
-            <div className="wrapper-center">{noHardwareReported}</div>
+            <div className="wrapper-center">{t('devices.hardware.no_hardware_reported')}</div>
             ) : (
               <div className="hardware-details">
                 <DeviceHardwareReportedList hardware={hardwareStore.filteredHardware} />
@@ -124,13 +124,13 @@ class Overlay extends Component {
         <div className="content">
           <div>
             <div className="heading">
-              <div className="internal">Reports by this ECU</div>
+              <div className="internal">{t('devices.hardware.reports_by_ecu')}</div>
             </div>
             <div className="body">
               {content}
               <div className="body-actions">
                 <a href="#" className="btn-primary" onClick={changeHardwareOverlayVisibility.bind(this, false)}>
-                  Close
+                  {t('devices.hardware.close')}
                 </a>
               </div>
             </div>
@@ -165,7 +165,8 @@ Overlay.propTypes = {
   hardwareOverlayShown: PropTypes.bool,
   showPackageBlacklistModal: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  t: PropTypes.func.isRequired
 };
 
-export default Overlay;
+export default withTranslation()(Overlay);

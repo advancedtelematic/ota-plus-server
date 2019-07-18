@@ -7,13 +7,14 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
+import { withTranslation } from 'react-i18next';
+
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
+import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 
-const headerHeight = 28;
-// eslint-disable-next-line max-len
-const autoUpdateInfo = 'Automatic update activated. The latest version of this package will automatically be installed on this device.';
+const HEADER_HEIGHT = 28;
 
 @inject('stores')
 @observer
@@ -108,8 +109,8 @@ class List extends Component {
           if (scrollTop >= position) {
             newFakeHeaderLetter = Object.keys(this.preparedPackages)[index];
             return true;
-          } if (scrollTop >= position - headerHeight) {
-            scrollTop -= scrollTop - (position - headerHeight);
+          } if (scrollTop >= position - HEADER_HEIGHT) {
+            scrollTop -= scrollTop - (position - HEADER_HEIGHT);
             return true;
           }
           return null;
@@ -192,7 +193,7 @@ class List extends Component {
           dirPacks[letter].push(pack);
         }
         _.map(pack.versions, (version) => {
-          if (hardwareStore.activeEcu.type === 'primary') {
+          if (hardwareStore.activeEcu.type === ECU_TYPE_PRIMARY) {
             if (version.filepath === devicesStore.getPrimaryFilepath()) {
               const packAdded = _.some(dirPacks[letter], item => item.packageName === version.id.name);
               if (!packAdded) {
@@ -223,10 +224,10 @@ class List extends Component {
     const { preparedPackages } = this;
     let ecuObject = null;
     switch (hardwareStore.activeEcu.type) {
-      case 'secondary':
+      case ECU_TYPE_SECONDARY:
         ecuObject = devicesStore.getSecondaryBySerial(hardwareStore.activeEcu.serial);
         break;
-      case 'primary':
+      case ECU_TYPE_PRIMARY:
         ecuObject = devicesStore.getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
         break;
       default:
@@ -270,7 +271,7 @@ class List extends Component {
     const { devicesStore, hardwareStore } = stores;
     const { device } = devicesStore;
     let installedPackage = null;
-    if (hardwareStore.activeEcu.type === 'primary') {
+    if (hardwareStore.activeEcu.type === ECU_TYPE_PRIMARY) {
       if (version.filepath === devicesStore.getPrimaryFilepath()) {
         installedPackage = version.id.version;
       }
@@ -292,7 +293,8 @@ class List extends Component {
       showPackageDetails,
       expandedPackageName,
       togglePackage,
-      stores
+      stores,
+      t
     } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
@@ -382,7 +384,7 @@ class List extends Component {
                             >
                               {pack.isAutoInstallEnabled ? (
                                 <div className="software-panel__auto-update-tip">
-                                  {autoUpdateInfo}
+                                  {t('devices.software.auto_update_info')}
                                 </div>
                               ) : null}
                             </VelocityTransitionGroup>
@@ -422,7 +424,8 @@ List.propTypes = {
   triggerPackages: PropTypes.bool,
   animatedScroll: PropTypes.func,
   expandedPackageName: PropTypes.string,
+  t: PropTypes.func.isRequired,
   togglePackage: PropTypes.func
 };
 
-export default withAnimatedScroll(List);
+export default withAnimatedScroll(withTranslation()(List));

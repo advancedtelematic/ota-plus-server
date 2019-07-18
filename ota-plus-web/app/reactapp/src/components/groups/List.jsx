@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
+
+import { GROUP_GROUP_TYPE_DYNAMIC } from '../../constants/groupConstants';
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../utils';
 import { Loader } from '../../partials';
@@ -47,7 +49,7 @@ class List extends Component {
                     const { type, groupName } = groupsStore.selectedGroup;
                     const isSelected = type === 'real' && groupName === group.groupName;
                     let isSmart = false;
-                    if (group.groupType === 'dynamic') {
+                    if (group.groupType === GROUP_GROUP_TYPE_DYNAMIC) {
                       isSmart = true;
                     }
                     return (
