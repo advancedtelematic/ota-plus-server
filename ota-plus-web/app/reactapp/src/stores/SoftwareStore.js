@@ -605,7 +605,7 @@ export default class SoftwareStore {
   }
 
   preparePackagesHistory() {
-    this.packagesHistory = _.sortBy(this.packagesHistory, pack => pack.receivedAt).reverse();
+    this.packagesHistory = _.sortBy(this.packagesHistory, pack => pack.eventTime).reverse();
   }
 
   enablePackageAutoInstall(targetName, deviceId, ecuSerial) {
