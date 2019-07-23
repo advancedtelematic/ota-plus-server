@@ -1,7 +1,9 @@
 package com.advancedtelematic.controllers
 
+import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.controllers.AuthUtils._
 import com.advancedtelematic.libats.data.DataType.Namespace
+import com.advancedtelematic.provisioning.NoOpZipkinTraceService
 import mockws.{MockWS, MockWSHelpers}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.PlaySpec
@@ -38,6 +40,7 @@ class NamespaceControllerSpec extends PlaySpec
     new GuiceApplicationBuilder()
       .configure("userprofile.uri" -> userProfileUri)
       .overrides(bind[WSClient].to(mock))
+      .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
       .build()
 
   "Switching namespace" should {

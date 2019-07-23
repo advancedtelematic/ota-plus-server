@@ -1,13 +1,15 @@
 package com.advancedtelematic.api
 
+import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.auth.garage.Auth0Api
 import play.api.Configuration
-import play.api.libs.ws.WSClient
 
 trait ApiClientSupport {
-  val ws: WSClient
   val conf: Configuration
   val clientExec: ApiClientExec
+  val tracer: ZipkinTraceServiceLike
+
+  private implicit val _tracer = tracer
 
   val authPlusApi = new AuthPlusApi(conf, clientExec)
 
