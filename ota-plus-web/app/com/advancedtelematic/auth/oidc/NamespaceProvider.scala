@@ -1,6 +1,7 @@
 package com.advancedtelematic.auth.oidc
 
 import akka.http.scaladsl.util.FastFuture
+import brave.play.{TraceData, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.Tokens
 import com.advancedtelematic.libats.data.DataType.Namespace
@@ -20,17 +21,21 @@ class NamespaceFromIdentity extends NamespaceProvider {
 
 class NamespaceFromUserProfile @Inject()(val conf: Configuration,
                                          val ws: WSClient,
-                                         val clientExec: ApiClientExec)
+                                         val clientExec: ApiClientExec,
+                                         val tracer: ZipkinTraceServiceLike)
                                         (implicit ec: ExecutionContext)
   extends NamespaceProvider with ApiClientSupport {
 
-  override def apply(tokens: Tokens): Future[Namespace] =
+  override def apply(tokens: Tokens): Future[Namespace] = {
+    implicit val traceData = TraceData(tracer.tracing.tracer().newTrace())
+
     userProfileApi.userOrganizations(tokens.idToken.userId).map {
       case organizations if organizations.isEmpty =>
         Namespace.generate
       case organizations =>
         organizations.filter(_.isCreator).map(_.namespace).head
     }
+  }
 }
 
 

@@ -1,8 +1,10 @@
 package com.advancedtelematic.controllers
 
+import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.TokenUtils
 import com.advancedtelematic.auth.OAuthConfig
 import com.advancedtelematic.auth.oidc.ProviderMetadata
+import com.advancedtelematic.provisioning.NoOpZipkinTraceService
 import mockws.{MockWS, MockWSHelpers}
 import org.jose4j.jwk.{JsonWebKey, JsonWebKeySet}
 import org.scalatest.BeforeAndAfterAll
@@ -10,7 +12,7 @@ import org.scalatestplus.play._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{Json, JsSuccess}
+import play.api.libs.json.{JsSuccess, Json}
 import play.api.libs.ws.WSClient
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -24,6 +26,7 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
 
   implicit override lazy val app: play.api.Application = new GuiceApplicationBuilder()
     .overrides(bind[WSClient].toInstance(mockClient))
+    .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
     // the following 2 entries should come from the environment in production
     .configure("authplus.client_id" -> "")
     .configure("authplus.secret" -> "")

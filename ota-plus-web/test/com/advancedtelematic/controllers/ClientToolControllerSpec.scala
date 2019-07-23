@@ -27,6 +27,8 @@ import play.api.test.Helpers._
 
 import scala.io.Source
 import AuthUtils._
+import brave.play.ZipkinTraceServiceLike
+import com.advancedtelematic.provisioning.NoOpZipkinTraceService
 
 class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -139,6 +141,7 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
     .configure("director.uri" -> "http://director")
     .configure("api_gateway.uri" -> "http://api-gateway")
     .overrides(bind[TokenVerification].to[NoVerification])
+    .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
   val application = builder.overrides(bind[WSClient].to(mockClient)).build
   val controller = application.injector.instanceOf[ClientToolController]
 

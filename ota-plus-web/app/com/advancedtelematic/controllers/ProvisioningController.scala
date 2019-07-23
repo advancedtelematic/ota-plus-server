@@ -1,26 +1,29 @@
 package com.advancedtelematic.controllers
 
-import java.time.{LocalDate, ZonedDateTime, ZoneOffset}
+import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
+import brave.play.ZipkinTraceServiceLike
+import brave.play.implicits.ZipkinTraceImplicits
 import javax.inject.{Inject, Singleton}
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.{ApiAuthAction, AuthorizedRequest}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
-import play.api.libs.json.{Json, JsValue}
-import play.api.libs.ws.WSClient
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient, val authAction: ApiAuthAction,
+class ProvisioningController @Inject()(val conf: Configuration,
+                                       val authAction: ApiAuthAction,
                                        val clientExec: ApiClientExec,
-                                       components: ControllerComponents)(
-    implicit executionContext: ExecutionContext)
-    extends AbstractController(components) with OtaPlusConfig with ApiClientSupport {
+                                       implicit val tracer: ZipkinTraceServiceLike,
+                                       components: ControllerComponents)
+                                      (implicit executionContext: ExecutionContext)
+    extends AbstractController(components) with OtaPlusConfig with ApiClientSupport with ZipkinTraceImplicits {
 
   val cryptApi = new CryptApi(conf, clientExec)
 
@@ -74,5 +77,4 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
     }
   }
-
 }

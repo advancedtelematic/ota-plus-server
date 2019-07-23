@@ -4,6 +4,7 @@ import akka.util.ByteString
 import java.time.{Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoField
 
+import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.TokenUtils
 import com.advancedtelematic.auth.{AccessToken, TokenVerification}
 import com.advancedtelematic.TokenUtils.NoVerification
@@ -28,6 +29,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
       .configure("crypt.uri" -> MockCrypt.CryptHost)
       .overrides(bind[WSClient].toInstance(MockCrypt.mockClient))
       .overrides(bind[TokenVerification].to[NoVerification])
+      .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
       .build()
 
   implicit val defaultPatience =
@@ -71,7 +73,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/status")
           .withFollowRedirects(false)
-          .withHttpHeaders("Cookie" -> makeSessionCookie("not|registered"), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie("not-registered"), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
