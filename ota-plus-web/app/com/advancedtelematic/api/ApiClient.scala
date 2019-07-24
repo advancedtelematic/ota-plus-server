@@ -5,7 +5,6 @@ import java.util.UUID
 import akka.Done
 import akka.stream.Materializer
 import akka.util.ByteString
-import brave.{NoopSpanCustomizer, Span, Tracing}
 import brave.play.{TraceData, TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.auth.AccessToken
@@ -218,7 +217,8 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .execResult(apiExec)
 
   def userProfileRequest(userId: UserId, method: String, path: String)(implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"users/${userId.id}/$path").transform(_.withMethod(method))
+    userProfileRequest(s"users/${userId.id}/$path")
+      .transform(_.withMethod(method))
       .execResult(apiExec)
 
   def userOrganizations(userId: UserId)(implicit traceData: TraceData): Future[Set[UserOrganization]] =
@@ -235,6 +235,11 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
     userProfileRequest(s"organizations/${namespace.get}/$path")
       .transform(_.withMethod(method))
       .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
+      .execResult(apiExec)
+
+  def getCredentialsBundle(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[Result] =
+    userProfileRequest(s"${namespace.get}/credentials/$keyUuid")
+      .transform(_.withMethod("GET"))
       .execResult(apiExec)
 }
 
