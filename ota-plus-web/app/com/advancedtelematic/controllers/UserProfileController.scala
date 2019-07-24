@@ -4,11 +4,11 @@ import java.util.UUID
 
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
-import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError, UnexpectedResponse}
 import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
@@ -30,6 +30,8 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
     extends AbstractController(components)
     with ApiClientSupport with ZipkinTraceImplicits {
+
+  private val log = Logger(this.getClass)
 
   def getUserProfile: Action[AnyContent] = authAction.async { implicit request =>
     val fut = for {
@@ -54,6 +56,9 @@ class UserProfileController @Inject()(val conf: Configuration,
     }
 
     fut.recover {
+      case UnexpectedResponse(u) if (u.status == TOO_MANY_REQUESTS) =>
+        log.error(s"Too many requests: ${u.body}")
+        TooManyRequests
       case e: RemoteApiError =>
         e.result.header.status match {
           case Unauthorized.header.status => Forbidden.sendEntity(e.result.body)
