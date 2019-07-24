@@ -15,8 +15,6 @@ POST    /api/v1/provisioning/credentials/registration       com.advancedtelemati
 GET     /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.getCredentials
 GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: UUID)
 
-GET     /api/v1/clienttools/provisioning/:keyuuid com.advancedtelematic.controllers.ClientToolController.downloadClientToolBundle(keyuuid: UUID)
-
 GET     /api/v1/features                         com.advancedtelematic.controllers.UserProfileController.getFeatures
 
 GET     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
@@ -40,6 +38,7 @@ GET     /user/profile                            com.advancedtelematic.controlle
 PUT     /user/profile                            com.advancedtelematic.controllers.UserProfileController.updateUserProfile
 PUT     /user/profile/billing_info               com.advancedtelematic.controllers.UserProfileController.updateBillingInfo
 POST    /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword
+GET     /user/credentials/:uuid                  com.advancedtelematic.controllers.UserProfileController.getUserCredentialsBundle(uuid: UUID)
 GET     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 
