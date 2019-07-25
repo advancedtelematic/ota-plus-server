@@ -65,9 +65,12 @@ class ContentPanel extends Component {
   resumeScope = () => {
     const { stores, highlight, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
+    const { pageNumber } = this.state;
 
     this.setActive(campaignsStore.activeTab);
-    this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
+    if (pageNumber !== CAMPAIGNS_PAGE_NUMBER_DEFAULT) {
+      this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
+    }
     this.fetchCampaignsData(CAMPAIGNS_PAGE_NUMBER_DEFAULT, CAMPAIGNS_LIMIT_PER_PAGE);
 
     /**

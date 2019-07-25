@@ -47,13 +47,13 @@ class Header extends Component {
                     showCreateModal(null);
                   }}
                 >
-                  {'Create update'}
+                  {'Create update configuration'}
                 </Button>
               </div>
             </div>
             <SubHeader className="update-subheader">
               <div className="update-subheader__item">Title</div>
-              <div className="update-subheader__item description">Internal description</div>
+              <div className="update-subheader__item description">Release note</div>
             </SubHeader>
           </div>
         )}

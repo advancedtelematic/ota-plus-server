@@ -375,6 +375,30 @@ strong {
     width: 180px;
   }
 }
+.anim-info-container {
+  width: 768px;
+  margin-left: -24px;
+  &.member-adding {
+    width: auto;
+    margin: -10px 0 10px 0;
+  }
+  .anim-info {
+    height: 40px;
+    background-color: $color-mint;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.member-adding {
+      width: auto;
+    }
+    .text {
+      color: $color-white;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
+    }
+  }
+}
 
 .add-button {
   text-transform: none;
@@ -412,6 +436,14 @@ strong {
   &.bordered {
     padding: 5px 15px;
     border: 1px solid;
+  }
+  &.file-input {
+    border: 0px;
+    color: $switch-blue-color;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0 5px;
   }
 }
 
@@ -2127,6 +2159,10 @@ input {
   }
 }
 
+.text-left {
+  font-weight: 400;
+}
+
 .alpha-tag {
   line-height: 18px;
   height: 18px;
@@ -2159,6 +2195,17 @@ input {
 
 .gutter-bottom {
   margin-bottom: 32px;
+  &.font-size-12 {
+    font-size: 12px;
+  }
+}
+
+.no-margin-bottom {
+  margin-bottom: 0;
+  &.pending-description {
+    font-size: 12px;
+    margin-left: 40px;
+  }
 }
 
 .app-flex-container {

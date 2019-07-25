@@ -37,6 +37,9 @@ h3 {
     float: right;
     font-size: 12px;
     width: 200px;
+    &.float-left {
+      float: left;
+    }
     &:hover {
       color: $color-white;
     }
@@ -62,8 +65,8 @@ h3 {
   &-outlined {
     color: $button-outline-color;
     background-color: transparent;
-    font-size: 14px;	
-    letter-spacing: 0.01px;	
+    font-size: 14px;
+    letter-spacing: 0.01px;
     line-height: 20px;
     border: 1px solid $button-outline-color;
     border-radius: 1px;

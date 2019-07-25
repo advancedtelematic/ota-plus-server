@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { MetaData, FadeAnimation } from '../utils';
 import { UpdatesContainer } from '../containers';
 
-const title = 'Updates';
+const title = 'Update Configuration';
 
 @inject('stores')
 @observer

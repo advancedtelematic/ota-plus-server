@@ -22,7 +22,6 @@ import {
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts';
-import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -120,17 +119,16 @@ export default class UserStore {
     }
   };
 
-  addUserToOrganization = async (email) => {
+  addUserToOrganization = (email) => {
     resetAsync(this.addUserToOrganizationAsync, true);
-    try {
-      const response = await axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email });
-      if (response.status === HTTP_CODE_200_OK) {
+    return axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email })
+      .then((response) => {
         this.getOrganizationUsers();
-      }
-      this.addUserToOrganizationAsync = handleAsyncSuccess(response);
-    } catch (error) {
-      this.addUserToOrganizationAsync = handleAsyncError(error);
-    }
+        this.addUserToOrganizationAsync = handleAsyncSuccess(response);
+      })
+      .catch((error) => {
+        this.addUserToOrganizationAsync = handleAsyncError(error);
+      });
   };
 
   fetchUser() {

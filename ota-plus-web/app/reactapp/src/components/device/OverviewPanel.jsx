@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Tabs } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
 import { ApprovalPendingMtuList } from './approvalPending';
@@ -40,20 +42,21 @@ class OverviewPanel extends Component {
       cancelMtuUpdate,
       activeTabId,
       setOverviewPanelActiveTabId,
-      cancelApprovalPendingCampaign
+      cancelApprovalPendingCampaign,
+      t
     } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
     return (
       <div className="overview-panel">
         <Tabs type="card" onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
-          <TabPane tab="History" id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
+          <TabPane tab={t('devices.history')} id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
             <HistoryMtuList device={device} />
           </TabPane>
-          <TabPane tab="Queue" id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
+          <TabPane tab={t('devices.installation_pending')} id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
             <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
           </TabPane>
-          <TabPane tab="Approval pending" id="approval-pending-campaigns" key={OVERVIEW_PANEL_TAB_ID_2}>
+          <TabPane tab={t('devices.consent_pending')} id="approval-pending-campaigns" key={OVERVIEW_PANEL_TAB_ID_2}>
             <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />
           </TabPane>
         </Tabs>
@@ -67,7 +70,8 @@ OverviewPanel.propTypes = {
   activeTabId: PropTypes.string.isRequired,
   setOverviewPanelActiveTabId: PropTypes.func.isRequired,
   cancelMtuUpdate: PropTypes.func.isRequired,
-  cancelApprovalPendingCampaign: PropTypes.func.isRequired
+  cancelApprovalPendingCampaign: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
-export default OverviewPanel;
+export default withTranslation()(OverviewPanel);

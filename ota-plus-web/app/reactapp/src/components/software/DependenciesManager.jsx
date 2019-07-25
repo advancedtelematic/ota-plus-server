@@ -197,7 +197,7 @@ class DependenciesManager extends Component {
                 })}
               </div>
             </div>
-          ) : null),),)}
+          ) : null)))}
         </div>
       </span>
     );

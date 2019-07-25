@@ -4,14 +4,52 @@
             "close": "Close",
             "confirm": "Confirm",
             "title": "You're about to cancel a campaign",
-            "warning": "This campaign will not be executed on any further devices, <br />and will be moved to <strong>Finished</strong>."
+            "warning": "This campaign will not be executed on any further devices, <br/>and will be moved to <strong>Finished</strong>."
+        },
+        "details": {
+            "cancel": "Cancel campaign",
+            "cancel_tooltip": "When you cancel a campaign, any update operations that are pending or already in progress will still complete. The campaign is canceled only for devices that haven't yet detected the new update.",
+            "rename": "Rename campaign"
         },
         "wizard": {
+            "add_new_campaign": "Add new campaign",
+            "campaign_update_details": "Campaign update details",
             "from": "From:",
             "groups_devices": "Groups & Devices",
             "software_version": "Software & Version",
-            "to": "To:",
-            "Version" : "Version:"
+            "steps": {
+                "dependencies_management": {
+                    "title": "Dependencies Management"
+                },
+                "user_consent": {
+                    "dont_request_consent": "Don't request end user's consent",
+                    "release_note": "Release note",
+                    "release_note_placeholder": "Re-use text from",
+                    "request_consent": "Request end user's consent",
+                    "title": "End user consent",
+                    "warning": "Please, remember that you are responsible for the interaction with the end users and for asking necessary permissions and consents to install updates and collect personal information."
+                },
+                "launch": {
+                    "title": "Launch"
+                },
+                "programming_sequencer": {
+                    "title": "Programming Sequencer"
+                },
+                "select_groups": {
+                    "title": "Select Groups"
+                },
+                "select_name": {
+                    "title": "Select Name"
+                },
+                "select_update": {
+                    "title": "Select update configuration"
+                },
+                "summary": {
+                    "title": "Summary",
+                    "warning": "Please, remember that the campaign will have an impact on your devices and that you are responsible for reviewing the campaign summary and ensuring that the campaign is properly configured before launching it."
+                }
+            },
+            "to": "To:"
         }
     },
     "common": {
@@ -55,6 +93,7 @@
     },
     "devices": {
         "all_grouped": "All your devices are grouped. Good work!",
+        "consent_pending": "Consent pending",
         "dashboard": {
             "avg": "avg:",
             "certificate_rollover": "Certificate rollover",
@@ -70,16 +109,16 @@
             "total_connections": "Total connections",
             "total_devices": "Total devices"
         },
+        "delete": "Delete device",
+        "delete_confirmation": "Remove {{device_name}} permanently?<br/><br/><br/>When you delete a device, it is removed from the user interface and the update history is deleted, but you can still provision it again.<br/><br/><br/>If the device is a part of any active campaigns, any devices that haven't installed it yet will fail the campaign.<br/><br/><br/><b>This action cannot be undone.</b>",
+        "device_count": "{{count}} device",
+        "device_count_plural": "{{count}} devices",
         "empty": {
             "add_new": "+ Add new device",
             "no_devices": "You currently have no devices to manage. Try provisioning some devices first."
         },
         "empty_group_fixed": "This group is empty. Please, drag and drop devices here.",
         "empty_group_smart": "This smart group isn't matching any devices. Either provision some matching devices, or recreate the smart group with different filter settings.",
-        "delete": "Delete device",
-        "delete_confirmation": "Device will be removed.",
-        "device_count": "{{count}} device",
-        "device_count_plural": "{{count}} devices",
         "hardware": {
             "activated": "Activated",
             "close": "Close",
@@ -116,6 +155,7 @@
             "title": "Hardware",
             "type": "Type: "
         },
+        "history": "History",
         "id_item": "ID: {{id}}",
         "installation_events": {
             "download_completed": "Download completed:",
@@ -125,9 +165,12 @@
             "installation_failed": "Installation failed:",
             "installation_start": "Installation start:"
         },
+        "installation_pending": "Installation pending",
         "last_seen_item": "Last seen: {{date}} {{time}}",
         "mtu": {
             "approval_pending": {
+                "cancel_tooltip_info": "You can cancel an update as long as the device has not detected it yet. After the device has detected an update, you can no longer cancel it.",
+                "description": "The device won't receive new updates until the end user has provided their consent. Wait until this update has finished before you launch another campaign.",
                 "distribution_settings": "Distribution Settings:",
                 "estimated_time_to_install": "Estimated time to install this update :",
                 "estimated_time_to_prepare": "Estimated time to prepare this update",
@@ -152,12 +195,14 @@
             "properties": {
                 "created_at": "Created at:",
                 "install": "Install",
+                "install_tooltip": "If a device has multiple ECUs with the same type, all of these ECUs will get the update.",
                 "installed_outside_ota_description": "This software was installed outside of OTA Connect so there are no details to display.",
                 "name": "Name:",
                 "not_reported": "Not reported",
                 "select_package_description": "Select the package version to see its details."
             },
             "queue": {
+                "description": "Devices can't receive new updates when an update is still in progress. Wait until this update has finished before you launch another campaign.",
                 "no_updates": "There aren't any updates queued for this device."
             }
         },
@@ -170,6 +215,7 @@
         "software": {
             "auto": "Auto",
             "automatic_update": "Automatic update",
+            "automatic_update_tooltip": "Automatic updates only get created when a new image is pushed while auto-updates are turned on; turning on auto-updates for a device will not trigger updates for any images that were already in the repository at the time auto-updating was activated.",
             "auto_update_info": "Automatic update activated. The latest version of this package will automatically be installed on this device.",
             "created_at": "Created at:",
             "hash_version": "Hash / version:",
@@ -191,7 +237,11 @@
             "processed": "Processed",
             "show_dependencies": "Show dependencies",
             "successful": "Successful: ",
-            "total_progress": "Total progress"
+            "total_progress": "Total progress",
+            "tooltip_failed": "Devices where at least one update that failed to install for various reasons. For more details, see the reported failure codes.",
+            "tooltip_installing": "Devices that are still installing one or more updates from this campaign.",
+            "tooltip_not_applicable": "Devices where none of the ECUs or software versions match the targeting criteria of the update. Can also indicate devices that are busy installing updates from another campaign.",
+            "tooltip_success": "Devices that have successfully installed their updates."
         },
         "rename": "Rename device"
     },
@@ -215,6 +265,9 @@
             "placeholder": "Name",
             "smart_group_title": "Smart group",
             "smart_group_teaser": "A group that is based on a device filter. New devices are automatically added if they match the filter criteria.",
+            "smart_group_description_1": "You can filter for devices based on the device ID. The device ID is defined in the OTA Connect client configuration. If no ID is configured for the device, OTA Connect automatically generates one for you. However, this feature works best when you preconfigure your own IDs such as device serial numbers. For more information about configuring the device ID, see the ",
+            "smart_group_description_2":".",
+            "smart_group_description_url": "developer documentation",
             "title": "Group Name"
         },
         "edit_group": "Edit Group",
@@ -232,8 +285,21 @@
         "dashboard": "Dashboard",
         "devices": "Devices",
         "impact_analysis": "Impact analysis",
-        "updates": "Updates",
+        "updates": "Update Configuration",
         "softwares": "Software Repository"
+    },
+    "profile": {
+        "organization":{
+            "add_registered_members": "Add members",
+            "add_registered_members_placeholder": "Enter email address",
+            "id": "Organization ID",
+            "member_added": "Member added",
+            "members": "Members",
+            "members_description": "People you add here must have an OTA Connect account. If you are unsure check with that person first. People in this list can collaborate on campaigns with other members in the organization. Please, remember that the device details may contain personal information and will be visible to all added members collaborating in your organization. Ensure that they have the legal right to access this information.",
+            "name": "Organization Name",
+            "name_description": "Select your active organization. When you select an organization, the OTA Connect portal will reload and show the details for the selected organization.",
+            "rename": "Rename organization"
+        }
     },
     "software": {
         "action_buttons": {
@@ -272,12 +338,14 @@
             "choose_file": "Choose file",
             "ecu_types": "ECU Types",
             "ecu_types_placeholder": "Select ECU types",
+            "file_information": "The file can be in any installable format.",
             "intro_1": "Upload new software versions to your software repository. Alternatively, you can also use the ",
-            "intro_2": " to build and upload full software images.",
+            "intro_2": " to build and upload full software images. Please, remember that you are responsible for the content of the software versions and for their impact on the devices. Ensure that you have tested them accordingly and that you can provide necessary support for your end users.",
             "intro_link": "OTA Connect Client",
             "software_name": "Software Name",
             "software_name_placeholder": "Name",
             "title": "Add new software",
+            "upload_complete": "Upload complete: {{file_name}}",
             "version": "Version",
             "version_placeholder": "Select version"
         },
@@ -347,9 +415,28 @@
         "minute_count": "{{count}} minutes",
         "hour_count": "{{count}} hours"
     },
+    "updates": {
+        "creating": {
+            "back": "Back",
+            "continue": "Continue",
+            "create_update": "Create update configuration",
+            "description": "An update is a list of instructions that you can later use in a campaign. These instructions specify the ECU types and software versions that should be updated. Before you continue, make sure that you've provisioned some target devices and uploaded your new software versions.",
+
+            "save": "Save",
+            "update_details": "Update configuration details",
+            "wizard": {
+                "description": "Description",
+                "description_placeholder": "Type here",
+                "select_ecu_types_description": "If a device has multiple ECUs with the same type, all of these ECUs will get the update.",
+                "select_ecu_types": "Select multiple ECU types",
+                "update_list_name": "Update configuration name",
+                "update_list_name_placeholder": "Name"
+            }
+        }
+    },
     "warnings": {
         "sizeverify": {
-            "description_1": "HERE OTA Connect works best in a browser window that is at least <strong>{{width}} x {{height}}</strong>.<br/>",
+            "description_1": "HERE OTA Connect works best in a browser window that is at least <strong>{{width}} x {{height}}</strong>.",
             "description_2": "You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.",
             "title": "Tip",
             "dontshow": "Don't show this again"

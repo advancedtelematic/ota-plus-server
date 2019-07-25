@@ -25,6 +25,7 @@ import EditCampaignModal from './EditCampaignModal';
 import EditSoftwareModal from './EditSoftwareModal';
 import LegalInfoFooter from './LegalInfoFooter';
 import TimePicker from './TimePicker';
+import OperationCompletedInfo from './OperationCompletedInfo';
 
 export {
   Navigation,
@@ -52,4 +53,5 @@ export {
   EditSoftwareModal,
   LegalInfoFooter,
   TimePicker,
+  OperationCompletedInfo
 };

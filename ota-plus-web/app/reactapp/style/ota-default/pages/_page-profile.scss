@@ -92,12 +92,14 @@
       float: left;
       margin-left: 36px;
       margin-bottom: 20px;
+      margin-right: 20px;
     }
 
     .description {
       color: $dashboard-header-text;
-      font-size: 14px;
-      margin: 0 0 10px 36px;
+      font-size: 11px;
+      margin: 0 20px 10px 36px;
+      white-space: pre-line;
     }
 
     .email-list {
@@ -110,9 +112,9 @@
       text-transform: unset;
       border: 0;
       padding: 0;
+      margin-bottom: 10px;
       &.adding-user {
         margin-top: 40px;
-        margin-bottom: 10px;
       }
     }
 
