@@ -658,7 +658,7 @@ export default class DevicesStore {
 
   getSecondaryFilepathsBySerial(serial) {
     const filepaths = [];
-    _.map(this.device.directorAttributes.secondary, (secondary,) => {
+    _.map(this.device.directorAttributes.secondary, (secondary) => {
       if (secondary.id === serial) {
         filepaths.push(secondary.image.filepath);
       }
@@ -675,7 +675,7 @@ export default class DevicesStore {
 
   getSecondaryBySerial(serial) {
     let secondaryObject = {};
-    _.each(this.device.directorAttributes.secondary, (secondary,) => {
+    _.each(this.device.directorAttributes.secondary, (secondary) => {
       if (secondary.id === serial) {
         secondaryObject = secondary;
       }

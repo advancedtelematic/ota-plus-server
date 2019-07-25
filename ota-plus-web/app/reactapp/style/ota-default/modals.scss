@@ -87,7 +87,9 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        justify-content: flex-end;
+        &.no-margin {
+          margin: 0
+        }
       }
     }
   }
@@ -100,6 +102,12 @@
   .row {
     margin-top: 10px;
     margin-bottom: 10px;
+    &.no-margin-bottom {
+      margin-bottom: 0;
+    }
+    &.no-margin-top {
+      margin-top: 0;
+    }
   }
 
   .content {
@@ -737,10 +745,24 @@
   .ecu-types-select {
     margin-top: 10px;
   }
-
   .upload-wrapper {
-    margin: 20px 0 0 0;
+    display: inline-block;
+    margin: 10px 0 0;
 
+    .file-input-button {
+      display: inline-block;
+      pointer-events: none;
+      cursor: pointer;
+      width: 80px;
+      height: 20px;
+      color: $switch-blue-color;
+      font-family: "Fira Sans";
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
+      margin-left: 2px;
+      margin-top: 8px;
+    }
     .file {
       height: 0;
       opacity: 0;
@@ -749,6 +771,12 @@
     .file-name {
       margin: 0 0 0 20px;
       display: inline-block;
+    }
+
+    .description {
+      display: inline-block;
+      font-size: 11px;
+      margin-left: 6px;
     }
   }
 }

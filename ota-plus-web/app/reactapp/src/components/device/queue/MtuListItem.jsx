@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
@@ -33,14 +34,16 @@ class MtuListItem extends Component {
                 <span id={`update-id-${correlationId}`}>{campaign.name}</span>
               </div>
               <div>
-                <button
-                  type="button"
-                  id="cancel-mtu"
-                  className="ant-btn ant-btn--sm ant-btn-error"
-                  onClick={cancelMtuUpdate.bind(this, correlationId)}
-                >
-                  {t('devices.mtu.common.cancel')}
-                </button>
+                <Tooltip title={t('devices.mtu.approval_pending.cancel_tooltip_info')} placement="left">
+                  <button
+                    type="button"
+                    id="cancel-mtu"
+                    className="ant-btn ant-btn--sm ant-btn-error"
+                    onClick={cancelMtuUpdate.bind(this, correlationId)}
+                  >
+                    {t('devices.mtu.common.cancel')}
+                  </button>
+                </Tooltip>
               </div>
             </div>
             <div className="overview-panel__item-header--update">

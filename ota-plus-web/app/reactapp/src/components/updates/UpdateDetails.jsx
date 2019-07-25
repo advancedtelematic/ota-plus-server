@@ -50,7 +50,7 @@ class UpdateDetails extends Component {
         <Row className="row name-container">
           <Col span={12}>
             <FormInput
-              label="Update Name"
+              label="Update configuration name"
               placeholder="Name"
               name="updateName"
               id={`update-name-${updateItem.name}`}

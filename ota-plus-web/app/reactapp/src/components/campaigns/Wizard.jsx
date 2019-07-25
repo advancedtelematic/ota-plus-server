@@ -6,8 +6,9 @@ import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Form from 'formsy-antd';
-
+import { withTranslation } from 'react-i18next';
 import { Button, Tag } from 'antd';
+
 import { OTAModal, Loader, SearchBar } from '../../partials';
 import UpdateDetails from '../updates/UpdateDetails';
 import {
@@ -27,104 +28,6 @@ const initialWizardData = {
   update: [],
   metadata: [],
 };
-const initialWizardStepForAlphaPlus = [
-  {
-    class: WizardStep1,
-    name: 'name',
-    title: 'Select Name',
-    isFinished: false,
-    isSearchBarShown: false,
-    hasAlphaTag: false,
-  },
-  {
-    class: WizardStep2,
-    title: 'Select Groups',
-    name: 'groups',
-    isFinished: false,
-    isSearchBarShown: false,
-    hasAlphaTag: false,
-  },
-  {
-    class: WizardStep3,
-    name: 'updates',
-    title: 'Select Update',
-    isFinished: false,
-    isSearchBarShown: false,
-    hasAlphaTag: false,
-  },
-  {
-    class: WizardStep4,
-    title: 'Distribution Settings',
-    name: 'metadata',
-    isFinished: false,
-    isSearchBarShown: false,
-    hasAlphaTag: false,
-  },
-  {
-    class: WizardStep5,
-    title: 'Dependencies Management',
-    name: 'dependencies-management',
-    isFinished: false,
-    isSearchBarShown: false,
-    hasAlphaTag: true,
-  },
-  {
-    class: WizardStep6,
-    title: 'Programming Sequencer',
-    name: 'programming-sequencer',
-    isFinished: true,
-    isSearchBarShown: false,
-    hasAlphaTag: true,
-  },
-  {
-    class: WizardStep7,
-    title: 'Summary',
-    name: 'summary',
-    finishButtonLabel: 'Launch',
-    isFinished: true,
-    isSearchBarShown: false,
-    hasAlphaTag: false,
-  },
-];
-
-const initialWizardStep = [
-  {
-    class: WizardStep1,
-    name: 'name',
-    title: 'Select Name',
-    isFinished: false,
-    isSearchBarShown: false,
-  },
-  {
-    class: WizardStep2,
-    title: 'Select Groups',
-    name: 'groups',
-    isFinished: false,
-    isSearchBarShown: false,
-  },
-  {
-    class: WizardStep3,
-    name: 'updates',
-    title: 'Select Update',
-    isFinished: false,
-    isSearchBarShown: false,
-  },
-  {
-    class: WizardStep4,
-    title: 'Distribution Settings',
-    name: 'metadata',
-    isFinished: false,
-    isSearchBarShown: false,
-  },
-  {
-    class: WizardStep7,
-    title: 'Summary',
-    name: 'summary',
-    finishButtonLabel: 'Launch',
-    isFinished: true,
-    isSearchBarShown: false,
-  },
-];
 
 const initialFilterValue = null;
 
@@ -137,6 +40,7 @@ class Wizard extends Component {
     minimizedWizards: PropTypes.arrayOf(PropTypes.shape({})),
     wizardIdentifier: PropTypes.number,
     hideWizard: PropTypes.func,
+    t: PropTypes.func.isRequired,
     toggleWizard: PropTypes.func,
   };
 
@@ -158,7 +62,107 @@ class Wizard extends Component {
 
   constructor(props) {
     super(props);
+    const { t } = props;
     const { campaignsStore, featuresStore } = props.stores;
+
+    const initialWizardStepForAlphaPlus = [
+      {
+        class: WizardStep1,
+        name: 'name',
+        title: t('campaigns.wizard.steps.select_name.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep2,
+        title: t('campaigns.wizard.steps.select_groups.title'),
+        name: 'groups',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep3,
+        name: 'updates',
+        title: t('campaigns.wizard.steps.select_update.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep4,
+        title: t('campaigns.wizard.steps.user_consent.title'),
+        name: 'metadata',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep5,
+        title: t('campaigns.wizard.steps.dependencies_management.title'),
+        name: 'dependencies-management',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: true,
+      },
+      {
+        class: WizardStep6,
+        title: t('campaigns.wizard.steps.programming_sequencer.title'),
+        name: 'programming-sequencer',
+        isFinished: true,
+        isSearchBarShown: false,
+        hasAlphaTag: true,
+      },
+      {
+        class: WizardStep7,
+        title: t('campaigns.wizard.steps.summary.title'),
+        name: 'summary',
+        finishButtonLabel: 'Launch',
+        isFinished: true,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+    ];
+
+    const initialWizardStep = [
+      {
+        class: WizardStep1,
+        name: 'name',
+        title: t('campaigns.wizard.steps.select_name.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+      },
+      {
+        class: WizardStep2,
+        title: t('campaigns.wizard.steps.select_groups.title'),
+        name: 'groups',
+        isFinished: false,
+        isSearchBarShown: false,
+      },
+      {
+        class: WizardStep3,
+        name: 'updates',
+        title: t('campaigns.wizard.steps.select_update.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+      },
+      {
+        class: WizardStep4,
+        title: t('campaigns.wizard.steps.user_consent.title'),
+        name: 'metadata',
+        isFinished: false,
+        isSearchBarShown: false,
+      },
+      {
+        class: WizardStep7,
+        title: 'Summary',
+        name: 'summary',
+        finishButtonLabel: t('campaigns.wizard.steps.launch.title'),
+        isFinished: true,
+        isSearchBarShown: false,
+      },
+    ];
 
     this.wizardSteps = featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep;
 
@@ -233,8 +237,10 @@ class Wizard extends Component {
     }
   };
 
-  // eslint-disable-next-line max-len
-  verifyIfPreviousStepsFinished = stepId => !_.find(this.wizardSteps, (step, index) => index <= stepId && step.isFinished === false);
+  verifyIfPreviousStepsFinished = stepId => !_.find(
+    this.wizardSteps,
+    (step, index) => index <= stepId && step.isFinished === false
+  );
 
   markStepAsFinished = () => {
     this.wizardSteps[this.currentStepId].isFinished = true;
@@ -318,7 +324,7 @@ class Wizard extends Component {
   };
 
   render() {
-    const { stores, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
+    const { stores, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards, t } = this.props;
     const { campaignsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const currentStep = this.wizardSteps[this.currentStepId];
@@ -420,7 +426,9 @@ class Wizard extends Component {
     );
     return (
       <OTAModal
-        title={!this.currentDetails ? 'Add new campaign' : 'Campaign update details'}
+        title={
+          !this.currentDetails ? t('campaigns.wizard.add_new_campaign') : t('campaigns.wizard.campaign_update_details')
+        }
         topActions={(
           <div className="top-actions">
             <div
@@ -460,4 +468,4 @@ class Wizard extends Component {
   }
 }
 
-export default Wizard;
+export default withTranslation()(Wizard);

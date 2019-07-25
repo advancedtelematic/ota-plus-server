@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 
 @observer
 class ListItem extends Component {
@@ -81,11 +82,13 @@ class ListItem extends Component {
             {isSelected ? (
               <div className="software-panel__auto-update">
                 {t('devices.software.automatic_update')}
-                <div
-                  className={`switch${pack.isAutoInstallEnabled ? ' switchOn' : ''}`}
-                  id="auto-install-switch"
-                  onClick={toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)}
-                />
+                <Tooltip title={t('devices.software.automatic_update_tooltip')} placement="top">
+                  <div
+                    className={`switch${pack.isAutoInstallEnabled ? ' switchOn' : ''}`}
+                    id="auto-install-switch"
+                    onClick={toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)}
+                  />
+                </Tooltip>
               </div>
             ) : null}
           </div>
