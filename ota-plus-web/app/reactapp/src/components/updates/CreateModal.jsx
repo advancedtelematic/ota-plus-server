@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { Button } from 'antd';
+import { withTranslation } from 'react-i18next';
 
-import { Button, Row } from 'antd';
 import { OTAModal } from '../../partials';
 
 import { contains } from '../../utils/Helpers';
@@ -195,19 +196,10 @@ class CreateModal extends Component {
   };
 
   render() {
-    const { shown, hide, showDetails } = this.props;
+    const { shown, hide, showDetails, t } = this.props;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
-        {!showDetails && (
-          <Row className="gutter-bottom">
-            {'An update is a list of instructions that you can later use in a campaign. '}
-            {'These instructions specify the ECU types and software versions that should be updated.'}
-            <br />
-            {'Before you continue, make sure that you\'ve provisioned some target devices '}
-            {'and uploaded your new software versions.'}
-          </Row>
-        )}
         {<currentStep.class
           wizardData={this.wizardData}
           onStep1DataSelect={this.onStep1DataSelect}
@@ -225,7 +217,7 @@ class CreateModal extends Component {
                   onClick={this.prevStep}
                   style={{ marginRight: '10px' }}
                 >
-                  {'Back'}
+                  {t('updates.creating.back')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -234,7 +226,7 @@ class CreateModal extends Component {
                   disabled={!currentStep.isFinished}
                   onClick={this.createMtu}
                 >
-                  {'Save'}
+                  {t('updates.creating.save')}
                 </Button>
               </div>
             )
@@ -246,7 +238,7 @@ class CreateModal extends Component {
               id="next"
               onClick={this.nextStep}
             >
-              {'Continue'}
+              {t('updates.creating.continue')}
             </Button>
           )}
         </div>
@@ -254,7 +246,7 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={showDetails ? 'Update details' : 'Create Update'}
+        title={showDetails ? t('updates.creating.update_details') : t('updates.creating.create_update')}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" id="close-update-modal" onClick={hide}>
@@ -278,6 +270,7 @@ CreateModal.propTypes = {
     PropTypes.bool
   ]),
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default CreateModal;
+export default withTranslation()(CreateModal);

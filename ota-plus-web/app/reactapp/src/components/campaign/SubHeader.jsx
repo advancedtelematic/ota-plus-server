@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
+import { withTranslation } from 'react-i18next';
 
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { EditCampaignModal, Dropdown } from '../../partials';
 
 @inject('stores')
@@ -20,6 +21,7 @@ class SubHeader extends Component {
   static propTypes = {
     campaign: PropTypes.shape({}).isRequired,
     showCancelCampaignModal: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -44,26 +46,28 @@ class SubHeader extends Component {
 
   toggleDropdown = () => {
     this.showDropdown = !this.showDropdown;
-  }
+  };
 
   render() {
-    const { campaign, showCancelCampaignModal } = this.props;
+    const { campaign, showCancelCampaignModal, t } = this.props;
     const { name } = campaign;
     return (
       <div className="statistics__campaign-name">
         <h3>{campaign.name}</h3>
         <div className="statistics__campaign-actions">
           {(campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled') && (
-            <div className="cancel-campaign">
-              <Button
-                htmlType="button"
-                id="campaign-detail-cancel-all"
-                className="delete-button fixed-width"
-                onClick={showCancelCampaignModal}
-              >
-                Cancel campaign
-              </Button>
-            </div>
+            <Tooltip title={t('campaigns.details.cancel_tooltip')} placement="left">
+              <div className="cancel-campaign">
+                <Button
+                  htmlType="button"
+                  id="campaign-detail-cancel-all"
+                  className="delete-button fixed-width"
+                  onClick={showCancelCampaignModal}
+                >
+                  {t('campaigns.details.cancel')}
+                </Button>
+              </div>
+            </Tooltip>
           )}
           <div className="dots relative" id="campaign-actions" onClick={this.toggleDropdown}>
             <span />
@@ -73,7 +77,7 @@ class SubHeader extends Component {
               <Dropdown hideSubmenu={this.hideEditModal} customClassName="relative">
                 <li className="device-dropdown-item">
                   <a className="device-dropdown-item" id="rename-campaign" onClick={this.showEditModal}>
-                    {'Rename campaign'}
+                    {t('campaigns.details.rename')}
                   </a>
                 </li>
               </Dropdown>
@@ -83,7 +87,7 @@ class SubHeader extends Component {
         <EditCampaignModal
           modalTitle={(
             <div className="title">
-              {'Rename campaign'}
+              {t('campaigns.details.rename')}
             </div>
           )}
           shown={this.editModal}
@@ -95,4 +99,4 @@ class SubHeader extends Component {
   }
 }
 
-export default SubHeader;
+export default withTranslation()(SubHeader);

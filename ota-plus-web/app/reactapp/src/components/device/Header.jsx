@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { withTranslation } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 
 import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation } from '../../utils';
@@ -155,15 +155,15 @@ class Header extends Component {
               </div>
               {this.deleteConfirmationShown && (
                 <ConfirmationModal
-                  modalTitle={<div className="text-red">Delete device</div>}
+                  modalTitle={<div className="text-red">{t('devices.delete')}</div>}
                   id="delete-device-confirmation-modal"
                   shown={this.deleteConfirmationShown}
                   hide={this.hideDeleteConfirmation}
                   deleteItem={this.deleteDevice}
                   topText={(
-                    <div className="delete-modal-top-text" id="delete-device-confirmation-modal-text">
-                      {t('devices.delete_confirmation')}
-                    </div>
+                    <Trans id="delete-device-confirmation-modal-text">
+                      {t('devices.delete_confirmation', { device_name: device.deviceName })}
+                    </Trans>
 )}
                 />
               )}

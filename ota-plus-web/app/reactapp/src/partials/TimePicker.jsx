@@ -61,15 +61,16 @@ class TimePicker extends Component {
         ))}
       </select>
     ) : null);
-
     return (
       <div className="c-time-picker" id={id}>
         <div className="c-time-picker__time-value" id={`${id}-value`}>
           <div className="c-time-picker__hours" onClick={this.showOptions.bind(this, 'hours')} id={`${id}-hours`}>
-            {`${times[0] || hours}:${select('hours')}`}
+            {`${times[0] || hours}:`}
+            {select('hours')}
           </div>
           <div className="c-time-picker__minutes" onClick={this.showOptions.bind(this, 'minutes')} id={`${id}-minutes`}>
-            {`${times[1] || minutes}:${select('minutes')}`}
+            {`${times[1] || minutes}:`}
+            {select('minutes')}
           </div>
           <div className="c-time-picker__seconds" onClick={this.showOptions.bind(this, 'seconds')} id={`${id}-seconds`}>
             {times[2] || seconds}

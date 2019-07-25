@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
+import { Row } from 'antd';
+
 import { AsyncResponse } from '../../../partials';
 
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
@@ -45,6 +47,9 @@ class WizardStep7 extends Component {
           }
         />
         <div className="box-summary">
+          <Row className="warning">
+            {t('campaigns.wizard.steps.summary.warning')}
+          </Row>
           <div className="title">
             {t('campaigns.wizard.software_version')}
           </div>

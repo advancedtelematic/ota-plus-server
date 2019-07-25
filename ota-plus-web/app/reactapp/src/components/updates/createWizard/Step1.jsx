@@ -6,6 +6,7 @@ import { Row, Col } from 'antd';
 import { Form } from 'formsy-antd';
 import _ from 'lodash';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { SelectableListItem } from '../../../partials/lists';
@@ -21,7 +22,7 @@ class Step1 extends Component {
   }
 
   render() {
-    const { wizardData, onStep1DataSelect, stores } = this.props;
+    const { wizardData, onStep1DataSelect, stores, showDetails, t } = this.props;
     const { hardwareStore } = stores;
 
     const hardwareList = [];
@@ -34,11 +35,14 @@ class Step1 extends Component {
 
     return (
       <Form id="update-create-form">
+        {!showDetails && (
+          <Row className="gutter-bottom">{t('updates.creating.description')}</Row>
+        )}
         <Row className="row name-container">
           <Col span={12}>
             <FormInput
-              label="Update Name"
-              placeholder="Name"
+              label={t('updates.creating.wizard.update_list_name')}
+              placeholder={t('updates.creating.wizard.update_list_name_placeholder')}
               name="updateName"
               id="create-new-update-name"
               defaultValue={wizardData.name}
@@ -49,8 +53,8 @@ class Step1 extends Component {
           </Col>
           <Col span={12}>
             <FormTextarea
-              label="Description"
-              placeholder="Type here"
+              label={t('updates.creating.wizard.description')}
+              placeholder={t('updates.creating.wizard.description_placeholder')}
               rows={5}
               name="updateDescription"
               id="create-new-update-description"
@@ -63,7 +67,8 @@ class Step1 extends Component {
         </Row>
         <Row className="row hardware-container">
           <Col span={24}>
-            <label className="c-form__label">{'Select ECU types'}</label>
+            <label className="c-form__label">{t('updates.creating.wizard.select_ecu_types')}</label>
+            <div>{t('updates.creating.wizard.select_ecu_types_description')}</div>
             <div className="ids-list">
               {hardwareStore.hardwareIdsFetchAsync.isFetching ? (
                 <div className="wrapper-center">
@@ -98,7 +103,12 @@ class Step1 extends Component {
 Step1.propTypes = {
   wizardData: PropTypes.shape({}),
   onStep1DataSelect: PropTypes.func,
-  stores: PropTypes.shape({})
+  showDetails: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.bool
+  ]),
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default Step1;
+export default withTranslation()(Step1);

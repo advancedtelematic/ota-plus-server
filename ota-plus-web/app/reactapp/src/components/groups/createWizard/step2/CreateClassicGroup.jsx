@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
 import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 
-import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
+import { AsyncResponse, OTAForm, FormInput, OperationCompletedInfo } from '../../../../partials';
 import {
   GROUP_DATA_TYPE_FILE,
   GROUP_DATA_TYPE_NAME,
@@ -49,12 +50,13 @@ class CreateClassicGroup extends Component {
       this.setState(
         {
           errorDescription: t('groups.creating.file_uploading.warnings.only_extension_file_description'),
-          fileName: ''
+          fileName: '',
+          fileUploadedAt: undefined
         }
       );
       return false;
     }
-    this.setState({ errorDescription: '', fileName: name });
+    this.setState({ errorDescription: '', fileName: name, fileUploadedAt: moment().format() });
     const { onStep2DataSelect } = this.props;
     onStep2DataSelect(GROUP_DATA_TYPE_FILE, file);
     return true;
@@ -63,7 +65,7 @@ class CreateClassicGroup extends Component {
   render() {
     const { onStep2DataSelect, stores, t } = this.props;
     const { groupsStore } = stores;
-    const { errorDescription, fileName } = this.state;
+    const { errorDescription, fileName, fileUploadedAt } = this.state;
     return (
       <OTAForm id="classic-group-create-form">
         <AsyncResponse
@@ -109,6 +111,17 @@ class CreateClassicGroup extends Component {
             </div>
           </Col>
         </Row>
+        <div className="anim-info-container">
+          <OperationCompletedInfo
+            info={t(
+              'software.create_modal.upload_complete',
+              { file_name: fileName }
+            )}
+            trigger={
+              { name: fileName, createdAt: fileUploadedAt }
+            }
+          />
+        </div>
       </OTAForm>
     );
   }

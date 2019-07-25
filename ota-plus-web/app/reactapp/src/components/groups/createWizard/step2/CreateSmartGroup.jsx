@@ -3,13 +3,15 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import SmartFilters from './SmartFilters';
 import { AsyncResponse, OTAForm, FormInput } from '../../../../partials';
 import { GROUP_DATA_TYPE_NAME } from '../../../../constants/groupConstants';
+import { URL_CONFIGURING_DEVICE } from '../../../../constants/urlConstants';
 
 const CreateSmartGroup = inject('stores')(
-  observer(({ stores, wizardData, onStep2DataSelect }) => {
+  observer(({ stores, wizardData, onStep2DataSelect, t }) => {
     const { groupsStore } = stores;
 
     return (
@@ -19,6 +21,17 @@ const CreateSmartGroup = inject('stores')(
           action={groupsStore.groupsCreateAsync}
           errorMsg={groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null}
         />
+        <Row className="gutter-bottom font-size-12">
+          {t('groups.creating.smart_group_description_1')}
+          <a
+            href={URL_CONFIGURING_DEVICE}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {t('groups.creating.smart_group_description_url')}
+          </a>
+          {t('groups.creating.smart_group_description_2')}
+        </Row>
         <div className="wizard__row-wrapper">
           <Row className="row">
             <Col span={24}>
@@ -48,4 +61,4 @@ const CreateSmartGroup = inject('stores')(
   }),
 );
 
-export default CreateSmartGroup;
+export default withTranslation()(CreateSmartGroup);

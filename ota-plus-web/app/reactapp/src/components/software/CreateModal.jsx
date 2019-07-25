@@ -9,7 +9,10 @@ import { Row, Col, Button, Input as TextInput } from 'antd';
 import serialize from 'form-serialize';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
-import { OTAModal, Loader, FormSelect } from '../../partials';
+import moment from 'moment';
+
+import { OTAModal, Loader, FormSelect, OperationCompletedInfo } from '../../partials';
+import { URL_SOFTWARE_PUSHING_UPDATES } from '../../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -20,11 +23,14 @@ class CreateModal extends Component {
 
   @observable fileName = null;
 
+  @observable fileUploadedAt = null;
+
   @observable selectedHardwareIds = [];
 
   constructor(props) {
     super(props);
     this.fileUploadRef = React.createRef();
+    this.fileUploadedAt = undefined;
   }
 
   componentDidMount() {
@@ -59,16 +65,20 @@ class CreateModal extends Component {
     fileUploadDom.click();
   };
 
-  onFileChange = (e) => {
+  onFileChange = (event) => {
     /* toDo: split based of `\` only affects windows paths */
-    const name = e.target.value.split('\\').pop();
+    const name = event.target.value.split('\\').pop();
     this.fileName = name;
+    this.fileUploadedAt = moment().format();
+    // reset value for target - enables selecting the same file one more time on Chrome browser
+    event.target.value = ''; // eslint-disable-line no-param-reassign
   };
 
   hideModal = (e) => {
     const { hide } = this.props;
     if (e) e.preventDefault();
     this.fileName = null;
+    this.fileUploadedAt = undefined;
     this.selectedHardwareIds = [];
     hide();
   };
@@ -93,7 +103,7 @@ class CreateModal extends Component {
         <Row className="gutter-bottom">
           {t('software.create_modal.intro_1')}
           <a
-            href="https://docs.ota.here.com/quickstarts/pushing-updates.html"
+            href={URL_SOFTWARE_PUSHING_UPDATES}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -148,20 +158,22 @@ class CreateModal extends Component {
             </div>
           </Col>
         </Row>
-        <Row className="row">
+        <Row className="row no-margin-bottom no-margin-top">
           <Col span={12}>
             <div className="upload-wrapper">
               {!fileDropped && (
-                <Button
-                  htmlType="button"
-                  className="add-button"
-                  onClick={this.onFileUploadClick}
-                  id="choose-software"
-                >
-                  <span>{t('software.create_modal.choose_file')}</span>
-                </Button>
+                <div>
+                  <Button
+                    htmlType="button"
+                    className="add-button file-input"
+                    onClick={this.onFileUploadClick}
+                    id="choose-software"
+                  >
+                    <div>{t('software.create_modal.choose_file')}</div>
+                  </Button>
+                  <div className="description">{t('software.create_modal.file_information')}</div>
+                </div>
               )}
-              <div className="file-name">{(fileDropped && fileDropped.name) || this.fileName}</div>
               <input
                 ref={this.fileUploadRef}
                 name="file"
@@ -177,12 +189,24 @@ class CreateModal extends Component {
                 style={{ display: 'none' }}
                 required
               />}
+
+            </div>
+            <div className="anim-info-container">
+              <OperationCompletedInfo
+                info={t(
+                  'software.create_modal.upload_complete',
+                  { file_name: (fileDropped && fileDropped.name) || this.fileName }
+                )}
+                trigger={
+                  { name: (fileDropped && fileDropped.name) || this.fileName, createdAt: this.fileUploadedAt }
+                }
+              />
             </div>
           </Col>
         </Row>
-        <Row className="row">
+        <Row className="row no-margin-bottom no-margin-top">
           <Col span={24}>
-            <div className="body-actions">
+            <div className="body-actions no-margin">
               <button
                 type="submit"
                 className="btn-primary"

@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import moment from 'moment';
 import { withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 
@@ -244,23 +245,25 @@ class List extends Component {
         )}
         {!isPackageInstalled && (
           <div className={isPackageQueued ? 'properties-panel__install' : 'properties-panel__install not-installed'}>
-            <button
-              type="button"
-              className="properties-panel__install-button btn-primary"
-              label="Install"
-              title="Install"
-              id={`button-install-package-${expandedPackage.id.name}-${expandedPackage.id.version}`}
-              onClick={installPackage.bind(this, {
-                target: expandedPackage.filepath,
-                hash: expandedPackage.packageHash,
-                targetLength: expandedPackage.targetLength,
-                targetFormat: expandedPackage.targetFormat,
-                generateDiff: false,
-              })}
-              disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
-            >
-              {t('devices.mtu.properties.install')}
-            </button>
+            <Tooltip title={t('devices.mtu.properties.install_tooltip')} placement="left">
+              <button
+                type="button"
+                className="properties-panel__install-button btn-primary"
+                label={t('devices.mtu.properties.install')}
+                title={t('devices.mtu.properties.install')}
+                id={`button-install-package-${expandedPackage.id.name}-${expandedPackage.id.version}`}
+                onClick={installPackage.bind(this, {
+                  target: expandedPackage.filepath,
+                  hash: expandedPackage.packageHash,
+                  targetLength: expandedPackage.targetLength,
+                  targetFormat: expandedPackage.targetFormat,
+                  generateDiff: false,
+                })}
+                disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
+              >
+                {t('devices.mtu.properties.install')}
+              </button>
+            </Tooltip>
           </div>
         )}
         {isPackageBlacklisted && isPackageInstalled ? (

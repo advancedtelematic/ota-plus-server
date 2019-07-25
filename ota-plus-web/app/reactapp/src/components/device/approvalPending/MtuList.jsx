@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { Row } from 'antd';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
@@ -23,6 +24,9 @@ class MtuList extends Component {
     );
     return (
       <ul className={`overview-panel__list${!devicesStore.deviceApprovalPendingCampaigns.campaigns.length ? ' empty' : ''}`}>
+        <Row className="no-margin-bottom pending-description">
+          {t('devices.mtu.approval_pending.description')}
+        </Row>
         {devicesStore.deviceApprovalPendingCampaigns.campaigns.length
           ? _.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => (
             <MtuListItem

@@ -68,7 +68,7 @@ class WizardStep3 extends Component {
       </div>
     ) : (
       <div>
-        <span className="c-form__label">{'Select Update'}</span>
+        <span className="c-form__label">{'Select update configuration'}</span>
         <CampaignsWizardUpdateList
           selectedUpdate={selectedUpdate}
           stepId={2}

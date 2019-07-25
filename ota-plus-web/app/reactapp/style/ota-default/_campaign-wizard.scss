@@ -223,6 +223,17 @@
         .distribution-settings {
           padding: 15px 0;
 
+          .consent {
+            color: #000000;
+            font-weight: 400;
+            line-height: 14px;
+          }
+          .warning {
+            color: $campaign-cancelled-color;
+            font-size: 11px;
+            line-height: 17px;
+          }
+
           .description {
             .c-form__input-wrapper {
               background-color: $color-white;
@@ -510,14 +521,18 @@
         }
 
         .box-summary {
-          margin-top: 20px;
           padding: 0 20px;
 
           .title {
             font-weight: bold;
             font-size: 18px;
+            margin-top: 20px;
           }
-
+          .warning {
+            color: $campaign-cancelled-color;
+            font-size: 11px;
+            line-height: 17px;
+          }
           .desc {
             .package-container {
               overflow: hidden;
