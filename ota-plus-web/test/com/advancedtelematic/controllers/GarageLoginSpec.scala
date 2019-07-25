@@ -49,7 +49,7 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
     )
   )
 
-  lazy val namespace: String = "LoginSpec"
+  lazy val namespace: String = "Login|Spec"
 
   lazy val idToken: String = TokenUtils.identityTokenFor(namespace, secret.getPrivate, keyId)
 
