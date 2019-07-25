@@ -39,6 +39,8 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
 
   val secret = TokenUtils.genKeyPair()
   val keyId = "secret"
+  val defaultToken = TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId)
+  val rateLimitToken = TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId)
 
   import play.api.data._
   import play.api.data.Forms._
@@ -58,13 +60,10 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
       Action(BodyParser.formUrlEncoded) { implicit request =>
         request.body("code").head match {
           case "AUTHORIZATIONCODE" =>
-            Ok(
-              Json.obj(
-                "id_token" -> idToken,
-                "access_token" -> TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId),
-                "expires_in" -> 3600
-              )
-            )
+            code(defaultToken)
+
+          case "RATELIMIT" =>
+            code(rateLimitToken)
 
           case "ERROR" =>
             Forbidden(Json.obj("error" -> "invalid_grant", "error_description" -> "Invalid authorization code"))
@@ -76,7 +75,11 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
 
     case ("GET", url) if url == providerMeta.userInfoEndpoint =>
       Action { implicit request =>
-        Ok(Json.obj("email" -> "email@email.email"))
+        if(request.headers("Authorization").contains(rateLimitToken)) {
+          BadGateway
+        } else {
+          Ok(Json.obj("email" -> "email@email.email"))
+        }
       }
 
     case ("GET", url) if url == providerMeta.jwksUri =>
@@ -98,6 +101,15 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
         NotFound(s"No handler for ' $method $url'")
       }
   }
+
+  private def code(token: String) =
+    Ok(
+      Json.obj(
+        "id_token" -> idToken,
+        "access_token" -> token,
+        "expires_in" -> 3600
+      )
+    )
 
   "Login" should {
     val controller = app.injector.instanceOf[OAuthOidcController]
@@ -136,6 +148,14 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
       }
       sess.get("id_token") mustBe Some(idToken)
       sess.get("namespace") mustBe Some(namespace)
+    }
+
+    "handle rate limiting from Auth0" in {
+      val req = FakeRequest("GET", "/callback?code=RATELIMIT")
+
+      val result = controller.callback()()(req)
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some("/")
     }
   }
 
