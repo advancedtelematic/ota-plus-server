@@ -23,7 +23,6 @@ class NamespaceControllerSpec extends PlaySpec
   with Results {
 
   val userProfileUri = "http://user-profile.com"
-  val userId = "HERE-cad12f41-e698-4b15-9ffd-969b5a6c0d12"
   val userAllowedNamespace = "another-namespace"
 
   val mock = MockWS {
