@@ -40,27 +40,18 @@ class Device extends Component {
     };
   };
 
-  cancelMtuUpdate = (correlationId) => {
+  cancelMtuUpdate = () => {
     const { stores } = this.props;
     const { devicesStore } = stores;
     const deviceId = devicesStore.device.uuid;
-    const data = {
-      correlationId,
-      device: deviceId,
-    };
-    devicesStore.cancelMtuUpdate(data);
+    devicesStore.cancelMtuUpdate(deviceId);
   };
 
   cancelApprovalPendingCampaign = (campaignId) => {
     const { stores } = this.props;
-    const campaignCorrelationId = `urn:here-ota:campaign:${campaignId}`;
     const { devicesStore } = stores;
     const deviceId = devicesStore.device.uuid;
-    const data = {
-      correlationId: campaignCorrelationId,
-      device: deviceId,
-    };
-    devicesStore.cancelApprovalPendingCampaingPerDevice(data);
+    devicesStore.cancelApprovalPendingCampaingPerDevice(campaignId, deviceId);
   };
 
   selectEcu = (hardwareId, serial, filepath, type, e) => {

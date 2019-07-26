@@ -39,7 +39,7 @@ class MtuListItem extends Component {
                     type="button"
                     id="cancel-mtu"
                     className="ant-btn ant-btn--sm ant-btn-error"
-                    onClick={cancelMtuUpdate.bind(this, correlationId)}
+                    onClick={cancelMtuUpdate.bind(this)}
                   >
                     {t('devices.mtu.common.cancel')}
                   </button>
@@ -74,7 +74,7 @@ class MtuListItem extends Component {
                   type="button"
                   id="cancel-mtu"
                   className="ant-btn ant-btn--sm ant-btn-error"
-                  onClick={cancelMtuUpdate.bind(this, correlationId)}
+                  onClick={cancelMtuUpdate.bind(this)}
                 >
                   {t('devices.mtu.common.cancel')}
                 </button>
