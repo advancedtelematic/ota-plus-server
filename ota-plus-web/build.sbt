@@ -36,7 +36,7 @@ dockerRepository := Some("advancedtelematic")
 
 dockerUpdateLatest := true
 
-dockerBaseImage := "openjdk:8u191-jre-alpine"
+dockerBaseImage := "advancedtelematic/alpine-jre:adoptopenjdk-jdk8u222"
 
 dockerCommands ++= Seq(
   Cmd("USER", "root"),
