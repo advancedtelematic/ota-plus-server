@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-
+import { Tooltip } from 'antd';
+import { withTranslation } from 'react-i18next';
 import { Loader } from '../../partials';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
 
@@ -20,22 +21,35 @@ class CampaignSummary extends Component {
   static propTypes = {
     campaign: PropTypes.shape({}).isRequired,
     toggle: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   render() {
-    const { campaign, toggle } = this.props;
+    const { campaign, toggle, t } = this.props;
     const type = campaign.status;
     const notInPreparation = type !== CAMPAIGNS_STATUS_PREPARED;
 
     let processedCount = 0;
+    let failedCount = 0;
     let failedRate = 0;
+    let successCount = 0;
     let successRate = 0;
+    let installingCount = 0;
     let installingRate = 0;
+    let notApplicableCount = 0;
     let notApplicableRate = 0;
 
     if (campaign.summary && (type === CAMPAIGNS_STATUS_LAUNCHED || type === CAMPAIGNS_STATUS_FINISHED)) {
       ({
-        processedCount, failedRate, successRate, installingRate, notApplicableRate
+        processedCount,
+        failedCount,
+        failedRate,
+        successCount,
+        successRate,
+        installingCount,
+        installingRate,
+        notApplicableCount,
+        notApplicableRate
       } = getCampaignSummaryData(campaign.summary));
     }
 
@@ -66,28 +80,36 @@ class CampaignSummary extends Component {
         {notInPreparation && (
           <div className="campaigns__column" id={`campaign-failed-${campaign.id}`}>
             <span>
-              <span>{`${failedRate} %`}</span>
+              <Tooltip title={t('devices.device_count', { count: failedCount })}>
+                <span>{`${failedRate} %`}</span>
+              </Tooltip>
             </span>
           </div>
         )}
         {notInPreparation && (
           <div className="campaigns__column" id={`campaign-successful-${campaign.id}`}>
             <span>
-              <span>{`${successRate} %`}</span>
+              <Tooltip title={t('devices.device_count', { count: successCount })}>
+                <span>{`${successRate} %`}</span>
+              </Tooltip>
             </span>
           </div>
         )}
         {notInPreparation && (
           <div className="campaigns__column" id={`campaign-installing-${campaign.id}`}>
             <span>
-              <span>{`${installingRate} %`}</span>
+              <Tooltip title={t('devices.device_count', { count: installingCount })}>
+                <span>{`${installingRate} %`}</span>
+              </Tooltip>
             </span>
           </div>
         )}
         {notInPreparation && (
           <div className="campaigns__column" id={`campaign-not-applicable-${campaign.id}`}>
             <span>
-              <span>{`${notApplicableRate} %`}</span>
+              <Tooltip title={t('devices.device_count', { count: notApplicableCount })}>
+                <span>{`${notApplicableRate} %`}</span>
+              </Tooltip>
             </span>
           </div>
         )}
@@ -95,14 +117,14 @@ class CampaignSummary extends Component {
           {notInPreparation ? (
             <div id="campaign-more-info">{'More info'}</div>
           ) : (
-            <div className="wrapper-center">
-              <Loader size={30} thickness={5} />
-            </div>
-          )}
+              <div className="wrapper-center">
+                <Loader size={30} thickness={5} />
+              </div>
+            )}
         </div>
       </div>
     );
   }
 }
 
-export default CampaignSummary;
+export default withTranslation()(CampaignSummary);
