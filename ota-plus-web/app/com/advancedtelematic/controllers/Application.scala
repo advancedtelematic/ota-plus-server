@@ -108,6 +108,7 @@ class Application @Inject() (ws: TraceWSClient,
   private val directorProxiedPrefixes: Dispatcher = {
     case (_, "multi_target_updates" :: _) => directorApiUri
     case (_, "admin" :: _) => directorApiUri
+    case (_, "assignments" :: _) => directorApiUri
   }
 
   private val coreProxiedPrefixes: Dispatcher = {
