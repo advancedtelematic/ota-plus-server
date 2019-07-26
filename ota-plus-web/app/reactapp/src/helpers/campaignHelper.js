@@ -1,3 +1,4 @@
+const LESS_THAN_ONE = '< 1';
 
 export const getOverallCampaignStatistics = (statistics) => {
   const stats = {
@@ -22,38 +23,50 @@ export const getOverallCampaignStatistics = (statistics) => {
   return stats;
 };
 
+const calcRateForStatType = (count, processedCount, percentageFactor) => {
+  if (count === 0) {
+    return 0;
+  }
+  const lessThanOnePercent = count / processedCount * 100 < 1;
+  return lessThanOnePercent
+    ? LESS_THAN_ONE
+    : Math.round(
+      (count / Math.max(processedCount, 1)) * 100 * percentageFactor
+    ) / percentageFactor;
+};
+
 // campaignSummaryData: summary or statistics data
 export const getCampaignSummaryData = (campaignSummaryData, percentageFactor = 1) => {
   // TODO: notProcessed is supposed to count batches, but the BE doesn’t send any batch info to display
   const notProcessed = 0;
 
-  const stats = getOverallCampaignStatistics(campaignSummaryData);
+  const {
+    processed,
+    failed,
+    successful,
+    queued,
+    notImpacted,
+    cancelled,
+    affected
+  } = getOverallCampaignStatistics(campaignSummaryData);
 
   // failed
-  const failedRate = Math.round(
-    (stats.failed / Math.max(stats.processed, 1)) * 100 * percentageFactor
-  ) / percentageFactor;
+  const failedRate = calcRateForStatType(failed, processed, percentageFactor);
 
   // success
-  const successRate = Math.round(
-    (stats.successful / Math.max(stats.processed, 1)) * 100 * percentageFactor
-  ) / percentageFactor;
+  const successRate = calcRateForStatType(successful, processed, percentageFactor);
 
   // installing
-  const installingCount = stats.queued + notProcessed;
-  const installingRate = Math.round(
-    (installingCount / Math.max(stats.processed, 1)) * 100 * percentageFactor
-  ) / percentageFactor;
+  const installingCount = queued + notProcessed;
+  const installingRate = calcRateForStatType(installingCount, processed, percentageFactor);
 
   // not applicable
-  const notApplicableCount = stats.notImpacted + stats.cancelled;
-  const notApplicableRate = Math.round(
-    (notApplicableCount / Math.max(stats.processed, 1)) * 100 * percentageFactor
-  ) / percentageFactor;
+  const notApplicableCount = notImpacted + cancelled;
+  const notApplicableRate = calcRateForStatType(notApplicableCount, processed, percentageFactor);
 
   return {
-    affectedCount: stats.affected,
-    failedCount: stats.failed,
+    affectedCount: affected,
+    failedCount: failed,
     failedRate,
     installingCount,
     installingRate,
@@ -61,7 +74,7 @@ export const getCampaignSummaryData = (campaignSummaryData, percentageFactor = 1
     notApplicableRate,
     notProcessedCount: notProcessed,
     successRate,
-    processedCount: stats.processed,
-    successCount: stats.successful
+    processedCount: processed,
+    successCount: successful
   };
 };

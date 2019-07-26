@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Tag } from 'antd';
+import { Checkbox, Row, Tag } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 import { FormTextarea, FormInput, TimePicker } from '../../../partials';
 
@@ -31,6 +32,7 @@ class WizardStep4 extends Component {
     setApprove: PropTypes.func.isRequired,
     approvalNeeded: PropTypes.bool.isRequired,
     alphaTest: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -88,28 +90,28 @@ class WizardStep4 extends Component {
   };
 
   render() {
-    const { wizardData, approvalNeeded, alphaTest } = this.props;
+    const { wizardData, approvalNeeded, alphaTest, t } = this.props;
     const { metadata } = wizardData;
     const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
-
     return (
       <div className="distribution-settings">
+        <Row className="warning">
+          {t('campaigns.wizard.steps.user_consent.warning')}
+        </Row>
         <div className="checkboxes">
           <div className="flex-row">
-            <button
-              type="button"
-              className={`btn-radio ${this.notify || !approvalNeeded ? 'checked' : ''}`}
-              onClick={this.toggleNotify}
+            <Checkbox
+              checked={this.notify || !approvalNeeded}
+              onChange={this.toggleNotify}
             />
-            <span>{"Don't request driver's consent"}</span>
+            <span className="consent">{t('campaigns.wizard.steps.user_consent.dont_request_consent')}</span>
           </div>
           <div className="flex-row">
-            <button
-              type="button"
-              className={`btn-radio ${this.approvalNeeded || approvalNeeded ? 'checked' : ''}`}
-              onClick={this.toggleApprove}
+            <Checkbox
+              checked={this.approvalNeeded || approvalNeeded}
+              onChange={this.toggleApprove}
             />
-            <span>{"Request driver's consent"}</span>
+            <span className="consent">{t('campaigns.wizard.steps.user_consent.request_consent')}</span>
           </div>
         </div>
         <div className="description">
@@ -117,9 +119,9 @@ class WizardStep4 extends Component {
             {alphaTest && (
               <>
                 <FormInput
-                  label="Notification Text"
+                  label={t('campaigns.wizard.steps.user_consent.release_note')}
                   id="internal_reuse-text"
-                  placeholder="Re-use text from"
+                  placeholder={t('campaigns.wizard.steps.user_consent.release_note_placeholder')}
                   getInputRef={(ref) => {
                     this.inputRef = ref;
                   }}
@@ -134,7 +136,7 @@ class WizardStep4 extends Component {
           </div>
           <FormTextarea
             rows="5"
-            label={!alphaTest && 'Notification Text'}
+            label={!alphaTest ? t('campaigns.wizard.steps.user_consent.release_note') : ''}
             id="internal_driver-description"
             defaultValue={DESCRIPTION || ''}
             onValid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
@@ -180,4 +182,4 @@ class WizardStep4 extends Component {
   }
 }
 
-export default WizardStep4;
+export default withTranslation()(WizardStep4);

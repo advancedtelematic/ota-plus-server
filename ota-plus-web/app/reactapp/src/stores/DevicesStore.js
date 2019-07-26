@@ -18,6 +18,7 @@ import {
   API_CREATE_MULTI_TARGET_UPDATE,
   API_FETCH_MULTI_TARGET_UPDATES,
   API_CANCEL_MULTI_TARGET_UPDATE,
+  API_CANCEL_UPDATE_PENDING_APPROVAL,
   API_CAMPAIGNS_FETCH_SINGLE,
   API_UPDATES_SEARCH,
   API_DEVICE_APPROVAL_PENDING_CAMPAIGNS,
@@ -525,10 +526,10 @@ export default class DevicesStore {
     }
   }
 
-  cancelMtuUpdate(data) {
+  cancelMtuUpdate(deviceId) {
     resetAsync(this.mtuCancelAsync, true);
     return axios
-      .post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+      .delete(`${API_CANCEL_MULTI_TARGET_UPDATE}/${deviceId}`)
       .then(
         (response) => {
           this.fetchMultiTargetUpdates(this.device.uuid);
@@ -542,12 +543,13 @@ export default class DevicesStore {
       );
   }
 
-  cancelApprovalPendingCampaingPerDevice(data) {
+  cancelApprovalPendingCampaingPerDevice(campaignId, deviceId) {
     resetAsync(this.mtuCancelAsync, true);
     return axios
-      .post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+      .delete(`${API_CANCEL_UPDATE_PENDING_APPROVAL}/${campaignId}/devices/${deviceId}`)
       .then(
         (response) => {
+          this.fetchApprovalPendingCampaigns(this.device.uuid);
           this.mtuCancelAsync = handleAsyncSuccess(response);
         },
       )
@@ -658,7 +660,7 @@ export default class DevicesStore {
 
   getSecondaryFilepathsBySerial(serial) {
     const filepaths = [];
-    _.map(this.device.directorAttributes.secondary, (secondary,) => {
+    _.map(this.device.directorAttributes.secondary, (secondary) => {
       if (secondary.id === serial) {
         filepaths.push(secondary.image.filepath);
       }
@@ -675,7 +677,7 @@ export default class DevicesStore {
 
   getSecondaryBySerial(serial) {
     let secondaryObject = {};
-    _.each(this.device.directorAttributes.secondary, (secondary,) => {
+    _.each(this.device.directorAttributes.secondary, (secondary) => {
       if (secondary.id === serial) {
         secondaryObject = secondary;
       }

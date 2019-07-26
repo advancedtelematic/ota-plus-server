@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+const _ = require('lodash');
 const fs = require('fs')
 const walk = require('walk');
 
@@ -35,19 +36,19 @@ const checkKeyExists = (jsonData, mainKey) => {
       return false;
     }
   }
-  return data ? true : false;
+  return data && (_.isString(data) || _.isArray(data)) ? true : false;
 };
 
 let translationFileJson;
 fs.readFile(translationFilePath, 'utf8', (errorReading, jsonString) => {
   if (errorReading) {
-    console.log('Error reading file from disk: ', errorReading)
+    console.error('Error reading file from disk: ', errorReading)
     return;
   }
   try {
     translationFileJson = JSON.parse(jsonString);
   } catch (errorParsing) {
-    console.log('Error parsing JSON string:', errorParsing);
+    console.error('Error parsing JSON string:', errorParsing);
   }
 });
 

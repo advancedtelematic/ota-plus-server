@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 
 import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
@@ -88,40 +89,56 @@ class StatisticsDetails extends Component {
             <div className="statistics__installation">
               <div className="statistics__bar-wrapper">
                 <div className="statistics__bar">
-                  <div className="statistics__bar-item statistics__bar-item--failure" style={{ width: `${failedRate}%` }} />
-                  <div className="statistics__bar-item statistics__bar-item--success" style={{ width: `${successRate}%` }} />
-                  <div className="statistics__bar-item statistics__bar-item--queued" style={{ width: `${installingRate}%` }} />
-                  <div className="statistics__bar-item statistics__bar-item--not-impacted" style={{ width: `${notApplicableRate}%` }} />
+                  <Tooltip title={t('devices.statistics.tooltip_failed')} placement="top">
+                    <div className="statistics__bar-item statistics__bar-item--failure" style={{ width: `${failedRate}%` }} />
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_success')} placement="top">
+                    <div className="statistics__bar-item statistics__bar-item--success" style={{ width: `${successRate}%` }} />
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_installing')} placement="top">
+                    <div className="statistics__bar-item statistics__bar-item--queued" style={{ width: `${installingRate}%` }} />
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_not_applicable')} placement="top">
+                    <div className="statistics__bar-item statistics__bar-item--not-impacted" style={{ width: `${notApplicableRate}%` }} />
+                  </Tooltip>
                 </div>
                 <div className="statistics__legend">
-                  <div className="statistics__legend-item">
-                    <span className="statistics__legend-item-color statistics__legend-item-color--failure" />
-                    <span>{t('devices.statistics.failed')}</span>
-                    <span id="target_stats_failure">
-                      {`${t('devices.device_count', { count: failedCount })} (${failedRate} %)`}
-                    </span>
-                  </div>
-                  <div className="statistics__legend-item">
-                    <span className="statistics__legend-item-color statistics__legend-item-color--success" />
-                    <span>{t('devices.statistics.successful')}</span>
-                    <span id="target_stats_success">
-                      {`${t('devices.device_count', { count: successCount })} (${successRate} %)`}
-                    </span>
-                  </div>
-                  <div className="statistics__legend-item">
-                    <span className="statistics__legend-item-color statistics__legend-item-color--queued" />
-                    <span>{t('devices.statistics.installing')}</span>
-                    <span id="target_stats_queued">
-                      {`${t('devices.device_count', { count: installingCount })} (${installingRate} %)`}
-                    </span>
-                  </div>
-                  <div className="statistics__legend-item">
-                    <span className="statistics__legend-item-color statistics__legend-item-color--not-proceed" />
-                    <span>{t('devices.statistics.not_applicable')}</span>
-                    <span id="target_stats_not_proceed">
-                      {`${t('devices.device_count', { count: notApplicableCount })} (${notApplicableRate} %)`}
-                    </span>
-                  </div>
+                  <Tooltip title={t('devices.statistics.tooltip_failed')} placement="top">
+                    <div className="statistics__legend-item">
+                      <span className="statistics__legend-item-color statistics__legend-item-color--failure" />
+                      <span>{t('devices.statistics.failed')}</span>
+                      <span id="target_stats_failure">
+                        {`${t('devices.device_count', { count: failedCount })} (${failedRate} %)`}
+                      </span>
+                    </div>
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_success')} placement="top">
+                    <div className="statistics__legend-item">
+                      <span className="statistics__legend-item-color statistics__legend-item-color--success" />
+                      <span>{t('devices.statistics.successful')}</span>
+                      <span id="target_stats_success">
+                        {`${t('devices.device_count', { count: successCount })} (${successRate} %)`}
+                      </span>
+                    </div>
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_installing')} placement="top">
+                    <div className="statistics__legend-item">
+                      <span className="statistics__legend-item-color statistics__legend-item-color--queued" />
+                      <span>{t('devices.statistics.installing')}</span>
+                      <span id="target_stats_queued">
+                        {`${t('devices.device_count', { count: installingCount })} (${installingRate} %)`}
+                      </span>
+                    </div>
+                  </Tooltip>
+                  <Tooltip title={t('devices.statistics.tooltip_not_applicable')} placement="top">
+                    <div className="statistics__legend-item">
+                      <span className="statistics__legend-item-color statistics__legend-item-color--not-proceed" />
+                      <span>{t('devices.statistics.not_applicable')}</span>
+                      <span id="target_stats_not_proceed">
+                        {`${t('devices.device_count', { count: notApplicableCount })} (${notApplicableRate} %)`}
+                      </span>
+                    </div>
+                  </Tooltip>
                 </div>
               </div>
               <div className="statistics__dependencies">

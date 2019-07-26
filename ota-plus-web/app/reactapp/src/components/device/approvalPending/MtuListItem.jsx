@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 
 const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
   const metadata = campaign.metadata.length ? campaign.metadata : null;
@@ -18,14 +19,16 @@ const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
             <span id={`update-id-${campaign.id}`}>{campaign.name}</span>
           </div>
           <div>
-            <button
-              type="button"
-              id="cancel-mtu"
-              className="ant-btn ant-btn--sm ant-btn-error"
-              onClick={cancelApprovalPendingCampaign.bind(this, campaign.id)}
-            >
-              {t('devices.mtu.common.cancel')}
-            </button>
+            <Tooltip title={t('devices.mtu.approval_pending.cancel_tooltip_info')} placement="left">
+              <button
+                type="button"
+                id="cancel-mtu"
+                className="ant-btn ant-btn--sm ant-btn-error"
+                onClick={cancelApprovalPendingCampaign.bind(this, campaign.id)}
+              >
+                {t('devices.mtu.common.cancel')}
+              </button>
+            </Tooltip>
           </div>
         </div>
         <div className="overview-panel__item-header--update">

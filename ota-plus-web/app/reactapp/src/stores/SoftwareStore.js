@@ -374,7 +374,7 @@ export default class SoftwareStore {
               },
               this,
             );
-            _.each(blacklist, (pack,) => {
+            _.each(blacklist, (pack) => {
               axios
                 .get(`${API_PACKAGES_COUNT_DEVICE_AND_GROUP}/${pack.packageId.name}/${pack.packageId.version}`)
                 .then((count) => {
@@ -551,7 +551,7 @@ export default class SoftwareStore {
           },
           this,
         );
-        _.each(data, (item,) => {
+        _.each(data, (item) => {
           if (item.correlationId && item.correlationId.search('urn:here-ota:campaign:') >= 0) {
             const campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
             const afterCampaign = _.after(
@@ -648,7 +648,7 @@ export default class SoftwareStore {
     return this.getReportedPackage(filepath, hardwareId);
   }
 
-  getReportedPackage(filepath,) {
+  getReportedPackage(filepath) {
     const result = _.find(this.packages, pack => pack.filepath === filepath);
     if (result) {
       result.isInstalled = true;
@@ -664,7 +664,7 @@ export default class SoftwareStore {
     this.packagesSort = packagesSort;
     _.each(
       packages,
-      (obj,) => {
+      (obj) => {
         if (_.isUndefined(groupedPackages[obj.id.name])) {
           groupedPackages[obj.id.name] = {};
           groupedPackages[obj.id.name].versions = [];
@@ -734,7 +734,7 @@ export default class SoftwareStore {
         if (autoInstalledPackages.indexOf(packInstalled.id.name) > -1) packInstalled.isAutoInstallEnabled = true;
       });
 
-      _.each(packages, (pack,) => {
+      _.each(packages, (pack) => {
         if (_.isUndefined(groupedPackages[pack.id.name]) || !(groupedPackages[pack.id.name] instanceof Object)) {
           groupedPackages[pack.id.name] = {
             versions: [],
@@ -808,7 +808,7 @@ export default class SoftwareStore {
 
       _.each(
         packages,
-        (obj,) => {
+        (obj) => {
           const objKey = `${obj.name}_${obj.version}`;
           groupedPackages[objKey] = obj;
         },
@@ -874,7 +874,7 @@ export default class SoftwareStore {
     groupedPackages.sort();
 
     const specialGroup = { '#': [] };
-    _.each(groupedPackages, (pack,) => {
+    _.each(groupedPackages, (pack) => {
       let firstLetter = pack.packageName.charAt(0).toUpperCase();
 
       firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';

@@ -8,9 +8,11 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
 import { observe } from 'mobx';
+import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 
 import EditOrganizationNameModal from './EditOrganizationNameModal';
-import { Dropdown, SearchBar } from '../../partials';
+import { Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
 import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
 
 @inject('stores')
@@ -18,12 +20,14 @@ import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE 
 class ProfileOrganization extends Component {
   static propTypes = {
     stores: PropTypes.shape({ userStore: PropTypes.shape({}).isRequired }).isRequired,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     const { userStore } = props.stores;
     this.state = {
+      memberAddedAt: undefined,
       menuEditShownIndex: -1,
       menuEditShowMenu: false,
       organization: undefined,
@@ -31,7 +35,7 @@ class ProfileOrganization extends Component {
         organization => organization.namespace === userStore.userOrganizationNamespace
       ),
       userEmail: '',
-      userEmailError: false
+      userEmailError: false,
     };
     this.userOrganizationNamespaceHandler = observe(userStore, (change) => {
       const { organizationSelectedIndex: stateOrganizationSelectedIndex } = this.state;
@@ -60,7 +64,9 @@ class ProfileOrganization extends Component {
     if (isEmail(userEmail)) {
       const { stores } = this.props;
       const { userStore } = stores;
-      userStore.addUserToOrganization(userEmail);
+      userStore.addUserToOrganization(userEmail).then(() => {
+        this.setState({ memberAddedAt: moment().format() });
+      });
     } else {
       this.setState({ userEmailError: true });
     }
@@ -107,6 +113,7 @@ class ProfileOrganization extends Component {
 
   render() {
     const {
+      memberAddedAt,
       menuEditShownIndex,
       menuEditShowMenu,
       organization,
@@ -114,7 +121,7 @@ class ProfileOrganization extends Component {
       userEmail,
       userEmailError
     } = this.state;
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { userStore } = stores;
     const namespace = userStore.userOrganizationNamespace;
     const organizations = userStore.userOrganizations;
@@ -124,8 +131,11 @@ class ProfileOrganization extends Component {
       <div className="profile-container" id="profile-organization">
         <span>
           <div className="section-header">
-            <div className="column name-header">Organization Name</div>
-            <div className="column id-header">Organization ID</div>
+            <div className="column name-header">{t('profile.organization.name')}</div>
+            <div className="column id-header">{t('profile.organization.id')}</div>
+          </div>
+          <div className="description">
+            {t('profile.organization.name_description')}
           </div>
           {organizations.map((item, index) => (
             <div className="organization-info" key={`organization-info-${item.namespace}`}>
@@ -153,7 +163,7 @@ class ProfileOrganization extends Component {
                     <Dropdown hideSubmenu={() => this.showHideOrganizationEditMenu(-1)} customClassName="relative">
                       <li className="device-dropdown-item">
                         <a className="device-dropdown-item" id="edit-device" onClick={this.showOrganizationEditModal}>
-                          {'Rename organization'}
+                          {t('profile.organization.rename')}
                         </a>
                       </li>
                     </Dropdown>
@@ -164,11 +174,18 @@ class ProfileOrganization extends Component {
           ))}
           <span>
             <div className="section-header adding-user">
-              <div className="column name-header">Members</div>
+              <div className="column name-header">{t('profile.organization.members')}</div>
+            </div>
+            <div className="anim-info-container member-adding">
+              <OperationCompletedInfo
+                info={t('profile.organization.member_added')}
+                trigger={
+                  { createdAt: memberAddedAt }
+                }
+              />
             </div>
             <div className="description">
-              People you add here must have an OTA Connect account. If you are unsure check with that person first.
-              People in this list can collaborate on campaigns with other members in the organization.
+              {t('profile.organization.members_description')}
             </div>
             <div className="adding-user-content">
               <Form className="adding-user-form" id="add-registered-user-form">
@@ -176,17 +193,17 @@ class ProfileOrganization extends Component {
                   additionalClassName={`white ${userEmailError ? 'error-border' : 'dark-border'}`}
                   changeAction={this.userEmailChangeCallback}
                   id="add-registered-user-search-bar"
-                  placeholder="Add by email address"
+                  placeholder={t('profile.organization.add_registered_members_placeholder')}
                   value={userEmail}
                 />
               </Form>
               <Button
                 htmlType="button"
-                className="ant-btn ant-btn-primary ant-btn-primary--gutter-right"
+                className="ant-btn ant-btn-primary float-left"
                 id="button-add-registered-user"
                 onClick={this.addRegisteredUser}
               >
-                {'Add registered user'}
+                {t('profile.organization.add_registered_members')}
               </Button>
             </div>
           </span>
@@ -220,4 +237,4 @@ class ProfileOrganization extends Component {
   }
 }
 
-export default ProfileOrganization;
+export default withTranslation()(ProfileOrganization);

@@ -96,16 +96,16 @@ export default class HardwareStore {
 
   prepareFilteredHardware(searchResults) {
     let pairs = [];
-    _.each(searchResults, (properties,) => {
-      _.each(properties, (value,) => {
+    _.each(searchResults, (properties) => {
+      _.each(properties, (value) => {
         pairs.push(value);
       });
     });
     pairs = _.groupBy(pairs, prop => prop.id);
     const final = [];
-    _.each(pairs, (pair,) => {
+    _.each(pairs, (pair) => {
       const convert = {};
-      _.each(pair, (obj,) => {
+      _.each(pair, (obj) => {
         _.each(obj, (o, i) => {
           convert[i] = o;
         });
@@ -121,7 +121,7 @@ export default class HardwareStore {
     const that = this;
     const pairs = {};
     if (_.isArray(data)) {
-      _.each(data, (obj,) => {
+      _.each(data, (obj) => {
         const name = obj.description ? this.capitalize(obj.description) : this.capitalize(obj.class);
         obj.name = name;
         if (obj.capabilities) {
