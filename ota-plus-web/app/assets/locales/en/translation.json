@@ -56,6 +56,10 @@
         "infinite_scroller": {
             "loader_content": "..."
         },
+        "legacy": {
+            "login_error_msg": "Legacy login",
+            "login_error_desc": "Sorry, we're experiencing some technical issues with user profiles. You might notice that the user profile menu is missing. If you encounter this issue, try logging in again in a few minutes."
+        },
         "more_info": "More info",
         "statuses": {
             "blacklisted": "Blacklisted",
@@ -151,7 +155,7 @@
                 "<p>The term <strong>ECU</strong> comes from automotive, and stands for <strong>Electronic Control Unit.</strong></p>",
                 "<p>If you don't have multiple devices to update from one primary/master device, ",
                 "you don't need to worry about this functionality. </p>"
-                ],
+            ],
             "title": "Hardware",
             "type": "Type: "
         },
@@ -266,7 +270,7 @@
             "smart_group_title": "Smart group",
             "smart_group_teaser": "A group that is based on a device filter. New devices are automatically added if they match the filter criteria.",
             "smart_group_description_1": "You can filter for devices based on the device ID. The device ID is defined in the OTA Connect client configuration. If no ID is configured for the device, OTA Connect automatically generates one for you. However, this feature works best when you preconfigure your own IDs such as device serial numbers. For more information about configuring the device ID, see the ",
-            "smart_group_description_2":".",
+            "smart_group_description_2": ".",
             "smart_group_description_url": "developer documentation",
             "title": "Group Name"
         },
@@ -289,7 +293,7 @@
         "softwares": "Software Repository"
     },
     "profile": {
-        "organization":{
+        "organization": {
             "add_registered_members": "Add members",
             "add_registered_members_placeholder": "Enter email address",
             "id": "Organization ID",
@@ -421,7 +425,6 @@
             "continue": "Continue",
             "create_update": "Create update configuration",
             "description": "An update is a list of instructions that you can later use in a campaign. These instructions specify the ECU types and software versions that should be updated. Before you continue, make sure that you've provisioned some target devices and uploaded your new software versions.",
-
             "save": "Save",
             "update_details": "Update configuration details",
             "wizard": {
