@@ -22,6 +22,7 @@ import {
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts';
+import { HTTP_CODE_429_TOO_MANY_REQUESTS, HTTP_CODE_503_SERVICE_UNAVAILABLE } from '../constants/httpCodes';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -143,7 +144,11 @@ export default class UserStore {
       )
       .catch(
         (error) => {
+          const { response: { status } } = error;
           this.userFetchAsync = handleAsyncError(error);
+          if (status === HTTP_CODE_429_TOO_MANY_REQUESTS || status === HTTP_CODE_503_SERVICE_UNAVAILABLE) {
+            throw new Error();
+          }
         },
       );
   }

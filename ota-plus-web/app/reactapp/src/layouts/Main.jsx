@@ -6,7 +6,9 @@ import axios from 'axios';
 import { observe, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { notification } from 'antd';
 import { withRouter } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Routes from '../Routes';
 
 import { FadeAnimation, WebsocketHandler } from '../utils';
@@ -24,6 +26,7 @@ class Main extends Component {
     stores: PropTypes.shape({}),
     location: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({}),
+    t: PropTypes.func.isRequired
   };
 
   @observable
@@ -86,11 +89,20 @@ class Main extends Component {
   }
 
   async componentDidMount() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { userStore, featuresStore } = stores;
     if (this.uiUserProfileMenu) {
       await featuresStore.fetchFeatures();
-      userStore.fetchUser();
+      try {
+        await userStore.fetchUser();
+      } catch (error) {
+        this.uiUserProfileMenu = false;
+        notification.open({
+          message: t('common.legacy.login_error_msg'),
+          description: t('common.legacy.login_error_desc')
+        });
+        return;
+      }
       const { alphaPlusEnabled } = featuresStore;
       if (alphaPlusEnabled) {
         userStore.getOrganizations();
@@ -163,7 +175,7 @@ class Main extends Component {
     const { stores, history } = this.props;
     const { userStore } = stores;
     const { router } = this.context;
-    if (!userStore.isTermsAccepted() && !router.isActive('/')) {
+    if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && !router.isActive('/')) {
       history.push('/');
     }
   };
@@ -242,4 +254,4 @@ Main.wrappedComponent.contextTypes = {
   router: PropTypes.shape({}).isRequired,
 };
 
-export default withRouter(Main);
+export default withTranslation()(withRouter(Main));
