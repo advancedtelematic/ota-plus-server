@@ -27,13 +27,14 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 final case class LoginData(username: String, password: String)
 
 final case class UserLogin(id: String, identity: Option[IdentityClaims], namespace: Namespace, timestamp: Instant)
 
 object UserLogin {
+  private[this] val log = Logger(this.getClass)
 
   import com.advancedtelematic.libats.codecs.CirceAnyVal.{anyValStringDecoder, anyValStringEncoder}
 
@@ -44,6 +45,16 @@ object UserLogin {
   private[this] implicit val UserLoginDecoder: Decoder[UserLogin] = io.circe.generic.semiauto.deriveDecoder[UserLogin]
 
   implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
+
+  def apply(futureIdentityClaims: Future[IdentityClaims], userId: String, namespace: Namespace)
+           (implicit ec: ExecutionContext): Future[UserLogin] =
+    futureIdentityClaims
+      .map(claim => UserLogin(claim.userId.id, Some(claim), namespace, Instant.now()))
+      .recover {
+        case t =>
+          log.warn("Unable to get user info", t)
+          UserLogin(userId, None, namespace, Instant.now())
+      }
 }
 
 final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable {
@@ -101,16 +112,9 @@ class OAuthOidcController @Inject()(
     Redirect(routes.OAuthOidcController.authorizationError()).flashing("authzError" -> error)
   }
 
-  def publishLoginEvent(userId: UserId, namespace: Namespace, accessToken: AccessToken): Future[Done] = {
-    oidcGateway.getUserInfo(accessToken)
-      .map(claim => UserLogin(claim.userId.id, Some(claim), namespace, Instant.now()))
-      .recover {
-        case t =>
-          log.warn("Unable to get user info", t)
-          UserLogin(userId.id, None, namespace, Instant.now())
-      }
-      .flatMap(x => messageBus.publish(x).map(_ => Done))
-  }
+  def publishLoginEvent(userId: UserId, namespace: Namespace, accessToken: AccessToken): Future[Done] =
+    UserLogin(oidcGateway.getUserInfo(accessToken), userId.id, namespace)
+      .flatMap(messageBus.publish(_)).map(_ => Done)
 
   val callback: Action[AnyContent] = Action.async { request =>
     def onAuthzError(errorCode: String): Future[Result] = {

@@ -70,8 +70,6 @@ class CreateModal extends Component {
     const name = event.target.value.split('\\').pop();
     this.fileName = name;
     this.fileUploadedAt = moment().format();
-    // reset value for target - enables selecting the same file one more time on Chrome browser
-    event.target.value = ''; // eslint-disable-line no-param-reassign
   };
 
   hideModal = (e) => {
