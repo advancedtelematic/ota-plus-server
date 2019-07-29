@@ -26,6 +26,12 @@ class OperationCompletedInfo extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.animationInterval) {
+      clearInterval(this.animationInterval);
+    }
+  }
+
   render() {
     const { info } = this.props;
     const { height } = this.state;
@@ -35,7 +41,7 @@ class OperationCompletedInfo extends Component {
         height={height}
         className="AnimateHeight"
         onAnimationEnd={() => {
-          setTimeout(() => {
+          this.animationInterval = setTimeout(() => {
             this.setState({ height: INITIAL_HEIGHT });
           }, ANIMATION_HIDE_DELAY);
         }}
