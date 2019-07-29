@@ -23,7 +23,7 @@ class NamespaceControllerSpec extends PlaySpec
   with Results {
 
   val userProfileUri = "http://user-profile.com"
-  val userAllowedNamespace = "another-namespace"
+  val userAllowedNamespace = "another|namespace"
 
   val mock = MockWS {
     case (GET, url) if s"$userProfileUri/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
