@@ -7,6 +7,7 @@ export const GROUP_DATA_TYPE_NAME = 'name';
 /* Group types */
 export const GROUP_GROUP_TYPE_CLASSIC = 'classic';
 export const GROUP_GROUP_TYPE_DYNAMIC = 'dynamic';
+export const GROUP_GROUP_TYPE_REAL = 'real';
 export const GROUP_GROUP_TYPE_SMART = 'smart';
 export const GROUP_GROUP_TYPE_STATIC = 'static';
 
