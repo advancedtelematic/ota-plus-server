@@ -183,26 +183,27 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   }
 
   def getUser(userId: UserId)(implicit traceData: TraceData): Future[JsValue] =
-    userProfileRequest("users/" + segment(userId)).execJsonValue(apiExec)
+    userProfileRequest("users/" + segment(userId.id)).execJsonValue(apiExec)
 
   def getFeature(namespace: Namespace, feature: FeatureName)(implicit traceData: TraceData): Future[Feature] =
-    userProfileRequest("organizations/" + namespace.get + "/features/" + feature.get).execJson[Feature](apiExec)
+    userProfileRequest("organizations/" + segment(namespace.get) + "/features/" + feature.get)
+      .execJson[Feature](apiExec)
 
   def getFeatures(namespace: Namespace)(implicit traceData: TraceData): Future[Seq[FeatureName]] =
-    userProfileRequest("organizations/" + namespace.get + "/features").execJson[Seq[FeatureName]](apiExec)
+    userProfileRequest("organizations/" + segment(namespace.get) + "/features").execJson[Seq[FeatureName]](apiExec)
 
   def activateFeature(namespace: Namespace, feature: FeatureName, clientId: UUID)
                      (implicit traceData: TraceData): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
-    userProfileRequest(s"organizations/${namespace.get}/features")
+    userProfileRequest(s"organizations/${segment(namespace.get)}/features")
       .transform(_.withMethod("POST").withBody(requestBody))
       .execResult(apiExec)
   }
 
   def updateDisplayName(userId: UserId, newName: String)
                        (implicit executionContext: ExecutionContext, traceData: TraceData): Future[Done] = {
-    val request = userProfileRequest(s"users/${segment(userId)}/displayname").transform(
+    val request = userProfileRequest(s"users/${segment(userId.id)}/displayname").transform(
       _.withMethod("PUT").withBody(JsString(newName))
     ).build
     apiExec.runSafe(request).map(_ => Done)
@@ -210,7 +211,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
 
   def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)
                           (implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"users/${segment(userId)}/billing_info")
+    userProfileRequest(s"users/${segment(userId.id)}/billing_info")
       .transform(
         _.withMethod("PUT")
           .withQueryStringParameters(query.mapValues(_.head).toSeq :_*)
@@ -218,12 +219,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .execResult(apiExec)
 
   def userProfileRequest(userId: UserId, method: String, path: String)(implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"users/${segment(userId)}/$path")
+    userProfileRequest(s"users/${segment(userId.id)}/$path")
       .transform(_.withMethod(method))
       .execResult(apiExec)
 
   def userOrganizations(userId: UserId)(implicit traceData: TraceData): Future[Set[UserOrganization]] =
-    userProfileRequest(s"users/${segment(userId)}/organizations")
+    userProfileRequest(s"users/${segment(userId.id)}/organizations")
       .transform(_.withMethod("GET"))
       .execJson[Set[UserOrganization]](apiExec)
 
@@ -233,17 +234,17 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
 
   def organizationRequest(namespace: Namespace, method: String, path: String, body: Option[JsValue])
                          (implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"organizations/${namespace.get}/$path")
+    userProfileRequest(s"organizations/${segment(namespace.get)}/$path")
       .transform(_.withMethod(method))
       .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
       .execResult(apiExec)
 
   def getCredentialsBundle(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"${namespace.get}/credentials/$keyUuid")
+    userProfileRequest(s"${segment(namespace.get)}/credentials/$keyUuid")
       .transform(_.withMethod("GET"))
       .execResult(apiExec)
 
-  private def segment(userId: UserId) = UriEncoding.encodePathSegment(userId.id, "UTF-8")
+  private def segment(s: String) = UriEncoding.encodePathSegment(s, "UTF-8")
 }
 
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike)
