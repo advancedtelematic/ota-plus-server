@@ -24,17 +24,21 @@ class MtuList extends Component {
     );
     return (
       <ul className={`overview-panel__list${!devicesStore.deviceApprovalPendingCampaigns.campaigns.length ? ' empty' : ''}`}>
-        <Row className="no-margin-bottom pending-description">
-          {t('devices.mtu.approval_pending.description')}
-        </Row>
         {devicesStore.deviceApprovalPendingCampaigns.campaigns.length
-          ? _.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => (
-            <MtuListItem
-              key={index}
-              campaign={campaign}
-              cancelApprovalPendingCampaign={cancelApprovalPendingCampaign}
-            />
-          ))
+          ? (
+            <div>
+              <Row className="no-margin-bottom pending-description">
+                {t('devices.mtu.approval_pending.description')}
+              </Row>
+              {_.map(devicesStore.deviceApprovalPendingCampaigns.campaigns, (campaign, index) => (
+                <MtuListItem
+                  key={index}
+                  campaign={campaign}
+                  cancelApprovalPendingCampaign={cancelApprovalPendingCampaign}
+                />
+              ))}
+            </div>
+          )
           : emptyApprovalPending}
       </ul>
     );

@@ -10,18 +10,26 @@ import { withTranslation } from 'react-i18next';
 
 import { Dropdown } from '../../partials';
 import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
+import { GROUP_GROUP_TYPE_REAL, GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
 
 const deviceSource = {
   beginDrag(props) {
     const { groupsStore } = props.stores;
+    const { selectedGroup } = groupsStore;
     const { uuid } = props.device;
     const foundClassicGroup = _.find(
-      groupsStore.groups, group => group.devices.values.indexOf(uuid) > -1 && group.groupType === 'static'
+      groupsStore.groups,
+      group => group.devices.values.indexOf(uuid) > -1 && group.groupType === GROUP_GROUP_TYPE_STATIC
     );
-
+    let groupId;
+    if (foundClassicGroup) {
+      groupId = foundClassicGroup.id;
+    } else if (!selectedGroup.isSmart && selectedGroup.type === GROUP_GROUP_TYPE_REAL) {
+      groupId = selectedGroup.id;
+    }
     return {
       uuid,
-      groupId: foundClassicGroup ? foundClassicGroup.id : null,
+      groupId,
     };
   },
   endDrag(props) {
