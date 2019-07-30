@@ -27,7 +27,8 @@ object Dependencies {
   val LibAts = Set(
     "com.advancedtelematic" %% "libats",
     "com.advancedtelematic" %% "libats-messaging",
-    "com.advancedtelematic" %% "libats-logging"
+    "com.advancedtelematic" %% "libats-logging",
+    "com.advancedtelematic" %% "libats-http"
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
