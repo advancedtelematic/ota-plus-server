@@ -26,19 +26,31 @@ class MtuQueueList extends Component {
     );
     return (
       <ul className={`overview-panel__list${!devicesStore.multiTargetUpdates.length ? ' empty' : ''}`}>
-        <Row className="no-margin-bottom pending-description">
-          {t('devices.mtu.queue.description')}
-        </Row>
+
         {devicesStore.multiTargetUpdates.length
-          ? _.map(devicesStore.multiTargetUpdates, (update, index) => {
-            const itemEvents = devicesStore.deviceEvents.filter((el) => {
-              if (el.payload.correlationId) {
-                return el.payload.correlationId === update.correlationId;
-              }
-              return null;
-            });
-            return <MtuListItem key={index} update={update} cancelMtuUpdate={cancelMtuUpdate} events={itemEvents} />;
-          })
+          ? (
+            <div>
+              <Row className="no-margin-bottom pending-description">
+                {t('devices.mtu.queue.description')}
+              </Row>
+              {_.map(devicesStore.multiTargetUpdates, (update, index) => {
+                const itemEvents = devicesStore.deviceEvents.filter((el) => {
+                  if (el.payload.correlationId) {
+                    return el.payload.correlationId === update.correlationId;
+                  }
+                  return null;
+                });
+                return (
+                  <MtuListItem
+                    key={index}
+                    update={update}
+                    cancelMtuUpdate={cancelMtuUpdate}
+                    events={itemEvents}
+                  />
+                );
+              })}
+            </div>
+          )
           : emptyQueue}
       </ul>
     );
