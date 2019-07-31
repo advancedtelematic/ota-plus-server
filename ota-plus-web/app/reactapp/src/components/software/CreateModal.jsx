@@ -192,9 +192,10 @@ class CreateModal extends Component {
             <div className="anim-info-container">
               <OperationCompletedInfo
                 info={t(
-                  'software.create_modal.upload_complete',
+                  'software.create_modal.file_selected',
                   { file_name: (fileDropped && fileDropped.name) || this.fileName }
                 )}
+                preserve
                 trigger={
                   { name: (fileDropped && fileDropped.name) || this.fileName, createdAt: this.fileUploadedAt }
                 }

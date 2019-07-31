@@ -114,7 +114,7 @@ class CreateClassicGroup extends Component {
         <div className="anim-info-container">
           <OperationCompletedInfo
             info={t(
-              'software.create_modal.upload_complete',
+              'groups.creating.file_uploading.file_selected',
               { file_name: fileName }
             )}
             trigger={
