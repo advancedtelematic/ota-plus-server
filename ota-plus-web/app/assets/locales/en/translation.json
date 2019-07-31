@@ -259,6 +259,7 @@
                 "button_title": "Choose file",
                 "description": "Upload a list of provisioned device IDs in a Text file.",
                 "file_not_selected": "File not selected",
+                "file_selected": "File selected: {{file_name}}",
                 "warnings": {
                     "only_extension_file_description": "Please upload .txt file"
                 }
@@ -339,17 +340,18 @@
         },
         "create_modal": {
             "add": "Add",
+            "cancel_all": "Cancel all",
             "choose_file": "Choose file",
             "ecu_types": "ECU Types",
             "ecu_types_placeholder": "Select ECU types",
             "file_information": "The file can be in any installable format.",
+            "file_selected": "File selected: {{file_name}}",
             "intro_1": "Upload new software versions to your software repository. Alternatively, you can also use the ",
             "intro_2": " to build and upload full software images. Please, remember that you are responsible for the content of the software versions and for their impact on the devices. Ensure that you have tested them accordingly and that you can provide necessary support for your end users.",
             "intro_link": "OTA Connect Client",
             "software_name": "Software Name",
             "software_name_placeholder": "Name",
             "title": "Add new software",
-            "upload_complete": "Upload complete: {{file_name}}",
             "version": "Version",
             "version_placeholder": "Select version"
         },
@@ -408,7 +410,8 @@
             "maximize_upload_box": "Maximize upload box",
             "remove_from_list": "Remove from list",
             "success": "Success",
-            "upload_is_finished": "Upload is finished",
+            "file_uploaded": "File uploaded",
+            "file_uploading": "File uploading: {{time_left}}",
             "uploading_software": "Uploading {{count}} softwares"
         },
         "versions_count": "{{count}} version",
@@ -417,7 +420,8 @@
     "time": {
         "second_count": "{{count}} seconds",
         "minute_count": "{{count}} minutes",
-        "hour_count": "{{count}} hours"
+        "hour_count": "{{count}} hours",
+        "time_left": "{{time}} left"
     },
     "updates": {
         "creating": {
