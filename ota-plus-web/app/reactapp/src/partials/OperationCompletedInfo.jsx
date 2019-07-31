@@ -9,7 +9,8 @@ const ANIMATION_HIDE_DELAY = 1000;
 class OperationCompletedInfo extends Component {
   constructor(props) {
     super(props);
-    this.state = { height: INITIAL_HEIGHT, trigger: { name: undefined, createdAt: undefined } };
+    const { initialHeight } = props;
+    this.state = { height: initialHeight, trigger: { name: undefined, createdAt: undefined } };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,7 +34,7 @@ class OperationCompletedInfo extends Component {
   }
 
   render() {
-    const { info } = this.props;
+    const { info, preserve } = this.props;
     const { height } = this.state;
     return (
       <AnimateHeight
@@ -41,9 +42,11 @@ class OperationCompletedInfo extends Component {
         height={height}
         className="AnimateHeight"
         onAnimationEnd={() => {
-          this.animationInterval = setTimeout(() => {
-            this.setState({ height: INITIAL_HEIGHT });
-          }, ANIMATION_HIDE_DELAY);
+          if (!preserve) {
+            this.animationInterval = setTimeout(() => {
+              this.setState({ height: INITIAL_HEIGHT });
+            }, ANIMATION_HIDE_DELAY);
+          }
         }}
       >
         <div className="anim-info">
@@ -57,12 +60,17 @@ class OperationCompletedInfo extends Component {
 }
 
 OperationCompletedInfo.defaultProps = {
-  info: ''
+  info: '',
+  initialHeight: INITIAL_HEIGHT,
+  preserve: false,
+  trigger: {}
 };
 
 OperationCompletedInfo.propTypes = {
   info: PropTypes.string,
-  trigger: PropTypes.shape({}).isRequired
+  initialHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  preserve: PropTypes.bool,
+  trigger: PropTypes.shape({})
 };
 
 export default OperationCompletedInfo;

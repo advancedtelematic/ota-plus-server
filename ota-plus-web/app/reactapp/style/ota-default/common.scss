@@ -374,6 +374,9 @@ strong {
   &.fixed-width {
     width: 180px;
   }
+  &.right {
+    float: right;
+  }
 }
 .anim-info-container {
   width: 768px;
@@ -449,6 +452,7 @@ strong {
 
 .link-cancel {
   font-size: 12px !important;
+  margin-right: 18px;
 }
 
 .bar-chart {
@@ -1656,21 +1660,30 @@ input {
   &.minimized {
     width: 400px;
   }
-
-  .subheading {
-    background: #dedede;
-    padding: 5px 20px;
-
-    .left {
-      width: 50%;
-      display: inline-block;
+  .info-container {
+    height: 40px;
+    background-color: $color-mint;
+    width: 100%;
+    display: inline-block;
+    .anim-info {
+      display: flex;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      .text {
+        color: $color-white;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 17px;
+      }
     }
+  }
 
-    .right {
-      text-align: right;
-      width: 50%;
-      display: inline-block;
-    }
+  .button-container {
+    margin: 5px 0px;
+    width: 100%;
+    clear: both;
+    overflow: hidden;
   }
 
   .content {

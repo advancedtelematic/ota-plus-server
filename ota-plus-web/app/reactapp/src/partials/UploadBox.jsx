@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Progress } from 'antd';
+import { Button, Progress } from 'antd';
 import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
+import OperationCompletedInfo from './OperationCompletedInfo';
+
 import SoftwareCancelUploadModal from '../components/software/CancelUploadModal';
 import SoftwareCancelAllUploadsModal from '../components/software/CancelAllUploadsModal';
-import { ConvertTime, ConvertBytes } from '../utils';
+import { ConvertBytes } from '../utils';
 import OTAModal from './OTAModal';
 
 @inject('stores')
@@ -48,8 +50,8 @@ class UploadBox extends Component {
     this.actionUploadIndex = null;
   };
 
-  showCancelAllUploadsModal = (ifClear = false, e) => {
-    if (e) e.preventDefault();
+  showCancelAllUploadsModal = (ifClear = false, event) => {
+    if (event) event.preventDefault();
     this.cancelAllUploadsModalShown = true;
     this.ifClearUploads = ifClear;
   };
@@ -88,24 +90,29 @@ class UploadBox extends Component {
     });
     const uploadBoxData = (
       <div id="upload-box">
-        <div className="subheading">
-          <div className="left">
-            {uploadFinished ? (
-              <span>{t('software.uploading.upload_is_finished')}</span>
-            ) : (
-              <span id="timeleft">
-                <ConvertTime seconds={secondsRemaining} />
-                &nbsp;left
-              </span>
-            )}
-          </div>
-          <div className="right">
-            {!uploadFinished ? (
-              <a href="#" onClick={this.showCancelAllUploadsModal.bind(this, false)} id="cancel-all-uploads">
-                Cancel all
-              </a>
-            ) : null}
-          </div>
+        <div className="info-container">
+          <OperationCompletedInfo
+            info={
+              uploadFinished
+                ? t('software.uploading.file_uploaded')
+                : t(
+                  'software.uploading.file_uploading',
+                  { time_left: t('time.time_left', { time: secondsRemaining }) }
+                )}
+            initialHeight="auto"
+            preserve
+          />
+        </div>
+        <div className="button-container">
+          <Button
+            disabled={uploadFinished}
+            htmlType="button"
+            id="cancel-all-uploads"
+            className="delete-button fixed-width right"
+            onClick={(event) => { this.showCancelAllUploadsModal(false, event); }}
+          >
+            {t('software.create_modal.cancel_all')}
+          </Button>
         </div>
         <div className="content">
           <ul className="list">
