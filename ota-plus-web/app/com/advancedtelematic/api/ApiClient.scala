@@ -8,7 +8,7 @@ import akka.util.ByteString
 import brave.play.{TraceData, TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.auth.AccessToken
-import com.advancedtelematic.controllers.{FeatureName, UserId}
+import com.advancedtelematic.controllers.{FeatureName, PathBinders, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufCodecs.tufKeyPairDecoder
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
@@ -17,8 +17,7 @@ import play.api.http.Status
 import play.api.libs.json._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc._
-import play.utils.UriEncoding
-
+import PathBinders.segment
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -243,8 +242,6 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
     userProfileRequest(s"${segment(namespace.get)}/credentials/$keyUuid")
       .transform(_.withMethod("GET"))
       .execResult(apiExec)
-
-  private def segment(s: String) = UriEncoding.encodePathSegment(s, "UTF-8")
 }
 
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike)
