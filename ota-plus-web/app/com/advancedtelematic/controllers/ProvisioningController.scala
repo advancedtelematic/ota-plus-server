@@ -13,6 +13,7 @@ import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import PathBinders.segment
 
 import scala.concurrent.ExecutionContext
 
@@ -27,7 +28,7 @@ class ProvisioningController @Inject()(val conf: Configuration,
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def accountName(request: AuthorizedRequest[_]): String = request.namespace.get
+  def accountName(request: AuthorizedRequest[_]): String = segment(request.namespace.get)
 
   val provisioningStatus: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map(x => Ok(Json.obj("active" -> x.isDefined)))

@@ -9,6 +9,7 @@ import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufDataType.{EcPrime256KeyType, Ed25519KeyType, RsaKeyType}
 import play.api.mvc.{PathBindable, QueryStringBindable}
+import play.utils.UriEncoding
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -16,6 +17,7 @@ import play.api.mvc.{PathBindable, QueryStringBindable}
   * Details in http://cjwebb.github.io/blog/2015/06/23/play-framework-path-binders/
   */
 object PathBinders {
+  def segment(s: String): String = UriEncoding.encodePathSegment(s, "UTF-8")
 
   implicit object bindableNamespace extends PathBindable[Namespace] {
     def bind(key: String, value: String): Either[String, Namespace] = {
