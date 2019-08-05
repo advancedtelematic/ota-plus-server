@@ -6,7 +6,7 @@ import React from 'react';
 const NoKeys = ({ showTooltip }) => (
   <div className="profile-container-empty">
     <div className="wrapper-center">
-      <div className="page-intro">
+      <div className="page-intro background-white">
         <div className="no-access-keys">{'You haven\'t created any keys yet.'}</div>
         <div>
           <a

@@ -28,7 +28,7 @@ class Header extends Component {
     const { updatesStore } = stores;
     return (
       <>
-        {(updatesStore.updatesTotalCount > 0 || updatesStore.updateFilter.length) && (
+        {(updatesStore.updatesTotalCount > 0 || updatesStore.updateFilter.length) ? (
           <div>
             <div className="tab-navigation">
               <div className="tab-navigation__buttons">
@@ -56,7 +56,7 @@ class Header extends Component {
               <div className="update-subheader__item description">Release note</div>
             </SubHeader>
           </div>
-        )}
+        ) : null}
       </>
     );
   }

@@ -71,7 +71,7 @@ class Provisioning extends Component {
           </span>
         ) : (
           <div className="wrapper-center">
-            <div className="page-intro">
+            <div className="page-intro background-white">
               <div>Provisioning not activated.</div>
             </div>
           </div>
