@@ -31,6 +31,14 @@ const WebsocketHandler = function (wsUrl, stores) {
               if (_.isString(data.uuid) && new Date(data.lastSeen).getTime()) {
                 devicesStore.updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
                 if (window.location.href.indexOf('/device/') > -1) {
+                  /*
+                   *  Since updates are out of web-events scope, manually toggle inFlight flag until further updates refetch
+                   */
+                  if (devicesStore.device.uuid === data.uuid) {
+                    devicesStore.multiTargetUpdates.forEach(update => {
+                      update.inFlight = true;
+                    });
+                  }
                   devicesStore.fetchDirectorAttributes(data.uuid);
                   devicesStore.updateStatus(data.uuid, UPDATE_STATUSES.DOWNLOADING);
                 }
@@ -46,7 +54,7 @@ const WebsocketHandler = function (wsUrl, stores) {
                 devicesStore.addDevice(data);
               }
               if (document.cookie.indexOf('fireworksPageAcknowledged') === -1
-              && devicesStore.devicesInitialTotalCount === 1) {
+                && devicesStore.devicesInitialTotalCount === 1) {
                 window.location = '#/fireworks';
               }
               break;
