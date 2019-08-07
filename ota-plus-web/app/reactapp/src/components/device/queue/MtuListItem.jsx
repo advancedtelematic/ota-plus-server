@@ -64,28 +64,28 @@ class MtuListItem extends Component {
             </div>
           </div>
         ) : (
-            <div className="overview-panel__item-header">
-              <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
-                <div>
-                  <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header--title__label">
-                    {t('devices.mtu.common.single_device_update')}
-                  </span>
-                </div>
-                <div>
-                  {!inFlight && (
-                    <button
-                      type="button"
-                      id="cancel-mtu"
-                      className="ant-btn ant-btn--sm ant-btn-error"
-                      onClick={cancelMtuUpdate.bind(this)}
-                    >
-                      {t('devices.mtu.common.cancel')}
-                    </button>
-                  )}
-                </div>
+          <div className="overview-panel__item-header">
+            <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
+              <div>
+                <span id={`update-id-title-${correlationId}`} className="overview-panel__item-header--title__label">
+                  {t('devices.mtu.common.single_device_update')}
+                </span>
+              </div>
+              <div>
+                {!inFlight && (
+                  <button
+                    type="button"
+                    id="cancel-mtu"
+                    className="ant-btn ant-btn--sm ant-btn-error"
+                    onClick={cancelMtuUpdate.bind(this)}
+                  >
+                    {t('devices.mtu.common.cancel')}
+                  </button>
+                )}
               </div>
             </div>
-          )}
+          </div>
+        )}
         <div className="overview-panel__operations">
           {_.map(targets, (target, serial) => {
             let hardwareId = null;
@@ -136,8 +136,8 @@ class MtuListItem extends Component {
                         </span>
                       </div>
                     ) : (
-                        <div className="overview-panel__operation-info-block" />
-                      )}
+                      <div className="overview-panel__operation-info-block" />
+                    )}
                   </div>
                   {events.length ? (
                     devicesStore.eventsFetchAsync.isFetching ? (
@@ -145,8 +145,8 @@ class MtuListItem extends Component {
                         <Loader />
                       </div>
                     ) : (
-                        <InstallationEvents events={events} />
-                      )
+                      <InstallationEvents events={events} />
+                    )
                   ) : null}
                 </div>
               </div>

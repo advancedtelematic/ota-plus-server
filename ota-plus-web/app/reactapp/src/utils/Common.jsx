@@ -19,7 +19,9 @@ const resetAsync = (obj, isFetching = false) => {
 
 const resetAll = (asyncCollection, isFetching = false) => {
   _.each(asyncCollection, (async) => {
-    resetAsync(async, isFetching);
+    if (_.isObject(async)) {
+      resetAsync(async, isFetching);
+    }
   });
 };
 

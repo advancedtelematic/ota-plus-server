@@ -6,27 +6,81 @@
             "title": "You're about to cancel a campaign",
             "warning": "This campaign will not be executed on any further devices, <br/>and will be moved to <strong>Finished</strong>."
         },
+        "create": "Create Campaign",
         "details": {
             "cancel": "Cancel campaign",
             "cancel_tooltip": "When you cancel a campaign, any update operations that are pending or already in progress will still complete. The campaign is canceled only for devices that haven't yet detected the new update.",
             "rename": "Rename campaign"
         },
+        "installation_reports": {
+            "can_export": "You can export",
+            "please_wait": "Please, wait to export"
+        },
+        "list_item": {
+            "created_at": "Created at",
+            "failed_percentage": "Failed %",
+            "installing_percentage": "Installing %",
+            "name": "Name",
+            "not_applicable_percentage": "Not applicable %",
+            "selected_devices": "Selected devices",
+            "status": "Status",
+            "successful_percentage": "Successful %"
+        },
+        "more_info": "More info",
+        "no_campaigns": "Currently there are no {{status}} campaigns.",
+        "retry": {
+            "title": "Confirm Retry",
+            "header_1": "For this campaign, retry all installations that failed due to the following error: ",
+            "description_1": [
+                "<li>OTA Connect retries installation on each devices once only.</li>",
+                "<li>After this retry cycle is completed, you'll see fresh failure statistics for all installation attempts in this retry cycle.</li>",
+                "<li>You cannot start a retry cycle for another error type before this retry cycle is finished.</li>",
+                "<li>If a device is installing another update, this retry cycle will not apply to the device.</li>"
+            ],
+            "header_2": "If some installations still fail...",
+            "description_2": [
+                "<li>You'll need to diagnose what's going wrong and possibly update your software.</li>",
+                "<li>You can export the list of devices with failed installations to help with your analysis.</li>",
+                "<li>Once you've figured it out, create another update and deploy it in another campaign.</li>"
+            ]
+        },
         "wizard": {
             "add_new_campaign": "Add new campaign",
+            "add_to_campaign": "Add to campaign",
+            "automatically_publish_devices": "Automatically publish to new matching devices",
+            "change_version": "Change version",
             "campaign_update_details": "Campaign update details",
+            "compatibility_issue": "Compatibility issue",
+            "dependencies_check": "Dependencies check",
             "from": "From:",
             "groups_devices": "Groups & Devices",
+            "live_installation_progress_not_available_description": "Live installation progress is not available for this update.",
+            "missing_dependencies": "Missing dependencies",
+            "name": "Name:",
+            "no_dependency_issues": "No dependency issues",
+            "no_groups_found": "No groups found.",
+            "not_compatible_with": "Not compatible with:",
+            "on_colon": "On:",
+            "package": "Package",
+            "requires": "Requires:",
+            "select_campaign_name": "Select campaign name",
+            "select_groups": "Select groups",
+            "select_update_configuration": "Select update configuration",
             "software_version": "Software & Version",
             "steps": {
                 "dependencies_management": {
                     "title": "Dependencies Management"
                 },
                 "user_consent": {
+                    "approved_translations": "Approved translations: {{count}}",
                     "dont_request_consent": "Don't request end user's consent",
+                    "estimated_time_to_install_this_update": "Estimated time to install this update:",
+                    "estimated_time_to_prepare_this_update": "Estimated time to prepare this update:",
                     "release_note": "Release note",
                     "release_note_placeholder": "Re-use text from",
                     "request_consent": "Request end user's consent",
                     "title": "End user consent",
+                    "translation_view": "Translation view",
                     "warning": "Please, remember that you are responsible for the interaction with the end users and for asking necessary permissions and consents to install updates and collect personal information."
                 },
                 "launch": {
@@ -49,7 +103,9 @@
                     "warning": "Please, remember that the campaign will have an impact on your devices and that you are responsible for reviewing the campaign summary and ensuring that the campaign is properly configured before launching it."
                 }
             },
-            "to": "To:"
+            "to": "To:",
+            "version": "Version",
+            "version_colon": "Version:"
         }
     },
     "common": {

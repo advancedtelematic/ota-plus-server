@@ -6,6 +6,8 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { Tabs, Tag } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
 import { Loader } from '../../../partials';
 
@@ -21,6 +23,7 @@ class WizardStep2 extends Component {
     wizardData: PropTypes.shape({}),
     markStepAsFinished: PropTypes.func.isRequired,
     markStepAsNotFinished: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -56,7 +59,7 @@ class WizardStep2 extends Component {
   };
 
   render() {
-    const { stores, wizardData } = this.props;
+    const { stores, wizardData, t } = this.props;
     const { groups: chosenGroups } = wizardData;
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
@@ -68,13 +71,13 @@ class WizardStep2 extends Component {
         </div>
       ) : (
         <div>
-          <h3>{'Select groups'}</h3>
+          <h3>{t('campaigns.wizard.select_groups')}</h3>
           <WizardGroupsList chosenGroups={chosenGroups} setWizardData={this.setWizardData} />
         </div>
       )
     ) : (
       <Tabs className="campaigns-wizard__tabs" onChange={this.setActiveTab}>
-        <TabPane key="0" tab="Select groups">
+        <TabPane key="0" tab={t('campaigns.wizard.select_groups')}>
           {groupsStore.groupsWizardFetchAsync.isFetching ? (
             <div className="wrapper-center">
               <Loader />
@@ -99,4 +102,4 @@ class WizardStep2 extends Component {
   }
 }
 
-export default WizardStep2;
+export default withTranslation()(WizardStep2);

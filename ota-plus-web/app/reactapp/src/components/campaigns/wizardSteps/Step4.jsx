@@ -147,16 +147,18 @@ class WizardStep4 extends Component {
           {alphaTest && (
             <div className="flex-row">
               <span className="bold" id="approved-translations-0">
-                {'Approved translations: 0'}
+                {t('campaigns.wizard.steps.user_consent.approved_translations', { count: 0 })}
               </span>
               <button type="button" className="btn-bordered" id="translations-view_button">
-                {'Translation view'}
+                {t('campaigns.wizard.steps.user_consent.translation_view')}
               </button>
             </div>
           )}
           <div className="estimations">
             <div className="estimation">
-              <span className="title">{'Estimated time to prepare this update:'}</span>
+              <span className="title">
+                {t('campaigns.wizard.steps.user_consent.estimated_time_to_prepare_this_update')}
+              </span>
               <span className="time-value">
                 <TimePicker
                   defaultValue={this.getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00')}
@@ -166,7 +168,9 @@ class WizardStep4 extends Component {
               </span>
             </div>
             <div className="estimation">
-              <span className="title">{'Estimated time to install this update:'}</span>
+              <span className="title">
+                {t('campaigns.wizard.steps.user_consent.estimated_time_to_install_this_update')}
+              </span>
               <span className="time-value">
                 <TimePicker
                   defaultValue={this.getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
