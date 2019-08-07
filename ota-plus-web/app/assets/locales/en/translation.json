@@ -187,7 +187,7 @@
             "got_it": "Got it",
             "hardware": "Hardware",
             "identifier": "Identifier: ",
-            "last_seen_online": "Last seen online",
+            "last_seen_online": "Last checked for update",
             "no_ecus": "None reported",
             "no_hardware_reported": "This device hasn’t reported any information about its hardware or system components yet.",
             "no_packages": "No matching packages found.",
