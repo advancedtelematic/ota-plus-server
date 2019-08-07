@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
+
 import GroupsListItem from './GroupsListItem';
 import { InfiniteScroll } from '../../../../utils';
 
@@ -14,6 +16,7 @@ class GroupsList extends Component {
     stores: PropTypes.shape({}),
     chosenGroups: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     setWizardData: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -22,7 +25,7 @@ class GroupsList extends Component {
   }
 
   render() {
-    const { stores, chosenGroups, setWizardData } = this.props;
+    const { stores, chosenGroups, setWizardData, t } = this.props;
     const { groupsStore } = stores;
     const wizardGroupsAvailable = Object.keys(groupsStore.preparedWizardGroups).length;
     return (
@@ -48,11 +51,11 @@ class GroupsList extends Component {
             ))}
           </InfiniteScroll>
         ) : (
-          <div className="wrapper-center">{'No groups found.'}</div>
+          <div className="wrapper-center">{t('campaigns.wizard.no_groups_found')}</div>
         )}
       </div>
     );
   }
 }
 
-export default GroupsList;
+export default withTranslation()(GroupsList);

@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 import { Loader, OTAForm, FormSelect, FormInput } from '../../../partials';
 
@@ -24,6 +25,7 @@ class WizardStep5 extends Component {
     markStepAsFinished: PropTypes.func.isRequired,
     selectVersion: PropTypes.func,
     addToCampaign: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -42,19 +44,6 @@ class WizardStep5 extends Component {
     _.each(mtu.data, (data) => {
       const { checksum: toVersion, target: toPackage } = data.to;
       this.selectedVersions.push({
-        packName: toPackage,
-        filepath: `${toPackage}-${toVersion.hash}`,
-      });
-    });
-  };
-
-  checkVersions = () => {
-    const { stores } = this.props;
-    const { updatesStore } = stores;
-    const { currentMtuData: mtu } = updatesStore;
-    _.each(mtu.data, (data) => {
-      const { checksum: toVersion, target: toPackage } = data.to;
-      this.checkVersion({
         packName: toPackage,
         filepath: `${toPackage}-${toVersion.hash}`,
       });
@@ -173,8 +162,7 @@ class WizardStep5 extends Component {
   };
 
   render() {
-    const { addToCampaign } = this.props;
-    // this.checkVersions();
+    const { addToCampaign, t } = this.props;
     const isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
     return (
       <div className="content">
@@ -182,18 +170,18 @@ class WizardStep5 extends Component {
           isOneIncompatible ? (
             <div className="top-alert danger" id="compatibility-issue">
               <img src="/assets/img/icons/white/manager-danger.png" alt="Icon" />
-              {'Compatibility issue'}
+              {t('campaigns.wizard.compatibility_issue')}
             </div>
           ) : (
             <div className="top-alert warning" id="missing-dependencies">
               <img src="/assets/img/icons/white/manager-warning.png" alt="Icon" />
-              {'Missing dependencies'}
+              {t('campaigns.wizard.missing_dependencies')}
             </div>
           )
         ) : (
           <div className="top-alert success" id="success">
             <img src="/assets/img/icons/white/manager-success.png" alt="Icon" />
-            {'Dependencies check'}
+            {t('campaigns.wizard.dependencies_check')}
           </div>
         )}
         {this.isLoading ? (
@@ -206,12 +194,17 @@ class WizardStep5 extends Component {
               <section className="pair" key={index}>
                 <div className="item">
                   <OTAForm formWidth="100%" flexDirection="row" customStyles={{ justifyContent: 'space-between' }}>
-                    <FormInput isEditable={false} defaultValue={block.parentPack} label="Package" wrapperWidth="49%" />
+                    <FormInput
+                      isEditable={false}
+                      defaultValue={block.parentPack}
+                      label={t('campaigns.wizard.package')}
+                      wrapperWidth="49%"
+                    />
                     <FormSelect
                       id="from-pack-versions"
                       options={this.formatVersions(block.parentPack)}
                       visibleFieldsCount={this.formatVersions(block.parentPack).length}
-                      label="Version"
+                      label={t('campaigns.wizard.version')}
                       wrapperWidth="49%"
                       defaultValue={block.parentFilepath}
                       onChange={() => this.onParentVersionChange(
@@ -227,21 +220,26 @@ class WizardStep5 extends Component {
                 </div>
                 {block.isCompatible ? (
                   <div className="status required" id="required">
-                    {'Requires:'}
+                    {t('campaigns.wizard.requires')}
                   </div>
                 ) : (
                   <div className="status incompatible" id="incompatible">
-                    {'Not compatible with:'}
+                    {t('campaigns.wizard.not_compatible_with')}
                   </div>
                 )}
 
                 <div className="item">
                   <OTAForm formWidth="100%" flexDirection="row" customStyles={{ justifyContent: 'space-between' }}>
-                    <FormInput isEditable={false} defaultValue={block.childPack} label="Package" wrapperWidth="49%" />
+                    <FormInput
+                      isEditable={false}
+                      defaultValue={block.childPack}
+                      label={t('campaigns.wizard.package')}
+                      wrapperWidth="49%"
+                    />
                     <FormInput
                       isEditable={false}
                       defaultValue={block.childRequiredVersion}
-                      label="Version"
+                      label={t('campaigns.wizard.version')}
                       wrapperWidth="49%"
                     />
                   </OTAForm>
@@ -255,7 +253,7 @@ class WizardStep5 extends Component {
                       onClick={addToCampaign.bind(this, block.childPack)}
                     >
                       <span>+</span>
-                      <span>{'Add to campaign'}</span>
+                      <span>{t('campaigns.wizard.add_to_campaign')}</span>
                     </button>
                   ) : (
                     <button
@@ -266,7 +264,7 @@ class WizardStep5 extends Component {
                       onClick={addToCampaign.bind(this, block.childPack)}
                     >
                       <span>+</span>
-                      <span>{'Change version'}</span>
+                      <span>{t('campaigns.wizard.change_version')}</span>
                     </button>
                   )}
                 </div>
@@ -277,7 +275,7 @@ class WizardStep5 extends Component {
           <div className="wrapper-center">
             <div className="step-pass" id="step-pass">
               <img src="/assets/img/icons/manager-success.svg" alt="Icon" />
-              {'No dependency issues'}
+              {t('campaigns.wizard.no_dependency_issues')}
             </div>
           </div>
         )}
@@ -286,4 +284,4 @@ class WizardStep5 extends Component {
   }
 }
 
-export default WizardStep5;
+export default withTranslation()(WizardStep5);

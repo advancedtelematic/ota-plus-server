@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 import Loader from '../../../partials/Loader';
 import CampaignsWizardUpdateList from './step3Files/CampaignsWizardUpdateList';
@@ -17,6 +18,7 @@ class WizardStep3 extends Component {
     markStepAsFinished: PropTypes.func.isRequired,
     markStepAsNotFinished: PropTypes.func.isRequired,
     showUpdateDetails: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -58,7 +60,7 @@ class WizardStep3 extends Component {
   };
 
   render() {
-    const { stores, wizardData } = this.props;
+    const { stores, wizardData, t } = this.props;
     const { updatesStore } = stores;
     const { update: selectedUpdate } = wizardData;
 
@@ -68,7 +70,7 @@ class WizardStep3 extends Component {
       </div>
     ) : (
       <div>
-        <span className="c-form__label">{'Select update configuration'}</span>
+        <span className="c-form__label">{t('campaigns.wizard.select_update_configuration')}</span>
         <CampaignsWizardUpdateList
           selectedUpdate={selectedUpdate}
           stepId={2}
@@ -80,4 +82,4 @@ class WizardStep3 extends Component {
   }
 }
 
-export default WizardStep3;
+export default withTranslation()(WizardStep3);

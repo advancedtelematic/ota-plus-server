@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { Trans, withTranslation } from 'react-i18next';
 
 import { OTAModal } from '../../partials';
 
@@ -13,7 +14,8 @@ class RetryModal extends Component {
     stores: PropTypes.shape({}),
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    failureforRetry: PropTypes.string.isRequired
+    failureforRetry: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   launch = () => {
@@ -24,27 +26,23 @@ class RetryModal extends Component {
   }
 
   render() {
-    const { shown, hide, failureforRetry } = this.props;
+    const { shown, hide, failureforRetry, t } = this.props;
     const content = (
       <div>
         <div className="list-header">
-          {'For this campaign, retry all installations that failed due to the following error: '}
+          {t('campaigns.retry.header_1')}
           <b>{failureforRetry}</b>
         </div>
         <ol>
-          <li>OTA Connect retries installation on each devices once only.</li>
-          <li>
-            {'After this retry cycle is completed, you\'ll see fresh failure statistics'}
-            {'for all installation attempts in this retry cycle.'}
-          </li>
-          <li>You cannot start a retry cycle for another error type before this retry cycle is finished.</li>
-          <li>If a device is installing another update, this retry cycle will not apply to the device.</li>
+          <Trans>
+            {t('campaigns.retry.description_1', { returnObjects: true })}
+          </Trans>
         </ol>
-        <div className="list-header">If some installations still fail...</div>
+        <div className="list-header">{t('campaigns.retry.header_2')}</div>
         <ol>
-          <li>You&apos;ll need to diagnose what&apos;s going wrong and possibly update your software.</li>
-          <li>You can export the list of devices with failed installations to help with your analysis.</li>
-          <li>Once you&apos;ve figured it out, create another update and deploy it in another campaign.</li>
+          <Trans>
+            {t('campaigns.retry.description_2', { returnObjects: true })}
+          </Trans>
         </ol>
         <div className="body-actions">
           <button type="submit" className="btn-primary" id="add-new-key-confirm" onClick={this.launch}>
@@ -55,7 +53,7 @@ class RetryModal extends Component {
     );
     return (
       <OTAModal
-        title="Confirm Retry"
+        title={t('campaigns.retry.title')}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
@@ -71,4 +69,4 @@ class RetryModal extends Component {
   }
 }
 
-export default RetryModal;
+export default withTranslation()(RetryModal);

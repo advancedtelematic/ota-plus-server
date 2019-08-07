@@ -9,6 +9,10 @@ import { Tooltip } from 'antd';
 
 import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
+import {
+  CAMPAIGNS_STATUS_PREPARED,
+  CAMPAIGNS_STATUS_SCHEDULED
+} from '../../config';
 
 const AUTO_REFRESH_TIME = 10000;
 const CHART_PERCENTAGE_FACTOR = 10;
@@ -39,8 +43,8 @@ class StatisticsDetails extends Component {
   autoRefresh = () => {
     const { stores } = this.props;
     const { campaignsStore } = stores;
-    if (campaignsStore.campaign.statistics.status === 'prepared'
-      || campaignsStore.campaign.statistics.status === 'scheduled') {
+    if (campaignsStore.campaign.statistics.status === CAMPAIGNS_STATUS_PREPARED
+      || campaignsStore.campaign.statistics.status === CAMPAIGNS_STATUS_SCHEDULED) {
       campaignsStore.fetchCampaign(campaignsStore.campaign.id);
     }
   };

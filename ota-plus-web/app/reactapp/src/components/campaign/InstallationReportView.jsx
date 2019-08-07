@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { Button, Tooltip } from 'antd';
+import { withTranslation } from 'react-i18next';
+
 import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
 import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
 
@@ -22,7 +24,7 @@ const RetryButtonWithTooltip = ({ status, tooltipText, onClick }) => (
 );
 
 RetryButtonWithTooltip.propTypes = {
-  status: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
   tooltipText: PropTypes.string,
   onClick: PropTypes.func.isRequired
 };
@@ -41,7 +43,7 @@ class InstallationReportView extends Component {
   };
 
   render() {
-    const { showRetryModal, stores } = this.props;
+    const { showRetryModal, stores, t } = this.props;
     const { campaignsStore } = stores;
     const { campaign } = campaignsStore;
     const devicesTotal = campaign.statistics.processed;
@@ -94,7 +96,14 @@ class InstallationReportView extends Component {
                     style={{ cursor: isActionDisabled && 'not-allowed' }}
                     onClick={() => (!isActionDisabled ? this.downloadReport(failure.code) : undefined)}
                   >
-                    <Tooltip title={isActionDisabled ? 'Please, wait to export' : 'You can export'} placement="left">
+                    <Tooltip
+                      title={
+                        isActionDisabled
+                          ? t('campaigns.installation_reports.please_wait')
+                          : t('campaigns.installation_reports.can_export')
+                      }
+                      placement="left"
+                    >
                       <img src="/assets/img/icons/download.svg" alt="Icon" />
                     </Tooltip>
                   </div>
@@ -120,8 +129,9 @@ class InstallationReportView extends Component {
 }
 
 InstallationReportView.propTypes = {
-  stores: PropTypes.shape({}).isRequired,
-  showRetryModal: PropTypes.func
+  stores: PropTypes.shape({}),
+  showRetryModal: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default InstallationReportView;
+export default withTranslation()(InstallationReportView);

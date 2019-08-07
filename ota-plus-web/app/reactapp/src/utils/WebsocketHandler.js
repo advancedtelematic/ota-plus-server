@@ -32,10 +32,12 @@ const WebsocketHandler = function (wsUrl, stores) {
                 devicesStore.updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
                 if (window.location.href.indexOf('/device/') > -1) {
                   /*
-                   *  Since updates are out of web-events scope, manually toggle inFlight flag until further updates refetch
+                   *  Since updates are out of web-events scope,
+                   * manually toggle inFlight flag until further updates refetch
                    */
                   if (devicesStore.device.uuid === data.uuid) {
-                    devicesStore.multiTargetUpdates.forEach(update => {
+                    devicesStore.multiTargetUpdates.forEach((update) => {
+                      // eslint-disable-next-line no-param-reassign
                       update.inFlight = true;
                     });
                   }
