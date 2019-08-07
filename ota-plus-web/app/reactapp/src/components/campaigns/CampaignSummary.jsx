@@ -115,12 +115,12 @@ class CampaignSummary extends Component {
         )}
         <div className="campaigns__column campaigns__column--additional-info" id={`campaign-additional-info-${campaign.id}`}>
           {notInPreparation ? (
-            <div id="campaign-more-info">{'More info'}</div>
+            <div id="campaign-more-info">{t('campaigns.more_info')}</div>
           ) : (
-              <div className="wrapper-center">
-                <Loader size={30} thickness={5} />
-              </div>
-            )}
+            <div className="wrapper-center">
+              <Loader size={30} thickness={5} />
+            </div>
+          )}
         </div>
       </div>
     );

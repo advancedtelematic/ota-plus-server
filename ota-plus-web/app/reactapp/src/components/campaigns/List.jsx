@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 
 import ListItem from './ListItem';
 import { contains } from '../../utils/Helpers';
@@ -18,11 +19,12 @@ class List extends Component {
     showCancelCampaignModal: PropTypes.func.isRequired,
     showDependenciesModal: PropTypes.func.isRequired,
     showRetryModal: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
     toggleCampaign: PropTypes.func.isRequired,
   };
 
   render() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { campaignsStore } = stores;
     const { campaigns } = campaignsStore;
     const { status, expandedCampaigns, showCancelCampaignModal,
@@ -50,9 +52,9 @@ class List extends Component {
         })}
       </div>
     ) : (
-      <div className="campaigns__list--empty">{`Currently there are no ${status} campaigns.`}</div>
+      <div className="campaigns__list--empty">{t('campaigns.no_campaigns', { status })}</div>
     );
   }
 }
 
-export default List;
+export default withTranslation()(List);

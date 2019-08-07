@@ -76,11 +76,11 @@ class DependenciesModal extends Component {
 
   componentDidMount() {
     const { router } = this.context;
-    const { stores } = this.props;
+    const { stores, status } = this.props;
     const { devicesStore, campaignsStore, softwareStore } = stores;
     devicesStore.fetchDevices().then(() => {
       if (router.route.location !== '/packages') {
-        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+        campaignsStore.fetchCampaigns(status, 'campaignsSafeFetchAsync');
       } else {
         softwareStore.fetchPackages();
       }

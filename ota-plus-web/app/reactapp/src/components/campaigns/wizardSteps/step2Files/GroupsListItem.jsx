@@ -5,8 +5,10 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { VelocityTransitionGroup } from 'velocity-react';
-
 import { Checkbox, Tag } from 'antd';
+import { withTranslation } from 'react-i18next';
+
+import { GROUP_GROUP_TYPE_STATIC } from '../../../../constants/groupConstants';
 
 @inject('stores')
 @observer
@@ -18,6 +20,7 @@ class GroupsListItem extends Component {
     group: PropTypes.shape({}).isRequired,
     setWizardData: PropTypes.func.isRequired,
     isChosen: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   toggleAutomaticCampaign = () => {
@@ -25,12 +28,11 @@ class GroupsListItem extends Component {
   };
 
   render() {
-    const { stores, group, setWizardData, isChosen } = this.props;
+    const { stores, group, setWizardData, isChosen, t } = this.props;
     const { groupName, groupType, id: groupId } = group;
     const { groupsStore, featuresStore } = stores;
     const { alphaPlusEnabled } = featuresStore;
     const countDevices = groupsStore.getGroupDevicesCount(group);
-    const isPlural = countDevices > 1;
 
     return (
       <div>
@@ -47,11 +49,11 @@ class GroupsListItem extends Component {
               setWizardData(groupId);
             }}
           >
-            <div className={`icon icon--${groupType === 'static' ? 'default' : 'smart'}`} />
+            <div className={`icon icon--${groupType === GROUP_GROUP_TYPE_STATIC ? 'default' : 'smart'}`} />
             <div className="desc">
               <div className="title">{groupName}</div>
               <div className="subtitle">
-                {`${countDevices} ${isPlural ? 'devices' : 'device'}`}
+                {t('devices.device_count', { count: countDevices })}
               </div>
             </div>
           </div>
@@ -71,7 +73,7 @@ class GroupsListItem extends Component {
           {this.automaticCampaign
             && (
               <div className="automatic-campaign-tip">
-                {'Automatically publish to new matching devices'}
+                {t('campaigns.wizard.automatically_publish_devices')}
               </div>
             )
           }
@@ -81,4 +83,4 @@ class GroupsListItem extends Component {
   }
 }
 
-export default GroupsListItem;
+export default withTranslation()(GroupsListItem);

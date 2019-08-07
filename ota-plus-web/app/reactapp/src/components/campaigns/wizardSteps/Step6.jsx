@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { observable } from 'mobx';
-import { Sequencer } from '../../../partials';
+import { withTranslation } from 'react-i18next';
 
+import { Sequencer } from '../../../partials';
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
 import { NO_VERSION_INFO } from '../../../constants';
 
@@ -18,6 +19,7 @@ class WizardStep6 extends Component {
 
   static propTypes = {
     stores: PropTypes.shape({}),
+    t: PropTypes.func.isRequired,
     wizardData: PropTypes.shape({}),
     wizardIdentifier: PropTypes.number,
   };
@@ -54,7 +56,7 @@ class WizardStep6 extends Component {
   };
 
   render() {
-    const { stores, wizardIdentifier } = this.props;
+    const { stores, t, wizardIdentifier } = this.props;
     const { campaignsStore } = stores;
     const versions = this.prepareVersionData();
 
@@ -67,9 +69,9 @@ class WizardStep6 extends Component {
         readOnly={false}
       />
     ) : (
-      <div className="wrapper-center">{'Live installation progress is not available for this update.'}</div>
+      <div className="wrapper-center">{t('campaigns.wizard.live_installation_progress_not_available_description')}</div>
     );
   }
 }
 
-export default WizardStep6;
+export default withTranslation()(WizardStep6);

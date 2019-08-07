@@ -6,6 +6,8 @@ import { observable } from 'mobx';
 import { VelocityTransitionGroup } from 'velocity-react';
 
 import { Checkbox } from 'antd';
+import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 
 const fakeOLP = {
   groupName: 'VINs Dynamic Config Campaign UPD66371823-Overheat',
@@ -18,6 +20,10 @@ const fakeOLP = {
 class OLPGroupsListItem extends Component {
   @observable automaticCampaign = false;
 
+  static propTypes = {
+    t: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.listRef = React.createRef();
@@ -28,6 +34,7 @@ class OLPGroupsListItem extends Component {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <span>
         <div className="ios-list" ref={this.listRef}>
@@ -65,7 +72,7 @@ class OLPGroupsListItem extends Component {
           {this.automaticCampaign
             && (
               <div className="automatic-campaign-tip">
-                {'Automatically publish to new matching devices'}
+                {t('campaigns.wizard.automatically_publish_devices')}
               </div>
             )}
         </VelocityTransitionGroup>
@@ -74,4 +81,4 @@ class OLPGroupsListItem extends Component {
   }
 }
 
-export default OLPGroupsListItem;
+export default withTranslation()(OLPGroupsListItem);

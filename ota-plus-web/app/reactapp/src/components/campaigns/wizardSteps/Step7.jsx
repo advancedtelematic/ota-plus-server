@@ -11,6 +11,7 @@ import { AsyncResponse } from '../../../partials';
 
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
 import { NO_VERSION_INFO } from '../../../constants';
+import { HTTP_CODE_200_OK } from '../../../constants/httpCodes';
 
 @inject('stores')
 @observer
@@ -41,7 +42,7 @@ class WizardStep7 extends Component {
         <AsyncResponse
           handledStatus="error"
           action={campaignsCreateAsync}
-          errorMsg={campaignsCreateAsync.status && campaignsCreateAsync.status !== 200
+          errorMsg={campaignsCreateAsync.status && campaignsCreateAsync.status !== HTTP_CODE_200_OK
             ? campaignsCreateAsync.data.description
             : null
           }
@@ -76,13 +77,13 @@ class WizardStep7 extends Component {
                       </span>
                       <span className="director-versions">
                         <div className="update-from">
-                          <div className="text">{'Version:'}</div>
+                          <div className="text">{t('campaigns.wizard.version_colon')}</div>
                           <div className="value" id={`from-package-version-${fromVersion}`}>
                             {fromVersion || NO_VERSION_INFO}
                           </div>
                         </div>
                         <div className="update-to">
-                          <div className="text">{'Version:'}</div>
+                          <div className="text">{t('campaigns.wizard.version_colon')}</div>
                           <div className="value" id={`to-package-version-${toVersion}`}>
                             {toVersion || NO_VERSION_INFO}
                           </div>
@@ -90,7 +91,7 @@ class WizardStep7 extends Component {
                       </span>
                     </div>
                     <div className="hardware-type-container">
-                      <div className="text">{'On:'}</div>
+                      <div className="text">{t('campaigns.wizard.on_colon')}</div>
                       <div className="value app-label" id={`package-version-${hardwareId}`}>
                         {hardwareId}
                       </div>
