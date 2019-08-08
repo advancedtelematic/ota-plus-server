@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 import { Loader } from '../../partials';
 import LatestCreatedCampaignItem from './LatestCreatedCampaignItem';
 import NoItems from './NoItems';
@@ -16,6 +17,7 @@ class LatestCreatedCampaigns extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -39,7 +41,7 @@ class LatestCreatedCampaigns extends Component {
   };
 
   render() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { campaignsStore } = stores;
     const { campaignsLatestFetchAsync, latestCampaigns } = campaignsStore;
 
@@ -52,11 +54,15 @@ class LatestCreatedCampaigns extends Component {
         ) : latestCampaigns.length ? (
           _.map(latestCampaigns, campaign => <LatestCreatedCampaignItem campaign={campaign} key={campaign.id} />)
         ) : (
-          <NoItems itemType="campaign" createItem={this.createCampaign} />
+          <NoItems
+            actionText={t('dashboard.no_items.action_campaigns')}
+            description={t('dashboard.no_items.desc_campaigns')}
+            createItem={this.createCampaign}
+          />
         )}
       </span>
     );
   }
 }
 
-export default LatestCreatedCampaigns;
+export default withTranslation()(LatestCreatedCampaigns);

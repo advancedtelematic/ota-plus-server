@@ -140,8 +140,12 @@
             "view_all": "View all"
         },
         "no_items": {
-            "create_new": "Create a new {{type}}",
-            "description": "No {{type}}'s to show"
+            "action_campaigns": "Create campaign",
+            "action_devices": "Find out how to provision more devices",
+            "action_software": "Add software",
+            "desc_campaigns": "No campaigns to show",
+            "desc_devices": "No devices to show",
+            "desc_software": "No software to show"
         },
         "software": {
             "add": "Add software",
@@ -283,10 +287,10 @@
             "title": "Software"
         },
         "statuses": {
-            "error": "Installation error",
-            "synchronized": "Device synchronized",
-            "unknown": "Status unknown",
-            "unsynchronized": "Device unsynchronized"
+            "error": "Update failed",
+            "synchronized": "Updated",
+            "unknown": "Never seen online",
+            "unsynchronized": "Update in progress"
         },
         "statistics": {
             "affected": "Affected",
@@ -345,7 +349,7 @@
         "campaigns": "Campaigns",
         "dashboard": "Dashboard",
         "devices": "Devices",
-        "impact_analysis": "Impact analysis",
+        "impact_analysis": "Impact",
         "updates": "Update Configuration",
         "softwares": "Software Repository"
     },
