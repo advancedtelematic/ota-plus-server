@@ -2,9 +2,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
-import { withTranslation } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import { AsyncResponse, OTAForm, FormInput, OperationCompletedInfo } from '../../../../partials';
@@ -14,6 +15,7 @@ import {
   GROUP_INPUT_FILE_ACCEPT_EXTENSION,
   GROUP_INPUT_FILE_ACCEPT_FILTER,
 } from '../../../../constants/groupConstants';
+import { URL_AKTUALIZR_CONFIG_OPTIONS } from '../../../../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -62,6 +64,18 @@ class CreateClassicGroup extends Component {
     return true;
   };
 
+  getDocumentationLink = name => (
+    <a
+      className="menu-text"
+      href={URL_AKTUALIZR_CONFIG_OPTIONS}
+      id="developer_documentation-link"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {name}
+    </a>
+  );
+
   render() {
     const { onStep2DataSelect, stores, t } = this.props;
     const { groupsStore } = stores;
@@ -94,6 +108,7 @@ class CreateClassicGroup extends Component {
             <div className="file-input-container">
               <div className="file-input-description">
                 {t('groups.creating.file_uploading.description')}
+                {this.getDocumentationLink(t('groups.creating.file_uploading.developer_documentation'))}
               </div>
               <div className="file-input-button-container">
                 <label className="file-input-button" htmlFor="file-input-group">

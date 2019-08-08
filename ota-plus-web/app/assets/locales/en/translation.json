@@ -317,7 +317,8 @@
             "create_new_group": "Create new group",
             "file_uploading": {
                 "button_title": "Choose file",
-                "description": "Upload a list of provisioned device IDs in a Text file.",
+                "description": "You can import a list of device IDs that you want to add to a fixed group. To use this feature, you'll need to configure your own device IDs and provision the devices first. You can find out how to configure your own device IDs in the ",
+                "developer_documentation": "developer documentation",
                 "file_not_selected": "File not selected",
                 "file_selected": "File selected: {{file_name}}",
                 "warnings": {
