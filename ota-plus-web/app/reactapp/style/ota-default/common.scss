@@ -448,6 +448,11 @@ strong {
     box-shadow: none;
     padding: 0 5px;
   }
+
+  &--borderless {
+    border: none;
+    box-shadow: none;
+  }
 }
 
 .link-cancel {

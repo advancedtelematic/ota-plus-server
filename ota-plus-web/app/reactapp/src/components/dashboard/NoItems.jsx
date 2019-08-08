@@ -3,24 +3,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button } from 'antd';
-import { withTranslation } from 'react-i18next';
 
-const NoItems = ({ createItem, itemType, t }) => (
+const NoItems = ({ createItem, description, actionText }) => (
   <div className="dashboard__items-empty">
-    <span>
-      {t('dashboard.no_items.description', { type: itemType })}
-    </span>
-    <Button htmlType="button" className="ant-btn ant-btn-plain add-button" onClick={createItem}>
-      {t('dashboard.no_items.create_new', { type: itemType })}
+    <span>{description}</span>
+    <Button htmlType="button" className="add-button add-button--borderless" onClick={createItem}>
+      {actionText}
     </Button>
   </div>
 );
 
 
 NoItems.propTypes = {
+  actionText: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node
+  ]),
   createItem: PropTypes.func,
-  itemType: PropTypes.string,
-  t: PropTypes.func.isRequired
+  description: PropTypes.string
 };
 
-export default withTranslation()(NoItems);
+export default NoItems;
