@@ -2,28 +2,33 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 
-const NoKeys = ({ showTooltip }) => (
-  <div className="profile-container-empty">
-    <div className="wrapper-center">
-      <div className="page-intro background-white">
-        <div className="no-access-keys">{'You haven\'t created any keys yet.'}</div>
-        <div>
-          <a
-            href="#"
-            className="add-button access-keys-tooltip"
-            onClick={showTooltip.bind(this)}
-          >
-            {'What is this?'}
-          </a>
-        </div>
+const ICON_SIZE = 60;
+
+const NoKeys = ({ showTooltip, t }) => (
+  <div className="wrapper-center">
+    <div className="page-intro">
+      <img src="/assets/img/icons/white/key.svg" alt="Icon" width={ICON_SIZE} height={ICON_SIZE} />
+      <div className="no-access-keys">
+        {t('profile.provisioning_keys.no_keys_description')}
+      </div>
+      <div>
+        <a
+          href="#"
+          className="add-button light"
+          onClick={showTooltip.bind(this)}
+        >
+          {t('profile.provisioning_keys.no_keys_button_title')}
+        </a>
       </div>
     </div>
   </div>
 );
 
 NoKeys.propTypes = {
-  showTooltip: PropTypes.func
+  showTooltip: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default NoKeys;
+export default withTranslation()(NoKeys);

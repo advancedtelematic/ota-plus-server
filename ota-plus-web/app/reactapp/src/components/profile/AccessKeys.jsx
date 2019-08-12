@@ -24,8 +24,13 @@ class AccessKeys extends Component {
   }
 
   render() {
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
     return (
-      <div className="profile-container" id="provisioning">
+      <div
+        className={`profile-container ${provisioningStore.preparedProvisioningKeys.length ? '' : 'background-black'}`}
+        id="provisioning"
+      >
         <MetaData title={title}>
           <ProvisioningContainer />
         </MetaData>

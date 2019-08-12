@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
+
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
 import {
@@ -52,7 +54,7 @@ class Provisioning extends Component {
   };
 
   render() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { provisioningStore } = stores;
     return (
       <span>
@@ -71,8 +73,10 @@ class Provisioning extends Component {
           </span>
         ) : (
           <div className="wrapper-center">
-            <div className="page-intro background-white">
-              <div>Provisioning not activated.</div>
+            <div className="page-intro">
+              <div className="no-access-keys">
+                <div>{t('profile.provisioning_keys.provisioning_not_activated')}</div>
+              </div>
             </div>
           </div>
         )}
@@ -86,6 +90,7 @@ class Provisioning extends Component {
 
 Provisioning.propTypes = {
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default Provisioning;
+export default withTranslation()(Provisioning);
