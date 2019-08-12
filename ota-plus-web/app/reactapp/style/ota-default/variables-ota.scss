@@ -57,8 +57,10 @@ $olp-group-layer: $warning-color;
 $navigation-bar-height: 50px;
 $footer-info-height: 60px;
 $profile-header-height: 180px;
+$profile-empty-container-height: 100px;
 $main-content-height: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height});
 $main-content-height-profile: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height} - #{$profile-header-height});
+$main-content-height-keys-empty: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height} - #{$profile-header-height} - #{$profile-empty-container-height});
 
 //campaign stats
 $campaign-success-color: #44CA9D;

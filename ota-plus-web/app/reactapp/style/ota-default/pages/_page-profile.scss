@@ -78,6 +78,9 @@
     min-height: $main-content-height-profile;
     padding: 40px;
     overflow-y: hidden;
+    &.background-black {
+      background-color: black;
+    }
 
     .profile-container-empty {
       height: calc(100% - 50px);
@@ -280,8 +283,11 @@
         border: 0;
         justify-content: space-between;
         padding: 0;
-        height: auto;
         margin-bottom: 20px;
+
+        &.flex-end {
+          justify-content: flex-end;
+        }
 
         form {
           border: 1px solid $add-button-grey;
@@ -331,13 +337,14 @@
       }
 
       .wrapper-center {
+        min-height: $main-content-height-keys-empty;
         .access-keys-tooltip {
           font-size: 18px;
         }
 
         .no-access-keys {
-          color: #444;
-          font-size: 24px;
+          color: white;
+          font-size: 18px;
           margin-bottom: 5px;
         }
 
