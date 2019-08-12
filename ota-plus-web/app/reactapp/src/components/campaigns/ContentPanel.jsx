@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { action, observable, observe, onBecomeObserved } from 'mobx';
-
+import { withTranslation } from 'react-i18next';
 import { Pagination } from 'antd';
 import _ from 'lodash';
+
 import ListHeader from './ListHeader';
 import List from './List';
 import Loader from '../../partials/Loader';
@@ -27,6 +28,7 @@ class ContentPanel extends Component {
     showCancelCampaignModal: PropTypes.func,
     showDependenciesModal: PropTypes.func,
     showRetryModal: PropTypes.func,
+    t: PropTypes.func.isRequired,
     toggleCampaign: PropTypes.func,
   };
 
@@ -107,29 +109,53 @@ class ContentPanel extends Component {
   render() {
     const { pageNumber } = this.state;
     const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
-      stores, toggleCampaign } = this.props;
+      stores, t, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
-    const { campaignsFetchAsync, campaigns } = campaignsStore;
+    const { campaignsFetchAsync, campaigns, campaignsFilter } = campaignsStore;
 
     return (
       <span>
-        <div>
-          <TabNavigation showCreateCampaignModal={addNewWizard} location="page-campaigns" />
-          <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
-        </div>
+        {(campaigns.length > 0 || campaignsFilter.length > 0) && (
+          <div>
+            <TabNavigation showCreateCampaignModal={addNewWizard} location="page-campaigns" />
+            <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
+          </div>
+        )}
         {campaignsFetchAsync[this.activeTab].isFetching ? (
           <div className="wrapper-center">
             <Loader />
           </div>
         ) : (
-          <List
-            status={this.activeTab}
-            expandedCampaigns={expandedCampaigns}
-            showCancelCampaignModal={showCancelCampaignModal}
-            showDependenciesModal={showDependenciesModal}
-            showRetryModal={showRetryModal}
-            toggleCampaign={toggleCampaign}
-          />
+          (campaigns.length > 0 || campaignsFilter.length > 0) ? (
+            <List
+              status={this.activeTab}
+              expandedCampaigns={expandedCampaigns}
+              showCancelCampaignModal={showCancelCampaignModal}
+              showDependenciesModal={showDependenciesModal}
+              showRetryModal={showRetryModal}
+              toggleCampaign={toggleCampaign}
+            />
+          ) : (
+            <div className="wrapper-center">
+              <div className="page-intro">
+                <img src="/assets/img/icons/white/campaigns.svg" alt="Icon" />
+                <div>{t('campaigns.no_campaigns_yet')}</div>
+                <div>
+                  <a
+                    href="#"
+                    className="add-button light"
+                    id="add-new-campaign"
+                    onClick={(event) => {
+                      if (event) event.preventDefault();
+                      addNewWizard();
+                    }}
+                  >
+                    <span>{t('campaigns.create')}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          )
         )}
         {campaigns.length > 0 && (
           <div className="ant-pagination__wrapper clearfix">
@@ -147,4 +173,4 @@ class ContentPanel extends Component {
   }
 }
 
-export default ContentPanel;
+export default withTranslation()(ContentPanel);

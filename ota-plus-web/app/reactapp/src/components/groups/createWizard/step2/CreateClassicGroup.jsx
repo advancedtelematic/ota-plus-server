@@ -2,10 +2,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Row, Col } from 'antd';
-import { Trans, withTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import { AsyncResponse, OTAForm, FormInput, OperationCompletedInfo } from '../../../../partials';
