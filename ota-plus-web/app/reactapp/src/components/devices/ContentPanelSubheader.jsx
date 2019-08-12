@@ -37,10 +37,9 @@ class ContentPanelSubheader extends Component {
         // for example: the input is "deviceid,position(13),is,8" and the output is ["(15)", "15"]
         const [, character] = element.match(CHARACTER_POSITION_REGEXP_PATTERN);
         const position = singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1];
-
-        if (element.search('than') < 0) {
+        if (element.search('not') < 0) {
           singleExpressionToDisplay = ['Device ID', 'has a character equal to', position, `in position ${character}`];
-        } else if (element.search('than') > 0) {
+        } else if (element.search('not') > 0) {
           singleExpressionToDisplay = ['Device ID', 'has a character different from', position, `in position ${character}`];
         }
 
