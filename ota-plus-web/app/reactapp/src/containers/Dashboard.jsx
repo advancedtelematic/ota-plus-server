@@ -73,7 +73,7 @@ class Dashboard extends Component {
           <div className="dashboard__list dashboard__list--devices">
             <div className="dashboard__heading">
               <div className="dashboard__heading-col">{t('dashboard.devices.last_created')}</div>
-              <div className="dashboard__heading-col">{t('dashboard.devices.seen_online')}</div>
+              <div className="dashboard__heading-col">{t('dashboard.devices.last_updated')}</div>
               <div className="dashboard__heading-col">{t('dashboard.devices.status')}</div>
               <div className="dots" id="devices-menu" onClick={this.showDeviceSubmenu}>
                 {/* ToDo: better refactor to use plain CSS' instead */}

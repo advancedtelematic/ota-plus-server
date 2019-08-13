@@ -135,7 +135,7 @@ class Item extends Component {
               ? (
                 <span>
                   {
-                    t('devices.last_seen_item',
+                    t('devices.last_updated_item',
                       { date: lastSeenDate.toDateString(), time: lastSeenDate.toLocaleTimeString() })
                   }
                 </span>
