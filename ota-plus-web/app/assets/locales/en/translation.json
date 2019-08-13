@@ -136,7 +136,7 @@
         "devices": {
             "add": "Add device",
             "last_created": "Last created devices",
-            "seen_online": "Seen online",
+            "last_updated": "Last Updated",
             "status": "Status",
             "view_all": "View all"
         },
@@ -231,7 +231,7 @@
             "installation_start": "Installation start:"
         },
         "installation_pending": "Installation pending",
-        "last_seen_item": "Last seen: {{date}} {{time}}",
+        "last_updated_item": "Last updated: {{date}} {{time}}",
         "mtu": {
             "approval_pending": {
                 "cancel_tooltip_info": "You can cancel an update as long as the device has not detected it yet. After the device has detected an update, you can no longer cancel it.",
