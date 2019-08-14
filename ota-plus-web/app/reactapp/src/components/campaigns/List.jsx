@@ -52,7 +52,7 @@ class List extends Component {
         })}
       </div>
     ) : (
-      <div className="campaigns__list--empty">{t('campaigns.no_campaigns', { status })}</div>
+      <div className="campaigns__list--empty">{t('campaigns.no_campaigns')}</div>
     );
   }
 }

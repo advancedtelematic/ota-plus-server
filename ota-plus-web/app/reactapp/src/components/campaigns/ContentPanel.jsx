@@ -115,12 +115,12 @@ class ContentPanel extends Component {
 
     return (
       <span>
-        {(campaigns.length > 0 || campaignsFilter.length > 0) && (
-          <div>
-            <TabNavigation showCreateCampaignModal={addNewWizard} location="page-campaigns" />
+        <div>
+          <TabNavigation showCreateCampaignModal={addNewWizard} location="page-campaigns" />
+          {(campaigns.length > 0 || campaignsFilter.length > 0) && (
             <ListHeader status={this.activeTab} addNewWizard={addNewWizard} />
-          </div>
-        )}
+          )}
+        </div>
         {campaignsFetchAsync[this.activeTab].isFetching ? (
           <div className="wrapper-center">
             <Loader />
@@ -139,7 +139,7 @@ class ContentPanel extends Component {
             <div className="wrapper-center">
               <div className="page-intro">
                 <img src="/assets/img/icons/white/campaigns.svg" alt="Icon" />
-                <div>{t('campaigns.no_campaigns_yet')}</div>
+                <div>{t('campaigns.no_campaigns')}</div>
                 <div>
                   <a
                     href="#"
