@@ -27,8 +27,7 @@
             "successful_percentage": "Successful %"
         },
         "more_info": "More info",
-        "no_campaigns": "Currently there are no {{status}} campaigns.",
-        "no_campaigns_yet": "There aren't any campaigns yet. Try creating your first campaign.",
+        "no_campaigns": "There aren't any campaigns in this status at the moment.",
         "retry": {
             "title": "Confirm Retry",
             "header_1": "For this campaign, retry all installations that failed due to the following error: ",
