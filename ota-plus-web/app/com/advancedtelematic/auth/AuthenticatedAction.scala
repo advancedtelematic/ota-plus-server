@@ -138,7 +138,7 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
             Success(token)
 
           case Right(authorization) =>
-            Failure(InvalidJwt(s"Unsupported authorization ${authorization}."))
+            Failure(InvalidJwt(s"Unsupported authorization $authorization."))
         }
       }
       .getOrElse(Failure(InvalidJwt("Missing 'Authorization' header")))
@@ -177,7 +177,7 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
 
   override def authRequest[A](request: Request[A]): Try[AuthorizedRequest[A]] = {
     (extractBearerToken(request), SecuredAction.fromSession(request)) match {
-      case (Failure(t), Failure(e)) =>
+      case (Failure(_), Failure(_)) =>
         Failure(new IllegalStateException("Neither valid session nor a bearer token authz in request"))
 
       case (Success(_), Success(_)) =>
@@ -189,8 +189,7 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
           ns <- nsFromScope(claims)
         } yield AuthorizedBearerJwtRequest(AccessToken(x, claims.expirationTime), ns, request)
 
-      case (Failure(_), x @ Success(_)) =>
-        x
+      case (Failure(_), x @ Success(_)) => x
     }
   }
 
