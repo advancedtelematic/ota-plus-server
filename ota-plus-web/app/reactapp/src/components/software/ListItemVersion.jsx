@@ -42,7 +42,7 @@ class ListItemVersion extends Component {
      */
     let versionCompatibilityData = null;
     if (alphaPlusEnabled && Object.keys(compatibilityData)) {
-      versionCompatibilityData = _.find(softwareStore.compatibilityData, item => item.name === version.filepath);
+      versionCompatibilityData = _.find(compatibilityData, item => item && item.name === version.filepath);
     }
 
     const directorBlock = (
