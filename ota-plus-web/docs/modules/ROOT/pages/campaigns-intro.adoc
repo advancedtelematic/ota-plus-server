@@ -1,0 +1,33 @@
+= What is a Campaign?
+
+The term "campaign" is borrowed from the advertising and marketing industry. For example, you might run a online advertising campaign with content that is targeted to a specific a audience. A campaign would run for a specific period of time and during that time you would regularly check in to see how your campaign is performing.
+
+In the context of software updates, the "audience" is your end users. As explained in the xref:device-groups.adoc[Device Groups] section, groups provide you with a way to segment your audience based on the attributes of your devices.
+
+The "content" of a campaign is defined in an update configuration because the update configuration specifies the software to deliver.  
+
+So when you create a campaign, you need to specify these two critera:
+
+.Key Criteria for a Campaign
+[cols="1a,1a",options="header"]
+|====================
+| Device Groups | Update Configuration 
+|
+image::workflow-group.png[image,180]
+These groups form your target audience. Devices are typically grouped by attributes such as region and model.
+|
+image::workflow-update.png[image,100]
+The update configuration defines the new software that each device should receive.
+
+It also refines your targeting criteria by specifying the hardware and software prerequisites for the target devices.
+|====================
+
+A campaign also includes settings that affect the end user experience. 
+
+Before you create a campaign, you also need to consider other criteria such as end user consent.
+
+* Is this update going to disrupt the end user's experience?
+* Do they need to provide their consent before installing the update?
+* How do you communicate the purpose of the update to the end user?
+
+You can request the end user's consent and write a notification text in the "Consent" section of the campaign wizard.

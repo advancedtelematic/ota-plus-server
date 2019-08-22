@@ -1,0 +1,45 @@
+= Managing devices
+:page-layout: page
+:page-categories: [usage]
+:page-date: 2017-06-07 13:51:37
+:page-order: 1
+:icons: font
+
+Once you have provisioned your devices, you should see them show up in the OTA Connect user interface.
+
+[.thumb]
+image::s2-find.png[image]
+
+*To see all your devices, follow this step:*
+
+* Navigate to the https://connect.ota.here.com/#/devices[Devices] page and select the *All Devices* or *Ungrouped Devices* menu items.
+
+If you haven't created any device groups yet, all your provisioned devices should show up as "ungrouped".
+
+Click the name of a device in the main list to see more details for that device.
+
+== Group Your Devices
+
+Once you've provisioned enough devices, you should organize them into groups that you can target with software update campaigns.
+
+There have two types of group: *fixed group* and *smart group*. The *smart group* type is better for organizing large fleets that are constantly changing.
+
+*To create a smart group, follow these steps:*
+
+1.  Open the https://connect.ota.here.com/#/devices[Devices] tab and click *+Add group*.
+2.  Select *Smart Group* and click Next.
+3.  In the next window, enter a group name and define a filter for your devices.
++
+A filter helps OTA Connect assign each vehicle to a fleet. Currently, OTA Connect can filter based on characters in the Device ID — this is usually the VIN number of the connected vehicle.
++
+* To create a filter, select *Device ID* from the *Data* dropdown.
+* In the Filter dropdown, select your filter criteria.
++
+Since every character in the VIN number has a meaning, we could select *Has character equal to*, enter the letter *M*, and select *in position 10* (the 10th character in a VIN number is usually the model).
+* OTA Connect will tell you how many devices match this criteria.
+4.  Assuming you have devices that match, click *Create* to create your smart group.
++
+The smart group is "smart" because any new vehicles that register with OTA Connect will be filtered into this group as long as they also match the filter criteria.
+
+[.thumb]
+image::s3-group.png[image]
