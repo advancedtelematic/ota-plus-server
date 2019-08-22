@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LINK_BUTTON_ICON } from '../config';
+import { URL_GET_STARTED } from '../constants/urlConstants';
 
 const SupportMenu = () => {
   const [hidden, setHidden] = useState(true);
@@ -19,7 +20,7 @@ const SupportMenu = () => {
         <div className="support-menu-body" id="support-menu-body">
           <ul className="support-menu-links">
             <li className="support-menu-links__link">
-              <a href="https://docs.ota.here.com/quickstarts/start-intro.html" rel="noopener noreferrer" target="_blank" id="get-started-link">
+              <a href={URL_GET_STARTED} rel="noopener noreferrer" target="_blank" id="get-started-link">
                 {'Get Started'}
                 <img src={LINK_BUTTON_ICON} alt="Icon" />
               </a>
