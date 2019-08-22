@@ -1,0 +1,8 @@
+= Get Access
+
+Before you can use the OTA Connect Portal, you'll need a HERE account. You can register for a free account at the link:https://developer.here.com/faqs?create=Freemium-Basic&keepState=true&step=account#[HERE Developer Portal].
+
+The free account is fine to test OTA Connect, but if you want to use it in production you'll need a production account. To get a production account, contact your HERE account manager or link:mailto:otaconnect.support@here.com[OTA Connect support].
+
+Once you have your sign-in details, you can access the OTA Connect Portal at the following address: link:https://connect.ota.here.com/[https://connect.ota.here.com/].
+// TODO
