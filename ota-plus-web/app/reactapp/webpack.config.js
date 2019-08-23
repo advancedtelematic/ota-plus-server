@@ -1,21 +1,10 @@
 /** @format */
 
 const { resolve } = require('path');
-const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const jsOutput = 'assets/js';
-const cssOutput = 'assets/css';
 
 const isProduction = process.env.NODE_ENV === 'development';
-
-const cleaningOptions = {
-  root: path.resolve(__dirname, '..'),
-  verbose: true,
-  exclude: ['jquery-3.3.1.min.js', 'lock-9.2.min.js', 'login.js', 'privay-notification.js'],
-};
-
-const foldersToClean = [jsOutput, cssOutput];
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -31,9 +20,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  plugins: [
-    new CleanWebpackPlugin(foldersToClean, cleaningOptions)
-  ],
   devtool: 'source-map',
   module: {
     rules: [
