@@ -1,0 +1,21 @@
+= Create an update configuration
+
+When you create an update configuration, you need to define two basic "assignment criteria".
+
+* The *type of ECU* that the software applies to.
+* The *current version* of the software that you want update.
+
+*To create an update configuration, follow these steps:*
+
+. Click https://connect.ota.here.com/#/updates[Updates], and in the top right, click *Create update*.
+. In the window that appears, give your update a name and add a brief description.
+. In the section *Select ECU Types*, select the ECU types to update and click *Continue*.
+. In the next window, define the update criteria for the ECU's current software.
+* If you want to update ECU's that are running a specific software version only, select the relevant items from the  *Software* and **Version** dropdowns in the *From* section.
+* If you don't care what software version the ECU is already running, select the option: *Update to my selected version regardless of what is currently installed*
+. Next, define the software version that you want to update *to*.
+ * Select the relevant items from the  *Software* and **Version** dropdowns in the *To* section.
+* Click *Save*.
++
+[.thumb]
+image::s6-create_update.png[image]

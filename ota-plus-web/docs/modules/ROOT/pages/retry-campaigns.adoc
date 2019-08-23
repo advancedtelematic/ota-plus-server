@@ -1,0 +1,3 @@
+= Retry Failed Installations
+
+Sometimes installations fail, but you can retry them. TODO

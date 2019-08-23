@@ -1,0 +1,20 @@
+= What is an Update Configuration?
+
+An update configuration is a set of instructions that you can later use in a campaign. These instructions specify the software versions that should be updated.
+
+image::workflow-update.png[image]
+
+Before you start creating update configuration, make sure that you've provisioned some target devices and uploaded your new software versions. 
+
+Here's why these two prerequisites are important:
+
+* You need to know what ECU types are available to target.
++
+When you provision devices in your fleet, OTA Connect collection information about the different types of ECUs that are installed on your devices and the software that they're currently running. OTA Connect can then provide you with a list of ECU types that were detected across your fleet.
+
+
+* You need to know what software versions are compatible with your targeted ECUs.
++
+image::software-ecus.png[image]
++
+When you upload new software versions, you're required to specify a target ECU either in your build configuration or in the OTA Connect user interface. This allows OTA Connect to store lists of software versions that are compatible with each ECU type.

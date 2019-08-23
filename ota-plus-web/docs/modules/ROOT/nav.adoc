@@ -1,0 +1,37 @@
+
+.Get Started
+* xref:index.adoc[Introduction] 
+* xref:get-access.adoc[Get Access]
+// TODO * xref:switch-orgs.adoc[Switching Organizations]
+* xref:ota-workflow-campaign-manager.adoc[OTA Update Workflow]
+
+.Devices
+* xref:manage-device-prov.adoc[Provisioning]
+** xref:create-provisioning-key.adoc[Get a Provisioning key]
+* xref:device-groups.adoc[Device Groups]
+** xref:create-device-groups.adoc[Create Device Groups]
+* xref:manage-devices.adoc[Manage Devices]
+// TODO * Update a Smart Group
+// TODO * Delete groups
+
+.Software
+* xref:software-upload-methods.adoc[Software Upload Methods]
+** xref:upload-software-ui.adoc[Upload Software]
+// TODO: * xref:manage-software.adoc[Manage Software Versions]
+* xref:blacklist-software.adoc[Blacklisting bad software]
+
+
+.Updates
+* xref:updates-intro.adoc[What is an Update Configuration?]
+* xref:create-update.adoc[Create an Update Configuration]
+// TODO: xref:manage-updates.adoc[Manage Update Configurations]
+
+.Campaigns
+* xref:campaigns-intro.adoc[What is a Campaign?]
+* xref:create-campaigns.adoc[Create a Campaign]
+* xref:monitor-campaigns.adoc[Monitor Campaigns]
+
+// TODO * xref:retry-campaigns.adoc[Retry Failed Installations]
+// TODO * xref:manage-campaigns.adoc[Manage Campaigns]
+
+// Common Gotchas? Troubleshooting?

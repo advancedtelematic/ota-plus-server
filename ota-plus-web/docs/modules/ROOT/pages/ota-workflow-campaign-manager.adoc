@@ -1,0 +1,35 @@
+= The Workflow of an OTA Update
+
+To deploy OTA updates in production, we use the concept of an update "campaign". We'll go into more details about campaigns later, but to understand the workflow, you first need to understand what goes into a campaign.
+
+A campaign consists of the following elements:
+
+* The relevant software and the hardware that it supports.
+* The new software versions that you want to update to.
+* The groups of devices that you want target for this update.
+
+[cols="1a"]
+|=== 
+|image::campaign-elements.png[image,600,alight="center"]
+|=== 
+In the OTA workflow, you set up each of these elements in a specific order. 
+
+.Overview of the OTA Update Worklow
+[cols="3a,3a,3a,3a"]
+|=== 
+|1) Provision Devices|2) Group Devices|3) Upload software|4) Create update configuration
+
+|image::workflow-provision.png[image,100]
+Connect your devices to the OTA Connect server. The server stores the following information about each device:
+
+* The device identity, 
+* The hardware on the device
+* The software that it's currently running. 
+
+| image::workflow-group.png[image,180]
+Put your the devices into groups. For example, you could create groups based on regional markets.
+| image::workflow-software.png[image,90]
+Upload new software versions into your OTA software repository
+| image::workflow-update.png[image,100]
+Define the software versions that you want to update and the new replacement versions.
+|=== 
