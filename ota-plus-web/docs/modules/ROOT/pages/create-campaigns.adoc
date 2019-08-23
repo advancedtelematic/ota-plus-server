@@ -1,0 +1,15 @@
+= Create a Campaign
+
+*To create a campaign, follow these steps:*
+
+1.  Click https://connect.ota.here.com/#/campaigns[Campaigns] and click *Create Campaign*.
+2.  In the wizard that appears, enter a campaign name and click *Next*.
+3.  Select the device groups that you want to deploy the update to and click *Next*.
+4.  Select the software update that you created previously and click *Next*.
+5. The *Distribution settings* step is optional for now, so we're going to leave it with the default settings.
++
+In this step you can configure the campaign so that end users must consent to the update. You can define your own notification text for the end user to read.
+6.  Click *Next* which takes you to the *Summary* step, then click *Launch*.
+
+[.thumb]
+image::s7-create_campaign.png[image]

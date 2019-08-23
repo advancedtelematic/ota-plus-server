@@ -65,7 +65,7 @@ class ProfileOrganization extends Component {
       const { stores } = this.props;
       const { userStore } = stores;
       userStore.addUserToOrganization(userEmail).then(() => {
-        this.setState({ memberAddedAt: moment().format() });
+        this.setState({ memberAddedAt: moment().format(), userEmail: '' });
       });
     } else {
       this.setState({ userEmailError: true });
