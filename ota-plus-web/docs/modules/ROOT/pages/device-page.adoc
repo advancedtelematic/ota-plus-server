@@ -1,0 +1,46 @@
+= Individual Device View
+:page-layout: page
+:page-categories: [usage]
+:page-date: 2017-06-07 13:52:10
+:page-order: 2
+:icons: font
+
+At some point you might need to assist a specific customer who is having trouble with the software on their vehicle.
+
+In this case, your customer support team can use the VIN number of the vehicle to find the device in OTA Connect. Then, they can inspect an individual device to get more details about the problem.
+
+== Review the Update History for the Device
+
+*To review the update history for an individual device, follow these steps:*
+
+1.  Open the device details:
+* Navigate to the *Devices* page.
+* Search for the affected device by entering the VIN number in the search box.
+* Click the device name to open the device details.
+2.  If it isn't open already, click the *History* tab.
++
+On this tab, you can see all the updates that were performed on the device. If applicable, you also see the campaign that the update was associated with. Note that it's possible to update a single device, so updates don't always have an associated campaign.
++
+Failed updates are indicated in red with the failure code that the device reported.
+
+[.thumb]
+image::s9-device_history.png[image]
+
+== Install Software on the Device
+
+*To install the first version of your software on a test device, follow these steps:*
+
+1.  Open the device details that we first looked at in *Step 3*.
+* Navigate to the https://connect.ota.here.com/#/devices[Devices] page, select a device group, and select a test device within that group.
+3.  Click the *primary ECU*, and in the *SOFTWARE* section, locate the software that you uploaded in the previous step.
+* If you uploaded two versions of the same software, you should see a row for each version that you uploaded.
+4.  Click the *first version* that you uploaded.
+* In the right-hand *PROPERTIES* panel, you'll see more details about the selected software version — the status should be *Not Installed*.
++
+5.  Click the *Install* button at the bottom of the *PROPERTIES* section.
+* OTA Connect will remotely install the software on your test device.
+
+[.thumb]
+image::s5-install_device.png[image]
+
+Note that this isn't the standard way to install new software in production. The standard way is to install the software update as part of a link:campaigns.adoc[campaign].
