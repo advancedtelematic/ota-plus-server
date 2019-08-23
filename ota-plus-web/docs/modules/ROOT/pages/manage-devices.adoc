@@ -1,0 +1,33 @@
+= Manage Devices
+
+== See all Your Devices
+
+*To see all your devices, follow this step:*
+
+* Navigate to the https://connect.ota.here.com/#/devices[Devices] page and select the *All Devices* or *Ungrouped Devices* menu items.
+
+If you haven't created any device groups yet, all your provisioned devices should show up as "ungrouped".
+
+Click the name of a device in the main list to see more details for that device.
+
+== Install Software on a Single Device
+
+If you just want to update the software on a single device, you can skip the normal workflow of creating update configurations and campaigns. You can install the software directly from the device details page.
+
+include::partial$devices.adoc[tags=single-device-install-steps]
+
+//// 
+
+== Monitor Updates Running on a Device
+
+TODO
+
+== Cancel Updates Running on a Device
+
+TODO
+
+== Understanding the Device Details
+
+TODO
+
+////

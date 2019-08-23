@@ -1,0 +1,11 @@
+= Prerequisites to Working With Devices
+
+Before you can start working with devices, your developers need to have provisioned them first.
+
+Provisioing is the process of giving the device some credentials so it can connect to the server.
+
+If you're feeling brave, you can simulate a device on your computer and provision it.
+
+The get started documentation describes how to do this in detail.
+
+The first step is to get a provisioning key.
