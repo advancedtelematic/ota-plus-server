@@ -31,14 +31,7 @@ const deviceSource = {
       uuid,
       groupId,
     };
-  },
-  endDrag(props) {
-    const { devicesStore, groupsStore } = props.stores;
-    const { selectedGroup } = groupsStore;
-    const groupId = selectedGroup.id || null;
-    const ungrouped = groupsStore.selectedGroup.ungrouped || null;
-    devicesStore.fetchDevices('', groupId, ungrouped);
-  },
+  }
 };
 
 function collect(connect, monitor) {
