@@ -113,16 +113,20 @@ class Devices extends Component {
     }
   };
 
-  onDeviceDrop = (device, groupId) => {
+  onDeviceDrop = async (device, groupId) => {
     const { stores } = this.props;
     const { groupsStore, devicesStore } = stores;
     devicesStore.fetchUngroupedDevicesCount();
     if (device.groupId !== groupId && device.groupId) {
-      groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
+      await groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
     }
     if (device.groupId !== groupId && groupId) {
-      groupsStore.addDeviceToGroup(groupId, device.uuid);
+      await groupsStore.addDeviceToGroup(groupId, device.uuid);
     }
+    const { selectedGroup } = groupsStore;
+    const selectedGroupId = selectedGroup.id || null;
+    const ungrouped = groupsStore.selectedGroup.ungrouped || null;
+    devicesStore.fetchDevices('', selectedGroupId, ungrouped);
   };
 
   changeSort = (sort, e) => {
@@ -143,12 +147,14 @@ class Devices extends Component {
 
   render() {
     const { addNewWizard, stores, t } = this.props;
-    const { devicesStore } = stores;
+    const { devicesStore, groupsStore } = stores;
     const { devicesInitialTotalCount } = devicesStore;
-
+    const isFetching = devicesStore.devicesFetchAsync.isFetching
+      || groupsStore.groupsAddDeviceAsync.isFetching
+      || groupsStore.groupsRemoveDeviceAsync.isFetching;
     return (
       <span>
-        {!devicesInitialTotalCount && devicesStore.devicesFetchAsync.isFetching ? (
+        {!devicesInitialTotalCount && isFetching ? (
           <div className="wrapper-center">
             <Loader />
           </div>
