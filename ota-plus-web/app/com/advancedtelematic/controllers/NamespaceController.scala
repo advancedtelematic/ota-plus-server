@@ -3,7 +3,7 @@ package com.advancedtelematic.controllers
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.auth.{IdentityAction, SessionCodecs}
+import com.advancedtelematic.auth.{IdentityAction, PlainAction, SessionCodecs}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
@@ -18,7 +18,7 @@ class NamespaceController @Inject()(val conf: Configuration,
                                     val ws: WSClient,
                                     val clientExec: ApiClientExec,
                                     implicit val tracer: ZipkinTraceServiceLike,
-                                    authAction: IdentityAction,
+                                    authAction: PlainAction,
                                     components: ControllerComponents)(implicit exec: ExecutionContext)
   extends AbstractController(components) with ApiClientSupport with ZipkinTraceImplicits {
 

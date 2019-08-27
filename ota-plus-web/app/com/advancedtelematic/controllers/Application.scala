@@ -10,13 +10,7 @@ import akka.util.ByteString
 import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
-import com.advancedtelematic.auth.{
-  AccessTokenBuilder,
-  AuthorizedSessionRequest,
-  IdentityAction,
-  OAuthConfig,
-  UiAuthAction
-}
+import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
 import javax.inject.{Inject, Singleton}
 import org.slf4j.LoggerFactory
 import play.api._
@@ -61,7 +55,7 @@ class Application @Inject() (ws: TraceWSClient,
                              components: ControllerComponents,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
-                             val apiAuth: IdentityAction,
+                             val apiAuth: PlainAction,
                              tokenBuilder: AccessTokenBuilder)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig with ZipkinTraceImplicits {
 
@@ -154,7 +148,7 @@ class Application @Inject() (ws: TraceWSClient,
   val allowedHeaders = Seq("content-type")
 
 
-  val bodySource = BodyParser { req =>
+  val bodySource = BodyParser { _ =>
     Accumulator.source[ByteString].map(Right.apply)
   }
   /**

@@ -1,6 +1,7 @@
 package com.advancedtelematic.auth
 
 import akka.http.scaladsl.model.headers.{Authorization, OAuth2BearerToken}
+import com.advancedtelematic.api.UnexpectedResponse
 import com.advancedtelematic.auth.SecuredAction.InvalidSignature
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.crypto.spec.SecretKeySpec
@@ -10,9 +11,10 @@ import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jwa.AlgorithmConstraints.ConstraintType
 import org.jose4j.jws.{AlgorithmIdentifiers, JsonWebSignature}
 import play.api.{Configuration, Logger}
-import play.api.libs.json.{Json, JsResult}
+import play.api.libs.json.{JsResult, Json}
 import play.api.mvc._
 import play.api.mvc.Results.EmptyContent
+import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes.UNAUTHORIZED_401
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
@@ -72,16 +74,30 @@ abstract class SecuredAction[R[_] <: AuthorizedRequest[_]] extends ActionBuilder
 
   val log = Logger(this.getClass)
 
-  def invokeBlock[A](request: Request[A], block: (R[A]) => Future[Result]): Future[Result] = {
+  def invokeBlock[A](request: Request[A], block: R[A] => Future[Result]): Future[Result] = {
     authRequest(request) match {
       case Success(x) =>
         tokenVerification(x.accessToken)
           .flatMap(isValid => if (isValid) block(x) else Future.successful(unauthorizedResult))
+          .recover {
+            case UnexpectedResponse(r) if r.status == UNAUTHORIZED_401 => unauthorizedResult
+          }
       case Failure(t) =>
         log.debug("Session verification failed.", t)
         Future.successful(unauthorizedResult)
     }
   }
+}
+
+class PlainAction @Inject()(val tokenVerification: TokenVerification,
+                               val config: Configuration,
+                               val parser: BodyParsers.Default)(implicit val executionContext: ExecutionContext)
+  extends SecuredAction[AuthorizedSessionRequest] {
+
+  override def authRequest[A](request: Request[A]): Try[AuthorizedSessionRequest[A]] =
+    SecuredAction.fromSession(request)
+
+  override def unauthorizedResult: Result = Results.Forbidden("Not authenticated")
 }
 
 /**
@@ -111,7 +127,10 @@ class IdentityAction @Inject()(val tokenVerification: TokenVerification,
   override def authRequest[A](request: Request[A]): Try[AuthorizedSessionRequest[A]] =
     SecuredAction.fromSession(request)
 
-  override def unauthorizedResult: Result = Results.Forbidden("Not authenticated")
+  override def unauthorizedResult: Result = {
+    log.warn("The access token has expired. Returning unauthorized response.")
+    Results.Unauthorized("The access token has expired.")
+  }
 }
 
 class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
