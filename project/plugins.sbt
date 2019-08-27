@@ -26,4 +26,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.13")
 
-addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.10")
+addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.0")
