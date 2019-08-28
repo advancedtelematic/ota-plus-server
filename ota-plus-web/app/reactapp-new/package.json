@@ -31,7 +31,6 @@
     "style-loader": "^1.0.0",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
-    "tslint-immutable": "^6.0.1",
     "typescript": "^3.5.3",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
@@ -40,7 +39,11 @@
   "dependencies": {
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.8.5",
+    "i18next": "^17.0.12",
+    "i18next-browser-languagedetector": "^3.0.3",
+    "i18next-xhr-backend": "^3.1.2",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "react-i18next": "^10.12.2"
   }
 }

@@ -1,15 +1,17 @@
 import React from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import '../style/index.scss';
 
-class App extends React.PureComponent {
-  render() {
-    return (
-      <div>
-        <h1>Hello World!</h1>
-      </div>
-    );
-  }
+interface IProps extends WithTranslation {
+  t: TFunction;
 }
 
-export default App;
+const App: React.FC<IProps> = ({ t }) => (
+  <div>
+    <h1>{t('common.test')}</h1>
+  </div>
+);
+
+export default withTranslation()(App);
