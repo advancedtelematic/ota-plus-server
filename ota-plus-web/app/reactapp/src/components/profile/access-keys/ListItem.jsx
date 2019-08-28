@@ -3,10 +3,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { observable } from 'mobx';
 
 @inject('stores')
 @observer
 class ListItem extends Component {
+  @observable isExportable = false;
+
+  componentDidMount() {
+    const { provisioningKey, stores } = this.props;
+    const { provisioningStore } = stores;
+    this.isExportable = provisioningStore.checkProvisioningKey(provisioningKey.id);
+  }
+
   onDownload = () => {
     const { provisioningKey, stores } = this.props;
     const { provisioningStore } = stores;
@@ -31,10 +40,10 @@ class ListItem extends Component {
         <div className="column">
           <img
             src="/assets/img/icons/download_key.svg"
-            className="download-key-link"
+            className={this.isExportable ? 'download-key-link' : 'download-key-link--disabled'}
             id={`download-key-link-${provisioningKey.description}`}
             alt="Icon"
-            onClick={this.onDownload}
+            onClick={this.isExportable ? this.onDownload : null}
           />
         </div>
       </div>
