@@ -60,7 +60,6 @@ Variable                    | Value
 `OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.garage.NoLoginAction
 `OIDC_LOGOUT_ACTION`        | com.advancedtelematic.auth.garage.NoLogoutAction
 `OIDC_TOKEN_EXCHANGE`       | com.advancedtelematic.auth.NoExchange
-`OIDC_TOKEN_VERIFICATION`   | com.advancedtelematic.auth.oidc.TokenValidityCheck
 
 #### OpenID Connect
 
@@ -71,7 +70,6 @@ Variable                    | Value
 `OIDC_NS_PROVIDER`          | com.advancedtelematic.auth.oidc.ConfiguredNamespace
 `OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.oidc.LoginAction
 `OIDC_TOKEN_EXCHANGE`       | com.advancedtelematic.auth.NoExchange
-`OIDC_TOKEN_VERIFICATION`   | com.advancedtelematic.auth.oidc.TokenValidityCheck
 
 To configure the client application from the OpenID Connect provider (such as [Auth0](https://auth0.com)), set the following environment variables:
 
@@ -92,7 +90,6 @@ Variable                    | Value
 `OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.garage.LoginAction
 `OIDC_LOGOUT_ACTION`        | com.advancedtelematic.auth.garage.LogoutAction
 `OIDC_TOKEN_EXCHANGE`       | com.advancedtelematic.auth.garage.AuthPlusTokenExchange
-`OIDC_TOKEN_VERIFICATION`   | com.advancedtelematic.auth.oidc.TokenIntrospection
 
 To configure the Auth+ OAuth2 client application, set the following environment variables:
 

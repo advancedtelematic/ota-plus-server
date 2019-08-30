@@ -6,8 +6,7 @@ import java.time.temporal.ChronoField
 
 import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.TokenUtils
-import com.advancedtelematic.auth.{AccessToken, TokenVerification}
-import com.advancedtelematic.TokenUtils.NoVerification
+import com.advancedtelematic.auth.AccessToken
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.play.PlaySpec
@@ -28,7 +27,6 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
     new GuiceApplicationBuilder()
       .configure("crypt.uri" -> MockCrypt.CryptHost)
       .overrides(bind[WSClient].toInstance(MockCrypt.mockClient))
-      .overrides(bind[TokenVerification].to[NoVerification])
       .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
       .build()
 

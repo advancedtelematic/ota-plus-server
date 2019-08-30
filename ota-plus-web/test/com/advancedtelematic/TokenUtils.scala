@@ -2,11 +2,8 @@ package com.advancedtelematic
 
 import java.security.{KeyPair, KeyPairGenerator, PrivateKey}
 
-import com.advancedtelematic.auth.{AccessToken, TokenVerification}
 import org.jose4j.jws.{AlgorithmIdentifiers, JsonWebSignature}
 import play.api.libs.json.{JsObject, Json}
-
-import scala.concurrent.Future
 
 object TokenUtils {
   def genKeyPair(): KeyPair = {
@@ -37,10 +34,6 @@ object TokenUtils {
     signer.setKeyIdHeaderValue(keyId)
     signer.setPayload(Json.stringify(claims))
     signer.getCompactSerialization
-  }
-
-  class NoVerification extends TokenVerification {
-    override def apply(token: AccessToken): Future[Boolean] = Future.successful(true)
   }
 
 }

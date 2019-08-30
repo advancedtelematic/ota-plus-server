@@ -1,6 +1,6 @@
 package com.advancedtelematic.auth.oidc
 
-import com.advancedtelematic.auth.{TokenExchange, TokenVerification}
+import com.advancedtelematic.auth.TokenExchange
 import play.api.{Configuration, Environment}
 import play.api.inject.{Binding, Module}
 
@@ -14,7 +14,6 @@ class OidcModule extends Module {
       bind[T].to(clazz)
     }
     Seq(
-      bindToClass[TokenVerification]("oidc.tokenVerification"),
       bindToClass[com.advancedtelematic.auth.LoginAction]("oidc.loginAction"),
       bindToClass[com.advancedtelematic.auth.LogoutAction]("oidc.logoutAction"),
       bindToClass[TokenExchange]("oidc.tokenExchange"),

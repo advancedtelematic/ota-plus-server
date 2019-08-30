@@ -19,7 +19,6 @@ class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Result
     .configure("authplus.token" -> "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow")
     .configure("oidc.namespace" -> "test-namespace")
     .configure("oidc.loginAction" -> "com.advancedtelematic.auth.garage.NoLoginAction")
-    .configure("oidc.tokenVerification" -> "com.advancedtelematic.auth.oidc.NoTokenIntrospection")
     .build
 
   implicit val mat = application.injector.instanceOf[Materializer]
