@@ -6,7 +6,7 @@ import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError, UnexpectedResponse}
 import com.advancedtelematic.auth.oidc.OidcGateway
-import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
+import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction, IdentityClaims}
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
 import play.api.libs.functional.syntax._
@@ -28,23 +28,23 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       accessTokenBuilder: AccessTokenBuilder,
                                       oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
-    extends AbstractController(components)
+  extends AbstractController(components)
     with ApiClientSupport with ZipkinTraceImplicits {
 
   private val log = Logger(this.getClass)
+
+  private def parseDisplayName(claims: IdentityClaims, profile: JsValue) =
+    ((profile \ "displayName").validateOpt[String] match {
+      case JsSuccess(maybeName, _) => maybeName
+      case JsError(_) => None
+    }).getOrElse(claims.name)
 
   def getUserProfile: Action[AnyContent] = authAction.async { implicit request =>
     val fut = for {
       claims  <- oidcGateway.getUserInfo(request.accessToken)
       profile <- userProfileApi.getUser(claims.userId)
-    } yield {
-      val displayName = ((profile \ "displayName").validateOpt[String] match {
-        case JsSuccess(maybeName, _) =>
-          maybeName
-        case JsError(_) =>
-          None
-      }).getOrElse(claims.name)
-
+      displayName = parseDisplayName(claims, profile)
+    } yield
       Ok(
         Json.obj(
           "fullName" -> displayName,
@@ -53,10 +53,9 @@ class UserProfileController @Inject()(val conf: Configuration,
           "profile"  -> profile
         )
       )
-    }
 
     fut.recover {
-      case UnexpectedResponse(u) if (u.status == TOO_MANY_REQUESTS) =>
+      case UnexpectedResponse(u) if u.status == TOO_MANY_REQUESTS =>
         log.error(s"Too many requests: ${u.body}")
         TooManyRequests
       case e: RemoteApiError =>

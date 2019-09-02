@@ -70,13 +70,11 @@ import java.util.Locale
 import scala.concurrent.duration.Duration
 
 final case class DowntimeConfig(start: Option[Instant], duration: Duration) {
-  val isPlanned = start.map(_.isAfter(Instant.now())).getOrElse(false)
-  val isDown = start
-    .map(st => {
-      val now = Instant.now()
-      st.isBefore(now) && st.isAfter(now.minusSeconds(duration.toSeconds))
-    })
-    .getOrElse(false)
+  val isPlanned = start.exists(_.isAfter(Instant.now()))
+  val isDown = start.exists { st =>
+    val now = Instant.now()
+    st.isBefore(now) && st.isAfter(now.minusSeconds(duration.toSeconds))
+  }
 
   def startDateTime =
     start

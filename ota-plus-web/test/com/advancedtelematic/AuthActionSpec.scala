@@ -19,10 +19,7 @@ import scala.concurrent.Future
 class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
 
   val application = new GuiceApplicationBuilder()
-    .configure(
-      "oidc.tokenVerification" -> "com.advancedtelematic.auth.oidc.NoTokenIntrospection",
-      "authplus.client_id"     -> UUID.randomUUID().toString
-    )
+    .configure("authplus.client_id"     -> UUID.randomUUID().toString)
     .build
 
   implicit val mat = application.injector.instanceOf[Materializer]
