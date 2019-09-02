@@ -1,7 +1,6 @@
 package com.advancedtelematic.auth.oidc
 
 import java.security.PublicKey
-import java.util.function.Consumer
 
 import akka.http.scaladsl.model.Uri
 import com.advancedtelematic.api.{MalformedResponse, UnexpectedResponse}
@@ -121,14 +120,8 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
       meta     <- providerMeta()
       response <- wsClient.url(meta.jwksUri).get()
       keys     <- extractKeys(response)
-    } yield {
-      keysFromConfig().foreach { xs =>
-        xs.getJsonWebKeys.forEach(new Consumer[JsonWebKey] {
-          override def accept(t: JsonWebKey): Unit = keys.addJsonWebKey(t)
-        })
-      }
-      keys
-    }
+      _        = keysFromConfig().foreach(_.getJsonWebKeys.forEach((t: JsonWebKey) => keys.addJsonWebKey(t)))
+    } yield keys
   }
 
   private[this] def getKeys()(implicit executionContext: ExecutionContext): Future[JsonWebKeySet] = {
