@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Form from 'formsy-antd';
 import { withTranslation } from 'react-i18next';
-import { Button, Tag } from 'antd';
+import { Button, notification, Tag } from 'antd';
 
 import { OTAModal, Loader, SearchBar } from '../../partials';
 import UpdateDetails from '../updates/UpdateDetails';
@@ -20,6 +20,8 @@ import {
   WizardStep6,
   WizardStep7
 } from './wizardSteps';
+import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
+import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -170,7 +172,16 @@ class Wizard extends Component {
       if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
         const wizardMinimized = _.find(props.minimizedWizards, wizard => wizard.id === props.wizardIdentifier);
         if (!wizardMinimized) {
-          if (change.object[change.name].status !== 'error') {
+          if (change.object[change.name].code === HTTP_CODE_400_BAD_REQUEST
+            && change.object[change.name].data.code === CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES) {
+            notification.error({
+              message: t('campaigns.error_descriptions.campaign_without_devices_title'),
+              description: t('campaigns.error_descriptions.campaign_without_devices'),
+              duration: 6
+            });
+            const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === 'groups');
+            this.jumpToStep(groupsStepIndex);
+          } else if (change.object[change.name].status !== 'error') {
             this.handleCampaignCreated();
           }
         }
@@ -230,7 +241,9 @@ class Wizard extends Component {
   };
 
   jumpToStep = (stepId, e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     if (stepId < this.currentStepId || this.verifyIfPreviousStepsFinished(stepId - 1)) {
       this.currentStepId = stepId;
       this.filterValue = initialFilterValue;

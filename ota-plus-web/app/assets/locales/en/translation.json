@@ -12,6 +12,10 @@
             "cancel_tooltip": "When you cancel a campaign, any update operations that are pending or already in progress will still complete. The campaign is canceled only for devices that haven't yet detected the new update.",
             "rename": "Rename campaign"
         },
+        "error_descriptions": {
+            "campaign_without_devices_title": "Selected device groups are empty",
+            "campaign_without_devices": "There are no devices in any of the groups that you've selected for this campaign."
+        },
         "installation_reports": {
             "can_export": "You can export",
             "please_wait": "Please, wait to export"
