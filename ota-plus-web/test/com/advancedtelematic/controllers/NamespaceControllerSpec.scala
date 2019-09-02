@@ -31,7 +31,7 @@ class NamespaceControllerSpec extends PlaySpec
         Json.obj(
           "namespace" -> userAllowedNamespace,
           "name" -> "My Organization",
-          "isCreator" -> true
+          "isDefault" -> true
         ))))
   }
 

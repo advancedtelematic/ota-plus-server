@@ -93,7 +93,7 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
         Json.obj(
         "namespace" -> namespace,
         "name" -> "My Organization",
-        "isCreator" -> true
+        "isDefault" -> true
       ))))
 
     case (method, url) =>

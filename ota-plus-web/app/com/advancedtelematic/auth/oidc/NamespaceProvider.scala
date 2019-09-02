@@ -33,7 +33,7 @@ class NamespaceFromUserProfile @Inject()(val conf: Configuration,
       case organizations if organizations.isEmpty =>
         Namespace.generate
       case organizations =>
-        organizations.filter(_.isCreator).map(_.namespace).head
+        organizations.filter(_.isDefault).map(_.namespace).head
     }
   }
 }

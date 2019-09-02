@@ -93,11 +93,11 @@ export default class UserStore {
       this.userOrganizations = data;
       const namespaceCookie = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
       let userOrganization;
-      // we have to get organization based on cookie (if it exists) or default one by isCreator flag
+      // we have to get organization based on cookie (if it exists) or default one by isDefault flag
       if (namespaceCookie) {
         userOrganization = data.find(organization => organization.namespace === namespaceCookie);
       } else {
-        userOrganization = data.find(organization => organization.isCreator);
+        userOrganization = data.find(organization => organization.isDefault);
         Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, userOrganization.namespace);
       }
       this.userOrganizationName = userOrganization.name;

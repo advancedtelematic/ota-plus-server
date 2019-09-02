@@ -37,7 +37,7 @@ case class UserPass(user: String, pass: String)
 
 case class Feature(feature: FeatureName, client_id: Option[UUID], enabled: Boolean)
 
-case class UserOrganization(namespace: Namespace, name: String, isCreator: Boolean)
+case class UserOrganization(namespace: Namespace, name: String, isDefault: Boolean)
 
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
@@ -177,7 +177,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
     (
       (__ \ "namespace").read[Namespace] and
       (__ \ "name").read[String] and
-      (__ \ "isCreator").read[Boolean]
+      (__ \ "isDefault").read[Boolean]
     )(UserOrganization.apply _)
   }
 
