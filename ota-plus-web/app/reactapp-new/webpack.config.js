@@ -18,6 +18,12 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
   },
   devtool: 'source-map',
+  devServer: {
+    contentBase: resolve(__dirname, 'src'),
+    https: true,
+    disableHostCheck: true,
+    port: 3000
+  },
   module: {
     rules: [
       {
@@ -64,5 +70,5 @@ module.exports = {
         },
       },
     ],
-  },
+  }
 };

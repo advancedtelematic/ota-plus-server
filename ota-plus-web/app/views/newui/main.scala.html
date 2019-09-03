@@ -1,7 +1,7 @@
 @import com.advancedtelematic.auth.OAuthConfig
 @import com.advancedtelematic.controllers.UiToggles
 @import play.filters.csrf.CSRF
-@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles)()(implicit req: RequestHeader)
+@(csrf: Option[CSRF.Token], scriptSrc: String)()(implicit req: RequestHeader)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,15 +15,11 @@
     <form id="logout" action="/logout">
     </form>
     <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
-    <input type="hidden" id="ws-url" value="@wsUrl"/>
-    <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
-    <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
-    <!-- Hides user dropdown -->
-    <input type="hidden" id="toggle-userProfileEdit" value="@{uiToggles.userProfileEdit}"/>
-    <input type="hidden" id="toggle-userProfileMenu" value="@{uiToggles.userProfileMenu}"/>
-    <!-- Hides provisioning keys -->
-    <input type="hidden" id="toggle-credentialsDownload" value="@{uiToggles.credentialsDownload}"/>
     <div id="app"></div>
-    <script src="@routes.Assets.versioned("js/app-new.js")"></script>
+    @if(scriptSrc.isEmpty) {
+      <script src="@routes.Assets.versioned("js/app-new.js")"></script>
+    } else {
+      <script src="@scriptSrc/app-new.js"></script>
+    }
   </body>
 </html>
