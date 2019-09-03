@@ -26,7 +26,7 @@ const SupportMenu = () => {
               </a>
             </li>
             <li className="support-menu-links__link">
-              <a href="https://docs.ota.here.com" rel="noopener noreferrer" target="_blank" id="docs-link">
+              <a href="https://docs.ota.here.com/getstarted/dev/index.html" rel="noopener noreferrer" target="_blank" id="docs-link">
                 {'Documentation'}
                 <img src={LINK_BUTTON_ICON} alt="Icon" />
               </a>
