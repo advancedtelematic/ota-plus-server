@@ -13,7 +13,7 @@ import {
   API_NAMESPACE_SETUP_STEPS
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { HTTP_CODE_200_OK } from '../constants/httpCodes';
+import { HTTP_CODE_200_OK, HTTP_CODE_202_ACCEPTED } from '../constants/httpCodes';
 
 export default class ProvisioningStore {
   @observable provisioningStatusFetchAsync = {};
@@ -168,6 +168,19 @@ export default class ProvisioningStore {
           this.provisioningKeyCreateAsync = handleAsyncError(error);
         },
       );
+  }
+
+  checkProvisioningKey = async (id) => {
+    const downloadUrl = `${API_PROVISIONING_DOWNLOAD}/${id}`;
+    try {
+      const { status } = await axios.get(downloadUrl);
+      if (status === HTTP_CODE_202_ACCEPTED) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   downloadProvisioningKey = async (id) => {
