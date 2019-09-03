@@ -213,9 +213,6 @@ class Application @Inject() (ws: TraceWSClient,
   }
 
   def newMain : Action[AnyContent] = uiAuth { implicit req =>
-    val subject = req.idToken.userId.id
-    val token = tokenBuilder.mkToken(subject, req.accessToken.expiresAt, Set(s"namespace.${req.namespace.get}"))
-    val wsUrl = s"$wsScheme://bearer:${token.value}@$wsHost:$wsPort$wsPath"
-    Ok(views.html.newui.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles))
+    Ok(views.html.newui.main(CSRF.getToken, conf.getOptional[String]("dev.scriptSrc").getOrElse("")))
   }
 }

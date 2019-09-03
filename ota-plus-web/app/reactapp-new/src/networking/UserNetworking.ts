@@ -8,7 +8,7 @@ export interface UserNetworkingInterface {
 export class UserNetworking implements UserNetworkingInterface {
   public async getUserProfile(): Promise<UserProfile> {
     // FIXME: until we do not have axios and networking configurated the url is hardcoded
-    const response = await axios.get('https://localhost:9443/user/profile');
+    const response = await axios.get('/user/profile');
     const { data } = response;
     return data;
   }
