@@ -1,9 +1,13 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { Suspense } from 'react';
+
+import './i18n';
 
 import App from './App';
 
 ReactDOM.render(
-  <App />, 
-  document.getElementById('app')
+  <Suspense fallback="">
+    <App />
+  </Suspense>,
+  document.getElementById('app') as HTMLElement
 );
