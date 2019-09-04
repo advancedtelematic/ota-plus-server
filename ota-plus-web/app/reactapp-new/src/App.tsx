@@ -1,17 +1,18 @@
 import React from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import Routes from './Routes';
 
 import '../style/index.scss';
 
-interface IProps extends WithTranslation {
-  t: TFunction;
-}
+const App: React.FC<{}> = () => {
+  const [t, i18n] = useTranslation();
 
-const App: React.FC<IProps> = ({ t }) => (
-  <div>
-    <h1>{t('common.test')}</h1>
-  </div>
-);
+  return (
+    <>
+      <h1>{t('common.test')}</h1>
+      <Routes />
+    </>
+  );
+};
 
-export default withTranslation()(App);
+export default App;
