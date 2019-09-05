@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/webpack/bin/webpack.js -w",
+    "start": "./node_modules/webpack/bin/webpack.js -w --config webpack.dev.js",
     "dev": "webpack-dev-server --config webpack.dev.js --mode development --hot",
     "build": "webpack -p --config webpack.prod.js",
     "check-types": "tsc",

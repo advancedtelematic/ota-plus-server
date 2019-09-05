@@ -1,5 +1,11 @@
 {
     "common.test": "Hello new world",
+    "dashboard.docslinks.title": "Learn to deploy updates",
+    "dashboard.docslinks.description": "Practical examples to help you get started with OTA Connect:",
+    "dashboard.docslinks.links.devicegroup": "Create device groups",
+    "dashboard.docslinks.links.updateconfiguration": "Create update configurations",
+    "dashboard.docslinks.links.campaigns": "Create campaigns",
+    "dashboard.docslinks.links.troubleshoot": "Troubleshoot campaigns",
     "footer.links.service-terms": "Service terms",
     "footer.links.service-terms.url": "",
     "footer.links.privacy-policy": "Privacy policy",
