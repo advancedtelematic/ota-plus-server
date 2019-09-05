@@ -3,7 +3,7 @@ package com.advancedtelematic.controllers
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.auth.{IdentityAction, PlainAction, SessionCodecs}
+import com.advancedtelematic.auth.{PlainAction, SessionCodecs}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._

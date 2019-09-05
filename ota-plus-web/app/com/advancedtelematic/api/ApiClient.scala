@@ -244,6 +244,44 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .execResult(apiExec)
 }
 
+class DeviceRegistryApi(val conf: Configuration, val apiExec: ApiClientExec)
+                       (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig with CirceJsonBodyWritables {
+
+  private def request(path: String)(implicit traceData: TraceData) =
+    ApiRequest.traced("device-registry", devicesApiUri.uri + "/api/v1/" + path)
+
+  def recentDevices(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
+    request("devices")
+      .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+
+  def recentDeviceGroups(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
+    request("device_groups")
+      .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+}
+
+class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)
+                   (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig with CirceJsonBodyWritables {
+
+  private def request(path: String)(implicit traceData: TraceData) =
+    ApiRequest.traced("campaigner", campaignerApiUri.uri + "/api/v2/" + path)
+
+  def recentCampaigns(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
+    request("campaigns")
+      .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+
+  def recentUpdates(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
+    request("updates")
+      .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+}
+
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike)
   extends OtaPlusConfig with CirceJsonBodyWritables {
 
@@ -254,6 +292,11 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implici
     request("user_repo/root.json")
       .withNamespace(Some(namespace))
       .execResult(apiExec)
+
+  def fetchTargets(namespace: Namespace)(implicit traceData: TraceData): Future[JsValue] =
+    request("user_repo/targets.json")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec)
