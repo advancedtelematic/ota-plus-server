@@ -7,6 +7,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import {
+  API_NAMESPACE_SETUP_STEPS,
   API_USER_DETAILS,
   API_USER_UPDATE,
   API_USER_CHANGE_PASSWORD,
@@ -22,7 +23,11 @@ import {
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../../assets/contracts';
-import { HTTP_CODE_429_TOO_MANY_REQUESTS, HTTP_CODE_503_SERVICE_UNAVAILABLE } from '../constants/httpCodes';
+import {
+  HTTP_CODE_429_TOO_MANY_REQUESTS,
+  HTTP_CODE_503_SERVICE_UNAVAILABLE,
+  HTTP_CODE_202_ACCEPTED
+} from '../constants/httpCodes';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -212,6 +217,18 @@ export default class UserStore {
           this.userUpdateAsync = handleAsyncError(error);
         },
       );
+  }
+
+  checkIfAccountActive = async () => {
+    try {
+      const { status } = await axios.get(API_NAMESPACE_SETUP_STEPS);
+      if (status === HTTP_CODE_202_ACCEPTED) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   changePassword() {
