@@ -3,19 +3,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable } from 'mobx';
 
 @inject('stores')
 @observer
 class ListItem extends Component {
-  @observable isExportable = false;
-
-  componentDidMount() {
-    const { provisioningKey, stores } = this.props;
-    const { provisioningStore } = stores;
-    this.isExportable = provisioningStore.checkProvisioningKey(provisioningKey.id);
-  }
-
   onDownload = () => {
     const { provisioningKey, stores } = this.props;
     const { provisioningStore } = stores;
@@ -23,7 +14,7 @@ class ListItem extends Component {
   }
 
   render() {
-    const { provisioningKey } = this.props;
+    const { provisioningKey, isExportable } = this.props;
     const validFrom = new Date(provisioningKey.validFrom);
     const validUntil = new Date(provisioningKey.validUntil);
     return (
@@ -40,10 +31,10 @@ class ListItem extends Component {
         <div className="column">
           <img
             src="/assets/img/icons/download_key.svg"
-            className={this.isExportable ? 'download-key-link' : 'download-key-link--disabled'}
+            className={isExportable ? 'download-key-link' : 'download-key-link--disabled'}
             id={`download-key-link-${provisioningKey.description}`}
             alt="Icon"
-            onClick={this.isExportable ? this.onDownload : null}
+            onClick={isExportable ? this.onDownload : null}
           />
         </div>
       </div>
@@ -53,6 +44,7 @@ class ListItem extends Component {
 
 ListItem.propTypes = {
   stores: PropTypes.shape({}),
+  isExportable: PropTypes.bool,
   provisioningKey: PropTypes.shape({}).isRequired,
 };
 
