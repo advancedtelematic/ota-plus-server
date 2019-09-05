@@ -17,6 +17,7 @@ import { Actions } from './store/user/actions';
 import { AppNavbar } from './components/layout/AppNavbar';
 
 import { Button, Container, ExternalLink, Title } from './components/common';
+import DocsLinks from './components/DocsLinks/DocsLinks';
 
 interface IProps {
   setUserProfileRequest: typeof Actions.setUserProfileRequest;
@@ -38,6 +39,7 @@ export const App = (props: IProps) => {
             <Title>Recently created</Title>
           </Container>
           <Title size="small">Devices</Title>
+          <DocsLinks/>
           <ExternalLink url="https://www.google.com">Create device groups</ExternalLink>
           <br />
           <Routes />
@@ -62,7 +64,7 @@ export const App = (props: IProps) => {
             </Button>
           </div>
         </AppMain>
-        <AppFooter>Footer</AppFooter>
+        <AppFooter />
       </>
     </ThemeProvider>
   );
