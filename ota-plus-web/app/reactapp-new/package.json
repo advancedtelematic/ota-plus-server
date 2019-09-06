@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/webpack/bin/webpack.js -w",
+    "dev": "webpack-dev-server --mode development --hot",
     "build": "webpack -p",
     "check-types": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,7 +26,6 @@
     "extract-loader": "^3.1.0",
     "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.12.0",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.2.0",
@@ -47,7 +47,6 @@
     "axios": "^0.19.0",
     "i18next": "^17.0.12",
     "i18next-browser-languagedetector": "^3.0.3",
-    "i18next-xhr-backend": "^3.1.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-i18next": "^10.12.2",
