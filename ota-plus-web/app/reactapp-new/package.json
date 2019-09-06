@@ -8,7 +8,8 @@
     "dev": "webpack-dev-server --mode development --hot",
     "build": "webpack -p",
     "check-types": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "set NODE_ENV=test && jest",
+    "test:coverage": "set NODE_ENV=test && jest --coverage --collectCoverageFrom=src/**/*.{js,ts,tsx}"
   },
   "author": "",
   "license": "ISC",
@@ -20,16 +21,27 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.18",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
     "extract-loader": "^3.1.0",
     "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.9.0",
     "node-sass": "^4.12.0",
+    "redux-devtools-extension": "^2.13.8",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.2.0",
     "style-loader": "^1.0.0",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3",
@@ -45,18 +57,37 @@
     "@types/react-router-dom": "^4.3.5",
     "@types/redux-logger": "^3.0.7",
     "axios": "^0.19.0",
-    "babel-jest": "^24.9.0",
     "i18next": "^17.0.12",
     "i18next-browser-languagedetector": "^3.0.3",
-    "jest": "^24.9.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-i18next": "^10.12.2",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.0.1",
     "redux": "^4.0.4",
-    "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.0.5"
+  },
+  "jest": {
+    "verbose": true,
+    "setupFiles": [
+      "./testsSetup.ts"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/antd/(?!es)"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "\\.(scss|less)$": "identity-obj-proxy"
+    },
+    "moduleDirectories": [
+      "node_modules"
+    ]
   }
 }
