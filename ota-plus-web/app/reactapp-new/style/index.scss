@@ -1,5 +1,5 @@
-$blue1: blue;
+@import '~antd/dist/antd.css';
 
-h1 {
-  color: $blue1;
-}
+@import 'variables';
+@import 'mixins';
+@import 'base';
