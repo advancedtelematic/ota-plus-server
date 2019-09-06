@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
 
@@ -21,11 +21,15 @@ export default function configureStore() {
   if (isDev) {
     middlewares.push(createLogger());
   }
+  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    serialize: true
+  }) || compose();
+
   const middleWareEnhancer = applyMiddleware(...middlewares);
 
   const store = createStore(
     rootReducer,
-    middleWareEnhancer,
+    composeEnhancer(middleWareEnhancer),
   );
   sagaMiddleware.run(rootSaga);
   return store;
