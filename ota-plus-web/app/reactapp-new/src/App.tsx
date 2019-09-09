@@ -21,7 +21,7 @@ interface IProps {
   user: UserState;
 }
 
-const App: React.FC<IProps> = (props) => {
+export const App: React.FC<IProps> = (props) => {
   const [t] = useTranslation();
 
   // FIXME: buttons are only temporary for Redux testing
