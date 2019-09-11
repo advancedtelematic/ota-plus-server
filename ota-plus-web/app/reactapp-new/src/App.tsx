@@ -1,18 +1,12 @@
 
 import React from 'react';
 import { useTranslation, UseTranslationResponse } from 'react-i18next';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 
 import Routes from './Routes';
 import { AppState } from './store';
-import { UserProfile, UserState } from './store/user/types';
-
-import {
-  setUserProfileRequest as setUserProfileRequestAction,
-  setUserProfileDone as setUserProfileDoneAction
-} from './store/user/actions';
+import { UserState } from './store/user/types';
 
 import '../style/index.scss';
 import theme from './theme';
@@ -20,10 +14,11 @@ import theme from './theme';
 import AppHeader from './components/layout/AppHeader';
 import AppMain from './components/layout/AppMain';
 import AppFooter from './components/layout/AppFooter';
+import { Actions } from './store/user/actions';
 
 interface IProps {
-  setUserProfileRequest: typeof setUserProfileRequestAction;
-  setUserProfileDone: typeof setUserProfileDoneAction;
+  setUserProfileRequest: typeof Actions.setUserProfileRequest;
+  setUserProfileDone: typeof Actions.setUserProfileDone;
   user: UserState;
 }
 
@@ -68,11 +63,9 @@ const mapStateToProps = (state: AppState) => ({
   user: state.user,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setUserProfileDone: (newUserProfile: UserProfile) => dispatch(setUserProfileDoneAction(newUserProfile)),
-    setUserProfileRequest: () => dispatch(setUserProfileRequestAction()),
-  };
+const mapDispatchToProps = {
+  setUserProfileDone: Actions.setUserProfileDone,
+  setUserProfileRequest: Actions.setUserProfileRequest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
