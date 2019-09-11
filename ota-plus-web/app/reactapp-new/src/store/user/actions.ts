@@ -1,26 +1,11 @@
-import {
-  SET_USER_PROFILE_REQUEST,
-  SET_USER_PROFILE_DONE,
-  SET_USER_PROFILE_FAILED,
-  UserProfile,
-  UserActionTypes
-} from './types';
+import { createAction } from '../../utils/makeAction';
+import { actionTypes, UserProfile } from './types';
+import { ActionsUnion } from '../../utils/types';
 
-export function setUserProfileRequest() {
-  return {
-    type: SET_USER_PROFILE_REQUEST
-  };
-}
+export const Actions = {
+  setUserProfileRequest: () => createAction(actionTypes.SET_USER_PROFILE_REQUEST),
+  setUserProfileDone: (newUserProfile: UserProfile) => createAction(actionTypes.SET_USER_PROFILE_DONE, newUserProfile),
+  setUserProfileFailed: () => createAction(actionTypes.SET_USER_PROFILE_FAILED)
+};
 
-export function setUserProfileDone(newUserProfile: UserProfile): UserActionTypes {
-  return {
-    type: SET_USER_PROFILE_DONE,
-    payload: newUserProfile,
-  };
-}
-
-export function setUserProfileFailed() {
-  return {
-    type: SET_USER_PROFILE_FAILED
-  };
-}
+export type Actions = ActionsUnion<typeof Actions>;
