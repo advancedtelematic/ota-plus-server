@@ -12,13 +12,13 @@ export const initialState: UserState = {
 };
 
 export const userReducer = (state = initialState, action: Actions): UserState => {
-  switch(action.type) {
+  switch (action.type) {
     case actionTypes.SET_USER_PROFILE_DONE: {
       return {
-        profile: { ...state.profile, ...action.payload}
-      }
+        profile: { ...state.profile, ...action.payload }
+      };
     }
     default:
       return state;
   }
-}
+};
