@@ -17,7 +17,7 @@ import AppFooter from './components/layout/AppFooter';
 import { Actions } from './store/user/actions';
 
 interface IProps {
-  setUserProfileRequest: typeof Actions.setUserProfileRequest,
+  setUserProfileRequest: typeof Actions.setUserProfileRequest;
   setUserProfileDone: typeof Actions.setUserProfileDone;
   user: UserState;
 }
@@ -66,6 +66,6 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = {
   setUserProfileDone: Actions.setUserProfileDone,
   setUserProfileRequest: Actions.setUserProfileRequest
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
