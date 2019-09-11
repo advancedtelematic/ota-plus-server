@@ -1,8 +1,8 @@
 import {
     UserState,
-    UserActionTypes,
-  SET_USER_PROFILE_DONE,
+    actionTypes,
 } from './types';
+import { Actions } from './actions';
 
 export const initialState: UserState = {
   profile: {
@@ -11,15 +11,13 @@ export const initialState: UserState = {
   },
 };
 
-export function userReducer(
-    state = initialState,
-    action: UserActionTypes,
-): UserState {
-  switch (action.type) {
-    case SET_USER_PROFILE_DONE:
+export const userReducer = (state = initialState, action: Actions): UserState => {
+  switch(action.type) {
+    case actionTypes.SET_USER_PROFILE_DONE: {
       return {
-        profile: { ...state.profile, ...action.payload },
-      };
+        profile: { ...state.profile, ...action.payload}
+      }
+    }
     default:
       return state;
   }
