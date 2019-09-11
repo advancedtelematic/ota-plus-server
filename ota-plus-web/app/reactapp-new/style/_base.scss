@@ -1,0 +1,27 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: $app-bg;
+}
+
+@include font-face(FiraGO, '/assets/fonts/FiraGo/FiraGO-Regular', 400);
+@include font-face(FiraGO, '/assets/fonts/FiraGo/FiraGO-Medium', 500);
+@include font-face(FiraGO, '/assets/fonts/FiraGo/FiraGO-Bold', 700);
+@include font-face(FiraGO, '/assets/fonts/FiraGo/FiraGO-UltraLightItalic', 200, italic);
+
+* {
+  font-family: FiraGO, -apple-system, BlinkMacSystemFont, 'Segoe UI', Ubuntu,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
