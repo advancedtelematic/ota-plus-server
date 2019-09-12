@@ -16,6 +16,8 @@ import AppMain from './components/layout/AppMain';
 import AppFooter from './components/layout/AppFooter';
 import { Actions } from './store/user/actions';
 
+import { Button, Container, ExternalLink, Title } from './components/common';
+
 interface IProps {
   setUserProfileRequest: typeof Actions.setUserProfileRequest;
   setUserProfileDone: typeof Actions.setUserProfileDone;
@@ -31,26 +33,33 @@ export const App: React.FC<IProps> = (props) => {
       <>
         <AppHeader>{t('common.test')}</AppHeader>
         <AppMain>
+          <Title size="large">Welcome</Title>
+          <Container>
+            <Title>Recently created</Title>
+          </Container>
+          <Title size="small">Devices</Title>
+          <ExternalLink url="https://www.google.com">Create device groups</ExternalLink>
+          <br />
           <Routes />
           <br />
           {JSON.stringify(props.user)}
           <div>
-            <button
+            <Button type="primary"
               onClick={() => {
                 props.setUserProfileDone({ fullName: '', email: '', picture: undefined });
               }}>
-              REDUX TEST Reset user profile
-            </button>
+              Reset user profile
+            </Button>
             <br />
             <br />
           </div>
           <div>
-            <button
+            <Button
               onClick={() => {
                 props.setUserProfileRequest();
               }}>
-              REDUX TEST Get user profile
-            </button>
+              Get user profile
+            </Button>
           </div>
         </AppMain>
         <AppFooter>Footer</AppFooter>

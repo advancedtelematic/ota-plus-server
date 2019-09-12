@@ -6,6 +6,7 @@ body {
 
 body {
   background-color: $app-bg;
+  color: $text-dark;
 }
 
 @include font-face(FiraGO, '/assets/fonts/FiraGo/FiraGO-Regular', 400);
