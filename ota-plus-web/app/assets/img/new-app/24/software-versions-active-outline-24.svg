@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>software-versions-active-outline-24</title>
+    <desc>Created with Sketch.</desc>
+    <g id="software-versions-active-outline-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="LUI-icon-pd-software-outline-24">
+            <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
+            <path d="M17,9.08 L16,10.08 L18,12.08 L16,14.08 L17,15.08 L20,12.08 L17,9.08 Z M6,12.08 L8,10.08 L7,9.08 L4,12.08 L7,15.08 L8,14.08 L6,12.08 Z M10.47,17.89 L8.65,17.07 L13.53,6.07 L15.35,6.89 L10.47,17.89 Z M22,11 L20,9 L20,4 L4,4 L4,9 L2,11 L2,4 C2,2.8954305 2.8954305,2 4,2 L20,2 C21.1045695,2 22,2.8954305 22,4 L22,11 Z M20,22 L4,22 C2.8954305,22 2,21.1045695 2,20 L2,13 L4,15 L4,20 L20,20 L20,15 L22,13 L22,20 C22,21.1045695 21.1045695,22 20,22 Z" id="Shape" fill="#000000" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

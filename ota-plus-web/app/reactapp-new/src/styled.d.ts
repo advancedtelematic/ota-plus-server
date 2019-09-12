@@ -7,14 +7,18 @@ declare module 'styled-components' {
       primaryTranslucent: string,
       primaryDarkened: string,
       secondary: string;
+      secondaryTranslucent: string;
       white: string;
+      lightGrey: string;
+      lightGreen: string;
       texts: {
         black: string;
         dark: string;
-      }
-    },
+        whiteTranslucent: string;
+      },
+    };
     shadows: {
       upwards: string;
-    }
+    };
   }
 }

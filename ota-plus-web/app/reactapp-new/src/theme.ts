@@ -7,10 +7,14 @@ const theme: DefaultTheme = {
     primaryTranslucent: COLORS.PRIMARY_TRANSLUCENT,
     primaryDarkened: COLORS.PRIMARY_DARKENED,
     secondary: COLORS.SECONDARY,
+    secondaryTranslucent: COLORS.SECONDARY_TRANSLUCENT,
     white: COLORS.WHITE,
+    lightGrey: COLORS.LIGHT_GREY,
+    lightGreen: COLORS.LIGHT_GREEN,
     texts: {
       black: COLORS.TEXT_BLACK,
-      dark: COLORS.TEXT_DARK
+      dark: COLORS.TEXT_DARK,
+      whiteTranslucent: COLORS.TEXT_WHITE_TRANSLUCENT
     }
   },
   shadows: {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>device-group-active-outline-24</title>
+    <desc>Created with Sketch.</desc>
+    <g id="device-group-active-outline-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="LUI-icon-pd-device_group_connected-outline-24">
+            <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
+            <path d="M6,20 C6,21.1045695 6.8954305,22 8,22 L16,22 C17.1045695,22 18,21.1045695 18,20 L18,16 L6,16 L6,20 Z M8,18 L16,18 L16,20 L8,20 L8,18 Z M12,6 C13.8378657,6.00168401 15.5735867,6.84559083 16.71,8.29 L15.28,9.72 C14.5318351,8.64813704 13.3071499,8.00945408 12,8.00945408 C10.6928501,8.00945408 9.46816495,8.64813704 8.72,9.72 L7.29,8.29 C8.42641331,6.84559083 10.1621343,6.00168401 12,6 Z M22,12 L22,15 C22,16.1045695 21.1045695,17 20,17 L20,14 L13,14 L13,12 L22,12 Z M5.87,6.87 L4.45,5.45 C6.34930424,3.26314551 9.10350398,2.0072479 12,2.0072479 C14.896496,2.0072479 17.6506958,3.26314551 19.55,5.45 L18.13,6.87 C16.6099769,5.05732993 14.3656379,4.01034046 12,4.01034046 C9.63436206,4.01034046 7.39002305,5.05732993 5.87,6.87 Z M11,14 L4,14 L4,17 C2.8954305,17 2,16.1045695 2,15 L2,12 L11,12 L11,14 Z" id="Shape" fill-opacity="0.8" fill="#0F1621" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
