@@ -8,5 +8,11 @@
     "footer.links.cookie-policy.url": "",
     "footer.links.contact-us": "Contact us",
     "footer.links.contact-us.url": "",
-    "footer.copyright": "@ 2019 HERE"
+    "footer.copyright": "@ 2019 HERE",
+    "navbar.links.campaigns": "Campaigns",
+    "navbar.links.devices": "Devices",
+    "navbar.links.device-groups": "Device Groups",
+    "navbar.links.home": "Home",
+    "navbar.links.software": "Software Versions",
+    "navbar.links.updates": "Update Instructions"
 }
