@@ -6,10 +6,15 @@ export const COLORS = {
   SECONDARY_TRANSLUCENT: 'rgba(15,22,33,0.4)',
   WHITE: '#FFF',
   WHITE_TRANSLUCENT: 'rgba(255,255,255,0.6)',
+  DISABLED_GREY: '#F7F8F8',
+  DISABLED_BORDER: 'rgba(15,22,33,0.15)',
+  DISABLED_TEXT: 'rgba(15,22,33,0.15)',
   LIGHT_GREEN: '#2DD5C9',
   LIGHT_GREY: '#6F737A',
   TEXT_BLACK: 'rgba(15,22,33,0.8)',
   TEXT_DARK: '#3F454D',
+  ACCENTS_LIGHT_DARK: '#E4E6E9',
+  ACCENTS_DARK: '#CFD0D3',
   TEXT_DARK_GREY: 'rgba(15,22,33,0.6)',
   TEXT_LIGHT_GREY: '#9FA2A6',
   ERROR: '#CF011A',
@@ -17,7 +22,8 @@ export const COLORS = {
 };
 
 export const SHADOWS = {
-  UPWARDS: '0 -1px 4px 0 rgba(15,22,33,0.05)'
+  UPWARDS: '0 -1px 4px 0 rgba(15,22,33,0.05)',
+  LIGHT: '1px 1px 3px 0 rgba(0,0,0,0.2)'
 };
 
 export const SIZES = {
