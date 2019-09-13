@@ -12,6 +12,7 @@ const Navbar = styled.nav`
   align-items: center;
   position: sticky;
   top: 0;
+  z-index: 999;
 `;
 
 const LogoContainer = styled.div`
@@ -27,12 +28,12 @@ const Logo = styled.div`
   background-position-y: center;
   width: 41px;
   height: 28.5px;
-  padding-right: 8px;
+  padding-right: 10px;
   border-right: 1px solid ${({ theme }) => theme.palette.lightGrey};
 `;
 
 const AppName = styled.span`
-  font-size: 1.14em;
+  font-size: 1.15em;
   font-weight: bold;
   margin-left: 10px;
   color: ${({ theme }) => theme.palette.white};
@@ -57,8 +58,9 @@ const Link = styled(NavLink)`
   align-items: center;
   height: inherit;
   text-decoration: none;
+  font-size: 1.15em;
   color: ${({ theme }) => theme.palette.whiteTranslucent};
-  padding: 0 10px;
+  padding: 0 14px;
   &:hover {
       background-color: ${({ theme }) => theme.palette.secondaryTranslucent};
       color: ${({ theme }) => theme.palette.whiteTranslucent};
@@ -72,7 +74,7 @@ const SettingsContainer = styled.div`
   align-items: center;
   border-left: 1px solid ${({ theme }) => theme.palette.lightGrey};
   padding: 0 30px 0 23px;
-  & > div {
+  & > div:not(:last-child) {
       margin-right: 15px;
   }
 `;

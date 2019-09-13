@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 const sizeVariants = {
@@ -19,7 +19,7 @@ type ExternalLinkProps = {
   url: string
 };
 
-const ExternalLink = ({ url, className, children }: ExternalLinkProps) => (
+const ExternalLink = ({ url, className, children }: ExternalLinkProps & HTMLAttributes<HTMLElement>) => (
   <a className={className} href={url} target="_blank" rel="noopener noreferrer">
     {children}
   </a>
