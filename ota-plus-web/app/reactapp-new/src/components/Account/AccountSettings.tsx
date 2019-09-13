@@ -5,8 +5,8 @@ import { Drawer } from 'antd';
 import { UseTranslationResponse, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { AppState } from '../../store';
-import { UserState } from '../../store/user/types';
-import { Title, Icon } from '../common';
+import { IUserState } from '../../store/user/types';
+import { Title, Icon, ExternalLink } from '../common';
 import { makeAcronym } from '../../utils/stringUtils';
 import { SIZES } from '../../constants/styleConstants';
 
@@ -44,7 +44,7 @@ const LinksContainer = styled.div`
   flex-direction: column;
 `;
 
-const LinkContainer = styled.div`
+const LinkContent = styled.div`
   border-bottom: 1px solid #e9e9e9;
   padding: 20px 20px;
   &:hover {
@@ -70,23 +70,24 @@ const SignoutIcon = styled(Icon)`
 `;
 
 type Props = {
-  user?: UserState;
+  user?: IUserState;
 };
 
 type LinkObject = { name: string, to: string };
 
 const renderLinks = (links: LinkObject[]): ReactElement[] => (
   links.map(link => (
-    <LinkContainer key={link.to}>
-      <Title size="small">
-        <Link
-          id={`accountSettings.link.${link.to.substring(1)}`}
-          to={link.to}
-        >
+    <Link
+      id={`accountSettings.link.${link.to.substring(1)}`}
+      to={link.to}
+      key={link.to}
+    >
+      <LinkContent>
+        <Title size="small">
           {link.name}
-        </Link>
-      </Title>
-    </LinkContainer>
+        </Title>
+      </LinkContent>
+    </Link>
   ))
 );
 
@@ -139,10 +140,12 @@ const AccountSettings = ({ user }: Props) => {
         <LinksContainer>
           {renderLinks(links)}
         </LinksContainer>
-        <Signout>
-          <SignoutIcon type="signOut" />
-          <Title size="small">{t('accountSettings.links.signout')}</Title>
-        </Signout>
+        <a href="/logout" rel="noopener noreferrer">
+          <Signout>
+            <SignoutIcon type="signOut" />
+            <Title size="small">{t('accountSettings.links.signout')}</Title>
+          </Signout>
+        </a>
       </Drawer>
     </div >
   );

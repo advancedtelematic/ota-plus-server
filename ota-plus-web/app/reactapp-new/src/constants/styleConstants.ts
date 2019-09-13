@@ -10,7 +10,10 @@ export const COLORS = {
   LIGHT_GREY: '#6F737A',
   TEXT_BLACK: 'rgba(15,22,33,0.8)',
   TEXT_DARK: '#3F454D',
-
+  TEXT_DARK_GREY: 'rgba(15,22,33,0.6)',
+  TEXT_LIGHT_GREY: '#9FA2A6',
+  ERROR: '#CF011A',
+  GREEN: '#00BD7D'
 };
 
 export const SHADOWS = {

@@ -1,20 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { App } from './App';
-import { UserState } from './store/user/types';
+import { IUserState } from './store/user/types';
 import { Actions } from './store/user/actions';
 import AppMain from './components/layout/AppMain';
 
 interface IProps {
   setUserProfileRequest: typeof Actions.setUserProfileRequest;
   setUserProfileDone: typeof Actions.setUserProfileDone;
-  user: UserState;
+  user: IUserState;
 }
 
-const props : IProps = {
+const props: IProps = {
   setUserProfileRequest: jest.fn() as typeof Actions.setUserProfileRequest,
   setUserProfileDone: jest.fn() as typeof Actions.setUserProfileDone,
-  user: {} as UserState
+  user: {} as IUserState
 };
 
 describe('App', () => {

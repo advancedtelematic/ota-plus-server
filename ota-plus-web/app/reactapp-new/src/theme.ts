@@ -1,6 +1,10 @@
 import { DefaultTheme } from 'styled-components';
 import { COLORS, SHADOWS } from './constants/styleConstants';
 
+export type StyledTheme = {
+  theme: DefaultTheme
+};
+
 const theme: DefaultTheme = {
   palette: {
     primary: COLORS.PRIMARY,
@@ -12,9 +16,12 @@ const theme: DefaultTheme = {
     lightGrey: COLORS.LIGHT_GREY,
     lightGreen: COLORS.LIGHT_GREEN,
     whiteTranslucent: COLORS.WHITE_TRANSLUCENT,
+    error: COLORS.ERROR,
     texts: {
       black: COLORS.TEXT_BLACK,
-      dark: COLORS.TEXT_DARK
+      dark: COLORS.TEXT_DARK,
+      darkGrey: COLORS.TEXT_DARK_GREY,
+      lightGrey: COLORS.TEXT_LIGHT_GREY,
     }
   },
   shadows: {
