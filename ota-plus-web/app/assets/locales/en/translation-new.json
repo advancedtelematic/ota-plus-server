@@ -1,3 +1,12 @@
 {
-    "common.test": "Hello new world"
+    "common.test": "Hello new world",
+    "footer.links.service-terms": "Service terms",
+    "footer.links.service-terms.url": "",
+    "footer.links.privacy-policy": "Privacy policy",
+    "footer.links.privacy-policy.url": "",
+    "footer.links.cookie-policy": "Cookie policy",
+    "footer.links.cookie-policy.url": "",
+    "footer.links.contact-us": "Contact us",
+    "footer.links.contact-us.url": "",
+    "footer.copyright": "@ 2019 HERE"
 }
