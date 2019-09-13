@@ -1,14 +1,22 @@
 import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
-type ExternalLinkProps = {
-  className?: string
-  children: React.ReactNode
-  url: string
+const sizeVariants = {
+  small: {
+    fontSize: '0.72em',
+    fontWeight: 300
+  },
+  default: {
+    fontSize: '0.93em',
+    fontWeight: 500
+  }
 };
 
-type Props = {
-  theme: DefaultTheme
+type ExternalLinkProps = {
+  className?: string
+  children: React.ReactNode,
+  size?: 'small' | 'default',
+  url: string
 };
 
 const ExternalLink = ({ url, className, children }: ExternalLinkProps) => (
@@ -17,8 +25,14 @@ const ExternalLink = ({ url, className, children }: ExternalLinkProps) => (
   </a>
 );
 
-export default styled(ExternalLink)(({ theme }: Props) => ({
-  color: theme.palette.primary,
+type Props = {
+  theme: DefaultTheme
+};
+
+export default styled(ExternalLink)(({ theme, size = 'default' }: Props & ExternalLinkProps) => ({
   textDecoration: 'none',
-  fontWeight: 500
+  '&, :hover': {
+    color: theme.palette.primary,
+    ...sizeVariants[size]
+  }
 }));
