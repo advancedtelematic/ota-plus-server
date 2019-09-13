@@ -12,6 +12,9 @@ declare module 'styled-components' {
       lightGrey: string;
       lightGreen: string;
       whiteTranslucent: string;
+      disabled: string;
+      disabledBorder: string;
+      disabledText: string;
       error: string;
       texts: {
         black: string;
@@ -19,9 +22,14 @@ declare module 'styled-components' {
         darkGrey: string;
         lightGrey: string;
       },
+      accents: {
+        dark: string;
+        light: string;
+      }
     };
     shadows: {
       upwards: string;
+      light: string;
     };
   }
 }

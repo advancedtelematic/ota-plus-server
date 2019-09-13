@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="11px" viewBox="0 0 11 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 57.1 (101010) - https://sketch.com -->
+    <title>9B9C12B6-536C-4BF0-B1F8-659569C63225</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="848" height="652" rx="5"></rect>
+        <filter x="-0.8%" y="-0.8%" width="101.7%" height="102.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-page---type-dropdown---1-item" transform="translate(-110.000000, -590.000000)">
+            <rect fill="#F3F3F4" x="0" y="0" width="1280" height="1132"></rect>
+            <g id="Recently-created-module" transform="translate(30.000000, 452.000000)">
+                <g id="Recently-created">
+                    <g id="BG">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="tabs" transform="translate(20.000000, 130.000000)">
+                        <g id="Tags/Filter-Attribute">
+                            <rect id="Tag-pill-[5-10]" stroke="#E4E6E9" fill="#FFFFFF" x="0.5" y="0.5" width="79.0005466" height="24" rx="12"></rect>
+                            <g id="Group" transform="translate(10.000000, 5.000000)" fill="#00B6B2">
+                                <g id="Icons/icon-close-aqua-12x12" transform="translate(50.000458, 3.000366)">
+                                    <g id="icon-close-aqua-12x12" transform="translate(1.666667, 1.666667)">
+                                        <path d="M4.27934414,3.33333333 L6.55019854,1.06247882 C6.70572674,0.906950613 6.70572674,0.651541905 6.55019854,0.495300266 L6.17065266,0.11718123 C6.01583789,-0.0390604099 5.75971576,-0.0390604099 5.60347413,0.11718123 L3.3340466,2.38732231 L1.0631922,0.11718123 C0.906950567,-0.0390604099 0.652255304,-0.0390604099 0.496013673,0.11718123 L0.117181224,0.495300266 C-0.0390604079,0.651541905 -0.0390604079,0.906950613 0.117181224,1.06247882 L2.38803562,3.33333333 L0.117181224,5.60347441 C-0.0390604079,5.75900262 -0.0390604079,6.01512476 0.117181224,6.17065297 L0.496013673,6.54948544 C0.652255304,6.70572708 0.906950567,6.70572708 1.0631922,6.54948544 L3.3340466,4.27863092 L5.60347413,6.54948544 C5.75971576,6.70572708 6.01583789,6.70572708 6.17065266,6.54948544 L6.55019854,6.1713664 C6.70572674,6.01441133 6.70572674,5.75900262 6.55019854,5.60347441 L4.27934414,3.33333333 Z" id="Shape"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
