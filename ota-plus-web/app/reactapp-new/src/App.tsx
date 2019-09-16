@@ -11,10 +11,10 @@ import { UserState } from './store/user/types';
 import '../style/index.scss';
 import theme from './theme';
 
-import AppHeader from './components/layout/AppHeader';
 import AppMain from './components/layout/AppMain';
 import AppFooter from './components/layout/AppFooter';
 import { Actions } from './store/user/actions';
+import { AppNavbar } from './components/layout/AppNavbar';
 
 import { Button, Container, ExternalLink, Title } from './components/common';
 
@@ -24,14 +24,14 @@ interface IProps {
   user: UserState;
 }
 
-export const App: React.FC<IProps> = (props) => {
+export const App = (props: IProps) => {
   const { t }: UseTranslationResponse = useTranslation();
 
   // FIXME: buttons are only temporary for Redux testing
   return (
     <ThemeProvider theme={theme}>
       <>
-        <AppHeader>{t('common.test')}</AppHeader>
+        <AppNavbar />
         <AppMain>
           <Title size="large">Welcome</Title>
           <Container>

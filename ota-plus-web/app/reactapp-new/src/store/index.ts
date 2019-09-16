@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userReducer } from './user/reducers';
 import { rootSaga } from './../saga/rootSaga';
@@ -21,15 +22,12 @@ export default function configureStore() {
   if (isDev) {
     middlewares.push(createLogger());
   }
-  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-    serialize: true
-  }) || compose();
 
   const middleWareEnhancer = applyMiddleware(...middlewares);
 
   const store = createStore(
     rootReducer,
-    composeEnhancer(middleWareEnhancer),
+    composeWithDevTools(middleWareEnhancer),
   );
   sagaMiddleware.run(rootSaga);
   return store;

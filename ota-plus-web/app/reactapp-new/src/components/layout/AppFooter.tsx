@@ -35,7 +35,7 @@ type Link = {
 
 const renderLinks = (links: Link[]): React.ReactElement[] => (
   links.map(link => (
-    <ExternalLink size="small" url={link.url}>
+    <ExternalLink size="small" url={link.url} key={`${link.url}-${link.name}`} >
       {link.name}
     </ExternalLink>
   ))

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>campaigns-inactive-solid-16</title>
+    <desc>Created with Sketch.</desc>
+    <g id="campaigns-inactive-solid-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.3">
+        <g id="LUI-icon-pd-distribute-solid-16">
+            <rect id="Rectangle" transform="translate(8.000000, 8.000000) rotate(-90.000000) translate(-8.000000, -8.000000) " x="0" y="0" width="16" height="16"></rect>
+            <path d="M15,15 L13,15 L13,13 L15,13 L15,15 Z M13,7 L3,7 C2.47042315,7.00223279 1.96335029,7.21441221 1.59,7.59 C1.21441221,7.96335029 1.00223279,8.47042315 1,9 L1,11 L3,11 L3,9 L7,9 L7,11 L9,11 L9,9 L13,9 L13,11 L15,11 L15,9 C15,7.8954305 14.1045695,7 13,7 Z M9,13 L7,13 L7,15 L9,15 L9,13 Z M3,13 L1,13 L1,15 L3,15 L3,13 Z M10,1 L11,2 L8,5 L5,2 L6,1 L8,3 L10,1 Z" id="Shape" fill-opacity="0.8" fill="#0F1621" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
