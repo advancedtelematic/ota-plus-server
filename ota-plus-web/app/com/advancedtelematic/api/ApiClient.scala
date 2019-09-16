@@ -184,6 +184,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   def getUser(userId: UserId)(implicit traceData: TraceData): Future[JsValue] =
     userProfileRequest("users/" + segment(userId.id)).execJsonValue(apiExec)
 
+  def createUser(userId: UserId, name: String, email: String)(implicit traceData: TraceData): Future[JsValue] =
+    userProfileRequest(s"users/${userId.id}")
+      .transform(_.withMethod("POST"))
+      .transform(_.withBody(Json.obj("name" -> name, "email"-> email)))
+      .execJsonValue(apiExec)
+
   def getFeature(namespace: Namespace, feature: FeatureName)(implicit traceData: TraceData): Future[Feature] =
     userProfileRequest("organizations/" + segment(namespace.get) + "/features/" + feature.get)
       .execJson[Feature](apiExec)
