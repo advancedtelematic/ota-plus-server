@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>device-group-active-outline-16</title>
+    <desc>Created with Sketch.</desc>
+    <g id="device-group-active-outline-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="LUI-icon-pd-device_group_connected-solid-16">
+            <rect id="Rectangle" x="0" y="0" width="16" height="16"></rect>
+            <path d="M10.83,5.17 C10.079727,4.41889183 9.06163699,3.99685337 8,3.99685337 C6.93836301,3.99685337 5.92027303,4.41889183 5.17,5.17 L5.88,5.88 C7.05127019,4.71018649 8.94872981,4.71018649 10.12,5.88 L10.83,5.17 Z M13,3.05 C11.6872248,1.73709086 9.90663919,0.999494924 8.05,0.999494924 C6.19336081,0.999494924 4.41277518,1.73709086 3.1,3.05 L3.81,3.76 C6.15254037,1.42037298 9.94745963,1.42037298 12.29,3.76 L13,3.05 Z M7,8 L7,10 L3,10 L3,12 L2,12 C1.44771525,12 1,11.5522847 1,11 L1,8 L7,8 Z M15,8 L15,11 C15,11.5522847 14.5522847,12 14,12 L13,12 L13,10 L9,10 L9,8 L15,8 Z M5,12 L5,14 C5,14.5522847 5.44771525,15 6,15 L10,15 C10.5522847,15 11,14.5522847 11,14 L11,12 L5,12 Z" id="Shape" fill-opacity="0.8" fill="#0F1621" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
