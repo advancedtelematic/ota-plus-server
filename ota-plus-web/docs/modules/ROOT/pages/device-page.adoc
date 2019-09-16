@@ -32,12 +32,12 @@ image::s9-device_history.png[image]
 
 1.  Open the device details that we first looked at in *Step 3*.
 * Navigate to the https://connect.ota.here.com/#/devices[Devices] page, select a device group, and select a test device within that group.
-3.  Click the *primary ECU*, and in the *SOFTWARE* section, locate the software that you uploaded in the previous step.
+2.  Click the *primary ECU*, and in the *SOFTWARE* section, locate the software that you uploaded in the previous step.
 * If you uploaded two versions of the same software, you should see a row for each version that you uploaded.
-4.  Click the *first version* that you uploaded.
+3.  Click the *first version* that you uploaded.
 * In the right-hand *PROPERTIES* panel, you'll see more details about the selected software version — the status should be *Not Installed*.
 +
-5.  Click the *Install* button at the bottom of the *PROPERTIES* section.
+4.  Click the *Install* button at the bottom of the *PROPERTIES* section.
 * OTA Connect will remotely install the software on your test device.
 
 [.thumb]
