@@ -96,6 +96,12 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
         "isDefault" -> true
       ))))
 
+    case ("GET", url) if ".*/api/v1/users/.*".r.findFirstIn(url).isDefined =>
+      Action(_ => Ok(Json.obj(
+        "defaultNamespace" -> namespace,
+        "userId" -> "abc",
+      )))
+
     case (method, url) =>
       Action {
         NotFound(s"No handler for ' $method $url'")

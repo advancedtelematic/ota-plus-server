@@ -2,11 +2,13 @@ package com.advancedtelematic.auth.oidc
 
 import akka.http.scaladsl.util.FastFuture
 import brave.play.{TraceData, ZipkinTraceServiceLike}
-import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.auth.Tokens
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
+import com.advancedtelematic.auth.{AccessToken, Tokens}
+import com.advancedtelematic.controllers.UserId
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.Inject
 import play.api.Configuration
+import play.api.libs.json.JsValue
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -22,19 +24,31 @@ class NamespaceFromIdentity extends NamespaceProvider {
 class NamespaceFromUserProfile @Inject()(val conf: Configuration,
                                          val ws: WSClient,
                                          val clientExec: ApiClientExec,
+                                         val oidcGateway: OidcGateway,
                                          val tracer: ZipkinTraceServiceLike)
                                         (implicit ec: ExecutionContext)
   extends NamespaceProvider with ApiClientSupport {
 
-  override def apply(tokens: Tokens): Future[Namespace] = {
-    implicit val traceData = TraceData(tracer.tracing.tracer().newTrace())
+  implicit private val traceData = TraceData(tracer.tracing.tracer().newTrace())
 
-    userProfileApi.userOrganizations(tokens.idToken.userId).map {
-      case organizations if organizations.isEmpty =>
-        Namespace.generate
-      case organizations =>
-        organizations.filter(_.isDefault).map(_.namespace).head
-    }
+  private val namespaceFromJson: JsValue => Namespace = json => Namespace((json \ "defaultNamespace").as[String])
+
+  private def createUser(accessToken: AccessToken, userId: UserId) =
+    oidcGateway
+      .getUserInfo(accessToken)
+      .flatMap { ic =>
+        userProfileApi.createUser(userId, ic.name, ic.email)
+      }
+
+  override def apply(tokens: Tokens): Future[Namespace] = {
+    val userId = tokens.idToken.userId
+    userProfileApi
+      .getUser(userId)
+      .recoverWith {
+        case RemoteApiError(result, _) if result.header.status == 404 =>
+          createUser(tokens.accessToken, userId)
+      }
+      .map(namespaceFromJson)
   }
 }
 
