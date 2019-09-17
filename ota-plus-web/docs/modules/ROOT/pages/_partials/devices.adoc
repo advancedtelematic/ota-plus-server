@@ -3,13 +3,13 @@
 //  tag::single-device-install-steps[]
 *To install a software version on a single device, follow these steps:*
 
-1.  Navigate to the https://connect.ota.here.com/#/devices[Devices] page, select a device group, and select a device within that group.
-1.  Click the *primary ECU*, and in the *SOFTWARE* section, locate the software that you want to install, and click the software name.
+.  Navigate to the https://connect.ota.here.com/#/devices[Devices] page, select a device group, and select a device within that group.
+.  Click the *primary ECU*, and in the *SOFTWARE* section, locate the software that you want to install, and click the software name.
 * You should see a list of all applicable versions of that software.
-1.  Select the version that you want to install.
+.  Select the version that you want to install.
 * In the right-hand *PROPERTIES* panel, you'll see more details about the selected software version — the status should be *Not Installed*.
 +
-1.  Click the *Install* button at the bottom of the *PROPERTIES* section.
+.  Click the *Install* button at the bottom of the *PROPERTIES* section.
 * OTA Connect will remotely install the software version on your test device.
 
 [.thumb]
