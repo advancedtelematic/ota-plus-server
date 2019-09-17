@@ -34,4 +34,7 @@
 // TODO * xref:retry-campaigns.adoc[Retry Failed Installations]
 // TODO * xref:manage-campaigns.adoc[Manage Campaigns]
 
+.Use Cases
+* xref:use-case-ecm.adoc[Updating the engine shutdown calibration on an ECM]
+
 // Common Gotchas? Troubleshooting?
