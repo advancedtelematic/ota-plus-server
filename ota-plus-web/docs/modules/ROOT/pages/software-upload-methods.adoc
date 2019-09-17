@@ -1,1 +1,1 @@
-include::dev@ota-client::page$software-management.adoc[]
+include::latest@ota-client::page$software-management.adoc[]
