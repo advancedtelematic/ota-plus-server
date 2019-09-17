@@ -17,6 +17,10 @@ trait ApiClientSupport {
 
   val userProfileApi = new UserProfileApi(conf, clientExec)
 
+  val deviceRegistryApi = new DeviceRegistryApi(conf, clientExec)
+
+  val campaignerApi = new CampaignerApi(conf, clientExec)
+
   val repoServerApi = new RepoServerApi(conf, clientExec)
 
   val keyServerApi = new KeyServerApi(conf, clientExec)
