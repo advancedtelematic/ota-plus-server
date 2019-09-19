@@ -11,10 +11,10 @@ const theme: DefaultTheme = {
     white: COLORS.WHITE,
     lightGrey: COLORS.LIGHT_GREY,
     lightGreen: COLORS.LIGHT_GREEN,
+    whiteTranslucent: COLORS.WHITE_TRANSLUCENT,
     texts: {
       black: COLORS.TEXT_BLACK,
-      dark: COLORS.TEXT_DARK,
-      whiteTranslucent: COLORS.TEXT_WHITE_TRANSLUCENT
+      dark: COLORS.TEXT_DARK
     }
   },
   shadows: {
