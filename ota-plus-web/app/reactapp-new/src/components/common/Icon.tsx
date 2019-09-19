@@ -20,6 +20,7 @@ const Icon = ({ className, type, alt = type, theme = Theme.dark }: Props) => {
       deviceGroup: '/assets/img/newapp/icons/device_group_dark.svg',
       softwareVersion: '/assets/img/newapp/icons/software_versions_dark.svg',
       softwareUpdates: '/assets/img/newapp/icons/software_updates_dark.svg',
+      signOut: '/assets/img/newapp/icons/software_updates_dark.svg',
     },
     [Theme.light]: {
 
@@ -27,8 +28,9 @@ const Icon = ({ className, type, alt = type, theme = Theme.dark }: Props) => {
   };
   const iconType = types[theme][type] || '';
   return (
-      iconType &&
-      <img className={className} alt={alt} src={iconType} />
+    iconType
+    ? <img className={className} alt={alt} src={iconType} />
+    : <img />
   );
 };
 
