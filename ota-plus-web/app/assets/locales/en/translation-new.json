@@ -1,4 +1,9 @@
 {
+    "accountSettings.label.organization": "Organization: ",
+    "accountSettings.links.usage": "Usage",
+    "accountSettings.links.organization": "Organization",
+    "accountSettings.links.keys": "Provisioning keys",
+    "accountSettings.links.signout": "Sign out",
     "common.test": "Hello new world",
     "dashboard.docslinks.title": "Learn to deploy updates",
     "dashboard.docslinks.description": "Practical examples to help you get started with OTA Connect:",

@@ -11,10 +11,10 @@ declare module 'styled-components' {
       white: string;
       lightGrey: string;
       lightGreen: string;
+      whiteTranslucent: string;
       texts: {
         black: string;
         dark: string;
-        whiteTranslucent: string;
       },
     };
     shadows: {
