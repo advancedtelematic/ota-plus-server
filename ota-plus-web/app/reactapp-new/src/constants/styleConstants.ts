@@ -5,13 +5,19 @@ export const COLORS = {
   SECONDARY: '#272D37',
   SECONDARY_TRANSLUCENT: 'rgba(15,22,33,0.4)',
   WHITE: '#FFF',
+  WHITE_TRANSLUCENT: 'rgba(255,255,255,0.6)',
   LIGHT_GREEN: '#2DD5C9',
   LIGHT_GREY: '#6F737A',
   TEXT_BLACK: 'rgba(15,22,33,0.8)',
   TEXT_DARK: '#3F454D',
-  TEXT_WHITE_TRANSLUCENT: 'rgba(255,255,255,0.6)'
+
 };
 
 export const SHADOWS = {
   UPWARDS: '0 -1px 4px 0 rgba(15,22,33,0.05)'
+};
+
+export const SIZES = {
+  NAVBAR_HEIGHT: '50px',
+  SIDEBAR_WIDTH: '25%'
 };

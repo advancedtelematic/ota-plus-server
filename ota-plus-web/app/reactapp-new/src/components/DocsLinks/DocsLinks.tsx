@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation, UseTranslationResponse } from 'react-i18next';
-import { Container, Title, ExternalLink } from '../common';
-import styled, { DefaultTheme } from 'styled-components';
-
-import { Icon } from '../common';
+import { Container, Title, ExternalLink, Icon } from '../common';
+import styled from 'styled-components';
 
 const Description = styled.div`
   color: ${({ theme }) => theme.palette.texts.black};

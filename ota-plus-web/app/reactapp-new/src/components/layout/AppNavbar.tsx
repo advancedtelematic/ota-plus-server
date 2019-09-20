@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation, UseTranslationResponse } from 'react-i18next';
-import { COLORS } from '../../constants/styleConstants';
+import { COLORS, SIZES } from '../../constants/styleConstants';
+import { AccountSettings } from '../Account';
 
 const Navbar = styled.nav`
-  height: 50px;
+  height: ${SIZES.NAVBAR_HEIGHT};
   background-color: ${({ theme }) => theme.palette.secondary};
   display: flex;
   align-items: center;
@@ -47,7 +48,7 @@ const Li = styled.li`
   justify-content: center;
   align-items: center;
   display: flex;
-  height: 50px;
+  height: ${SIZES.NAVBAR_HEIGHT};
 `;
 
 const Link = styled(NavLink)`
@@ -56,11 +57,11 @@ const Link = styled(NavLink)`
   align-items: center;
   height: inherit;
   text-decoration: none;
-  color: ${({ theme }) => theme.palette.texts.whiteTranslucent};
+  color: ${({ theme }) => theme.palette.whiteTranslucent};
   padding: 0 10px;
   &:hover {
       background-color: ${({ theme }) => theme.palette.secondaryTranslucent};
-      color: ${({ theme }) => theme.palette.texts.whiteTranslucent};
+      color: ${({ theme }) => theme.palette.whiteTranslucent};
   }
 `;
 
@@ -85,13 +86,6 @@ const MiscSettings = styled.div`
 const Support = styled.div`
   width: 20px;
   height: 20px;
-  background-color: ${({ theme }) => theme.palette.white};
-`;
-
-const AccountSettings = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
   background-color: ${({ theme }) => theme.palette.white};
 `;
 
