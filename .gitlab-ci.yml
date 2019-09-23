@@ -1,4 +1,5 @@
 stages:
+  - publish-docs-if-changed
   - trigger
 
 
@@ -22,7 +23,7 @@ trigger-veracode-scan:
       - scan.tar
 
 trigger-docsite-build:
-  stage: trigger
+  stage: publish-docs-if-changed
   only:
     refs:
       - master
