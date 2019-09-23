@@ -13,5 +13,5 @@
 * OTA Connect will remotely install the software version on your test device.
 
 [.thumb]
-image::s5-install_device.png[image]
+image::ota-web::s5-install_device.png[image]
 //  end::single-device-install-steps[]

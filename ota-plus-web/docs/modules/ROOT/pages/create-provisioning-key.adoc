@@ -6,13 +6,11 @@
 
 Go to the {app-url}/#/profile/access-keys[**Provisioning Keys**, window="_blank"] tab of your profile.
 
-image::s1-prov.png[]
-// MC: Images don't render from included files, copied this image to "ota-client" until I can find a better solution (this topic is included in ota-client:ROOT:download-prov-key.adoc)
+image::ota-web::s1-prov.png[]
 
 Create a new key, select its period of validity, and then download it.
 
-image::screenshot_provisioning_key_2.png[]
-// MC: Images don't render from included files, copied this image to "ota-client" until I can find a better solution (this topic is included in ota-client:ROOT:download-prov-key.adoc)
+image::ota-web::screenshot_provisioning_key_2.png[]
 
 It comes as a zip file containing a provisioning key and credentials for your build system to publish images. You don't need to unzip it; just save it somewhere. You'll need it when you set up your Yocto build or configure the {product-name} client.
 
