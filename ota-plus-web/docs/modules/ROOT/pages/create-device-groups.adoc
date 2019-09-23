@@ -23,7 +23,7 @@ This list should be a `.txt` file with one ID on each line.
 +
 Before you upload this list, make sure that you've provisioned all of the specified devices first.
 +
-NOTE: By default, OTA Connect automatically generates device IDs during the provisioning process. Currently, there's no way to get a list of these IDs. However, to create this list, you need to know the device IDs for all the devices that you've provisioned. The best way to create this list is to have your developers xref:dev@ota-client::use-your-own-deviceid.adoc[define the device IDs] and keep a list of the IDs that they've configured.
+NOTE: By default, OTA Connect automatically generates device IDs during the provisioning process. Currently, there's no way to get a list of these IDs. However, to create this list, you need to know the device IDs for all the devices that you've provisioned. The best way to create this list is to have your developers xref:ota-client::use-your-own-deviceid.adoc[define the device IDs] and keep a list of the IDs that they've configured.
 +
 ..  If you don't have a list, you can add devices manually.
 +
@@ -41,7 +41,7 @@ Click *Create* to finish creating your group, open the *All devices* or *Ungroup
 2.  Select *Smart Group* and click Next.
 3.  In the next window, enter a group name and define a filter for your devices.
 +
-A filter helps OTA Connect assign each vehicle to a fleet. Currently, OTA Connect can filter based on characters in the Device ID. By default OTA Connect generates a random device ID for you. But developers can xref:dev@ota-client::use-your-own-deviceid.adoc[configure the device ID] to be whatever you want.
+A filter helps OTA Connect assign each vehicle to a fleet. Currently, OTA Connect can filter based on characters in the Device ID. By default OTA Connect generates a random device ID for you. But developers can xref:ota-client::use-your-own-deviceid.adoc[configure the device ID] to be whatever you want.
 +
 In this procedure, we'll use the VIN number as an example of a device ID.
 +

@@ -1,7 +1,7 @@
 = Introduction
 
-include::dev@getstarted::partial$product-intro.adoc[tags=standard-intro]
+include::getstarted::partial$product-intro.adoc[tags=standard-intro]
 
 == Who is this guide for?
 
-This guide is primarily intended for campaign managers who want an in-depth understanding of how to deploy software updates that their developers have prepared. You don't need any technical skills to follow these instructions, but helps if you already have some experience managing sofware deployments in the automotive industry.
+This guide is primarily intended for campaign managers who want an in-depth understanding of how to deploy software updates that their developers have prepared. You don't need any technical skills to follow these instructions, but helps if you already have some experience managing software deployments in the automotive industry.
