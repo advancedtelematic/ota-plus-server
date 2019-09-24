@@ -32,9 +32,10 @@ const renderStats = (id: string, statValue: number, type: CardType, description?
   <>
     <PrimaryText id={`${id}-stat-value`}>{statValue.toLocaleString()}</PrimaryText>
     {type !== 'campaigns' && description
-      ? <SecondaryTextNormal isLight>{description}</SecondaryTextNormal>
+      ? <SecondaryTextNormal isLight id={`${id}-desc-done`}>{description}</SecondaryTextNormal>
       : (
         <SecondaryTextError
+          id={`${id}-error`}
           style={{
             // If there are no campaign errors, highlight the text in green
             color: description && Number(description.split(' ').slice(0, 1).join(' ')) === 0
@@ -63,14 +64,19 @@ export const DashboardStepperCard = ({ id, buttonTitle, description, statValue, 
     <Card status={status} id={id}>
       <TitleWrapper>
         <TitleIcon type={type} />
-        <Title size="small">{title}</Title>
+        <Title size="small" id={`${id}-title`}>{title}</Title>
       </TitleWrapper>
       {isLoading
         ? <LoadingIcon type="loading" spin />
         : status === 'done' && statValue
           ? renderStats(id, statValue, type, description)
-          : <SecondaryText>{description}</SecondaryText>}
-      <ActionButton type={status === 'active' ? 'primary' : 'default'}>{buttonTitle}</ActionButton>
+          : <SecondaryText id={`${id}-desc`}>{description}</SecondaryText>}
+      <ActionButton
+        id={`${id}-action-btn`}
+        type={status === 'active' ? 'primary' : 'default'}
+      >
+        {buttonTitle}
+      </ActionButton>
     </Card>
   );
 };

@@ -125,10 +125,10 @@ export const AppNavbar = () => {
     { name: t('navbar.links.campaigns'), to: '/campaigns' },
   ];
   return (
-    <Navbar>
+    <Navbar id="app-navbar">
       <LogoContainer>
         <Logo />
-        <AppName>OTA Connect</AppName>
+        <AppName>{t('navbar.app-name')}</AppName>
       </LogoContainer>
       <Ul>
         {renderLinks(links)}
