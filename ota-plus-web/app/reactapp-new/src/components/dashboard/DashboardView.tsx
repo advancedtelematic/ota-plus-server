@@ -32,7 +32,7 @@ export const DashboardView = () => {
   const { t } = useTranslation();
 
   return (
-    <Dashboard>
+    <Dashboard id="dashboard-view">
       <Title size="large">{t('dashboard.title')}</Title>
       <DashboardStepper />
       <SplitWrapper>

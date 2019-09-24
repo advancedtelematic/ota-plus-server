@@ -7,13 +7,13 @@ import { AddMembersButton, Description, StyledIcon, TitleWrapper } from './style
 export const BuildTeam = () => {
   const { t }: UseTranslationResponse = useTranslation();
   return (
-    <Container elevation={2}>
+    <Container id="build-team" elevation={2}>
       <TitleWrapper>
         <StyledIcon type="people" />
-        <Title>{t('dashboard.buildteam.title')}</Title>
+        <Title id="build-team-title">{t('dashboard.buildteam.title')}</Title>
       </TitleWrapper>
-      <Description>{t('dashboard.buildteam.description')}</Description>
-      <AddMembersButton type="link">
+      <Description id="build-team-desc">{t('dashboard.buildteam.description')}</Description>
+      <AddMembersButton type="link" id="build-team-add-btn">
         <Icon theme={Theme.aqua} type="plus" />
         {t('dashboard.buildteam.button-title')}
       </AddMembersButton>

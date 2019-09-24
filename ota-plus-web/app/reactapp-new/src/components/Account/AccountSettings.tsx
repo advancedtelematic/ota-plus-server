@@ -113,7 +113,7 @@ const AccountSettings = ({ user }: Props) => {
 
   return (
     <div>
-      <Avatar onClick={openSidebar} isActive={isSidebarVisible}>{acronym}</Avatar>
+      <Avatar id="sidebar-avatar" onClick={openSidebar} isActive={isSidebarVisible}>{acronym}</Avatar>
       <Drawer
         width={SIZES.SIDEBAR_WIDTH}
         placement="right"
@@ -134,16 +134,16 @@ const AccountSettings = ({ user }: Props) => {
         visible={isSidebarVisible}
       >
         <DrawerHeader>
-          <Title size="large">{userName}</Title>
-          <span>{t('accountSettings.label.organization')}</span>
+          <Title size="large" id="sidebar-username">{userName}</Title>
+          <span id="sidebar-org">{t('accountSettings.label.organization')}</span>
         </DrawerHeader>
         <LinksContainer>
           {renderLinks(links)}
         </LinksContainer>
-        <a href="/logout" rel="noopener noreferrer">
+        <a href="/logout" rel="noopener noreferrer" id="sidebar-signout">
           <Signout>
             <SignoutIcon type="signOut" />
-            <Title size="small">{t('accountSettings.links.signout')}</Title>
+            <Title size="small" id="sidebar-signout-title">{t('accountSettings.links.signout')}</Title>
           </Signout>
         </a>
       </Drawer>
