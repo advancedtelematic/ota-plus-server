@@ -1,4 +1,5 @@
 stages:
+  - publish-docs-if-changed
   - trigger
 
 
@@ -20,3 +21,14 @@ trigger-veracode-scan:
   artifacts:
     paths:
       - scan.tar
+
+trigger-docsite-build:
+  stage: publish-docs-if-changed
+  only:
+    refs:
+      - master
+    changes:
+      - ota-plus-web/docs/**/*
+  trigger:
+    project: olp/edge/ota/documentation/ota-connect-docs
+    branch: master
