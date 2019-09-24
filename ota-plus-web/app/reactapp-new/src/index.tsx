@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import './i18n';
 import configureStore from './store';
 
+import '../style/index.scss';
+
 const store = configureStore();
 
 import App from './App';

@@ -6,7 +6,7 @@ type Props = {
   theme: DefaultTheme
 };
 
-export default styled.div<Props>(({ elevation = 1, rounded = true, theme }) => ({
+export default styled.div<Props>(({ elevation = 1, rounded = true, theme }: Props) => ({
   padding: '20px',
   backgroundColor: theme.palette.white,
   borderRadius: rounded ? '5px' : 0,

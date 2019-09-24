@@ -1,35 +1,40 @@
 import React from 'react';
-import { useTranslation, UseTranslationResponse } from 'react-i18next';
-import { Container, Title, ExternalLink, Icon } from '../common';
 import styled from 'styled-components';
+import { useTranslation, UseTranslationResponse } from 'react-i18next';
+import { Container, Title, ExternalLink, Icon } from '../../common';
 
 const Description = styled.div`
   color: ${({ theme }) => theme.palette.texts.black};
-  font-size: 1em;
-  line-height: 17px;
+  font-size: 0.93em;
+  line-height: 24px;
+  padding-right: 40px;
 `;
 
 const List = styled.ul`
   list-style: none;
-  margin: 1.3em 0 0 0;
+  margin: 1em 0 0 0;
   padding: 0;
 `;
 
 const ListItem = styled.li`
-  margin: 0.6em 0 0 0;
-  line-height: 18px;
+  margin: 0.3em 0 0 0;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  a {
+    line-height: 20px;
+  }
 `;
 
 const StyledIcon = styled(Icon)`
-  width: 13px;
-  margin-top: -3px;
+  width: 16px;
   margin-right: 10px;
 `;
 
 const DocsLinks = () => {
   const { t }: UseTranslationResponse = useTranslation();
   return (
-    <Container>
+    <Container elevation={2}>
       <Title>{t('dashboard.docslinks.title')}</Title>
       <Description>{t('dashboard.docslinks.description')}</Description>
       <List>

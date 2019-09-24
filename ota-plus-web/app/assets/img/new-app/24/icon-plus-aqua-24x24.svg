@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 57.1 (101010) - https://sketch.com -->
+    <title>E20723AE-ADF3-40F8-BE2A-DBEDB155C9C1</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="353" height="275" rx="5"></rect>
+        <filter x="-2.0%" y="-1.8%" width="104.0%" height="105.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0588235294   0 0 0 0 0.0862745098   0 0 0 0 0.129411765  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-page---type-dropdown---1-item" transform="translate(-917.000000, -995.000000)">
+            <rect fill="#F3F3F4" x="0" y="0" width="1280" height="1132"></rect>
+            <g id="team-module" transform="translate(897.000000, 777.000000)">
+                <g id="BG">
+                    <g>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+                <g id="Buttons/CC/Tertiary/Default" transform="translate(20.000000, 215.000000)">
+                    <rect id="safety-area" x="0" y="0" width="137" height="30"></rect>
+                    <g id="Icons/icon-plus-aqua-24x24" transform="translate(0.000000, 3.000000)" fill="#00B6B2">
+                        <g id="icon-plus-aqua" transform="translate(6.000000, 6.000000)">
+                            <path d="M6.937,5.063 L6.937,0.563 C6.937,0.253 6.684,0.001 6.375,0.001 L5.625,0.001 C5.315,-1.62630326e-19 5.062,0.253 5.062,0.563 L5.062,5.063 L0.562,5.063 C0.252,5.063 0,5.316 0,5.625 L0,6.375 C0,6.685 0.252,6.938 0.562,6.938 L5.062,6.938 L5.062,11.438 C5.062,11.748 5.315,12 5.625,12 L6.375,12 C6.684,12 6.937,11.747 6.937,11.438 L6.937,6.938 L11.437,6.938 C11.747,6.938 11.999,6.685 11.999,6.375 L11.999,5.625 C11.999,5.316 11.747,5.063 11.437,5.063 L6.937,5.063 Z" id="Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

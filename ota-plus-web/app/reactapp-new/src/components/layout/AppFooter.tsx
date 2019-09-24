@@ -35,13 +35,13 @@ type Link = {
 
 const renderLinks = (links: Link[]): React.ReactElement[] => (
   links.map(link => (
-    <ExternalLink size="small" url={link.url} key={`${link.url}-${link.name}`} >
+    <ExternalLink size="small" url={link.url} key={`${link.url}-${link.name}`}>
       {link.name}
     </ExternalLink>
   ))
 );
 
-export const AppFooter = () => {
+export const AppFooter: React.FC = () => {
   const { t }: UseTranslationResponse = useTranslation();
   const links: Link[] = [
     { name: t('footer.links.service-terms'), url: t('footer.links.service-terms.url') },
