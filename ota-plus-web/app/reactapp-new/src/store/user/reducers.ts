@@ -1,19 +1,19 @@
 import {
-    UserState,
-    actionTypes,
+  IUserState,
+  ActionType,
 } from './types';
 import { Actions } from './actions';
 
-export const initialState: UserState = {
+export const initialState: IUserState = {
   profile: {
     fullName: '',
     email: '',
   },
 };
 
-export const userReducer = (state = initialState, action: Actions): UserState => {
+export const userReducer = (state = initialState, action: Actions): IUserState => {
   switch (action.type) {
-    case actionTypes.SET_USER_PROFILE_DONE: {
+    case ActionType.SET_USER_PROFILE_DONE: {
       return {
         profile: { ...state.profile, ...action.payload }
       };

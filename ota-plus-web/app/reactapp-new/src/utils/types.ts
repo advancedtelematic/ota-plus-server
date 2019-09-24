@@ -1,4 +1,4 @@
-export interface Action <T extends string> {
+export interface Action<T extends string> {
   type: T;
 }
 
@@ -13,4 +13,4 @@ type ActionCreatorsMapObject = {
 
 export type ActionsUnion<A extends ActionCreatorsMapObject> = ReturnType<A[keyof A]>;
 
-export type Object = {[key: string]: any };
+export type Object = { [key: string]: any };

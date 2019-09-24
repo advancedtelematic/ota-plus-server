@@ -39,7 +39,11 @@ const styleVariants = (theme: DefaultTheme) => ({
       backgroundColor: theme.palette.primaryDarkened
     }
   },
-  link: {},
+  link: {
+    '&, :hover, :focus, :active': {
+      color: theme.palette.primary
+    },
+  },
   ghost: {},
   dashed: {},
   danger: {}

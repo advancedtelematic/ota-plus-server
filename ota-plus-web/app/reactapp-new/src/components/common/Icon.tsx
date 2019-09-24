@@ -1,8 +1,9 @@
 import React from 'react';
 
-enum Theme {
+export enum Theme {
   light = 'light',
-  dark = 'dark'
+  dark = 'dark',
+  aqua = 'aqua'
 }
 
 type Props = {
@@ -15,22 +16,24 @@ type Props = {
 const Icon = ({ className, type, alt = type, theme = Theme.dark }: Props) => {
   const types: Record<string, Record<string, string>> = {
     [Theme.dark]: {
-      campaigns: '/assets/img/newapp/icons/campaigns_dark.svg',
-      devices: '/assets/img/newapp/icons/devices_dark.svg',
-      deviceGroup: '/assets/img/newapp/icons/device_group_dark.svg',
-      softwareVersion: '/assets/img/newapp/icons/software_versions_dark.svg',
-      softwareUpdates: '/assets/img/newapp/icons/software_updates_dark.svg',
-      signOut: '/assets/img/newapp/icons/software_updates_dark.svg',
+      campaigns: '/assets/img/new-app/24/campaigns-active-solid-24.svg',
+      devices: '/assets/img/new-app/24/devices-active-outline-24.svg',
+      deviceGroup: '/assets/img/new-app/24/device-group-active-outline-24.svg',
+      people: '/assets/img/new-app/24/people-active-outline-24.svg',
+      softwareVersion: '/assets/img/new-app/24/software-versions-active-outline-24.svg',
+      softwareUpdates: '/assets/img/new-app/24/software-updates-active-outline-24.svg',
+      signOut: '/assets/img/new-app/24/software-updates-active-outline-24.svg'
     },
-    [Theme.light]: {
-
+    [Theme.light]: {},
+    [Theme.aqua]: {
+      plus: '/assets/img/new-app/24/icon-plus-aqua-24x24.svg'
     }
-  };
+  } as const;
   const iconType = types[theme][type] || '';
   return (
     iconType
-    ? <img className={className} alt={alt} src={iconType} />
-    : <img />
+      ? <img className={className} alt={alt} src={iconType} />
+      : <img />
   );
 };
 

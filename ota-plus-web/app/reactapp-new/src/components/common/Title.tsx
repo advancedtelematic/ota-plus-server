@@ -7,15 +7,15 @@ const styleVariants = (theme: DefaultTheme) => ({
     lineHeight: '30px'
   },
   medium: {
-    height: '40px',
     fontSize: '1.58em',
-    lineHeight: '28px',
+    lineHeight: '40px',
+    marginBottom: '20px',
     color: theme.palette.texts.black
   },
   large: {
-    height: '50px',
     fontSize: '2.29em',
-    lineHeight: '46px'
+    lineHeight: '46px',
+    marginBottom: '22px'
   }
 });
 
@@ -24,7 +24,7 @@ type Props = {
   theme: DefaultTheme
 };
 
-export default styled.h1<Props>(({ size = 'medium', theme }) => ({
+export default styled.h1<Props>(({ size = 'medium', theme }: Props) => ({
   fontWeight: 700,
   color: theme.palette.texts.black,
   ...styleVariants(theme)[size]
