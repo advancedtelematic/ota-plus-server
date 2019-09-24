@@ -112,11 +112,9 @@ export const DashboardStepper = ({
   ]);
 
   return (
-    <StepperWrapper>
+    <StepperWrapper id="stepper-wrapper">
       <Stepper current={currentStep}>
-        {steps.map(() => (
-          <Step />
-        ))}
+        {steps.map(() => <Step />)}
       </Stepper>
       <CardsWrapper>
         {steps.map(({ primaryStatValue, secondaryStatValue }, index) => {

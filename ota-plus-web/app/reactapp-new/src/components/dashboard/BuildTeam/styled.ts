@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Icon, Button } from '../../common';
 
 const AddMembersButton = styled(Button)`
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
   padding: 0;
   font-weight: 500;
@@ -10,7 +12,6 @@ const AddMembersButton = styled(Button)`
     margin-left: 4px;
     font-size: 1.15em;
     letter-spacing: 0.01px;
-    line-height: 18px;
   }
 `;
 

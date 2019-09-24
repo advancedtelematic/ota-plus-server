@@ -51,7 +51,7 @@ export const AppFooter: React.FC = () => {
   ];
 
   return (
-    <Footer>
+    <Footer id="app-footer">
       {renderLinks(links)}
       <CopyrightTag>{t('footer.copyright')}</CopyrightTag>
     </Footer>
