@@ -122,9 +122,10 @@ class CryptApi(conf: Configuration, apiExec: ApiClientExec)
       .execResult(apiExec)
       .transform {
         case Success(res) if Status.isServerError(res.header.status) =>
-                            Failure(RemoteApiError(res, "vault error status"))
+          Failure(RemoteApiError(res, JsString("vault error status"), "vault error status"))
         case Success(res) if ! Status.isSuccessful(res.header.status) =>
-          Failure(RemoteApiError(res, s"Error status ${res.header.status} downloading credentials"))
+          val e = s"Error status ${res.header.status} downloading credentials"
+          Failure(RemoteApiError(res, JsString(e), e))
         case Success(res) => Success(res.body)
         case Failure(exception) => Failure(exception)
       }

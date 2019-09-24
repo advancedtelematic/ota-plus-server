@@ -29,7 +29,7 @@ object ApiVersion extends Enumeration {
 
 case class RemoteApiIOError(cause: Throwable) extends Exception(cause) with NoStackTrace
 
-case class RemoteApiError(result: Result, msg: String = "") extends Exception(msg) with NoStackTrace
+case class RemoteApiError(result: Result, errorBody: JsValue, msg: String = "") extends Exception(msg) with NoStackTrace
 
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 

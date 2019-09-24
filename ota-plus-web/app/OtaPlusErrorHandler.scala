@@ -21,7 +21,7 @@ class OtaPlusErrorHandler @Inject() (
 
   override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     val handler: PartialFunction[Throwable, Result] = {
-      case RemoteApiError(result, _) =>
+      case RemoteApiError(result, _, _) =>
         result
       case RemoteApiIOError(cause) =>
         BadGateway(cause.getMessage)

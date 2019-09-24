@@ -45,7 +45,9 @@ class NamespaceFromUserProfile @Inject()(val conf: Configuration,
     userProfileApi
       .getUser(userId)
       .recoverWith {
-        case RemoteApiError(result, _) if result.header.status == 404 =>
+        case RemoteApiError(result, errorBody, _)
+          if result.header.status == 404 &&
+            (errorBody \ "code").validate[String].map(_ == "missing_entity").getOrElse(false) =>
           createUser(tokens.accessToken, userId)
       }
       .map(namespaceFromJson)

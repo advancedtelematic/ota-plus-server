@@ -107,9 +107,9 @@ class UserProfileController @Inject()(val conf: Configuration,
         Ok(Json.toJson(features))
       }
       .recover {
-        case RemoteApiError(r, _) if r.header.status == 404 =>
+        case RemoteApiError(r, _, _) if r.header.status == 404 =>
           Ok(Json.toJson(Seq.empty[FeatureName]))
-        case RemoteApiError(r, _) => r
+        case RemoteApiError(r, _, _) => r
       }
   }
 

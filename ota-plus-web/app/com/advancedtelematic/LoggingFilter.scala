@@ -24,7 +24,7 @@ class LoggingFilter @Inject()(@Named("logging-actor") loggingActor: ActorRef)
     nextFilter(requestHeader) andThen {
       case Success(result) =>
         loggingActor ! logMessage((result.header.status, result.body.contentLength.getOrElse(0)))
-      case Failure(RemoteApiError(result, _)) =>
+      case Failure(RemoteApiError(result, _, _)) =>
         loggingActor ! logMessage((result.header.status, result.body.contentLength.getOrElse(0)))
       case _ =>
         loggingActor ! logMessage((Status.INTERNAL_SERVER_ERROR, 0))
