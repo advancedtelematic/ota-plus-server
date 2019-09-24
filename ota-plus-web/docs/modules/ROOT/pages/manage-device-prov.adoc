@@ -4,8 +4,8 @@ Before you can start working with devices, they need to provisioned with credent
 
 If you've just logged in and don't see any devices, ask your developers to provision some for you. Alternatively, if you feel comfortable with the Linux command line, you can provision devices yourself. The easiest way to provision a device is to simulate a device on your computer and have the OTA Connect server generate device credentials for you.
 
-The xref:dev@getstarted::simulate-device-workstation.adoc[get started] documentation describes how to do this in detail. If you want to try out this procedure, you'll need a provisioning key first. You can xref:create-provisioning-key.adoc[generate and download] this key from within the OTA Connect Portal.
+The xref:getstarted::simulate-device-workstation.adoc[get started] documentation describes how to do this in detail. If you want to try out this procedure, you'll need a provisioning key first. You can xref:create-provisioning-key.adoc[generate and download] this key from within the OTA Connect Portal.
 
-If you want understand how provisioning works in detail, have a look at the xref:dev@ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Client guide.
+If you want understand how provisioning works in detail, have a look at the xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Client guide.
 
 // Note for client guide: Reprovisioning the same device wont override the old one, you need to delete the old one first.
