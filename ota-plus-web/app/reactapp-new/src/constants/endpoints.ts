@@ -5,6 +5,9 @@ export const ApiEndpoints = {
   DEVICES: {
     ALL: '/api/v1/devices',
   },
+  FEED: {
+    ALL: '/recently_created',
+  },
   DEVICE_GROUPS: {
     ALL: '/api/v1/device_groups'
   },

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { Title, Container } from '../common';
+import { Title } from '../common';
 import DashboardStepper from './DashboardStepper';
 import DocsLinks from './DocsLinks';
 import BuildTeam from './BuildTeam';
+import RecentlyCreated from './RecentlyCreated';
 
 const Dashboard = styled.div`
   max-width: 1440px;
@@ -37,9 +38,7 @@ export const DashboardView = () => {
       <DashboardStepper />
       <SplitWrapper>
         <RecentlyCreatedWrapper>
-          <Container elevation={2}>
-            <Title>Recently created</Title>
-          </Container>
+          <RecentlyCreated />
         </RecentlyCreatedWrapper>
         <HelpSectionWrapper>
           <DocsLinks />
