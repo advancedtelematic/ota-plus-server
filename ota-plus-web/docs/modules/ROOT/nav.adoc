@@ -1,35 +1,36 @@
 
-.Get Started
+.Get started
 * xref:index.adoc[Introduction] 
-* xref:get-access.adoc[Get Access]
+* xref:get-access.adoc[Get access]
 // TODO * xref:switch-orgs.adoc[Switching Organizations]
-* xref:ota-workflow-campaign-manager.adoc[OTA Update Workflow]
+* xref:ota-workflow-campaign-manager.adoc[OTA update workflow]
 
 .Devices
 * xref:manage-device-prov.adoc[Provisioning]
-** xref:create-provisioning-key.adoc[Get a Provisioning key]
-* xref:device-groups.adoc[Device Groups]
-** xref:create-device-groups.adoc[Create Device Groups]
-* xref:manage-devices.adoc[Manage Devices]
+** xref:create-provisioning-key.adoc[Get a provisioning key]
+* xref:device-groups.adoc[Device groups]
+** xref:create-fixed-group.adoc[Create a fixed group]
+** xref:create-smart-group.adoc[Create a smart group]
+* xref:manage-devices.adoc[Manage devices]
 // TODO * Update a Smart Group
 // TODO * Delete groups
 
 .Software
-* xref:software-upload-methods.adoc[Software Upload Methods]
+* xref:software-upload-methods.adoc[Software upload methods]
 ** xref:upload-software-ui.adoc[Upload Software]
 // TODO: * xref:manage-software.adoc[Manage Software Versions]
 * xref:blacklist-software.adoc[Blacklisting bad software]
 
 
 .Updates
-* xref:updates-intro.adoc[What is an Update Configuration?]
-* xref:create-update.adoc[Create an Update Configuration]
+* xref:updates-intro.adoc[What is an update configuration?]
+* xref:create-update.adoc[Create an update configuration]
 // TODO: xref:manage-updates.adoc[Manage Update Configurations]
 
 .Campaigns
-* xref:campaigns-intro.adoc[What is a Campaign?]
-* xref:create-campaigns.adoc[Create a Campaign]
-* xref:monitor-campaigns.adoc[Monitor Campaigns]
+* xref:campaigns-intro.adoc[What is a campaign?]
+* xref:create-campaigns.adoc[Create a campaign]
+* xref:monitor-campaigns.adoc[Monitor campaigns]
 
 // TODO * xref:retry-campaigns.adoc[Retry Failed Installations]
 // TODO * xref:manage-campaigns.adoc[Manage Campaigns]
