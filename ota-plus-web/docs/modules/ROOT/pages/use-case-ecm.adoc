@@ -68,7 +68,7 @@ You should see matching devices show up in your group. For simplicity's sake, le
 *What should have happened first* 
 +++ </summary><div> +++
 
-Your developers have bitbaked a "baseline" disk image - a baseline disk image that contains the compatible software for your ECU's hardware. In this case, the ECU uses a Renesas RL78 board. 
+Your developers have built a "baseline" disk image - a baseline disk image that contains the compatible software for your ECU's hardware. In this case, the ECU uses a Renesas RL78 board. 
 
 * The exact board model is a Renesas RL78/F15, so the machine configuration is `RL7815`.
 * The software for the ECM is based on the FreeRTOS kernel.
@@ -118,8 +118,8 @@ Update Engine Idle Shutdown Timer Calibration on Renesas RL78/15 ECMs in "Tireon
 ====
 . In the *Control Units* section, you would select the "__ECM (RL78/15)__".
 +
-** In the *SOFTWARE CURRENTLY INSTALLED* column and the *SOFTWARE TO BE INSTALLED* columns, you would select `ECM-RL7815-FRTOS` from the dropdown.
-** In the *VERSION CURRENTLY INSTALLED* column, you would select "1.0.0" from the dropdown and in the *VERSION TO BE INSTALLED* column you would select "1.0.1".
+** In the *SOFTWARE CURRENTLY INSTALLED* column and the *SOFTWARE TO BE INSTALLED* columns, you would select "__ECM-RL7815-FRTOS__" from the dropdown.
+** In the *VERSION CURRENTLY INSTALLED* column, you would select "__1.0.0__" from the dropdown and in the *VERSION TO BE INSTALLED* column you would select "__1.0.1__".
 . Click *Save* to save your software update called "__Improve HVAC in extreme conditions__".
 
 == Setting up the campaign
