@@ -40,15 +40,6 @@ In this case, you'd want to create a fixed group.
 * A smart group is not sophisticated enough for your query since smart groups can only filter by Device ID.
 * Instead, you can use a fixed group and import the search results that you exported from CarHQ.
 
-
-*To prepare the data for import:*
-
-. You'd export your query to a CSV file. Open the file in Excel and remove all any other columns except the VIN numbers.
-. Save a copy of this file as a TEXT file as "__Tireon-vins.txt__".
-. **Tidy up the file format**: Open the text file in a text editor such as Notepad++ and make sure there are no carriage return characters, and the lines are separated only by new line characters. 
-** In Notepad++ you can click the *Show All Characters* button to show non-printable characters such as tabs and new lines.
-** In Notepad++ you also find carriage returns by searching for the regular expression "`\r`".
-
 // MC: Hack to make this section collapsible
 +++ <details><summary> +++
 *What should have happened first* 
@@ -58,10 +49,7 @@ To group your vehicles, they must already exist as "devices" in OTA Connect. In 
 
 +++ </div></details> +++
 
-Make sure that the devices are already provisioned with OTA Connect
-You can check that the devices have been provisioned by doing a couple of spot checks. 
-
-For example, you could randomly pick a few device IDs from the file "__Tireon-vins.txt__" and search for them in the device view.
+For the sake of this use case, lets say you exported a file called "__Tireon-vins.txt__" from carHQ.
 
 *To create the device group, you'd follow these steps*
 
@@ -80,15 +68,19 @@ You should see matching devices show up in your group. For simplicity's sake, le
 *What should have happened first* 
 +++ </summary><div> +++
 
-Your developers have bitbaked a "baseline" disk image - a baseline disk image that runs application software which is compatible with your ECU's hardware. In this case, it's "NXP-AUTOSAR-Classic-4.2".
+Your developers have bitbaked a "baseline" disk image - a baseline disk image that contains the compatible software for your ECU's hardware. In this case, the ECU uses a Renesas RL78 board. 
 
-The baseline disk image includes version 5.2.0 of the "Engine Idle Shutdown Timer Calibration" software and installed it on your devices - so your cars are running version 5.2.0 right now.
+* The exact board model is a Renesas RL78/F15, so the machine configuration is `RL7815`.
+* The software for the ECM is based on the FreeRTOS kernel.
+* The name of the image is a combination of these elements: `ECM-RL7815-FRTOS`
+
+Version 1.0 of this image contains the problematic calibration for the engine idle shutdown timer.
 
 To prepare the new update, your developers have:
 
 * built a version of the "baseline" disk image
-* bumped the minor version to V1.2.2
-** This is because the "Engine Idle Shutdown Timer Calibration" software is the only thing they changed on the disk image.
+* bumped the minor version to V1.0.1
+** This is because the calibration for the engine idle shutdown timer is the only thing they changed on the disk image.
 +
 In other words, it's a minor release.
 
@@ -98,15 +90,14 @@ As part of the build process the disk image is automatically uploaded to your OT
 
 .Release Note
 ====
-Update for NXP S32S24 K ECMs on post-2018 Tireon models.
+Update for RL78/15 ECMs on post-2018 Tireon models.
 
-CHANGED PACKAGES:
+CHANGES:
 
-* Engine Idle Shutdown Timer Calibration: Updated from 5.2.0 to 5.3.0. 
-** 5.3.0: Overrides engine shutdown if temperature falls below 7.2 degrees C or above 35 degrees C.
+* Engine idle shutdown timer calibration now overrides engine shutdown if temperature falls below 7.2 degrees C or above 35 degrees C.
 ====
 
-So you know that you need version 1.2.2 of the disk image for NXP S32S24 microcontrollers that are used as engine control modules on all Lannista "Tireon" models produced after 2018.
+So you know that you need version 1.0.1 of the disk image for Renesas RL78/15 microcontrollers that are used as engine control modules on all Lannista "Tireon" models produced after 2018.
 
 *Create the software update:*
 
@@ -116,19 +107,19 @@ So you know that you need version 1.2.2 of the disk image for NXP S32S24 microco
 +
 .Software update name
 ====
-Update NXP S32S24 ECMs to improve HVAC in extreme conditions- 
+Update Renesas RL78/15 ECMs to improve HVAC in extreme conditions- 
 ====
 +
 .Software update description
 ====
-Update Engine Idle Shutdown Timer Calibration on NXP MPC5777C ECMs in "Tireon" models produced after 2018. 
+Update Engine Idle Shutdown Timer Calibration on Renesas RL78/15 ECMs in "Tireon" models produced after 2018. 
 
 * Improve HVAC in extreme weather conditions (Initially for Scandinavian market).
 ====
-. In the *Control Units* section, you would select the "__ECM (NXP S32V23-M4)__".
+. In the *Control Units* section, you would select the "__ECM (RL78/15)__".
 +
-** In the *SOFTWARE CURRENTLY INSTALLED* column and the *SOFTWARE TO BE INSTALLED* columns, you would select "Engine Idle Shutdown Timer Calibration" from the dropdown.
-** In the *VERSION CURRENTLY INSTALLED* column, you would select "5.2.0" from the dropdown and in the *VERSION TO BE INSTALLED* column you would select "5.3.0".
+** In the *SOFTWARE CURRENTLY INSTALLED* column and the *SOFTWARE TO BE INSTALLED* columns, you would select `ECM-RL7815-FRTOS` from the dropdown.
+** In the *VERSION CURRENTLY INSTALLED* column, you would select "1.0.0" from the dropdown and in the *VERSION TO BE INSTALLED* column you would select "1.0.1".
 . Click *Save* to save your software update called "__Improve HVAC in extreme conditions__".
 
 == Setting up the campaign
@@ -176,7 +167,7 @@ Since the installation is going to affect the operation of the engine, we'll nee
 ====
 The Lannista customer care team has released a new software update that improves your vehicle's heating and air conditioning in extreme weather conditions.
 
-To install this update, your engine will shut down for about 15 minutes.
+To install this update, your engine will shut down for about 15 seconds.
 
 Do you want to download and install this update to your vehicle? 
 ====
@@ -237,20 +228,20 @@ You pick Device ID "JTHBE5D21E5009987" and search for it the OTA Connect portal.
 .Control units on device ID "JTHBE5D21E5009987"
 [width="100%",options="header"]
 |====================
-| Role | Type | Software
-| Primary |IVI - NXP iMX 6Quad SABRE-SD | FSL-IMX-X11-2.1
-| Secondary |ECM - NXP MPC5777C |  NXP-AUTOSAR-Classic-4.0-B2445
-| Secondary |BCM - NXP MPC574xP | NXP-AUTOSAR-Classic-4.0-B2345
+| Role | Type | Software Name | Software Version
+| Primary |IVI - NXP IMX 8MQuad | `IVI-IMX7ULPEVK-fsl-IMX-X11` | 2.3.1
+| Secondary |ECM - SH7080 |  `ECM-SH7080-FRTOS` | 1.0.0
+| Secondary |BCM - SH7080L | `BCM-SH7080-FRTOS` | 1.1.2
 |====================
 
 If you look closely, you can see that the hardware and software on this device doesn't match our criteria for the software update:
 
-Remember that we want to update ECMs that use an NXP board from the *S32* family. In this case, it's the "NXP S32V23-M4". 
+Remember that we want to update ECMs that use a Renesas board from the *RL78* family. In this case, it's the "RL78/15". 
 
-* We can see from the list that the ECM in this device is using an NXP board from the *MPC* family rather than the S32 family.
-* The ECM is using an NXP MPC5777C board which only supports NXP-AUTOSAR-Classic-*4.0*, but we updated the calibration software on the disk image that runs NXP-AUTOSAR-Classic-*4.2*.
-* When your developers built the disk image, they configured it to be compatible with NXP S32V23-M4 boards.
-* When you configured the update, you selected the control unit ""__ECM (NXP S32V23-M4)__" but the ECM on this device is another model -- that's why your update didn't get installed and the device showed up as "Not applicable".
+* We can see from the list that the ECM in this device is using an Renesas board from the *SH* (SuperH) family rather than the RL78 family.
+* The ECM is a Renesas SH7080 board which uses a different baseline image and different libaries.
+** We updated the calibration software on the disk image intended only for boards in the RL78 family.
+* When you configured the update, you selected the control unit ""__ECM (RL78/15)__" but the ECM on this device is another model -- that's why your update didn't get installed and the device showed up as "Not applicable".
 +
 The other "not applicable" devices most likely have the same issue -- even though they are in the device group that you targeted.
 
