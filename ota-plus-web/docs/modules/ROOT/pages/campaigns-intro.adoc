@@ -30,4 +30,4 @@ Before you create a campaign, you also need to consider other criteria such as e
 * Do they need to provide their consent before installing the update?
 * How do you communicate the purpose of the update to the end user?
 
-You can request the end user's consent and write a notification text in the "Consent" section of the campaign wizard.
+You can request end user consent and write a notification text in the "Consent" section of the campaign wizard.
