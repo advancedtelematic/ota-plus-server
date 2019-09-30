@@ -1,0 +1,278 @@
+= Updating the engine shutdown calibration on an ECM 
+
+Suppose that you work for a vehicle brand called "Lannista". Your vehicles are popular in Scandinavia, but you've been receiving complaints about a specific problem: In winter, people keep their engines on when waiting in their vehicles so that they can use the heating system to stay warm. However, the engines keep automatically shutting down after a minute or so. This means that people have to constantly restart their engines. 
+
+Your head developer tells you that this is the software problem. To save energy, an idling engine is configured to shut down after the temperature falls below a certain level. Luckily, you can fix this issue with an OTA update.
+
+== Your production environment
+
+You have your vehicle data in a sophisticated system called "CarHQ" which integrates with your customer database called "CustomerHQ". 
+
+Your "CarHQ" system contains detailed information about all the vehicles in your fleet such as model, build date, warranty date and region. It can also tell you information about customers, what vehicle they have purchased and what support contract they're on.
+
+== A new release is announced
+
+Your release manager contacts you and says that they want to update the software on the Engine Control Module (ECM). 
+
+* The goal is to extend the engine idle time as much as possible to allow the Heating, ventilation, and air conditioning (HVAC) to keep the driver comfortable during extreme weather conditions. 
+* The update will override engine shutdown if temperature falls below 7.2 degrees Celsius or above 35 degrees Celsius.
+
+They have the following release conditions:
+
+* The release only applies to editions of the Lannista "Tireon" model built after 2018
+* Restrict the update to the Scandinavian market 
+* Target only customers who have opted for premium support.
+
+== Device groups
+
+=== Preparation
+You can run detailed search queries in CarHQ and export the data to a CSV file. Your search query might look something like this. It's simplified for the purposes of this tutorial.
+
+[source,sql]
+----
+Select VIN
+FROM CustomerView
+WHERE model="Tireon" AND "BuildDate => 2018-01-01" AND Region IN ('DK, NO, SE, FI') AND SupportLevel ="010A"
+----
+
+In this case, you'd want to create a fixed group. 
+
+* A smart group is not sophisticated enough for your query since smart groups can only filter by Device ID.
+* Instead, you can use a fixed group and import the search results that you exported from CarHQ.
+
+// MC: Hack to make this section collapsible
++++ <details><summary> +++
+*What should have happened first* 
++++ </summary><div> +++
+
+To group your vehicles, they must already exist as "devices" in OTA Connect. In other words, your developers should have provisioned these devices with a proper device identifier - in this case we're using the VIN number.
+
++++ </div></details> +++
+
+For the sake of this use case, lets say you exported a file called "__Tireon-vins.txt__" from carHQ.
+
+*To create the device group, you'd follow these steps*
+
+. In the OTA Connect Portal, navigate to the *Device groups* page and click **Create device group**.
+. On the *Create group* page, make sure that *Fixed group* is selected.
+. Enter the name like "__Tireon-2018-Scandinavia-010A__" for the group name.
+. In the *Optional Import* section, click *Choose file* and select the "__Tireon-vins.txt__" file that you saved previously.
+. Click **Create**.
++
+You should see matching devices show up in your group. For simplicity's sake, let's say that the group contains exactly 1,000 devices. This is useful to know when we track the progress of our software updates.
+
+== Preparing the software update
+
+// MC: Hack to make this section collapsible
++++ <details><summary> +++
+*What should have happened first* 
++++ </summary><div> +++
+
+Your developers have built a "baseline" disk image - a baseline disk image that contains the compatible software for your ECU's hardware. In this case, the ECU uses a Renesas RL78 board. 
+
+* The exact board model is a Renesas RL78/F15, so the machine configuration is `RL7815`.
+* The software for the ECM is based on the FreeRTOS kernel.
+* The name of the image is a combination of these elements: `ECM-RL7815-FRTOS`
+
+Version 1.0 of this image contains the problematic calibration for the engine idle shutdown timer.
+
+To prepare the new update, your developers have:
+
+* built a version of the "baseline" disk image
+* bumped the minor version to V1.0.1
+** This is because the calibration for the engine idle shutdown timer is the only thing they changed on the disk image.
++
+In other words, it's a minor release.
+
++++ </div></details> +++
+
+As part of the build process the disk image is automatically uploaded to your OTA Connect software repository. Your developers have kindly left the following internal release note.
+
+.Release Note
+====
+Update for RL78/15 ECMs on post-2018 Tireon models.
+
+CHANGES:
+
+* Engine idle shutdown timer calibration now overrides engine shutdown if temperature falls below 7.2 degrees C or above 35 degrees C.
+====
+
+So you know that you need version 1.0.1 of the disk image for Renesas RL78/15 microcontrollers that are used as engine control modules on all Lannista "Tireon" models produced after 2018.
+
+*Create the software update:*
+
+. In the OTA Connect portal, navigate to the *Software updates* page.
+. Click *Create software update* 
+. On the *Details* page, you'd enter something like this:
++
+.Software update name
+====
+Update Renesas RL78/15 ECMs to improve HVAC in extreme conditions- 
+====
++
+.Software update description
+====
+Update Engine Idle Shutdown Timer Calibration on Renesas RL78/15 ECMs in "Tireon" models produced after 2018. 
+
+* Improve HVAC in extreme weather conditions (Initially for Scandinavian market).
+====
+. In the *Control Units* section, you would select the "__ECM (RL78/15)__".
++
+** In the *SOFTWARE CURRENTLY INSTALLED* column and the *SOFTWARE TO BE INSTALLED* columns, you would select "__ECM-RL7815-FRTOS__" from the dropdown.
+** In the *VERSION CURRENTLY INSTALLED* column, you would select "__1.0.0__" from the dropdown and in the *VERSION TO BE INSTALLED* column you would select "__1.0.1__".
+. Click *Save* to save your software update called "__Improve HVAC in extreme conditions__".
+
+== Setting up the campaign
+
+So your software update is ready, now you need to deploy it to your vehicles.
+
+// MC: Hack to make this section collapsible
++++ <details><summary> +++
+*What should have happened first* 
++++ </summary><div> +++
+
+// MC: Might need more details
+When you create a campaign, you can configure a notification for end users. The text of this notification is then passed on to the OTA Connect client software that runs on the vehicle. The OTA Connect client can output the text of this message but your developers need to make sure that this message is passed to the IVI and displayed on-screen in the dashboard so that the vehicle owner can reply to requests for their consent. 
+
++++ </div></details> +++
+
+*To create a campaign, follow these steps:*
+
+.  Navigate to *Campaigns* and click *Create campaign*.
+. On the *Details* page, you'd enter the campaign details like in the following examples:
++
+.Campaign name
+====
+Deploy HVAC improvement - Scandinavia/Tireon post-2018
+====
++
+.Campaign description
+====
+Update Engine Idle Shutdown Timer Calibration on ECM in "Tireon" models built after 2018. 
+
+* Improve HVAC in extreme weather conditions 
+* Restrict to Scandinavian market since only market approved by legal so far.
+====
+.  You would then select the device group that you created previously.
+** In this case, our device group is called "__Tireon-2018-Scandinavia-010A__" so we'll select it for our campaign and click *Next*.
+. Next, we would select the software update that we created previously.
+** We called it "__Improve HVAC in extreme conditions__"  --  again, let's find it in the list, select it and click *Next*.
+. Next is the *Distribution settings* step. 
++
+Since the installation is going to affect the operation of the engine, we'll need to ask the vehicle owner if we can temporarily disable the engine and install the update.
+
+** We select the option *Request end user's consent* and enter the following message into the *Release Note* field:
++
+.Example Release Note
+====
+The Lannista customer care team has released a new software update that improves your vehicle's heating and air conditioning in extreme weather conditions.
+
+To install this update, your engine will shut down for about 15 seconds.
+
+Do you want to download and install this update to your vehicle? 
+====
++
+
+. Let's click *Next* which takes us to the *Summary* step -- then we click *Launch*.
++
+Our campaign starts to run, and we'll see devices detecting and downloading the new update.
+
+== Monitoring the campaign 
+
+Now that we've launched our campaign, we want to see what percentage of our 1,000 vehicles have successfully installed the software update. This might take a while since not all vehicles will connect and install at the same time. Additionally, some end users might decline to install the update, and in a few cases, the update might fail to install for various technical reasons.
+
+We can get a good overview of the progress on the campaign details page.
+
+* To open it, we simply click the name of our campaign "__Deploy HVAC improvement - Scandinavia/Tireon post-2018__".
+
+After one day, we check in and see what has happened with the campaign. Suppose that we see the following statistics:
+
+.Status report for campaign "Deploy HVAC improvement - Scandinavia/Tireon post-2018"
+[width="100%",options="header"]
+|====================
+| Status | % | Number  
+| Successful | 83% | 830 
+| Installing | 9% | 90 
+| Not applicable | 6% | 60  
+| Failed | 2% | 20 
+|====================
+
+The good news is that control units on most devices were able to install the update. A few devices are still installing or haven't connected yet.
+
+What we're concerned about is the devices that haven't installed the update -- either because they're "not applicable" or the update has failed for whatever reason.
+
+== Troubleshoot not applicable updates 
+
+Luckily, we can download an installation report to get more details about the specific devices that had problems.
+
+* On the *statistics* tab, click *Download Installation Report*.
++
+Your browser prompts you to download a CSV file -- you save it and open it. 
+
+First, you search for devices that have the status "Not applicable". You see the following block of entries.
+
+.Excerpt of installation report showing not applicable updates
+[width="100%",options="header"]
+|====================
+| Device ID | Status | Error Code | Last Reported  
+| ... | ... | ... | ... 
+| JTHBE5D25E5999999 | Not Applicable | N/A | 2019-12-01T10:25:43Z
+| JTHBE5D21E5009987 | Not Applicable | N/A | 2019-12-01T11:55:12Z 
+| JTJYWRBZ6G2009198 | Not Applicable | N/A | 2019-12-01T14:05:23Z  
+| JTHFF2C26B2515141 | Not Applicable | N/A | 2019-12-01T11:40:31Z 
+| ... | ... | ... | ... 
+|====================
+
+You pick Device ID "JTHBE5D21E5009987" and search for it the OTA Connect portal. You open the device details and see the list of control units on the device.
+
+.Control units on device ID "JTHBE5D21E5009987"
+[width="100%",options="header"]
+|====================
+| Role | Type | Software Name | Software Version
+| Primary |IVI - NXP IMX 8MQuad | `IVI-IMX7ULPEVK-fsl-IMX-X11` | 2.3.1
+| Secondary |ECM - SH7080 |  `ECM-SH7080-FRTOS` | 1.0.0
+| Secondary |BCM - SH7080L | `BCM-SH7080-FRTOS` | 1.1.2
+|====================
+
+If you look closely, you can see that the hardware and software on this device doesn't match our criteria for the software update:
+
+Remember that we want to update ECMs that use a Renesas board from the *RL78* family. In this case, it's the "RL78/15". 
+
+* We can see from the list that the ECM in this device is using an Renesas board from the *SH* (SuperH) family rather than the RL78 family.
+* The ECM is a Renesas SH7080 board which uses a different baseline image and different libaries.
+** We updated the calibration software on the disk image intended only for boards in the RL78 family.
+* When you configured the update, you selected the control unit ""__ECM (RL78/15)__" but the ECM on this device is another model -- that's why your update didn't get installed and the device showed up as "Not applicable".
++
+The other "not applicable" devices most likely have the same issue -- even though they are in the device group that you targeted.
+
+== Troubleshoot failed updates 
+
+In the case of failed updates, the process is very similar. You would search the installation report for updates where the status was "FAILED". In the "Error code" column, you can see more details about that caused the failure:
+
+.Excerpt of installation report showing failed updates
+[width="100%",options="header"]
+|====================
+| Device ID | Status | Error Code | Last Reported  
+| ... | ... | ... | ... 
+| JTHBE5D25E5999997 | FAILED | Update rejected by User | 2019-12-01T10:25:43Z
+| JTHBE5D21E5009985 | FAILED | Update rejected by User | 2019-12-01T11:55:12Z 
+| JTJYWRBZ6G2009193 | FAILED | Assign BOOT Local Storage Not Accessible | 2019-12-01T14:05:23Z  
+| JTHFF2C26B2515161 | FAILED | Assign BOOT Service Unavailable | 2019-12-01T11:40:31Z 
+| ... | ... | ... | ... 
+|====================
+
+You can see in the previous excerpt that there are at least two cases where the end user simply rejected the request to install the update. Since this update is not a safety-critical update, you decide to ignore devices that have reported this error code.
+
+However, you can see other failures that might indicate a technical defect on the control unit. You could import the report into a tool such as Microsoft Excel and analyze the data for specific patterns.
+
+For example, does the error only occur on specific variants of the Tireon model? 
+
+* You could cross-reference this report with VIN numbers from your "CarHQ" database to get more details about the model and control units for each affected device.
+
+Just like "not applicable" updates, you could also pick a couple devices to check. Let's say that you choose the device ID "__JTHFF2C26B2515161__" and again search for it the OTA Connect portal. You open the device details, but this time you look at the update history for all the control units on the device.
+
+* You notice that the ECM on this device hasn't successfully installed an update for the last six months. In this case, it might be prudent to contact the vehicle owner and ask them to visit a local dealership for further diagnosis.
+* You can also query the historical installation records for all update operations to see if there control units on other devices that have consistently failed to install updates in the last six months.
+
+
+
