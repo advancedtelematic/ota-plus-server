@@ -120,11 +120,12 @@ const AccountSettings = ({ user }: Props) => {
         // put Drawer below navbar but keep mask position, prevent navbar for getting higher than screen
         maskStyle={{
           backgroundColor: 'transparent',
-          top: `-${SIZES.NAVBAR_HEIGHT}`
+          top: `-${SIZES.NAVBAR_HEIGHT}`,
+          height: `calc(100% + ${SIZES.NAVBAR_HEIGHT})`
         }}
         style={{
           top: SIZES.NAVBAR_HEIGHT,
-          height: `calc(100% - ${SIZES.NAVBAR_HEIGHT})`
+          maxHeight: `calc(100% - ${SIZES.NAVBAR_HEIGHT})`
         }}
         bodyStyle={{
           padding: 0
