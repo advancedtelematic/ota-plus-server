@@ -3,11 +3,11 @@ import { FeedData } from '../store/feed/types';
 import buildUrl from '../helpers/UrlBuilder';
 import ApiEndpoints from '../constants/endpoints';
 
-export interface FeedServiceInterface {
+export interface IFeedService {
   getFeedData(types: string[]): Promise<FeedData[]>;
 }
 
-export class FeedService implements FeedServiceInterface {
+export class FeedService implements IFeedService {
   public async getFeedData(types: string[]): Promise<FeedData[]> {
     const url = buildUrl(ApiEndpoints.FEED.ALL, types.length ? { types: types.join(',') } : {});
     const response = await axios.get(url);
@@ -16,4 +16,4 @@ export class FeedService implements FeedServiceInterface {
   }
 }
 
-export const feedService: FeedServiceInterface = new FeedService();
+export const feedService: IFeedService = new FeedService();
