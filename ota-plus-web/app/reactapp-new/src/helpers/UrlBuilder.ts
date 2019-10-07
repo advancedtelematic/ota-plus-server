@@ -15,7 +15,7 @@ const buildUrl: IBuildUrl = (queryPath, queryParams = {}, url): string => {
     ? url.endsWith('/') ? url : `${url}/`
     : '';
   let path: string = queryPath instanceof Array ? queryPath.join('/') : queryPath;
-  if (path) {
+  if (path && Object.keys(queryParams).length) {
     path = path.concat('?');
   }
   return `${formattedUrl}${path}${

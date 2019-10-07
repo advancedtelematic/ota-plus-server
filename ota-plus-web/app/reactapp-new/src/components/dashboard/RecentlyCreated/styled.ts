@@ -1,4 +1,4 @@
-import styled, {DefaultTheme} from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import { Icon } from '../../common';
 
 type ElementProps = {
@@ -7,26 +7,28 @@ type ElementProps = {
 };
 
 const StyledIcon = styled(Icon)`
-  width: 1.25em;
+  width: 24px;
 `;
 
 const StyledSelectIcon = styled(Icon)`
-  width: 0.75em;
-  margin-right: 0.31em;
+  width: 16px;
+  margin-right: 6px;
   margin-top: -0.19em;
 `;
 
 const DataHeader = styled.div`
-  font-size: 1em;
+  font-size: 1.15em;
   font-weight: 500;
 `;
+
 const DataDesc = styled.div`
   color: ${({ theme }) => theme.palette.lightGrey};
-  font-size: 0.81em;
+  font-size: 0.93em;
   font-weight: 300;
 `;
+
 const DateElement = styled.div`
-  font-size: 1em;
+  font-size: 1.15em;
 `;
 
 const SelectElement = styled.div`
@@ -34,13 +36,12 @@ const SelectElement = styled.div`
 `;
 
 const ShowElement = styled.span<ElementProps>`
-  color: ${({ disabled = false, theme }) => !disabled ? theme.palette.lightGrey : theme.palette.disabledText };
-  display: inline-block;
+  color: ${({ disabled = false, theme }) => !disabled ? theme.palette.lightGrey : theme.palette.disabledText};
   float: left;
   font-size: 0.91em;
-  font-weight: 600;
-  line-height: 3.1em;
-  margin-right: 0.5em;
+  font-weight: 500;
+  line-height: 40px;
+  margin-right: 8px;
 `;
 
 const EmptyList = styled.div`
@@ -48,7 +49,7 @@ const EmptyList = styled.div`
   font-size: 0.91em;
   font-weight: 400;
   line-height: 1.5em;
-  margin-right: 0.5em
+  margin-right: 0.5em;
   width: 75%;
 `;
 
@@ -57,20 +58,19 @@ const SelectedElements = styled.div`
 `;
 
 const SelectedItem = styled.span`
-  border: ${({ theme }) => `1px solid ${theme.palette.lightGrey}`};
-  border-radius: 1.25em;
+  border: ${({ theme }) => `1px solid ${theme.palette.accents.light}`};
+  border-radius: 100px;
   color: ${({ theme }) => theme.palette.lightGrey};
   display: inline-block;
-  font-size: 0.81em;
+  font-size: 0.93em;
   margin-right: 0.63em;
-  padding: 0.13em 0.63em;
+  padding: 0.1em 0.64em;
 `;
 
 const SelectedCloseItem = styled(Icon)`
   cursor: pointer;
-  margin-left: 0.25em;
-  margin-top: 0.13em;
-  width: 1em;
+  margin-left: 6px;
+  width: 12px;
 `;
 
 export {
