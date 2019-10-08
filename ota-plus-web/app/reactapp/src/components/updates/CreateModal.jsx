@@ -126,11 +126,11 @@ class CreateModal extends Component {
 
   validateStep = (id) => {
     const { showDetails } = this.props;
-    const { name, description, selectedHardwares, update } = this.wizardData;
+    const { name, selectedHardwares, update } = this.wizardData;
 
     switch (id) {
       case 0:
-        if (selectedHardwares.length && name !== '' && description !== '') {
+        if (selectedHardwares.length && name !== '') {
           this.markStepAsFinished();
         } else {
           this.markStepAsNotFinished();

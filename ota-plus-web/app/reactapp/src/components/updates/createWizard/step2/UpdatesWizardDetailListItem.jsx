@@ -194,7 +194,7 @@ UpdatesWizardDetailListItem.propTypes = {
   stores: PropTypes.shape({}),
   item: PropTypes.shape({}),
   wizardData: PropTypes.shape({}),
-  onStep2DataSelect: PropTypes.func,
+  onStep2DataSelect: PropTypes.func
 };
 
 export default UpdatesWizardDetailListItem;
