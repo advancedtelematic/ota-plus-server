@@ -36,11 +36,14 @@ const StepIcons = ['devices', 'softwareVersion', 'deviceGroup', 'softwareUpdates
 
 const calculateCurrentStep = (totals: number[]): number => totals.indexOf(0) !== -1 ? totals.indexOf(0) : totals.length;
 
-const calculateStatus = (currentStep: number, index: number): StepStatus => {
+const calculateStatus = (currentStep: number, statValue: number, index: number): StepStatus => {
   if (currentStep > index) {
     return 'done';
   }
-  return currentStep === index ? 'active' : 'inactive';
+  if (currentStep === index) {
+    return 'active';
+  }
+  return statValue === 0 ? 'inactive' : 'done';
 };
 
 export const DashboardStepper = ({
@@ -113,12 +116,15 @@ export const DashboardStepper = ({
 
   return (
     <StepperWrapper id="stepper-wrapper">
-      <Stepper current={currentStep}>
-        {steps.map(() => <Step />)}
+      <Stepper>
+        {steps.map((step, index) => (
+          <Step key={`step-${index}`} status={currentStep === index ? 'process' : 'wait'} />
+        ))}
       </Stepper>
       <CardsWrapper>
         {steps.map(({ primaryStatValue, secondaryStatValue }, index) => {
           const {
+            id,
             status,
             description,
             descriptionDone,
@@ -127,9 +133,11 @@ export const DashboardStepper = ({
 
           return (
             <DashboardStepperCard
-              status={calculateStatus(currentStep, index)}
+              key={id}
+              id={id}
+              status={calculateStatus(currentStep, primaryStatValue, index)}
               description={
-                status === 'done' && currentStep > index
+                status === 'done'
                   ? descriptionDone
                   : description
               }

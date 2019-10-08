@@ -25,29 +25,31 @@ const iconMappings: Record<string, string> = {
   update: 'softwareUpdates'
 };
 
-
-
 const RecentlyCreated = (props: Props) => {
   const { t }: UseTranslationResponse = useTranslation();
   const [state, setState] = useState<{ selected: string[] }>({ selected: [] });
   const { feed, getFeedData } = props;
-  useEffect(() => {
-    getFeedData(state.selected);
-  },        []);
+
+  useEffect(
+    () => {
+      getFeedData(state.selected);
+    },
+    []
+  );
 
   const columns = [
     {
       title: '',
-      row: ({ _type }: FeedData) => (<><StyledIcon type={iconMappings[_type]} /></>),
-      width: 40,
+      row: ({ type }: FeedData) => (<><StyledIcon type={iconMappings[type]} /></>),
+      width: 30,
       textPosition: 'centered'
     },
     {
       title: 'NAME',
-      row: ({ name, groupName }: FeedData) => (
+      row: ({ name, supplementaryText }: FeedData) => (
         <>
-          <DataHeader>{ name || groupName }</DataHeader>
-          <DataDesc>{ name || groupName }</DataDesc>
+          <DataHeader>{name}</DataHeader>
+          <DataDesc>{supplementaryText || name}</DataDesc>
         </>
       ),
       width: 200,
@@ -114,38 +116,36 @@ const RecentlyCreated = (props: Props) => {
   };
 
   return (
-    <>
-      <Container>
-        <Title>{t('dashboard.recentlycreated.title')}</Title>
-        <SelectElement>
-          <ShowElement disabled={!feed.length}>{t('dashboard.recentlycreated.show')}</ShowElement>
-          <Select
-            disabled={!feed.length}
-            dropdownWidth="250px"
-            multiple={true}
-            options={selectOptions}
-            onSelect={handleOnSelect}
-            placeholder={t('dashboard.recentlycreated.select.placeholder')}
-            selected={state.selected}
-            width="200px"
-          />
-        </SelectElement>
-        {state.selected.length !== 0 && (
-          <SelectedElements>
-            {state.selected.map((selection: string, index) => (
-              <SelectedItem key={`selected-item-${index}`}>
-                {t(`dashboard.recentlycreated.${selection}`)}
-                <SelectedCloseItem type="close" colorTheme={IconTheme.aqua} onClick={handleOnRemove(selection)} />
-              </SelectedItem>
-            ))}
-          </SelectedElements>
-        )}
-        {feed.length ?
-          (<List<FeedData> columns={columns} items={feed} headerTheme="dark" />) :
-          (<EmptyList>{t('dashboard.recentlycreated.empty')}</EmptyList>)
-        }
-      </Container>
-    </>
+    <Container>
+      <Title>{t('dashboard.recentlycreated.title')}</Title>
+      <SelectElement>
+        <ShowElement disabled={!feed.length}>{t('dashboard.recentlycreated.show')}</ShowElement>
+        <Select
+          disabled={!feed.length}
+          dropdownWidth="250px"
+          multiple={true}
+          options={selectOptions}
+          onSelect={handleOnSelect}
+          placeholder={t('dashboard.recentlycreated.select.placeholder')}
+          selected={state.selected}
+          width="200px"
+        />
+      </SelectElement>
+      {state.selected.length !== 0 && (
+        <SelectedElements>
+          {state.selected.map((selection: string, index) => (
+            <SelectedItem key={`selected-item-${index}`}>
+              {t(`dashboard.recentlycreated.${selection}`)}
+              <SelectedCloseItem type="close" colorTheme={IconTheme.aqua} onClick={handleOnRemove(selection)} />
+            </SelectedItem>
+          ))}
+        </SelectedElements>
+      )}
+      {feed.length
+        ? <List<FeedData> columns={columns} items={feed} headerTheme="dark" />
+        : <EmptyList>{t('dashboard.recentlycreated.empty')}</EmptyList>
+      }
+    </Container>
   );
 };
 

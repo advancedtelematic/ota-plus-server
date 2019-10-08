@@ -42,7 +42,8 @@ const headerVariants = (selected: string, theme: DefaultTheme) => {
         padding: '0.31em 0'
       }
     },
-    light: {fontWeight: 700,
+    light: {
+      fontWeight: 700,
       borderBottom: `1px solid ${theme.palette.accents.dark}`,
       td: {
         padding: '0.75em 0'
@@ -82,7 +83,7 @@ const HeaderCell = styled.td<Props>`
 `;
 
 const DataRow = styled.tr<Props>`
-  border-bottom: ${({ theme }) => `1px solid ${theme.palette.accents.dark}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.palette.disabledBorder}`};
 `;
 
 const Cell = styled.td<Props>(({ theme, width, textPosition = 'default' }: Props) => ({
@@ -117,7 +118,7 @@ const List = <T extends ItemProps>(props: ListInterface<T>): ReactElement => {
                 key={`header-${index}-key`}
                 width={widths[index]}
               >
-                {(typeof title === 'function') ? title() : title }
+                {(typeof title === 'function') ? title() : title}
               </HeaderCell>
             )}
           </HeaderRow>
