@@ -36,7 +36,10 @@ class Step1 extends Component {
     return (
       <Form id="update-create-form">
         {!showDetails && (
-          <Row className="gutter-bottom">{t('updates.creating.description')}</Row>
+          <>
+            <Row>{t('updates.creating.description1')}</Row>
+            <Row className="gutter-bottom">{t('updates.creating.description2')}</Row>
+          </>
         )}
         <Row className="row name-container">
           <Col span={12}>
@@ -93,6 +96,9 @@ class Step1 extends Component {
                 })
               )}
             </div>
+            {hardwareList.length === 1 && (
+              <div className="information-text">{t('updates.creating.wizard.information_step1')}</div>
+            )}
           </Col>
         </Row>
       </Form>

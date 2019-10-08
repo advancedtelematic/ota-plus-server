@@ -695,7 +695,7 @@
 
 .create-update-modal {
   .updates-container {
-    height: 400px;
+    height: 450px;
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -738,6 +738,11 @@
       height: 200px;
       padding-top: 20px;
     }
+  }
+
+  .information-text {
+    color: $error-color;
+    padding-top: 20px;
   }
 }
 
