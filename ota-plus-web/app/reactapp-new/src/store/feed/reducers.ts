@@ -1,21 +1,21 @@
 import {
-  FeedState,
-  actionTypes,
+  IFeedState,
+  ActionTypes,
 } from './types';
 import { Actions } from './actions';
 
-export const initialState: FeedState = {
+export const initialState: IFeedState = {
   data: [],
 };
 
-export const feedReducer = (state = initialState, action: Actions): FeedState => {
+export const feedReducer = (state = initialState, action: Actions): IFeedState => {
   switch (action.type) {
-    case actionTypes.SET_FEED_DATA_DONE: {
+    case ActionTypes.SET_FEED_DATA_DONE: {
       return {
         data: action.payload
       };
     }
-    case actionTypes.SET_FEED_DATA_FAILED: {
+    case ActionTypes.SET_FEED_DATA_FAILED: {
       return {
         data: []
       };

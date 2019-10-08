@@ -14,7 +14,7 @@ export const BuildTeam = () => {
       </TitleWrapper>
       <Description id="build-team-desc">{t('dashboard.buildteam.description')}</Description>
       <AddMembersButton type="link" id="build-team-add-btn">
-        <Icon theme={Theme.aqua} type="plus" />
+        <Icon colorTheme={Theme.aqua} type="plus" />
         {t('dashboard.buildteam.button-title')}
       </AddMembersButton>
     </Container>

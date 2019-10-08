@@ -52,24 +52,28 @@ const StyledMenu = styled(Menu)<StyledProps>`
   border-radius: 0;
   box-shadow: ${({ theme }) => `${theme.shadows.light}`};
   margin-top: -0.19em;
-  font-size: 1em;
+  font-size: 1.15em;
   width: ${({ dropdownwidth }) => `${dropdownwidth || '100%'}`};
   padding: 0;
 `;
+
 const StyledMenuItem = styled(Menu.Item)<StyledProps>`
-  border-bottom: ${({ theme }) => `1px solid ${theme.palette.accents.dark}`};
-  padding: 0.56em 0.62em;
+  border-bottom: ${({ theme }) => `1px solid ${theme.palette.accents.light}`};
+  padding: 9px 10px;
+  font-size: 1em;
+  line-height: 20px;
   &.ant-dropdown-menu-item-active {
     background-color: ${({ theme }) => `${theme.palette.white}`};
   }
 `;
+
 const StyledSelection = styled.div<StyledProps>(({ theme, disabled = false, width = '100%' }: StyledProps) => ({
   ...disabledState(disabled, theme),
   display: 'inline-block',
-  fontSize: '1em',
+  fontSize: '1.15em',
   fontWeight: 400,
   overflow: 'hidden',
-  padding: '0.6em 0.62em',
+  padding: '8px 8px',
   width: `${width}`
 }));
 
@@ -88,7 +92,7 @@ const Select = (
   const { t }: UseTranslationResponse = useTranslation();
 
   // on item click, select option
-  const handleOnClick = ({ key }: { key: string}) => {
+  const handleOnClick = ({ key }: { key: string }) => {
     let { selected } = state;
     const property = selected.indexOf(key);
     if (multiple) {
@@ -108,7 +112,7 @@ const Select = (
   };
 
   // to keep dropdown visible after making selection
-  const handleVisibleChange = (flag : boolean) => {
+  const handleVisibleChange = (flag: boolean) => {
     setState({ ...state, visible: flag });
   };
 
@@ -123,10 +127,10 @@ const Select = (
   const menu = (
     <StyledMenu multiple={true} onClick={handleOnClick} dropdownwidth={dropdownWidth}>
       {options.map(({ value, row }) => (
-          <StyledMenuItem key={value}>
-            <Checkbox checked={(state.selected.indexOf(value) !== -1)}/>
-            {row()}
-          </StyledMenuItem>
+        <StyledMenuItem key={value}>
+          <Checkbox checked={(state.selected.indexOf(value) !== -1)} />
+          {row()}
+        </StyledMenuItem>
       ))}
     </StyledMenu>
   );
