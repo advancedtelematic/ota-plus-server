@@ -18,21 +18,16 @@ image::s8-monitor_campaign.png[image]
 
 You'll see a summary of all the update attempts for each device grouped by status:
 
-*Success* indicates the number of devices where the software was successfully updated.
-
-*Queued* indicates the number of devices that are still waiting to be updated.
-
-* These devices might be offline or the OTA Connect server is waiting until a previous batch of updates has completed.
-
-*Failure* indicates the number of devices where the update attempt failed.
+*Failed* indicates the number of devices where the update attempt failed.
 
 * If there are update failures, the campaign details include a breakdown by individual failure code.
 * To get a list of individual devices affected by the failure code, click the Export image::download.png[Icon,20,20] button next to the relevant failure code.
 
-*Not Processed* indicates devices that weren't processed by the OTA Connect server for some strange reason.
+*Successful* indicates the number of devices where the software was successfully updated.
 
-*Not Impacted* indicates devices that were targeted by the campaign by were ignored because they did not match the criteria of the selected update.
+*Installing* indicates the number of devices that have received the update campaign, but have not yet sent a success or failure code.
 
-* A common cause for this status is when the device is not running the same version of the software that is defined in the *From* criteria of the update.
+*Not Applicable* indicates devices that were targeted by the campaign (that is, they were in a group that the campaign targeted), but were not processed.
 
-*Canceled* indicates updates that were canceled either on the device itself or from the device details page of an individual device.
+* A common cause for this status is when the device is not running the same version of the software that is defined in the *From* criteria of the update, or if it doesn't have the model of ECU that the campaign is targeting.
+* Another common cause is when a campaign was canceled. If a campaign is canceled, any devices that have not yet been processed (for example, because they weren't online at any time the campaign was running) will be marked as Not Applicable.
