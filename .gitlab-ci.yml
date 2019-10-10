@@ -1,11 +1,12 @@
 stages:
   - publish-docs-if-changed
-  - trigger
+  - veracode scan
+  - deps scan
+  - generate pages
 
-
-trigger-veracode-scan:
+veracode scan:
   # prepare and submit for static code analysis
-  stage: trigger
+  stage: veracode scan
   only:
     variables:
       - $VERACODE_API_ID
@@ -21,6 +22,33 @@ trigger-veracode-scan:
   artifacts:
     paths:
       - scan.tar
+
+deps scan:
+  # perform dependencies CVE analysis
+  stage: deps scan
+  only:
+    - schedules
+  image: advancedtelematic/gitlab-jobs:0.2.0
+  script:
+    - ./sbt dependencyCheckAggregate
+    - mv target/scala-*/dependency-check-report.html ./depchk.html
+  artifacts:
+    paths:
+      - depchk.html
+
+pages:
+  stage: generate pages
+  only:
+    - schedules
+  dependencies:
+    - deps scan
+  script:
+    - mkdir -p public
+    - mv depchk.html public/index.html
+  artifacts:
+    paths:
+      - public
+    expire_in: 64 days
 
 trigger-docsite-build:
   stage: publish-docs-if-changed
