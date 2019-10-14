@@ -78,7 +78,7 @@ type LinkObject = { name: string, to: string };
 const renderLinks = (links: LinkObject[]): ReactElement[] => (
   links.map(link => (
     <Link
-      id={`accountSettings.link.${link.to.substring(1)}`}
+      id={`account-settings.link.${link.to.substring(1)}`}
       to={link.to}
       key={link.to}
     >
@@ -95,9 +95,9 @@ const AccountSettings = ({ user }: Props) => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [t]: UseTranslationResponse = useTranslation();
   const links = [
-    { name: t('accountSettings.links.organization'), to: '/profile/organization' },
-    { name: t('accountSettings.links.usage'), to: '/profile/usage' },
-    { name: t('accountSettings.links.keys'), to: '/profile/keys' }
+    { name: t('account-settings.links.organization'), to: '/profile/organization' },
+    { name: t('account-settings.links.usage'), to: '/profile/usage' },
+    { name: t('account-settings.links.keys'), to: '/profile/keys' }
   ];
 
   const onClose = (): void => {
@@ -136,7 +136,7 @@ const AccountSettings = ({ user }: Props) => {
       >
         <DrawerHeader>
           <Title size="large" id="sidebar-username">{userName}</Title>
-          <span id="sidebar-org">{t('accountSettings.label.organization')}</span>
+          <span id="sidebar-org">{t('account-settings.label.organization')}</span>
         </DrawerHeader>
         <LinksContainer>
           {renderLinks(links)}
@@ -144,7 +144,7 @@ const AccountSettings = ({ user }: Props) => {
         <a href="/logout" rel="noopener noreferrer" id="sidebar-signout">
           <Signout>
             <SignoutIcon type="signOut" />
-            <Title size="small" id="sidebar-signout-title">{t('accountSettings.links.signout')}</Title>
+            <Title size="small" id="sidebar-signout-title">{t('account-settings.links.sign-out')}</Title>
           </Signout>
         </a>
       </Drawer>

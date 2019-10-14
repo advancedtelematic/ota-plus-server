@@ -20,7 +20,7 @@ function mutateData(data: FeedNetworkingData[]): FeedData[] {
           createdAt,
           type: _type,
           name: deviceName,
-          supplementaryText: `${i18n.t('dashboard.recentlycreated.id')}: ${deviceId}`
+          supplementaryText: `${i18n.t('dashboard.recently-created.id')}: ${deviceId}`
         });
         break;
       }
@@ -37,7 +37,7 @@ function mutateData(data: FeedNetworkingData[]): FeedData[] {
           id: `${name}-${createdAt}`,
           type: _type,
           supplementaryText: hardwareIds.length > 1
-            ? i18n.t('dashboard.recentlycreated.ecu-types', { count: hardwareIds.length })
+            ? i18n.t('dashboard.recently-created.ecu-types', { count: hardwareIds.length })
             : hardwareIds[0]
         });
         break;
