@@ -71,31 +71,31 @@ const RecentlyCreated = (props: Props) => {
     {
       value: 'device',
       row: () => (
-        <span><StyledSelectIcon type="devices" />{t('dashboard.recentlycreated.device')}</span>
+        <span><StyledSelectIcon type="devices" />{t('dashboard.recently-created.device')}</span>
       )
     },
     {
       value: 'device_group',
       row: () => (
-        <span><StyledSelectIcon type="deviceGroup" />{t('dashboard.recentlycreated.device_group')}</span>
+        <span><StyledSelectIcon type="deviceGroup" />{t('dashboard.recently-created.device_group')}</span>
       )
     },
     {
       value: 'software',
       row: () => (
-        <span><StyledSelectIcon type="softwareVersion" />{t('dashboard.recentlycreated.software')}</span>
+        <span><StyledSelectIcon type="softwareVersion" />{t('dashboard.recently-created.software')}</span>
       )
     },
     {
       value: 'update',
       row: () => (
-        <span><StyledSelectIcon type="softwareUpdates" />{t('dashboard.recentlycreated.update')}</span>
+        <span><StyledSelectIcon type="softwareUpdates" />{t('dashboard.recently-created.update')}</span>
       )
     },
     {
       value: 'campaign',
       row: () => (
-        <span><StyledSelectIcon type="campaigns" />{t('dashboard.recentlycreated.campaign')}</span>
+        <span><StyledSelectIcon type="campaigns" />{t('dashboard.recently-created.campaign')}</span>
       )
     }
   ];
@@ -117,16 +117,16 @@ const RecentlyCreated = (props: Props) => {
 
   return (
     <Container>
-      <Title>{t('dashboard.recentlycreated.title')}</Title>
+      <Title>{t('dashboard.recently-created.title')}</Title>
       <SelectElement>
-        <ShowElement disabled={!feed.length}>{t('dashboard.recentlycreated.show')}</ShowElement>
+        <ShowElement disabled={!feed.length}>{t('dashboard.recently-created.show')}</ShowElement>
         <Select
           disabled={!feed.length}
           dropdownWidth="250px"
           multiple={true}
           options={selectOptions}
           onSelect={handleOnSelect}
-          placeholder={t('dashboard.recentlycreated.select.placeholder')}
+          placeholder={t('dashboard.recently-created.select.placeholder')}
           selected={state.selected}
           width="200px"
         />
@@ -135,7 +135,7 @@ const RecentlyCreated = (props: Props) => {
         <SelectedElements>
           {state.selected.map((selection: string, index) => (
             <SelectedItem key={`selected-item-${index}`}>
-              {t(`dashboard.recentlycreated.${selection}`)}
+              {t(`dashboard.recently-created.${selection}`)}
               <SelectedCloseItem type="close" colorTheme={IconTheme.aqua} onClick={handleOnRemove(selection)} />
             </SelectedItem>
           ))}
@@ -143,7 +143,7 @@ const RecentlyCreated = (props: Props) => {
       )}
       {feed.length
         ? <List<FeedData> columns={columns} items={feed} headerTheme="dark" />
-        : <EmptyList>{t('dashboard.recentlycreated.empty')}</EmptyList>
+        : <EmptyList>{t('dashboard.recently-created.empty')}</EmptyList>
       }
     </Container>
   );

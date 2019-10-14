@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation, UseTranslationResponse } from 'react-i18next';
 import { COLORS, SIZES } from '../../constants/styleConstants';
-import { AccountSettings } from '../Account';
+import AccountSettings from '../AccountSettings';
 
 const Navbar = styled.nav`
   height: ${SIZES.NAVBAR_HEIGHT};

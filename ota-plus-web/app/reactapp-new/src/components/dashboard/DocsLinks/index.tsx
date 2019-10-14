@@ -7,8 +7,8 @@ const DocsLinks = () => {
   const { t }: UseTranslationResponse = useTranslation();
   return (
     <Container elevation={2} id="docs-links">
-      <Title id="docs-links-title">{t('dashboard.docslinks.title')}</Title>
-      <Description id="docs-links-desc">{t('dashboard.docslinks.description')}</Description>
+      <Title id="docs-links-title">{t('dashboard.docs-links.title')}</Title>
+      <Description id="docs-links-desc">{t('dashboard.docs-links.description')}</Description>
       <List>
         <ListItem>
           <StyledIcon type="devices" />
@@ -16,7 +16,7 @@ const DocsLinks = () => {
             id="docs-links-link-devicegroups"
             url="#"
           >
-            {t('dashboard.docslinks.links.devicegroup')}
+            {t('dashboard.docs-links.links.device-group')}
           </ExternalLink>
         </ListItem>
         <ListItem>
@@ -25,7 +25,7 @@ const DocsLinks = () => {
             id="docs-links-link-updateconfig"
             url="#"
           >
-            {t('dashboard.docslinks.links.updateconfiguration')}
+            {t('dashboard.docs-links.links.update-configuration')}
           </ExternalLink>
         </ListItem>
         <ListItem>
@@ -34,7 +34,7 @@ const DocsLinks = () => {
             id="docs-links-link-campaigns"
             url="#"
           >
-            {t('dashboard.docslinks.links.campaigns')}
+            {t('dashboard.docs-links.links.campaigns')}
           </ExternalLink>
         </ListItem>
         <ListItem>
@@ -43,7 +43,7 @@ const DocsLinks = () => {
             id="docs-links-link-troubleshoot"
             url="#"
           >
-            {t('dashboard.docslinks.links.troubleshoot')}
+            {t('dashboard.docs-links.links.troubleshoot')}
           </ExternalLink>
         </ListItem>
       </List>
