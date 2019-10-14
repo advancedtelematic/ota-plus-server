@@ -10,12 +10,12 @@ export const BuildTeam = () => {
     <Container id="build-team" elevation={2}>
       <TitleWrapper>
         <StyledIcon type="people" />
-        <Title id="build-team-title">{t('dashboard.buildteam.title')}</Title>
+        <Title id="build-team-title">{t('dashboard.build-team.title')}</Title>
       </TitleWrapper>
-      <Description id="build-team-desc">{t('dashboard.buildteam.description')}</Description>
+      <Description id="build-team-desc">{t('dashboard.build-team.description')}</Description>
       <AddMembersButton type="link" id="build-team-add-btn">
         <Icon colorTheme={Theme.aqua} type="plus" />
-        {t('dashboard.buildteam.button-title')}
+        {t('dashboard.build-team.button-title')}
       </AddMembersButton>
     </Container>
   );
