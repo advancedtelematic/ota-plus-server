@@ -119,7 +119,7 @@ const Select = (
   const displaySelected = () => {
     const { selected } = state;
     if (!selected.length) {
-      return placeholder || t('select.default.option');
+      return placeholder;
     }
     return `${selected.length} ${t('select.default.selected')}`;
   };

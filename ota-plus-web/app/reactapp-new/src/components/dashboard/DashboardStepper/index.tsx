@@ -74,7 +74,8 @@ export const DashboardStepper = ({
     type: StepIcons[index] as CardType,
     title: t(`dashboard.stepper.step-${index}.title`),
     description: t(`dashboard.stepper.step-${index}.desc`),
-    descriptionDone: t(`dashboard.stepper.step-${index}.desc-done`, { count: secondaryStatValue }),
+    descriptionDone: t(`dashboard.stepper.step-${index}.desc-done`) ?
+      t(`dashboard.stepper.step-${index}.desc-done`, { count: secondaryStatValue }) : '',
     statValue: primaryStatValue,
     buttonTitle: t(`dashboard.stepper.step-${index}.action`),
   });
