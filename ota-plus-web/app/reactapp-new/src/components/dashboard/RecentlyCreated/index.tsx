@@ -71,31 +71,31 @@ const RecentlyCreated = (props: Props) => {
     {
       value: 'device',
       row: () => (
-        <span><StyledSelectIcon type="devices" />{t('dashboard.recently-created.device')}</span>
+        <span><StyledSelectIcon type="devices" />{t('dashboard.recently-created.select-list.devices')}</span>
       )
     },
     {
       value: 'device_group',
       row: () => (
-        <span><StyledSelectIcon type="deviceGroup" />{t('dashboard.recently-created.device_group')}</span>
+        <span><StyledSelectIcon type="deviceGroup" />{t('dashboard.recently-created.select-list.device-groups')}</span>
       )
     },
     {
       value: 'software',
       row: () => (
-        <span><StyledSelectIcon type="softwareVersion" />{t('dashboard.recently-created.software')}</span>
+        <span><StyledSelectIcon type="softwareVersion" />{t('dashboard.recently-created.select-list.software')}</span>
       )
     },
     {
       value: 'update',
       row: () => (
-        <span><StyledSelectIcon type="softwareUpdates" />{t('dashboard.recently-created.update')}</span>
+        <span><StyledSelectIcon type="softwareUpdates" />{t('dashboard.recently-created.select-list.updates')}</span>
       )
     },
     {
       value: 'campaign',
       row: () => (
-        <span><StyledSelectIcon type="campaigns" />{t('dashboard.recently-created.campaign')}</span>
+        <span><StyledSelectIcon type="campaigns" />{t('dashboard.recently-created.select-list.campaigns')}</span>
       )
     }
   ];
@@ -126,7 +126,7 @@ const RecentlyCreated = (props: Props) => {
           multiple={true}
           options={selectOptions}
           onSelect={handleOnSelect}
-          placeholder={t('dashboard.recently-created.select.placeholder')}
+          placeholder={t('dashboard.recently-created.select-list.placeholder')}
           selected={state.selected}
           width="200px"
         />

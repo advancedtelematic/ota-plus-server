@@ -117,18 +117,18 @@ const renderLinks = (links: Link[]): ReactElement[] => (
 export const AppNavbar = () => {
   const [t]: UseTranslationResponse = useTranslation();
   const links = [
-    { name: t('navbar.links.home'), to: '/' },
-    { name: t('navbar.links.devices'), to: '/devices' },
-    { name: t('navbar.links.device-groups'), to: '/devices-groups' },
-    { name: t('navbar.links.software'), to: '/software' },
-    { name: t('navbar.links.updates'), to: '/updates' },
-    { name: t('navbar.links.campaigns'), to: '/campaigns' },
+    { name: t('nav-bar.links.home'), to: '/' },
+    { name: t('nav-bar.links.devices'), to: '/devices' },
+    { name: t('nav-bar.links.device-groups'), to: '/devices-groups' },
+    { name: t('nav-bar.links.software'), to: '/software' },
+    { name: t('nav-bar.links.updates'), to: '/updates' },
+    { name: t('nav-bar.links.campaigns'), to: '/campaigns' },
   ];
   return (
     <Navbar id="app-navbar">
       <LogoContainer>
         <Logo />
-        <AppName>{t('navbar.app-name')}</AppName>
+        <AppName>{t('nav-bar.app-name')}</AppName>
       </LogoContainer>
       <Ul>
         {renderLinks(links)}

@@ -19,6 +19,7 @@ i18n
     whitelist: ['en', 'zh'],
     fallbackLng: 'en',
     keySeparator: true,
+    pluralSeparator: '-',
     interpolation: {
       escapeValue: false // react already safes from xss
     }
