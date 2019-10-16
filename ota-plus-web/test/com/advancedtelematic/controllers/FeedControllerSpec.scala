@@ -55,11 +55,13 @@ class FeedControllerSpec extends PlaySpec
   private val genDeviceGroup = for {
     id <- Gen.uuid
     groupName <- Gen.alphaNumStr
+    deviceCount <- Gen.posNum[Int]
     groupType <- Gen.alphaNumStr
     createdAt <- genInstant
   } yield FeedResource(createdAt, "device_group", Json.obj(
     "id" -> id,
     "groupName" -> groupName,
+    "deviceCount" -> deviceCount,
     "groupType" -> groupType,
     "createdAt" -> createdAt,
   ))
@@ -124,8 +126,15 @@ class FeedControllerSpec extends PlaySpec
     case (GET, url) if url == s"$deviceRegistryUri/api/v1/device_groups" =>
       Action(_ => Ok(Json.obj(
         "total" -> deviceGroups.length,
-        "values" -> deviceGroups.map(_.resource)
+        "values" -> deviceGroups.map(_.resource).map(_ - "deviceCount")
       )))
+
+    case (GET, url) if s"$deviceRegistryUri/api/v1/device_groups/(.*)/count".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$deviceRegistryUri/api/v1/device_groups/(.*)/count".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val deviceCount = deviceGroups.map(_.resource)
+        .filter(j => (j \ "id").as[String] == uuid)
+        .map(j => (j \ "deviceCount").as[Int]).head
+      Action(_ => Ok(Json.toJson(deviceCount)))
 
     case (GET, url) if url == s"$campaignerUri/api/v2/campaigns" =>
       Action(_ => Ok(Json.obj(
