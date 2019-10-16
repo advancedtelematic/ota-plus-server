@@ -50,6 +50,8 @@ pages:
 
 trigger-docsite-build:
   stage: publish-docs-if-changed
+  except:
+    - schedules
   only:
     refs:
       - master
