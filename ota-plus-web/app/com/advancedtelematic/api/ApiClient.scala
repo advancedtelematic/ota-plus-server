@@ -267,6 +267,11 @@ class DeviceRegistryApi(val conf: Configuration, val apiExec: ApiClientExec)
       .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
+
+  def countDevicesInGroup(namespace: Namespace, groupId: String)(implicit traceData: TraceData): Future[JsValue] =
+    request(s"device_groups/$groupId/count")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
 }
 
 class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)

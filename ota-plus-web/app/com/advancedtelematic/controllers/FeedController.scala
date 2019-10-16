@@ -33,15 +33,30 @@ class FeedController @Inject()(val conf: Configuration,
       case "device" =>
         implicit val devicesReads = feedResourcesReads("device")
         deviceRegistryApi.recentDevices(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+
       case "device_group" =>
         implicit val deviceGroupsReads = feedResourcesReads("device_group")
-        deviceRegistryApi.recentDeviceGroups(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        for {
+          groups <- deviceRegistryApi
+            .recentDeviceGroups(namespace, limit)
+            .map(_ \ "values")
+            .map(_.as[Seq[FeedResource]])
+          groupsWithCounts <- Future.traverse(groups) { group =>
+            val gid = (group.resource \ "id").as[String]
+            deviceRegistryApi.countDevicesInGroup(namespace, gid)
+              .map("deviceCount" -> _)
+              .map(extraField => group.copy(resource = group.resource + extraField))
+          }
+        } yield groupsWithCounts
+
       case "campaign" =>
         implicit val campaignsReads = feedResourcesReads("campaign")
         campaignerApi.recentCampaigns(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+
       case "update" =>
         implicit val updatesReads = feedResourcesReads("update")
         campaignerApi.recentUpdates(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+
       case "software" =>
         implicit val softwareReads = feedResourceReads("software")
         repoServerApi.fetchTargets(namespace)
@@ -49,6 +64,7 @@ class FeedController @Inject()(val conf: Configuration,
           .map(_.as[Map[String, JsObject]])
           .map(_.values.map(_ \ "custom").toSeq)
           .map(_.map(_.as[FeedResource]))
+
       case _ =>
         Future.successful(Seq())
     }

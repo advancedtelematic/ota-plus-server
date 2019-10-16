@@ -9,9 +9,9 @@ import scala.collection.Seq
 
 object Data {
 
-  final case class FeedResource(createdAt: Instant, _type: String, resource: JsValue)
+  final case class FeedResource(createdAt: Instant, _type: String, resource: JsObject)
   object FeedResource {
-    def of(_type: String)(createdAt: Instant, resource: JsValue): FeedResource = {
+    def of(_type: String)(createdAt: Instant, resource: JsObject): FeedResource = {
       FeedResource(createdAt, _type, resource)
     }
   }
@@ -20,7 +20,7 @@ object Data {
 
   def feedResourceReads(_type: String): Reads[FeedResource] = (
     (__ \ "createdAt").read[Instant] and
-    __.read[JsValue]
+    __.read[JsObject]
   )(FeedResource.of(_type) _)
 
   def feedResourcesReads(_type: String): Reads[Seq[FeedResource]] = {
