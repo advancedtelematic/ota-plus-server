@@ -36,21 +36,27 @@ class FeedController @Inject()(val conf: Configuration,
 
       case "device_group" =>
         implicit val deviceGroupsReads = feedResourcesReads("device_group")
-        enrichWithDeviceCount(
+        enrich(
+          "deviceCount", _ \ "id",
           deviceRegistryApi.recentDeviceGroups(namespace, limit),
           deviceRegistryApi.countDevicesInGroup(namespace, _)
         )
 
       case "campaign" =>
         implicit val campaignsReads = feedResourcesReads("campaign")
-        enrichWithDeviceCount(
+        enrich(
+          "deviceCount", _ \ "id",
           campaignerApi.recentCampaigns(namespace, limit),
           campaignerApi.countDevicesInCampaign(namespace, _)
         )
 
       case "update" =>
         implicit val updatesReads = feedResourcesReads("update")
-        campaignerApi.recentUpdates(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        enrich(
+          "ecuTypes", _ \ "source" \ "id",
+          campaignerApi.recentUpdates(namespace, limit),
+          directorApi.fetchEcuTypes(namespace, _)
+        )
 
       case "software" =>
         implicit val softwareReads = feedResourceReads("software")
@@ -64,16 +70,18 @@ class FeedController @Inject()(val conf: Configuration,
         Future.successful(Seq())
     }
 
-  private def enrichWithDeviceCount(rawData: => Future[JsValue],
-                                    fetchCounts: String => Future[JsValue])
-                                   (implicit feedResourceReads: Reads[Seq[FeedResource]]): Future[Seq[FeedResource]] =
+  private def enrich(newFieldKey: String,
+                     parseUuid: JsObject => JsLookupResult,
+                     paginatedFeedResources: Future[JsValue],
+                     fetchExtra: String => Future[JsValue])
+                    (implicit feedResourceReads: Reads[Seq[FeedResource]]): Future[Seq[FeedResource]] =
     for {
-      frs <- rawData.map(_ \ "values").map(_.as[Seq[FeedResource]])
+      frs <- paginatedFeedResources.map(_ \ "values").map(_.as[Seq[FeedResource]])
       enriched <- Future.traverse(frs) { fr =>
-        val id = (fr.resource \ "id").as[String]
-        fetchCounts(id)
-          .map("deviceCount" -> _)
-          .map(extraField => fr.copy(resource = fr.resource + extraField))
+        val uuid = parseUuid(fr.resource).as[String]
+        fetchExtra(uuid)
+          .map(newFieldKey -> _)
+          .map(newField => fr.copy(resource = fr.resource + newField))
       }
     } yield enriched
 
