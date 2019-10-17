@@ -30,6 +30,7 @@ class FeedControllerSpec extends PlaySpec
 
   private val campaignerUri = "http://campaigner.com"
   private val deviceRegistryUri = "http://device-registry.com"
+  private val directorUri = "http://director.com"
   private val repoServerUri = "http://repo-server.com"
   private val testNamespace = Gen.uuid.map(_.toString).map(uuid => s"HERE-$uuid").sample.get
 
@@ -87,12 +88,16 @@ class FeedControllerSpec extends PlaySpec
     uuid <- Gen.uuid
     name <- Gen.alphaNumStr
     description <- Gen.alphaNumStr
+    sourceUuid <- Gen.uuid
+    ecuTypes <- Gen.resize(10, Gen.containerOf[Set, String](Gen.alphaNumStr)).map(_.toSeq.sorted)
     createdAt <- genInstant
   } yield FeedResource(createdAt, "update" , Json.obj(
     "namespace" -> testNamespace,
     "uuid" -> uuid,
     "name" -> name,
     "description" -> description,
+    "source" -> Json.obj("id" -> sourceUuid),
+    "ecuTypes" -> ecuTypes,
     "createdAt" -> createdAt,
   ))
 
@@ -158,8 +163,30 @@ class FeedControllerSpec extends PlaySpec
     case (GET, url) if url == s"$campaignerUri/api/v2/updates" =>
       Action(_ => Ok(Json.obj(
           "total" -> updates.length,
-          "values" -> updates.map(_.resource)
+          "values" -> updates.map(_.resource).map(_ - "ecuTypes")
       )))
+
+    case (GET, url) if s"$directorUri/api/v1/multi_target_updates/(.*)".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$directorUri/api/v1/multi_target_updates/(.*)".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val ecuTypes = updates
+        .map(_.resource)
+        .filter(r => (r \ "source" \ "id").as[String] == uuid)
+        .map(r => (r \ "ecuTypes").as[Seq[String]])
+        .head
+        .map { ecuType =>
+          ecuType -> Json.obj(
+            "from" -> Json.obj(
+              "target" -> "target",
+              "uri" -> "uri"
+            ),
+            "to" -> Json.obj(
+              "target" -> "target",
+              "uri" -> "uri"
+            ),
+            "targetFormat" -> "BINARY"
+          )
+      }
+      Action(_ => Ok(JsObject(ecuTypes)))
 
     case (GET, url) if url == s"$repoServerUri/api/v1/user_repo/targets.json" =>
       Action(_ => Ok(Json.obj(
@@ -184,6 +211,7 @@ class FeedControllerSpec extends PlaySpec
     new GuiceApplicationBuilder()
       .configure("campaigner.uri" -> campaignerUri)
       .configure("deviceregistry.uri" -> deviceRegistryUri)
+      .configure("director.uri" -> directorUri)
       .configure("repo.uri" -> repoServerUri)
       .overrides(bind[WSClient].to(mock))
       .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))

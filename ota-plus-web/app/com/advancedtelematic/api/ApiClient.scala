@@ -300,6 +300,21 @@ class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)
       .execJsonValue(apiExec)
 }
 
+class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec)
+                 (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig with CirceJsonBodyWritables {
+
+  private def request(path: String)(implicit traceData: TraceData) =
+    ApiRequest.traced("director", directorApiUri.uri + "/api/v1/" + path)
+
+  def fetchEcuTypes(namespace: Namespace, updateId: String)
+                   (implicit traceData: TraceData, ec: ExecutionContext): Future[JsValue] =
+    request(s"multi_target_updates/$updateId")
+      .withNamespace(Some(namespace))
+      .execJson[JsObject](apiExec)
+      .map(_.keys.toSeq.sorted.map(JsString))
+      .map(JsArray(_))
+}
+
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike)
   extends OtaPlusConfig with CirceJsonBodyWritables {
 
