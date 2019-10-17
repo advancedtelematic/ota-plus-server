@@ -69,6 +69,7 @@ class FeedControllerSpec extends PlaySpec
   private val genCampaign = for {
     id <- Gen.uuid
     name <- Gen.alphaNumStr
+    deviceCount <- Gen.posNum[Int]
     updateId <- Gen.uuid
     status <- Gen.alphaNumStr
     createdAt <- genInstant
@@ -76,6 +77,7 @@ class FeedControllerSpec extends PlaySpec
     "namespace" -> testNamespace,
     "id" -> id,
     "name" -> name,
+    "deviceCount" -> deviceCount,
     "updateId" -> updateId,
     "status" -> status,
     "createdAt" -> createdAt,
@@ -139,7 +141,18 @@ class FeedControllerSpec extends PlaySpec
     case (GET, url) if url == s"$campaignerUri/api/v2/campaigns" =>
       Action(_ => Ok(Json.obj(
         "total" -> campaigns.length,
-        "values" -> campaigns.map(_.resource)
+        "values" -> campaigns.map(_.resource).map(_ - "deviceCount")
+      )))
+
+    case (GET, url) if s"$campaignerUri/api/v2/campaigns/(.*)/stats".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$campaignerUri/api/v2/campaigns/(.*)/stats".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val deviceCount = campaigns.map(_.resource)
+        .filter(j => (j \ "id").as[String] == uuid)
+        .map(j => (j \ "deviceCount").as[Int]).head
+      Action(_ => Ok(Json.obj(
+        "campaign" -> uuid,
+        "processed" -> deviceCount,
+        "affected" -> deviceCount,
       )))
 
     case (GET, url) if url == s"$campaignerUri/api/v2/updates" =>

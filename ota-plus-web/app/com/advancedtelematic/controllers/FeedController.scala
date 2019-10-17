@@ -51,7 +51,15 @@ class FeedController @Inject()(val conf: Configuration,
 
       case "campaign" =>
         implicit val campaignsReads = feedResourcesReads("campaign")
-        campaignerApi.recentCampaigns(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        for {
+          campaigns <- campaignerApi.recentCampaigns(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+          campaignsWithCounts <- Future.traverse(campaigns) { campaign =>
+            val cid = (campaign.resource \ "id").as[String]
+            campaignerApi.countDevicesInCampaign(namespace, cid)
+              .map("deviceCount" -> _)
+              .map(extraField => campaign.copy(resource = campaign.resource + extraField))
+          }
+        } yield campaignsWithCounts
 
       case "update" =>
         implicit val updatesReads = feedResourcesReads("update")
