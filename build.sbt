@@ -34,25 +34,7 @@ lazy val Library = new {
   val Netty = Seq("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
 }
 
-lazy val versioningSettings = {
-  import com.typesafe.sbt.SbtGit._
-  import com.typesafe.sbt.SbtGit.GitKeys._
-  import com.typesafe.sbt.GitVersioning
 
-  val VersionRegex = "v([0-9]+.[0-9]+.[0-9]+)".r
-
-  Seq(
-    git.useGitDescribe := true,
-    git.gitTagToVersionNumber := {
-      case VersionRegex(v) => Some(v)
-      case _               => None
-    },
-    git.baseVersion := "0.0.1",
-    git.gitDescribedVersion := gitReader.value
-      .withGit(_.describedVersion)
-      .flatMap(v => Option(v).map(_.drop(1)).orElse(formattedShaVersion.value).orElse(Some(git.baseVersion.value)))
-  )
-}
 
 lazy val releaseSettings = {
 
@@ -102,7 +84,7 @@ lazy val dockerSettings = {
     daemonUserUid in Docker := None,
     daemonUser in Docker := "daemon",
     dockerRepository := Some("advancedtelematic"),
-    dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
     dockerBaseImage := "advancedtelematic/alpine-jre:adoptopenjdk-jdk8u222",
     dockerAliases += dockerAlias.value.withTag(git.gitHeadCommit.value)
   )
@@ -166,7 +148,6 @@ lazy val `ota-plus-web` = project.in(file("ota-plus-web"))
     .settings(testFrameworks := Seq(sbt.TestFrameworks.ScalaTest))
     .settings(fork in Test := false) // PRO-157
     .settings(publish := (()))
-    .settings(versioningSettings)
     .settings(releaseSettings)
     .settings(dockerSettings)
     .settings(PlaySettings.defaultScalaSettings)
