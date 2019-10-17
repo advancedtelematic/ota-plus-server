@@ -286,6 +286,13 @@ class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
 
+  def countDevicesInCampaign(namespace: Namespace, campaignId: String)
+                            (implicit traceData: TraceData, ec: ExecutionContext): Future[JsValue] =
+    request(s"campaigns/$campaignId/stats")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+      .map(j => (j \ "processed").as[JsValue])
+
   def recentUpdates(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
     request("updates")
       .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
