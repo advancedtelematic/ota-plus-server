@@ -28,14 +28,17 @@ class FeedController @Inject()(val conf: Configuration,
   private val defaultLimit = conf.get[Int]("app.homepage.recently_created.limit")
 
   private def fetchRemoteActivityFeed(namespace: Namespace, limit: Int)(resourceType: String)
-                             (implicit traceData: TraceData): Future[Seq[FeedResource]] =
+                             (implicit traceData: TraceData): Future[Seq[FeedResource]] = {
+
+    implicit val resourceReads: Reads[Seq[FeedResource]] = feedResourcesReads(resourceType.toLowerCase)
     resourceType.toLowerCase match {
       case "device" =>
-        implicit val devicesReads = feedResourcesReads("device")
-        deviceRegistryApi.recentDevices(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        deviceRegistryApi
+          .recentDevices(namespace, limit)
+          .map(_ \ "values")
+          .map(_.as[Seq[FeedResource]])
 
       case "device_group" =>
-        implicit val deviceGroupsReads = feedResourcesReads("device_group")
         enrich(
           "deviceCount", _ \ "id",
           deviceRegistryApi.recentDeviceGroups(namespace, limit),
@@ -43,7 +46,6 @@ class FeedController @Inject()(val conf: Configuration,
         )
 
       case "campaign" =>
-        implicit val campaignsReads = feedResourcesReads("campaign")
         enrich(
           "deviceCount", _ \ "id",
           campaignerApi.recentCampaigns(namespace, limit),
@@ -51,7 +53,6 @@ class FeedController @Inject()(val conf: Configuration,
         )
 
       case "update" =>
-        implicit val updatesReads = feedResourcesReads("update")
         enrich(
           "ecuTypes", _ \ "source" \ "id",
           campaignerApi.recentUpdates(namespace, limit),
@@ -69,6 +70,7 @@ class FeedController @Inject()(val conf: Configuration,
       case _ =>
         Future.successful(Seq())
     }
+  }
 
   private def enrich(newFieldKey: String,
                      parseUuid: JsObject => JsLookupResult,
