@@ -23,6 +23,8 @@ i18n
     fallbackLng: 'en', // language to use if translations in user language are not available
     ns: ['translation'], // string or array of namespaces to load
     debug: false,
+    keySeparator: true,
+    pluralSeparator: '-',
     interpolation: {
       escapeValue: false,
     },
