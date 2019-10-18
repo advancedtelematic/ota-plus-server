@@ -215,6 +215,7 @@ export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_ALL;
 
 export const DEVICES_LIMIT_LATEST = 4;
 export const DEVICES_LIMIT_PER_PAGE = 30;
+export const DEVICE_HISTORY_LIMIT = 10;
 
 /**
  * softwares
