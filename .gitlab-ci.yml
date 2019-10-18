@@ -1,8 +1,77 @@
 stages:
+  - test
+  - build image
+  - trigger deploy
   - publish-docs-if-changed
   - veracode scan
   - deps scan
   - generate pages
+
+
+variables:
+  VAULT_ADDR: "http://vault.sit-ota.aws.in.here.com"
+
+test:
+  stage: test
+  tags:
+    - docker-sock
+  image: advancedtelematic/gitlab-jobs:0.2.3
+  script:
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 ota-plus-web/ut:test
+  cache:
+    paths:
+      - .ivy2/
+      - .sbt
+
+
+build docker image:
+  stage: build image
+  except:
+    - schedules
+  only:
+    - master
+  tags:
+    - docker-sock
+  image: advancedtelematic/app-gitlab-job:0.0.1
+  script:
+    - env | sort
+    - export VAULT_TOKEN=$(cat /opt/vault/token)
+    - gitlab-docker-login $VAULT_ADDR
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 -batch ";project ota-plus-web;release" -Dsbt.log.noformat=true
+  cache:
+    paths:
+      - .ivy2/
+      - .sbt/
+
+trigger dev deploy:
+  stage: trigger deploy
+  except:
+    - schedules
+  only:
+    - master
+  variables:
+    ENV: "dev"
+    NEW_TAG: $CI_COMMIT_SHA
+    SERVICE: app
+    CREATE_COMMIT: "true"
+  trigger:
+    project: OLP/EDGE/OTA/infra/deployment-descriptors
+    branch: master
+
+trigger sit deploy:
+  stage: trigger deploy
+  except:
+    - schedules
+  only:
+    - deploy/sit
+  variables:
+    ENV: "sit"
+    NEW_TAG: $CI_COMMIT_SHA
+    SERVICE: app
+    CREATE_COMMIT: "true"
+  trigger:
+    project: OLP/EDGE/OTA/infra/deployment-descriptors
+    branch: master
 
 veracode scan:
   # prepare and submit for static code analysis
