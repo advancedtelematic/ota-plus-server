@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Button, Dropdown, Icon, Menu, Tag } from 'antd';
 import { Form } from 'formsy-antd';
-import { action, observable } from 'mobx';
+import { action, observable, observe } from 'mobx';
 
 import { CAMPAIGNS_STATUSES, CAMPAIGNS_STATUS_TAB_TITLE, CAMPAIGNS_DEFAULT_TAB } from '../config';
 import SearchBar from './SearchBar';
@@ -33,6 +33,7 @@ class TabNavigation extends Component {
     this.state = {
       filterValue: ''
     };
+    const { campaignsStore } = props.stores;
     this.filterChangeCallback = this.filterChangeCallback.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.menu = (
@@ -44,6 +45,11 @@ class TabNavigation extends Component {
         ))}
       </Menu>
     );
+    this.fetchCampaignsCancelHandler = observe(campaignsStore, (change) => {
+      if (change.name === 'campaignsCancelAsync' && change.object[change.name].isFetching === false) {
+        this.setActive(campaignsStore.activeTab);
+      }
+    });
   }
 
   componentDidMount() {
@@ -61,6 +67,7 @@ class TabNavigation extends Component {
 
   componentWillUnmount() {
     this.storeActive(this.activeTab);
+    this.fetchCampaignsCancelHandler();
   }
 
   isPackagesPage = location => location === 'page-software-repository';

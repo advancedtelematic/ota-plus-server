@@ -10,7 +10,7 @@ import { Button } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { OTAModal, AsyncResponse } from '../../partials';
 
-import { assets } from '../../config';
+import { assets, CAMPAIGNS_STATUS_CANCELLED } from '../../config';
 
 @inject('stores')
 @observer
@@ -38,7 +38,7 @@ class CancelCampaignModal extends Component {
     const { campaignsStore } = stores;
     const { campaign } = campaignsStore;
     campaignsStore.cancelCampaign(campaign.id);
-    campaignsStore.activeTab = 'cancelled';
+    campaignsStore.activeTab = CAMPAIGNS_STATUS_CANCELLED;
   };
 
   handleResponse = () => {
