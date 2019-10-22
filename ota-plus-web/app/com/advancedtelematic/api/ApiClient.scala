@@ -267,6 +267,11 @@ class DeviceRegistryApi(val conf: Configuration, val apiExec: ApiClientExec)
       .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
+
+  def countDevicesInGroup(namespace: Namespace, groupId: String)(implicit traceData: TraceData): Future[JsValue] =
+    request(s"device_groups/$groupId/count")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
 }
 
 class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)
@@ -281,11 +286,33 @@ class CampaignerApi(val conf: Configuration, val apiExec: ApiClientExec)
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
 
+  def countDevicesInCampaign(namespace: Namespace, campaignId: String)
+                            (implicit traceData: TraceData, ec: ExecutionContext): Future[JsValue] =
+    request(s"campaigns/$campaignId/stats")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
+      .map(j => (j \ "processed").as[JsValue])
+
   def recentUpdates(namespace: Namespace, limit: Int)(implicit traceData: TraceData): Future[JsValue] =
     request("updates")
       .transform(_.addQueryStringParameters("sortBy" -> "createdAt", "limit" -> limit.toString))
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
+}
+
+class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec)
+                 (implicit tracer: ZipkinTraceServiceLike) extends OtaPlusConfig with CirceJsonBodyWritables {
+
+  private def request(path: String)(implicit traceData: TraceData) =
+    ApiRequest.traced("director", directorApiUri.uri + "/api/v1/" + path)
+
+  def fetchEcuTypes(namespace: Namespace, updateId: String)
+                   (implicit traceData: TraceData, ec: ExecutionContext): Future[JsValue] =
+    request(s"multi_target_updates/$updateId")
+      .withNamespace(Some(namespace))
+      .execJson[JsObject](apiExec)
+      .map(_.keys.toSeq.sorted.map(JsString))
+      .map(JsArray(_))
 }
 
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implicit tracer: ZipkinTraceServiceLike)

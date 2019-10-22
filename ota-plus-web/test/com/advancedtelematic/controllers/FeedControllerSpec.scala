@@ -30,6 +30,7 @@ class FeedControllerSpec extends PlaySpec
 
   private val campaignerUri = "http://campaigner.com"
   private val deviceRegistryUri = "http://device-registry.com"
+  private val directorUri = "http://director.com"
   private val repoServerUri = "http://repo-server.com"
   private val testNamespace = Gen.uuid.map(_.toString).map(uuid => s"HERE-$uuid").sample.get
 
@@ -55,11 +56,13 @@ class FeedControllerSpec extends PlaySpec
   private val genDeviceGroup = for {
     id <- Gen.uuid
     groupName <- Gen.alphaNumStr
+    deviceCount <- Gen.posNum[Int]
     groupType <- Gen.alphaNumStr
     createdAt <- genInstant
   } yield FeedResource(createdAt, "device_group", Json.obj(
     "id" -> id,
     "groupName" -> groupName,
+    "deviceCount" -> deviceCount,
     "groupType" -> groupType,
     "createdAt" -> createdAt,
   ))
@@ -67,6 +70,7 @@ class FeedControllerSpec extends PlaySpec
   private val genCampaign = for {
     id <- Gen.uuid
     name <- Gen.alphaNumStr
+    deviceCount <- Gen.posNum[Int]
     updateId <- Gen.uuid
     status <- Gen.alphaNumStr
     createdAt <- genInstant
@@ -74,6 +78,7 @@ class FeedControllerSpec extends PlaySpec
     "namespace" -> testNamespace,
     "id" -> id,
     "name" -> name,
+    "deviceCount" -> deviceCount,
     "updateId" -> updateId,
     "status" -> status,
     "createdAt" -> createdAt,
@@ -83,12 +88,16 @@ class FeedControllerSpec extends PlaySpec
     uuid <- Gen.uuid
     name <- Gen.alphaNumStr
     description <- Gen.alphaNumStr
+    sourceUuid <- Gen.uuid
+    ecuTypes <- Gen.resize(10, Gen.containerOf[Set, String](Gen.alphaNumStr)).map(_.toSeq.sorted)
     createdAt <- genInstant
   } yield FeedResource(createdAt, "update" , Json.obj(
     "namespace" -> testNamespace,
     "uuid" -> uuid,
     "name" -> name,
     "description" -> description,
+    "source" -> Json.obj("id" -> sourceUuid),
+    "ecuTypes" -> ecuTypes,
     "createdAt" -> createdAt,
   ))
 
@@ -124,20 +133,60 @@ class FeedControllerSpec extends PlaySpec
     case (GET, url) if url == s"$deviceRegistryUri/api/v1/device_groups" =>
       Action(_ => Ok(Json.obj(
         "total" -> deviceGroups.length,
-        "values" -> deviceGroups.map(_.resource)
+        "values" -> deviceGroups.map(_.resource).map(_ - "deviceCount")
       )))
+
+    case (GET, url) if s"$deviceRegistryUri/api/v1/device_groups/(.*)/count".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$deviceRegistryUri/api/v1/device_groups/(.*)/count".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val deviceCount = deviceGroups.map(_.resource)
+        .filter(j => (j \ "id").as[String] == uuid)
+        .map(j => (j \ "deviceCount").as[Int]).head
+      Action(_ => Ok(Json.toJson(deviceCount)))
 
     case (GET, url) if url == s"$campaignerUri/api/v2/campaigns" =>
       Action(_ => Ok(Json.obj(
         "total" -> campaigns.length,
-        "values" -> campaigns.map(_.resource)
+        "values" -> campaigns.map(_.resource).map(_ - "deviceCount")
+      )))
+
+    case (GET, url) if s"$campaignerUri/api/v2/campaigns/(.*)/stats".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$campaignerUri/api/v2/campaigns/(.*)/stats".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val deviceCount = campaigns.map(_.resource)
+        .filter(j => (j \ "id").as[String] == uuid)
+        .map(j => (j \ "deviceCount").as[Int]).head
+      Action(_ => Ok(Json.obj(
+        "campaign" -> uuid,
+        "processed" -> deviceCount,
+        "affected" -> deviceCount,
       )))
 
     case (GET, url) if url == s"$campaignerUri/api/v2/updates" =>
       Action(_ => Ok(Json.obj(
           "total" -> updates.length,
-          "values" -> updates.map(_.resource)
+          "values" -> updates.map(_.resource).map(_ - "ecuTypes")
       )))
+
+    case (GET, url) if s"$directorUri/api/v1/multi_target_updates/(.*)".r.findAllIn(url).nonEmpty =>
+      val uuid = s"$directorUri/api/v1/multi_target_updates/(.*)".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val ecuTypes = updates
+        .map(_.resource)
+        .filter(r => (r \ "source" \ "id").as[String] == uuid)
+        .map(r => (r \ "ecuTypes").as[Seq[String]])
+        .head
+        .map { ecuType =>
+          ecuType -> Json.obj(
+            "from" -> Json.obj(
+              "target" -> "target",
+              "uri" -> "uri"
+            ),
+            "to" -> Json.obj(
+              "target" -> "target",
+              "uri" -> "uri"
+            ),
+            "targetFormat" -> "BINARY"
+          )
+      }
+      Action(_ => Ok(JsObject(ecuTypes)))
 
     case (GET, url) if url == s"$repoServerUri/api/v1/user_repo/targets.json" =>
       Action(_ => Ok(Json.obj(
@@ -162,6 +211,7 @@ class FeedControllerSpec extends PlaySpec
     new GuiceApplicationBuilder()
       .configure("campaigner.uri" -> campaignerUri)
       .configure("deviceregistry.uri" -> deviceRegistryUri)
+      .configure("director.uri" -> directorUri)
       .configure("repo.uri" -> repoServerUri)
       .overrides(bind[WSClient].to(mock))
       .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
