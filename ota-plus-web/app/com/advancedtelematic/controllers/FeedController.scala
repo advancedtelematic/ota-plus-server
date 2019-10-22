@@ -28,20 +28,37 @@ class FeedController @Inject()(val conf: Configuration,
   private val defaultLimit = conf.get[Int]("app.homepage.recently_created.limit")
 
   private def fetchRemoteActivityFeed(namespace: Namespace, limit: Int)(resourceType: String)
-                             (implicit traceData: TraceData): Future[Seq[FeedResource]] =
+                             (implicit traceData: TraceData): Future[Seq[FeedResource]] = {
+
+    implicit val resourceReads: Reads[Seq[FeedResource]] = feedResourcesReads(resourceType.toLowerCase)
     resourceType.toLowerCase match {
       case "device" =>
-        implicit val devicesReads = feedResourcesReads("device")
-        deviceRegistryApi.recentDevices(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        deviceRegistryApi
+          .recentDevices(namespace, limit)
+          .map(_ \ "values")
+          .map(_.as[Seq[FeedResource]])
+
       case "device_group" =>
-        implicit val deviceGroupsReads = feedResourcesReads("device_group")
-        deviceRegistryApi.recentDeviceGroups(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        enrich(
+          "deviceCount", _ \ "id",
+          deviceRegistryApi.recentDeviceGroups(namespace, limit),
+          deviceRegistryApi.countDevicesInGroup(namespace, _)
+        )
+
       case "campaign" =>
-        implicit val campaignsReads = feedResourcesReads("campaign")
-        campaignerApi.recentCampaigns(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        enrich(
+          "deviceCount", _ \ "id",
+          campaignerApi.recentCampaigns(namespace, limit),
+          campaignerApi.countDevicesInCampaign(namespace, _)
+        )
+
       case "update" =>
-        implicit val updatesReads = feedResourcesReads("update")
-        campaignerApi.recentUpdates(namespace, limit).map(_ \ "values").map(_.as[Seq[FeedResource]])
+        enrich(
+          "ecuTypes", _ \ "source" \ "id",
+          campaignerApi.recentUpdates(namespace, limit),
+          directorApi.fetchEcuTypes(namespace, _)
+        )
+
       case "software" =>
         implicit val softwareReads = feedResourceReads("software")
         repoServerApi.fetchTargets(namespace)
@@ -49,9 +66,26 @@ class FeedController @Inject()(val conf: Configuration,
           .map(_.as[Map[String, JsObject]])
           .map(_.values.map(_ \ "custom").toSeq)
           .map(_.map(_.as[FeedResource]))
+
       case _ =>
         Future.successful(Seq())
     }
+  }
+
+  private def enrich(newFieldKey: String,
+                     parseUuid: JsObject => JsLookupResult,
+                     paginatedFeedResources: Future[JsValue],
+                     fetchExtra: String => Future[JsValue])
+                    (implicit feedResourceReads: Reads[Seq[FeedResource]]): Future[Seq[FeedResource]] =
+    for {
+      frs <- paginatedFeedResources.map(_ \ "values").map(_.as[Seq[FeedResource]])
+      enriched <- Future.traverse(frs) { fr =>
+        val uuid = parseUuid(fr.resource).as[String]
+        fetchExtra(uuid)
+          .map(newFieldKey -> _)
+          .map(newField => fr.copy(resource = fr.resource + newField))
+      }
+    } yield enriched
 
   def activityFeed(types: Option[String], limit: Option[Int]): Action[AnyContent] =
     authAction.async { implicit request =>
