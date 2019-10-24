@@ -22,6 +22,7 @@ import {
   API_DELETE_SOFTWARE,
   API_UPDATES_SEARCH,
   API_CAMPAIGNS_FETCH_SINGLE,
+  DEVICE_HISTORY_LIMIT,
   PACKAGES_DEFAULT_TAB,
   SOFTWARES_LIMIT_LATEST,
 } from '../config';
@@ -530,23 +531,26 @@ export default class SoftwareStore {
       });
   }
 
-  fetchPackagesHistory(id, filter = '', fetchFirstItems = false) {
+  fetchPackagesHistory(id, filter = '', fetchFirstItems = false, dataLimit = DEVICE_HISTORY_LIMIT, dataOffset = 0) {
     resetAsync(this.packagesHistoryFetchAsync, true);
     if (this.packagesHistoryFilter !== filter || fetchFirstItems) {
       this.packagesHistoryTotalCount = null;
       this.packagesHistoryCurrentPage = 0;
     }
     this.packagesHistoryFilter = filter;
+    const limit = `limit=${dataLimit}`;
+    const offset = `offset=${dataOffset}`;
     return axios
-      .get(`${API_SOFTWARE_DEVICE_HISTORY}/${id}/installation_history?limit=1000`)
+      .get(`${API_SOFTWARE_DEVICE_HISTORY}/${id}/installation_history?${limit}&${offset}`)
       .then((response) => {
         const data = response.data.values;
+
         const after = _.after(
           data.length,
           () => {
             this.packagesHistoryCurrentPage += 1;
             this.packagesHistoryTotalCount = response.data.total;
-            this.packagesHistory = _.uniqBy(this.packagesHistory.concat(data), item => item.correlationId);
+            this.packagesHistory = _.uniqBy(data, item => item.correlationId);
             this.preparePackagesHistory();
           },
           this,

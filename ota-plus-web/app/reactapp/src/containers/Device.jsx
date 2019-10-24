@@ -177,14 +177,14 @@ class Device extends Component {
             )}
             {!this.ECUselected ? (
               devicesStore.approvalPendingCampaignsFetchAsync.isFetching
-              || devicesStore.mtuFetchAsync.isFetching
-              || softwareStore.packagesHistoryFetchAsync.isFetching ? (
-                <ul className="overview-panel__list">
-                  <div className="wrapper-center">
-                    <Loader />
-                  </div>
-                </ul>
-                ) : (
+                ? (
+                  <ul className="overview-panel__list">
+                    <div className="wrapper-center">
+                      <Loader />
+                    </div>
+                  </ul>
+                )
+                : (
                   <DeviceOverviewPanel
                     cancelMtuUpdate={this.cancelMtuUpdate}
                     cancelApprovalPendingCampaign={this.cancelApprovalPendingCampaign}
