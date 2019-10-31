@@ -10,6 +10,7 @@ import isEmail from 'validator/lib/isEmail';
 import { observe } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
+import encodeUrl from 'encodeurl';
 
 import EditOrganizationNameModal from './EditOrganizationNameModal';
 import { Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
@@ -80,7 +81,7 @@ class ProfileOrganization extends Component {
     if (namespace) {
       const pathOrigin = window.location.origin;
       const subUrl = API_USER_ORGANIZATIONS_SWITCH_NAMESPACE.replace('$namespace', namespace);
-      const redirectUrl = `${pathOrigin}${subUrl}`;
+      const redirectUrl = encodeUrl(`${pathOrigin}${subUrl}`);
       Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, namespace);
       window.location.replace(redirectUrl);
     }
