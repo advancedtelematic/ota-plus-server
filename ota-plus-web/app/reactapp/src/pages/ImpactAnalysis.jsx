@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { ImpactAnalysisContainer } from '../containers';
 
-const title = 'Impact analysis';
+const title = 'Analytics';
 
 @inject('stores')
 @observer

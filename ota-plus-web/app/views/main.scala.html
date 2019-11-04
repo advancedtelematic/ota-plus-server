@@ -1,7 +1,8 @@
 @import com.advancedtelematic.auth.OAuthConfig
 @import com.advancedtelematic.controllers.UiToggles
+@import com.advancedtelematic.controllers.EnvironmentMode
 @import play.filters.csrf.CSRF
-@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles)()(implicit req: RequestHeader)
+@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles, envMode: EnvironmentMode)()(implicit req: RequestHeader)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,6 +17,20 @@
     </form>
     <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
     <input type="hidden" id="ws-url" value="@wsUrl"/>
+    <script nonce="780ae1a1d847ffc">
+      var nkT = {
+        pName :"HERE OTA Connect",
+        sCountry :"Global",
+        sLang :"en"
+      };
+    </script>
+    @if(envMode.isProd) {
+      <script src="https://tags.tiqcdn.com/utag/here/otaconnect/prod/utag.js"></script>
+    } else {
+      <script src="https://tags.tiqcdn.com/utag/here/otaconnect/dev/utag.js"></script>
+    }
+    <input type="hidden" id="environment-dev" value="@{envMode.isDev}"/>
+    <input type="hidden" id="environment-prod" value="@{envMode.isProd}"/>
     <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
     <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
     <!-- Hides user dropdown -->

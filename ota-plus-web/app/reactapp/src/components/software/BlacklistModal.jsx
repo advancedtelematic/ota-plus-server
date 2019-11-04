@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import { Button } from 'antd';
 import serialize from 'form-serialize';
 import _ from 'lodash';
 import { withTranslation, Trans } from 'react-i18next';
@@ -172,7 +173,8 @@ class BlacklistModal extends Component {
         <div className="row">
           <div className="col-xs-12">
             <div className="body-actions">
-              <button
+              <Button
+                htmlType="submit"
                 type="button"
                 className="btn-primary"
                 disabled={
@@ -186,7 +188,7 @@ class BlacklistModal extends Component {
                   ? t('software.blacklist_modal.save_comment')
                   : t('software.blacklist_modal.confirm')
                 }
-              </button>
+              </Button>
             </div>
           </div>
         </div>

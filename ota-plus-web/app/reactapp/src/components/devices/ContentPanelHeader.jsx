@@ -8,6 +8,8 @@ import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { SubHeader, SearchBar } from '../../partials';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_DEVICES_CREATE_CAMPAIGN } from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -34,6 +36,7 @@ class ContentPanelHeader extends Component {
               onClick={(e) => {
                 e.preventDefault();
                 addNewWizard('groups');
+                sendAction(OTA_DEVICES_CREATE_CAMPAIGN);
               }}
             >
               {t('devices.dashboard.create_campaign')}

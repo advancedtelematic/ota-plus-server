@@ -13,6 +13,8 @@ import ListItemVersion from './ListItemVersion';
 import { SoftwareVersionsStats } from './stats';
 import { Dropdown, ConfirmationModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_SOFTWARE_SEE_DETAILS, OTA_SOFTWARE_DELETE_SOFTWARE } from '../../constants/analyticsActions';
 
 const headerHeight = 28;
 
@@ -169,6 +171,9 @@ class List extends Component {
     if (e) e.preventDefault();
     softwareStore.handleCompatibles();
     setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
+    if (!expandedPackageName) {
+      sendAction(OTA_SOFTWARE_SEE_DETAILS);
+    }
   };
 
   hideSubmenu = () => {
@@ -276,6 +281,7 @@ class List extends Component {
                                         e.preventDefault();
                                         this.packVersions = pack.versions;
                                         this.showDeleteModal();
+                                        sendAction(OTA_SOFTWARE_DELETE_SOFTWARE);
                                       }}
                                     >
                                       {t('software.action_buttons.delete_software')}

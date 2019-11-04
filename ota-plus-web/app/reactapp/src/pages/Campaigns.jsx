@@ -3,11 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { MetaData } from '../utils';
 import { CampaignsContainer } from '../containers';
 import FadeAnimation from '../utils/FadeAnimation';
-
-const title = 'Campaigns';
 
 @inject('stores')
 @observer
@@ -38,9 +35,9 @@ class Campaigns extends Component {
 
     return (
       <FadeAnimation>
-        <MetaData title={title}>
+        <div>
           <CampaignsContainer highlight={params.campaignId} addNewWizard={addNewWizard} />
-        </MetaData>
+        </div>
       </FadeAnimation>
     );
   }

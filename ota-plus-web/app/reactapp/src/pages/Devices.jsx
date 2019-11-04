@@ -5,11 +5,10 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { withTranslation } from 'react-i18next';
 
 import { MetaData, FadeAnimation } from '../utils';
 import { DevicesContainer } from '../containers';
-
-const title = 'Devices';
 
 @DragDropContext(HTML5Backend)
 @inject('stores')
@@ -18,6 +17,7 @@ class Devices extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
@@ -39,7 +39,14 @@ class Devices extends Component {
   }
 
   render() {
-    const { addNewWizard } = this.props;
+    const { addNewWizard, stores, t } = this.props;
+    const { groupsStore } = stores;
+    let title = t('groups.all_devices');
+    if (groupsStore.selectedGroup.ungrouped) {
+      title = t('groups.ungrouped_devices');
+    } else if (!groupsStore.selectedGroup.ungrouped && groupsStore.selectedGroup.id) {
+      title = t('groups.grouped_devices');
+    }
     return (
       <FadeAnimation>
         <MetaData title={title}>
@@ -50,4 +57,4 @@ class Devices extends Component {
   }
 }
 
-export default Devices;
+export default withTranslation()(Devices);

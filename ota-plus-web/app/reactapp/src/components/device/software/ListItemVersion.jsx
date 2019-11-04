@@ -7,12 +7,16 @@ import moment from 'moment';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
+import { sendAction } from '../../../helpers/analyticsHelper';
+import { OTA_DEVICE_SEE_SOFTWARE } from '../../../constants/analyticsActions';
+
 @inject('stores')
 @observer
 class ListItemVersion extends Component {
   handlePackageVersionClick = () => {
     const { showPackageDetails, version } = this.props;
     showPackageDetails(version);
+    sendAction(OTA_DEVICE_SEE_SOFTWARE);
   };
 
   isPackageBlacklisted(version) {

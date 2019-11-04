@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
+import { withTranslation } from 'react-i18next';
 import Items from './usage/Items';
+import { MetaData } from '../../utils';
 
 const startTime = moment([2017, 0, 1]);
 const currentTime = moment();
@@ -19,10 +21,11 @@ for (let i = 0; i <= monthsCount; i += 1) {
 @observer
 class Usage extends Component {
   componentWillMount() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { userStore } = stores;
     userStore.setUsageInitial(startTime, monthsCount);
     this.fetchUsage();
+    this.title = t('profile.usage.title');
   }
 
   fetchUsage = () => {
@@ -40,15 +43,17 @@ class Usage extends Component {
   render() {
     return (
       <div className="profile-container" id="usage">
-        <div className="section-header">
-          <div className="column">Date</div>
-          <div className="column">Total activated devices</div>
-          <div className="column">New devices activated this month</div>
-          <div className="column">Devices connected this month</div>
-        </div>
-        <div className="usage-info">
-          <Items months={months} />
-        </div>
+        <MetaData title={this.title}>
+          <div className="section-header">
+            <div className="column">Date</div>
+            <div className="column">Total activated devices</div>
+            <div className="column">New devices activated this month</div>
+            <div className="column">Devices connected this month</div>
+          </div>
+          <div className="usage-info">
+            <Items months={months} />
+          </div>
+        </MetaData>
       </div>
     );
   }
@@ -56,6 +61,7 @@ class Usage extends Component {
 
 Usage.propTypes = {
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default Usage;
+export default withTranslation()(Usage);

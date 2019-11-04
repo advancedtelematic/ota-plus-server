@@ -21,6 +21,8 @@ import {
   GROUP_GROUP_TYPE_SMART,
   GROUP_GROUP_TYPE_STATIC
 } from '../../constants/groupConstants';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_DEVICES_CREATE_SMART_GROUP, OTA_DEVICES_CREATE_FIXED_GROUP } from '../../constants/analyticsActions';
 
 const wizardSteps = [
   {
@@ -117,6 +119,7 @@ class CreateModal extends Component {
           expression: null,
         });
       }
+      sendAction(OTA_DEVICES_CREATE_FIXED_GROUP);
     } else {
       // eslint-disable-next-line no-unused-vars
       const data = serialize(document.querySelector('#smart-group-create-form'), { hash: true });
@@ -125,6 +128,7 @@ class CreateModal extends Component {
         groupType: GROUP_GROUP_TYPE_DYNAMIC,
         expression: smartExpression,
       });
+      sendAction(OTA_DEVICES_CREATE_SMART_GROUP);
     }
   };
 

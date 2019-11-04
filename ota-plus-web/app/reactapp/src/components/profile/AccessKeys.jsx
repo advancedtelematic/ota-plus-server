@@ -3,18 +3,18 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { MetaData } from '../../utils';
 import ProvisioningContainer from '../../containers/Provisioning';
-
-const title = 'Access keys';
 
 @inject('stores')
 @observer
 class AccessKeys extends Component {
   componentWillMount() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { provisioningStore } = stores;
     provisioningStore.fetchProvisioningStatus();
+    this.title = t('profile.provisioning_keys.title');
   }
 
   componentWillUnmount() {
@@ -31,7 +31,7 @@ class AccessKeys extends Component {
         className={`profile-container ${provisioningStore.preparedProvisioningKeys.length ? '' : 'background-black'}`}
         id="provisioning"
       >
-        <MetaData title={title}>
+        <MetaData title={this.title}>
           <ProvisioningContainer />
         </MetaData>
       </div>
@@ -40,7 +40,8 @@ class AccessKeys extends Component {
 }
 
 AccessKeys.propTypes = {
-  stores: PropTypes.shape({})
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default AccessKeys;
+export default withTranslation()(AccessKeys);

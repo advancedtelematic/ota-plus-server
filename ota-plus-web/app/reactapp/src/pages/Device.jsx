@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { DeviceContainer } from '../containers';
-
-const title = 'Device';
 
 @inject('stores')
 @observer
@@ -20,7 +19,8 @@ class Device extends Component {
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
-    match: PropTypes.shape({})
+    match: PropTypes.shape({}),
+    t: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -46,10 +46,15 @@ class Device extends Component {
   }
 
   render() {
+    const { stores, t } = this.props;
+    const { hardwareStore } = stores;
     return (
       <FadeAnimation>
         <span>
-          <MetaData title={title}>
+          <MetaData
+            title={hardwareStore.activeEcu.hardwareId
+              ? t('devices.device_control_units') : t('devices.device_overview')}
+          >
             <DeviceContainer />
           </MetaData>
         </span>
@@ -58,4 +63,4 @@ class Device extends Component {
   }
 }
 
-export default Device;
+export default withTranslation()(Device);

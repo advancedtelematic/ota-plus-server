@@ -12,6 +12,13 @@ class MetaData extends Component {
     if (description) document.querySelector('meta[name="description"]').setAttribute('content', description);
   }
 
+  componentDidUpdate(prevProps) {
+    const { title } = this.props;
+    if (prevProps.title !== title) {
+      document.title = `${APP_TITLE} - ${title}`;
+    }
+  }
+
   render() {
     const { className, children } = this.props;
     return <span className={`content${className ? ` ${className}` : ''}`}>{children}</span>;

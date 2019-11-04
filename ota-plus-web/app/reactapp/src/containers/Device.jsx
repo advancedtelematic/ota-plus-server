@@ -14,6 +14,22 @@ import {
 } from '../components/device';
 import { SoftwareCreateModal } from '../components/software';
 import { getDeviceHttpStatusErrorMessage } from '../helpers/deviceHelper';
+import { sendAction } from '../helpers/analyticsHelper';
+import {
+  OTA_DEVICE_CANCEL_CAMPAIGN,
+  OTA_DEVICE_SEE_OVERVIEW,
+  OTA_DEVICE_SEE_CONTROL_UNIT,
+  OTA_DEVICE_SEE_HISTORY,
+  OTA_DEVICE_SEE_INSTALLATION_PENDING,
+  OTA_DEVICE_SEE_CONSENT_PENDING,
+  OTA_DEVICE_LAUNCH_AUTOMATIC_UPDATE,
+  OTA_DEVICE_LAUNCH_SINGLE_UPDATE
+} from '../constants/analyticsActions';
+import {
+  OVERVIEW_PANEL_TAB_ID_0,
+  OVERVIEW_PANEL_TAB_ID_1,
+  OVERVIEW_PANEL_TAB_ID_2
+} from '../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -52,17 +68,21 @@ class Device extends Component {
     const { devicesStore } = stores;
     const deviceId = devicesStore.device.uuid;
     devicesStore.cancelApprovalPendingCampaingPerDevice(campaignId, deviceId);
+    sendAction(OTA_DEVICE_CANCEL_CAMPAIGN);
   };
 
   selectEcu = (hardwareId, serial, filepath, type, e) => {
     if (e) e.preventDefault();
     const { stores } = this.props;
     const { softwareStore, devicesStore, hardwareStore } = stores;
-    hardwareStore.activeEcu = {
-      hardwareId,
-      serial,
-      type,
-    };
+    if (hardwareId !== hardwareStore.activeEcu.hardwareId) {
+      sendAction(OTA_DEVICE_SEE_CONTROL_UNIT);
+      hardwareStore.activeEcu = {
+        hardwareId,
+        serial,
+        type,
+      };
+    }
     const expandedPackage = softwareStore.getInstalledPackage(filepath, hardwareId);
     if (!expandedPackage) {
       softwareStore.expandedPackage = {
@@ -88,6 +108,7 @@ class Device extends Component {
       serial: null,
       type: null,
     };
+    sendAction(OTA_DEVICE_SEE_OVERVIEW);
   };
 
   installPackage = (data) => {
@@ -97,7 +118,7 @@ class Device extends Component {
     data.hardwareId = hardwareStore.activeEcu.hardwareId;
     devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
     this.selectQueue();
-    this.setOverviewPanelActiveTabId('1');
+    this.setOverviewPanelActiveTabId(OVERVIEW_PANEL_TAB_ID_1);
   };
 
   togglePackageAutoUpdate = (packageName, deviceId, isAutoInstallEnabled, e) => {
@@ -108,8 +129,13 @@ class Device extends Component {
     const { stores } = this.props;
     const { softwareStore, hardwareStore } = stores;
     const activeEcuSerial = hardwareStore.activeEcu.serial;
-    if (isAutoInstallEnabled) softwareStore.disablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
-    else softwareStore.enablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
+    if (isAutoInstallEnabled) {
+      softwareStore.disablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
+      sendAction(OTA_DEVICE_LAUNCH_AUTOMATIC_UPDATE);
+    } else {
+      softwareStore.enablePackageAutoInstall(packageName, deviceId, activeEcuSerial);
+      sendAction(OTA_DEVICE_LAUNCH_SINGLE_UPDATE);
+    }
   };
 
   togglePackage = (packageName) => {
@@ -148,6 +174,20 @@ class Device extends Component {
 
   setOverviewPanelActiveTabId = (tabId) => {
     this.activeTabId = tabId;
+    if (!this.ECUselected) {
+      switch (tabId) {
+        case OVERVIEW_PANEL_TAB_ID_0:
+        default:
+          sendAction(OTA_DEVICE_SEE_HISTORY);
+          break;
+        case OVERVIEW_PANEL_TAB_ID_1:
+          sendAction(OTA_DEVICE_SEE_INSTALLATION_PENDING);
+          break;
+        case OVERVIEW_PANEL_TAB_ID_2:
+          sendAction(OTA_DEVICE_SEE_CONSENT_PENDING);
+          break;
+      }
+    }
   };
 
   render() {
