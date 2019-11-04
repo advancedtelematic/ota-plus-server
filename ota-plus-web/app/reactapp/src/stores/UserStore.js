@@ -22,7 +22,7 @@ import {
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import * as contracts from '../../../assets/contracts';
+import * as contracts from '../../contracts';
 import {
   HTTP_CODE_429_TOO_MANY_REQUESTS,
   HTTP_CODE_503_SERVICE_UNAVAILABLE,

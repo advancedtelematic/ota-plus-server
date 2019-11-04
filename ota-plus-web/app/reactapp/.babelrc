@@ -1,5 +1,8 @@
 {
-  "presets": [["@babel/preset-env"], "@babel/preset-react"],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
   "plugins": [
     [
       "@babel/plugin-proposal-decorators",
@@ -17,9 +20,8 @@
       "import",
       {
         "libraryName": "antd",
-        "libraryDirectory": "es"
-      },
-      "ant"
+        "libraryDirectory": "lib"
+      }
     ],
     [
       "import",
@@ -28,6 +30,8 @@
       },
       "ant-formsy"
     ],
-    ["@babel/transform-runtime"]
+    [
+      "@babel/transform-runtime"
+    ]
   ]
 }

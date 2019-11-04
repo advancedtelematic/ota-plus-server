@@ -10,8 +10,6 @@ import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
 import { ApprovalPendingMtuList } from './approvalPending';
 
-const { TabPane } = Tabs;
-
 const OVERVIEW_PANEL_TAB_ID_0 = '0';
 const OVERVIEW_PANEL_TAB_ID_1 = '1';
 const OVERVIEW_PANEL_TAB_ID_2 = '2';
@@ -50,15 +48,19 @@ class OverviewPanel extends Component {
     return (
       <div className="overview-panel">
         <Tabs type="card" onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
-          <TabPane tab={t('devices.history')} id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
+          <Tabs.TabPane tab={t('devices.history')} id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
             <HistoryMtuList device={device} />
-          </TabPane>
-          <TabPane tab={t('devices.installation_pending')} id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={t('devices.installation_pending')} id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
             <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
-          </TabPane>
-          <TabPane tab={t('devices.consent_pending')} id="approval-pending-campaigns" key={OVERVIEW_PANEL_TAB_ID_2}>
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={t('devices.consent_pending')}
+            id="approval-pending-campaigns"
+            key={OVERVIEW_PANEL_TAB_ID_2}
+          >
             <ApprovalPendingMtuList cancelApprovalPendingCampaign={cancelApprovalPendingCampaign} />
-          </TabPane>
+          </Tabs.TabPane>
         </Tabs>
       </div>
     );
