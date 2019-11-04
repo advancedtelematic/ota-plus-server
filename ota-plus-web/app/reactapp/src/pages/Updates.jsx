@@ -4,10 +4,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 
-import { MetaData, FadeAnimation } from '../utils';
+import { FadeAnimation } from '../utils';
 import { UpdatesContainer } from '../containers';
-
-const title = 'Update Configuration';
 
 @inject('stores')
 @observer
@@ -32,9 +30,9 @@ class Updates extends Component {
   render() {
     return (
       <FadeAnimation>
-        <MetaData title={title}>
+        <div>
           <UpdatesContainer />
-        </MetaData>
+        </div>
       </FadeAnimation>
     );
   }

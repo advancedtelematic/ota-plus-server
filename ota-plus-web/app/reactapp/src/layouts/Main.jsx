@@ -198,7 +198,7 @@ class Main extends Component {
     const { router } = this.context;
     const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
-    const { featuresStore, userStore } = stores;
+    const { userStore } = stores;
     const isTermsAccepted = userStore.isTermsAccepted();
     const contractsCheckCompleted = userStore.contractsCheckCompleted();
     return (

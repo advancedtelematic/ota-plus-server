@@ -7,6 +7,8 @@ import { Button } from 'antd';
 import { Form } from 'formsy-antd';
 
 import { SearchBar, SubHeader } from '../../partials';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_UPDATES_CREATE_UPDATE } from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -45,9 +47,10 @@ class Header extends Component {
                   id="add-new-update"
                   onClick={() => {
                     showCreateModal(null);
+                    sendAction(OTA_UPDATES_CREATE_UPDATE);
                   }}
                 >
-                  {'Create update configuration'}
+                  {'Create software update'}
                 </Button>
               </div>
             </div>

@@ -3,10 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { MetaData, FadeAnimation } from '../utils';
+import { FadeAnimation } from '../utils';
 import { ProfileHeader } from '../components/profile';
-
-const title = 'Profile';
 
 @observer
 class Profile extends Component {
@@ -27,7 +25,7 @@ class Profile extends Component {
     const currentLocation = location.pathname;
     return (
       <FadeAnimation>
-        <MetaData title={title}>
+        <div>
           <ProfileHeader
             location={currentLocation}
             uiUserProfileMenu={uiUserProfileMenu}
@@ -35,7 +33,7 @@ class Profile extends Component {
             uiCredentialsDownload={uiCredentialsDownload}
           />
           {children}
-        </MetaData>
+        </div>
       </FadeAnimation>
     );
   }

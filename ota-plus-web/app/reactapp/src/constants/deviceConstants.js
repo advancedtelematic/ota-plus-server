@@ -12,3 +12,8 @@ export const ECU_TYPE_SECONDARY = 'secondary';
 export const INSTALLATION_EVENT_ERROR = 'Error';
 export const INSTALLATION_EVENT_PENDING = 'Pending';
 export const INSTALLATION_EVENT_SUCCESS = 'Success';
+
+/* Overview Panel tabs */
+export const OVERVIEW_PANEL_TAB_ID_0 = '0';
+export const OVERVIEW_PANEL_TAB_ID_1 = '1';
+export const OVERVIEW_PANEL_TAB_ID_2 = '2';

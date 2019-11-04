@@ -21,7 +21,7 @@ class Versions extends Component {
 }
 
 Versions.propTypes = {
-  versions: PropTypes.shape({}),
+  versions: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 export default Versions;

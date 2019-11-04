@@ -8,6 +8,8 @@ import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { SubHeader, SearchBar } from '../../../partials';
+import { sendAction } from '../../../helpers/analyticsHelper';
+import { OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS } from '../../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -34,6 +36,7 @@ class Header extends Component {
           onClick={(event) => {
             event.preventDefault();
             showCreateModal(event);
+            sendAction(OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS);
           }}
         >
           {t('profile.provisioning_keys.add_key')}

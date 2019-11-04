@@ -17,6 +17,8 @@ import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { ARTIFICIAL } from '../../constants';
 import { DEVICES_LIMIT_PER_PAGE, FEATURES } from '../../config';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_DEVICES_SEE_DEVICE } from '../../constants/analyticsActions';
 
 const connections = {
   live: {
@@ -108,6 +110,7 @@ class ContentPanel extends Component {
     const { router } = this.context;
     if (e) e.preventDefault();
     router.history.push(`/device/${deviceId}`);
+    sendAction(OTA_DEVICES_SEE_DEVICE);
   };
 
   loadDevices = async () => {

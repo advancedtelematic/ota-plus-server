@@ -7,6 +7,12 @@ import { Button, Tag } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import { FEATURES } from '../../config';
+import { sendAction } from '../../helpers/analyticsHelper';
+import {
+  OTA_SOFTWARE_SEE_ALL,
+  OTA_SOFTWARE_SEE_ADVANCED,
+  OTA_SOFTWARE_ADD_SOFTWARE
+} from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -26,6 +32,10 @@ class Header extends Component {
     const { stores } = this.props;
     const { softwareStore } = stores;
     this.setActive(softwareStore.activeTab);
+  }
+
+  componentDidMount() {
+    sendAction(OTA_SOFTWARE_SEE_ALL);
   }
 
   componentWillUnmount() {
@@ -58,6 +68,7 @@ class Header extends Component {
             <li
               onClick={() => {
                 this.setActive('compact');
+                sendAction(OTA_SOFTWARE_SEE_ALL);
               }}
               className={`tab-navigation__link ${this.isActive('compact')}`}
             >
@@ -66,6 +77,7 @@ class Header extends Component {
             <li
               onClick={() => {
                 this.setActive('advanced');
+                sendAction(OTA_SOFTWARE_SEE_ADVANCED);
               }}
               className={`tab-navigation__link ${this.isActive('advanced')}`}
             >
@@ -87,6 +99,7 @@ class Header extends Component {
               id="add-new-software"
               onClick={() => {
                 showCreateModal(null);
+                sendAction(OTA_SOFTWARE_ADD_SOFTWARE);
               }}
             >
               {t('software.action_buttons.add_software')}

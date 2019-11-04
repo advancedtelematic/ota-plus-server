@@ -5,11 +5,21 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 
 import { DependenciesModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { CampaignsContentPanel, RetryModal } from '../components/campaigns';
 import { CampaignCancelCampaignModal } from '../components/campaign';
+import { MetaData } from '../utils';
+import { sendAction } from '../helpers/analyticsHelper';
+import {
+  OTA_CAMPAIGNS_SEE_ALL,
+  OTA_CAMPAIGNS_SEE_DETAILS,
+  OTA_CAMPAIGNS_SEE_DEPENDENCIES,
+  OTA_CAMPAIGNS_CANCEL_CAMPAIGN,
+  OTA_CAMPAIGNS_RETRY_FAILED_DEVICES
+} from '../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -30,11 +40,27 @@ class Campaigns extends Component {
     stores: PropTypes.shape({}),
     highlight: PropTypes.string,
     addNewWizard: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    const { t } = props;
+    this.title = t('campaigns.title');
+  }
+
+  componentDidMount() {
+    sendAction(OTA_CAMPAIGNS_SEE_ALL);
+  }
 
   toggle = (campaign) => {
     if (!_.isEqual(this.expandedCampaigns.pop(), campaign)) {
       this.expandedCampaigns.push(campaign);
+    }
+    const { t } = this.props;
+    this.title = this.expandedCampaigns.length === 0 ? t('campaigns.title') : t('campaigns.details.title');
+    if (this.expandedCampaigns.length) {
+      sendAction(OTA_CAMPAIGNS_SEE_DETAILS);
     }
   };
 
@@ -45,6 +71,7 @@ class Campaigns extends Component {
   showCancelCampaignModal = (e) => {
     if (e) e.preventDefault();
     this.cancelCampaignModalShown = true;
+    sendAction(OTA_CAMPAIGNS_CANCEL_CAMPAIGN);
   };
 
   hideCancelCampaignModal = (e) => {
@@ -59,6 +86,7 @@ class Campaigns extends Component {
     if (e) e.preventDefault();
     this.dependenciesModalShown = true;
     this.activeCampaign = activeCampaign;
+    sendAction(OTA_CAMPAIGNS_SEE_DEPENDENCIES);
   };
 
   hideDependenciesModal = (e) => {
@@ -71,6 +99,7 @@ class Campaigns extends Component {
     if (e) e.preventDefault();
     this.retryModalShown = true;
     this.failureforRetry = failure;
+    sendAction(OTA_CAMPAIGNS_RETRY_FAILED_DEVICES);
   };
 
   hideRetryModal = (e) => {
@@ -97,37 +126,39 @@ class Campaigns extends Component {
 
     return (
       <>
-        <CampaignsContentPanel
-          highlight={highlight}
-          expandedCampaigns={this.expandedCampaigns}
-          toggleCampaign={this.toggle}
-          addNewWizard={addNewWizard}
-          showWizard={this.showWizard}
-          showCancelCampaignModal={this.showCancelCampaignModal}
-          showDependenciesModal={this.showDependenciesModal}
-          showRetryModal={this.showRetryModal}
-        />
-        <CampaignCancelCampaignModal
-          shown={this.cancelCampaignModalShown}
-          hide={this.hideCancelCampaignModal}
-        />
-        {this.dependenciesModalShown && (
-          <DependenciesModal
-            shown={this.dependenciesModalShown}
-            hide={this.hideDependenciesModal}
-            activeItemName={this.activeCampaign}
+        <MetaData title={this.title}>
+          <CampaignsContentPanel
+            highlight={highlight}
+            expandedCampaigns={this.expandedCampaigns}
+            toggleCampaign={this.toggle}
+            addNewWizard={addNewWizard}
+            showWizard={this.showWizard}
+            showCancelCampaignModal={this.showCancelCampaignModal}
+            showDependenciesModal={this.showDependenciesModal}
+            showRetryModal={this.showRetryModal}
           />
-        )}
-        {this.retryModalShown && (
-          <RetryModal
-            shown={this.retryModalShown}
-            hide={this.hideRetryModal}
-            failureforRetry={this.failureforRetry}
+          <CampaignCancelCampaignModal
+            shown={this.cancelCampaignModalShown}
+            hide={this.hideCancelCampaignModal}
           />
-        )}
+          {this.dependenciesModalShown && (
+            <DependenciesModal
+              shown={this.dependenciesModalShown}
+              hide={this.hideDependenciesModal}
+              activeItemName={this.activeCampaign}
+            />
+          )}
+          {this.retryModalShown && (
+            <RetryModal
+              shown={this.retryModalShown}
+              hide={this.hideRetryModal}
+              failureforRetry={this.failureforRetry}
+            />
+          )}
+        </MetaData>
       </>
     );
   }
 }
 
-export default Campaigns;
+export default withTranslation()(Campaigns);

@@ -16,6 +16,7 @@ import {
   SoftwareEditCommentModal
 } from '../components/software';
 import { FEATURES } from '../config';
+import { MetaData } from '../utils';
 
 @inject('stores')
 @observer
@@ -59,6 +60,7 @@ class Software extends Component {
   constructor(props) {
     super(props);
     this.componentRef = React.createRef();
+    this.updateHeaderTitle();
   }
 
   componentDidMount() {
@@ -85,6 +87,7 @@ class Software extends Component {
 
     this.switchToSWRepo = tab === 'advanced';
     softwareStore.activeTab = tab;
+    this.updateHeaderTitle();
   };
 
   resumeScope = () => {
@@ -118,6 +121,7 @@ class Software extends Component {
 
   setExpandedPackageName = (name) => {
     this.expandedPackageName = name;
+    this.updateHeaderTitle();
   };
 
   deleteItem = (e) => {
@@ -194,112 +198,125 @@ class Software extends Component {
     this.showCreateModal(files);
   };
 
+  updateHeaderTitle = () => {
+    const { t } = this.props;
+    if (this.switchToSWRepo) {
+      this.title = t('software.advanced.title');
+    } else if (this.expandedPackageName) {
+      this.title = t('software.details.title');
+    } else {
+      this.title = t('software.title');
+    }
+  };
+
   render() {
     const { stores, highlightedPackage, t } = this.props;
     const { softwareStore } = stores;
     return (
       <span ref={this.componentRef}>
-        {softwareStore.packagesFetchAsync.isFetching ? (
-          <div className="wrapper-center">
-            <Loader />
-          </div>
-        ) : softwareStore.packagesCount ? (
-          <div className="packages-container">
-            <SoftwareHeader showCreateModal={this.showCreateModal} switchToSWRepo={this.switchToSWRepo} />
-            {!this.switchToSWRepo ? (
-              <SoftwareList
-                onFileDrop={this.onFileDrop}
-                highlightedPackage={highlightedPackage}
-                showDependenciesModal={this.showDependenciesModal}
-                showDependenciesManager={this.showDependenciesManager}
-                showDeleteConfirmation={this.showDeleteConfirmation}
-                expandedPackageName={this.expandedPackageName}
-                setExpandedPackageName={this.setExpandedPackageName}
-                showEditComment={this.showEditComment}
-              />
-            ) : (
-              <SoftwareRepositoryAlpha />
-            )}
-          </div>
-        ) : (
-          <div className="wrapper-center">
-            <div className="page-intro">
-              <div>
-                <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
-              </div>
-              <div>{t('software.empty.no_software')}</div>
-              <div>
-                <a
-                  href="#"
-                  className="add-button light"
-                  id="add-new-software"
-                  onClick={this.showCreateModal.bind(this, null)}
-                >
-                  <span>{t('software.empty.add_new')}</span>
-                </a>
+        <MetaData title={this.title}>
+          {softwareStore.packagesFetchAsync.isFetching ? (
+            <div className="wrapper-center">
+              <Loader />
+            </div>
+          ) : softwareStore.packagesCount ? (
+            <div className="packages-container">
+              <SoftwareHeader showCreateModal={this.showCreateModal} switchToSWRepo={this.switchToSWRepo} />
+              {!this.switchToSWRepo ? (
+                <SoftwareList
+                  onFileDrop={this.onFileDrop}
+                  highlightedPackage={highlightedPackage}
+                  showDependenciesModal={this.showDependenciesModal}
+                  showDependenciesManager={this.showDependenciesManager}
+                  showDeleteConfirmation={this.showDeleteConfirmation}
+                  expandedPackageName={this.expandedPackageName}
+                  setExpandedPackageName={this.setExpandedPackageName}
+                  showEditComment={this.showEditComment}
+                />
+              ) : (
+                <SoftwareRepositoryAlpha />
+              )}
+            </div>
+          ) : (
+            <div className="wrapper-center">
+              <div className="page-intro">
+                <div>
+                  <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
+                </div>
+                <div>{t('software.empty.no_software')}</div>
+                <div>
+                  <a
+                    href="#"
+                    className="add-button light"
+                    id="add-new-software"
+                    onClick={this.showCreateModal.bind(this, null)}
+                  >
+                    <span>{t('software.empty.add_new')}</span>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {this.createModalShown && (
-        <SoftwareCreateModal
-          shown={this.createModalShown}
-          hide={this.hideCreateModal}
-          fileDropped={this.fileDropped}
-        />
-        )}
-        {this.deleteConfirmationShown && (
-          <ConfirmationModal
-            modalTitle={(
-              <div className="text-red" id="delete-software-title">
-                {t('software.action_buttons.delete_software')}
-              </div>
-            )}
-            shown={this.deleteConfirmationShown}
-            hide={this.hideDeleteConfirmation}
-            deleteItem={this.deleteItem}
-            topText={(
-              <div className="delete-modal-top-text" id="delete-software-top-text">
-                {t('software.delete_soft_version.top_text.p1')}
-                <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b>
-                {t('software.delete_soft_version.top_text.p2')}
-                <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>
-                  {this.itemToDelete}
-                </b>
-                {t('software.delete_soft_version.top_text.p3')}
-              </div>
-            )}
-            bottomText={(
-              <div className="delete-modal-bottom-text" id="delete-software-bottom-text">
-                {t('software.delete_soft_version.bottom_text')}
-              </div>
-            )}
-            showDetailedInfo
+          )}
+          {this.createModalShown && (
+          <SoftwareCreateModal
+            shown={this.createModalShown}
+            hide={this.hideCreateModal}
+            fileDropped={this.fileDropped}
           />
-        )}
-        {this.dependenciesModalShown && (
-          <DependenciesModal
-            shown={this.dependenciesModalShown}
-            hide={this.hideDependenciesModal}
-            activeItemName={this.activeVersionFilepath}
-          />
-        )}
-        {this.dependenciesManagerShown && (
-          <SoftwareDependenciesManager
-            shown={this.dependenciesManagerShown}
-            hide={this.hideDependenciesManager}
-            packages={softwareStore.preparedPackages}
-            activePackage={this.activeManagerVersion}
-          />
-        )}
-        {this.editCommentShown && (
-          <SoftwareEditCommentModal
-            shown={this.editCommentShown}
-            hide={this.hideEditComment}
-            comment={this.activeComment}
-            filepath={this.activePackageFilepath}
-          />
-        )}
+          )}
+          {this.deleteConfirmationShown && (
+            <ConfirmationModal
+              modalTitle={(
+                <div className="text-red" id="delete-software-title">
+                  {t('software.action_buttons.delete_software')}
+                </div>
+              )}
+              shown={this.deleteConfirmationShown}
+              hide={this.hideDeleteConfirmation}
+              deleteItem={this.deleteItem}
+              topText={(
+                <div className="delete-modal-top-text" id="delete-software-top-text">
+                  {t('software.delete_soft_version.top_text.p1')}
+                  <b id={`delete-software-${this.expandedPackageName}`}>{this.expandedPackageName}</b>
+                  {t('software.delete_soft_version.top_text.p2')}
+                  <b id={`delete-software-${this.expandedPackageName}-version-${this.itemToDelete}`}>
+                    {this.itemToDelete}
+                  </b>
+                  {t('software.delete_soft_version.top_text.p3')}
+                </div>
+              )}
+              bottomText={(
+                <div className="delete-modal-bottom-text" id="delete-software-bottom-text">
+                  {t('software.delete_soft_version.bottom_text')}
+                </div>
+              )}
+              showDetailedInfo
+            />
+          )}
+          {this.dependenciesModalShown && (
+            <DependenciesModal
+              shown={this.dependenciesModalShown}
+              hide={this.hideDependenciesModal}
+              activeItemName={this.activeVersionFilepath}
+            />
+          )}
+          {this.dependenciesManagerShown && (
+            <SoftwareDependenciesManager
+              shown={this.dependenciesManagerShown}
+              hide={this.hideDependenciesManager}
+              packages={softwareStore.preparedPackages}
+              activePackage={this.activeManagerVersion}
+            />
+          )}
+          {this.editCommentShown && (
+            <SoftwareEditCommentModal
+              shown={this.editCommentShown}
+              hide={this.hideEditComment}
+              comment={this.activeComment}
+              filepath={this.activePackageFilepath}
+            />
+          )}
+        </MetaData>
       </span>
     );
   }
