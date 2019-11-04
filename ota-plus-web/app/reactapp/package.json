@@ -52,10 +52,14 @@
     "@babel/preset-env": "7.4.3",
     "@babel/preset-react": "7.0.0",
     "babel-eslint": "10.0.1",
+    "babel-jest": "24.9.0",
     "babel-loader": "8.0.5",
     "babel-plugin-import": "1.11.0",
     "clean-webpack-plugin": "1.0.0",
     "css-loader": "1.0.1",
+    "enzyme": "3.10.0",
+    "enzyme-adapter-react-16": "1.15.1",
+    "enzyme-to-json": "3.4.3",
     "eslint": "5.3.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-config-airbnb-base": "13.1.0",
@@ -68,6 +72,10 @@
     "extract-loader": "3.1.0",
     "file-loader": "2.0.0",
     "html-loader": "0.5.5",
+    "html-loader-jest": "0.2.1",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "24.9.0",
+    "jest-transform-stub": "2.0.0",
     "less": "3.9.0",
     "less-loader": "4.1.0",
     "line-reader": "0.4.0",
@@ -83,12 +91,36 @@
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.3.1"
   },
+  "jest": {
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+    },
+    "setupFiles": [
+      "./setupTests.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "transform": {
+      "^.+\\.(t|j)sx?$": "babel-jest",
+      "^.+\\.html?$": "html-loader-jest",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/antd/(?!es)"
+    ],
+    "verbose": true
+  },
   "scripts": {
     "dev": " ./node_modules/webpack/bin/webpack.js -w",
     "lint": "eslint src/** --ext .js,.jsx",
     "npm-check": "npm-check -p",
     "socket-rome": "curl -k https://web-events.rome.sit-ota.aws.in.here.com/",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "set NODE_ENV=test && jest",
+    "test:coverage": "set NODE_ENV=test && jest --coverage --collectCoverageFrom=src/**/*.{js,jsx}",
     "translations-check": "node tests/translations_check.js"
   },
   "keywords": [
