@@ -9,11 +9,24 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import { Dropdown } from '../../partials';
 import { FEATURES } from '../../config';
+import { sendAction } from '../../helpers/analyticsHelper';
+import {
+  OTA_SOFTWARE_DELETE_VERSION,
+  OTA_SOFTWARE_EDIT_COMMENT,
+  OTA_SOFTWARE_EDIT_DEPENDENCIES
+} from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
 class ListItemVersion extends Component {
   @observable isShown = false;
+
+  constructor(props) {
+    super(props);
+    this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
+    this.showEditComment = this.showEditComment.bind(this);
+    this.showDependenciesManager = this.showDependenciesManager.bind(this);
+  }
 
   hideSubmenu = () => {
     this.isShown = false;
@@ -23,8 +36,26 @@ class ListItemVersion extends Component {
     this.isShown = true;
   };
 
+  showDeleteConfirmation(itemName, itemType) {
+    const { showDeleteConfirmation } = this.props;
+    showDeleteConfirmation(itemName, itemType);
+    sendAction(OTA_SOFTWARE_DELETE_VERSION);
+  }
+
+  showEditComment(filePath, comment) {
+    const { showEditComment } = this.props;
+    showEditComment(filePath, comment);
+    sendAction(OTA_SOFTWARE_EDIT_COMMENT);
+  }
+
+  showDependenciesManager(version) {
+    const { showDependenciesManager } = this.props;
+    showDependenciesManager(version);
+    sendAction(OTA_SOFTWARE_EDIT_DEPENDENCIES);
+  }
+
   render() {
-    const { stores, version, showDependenciesManager, showDeleteConfirmation, showEditComment, t } = this.props;
+    const { stores, version, t } = this.props;
     const { softwareStore, featuresStore } = stores;
     const { compatibilityData } = softwareStore;
     const { features } = featuresStore;
@@ -230,7 +261,10 @@ class ListItemVersion extends Component {
                   className="package-dropdown-item"
                   href="#"
                   id="edit-comment"
-                  onClick={showEditComment.bind(this, version.filepath, version.comment)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.showEditComment(version.filepath, version.comment);
+                  }}
                 >
                   {t('software.action_buttons.edit_comment')}
                 </a>
@@ -241,7 +275,10 @@ class ListItemVersion extends Component {
                     className="package-dropdown-item"
                     href="#"
                     id="show-dependencies"
-                    onClick={showDependenciesManager.bind(this, version)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.showDependenciesManager(version);
+                    }}
                   >
                     {t('software.action_buttons.edit_dependencies')}
                   </a>
@@ -252,7 +289,10 @@ class ListItemVersion extends Component {
                   className="package-dropdown-item"
                   href="#"
                   id="delete-version"
-                  onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.showDeleteConfirmation(version.filepath, 'version');
+                  }}
                 >
                   {t('software.action_buttons.delete_version')}
                 </a>

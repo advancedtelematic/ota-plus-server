@@ -5,10 +5,13 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Avatar, Button } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import { Loader, AsyncResponse } from '../../partials';
 import { resetAsync } from '../../utils/Common';
-import { AsyncStatusCallbackHandler } from '../../utils';
+import { AsyncStatusCallbackHandler, MetaData } from '../../utils';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_PROFILE_RENAME } from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -23,8 +26,10 @@ class EditProfile extends Component {
 
   constructor(props) {
     super(props);
-    const { userStore } = props.stores;
+    const { stores, t } = props;
+    const { userStore } = stores;
     this.renameHandler = new AsyncStatusCallbackHandler(userStore, 'userUpdateAsync', this.handleResponse.bind(this));
+    this.title = t('profile.title');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,6 +90,7 @@ class EditProfile extends Component {
     this.clickableArea.classList.remove('hide');
     const data = { name: this.newName };
     userStore.updateUser(data);
+    sendAction(OTA_PROFILE_RENAME);
   };
 
   handleResponse = () => {
@@ -107,113 +113,116 @@ class EditProfile extends Component {
     const { userStore } = stores;
     return (
       <div className="profile-container" id="edit-profile">
-        {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? (
-          <div className="wrapper-center">
-            <Loader className="dark" />
-          </div>
-        ) : (
-          <span>
-            <AsyncResponse
-              handledStatus="all"
-              action={userStore.userUpdateAsync}
-              errorMsg={userStore.userUpdateAsync.data ? userStore.userUpdateAsync.data.description : null}
-              successMsg="Profile has been updated."
-            />
-            <AsyncResponse
-              handledStatus="all"
-              action={userStore.userChangePasswordAsync}
-              errorMsg={
-                userStore.userChangePasswordAsync.data ? userStore.userChangePasswordAsync.data.description : null
-              }
-              successMsg="An email with password resetting instructions has been sent to your email account."
-            />
-            <div className="section-header">
-              <div className="column" />
-              <div className="column name-header">Name</div>
-              <div className="column">Mail</div>
-              <div className="column" />
+        <MetaData title={this.title}>
+          {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? (
+            <div className="wrapper-center">
+              <Loader className="dark" />
             </div>
-            <div className="user-info">
-              <div className="column">
-                {window.atsGarageTheme ? (
-                  <Avatar
-                    src={userStore.user.picture ? userStore.user.picture : '/assets/img/icons/profile.png'}
-                    className="icon-profile"
-                    id="user-avatar"
-                  />
-                ) : (
-                  <Avatar src="/assets/img/icons/Settings_Icon_big.svg" className="icon-profile" id="user-avatar" />
-                )}
+          ) : (
+            <span>
+              <AsyncResponse
+                handledStatus="all"
+                action={userStore.userUpdateAsync}
+                errorMsg={userStore.userUpdateAsync.data ? userStore.userUpdateAsync.data.description : null}
+                successMsg="Profile has been updated."
+              />
+              <AsyncResponse
+                handledStatus="all"
+                action={userStore.userChangePasswordAsync}
+                errorMsg={
+                  userStore.userChangePasswordAsync.data ? userStore.userChangePasswordAsync.data.description : null
+                }
+                successMsg="An email with password resetting instructions has been sent to your email account."
+              />
+              <div className="section-header">
+                <div className="column" />
+                <div className="column name-header">Name</div>
+                <div className="column">Mail</div>
+                <div className="column" />
               </div>
-              <div className="column name" id="user-name">
-                <div className="rename-box">
-                  <div
-                    onClick={this.enableRename}
-                    ref={(clickableArea) => {
-                      this.clickableArea = clickableArea;
-                    }}
-                    className="rename-box__clickable-area"
-                  />
+              <div className="user-info">
+                <div className="column">
+                  {window.atsGarageTheme ? (
+                    <Avatar
+                      src={userStore.user.picture ? userStore.user.picture : '/assets/img/icons/profile.png'}
+                      className="icon-profile"
+                      id="user-avatar"
+                    />
+                  ) : (
+                    <Avatar src="/assets/img/icons/Settings_Icon_big.svg" className="icon-profile" id="user-avatar" />
+                  )}
+                </div>
+                <div className="column name" id="user-name">
+                  <div className="rename-box">
+                    <div
+                      onClick={this.enableRename}
+                      ref={(clickableArea) => {
+                        this.clickableArea = clickableArea;
+                      }}
+                      className="rename-box__clickable-area"
+                    />
 
-                  <input
-                    className="rename-box__input rename-box__input--black"
-                    type="text"
-                    ref={(input) => {
-                      this.renameInput = input;
-                    }}
-                    disabled
-                    onKeyPress={this.keyPressed}
-                    value={this.newName ? this.newName : userStore.user.fullName}
-                    onChange={this.userTypesName}
-                  />
+                    <input
+                      className="rename-box__input rename-box__input--black"
+                      type="text"
+                      ref={(input) => {
+                        this.renameInput = input;
+                      }}
+                      disabled
+                      onKeyPress={this.keyPressed}
+                      value={this.newName ? this.newName : userStore.user.fullName}
+                      onChange={this.userTypesName}
+                    />
 
-                  <div className="rename-box__actions rename-box__actions--big">
-                    {this.renameDisabled ? (
-                      <div className="rename-box__icon--edit edit">{'Rename'}</div>
-                    ) : (
-                      <span className="rename-box__user-actions">
-                        {this.newNameLength ? (
+                    <div className="rename-box__actions rename-box__actions--big">
+                      {this.renameDisabled ? (
+                        <div className="rename-box__icon--edit edit">{'Rename'}</div>
+                      ) : (
+                        <span className="rename-box__user-actions">
+                          {this.newNameLength ? (
+                            <img
+                              src="/assets/img/icons/black/tick.svg"
+                              className="rename-box__icon rename-box__icon--save save"
+                              alt="Icon"
+                              onClick={this.rename}
+                            />
+                          ) : null}
                           <img
-                            src="/assets/img/icons/black/tick.svg"
-                            className="rename-box__icon rename-box__icon--save save"
+                            src="/assets/img/icons/black/cancel-thin.svg"
                             alt="Icon"
-                            onClick={this.rename}
+                            className="rename-box__icon rename-box__icon--cancel cancel"
+                            onClick={this.cancelRename}
                           />
-                        ) : null}
-                        <img
-                          src="/assets/img/icons/black/cancel-thin.svg"
-                          alt="Icon"
-                          className="rename-box__icon rename-box__icon--cancel cancel"
-                          onClick={this.cancelRename}
-                        />
-                      </span>
-                    )}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
+                <div className="column email" id="user-email">
+                  {userStore.user.email}
+                </div>
+                <div className="column">
+                  <Button
+                    htmlType="button"
+                    className="btn-link add-button"
+                    id="change-password-link"
+                    onClick={this.changePassword}
+                  >
+                    Change password
+                  </Button>
+                </div>
               </div>
-              <div className="column email" id="user-email">
-                {userStore.user.email}
-              </div>
-              <div className="column">
-                <Button
-                  htmlType="button"
-                  className="btn-link add-button"
-                  id="change-password-link"
-                  onClick={this.changePassword}
-                >
-                  Change password
-                </Button>
-              </div>
-            </div>
-          </span>
-        )}
+            </span>
+          )}
+        </MetaData>
       </div>
     );
   }
 }
 
 EditProfile.propTypes = {
-  stores: PropTypes.shape({})
+  stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default EditProfile;
+export default withTranslation()(EditProfile);

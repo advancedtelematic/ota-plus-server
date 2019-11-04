@@ -11,6 +11,8 @@ import { withTranslation } from 'react-i18next';
 import DeviceHardwareReportedList from './ReportedList';
 import { DeviceHardwarePackagesInstalledList } from './packages';
 import { Loader, SubHeader, SearchBar } from '../../../partials';
+import { sendAction } from '../../../helpers/analyticsHelper';
+import { OTA_DEVICE_SEE_PRIMARY_HARDWARE, OTA_DEVICE_SEE_PRIMARY_PACKAGE } from '../../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -30,12 +32,14 @@ class Overlay extends Component {
     if (e) e.preventDefault();
     this.hardwareInfoShown = false;
     this.changePackagesFilter('');
+    sendAction(OTA_DEVICE_SEE_PRIMARY_HARDWARE);
   };
 
   showHardwareInfo = (e) => {
     if (e) e.preventDefault();
     this.hardwareInfoShown = true;
     this.changeHardwareFilter('');
+    sendAction(OTA_DEVICE_SEE_PRIMARY_PACKAGE);
   };
 
   changeHardwareFilter = (filter) => {

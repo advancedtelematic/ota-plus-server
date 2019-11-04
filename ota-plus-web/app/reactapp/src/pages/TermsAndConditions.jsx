@@ -1,17 +1,19 @@
 /** @format */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { Terms } from '../containers';
 
-const title = 'Policy';
-
-const TermsAndConditions = () => (
-  <FadeAnimation>
-    <MetaData title={title}>
-      <Terms checked />
-    </MetaData>
-  </FadeAnimation>
-);
+const TermsAndConditions = () => {
+  const { t } = useTranslation();
+  return (
+    <FadeAnimation>
+      <MetaData title={t('terms_of_use.title')}>
+        <Terms checked />
+      </MetaData>
+    </FadeAnimation>
+  );
+};
 
 export default TermsAndConditions;

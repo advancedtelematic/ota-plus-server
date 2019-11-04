@@ -3,10 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { MetaData, FadeAnimation } from '../utils';
+import { FadeAnimation } from '../utils';
 import { SoftwareContainer } from '../containers';
-
-const title = 'Software Repository';
 
 @inject('stores')
 @observer
@@ -34,9 +32,9 @@ class SoftwareRepository extends Component {
     const { params } = match;
     return (
       <FadeAnimation>
-        <MetaData title={title}>
+        <div>
           <SoftwareContainer highlightedPackage={params.packageName} />
-        </MetaData>
+        </div>
       </FadeAnimation>
     );
   }

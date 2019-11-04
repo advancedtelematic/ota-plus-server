@@ -5,11 +5,19 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Pagination } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
 import { Loader } from '../partials';
 
 import { UPDATES_LIMIT_PER_PAGE } from '../config';
+import { MetaData } from '../utils';
+import { sendAction } from '../helpers/analyticsHelper';
+import {
+  OTA_UPDATES_SEE_ALL,
+  OTA_UPDATES_SEE_DETAILS,
+  OTA_UPDATES_SEARCH_UPDATE
+} from '../constants/analyticsActions';
 
 const PAGE_NUMBER_DEFAULT = 1;
 
@@ -27,8 +35,14 @@ class Updates extends Component {
 
   constructor(props) {
     super(props);
+    const { t } = props;
     this.componentRef = React.createRef();
     this.state = { pageNumber: PAGE_NUMBER_DEFAULT };
+    this.title = t('updates.title');
+  }
+
+  componentDidMount() {
+    sendAction(OTA_UPDATES_SEE_ALL);
   }
 
   showCreateModal = (e) => {
@@ -45,11 +59,16 @@ class Updates extends Component {
     if (e) e.preventDefault();
     this.updateDetailsShown = true;
     this.selectedUpdate = update;
+    const { t } = this.props;
+    this.title = t('updates.details.title');
+    sendAction(OTA_UPDATES_SEE_DETAILS);
   };
 
   hideUpdateDetails = (e) => {
     if (e) e.preventDefault();
     this.updateDetailsShown = false;
+    const { t } = this.props;
+    this.title = t('updates.title');
   };
 
   onPageChange = (page, pageSize) => {
@@ -69,6 +88,7 @@ class Updates extends Component {
     const { stores } = this.props;
     const { updatesStore } = stores;
     updatesStore.filterUpdates(filter);
+    sendAction(OTA_UPDATES_SEARCH_UPDATE);
   };
 
   render() {
@@ -78,53 +98,55 @@ class Updates extends Component {
     const { isFetching } = updatesStore.updatesFetchAsync;
     return (
       <span ref={this.componentRef}>
-        {isFetching ? (
-          <div className="wrapper-center">
-            <Loader />
-          </div>
-        ) : (updatesStore.updatesTotalCount || updatesStore.updateFilter.length) ? (
-          <span>
-            <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
-            <UpdateList showUpdateDetails={this.showUpdateDetails} />
-            <div className="ant-pagination__wrapper clearfix">
-              <Pagination
-                current={pageNumber}
-                defaultPageSize={UPDATES_LIMIT_PER_PAGE}
-                onChange={this.onPageChange}
-                total={updatesStore.updatesTotalCount}
-                showTotal={this.showTotalTemplate}
-              />
-            </div>
-          </span>
-        ) : (
-          <span>
-            <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
+        <MetaData title={this.title}>
+          {isFetching ? (
             <div className="wrapper-center">
-              <div className="page-intro">
-                <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
-                <div>{"You haven't created any updates yet."}</div>
-                <div>
-                  <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>
-                    <span>{'Create update configuration'}</span>
-                  </a>
+              <Loader />
+            </div>
+          ) : (updatesStore.updatesTotalCount || updatesStore.updateFilter.length) ? (
+            <span>
+              <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
+              <UpdateList showUpdateDetails={this.showUpdateDetails} />
+              <div className="ant-pagination__wrapper clearfix">
+                <Pagination
+                  current={pageNumber}
+                  defaultPageSize={UPDATES_LIMIT_PER_PAGE}
+                  onChange={this.onPageChange}
+                  total={updatesStore.updatesTotalCount}
+                  showTotal={this.showTotalTemplate}
+                />
+              </div>
+            </span>
+          ) : (
+            <span>
+              <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
+              <div className="wrapper-center">
+                <div className="page-intro">
+                  <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
+                  <div>{"You haven't created any updates yet."}</div>
+                  <div>
+                    <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>
+                      <span>{'Create software update'}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </span>
-        )}
-        {this.createModalShown ? (
-          <UpdateCreateModal
-            shown={this.createModalShown}
-            hide={this.hideCreateModal}
-          />
-        ) : null}
-        {this.updateDetailsShown ? (
-          <UpdateCreateModal
-            shown={this.updateDetailsShown}
-            hide={this.hideUpdateDetails}
-            showDetails={this.selectedUpdate}
-          />
-        ) : null}
+            </span>
+          )}
+          {this.createModalShown ? (
+            <UpdateCreateModal
+              shown={this.createModalShown}
+              hide={this.hideCreateModal}
+            />
+          ) : null}
+          {this.updateDetailsShown ? (
+            <UpdateCreateModal
+              shown={this.updateDetailsShown}
+              hide={this.hideUpdateDetails}
+              showDetails={this.selectedUpdate}
+            />
+          ) : null}
+        </MetaData>
       </span>
     );
   }
@@ -132,6 +154,7 @@ class Updates extends Component {
 
 Updates.propTypes = {
   stores: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default Updates;
+export default withTranslation()(Updates);

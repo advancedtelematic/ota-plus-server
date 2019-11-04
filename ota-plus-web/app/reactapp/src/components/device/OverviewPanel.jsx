@@ -9,10 +9,11 @@ import { withTranslation } from 'react-i18next';
 import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
 import { ApprovalPendingMtuList } from './approvalPending';
-
-const OVERVIEW_PANEL_TAB_ID_0 = '0';
-const OVERVIEW_PANEL_TAB_ID_1 = '1';
-const OVERVIEW_PANEL_TAB_ID_2 = '2';
+import {
+  OVERVIEW_PANEL_TAB_ID_0,
+  OVERVIEW_PANEL_TAB_ID_1,
+  OVERVIEW_PANEL_TAB_ID_2
+} from '../../constants/deviceConstants';
 
 @inject('stores')
 @observer
@@ -48,10 +49,18 @@ class OverviewPanel extends Component {
     return (
       <div className="overview-panel">
         <Tabs type="card" onChange={setOverviewPanelActiveTabId} activeKey={activeTabId}>
-          <Tabs.TabPane tab={t('devices.history')} id="installation-history" key={OVERVIEW_PANEL_TAB_ID_0}>
+          <Tabs.TabPane
+            tab={t('devices.history')}
+            id="installation-history"
+            key={OVERVIEW_PANEL_TAB_ID_0}
+          >
             <HistoryMtuList device={device} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={t('devices.installation_pending')} id="queued-packages" key={OVERVIEW_PANEL_TAB_ID_1}>
+          <Tabs.TabPane
+            tab={t('devices.installation_pending')}
+            id="queued-packages"
+            key={OVERVIEW_PANEL_TAB_ID_1}
+          >
             <QueueMtuList cancelMtuUpdate={cancelMtuUpdate} />
           </Tabs.TabPane>
           <Tabs.TabPane

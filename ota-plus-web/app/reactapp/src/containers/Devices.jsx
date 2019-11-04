@@ -11,6 +11,13 @@ import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
+import { sendAction } from '../helpers/analyticsHelper';
+import {
+  OTA_DEVICES_SEE_ALL,
+  OTA_DEVICES_SEE_GROUPED,
+  OTA_DEVICES_SEE_UNGROUPED,
+  OTA_DEVICES_SEARCH_DEVICE
+} from '../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -47,6 +54,10 @@ class Devices extends Component {
         devicesStore.fetchUngroupedDevicesCount();
       }
     });
+  }
+
+  componentDidMount() {
+    sendAction(OTA_DEVICES_SEE_ALL);
   }
 
   componentWillUnmount() {
@@ -111,6 +122,14 @@ class Devices extends Component {
     if (group.isSmart) {
       groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
     }
+
+    if (groupsStore.selectedGroup.ungrouped) {
+      sendAction(OTA_DEVICES_SEE_UNGROUPED);
+    } else if (!groupsStore.selectedGroup.ungrouped && groupsStore.selectedGroup.id) {
+      sendAction(OTA_DEVICES_SEE_GROUPED);
+    } else {
+      sendAction(OTA_DEVICES_SEE_ALL);
+    }
   };
 
   onDeviceDrop = async (device, groupId) => {
@@ -143,6 +162,7 @@ class Devices extends Component {
     const groupId = groupsStore.selectedGroup.id;
     const ungrouped = groupsStore.selectedGroup.ungrouped || null;
     devicesStore.fetchDevices(filter, groupId, ungrouped);
+    sendAction(OTA_DEVICES_SEARCH_DEVICE);
   };
 
   render() {

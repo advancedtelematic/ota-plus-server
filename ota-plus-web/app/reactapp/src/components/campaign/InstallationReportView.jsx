@@ -9,6 +9,8 @@ import { withTranslation } from 'react-i18next';
 
 import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
 import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES } from '../../constants/analyticsActions';
 
 const RetryButtonWithTooltip = ({ status, tooltipText, onClick }) => (
   <Tooltip title={tooltipText} placement="left">
@@ -40,6 +42,7 @@ class InstallationReportView extends Component {
     location.href = `${API_CAMPAIGNS_STATISTICS_SINGLE}/${
       campaign.id
     }/failed-installations.csv?failureCode=${failureCode}`;
+    sendAction(OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES);
   };
 
   render() {
