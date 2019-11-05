@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 
-import { MetaData, FadeAnimation } from '../utils';
-import { DashboardContainer, SanityCheckContainer, Terms } from '../containers';
-import { Loader } from '../partials';
-import { DEVICES_LIMIT_LATEST } from '../config';
+import { MetaData, FadeAnimation } from '../../utils';
+import { DashboardContainer, SanityCheckContainer, Terms } from '../../containers';
+import { Loader } from '../../partials';
+import { DEVICES_LIMIT_LATEST } from '../../config';
 
 const title = 'Dashboard';
 
