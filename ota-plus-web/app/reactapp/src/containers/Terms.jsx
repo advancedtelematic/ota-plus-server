@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import { Button, Checkbox } from 'antd';
 import { OTAModal } from '../partials';
-import * as contracts from '../../../assets/contracts';
+import * as contracts from '../../contracts';
 
 @inject('stores')
 @observer
