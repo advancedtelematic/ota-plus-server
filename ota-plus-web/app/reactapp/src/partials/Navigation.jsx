@@ -8,12 +8,16 @@ import { withTranslation } from 'react-i18next';
 
 import NavigationPopover from './NavigationPopover';
 import SupportMenu from './SupportMenu';
+import { FEATURES } from '../config';
 
 @inject('stores')
 @observer
 class Navigation extends Component {
   render() {
-    const { uiUserProfileMenu, t, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { uiUserProfileMenu, t, uiCredentialsDownload, uiUserProfileEdit, stores } = this.props;
+    const { featuresStore } = stores;
+    const { features } = featuresStore;
+
     return (
       <nav className="navbar navbar-inverse clearfix">
         <div className="container clearfix">
@@ -48,11 +52,13 @@ class Navigation extends Component {
                     {t('navigation.campaigns')}
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/impact-analysis" activeClassName="active" id="link-impact-analysis">
-                    {t('navigation.impact_analysis')}
-                  </NavLink>
-                </li>
+                {features.includes(FEATURES.IMPACT_ANALYSIS) && (
+                  <li>
+                    <NavLink to="/impact-analysis" activeClassName="active" id="link-impact-analysis">
+                      {t('navigation.impact_analysis')}
+                    </NavLink>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

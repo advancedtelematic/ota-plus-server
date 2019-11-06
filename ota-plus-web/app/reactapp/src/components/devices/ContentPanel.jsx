@@ -7,6 +7,7 @@ import { observe } from 'mobx';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroller';
+import { Tag } from 'antd';
 
 import DeviceItem from './Item';
 import BarChart from './BarChart';
@@ -15,7 +16,7 @@ import ContentPanelHeader from './ContentPanelHeader';
 import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { ARTIFICIAL } from '../../constants';
-import { DEVICES_LIMIT_PER_PAGE } from '../../config';
+import { DEVICES_LIMIT_PER_PAGE, FEATURES } from '../../config';
 
 const connections = {
   live: {
@@ -127,7 +128,7 @@ class ContentPanel extends Component {
   render() {
     const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard, t } = this.props;
     const { devicesStore, featuresStore, groupsStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
     const {
       devices,
       devicesCurrentPage,
@@ -138,6 +139,7 @@ class ContentPanel extends Component {
     const { selectedGroup } = groupsStore;
     const { type, isSmart } = selectedGroup;
 
+    const isGroupsKPIEnabled = features.includes(FEATURES.DASHBOARD_CHARTS);
     const items = [];
 
     _.map(devices, (device, index) => {
@@ -175,7 +177,7 @@ class ContentPanel extends Component {
           ))}
         <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
           <div
-            className={`devices-panel__list${alphaPlusEnabled ? ' devices-panel__list--alpha' : ''}`}
+            className={`devices-panel__list${isGroupsKPIEnabled ? ' devices-panel__list--alpha' : ''}`}
             ref={this.scrollParentRef}
           >
             <InfiniteScroll
@@ -211,9 +213,14 @@ class ContentPanel extends Component {
               )}
             </InfiniteScroll>
           </div>
-          {alphaPlusEnabled && (
+          {isGroupsKPIEnabled && (
             <div className="devices-panel__dashboard">
-              <div className="devices-panel__title devices-panel__title--margin">{t('devices.dashboard.title')}</div>
+              <div className="devices-panel__title devices-panel__title--margin">
+                {t('devices.dashboard.title')}
+                <Tag color="#48dad0" className="alpha-tag">
+                  {'BETA'}
+                </Tag>
+              </div>
               <div className="devices-panel__top-wrapper">
                 <div className="devices-panel__dashboard-top">
                   <div className="devices-panel__title">{t('devices.dashboard.simultaneous_connections')}</div>

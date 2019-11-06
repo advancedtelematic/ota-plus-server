@@ -22,6 +22,7 @@ import {
 } from './wizardSteps';
 import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
 import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
+import { FEATURES } from '../../config';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -64,109 +65,12 @@ class Wizard extends Component {
 
   constructor(props) {
     super(props);
-    const { t } = props;
-    const { campaignsStore, featuresStore } = props.stores;
-
-    const initialWizardStepForAlphaPlus = [
-      {
-        class: WizardStep1,
-        name: 'name',
-        title: t('campaigns.wizard.steps.select_name.title'),
-        isFinished: false,
-        isSearchBarShown: false,
-        hasAlphaTag: false,
-      },
-      {
-        class: WizardStep2,
-        title: t('campaigns.wizard.steps.select_groups.title'),
-        name: 'groups',
-        isFinished: false,
-        isSearchBarShown: false,
-        hasAlphaTag: false,
-      },
-      {
-        class: WizardStep3,
-        name: 'updates',
-        title: t('campaigns.wizard.steps.select_update.title'),
-        isFinished: false,
-        isSearchBarShown: false,
-        hasAlphaTag: false,
-      },
-      {
-        class: WizardStep4,
-        title: t('campaigns.wizard.steps.user_consent.title'),
-        name: 'metadata',
-        isFinished: false,
-        isSearchBarShown: false,
-        hasAlphaTag: false,
-      },
-      {
-        class: WizardStep5,
-        title: t('campaigns.wizard.steps.dependencies_management.title'),
-        name: 'dependencies-management',
-        isFinished: false,
-        isSearchBarShown: false,
-        hasAlphaTag: true,
-      },
-      {
-        class: WizardStep6,
-        title: t('campaigns.wizard.steps.programming_sequencer.title'),
-        name: 'programming-sequencer',
-        isFinished: true,
-        isSearchBarShown: false,
-        hasAlphaTag: true,
-      },
-      {
-        class: WizardStep7,
-        title: t('campaigns.wizard.steps.summary.title'),
-        name: 'summary',
-        finishButtonLabel: 'Launch',
-        isFinished: true,
-        isSearchBarShown: false,
-        hasAlphaTag: false,
-      },
-    ];
-
-    const initialWizardStep = [
-      {
-        class: WizardStep1,
-        name: 'name',
-        title: t('campaigns.wizard.steps.select_name.title'),
-        isFinished: false,
-        isSearchBarShown: false,
-      },
-      {
-        class: WizardStep2,
-        title: t('campaigns.wizard.steps.select_groups.title'),
-        name: 'groups',
-        isFinished: false,
-        isSearchBarShown: false,
-      },
-      {
-        class: WizardStep3,
-        name: 'updates',
-        title: t('campaigns.wizard.steps.select_update.title'),
-        isFinished: false,
-        isSearchBarShown: false,
-      },
-      {
-        class: WizardStep4,
-        title: t('campaigns.wizard.steps.user_consent.title'),
-        name: 'metadata',
-        isFinished: false,
-        isSearchBarShown: false,
-      },
-      {
-        class: WizardStep7,
-        title: 'Summary',
-        name: 'summary',
-        finishButtonLabel: t('campaigns.wizard.steps.launch.title'),
-        isFinished: true,
-        isSearchBarShown: false,
-      },
-    ];
-
-    this.wizardSteps = featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep;
+    const { stores, t } = props;
+    const { campaignsStore, featuresStore } = stores;
+    const { features } = featuresStore;
+    const isDependencyManagementEnabled = features.includes(FEATURES.DEPENDENCY_CAMPAIGN);
+    const isProgrammingSequencerEnabled = features.includes(FEATURES.SEQUENCER_CAMPAIGN);
+    this.wizardSteps = this.getWizardSteps(isDependencyManagementEnabled, isProgrammingSequencerEnabled);
 
     this.campaignCreatedHandler = observe(campaignsStore, (change) => {
       if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
@@ -210,6 +114,79 @@ class Wizard extends Component {
   componentWillUnmount() {
     this.campaignCreatedHandler();
   }
+
+  getWizardSteps = (isDependencyManagementEnabled, isProgrammingSequencerEnabled) => {
+    const { t } = this.props;
+    const steps = [
+      {
+        class: WizardStep1,
+        name: 'name',
+        title: t('campaigns.wizard.steps.select_name.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep2,
+        title: t('campaigns.wizard.steps.select_groups.title'),
+        name: 'groups',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep3,
+        name: 'updates',
+        title: t('campaigns.wizard.steps.select_update.title'),
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep4,
+        title: t('campaigns.wizard.steps.user_consent.title'),
+        name: 'metadata',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+      {
+        class: WizardStep7,
+        title: t('campaigns.wizard.steps.summary.title'),
+        name: 'summary',
+        finishButtonLabel: 'Launch',
+        isFinished: true,
+        isSearchBarShown: false,
+        hasAlphaTag: false,
+      },
+    ];
+
+    const penultimateStepIndex = steps.length - 1;
+    const extraSteps = [];
+
+    if (isDependencyManagementEnabled) {
+      extraSteps.push({
+        class: WizardStep5,
+        title: t('campaigns.wizard.steps.dependencies_management.title'),
+        name: 'dependencies-management',
+        isFinished: false,
+        isSearchBarShown: false,
+        hasAlphaTag: true,
+      });
+    }
+    if (isProgrammingSequencerEnabled) {
+      extraSteps.push({
+        class: WizardStep6,
+        title: t('campaigns.wizard.steps.programming_sequencer.title'),
+        name: 'programming-sequencer',
+        isFinished: true,
+        isSearchBarShown: false,
+        hasAlphaTag: true,
+      });
+    }
+    steps.splice(penultimateStepIndex, 0, ...extraSteps);
+    return steps;
+  };
 
   toggleFullScreen = (e) => {
     const { stores } = this.props;
@@ -338,8 +315,7 @@ class Wizard extends Component {
 
   render() {
     const { stores, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards, t } = this.props;
-    const { campaignsStore, featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { campaignsStore } = stores;
     const currentStep = this.wizardSteps[this.currentStepId];
 
     const wizardMinimized = _.find(minimizedWizards, wizard => wizard.id === wizardIdentifier);
@@ -372,7 +348,7 @@ class Wizard extends Component {
                       {index + 1}
                     </button>
                     <div className="stepnum">{step.title}</div>
-                    {(alphaPlusEnabled && step.hasAlphaTag) && <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>}
+                    {step.hasAlphaTag && <Tag color="#48dad0" className="alpha-tag">BETA</Tag>}
                   </div>
                 ))}
               </div>
@@ -396,8 +372,6 @@ class Wizard extends Component {
                   wizardIdentifier={wizardIdentifier}
                   rawSelectedPacks={this.rawSelectedPacks}
                   approvalNeeded={this.approvalNeeded}
-                  alphaPlus={featuresStore.alphaPlusEnabled}
-                  alphaTest={featuresStore.alphaTestEnabled}
                   showUpdateDetails={this.showUpdateDetails}
                 />
               )}
@@ -469,7 +443,7 @@ class Wizard extends Component {
               <img src="/assets/img/icons/close.svg" alt="Icon" />
             </div>
           </div>
-)}
+        )}
         content={modalContent}
         visible={!wizardMinimized}
         onRequestClose={() => {

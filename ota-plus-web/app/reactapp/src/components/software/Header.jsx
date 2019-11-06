@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Button, Tag } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
+import { FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -49,10 +50,10 @@ class Header extends Component {
   render() {
     const { showCreateModal, stores, switchToSWRepo, t } = this.props;
     const { featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
     return (
       <div className="tab-navigation">
-        {alphaPlusEnabled && (
+        {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
           <ul className="tab-navigation__links">
             <li
               onClick={() => {
@@ -71,7 +72,7 @@ class Header extends Component {
               <span>
                 {t('software.tabs.advanced')}
                 <Tag color="#48dad0" className="alpha-tag">
-                  ALPHA
+                  BETA
                 </Tag>
               </span>
             </li>

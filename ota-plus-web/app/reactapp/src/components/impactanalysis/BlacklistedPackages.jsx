@@ -137,7 +137,7 @@ class BlacklistedPackages extends Component {
         <div className="section-header">
           Blacklisted packages
           <Tag color="#48dad0" className="alpha-tag">
-            ALPHA
+            BETA
           </Tag>
         </div>
         <div className="ios-list" ref={this.listRef}>

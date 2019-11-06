@@ -10,6 +10,7 @@ import { withTranslation } from 'react-i18next';
 
 import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
 import { Loader } from '../../../partials';
+import { FEATURES } from '../../../config';
 
 const { TabPane } = Tabs;
 
@@ -62,9 +63,9 @@ class WizardStep2 extends Component {
     const { stores, wizardData, t } = this.props;
     const { groups: chosenGroups } = wizardData;
     const { groupsStore, featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
 
-    return !alphaPlusEnabled ? (
+    return !features.includes(FEATURES.OLP_CAMPAIGN) ? (
       groupsStore.groupsWizardFetchAsync.isFetching ? (
         <div className="wrapper-center">
           <Loader />
@@ -91,7 +92,7 @@ class WizardStep2 extends Component {
           tab={(
             <div>
                 OLP
-              <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
+              <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
             </div>
             )}
         >
