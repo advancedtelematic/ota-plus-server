@@ -30,6 +30,7 @@ build docker image:
     - schedules
   only:
     - master
+    - deploy/rome
   tags:
     - docker-sock
   image: advancedtelematic/app-gitlab-job:0.0.1
