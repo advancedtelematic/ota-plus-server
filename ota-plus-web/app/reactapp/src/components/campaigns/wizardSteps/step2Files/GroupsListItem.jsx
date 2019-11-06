@@ -9,6 +9,7 @@ import { Checkbox, Tag } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { GROUP_GROUP_TYPE_STATIC } from '../../../../constants/groupConstants';
+import { FEATURES } from '../../../../config';
 
 @inject('stores')
 @observer
@@ -31,7 +32,7 @@ class GroupsListItem extends Component {
     const { stores, group, setWizardData, isChosen, t } = this.props;
     const { groupName, groupType, id: groupId } = group;
     const { groupsStore, featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
     const countDevices = groupsStore.getGroupDevicesCount(group);
 
     return (
@@ -57,12 +58,12 @@ class GroupsListItem extends Component {
               </div>
             </div>
           </div>
-          {alphaPlusEnabled && groupType === 'dynamic' && (
+          {features.includes(FEATURES.AUTO_CAMPAIGN) && groupType === 'dynamic' && (
             <div className="automatic-campaign" onClick={this.toggleAutomaticCampaign}>
               <div>
                 <span>
                   {'automatic campaign'}
-                  <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
+                  <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
                 </span>
                 <div className={`switch${this.automaticCampaign ? ' switchOn' : ''}`} />
               </div>

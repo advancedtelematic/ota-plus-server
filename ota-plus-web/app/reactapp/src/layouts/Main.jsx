@@ -14,7 +14,7 @@ import Routes from '../Routes';
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
-import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT } from '../config';
+import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT, FEATURES } from '../config';
 import { LegalInfoFooter, Navigation, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
@@ -103,8 +103,8 @@ class Main extends Component {
         });
         return;
       }
-      const { alphaPlusEnabled } = featuresStore;
-      if (alphaPlusEnabled) {
+      const { features } = featuresStore;
+      if (features.includes(FEATURES.ORGANIZATIONS)) {
         userStore.getOrganizations();
       }
       userStore.fetchContracts();
@@ -199,7 +199,6 @@ class Main extends Component {
     const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
     const { featuresStore, userStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
     const isTermsAccepted = userStore.isTermsAccepted();
     const contractsCheckCompleted = userStore.contractsCheckCompleted();
     return (
@@ -213,12 +212,11 @@ class Main extends Component {
               switchToSWRepo={this.switchToSWRepo}
               uiUserProfileMenu={this.uiUserProfileMenu}
               uiCredentialsDownload={this.uiCredentialsDownload}
-              alphaPlusEnabled={alphaPlusEnabled}
               addNewWizard={this.addNewWizard}
             />
           )}
           <div className="app-flex-container">
-            <div id={pageId} className={alphaPlusEnabled ? 'alpha-plus' : undefined}>
+            <div id={pageId}>
               <FadeAnimation>
                 <Routes
                   {...rest}
