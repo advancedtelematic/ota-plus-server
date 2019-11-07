@@ -36,7 +36,7 @@ export const API_USER_ORGANIZATION_EDIT = '/organization';
 /*
  *  Features
  */
-export const API_FEATURES_FETCH = '/api/v1/features';
+export const API_FEATURES_FETCH = '/user/feature_flags';
 
 /*
  *  Devices
@@ -253,3 +253,20 @@ export const ORGANIZATION_NAMESPACE_COOKIE = 'ORGANIZATION_NAMESPACE_COOKIE';
  */
 
 export const NOTIFICATION_ERROR_DURATION = 5;
+
+/**
+ * Feature flags
+ */
+
+export const FEATURES = {
+  ADVANCED_SOFTWARE: 'advanced_software',
+  AUTO_CAMPAIGN: 'automatic_campaign',
+  CAMPAIGN_USER_CONSENT_REUSE: 'campaign_user_consent_reuse_text',
+  DASHBOARD_CHARTS: 'dashboard_charts',
+  DEPENDENCY_CAMPAIGN: 'dependency_campaign',
+  DEPENDENCY_SOFTWARE: 'dependency_software',
+  IMPACT_ANALYSIS: 'impact_analysis',
+  OLP_CAMPAIGN: 'olp_campaign',
+  ORGANIZATIONS: 'organizations',
+  SEQUENCER_CAMPAIGN: 'sequencer_campaign'
+};

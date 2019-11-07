@@ -119,7 +119,7 @@
     "devices.dashboard.peak": "peak:",
     "devices.dashboard.reported": "Reported",
     "devices.dashboard.simultaneous_connections": "Simultaneous connections",
-    "devices.dashboard.title": "Dashboard (BETA)",
+    "devices.dashboard.title": "Dashboard",
     "devices.dashboard.total_connections": "Total connections",
     "devices.dashboard.total_devices": "Total devices",
     "devices.delete": "Delete device",

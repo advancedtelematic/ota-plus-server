@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react';
 
 import { Tag } from 'antd';
 import Dropdown from './Dropdown';
-import { ORGANIZATION_NAMESPACE_COOKIE } from '../config';
+import { ORGANIZATION_NAMESPACE_COOKIE, FEATURES } from '../config';
 
 @inject('stores')
 @observer
@@ -42,7 +42,7 @@ class NavigationProfile extends Component {
   render() {
     const { stores, settingsOnly, uiCredentialsDownload, uiUserProfileEdit, hideDropdown } = this.props;
     const { featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
     const showUserMenu = !settingsOnly && uiCredentialsDownload;
 
     return (
@@ -65,7 +65,7 @@ class NavigationProfile extends Component {
                 </Link>
               </li>
             )}
-            {alphaPlusEnabled && (
+            {features.includes(FEATURES.ORGANIZATIONS) && (
               <li>
                 <Link
                   className="centered"
@@ -74,7 +74,7 @@ class NavigationProfile extends Component {
                   onClick={hideDropdown}
                 >
                   {'Organization'}
-                  <Tag color="#48dad0" className="alpha-tag--nav">ALPHA</Tag>
+                  <Tag color="#48dad0" className="alpha-tag--nav">BETA</Tag>
                 </Link>
               </li>
             )}
@@ -95,14 +95,6 @@ class NavigationProfile extends Component {
                 {'Terms of use'}
               </Link>
             </li>
-            {alphaPlusEnabled && (
-              <li className="clear-localstorage">
-                <a className="primary centered" onClick={this.clearLocalStorage} id="reset-demo">
-                  {'Reset demo'}
-                  <Tag color="#48dad0" className="alpha-tag--nav">ALPHA</Tag>
-                </a>
-              </li>
-            )}
             <li>
               <a className="primary" onClick={this.logout} id="app-logout">
                 {'Log out'}

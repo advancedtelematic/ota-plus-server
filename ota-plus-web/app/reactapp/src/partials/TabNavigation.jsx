@@ -157,7 +157,7 @@ class TabNavigation extends Component {
                 <span>
                   {'Advanced'}
                   <Tag color="#48dad0" className="alpha-tag">
-                    ALPHA
+                    BETA
                   </Tag>
                 </span>
               </li>

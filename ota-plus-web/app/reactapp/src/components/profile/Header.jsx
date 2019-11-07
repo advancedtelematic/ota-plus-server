@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Tag } from 'antd';
+import { FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -12,7 +13,7 @@ class Header extends Component {
   render() {
     const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit, stores } = this.props;
     const { featuresStore } = stores;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
     const fullNavigation = (
       <div className="profile-nav__list">
         {uiUserProfileEdit && (
@@ -28,7 +29,7 @@ class Header extends Component {
             </div>
           </NavLink>
         )}
-        {alphaPlusEnabled && (
+        {features.includes(FEATURES.ORGANIZATIONS) && (
           <NavLink
             to="/profile/organization"
             activeClassName="profile-nav__list-item--active"
@@ -39,7 +40,7 @@ class Header extends Component {
               <span>
                 Organization
                 <Tag color="#48dad0" className="alpha-tag">
-                  ALPHA
+                  BETA
                 </Tag>
               </span>
               <span className="profile-nav__bottom-line" />
