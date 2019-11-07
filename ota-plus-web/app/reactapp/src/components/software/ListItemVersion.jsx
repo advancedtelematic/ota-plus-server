@@ -8,6 +8,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import { Dropdown } from '../../partials';
+import { FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -26,7 +27,8 @@ class ListItemVersion extends Component {
     const { stores, version, showDependenciesManager, showDeleteConfirmation, showEditComment, t } = this.props;
     const { softwareStore, featuresStore } = stores;
     const { compatibilityData } = softwareStore;
-    const { alphaPlusEnabled } = featuresStore;
+    const { features } = featuresStore;
+    const isDependencySoftwareEnabled = features.includes(FEATURES.DEPENDENCY_SOFTWARE);
     const packageName = version.id.name;
     let borderStyle = {
       borderLeft: '10px solid #e1e1e1',
@@ -41,7 +43,7 @@ class ListItemVersion extends Component {
      *  ToDo: according to softwareStore._getAllStorage()
      */
     let versionCompatibilityData = null;
-    if (alphaPlusEnabled && Object.keys(compatibilityData)) {
+    if (isDependencySoftwareEnabled && Object.keys(compatibilityData)) {
       versionCompatibilityData = _.find(compatibilityData, item => item && item.name === version.filepath);
     }
 
@@ -151,7 +153,7 @@ class ListItemVersion extends Component {
               id={`package-${packageName}-comment-${version.id.version.substring(0, 8)}`}
             />
           </div>
-          {alphaPlusEnabled && (
+          {isDependencySoftwareEnabled && (
             <div className="c-package__manager">
               <div className="c-package__heading">{t('software.dependencies.title')}</div>
               <div className="c-package__manager-content">
@@ -233,7 +235,7 @@ class ListItemVersion extends Component {
                   {t('software.action_buttons.edit_comment')}
                 </a>
               </li>
-              {alphaPlusEnabled && (
+              {isDependencySoftwareEnabled && (
                 <li className="package-dropdown-item">
                   <a
                     className="package-dropdown-item"

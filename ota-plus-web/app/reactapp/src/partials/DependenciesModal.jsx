@@ -645,7 +645,7 @@ class DependenciesModal extends Component {
           <span>
             {'Dependencies'}
             <Tag color="#48dad0" className="alpha-tag alpha-tag--gutter-horizontal">
-              {'ALPHA'}
+              {'BETA'}
             </Tag>
           </span>
         )}

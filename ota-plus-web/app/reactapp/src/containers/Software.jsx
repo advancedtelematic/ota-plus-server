@@ -15,6 +15,7 @@ import {
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 } from '../components/software';
+import { FEATURES } from '../config';
 
 @inject('stores')
 @observer
@@ -63,8 +64,8 @@ class Software extends Component {
   componentDidMount() {
     const { stores } = this.props;
     const { softwareStore, featuresStore } = stores;
-
-    if (featuresStore.alphaPlusEnabled) {
+    const { features } = featuresStore;
+    if (features.includes(FEATURES.ADVANCED_SOFTWARE)) {
       this.cancelObserveTabChange = observe(softwareStore, (change) => {
         this.applyTab(change);
       });

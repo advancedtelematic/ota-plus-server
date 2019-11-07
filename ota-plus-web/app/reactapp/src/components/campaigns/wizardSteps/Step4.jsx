@@ -3,20 +3,21 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Checkbox, Row, Tag } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import { FormTextarea, FormInput, TimePicker } from '../../../partials';
+import { FEATURES } from '../../../config';
 
 const metadataTypes = {
   DESCRIPTION: 'DESCRIPTION',
   INSTALL_DUR: 'ESTIMATED_INSTALLATION_DURATION',
   PRE_DUR: 'ESTIMATED_PREPARATION_DURATION',
 };
-
+@inject('stores')
 @observer
 class WizardStep4 extends Component {
   @observable notify = null;
@@ -30,8 +31,8 @@ class WizardStep4 extends Component {
     setWizardData: PropTypes.func.isRequired,
     markStepAsFinished: PropTypes.func.isRequired,
     setApprove: PropTypes.func.isRequired,
+    stores: PropTypes.shape({}),
     approvalNeeded: PropTypes.bool.isRequired,
-    alphaTest: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired
   };
 
@@ -90,9 +91,13 @@ class WizardStep4 extends Component {
   };
 
   render() {
-    const { wizardData, approvalNeeded, alphaTest, t } = this.props;
+    const { wizardData, approvalNeeded, stores, t } = this.props;
     const { metadata } = wizardData;
     const { DESCRIPTION, ESTIMATED_PREPARATION_DURATION, ESTIMATED_INSTALLATION_DURATION } = metadata;
+    const { featuresStore } = stores;
+    const { features } = featuresStore;
+    const isConsentReuseEnabled = features.includes(FEATURES.CAMPAIGN_USER_CONSENT_REUSE);
+
     return (
       <div className="distribution-settings">
         <Row className="warning">
@@ -116,7 +121,7 @@ class WizardStep4 extends Component {
         </div>
         <div className="description">
           <div className="search-box">
-            {alphaTest && (
+            {isConsentReuseEnabled && (
               <>
                 <FormInput
                   label={t('campaigns.wizard.steps.user_consent.release_note')}
@@ -130,13 +135,13 @@ class WizardStep4 extends Component {
                   <i className="fa fa-search icon-search icon-search--alpha" />
                   <i className="fa fa-close icon-close icon-close--alpha" onClick={this.clearInput} />
                 </FormInput>
-                <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
+                <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
               </>
             )}
           </div>
           <FormTextarea
             rows="5"
-            label={!alphaTest ? t('campaigns.wizard.steps.user_consent.release_note') : ''}
+            label={!isConsentReuseEnabled ? t('campaigns.wizard.steps.user_consent.release_note') : ''}
             id="internal_driver-description"
             defaultValue={DESCRIPTION || ''}
             onValid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
@@ -144,7 +149,7 @@ class WizardStep4 extends Component {
           />
         </div>
         <div className="translations">
-          {alphaTest && (
+          {isConsentReuseEnabled && (
             <div className="flex-row">
               <span className="bold" id="approved-translations-0">
                 {t('campaigns.wizard.steps.user_consent.approved_translations', { count: 0 })}
