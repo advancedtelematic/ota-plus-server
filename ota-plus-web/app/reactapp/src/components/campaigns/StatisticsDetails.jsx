@@ -11,7 +11,8 @@ import { CampaignSubHeader, CampaignInstallationReportView } from '../campaign';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
 import {
   CAMPAIGNS_STATUS_PREPARED,
-  CAMPAIGNS_STATUS_SCHEDULED
+  CAMPAIGNS_STATUS_SCHEDULED,
+  FEATURES
 } from '../../config';
 
 const AUTO_REFRESH_TIME = 10000;
@@ -51,8 +52,9 @@ class StatisticsDetails extends Component {
 
   render() {
     const { stores, showCancelCampaignModal, showDependenciesModal, hideCancel, showRetryModal, t } = this.props;
-    const { campaignsStore } = stores;
+    const { campaignsStore, featuresStore } = stores;
     const { campaign } = campaignsStore;
+    const { features } = featuresStore;
     const {
       affectedCount,
       failedCount,
@@ -145,15 +147,17 @@ class StatisticsDetails extends Component {
                   </Tooltip>
                 </div>
               </div>
-              <div className="statistics__dependencies">
-                <a
-                  className="add-button"
-                  id="target_show_dependencies"
-                  onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}
-                >
-                  <span>{t('devices.statistics.show_dependencies')}</span>
-                </a>
-              </div>
+              {features.includes(FEATURES.DEPENDENCY_CAMPAIGN) && (
+                <div className="statistics__dependencies">
+                  <a
+                    className="add-button"
+                    id="target_show_dependencies"
+                    onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}
+                  >
+                    <span>{t('devices.statistics.show_dependencies')}</span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
           {campaign.statistics.failures.length > 0
