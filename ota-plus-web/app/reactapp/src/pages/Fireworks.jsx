@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import Cookies from 'js-cookie';
 import _ from 'lodash';
@@ -11,6 +12,7 @@ import { FadeAnimation } from '../utils';
 @observer
 class Fireworks extends Component {
   static propTypes = {
+    history: PropTypes.shape({}),
     stores: PropTypes.shape({}),
   };
 
@@ -22,11 +24,10 @@ class Fireworks extends Component {
   }
 
   acknowledgeFireworks = () => {
-    const { stores } = this.props;
+    const { history, stores } = this.props;
     const { devicesStore } = stores;
-    const { router } = this.context;
     const directorDeviceId = _.last(devicesStore.directorDevicesIds);
-    router.history.push(`/device/${directorDeviceId}`);
+    history.push(`/device/${directorDeviceId}`);
   };
 
   render() {
@@ -54,8 +55,4 @@ class Fireworks extends Component {
   }
 }
 
-Fireworks.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired,
-};
-
-export default Fireworks;
+export default withRouter(Fireworks);

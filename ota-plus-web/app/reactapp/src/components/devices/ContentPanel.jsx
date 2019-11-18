@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { observe } from 'mobx';
 import _ from 'lodash';
@@ -83,6 +84,7 @@ class ContentPanel extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     changeFilter: PropTypes.func.isRequired,
+    history: PropTypes.shape({}).isRequired,
     showDeleteConfirmation: PropTypes.func,
     showEditName: PropTypes.func,
     addNewWizard: PropTypes.func,
@@ -107,9 +109,9 @@ class ContentPanel extends Component {
   }
 
   goToDetails = (deviceId, e) => {
-    const { router } = this.context;
+    const { history } = this.props;
     if (e) e.preventDefault();
-    router.history.push(`/device/${deviceId}`);
+    history.push(`/device/${deviceId}`);
     sendAction(OTA_DEVICES_SEE_DEVICE);
   };
 
@@ -268,8 +270,4 @@ class ContentPanel extends Component {
   }
 }
 
-ContentPanel.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired,
-};
-
-export default withTranslation()(ContentPanel);
+export default withTranslation()(withRouter(ContentPanel));

@@ -1,6 +1,6 @@
 /** @format */
 
-import Navigation from './Navigation';
+import Navbar from './Navbar';
 import TabNavigation from './TabNavigation';
 import NavigationProfile from './NavigationProfile';
 import Header from './Header';
@@ -28,7 +28,7 @@ import TimePicker from './TimePicker';
 import OperationCompletedInfo from './OperationCompletedInfo';
 
 export {
-  Navigation,
+  Navbar,
   TabNavigation,
   NavigationProfile,
   Header,
