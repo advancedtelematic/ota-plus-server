@@ -49,11 +49,9 @@ class Header extends Component {
 
   deleteDevice = (e) => {
     if (e) e.preventDefault();
-    const { router } = this.context;
-    const { stores } = this.props;
+    const { stores, history } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
-    const { history } = router;
     devicesStore.deleteDevice(device.uuid).then(() => {
       history.push('/devices');
     });
@@ -184,12 +182,9 @@ class Header extends Component {
 }
 
 Header.propTypes = {
+  history: PropTypes.shape({}),
   stores: PropTypes.shape({}),
   t: PropTypes.func.isRequired
-};
-
-Header.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired
 };
 
 export default withTranslation()(Header);
