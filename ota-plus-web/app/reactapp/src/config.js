@@ -241,6 +241,7 @@ export const assets = {
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
+export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 
 /**
  * cookies
