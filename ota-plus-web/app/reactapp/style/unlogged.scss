@@ -31,10 +31,8 @@ html {
 }
 
 body {
-  color: #fff;
+  background-color: #FFFFFF;
   font: normal 13px $font;
-  background: url('/assets/img/door.jpg') top center no-repeat;
-  background-size: cover;
   height: 100%;
 }
 
@@ -76,6 +74,7 @@ a:focus {
 #ats-page {
   #logo {
     width: 100px;
+    height: 100px;
     margin: 50px 0;
   }
   .info {
@@ -83,26 +82,55 @@ a:focus {
 
     .header {
       font-size: 20px;
-      margin-bottom: 50px;
 
       .welcome {
-        font-size: 30px;
-        margin-bottom: 25px;
+        height: 50px;
+        color: #3F454D;
+        font-family: FiraGO,Tahoma,Calibri,Helvetica,Arial,sans-serif;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.01px;
+        line-height: 50px;
+        margin-bottom: 0;
+        text-align: center;
+      }
+
+      .description {
+        height: 50px;
+        color: #3F454D;
+        font-family: Fira Sans;
+        font-size: 16px;
+        letter-spacing: 0.01px;
+        line-height: 50px;
+        margin-bottom: 0;
+        text-align: center;
+      }
+
+      .divider {
+        background-color: #CFD0D3;
+        height: 1px;
+        width: 433px;
+        margin-top: 20px;
+        margin-bottom: 30px;
       }
     }
 
-    .box {
-      margin-top: 40px;
-      padding: 25px;
-      border: 1px solid #fff;
-      font-size: 16px;
-      width: 55%;
-      margin: auto;
+    .button {
+      height: 41px;
+      width: 433px;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #AE77FF 0%, #61D7D6 100%);
 
       a {
-        margin-top: 10px;
+        padding-top: 10px;
         display: block;
-        text-decoration: underline;
+        height: 19px;
+        color: #3F454D;
+        font-family: "Fira Sans";
+        font-size: 16px;
+        letter-spacing: 0.01px;
+        line-height: 19px;
+        text-align: center;
       }
     }
 
