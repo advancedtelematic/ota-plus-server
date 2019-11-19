@@ -9,13 +9,16 @@ import _ from 'lodash';
 import { notification } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
+import { ThemeProvider } from 'styled-components';
+import theme from '../theme';
+
 import Routes from '../Routes';
 
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
 import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT, FEATURES } from '../config';
-import { LegalInfoFooter, Navigation, SizeVerify, UploadBox } from '../partials';
+import { LegalInfoFooter, Navbar, SizeVerify, UploadBox } from '../partials';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
 
@@ -133,10 +136,10 @@ class Main extends Component {
   };
 
   addNewWizard = (skipStep = null) => {
-    const { router } = this.context;
+    const { location } = this.props;
     const wizard = (
       <Wizard
-        location={getCurrentLocation(router)}
+        location={getCurrentLocation(location)}
         wizardIdentifier={this.wizards.length}
         hideWizard={this.hideWizard}
         toggleWizard={this.toggleWizard}
@@ -174,8 +177,7 @@ class Main extends Component {
   locationChange = () => {
     const { stores, history } = this.props;
     const { userStore } = stores;
-    const { router } = this.context;
-    if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && !router.isActive('/')) {
+    if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && history.location.pathname !== '/') {
       history.push('/');
     }
   };
@@ -195,17 +197,17 @@ class Main extends Component {
   };
 
   render() {
-    const { router } = this.context;
-    const pageId = `page-${getCurrentLocation(router) || 'dashboard'}`;
+    const { location } = this.props;
+    const pageId = `page-${getCurrentLocation(location) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
     const { userStore } = stores;
     const isTermsAccepted = userStore.isTermsAccepted();
     const contractsCheckCompleted = userStore.contractsCheckCompleted();
     return (
-      <span>
+      <ThemeProvider theme={theme}>
         <div>
           {((contractsCheckCompleted && isTermsAccepted) || !this.uiUserProfileMenu) && (
-            <Navigation
+            <Navbar
               location={pageId}
               toggleSWRepo={this.toggleSWRepo}
               uiUserProfileEdit={this.uiUserProfileEdit}
@@ -243,13 +245,9 @@ class Main extends Component {
             )}
           </div>
         </div>
-      </span>
+      </ThemeProvider>
     );
   }
 }
-
-Main.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired,
-};
 
 export default withTranslation()(withRouter(Main));

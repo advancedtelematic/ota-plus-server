@@ -3,6 +3,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { observable, toJS, observe } from 'mobx';
 import _ from 'lodash';
@@ -75,11 +76,10 @@ class DependenciesModal extends Component {
   }
 
   componentDidMount() {
-    const { router } = this.context;
-    const { stores, status } = this.props;
+    const { history, stores, status } = this.props;
     const { devicesStore, campaignsStore, softwareStore } = stores;
     devicesStore.fetchDevices().then(() => {
-      if (router.route.location !== '/packages') {
+      if (history.location !== '/software') {
         campaignsStore.fetchCampaigns(status, 'campaignsSafeFetchAsync');
       } else {
         softwareStore.fetchPackages();
@@ -119,8 +119,7 @@ class DependenciesModal extends Component {
   };
 
   onLinkClick = (linkData) => {
-    const { router } = this.context;
-    const { stores, hide } = this.props;
+    const { stores, hide, history } = this.props;
     const { campaignsStore } = stores;
     const clickedItemType = linkData.target.type;
     let path = '';
@@ -144,7 +143,7 @@ class DependenciesModal extends Component {
         break;
     }
 
-    router.push(path);
+    history.push(path);
   };
 
   // eslint-disable-next-line max-len
@@ -667,11 +666,8 @@ class DependenciesModal extends Component {
 }
 
 DependenciesModal.propTypes = {
+  history: PropTypes.shape({}),
   stores: PropTypes.shape({}),
 };
 
-DependenciesModal.wrappedComponent.contextTypes = {
-  router: PropTypes.shape({}).isRequired,
-};
-
-export default DependenciesModal;
+export default withRouter(DependenciesModal);
