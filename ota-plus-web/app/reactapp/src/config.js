@@ -240,6 +240,7 @@ export const assets = {
   DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
+export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
 export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 
