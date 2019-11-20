@@ -22,7 +22,6 @@ import ConfirmationModal from './ConfirmationModal';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
 import EditSoftwareModal from './EditSoftwareModal';
-import LegalInfoFooter from './LegalInfoFooter';
 import TimePicker from './TimePicker';
 import OperationCompletedInfo from './OperationCompletedInfo';
 import Title from './Title';
@@ -50,7 +49,6 @@ export {
   EditModal,
   EditCampaignModal,
   EditSoftwareModal,
-  LegalInfoFooter,
   TimePicker,
   OperationCompletedInfo,
   Title,
