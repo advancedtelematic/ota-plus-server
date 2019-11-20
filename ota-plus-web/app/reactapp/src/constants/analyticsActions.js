@@ -76,3 +76,9 @@ export const OTA_PROFILE_RENAME = 'OTA_Profile_Rename';
 export const OTA_ENVIRONMENT_SWITCH = 'OTA_Environment_Switch';
 export const OTA_ENVIRONMENT_ADD_MEMBER = 'OTA_Environment_Add_Member';
 export const OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS = 'OTA_Provisioning_Create_Shared_Credentials';
+
+/* Footer */
+export const OTA_FOOTER_TERMS = 'OTA_Footer_terms';
+export const OTA_FOOTER_PRIVACY = 'OTA_Footer_privacy';
+export const OTA_FOOTER_CONTACT = 'OTA_Footer_Contact';
+export const OTA_FOOTER_LANGUAGES = 'OTA_Footer_Languages';

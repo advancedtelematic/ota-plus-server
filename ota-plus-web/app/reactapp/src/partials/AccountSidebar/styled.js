@@ -31,7 +31,7 @@ export const BetaTag = styled.span`
 `;
 
 export const DrawerHeader = styled.div`
-  padding: 20px 30px;
+  padding: 21px 30px;
   background-color: rgba(15,22,33,0.03);
   display: flex;
   flex-direction: column;
@@ -58,6 +58,7 @@ export const LinksContainer = styled.div`
 `;
 
 export const LinkContent = styled.div`
+  color: ${({ theme }) => theme.palette.texts.black};
   display: flex;
   border-bottom: 1px solid rgba(15,22,33,0.05);
   padding: 25px 30px;
@@ -65,6 +66,7 @@ export const LinkContent = styled.div`
     background-color: rgba(15,22,33,0.05);
   }
   h1 {
+    font-weight: 500;
     margin-bottom: 0;
   }
   ${BetaTag} {
@@ -90,6 +92,7 @@ export const Signout = styled.div`
   border-top: 1px solid rgba(15,22,33,0.15);
   padding: 25px 30px;
   h1 {
+    font-weight: 500;
     margin: 0;
   }
 `;

@@ -62,7 +62,14 @@ const Navbar = ({ uiUserProfileMenu }) => {
       to: '/updates',
       isBeta: false
     });
-    publicLinks.push({ actionType: OTA_NAV_CAMPAIGNS, name: t('navigation.campaigns'), to: '/campaigns', isBeta: false });
+    publicLinks.push(
+      {
+        actionType: OTA_NAV_CAMPAIGNS,
+        name: t('navigation.campaigns'),
+        to: '/campaigns',
+        isBeta: false
+      }
+    );
     if (features.includes(FEATURES.IMPACT_ANALYSIS)) {
       publicLinks.push({
         actionType: OTA_NAV_IMPACT,
