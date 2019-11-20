@@ -89,15 +89,3 @@ export const SettingsContainer = styled.div`
       margin-right: 15px;
   }
 `;
-
-export const Support = styled.div`
-  background: url(/assets/img/new-app/24/help-solid-active-24.svg) no-repeat;
-  background-size: contain;
-  background-position-y: center;
-  width: 24px;
-  height: inherit;
-  opacity: .6;
-  :hover, :focus {
-    opacity: 1;
-  }
-`;

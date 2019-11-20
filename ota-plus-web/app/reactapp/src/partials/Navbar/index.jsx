@@ -8,6 +8,7 @@ import { useStores } from '../../stores/hooks';
 import { COLORS } from '../../constants/styleConstants';
 import { FEATURES } from '../../config';
 import AccountSidebar from '../AccountSidebar';
+import HelpSidebar from '../HelpSidebar';
 import {
   AppName,
   BetaTag,
@@ -17,7 +18,6 @@ import {
   LogoContainer,
   NavContainer,
   SettingsContainer,
-  Support,
   Ul
 } from './styled';
 
@@ -82,7 +82,7 @@ const Navbar = ({ uiUserProfileMenu }) => {
         {renderLinks(t, links)}
       </Ul>
       <SettingsContainer>
-        <Support />
+        <HelpSidebar />
         {uiUserProfileMenu && (
           <AccountSidebar />
         )}
