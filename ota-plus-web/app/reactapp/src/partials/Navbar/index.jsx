@@ -7,9 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { useStores } from '../../stores/hooks';
 import { COLORS } from '../../constants/styleConstants';
 import { FEATURES } from '../../config';
+import AccountSidebar from '../AccountSidebar';
 import {
   AppName,
-  Avatar,
   BetaTag,
   Li,
   Link,
@@ -55,19 +55,20 @@ const Navbar = ({ uiUserProfileMenu }) => {
   const { features } = useFeatures();
 
   useEffect(() => {
-    const publicLinks = [
-      { name: t('navigation.dashboard'), to: '/', isBeta: false },
-      { name: t('navigation.devices'), to: '/devices', isBeta: false },
-      { name: t('navigation.softwares'), to: '/software-repository', isBeta: false },
-      { name: t('navigation.updates'), to: '/updates', isBeta: false },
-      { name: t('navigation.campaigns'), to: '/campaigns', isBeta: false },
-    ];
+    const publicLinks = [];
+
+    if (features.includes(FEATURES.NEW_HOMEPAGE)) {
+      publicLinks.push({ name: t('navigation.home'), to: '/home', isBeta: true });
+    }
+    publicLinks.push({ name: t('navigation.dashboard'), to: '/', isBeta: false });
+    publicLinks.push({ name: t('navigation.devices'), to: '/devices', isBeta: false });
+    publicLinks.push({ name: t('navigation.softwares'), to: '/software-repository', isBeta: false });
+    publicLinks.push({ name: t('navigation.updates'), to: '/updates', isBeta: false });
+    publicLinks.push({ name: t('navigation.campaigns'), to: '/campaigns', isBeta: false });
     if (features.includes(FEATURES.IMPACT_ANALYSIS)) {
       publicLinks.push({ name: t('navigation.impact_analysis'), to: '/impact-analysis', isBeta: false });
     }
-    if (features.includes(FEATURES.NEW_HOMEPAGE)) {
-      publicLinks.splice(0, 0, { name: t('navigation.home'), to: '/home', isBeta: true });
-    }
+
     setLinks(publicLinks);
   }, [features]);
 
@@ -83,7 +84,7 @@ const Navbar = ({ uiUserProfileMenu }) => {
       <SettingsContainer>
         <Support />
         {uiUserProfileMenu && (
-          <Avatar />
+          <AccountSidebar />
         )}
       </SettingsContainer>
     </NavContainer>

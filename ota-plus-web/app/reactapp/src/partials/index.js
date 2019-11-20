@@ -1,6 +1,5 @@
 /** @format */
 
-import Navbar from './Navbar';
 import TabNavigation from './TabNavigation';
 import NavigationProfile from './NavigationProfile';
 import Header from './Header';
@@ -26,9 +25,9 @@ import EditSoftwareModal from './EditSoftwareModal';
 import LegalInfoFooter from './LegalInfoFooter';
 import TimePicker from './TimePicker';
 import OperationCompletedInfo from './OperationCompletedInfo';
+import Title from './Title';
 
 export {
-  Navbar,
   TabNavigation,
   NavigationProfile,
   Header,
@@ -53,5 +52,6 @@ export {
   EditSoftwareModal,
   LegalInfoFooter,
   TimePicker,
-  OperationCompletedInfo
+  OperationCompletedInfo,
+  Title,
 };

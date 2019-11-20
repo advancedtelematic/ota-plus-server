@@ -101,18 +101,3 @@ export const Support = styled.div`
     opacity: 1;
   }
 `;
-
-export const Avatar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid ${({ theme, isActive }) => isActive ? theme.palette.lightGreen : theme.palette.whiteTranslucent};
-  color: ${({ theme }) => theme.palette.lightGrey};
-  background-color: ${({ theme }) => theme.palette.secondaryTranslucent};
-  :hover {
-    border: 1px solid ${({ theme }) => theme.palette.white};
-  }
-`;
