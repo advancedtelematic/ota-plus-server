@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useObserver } from 'mobx-react';
-import { Drawer } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { makeAcronym } from '../../utils/stringUtils';
-import { SIZES } from '../../constants/styleConstants';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
+import Sidebar from '../Sidebar';
 import {
   Avatar,
   BetaTag,
@@ -29,7 +28,7 @@ const renderLinks = (t, links, onClick) => (
     >
       <LinkContent>
         <Title size="small">
-          {t(`account-settings.links.${name}`)}
+          {t(`account_settings.links.${name}`)}
         </Title>
         {isBeta && <BetaTag>{t('miscellaneous.beta')}</BetaTag>}
       </LinkContent>
@@ -77,28 +76,12 @@ const AccountSidebar = () => {
       <Avatar id="sidebar-avatar" onClick={openSidebar} isActive={isSidebarVisible}>
         {acronym}
       </Avatar>
-      <Drawer
-        width={SIZES.SIDEBAR_WIDTH}
-        maskStyle={{
-          backgroundColor: 'transparent',
-          top: `-${SIZES.NAVBAR_HEIGHT}`,
-        }}
-        style={{
-          top: SIZES.NAVBAR_HEIGHT,
-          maxHeight: `calc(100% - ${SIZES.NAVBAR_HEIGHT})`
-        }}
-        bodyStyle={{
-          padding: 0
-        }}
-        closable={false}
-        onClose={onClose}
-        visible={isSidebarVisible}
-      >
+      <Sidebar onClose={onClose} visible={isSidebarVisible}>
         <DrawerHeader>
           <Title size="large" id="sidebar-username">{userName}</Title>
           {features.includes(FEATURES.ORGANIZATIONS) && (
             <div id="sidebar-header-org">
-              <span>{t('account-settings.label.organization')}</span>
+              <span>{t('account_settings.label.organization')}</span>
               <OrganizationName>{organizationName}</OrganizationName>
               <BetaTag>{t('miscellaneous.beta')}</BetaTag>
             </div>
@@ -110,10 +93,10 @@ const AccountSidebar = () => {
         <a href="/logout" rel="noopener noreferrer" id="sidebar-signout">
           <Signout>
             <SignoutIcon src={SIGN_OUT_ICON} />
-            <Title size="small" id="sidebar-signout-title">{t('account-settings.links.sign-out')}</Title>
+            <Title size="small" id="sidebar-signout-title">{t('account_settings.links.sign-out')}</Title>
           </Signout>
         </a>
-      </Drawer>
+      </Sidebar>
     </div>
   );
 };
