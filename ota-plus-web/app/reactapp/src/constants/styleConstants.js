@@ -28,5 +28,5 @@ export const SHADOWS = {
 
 export const SIZES = {
   NAVBAR_HEIGHT: '50px',
-  SIDEBAR_WIDTH: '25%'
+  SIDEBAR_WIDTH: '400px'
 };

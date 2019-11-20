@@ -1,4 +1,11 @@
 {
+    "account-settings.label.organization": "Organization: ",
+    "account-settings.links.keys": "Credentials (provisioning)",
+    "account-settings.links.organization": "Organization",
+    "account-settings.links.profile": "Profile",
+    "account-settings.links.sign-out": "Sign out",
+    "account-settings.links.terms": "Terms of use",
+    "account-settings.links.usage": "Usage",
     "campaigns.cancelling.close": "Close",
     "campaigns.cancelling.confirm": "Confirm",
     "campaigns.cancelling.title": "You're about to cancel a campaign",

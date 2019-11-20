@@ -18,7 +18,8 @@ import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
 import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT, FEATURES } from '../config';
-import { LegalInfoFooter, Navbar, SizeVerify, UploadBox } from '../partials';
+import { LegalInfoFooter, SizeVerify, UploadBox } from '../partials';
+import Navbar from '../partials/Navbar';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
 
