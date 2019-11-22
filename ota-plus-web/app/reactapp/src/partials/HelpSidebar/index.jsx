@@ -3,7 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Title } from '..';
 import Sidebar from '../Sidebar';
 import { HELP_ICON_DARK } from '../../config';
-import { URL_GET_STARTED, URL_DOCS, MAIL_SUPPORT } from '../../constants/urlConstants';
+import { URL_GET_STARTED, MAIL_SUPPORT, URL_DEV_GUIDE, URL_USER_GUIDE } from '../../constants/urlConstants';
+import { sendAction } from '../../helpers/analyticsHelper';
+import {
+  OTA_NAV_GET_STARTED,
+  OTA_NAV_DEV_GUIDE,
+  OTA_NAV_USER_GUIDE,
+  OTA_NAV_CONTACT
+} from '../../constants/analyticsActions';
 import {
   HelpIcon,
   LinksContainer,
@@ -13,28 +20,15 @@ import {
 
 const ARROW_RIGHT = String.fromCharCode(8594);
 
-const renderLinks = (t, links) => (
-  links.map(({ name, to }) => (
-    <a
-      id={`help-sidebar-link-${name}`}
-      href={to}
-      key={name}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      {`${t(`help_sidebar.links.${name}`)} ${ARROW_RIGHT}`}
-    </a>
-  ))
-);
-
 const HelpSidebar = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { t } = useTranslation();
 
   const links = [
-    { name: 'get_started', to: URL_GET_STARTED },
-    { name: 'docs', to: URL_DOCS },
-    { name: 'contact', to: MAIL_SUPPORT }
+    { actionType: OTA_NAV_GET_STARTED, name: 'get-started', to: URL_GET_STARTED },
+    { actionType: OTA_NAV_DEV_GUIDE, name: 'developer-guide', to: URL_DEV_GUIDE },
+    { actionType: OTA_NAV_USER_GUIDE, name: 'user-guide', to: URL_USER_GUIDE },
+    { actionType: OTA_NAV_CONTACT, name: 'contact', to: MAIL_SUPPORT }
   ];
 
   const onClose = () => {
@@ -45,16 +39,35 @@ const HelpSidebar = () => {
     setSidebarVisible(true);
   };
 
+  const onClick = (actionType) => {
+    sendAction(actionType);
+  };
+
+  const renderLinks = linkList => (
+    linkList.map(({ actionType, name, to }) => (
+      <a
+        id={`help-sidebar-link-${name}`}
+        href={to}
+        key={name}
+        rel="noopener noreferrer"
+        target="_blank"
+        onClick={() => onClick(actionType)}
+      >
+        {`${t(`help-sidebar.links.${name}`)} ${ARROW_RIGHT}`}
+      </a>
+    ))
+  );
+
   return (
     <>
       <Support id="help-icon" onClick={openSidebar} isActive={isSidebarVisible} />
       <Sidebar onClose={onClose} visible={isSidebarVisible}>
         <SidebarHeader>
           <HelpIcon src={HELP_ICON_DARK} />
-          <Title size="large">{t('help_sidebar.title')}</Title>
+          <Title size="large">{t('help-sidebar.title')}</Title>
         </SidebarHeader>
         <LinksContainer>
-          {renderLinks(t, links)}
+          {renderLinks(links)}
         </LinksContainer>
       </Sidebar>
     </>

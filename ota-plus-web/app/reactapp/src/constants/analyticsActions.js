@@ -23,6 +23,24 @@ export const OTA_DEVICE_LAUNCH_SINGLE_UPDATE = 'OTA_Device_Launch_Single_Update'
 export const OTA_DEVICE_CANCEL_CAMPAIGN = 'OTA_Device_Cancel_Campaign';
 export const OTA_DEVICE_BLACKLIST_PRIMARY_PACKAGE = 'OTA_Device_Blacklist_Primary_Package';
 
+/* Navbar */
+export const OTA_NAV_HOMEPAGE = 'OTA_Nav_Homepage';
+export const OTA_NAV_DEVICES = 'OTA_Nav_Devices';
+export const OTA_NAV_SOFTWARE_VERSIONS = 'OTA_Nav_Software_Versions';
+export const OTA_NAV_SOFTWARE_UPDATES = 'OTA_Nav_Software_Updates';
+export const OTA_NAV_CAMPAIGNS = 'OTA_Nav_Campaigns';
+export const OTA_NAV_IMPACT = 'OTA_Nav_Impact';
+export const OTA_NAV_GET_STARTED = 'OTA_Nav_Get_Started';
+export const OTA_NAV_DEV_GUIDE = 'OTA_Nav_Dev_Guide';
+export const OTA_NAV_USER_GUIDE = 'OTA_Nav_User_Guide';
+export const OTA_NAV_CONTACT = 'OTA_Nav_Contact';
+export const OTA_NAV_PROFILE = 'OTA_Nav_Profile';
+export const OTA_NAV_ORGANIZATION = 'OTA_Nav_Organization';
+export const OTA_NAV_USAGE = 'OTA_Nav_Usage';
+export const OTA_NAV_CREDENTIALS = 'OTA_Nav_Credentials';
+export const OTA_NAV_SIGNOUT = 'OTA_Nav_Signout';
+export const OTA_NAV_TERMS = 'OTA_Nav_Terms';
+
 /* Software */
 export const OTA_SOFTWARE_SEE_ALL = 'OTA_Software_See_All';
 export const OTA_SOFTWARE_SEE_ADVANCED = 'OTA_Software_See_Advanced';
