@@ -2,6 +2,7 @@ package com.advancedtelematic.controllers
 
 import java.time.Instant
 
+import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -26,6 +27,13 @@ object Data {
   def feedResourcesReads(_type: String): Reads[Seq[FeedResource]] = {
     implicit val rr = feedResourceReads(_type)
     Reads.traversableReads[Seq, FeedResource]
+  }
+
+  final case class OmnitureSource(url: String)
+
+  object OmnitureSource {
+    def apply(configuration: Configuration): OmnitureSource =
+      OmnitureSource(configuration.get[String]("omniture_source.url"))
   }
 
 }
