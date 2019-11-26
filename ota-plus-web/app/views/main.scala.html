@@ -1,8 +1,8 @@
 @import com.advancedtelematic.auth.OAuthConfig
 @import com.advancedtelematic.controllers.UiToggles
-@import com.advancedtelematic.controllers.EnvironmentMode
+@import com.advancedtelematic.controllers.Data.OmnitureSource
 @import play.filters.csrf.CSRF
-@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles, envMode: EnvironmentMode)()(implicit req: RequestHeader)
+@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles, omnitureSource: OmnitureSource)()(implicit req: RequestHeader)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,13 +24,7 @@
         sLang :"en"
       };
     </script>
-    @if(envMode.isProd) {
-      <script src="https://tags.tiqcdn.com/utag/here/otaconnect/prod/utag.js"></script>
-    } else {
-      <script src="https://tags.tiqcdn.com/utag/here/otaconnect/dev/utag.js"></script>
-    }
-    <input type="hidden" id="environment-dev" value="@{envMode.isDev}"/>
-    <input type="hidden" id="environment-prod" value="@{envMode.isProd}"/>
+    <script src="@{omnitureSource.url}"></script>
     <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
     <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
     <!-- Hides user dropdown -->

@@ -19,10 +19,11 @@ import play.api.libs.streams.Accumulator
 import play.api.libs.ws._
 import play.api.mvc._
 import play.filters.csrf.CSRF
-import play.api.Environment
-import play.api.Mode.{Dev, Prod}
+import play.api.Configuration
 
 import scala.concurrent.Future
+
+import com.advancedtelematic.controllers.Data.OmnitureSource
 
 final case class UiToggles(
   atsGarageTheme: Boolean,
@@ -47,13 +48,6 @@ object UiToggles {
   }
 }
 
-final case class EnvironmentMode(isDev: Boolean, isProd: Boolean)
-
-object EnvironmentMode {
-  def apply(env: Environment): EnvironmentMode =
-    EnvironmentMode(env.mode == Dev, env.mode == Prod)
-}
-
 /**
  * The main application controller. Handles authentication and request proxying.
  *
@@ -65,8 +59,7 @@ class Application @Inject() (ws: TraceWSClient,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
                              val apiAuth: PlainAction,
-                             tokenBuilder: AccessTokenBuilder,
-                             env: Environment)
+                             tokenBuilder: AccessTokenBuilder)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig with ZipkinTraceImplicits {
 
   import ApiVersion.ApiVersion
@@ -76,7 +69,7 @@ class Application @Inject() (ws: TraceWSClient,
 
   private[this] val oauthConfig = OAuthConfig(conf)
   private[this] val uiToggles = UiToggles(conf)
-  private[this] val environmentMode = EnvironmentMode(env)
+  private[this] val omnitureSource = OmnitureSource(conf)
   private[this] val wsScheme = conf.underlying.getString("ws.scheme")
   private[this] val wsHost = conf.underlying.getString("ws.host")
   private[this] val wsPort = conf.underlying.getString("ws.port")
@@ -220,7 +213,7 @@ class Application @Inject() (ws: TraceWSClient,
     val subject = req.idToken.userId.id
     val token = tokenBuilder.mkToken(subject, req.accessToken.expiresAt, Set(s"namespace.${req.namespace.get}"))
     val wsUrl = s"$wsScheme://bearer:${token.value}@$wsHost:$wsPort$wsPath"
-    Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles, environmentMode))
+    Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles, omnitureSource))
   }
 
   def newMain : Action[AnyContent] = uiAuth { implicit req =>
