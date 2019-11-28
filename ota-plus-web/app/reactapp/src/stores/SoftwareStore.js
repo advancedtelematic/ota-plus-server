@@ -434,6 +434,7 @@ export default class SoftwareStore {
     return axios
       .post(API_PACKAGES_BLACKLIST, data)
       .then((response) => {
+        this.fetchBlacklist();
         this.packagesBlacklistAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
