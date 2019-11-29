@@ -10,6 +10,7 @@ import { Form } from 'formsy-antd';
 import { Row, Col, DatePicker } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../../utils';
 import { OTAModal, AsyncResponse, FormInput } from '../../../partials';
+import { MAX_REGISTRATION_CREDENTIALS_TTL } from '../../../config';
 
 @inject('stores')
 @observer
@@ -58,7 +59,9 @@ class CreateModal extends Component {
     provisioningStore.createProvisioningKey(data);
   };
 
-  disabledDate = current => current && current < moment().endOf('day');
+  disabledDate = current => current
+    && (current < moment().endOf('day').add(1, 'minutes')
+      || current > moment().add(MAX_REGISTRATION_CREDENTIALS_TTL, 'hours'));
 
   handleDateChange = (value) => {
     this.untilTime = value;
