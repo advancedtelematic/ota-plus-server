@@ -251,7 +251,7 @@ export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 export const ORGANIZATION_NAMESPACE_COOKIE = 'ORGANIZATION_NAMESPACE_COOKIE';
 
 /**
- * cookies
+ * notifications
  */
 
 export const NOTIFICATION_ERROR_DURATION = 5;
@@ -273,3 +273,9 @@ export const FEATURES = {
   ORGANIZATIONS: 'organizations',
   SEQUENCER_CAMPAIGN: 'sequencer_campaign'
 };
+
+/**
+ * Provisioning keys/credentials
+ */
+
+export const MAX_REGISTRATION_CREDENTIALS_TTL = 35040;// 35040 hours = 4 years
