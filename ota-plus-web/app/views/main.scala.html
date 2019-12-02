@@ -17,13 +17,7 @@
     </form>
     <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
     <input type="hidden" id="ws-url" value="@wsUrl"/>
-    <script nonce="780ae1a1d847ffc">
-      var nkT = {
-        pName :"HERE OTA Connect",
-        sCountry :"Global",
-        sLang :"en"
-      };
-    </script>
+    <script src="/assets/js/omniture.js"></script>
     <script src="@{omnitureSource.url}"></script>
     <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
     <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
