@@ -2,7 +2,7 @@ package com.advancedtelematic
 
 import _root_.akka.stream.Materializer
 import akka.actor._
-import com.advancedtelematic.api.RemoteApiError
+import com.advancedtelematic.api.Errors.RemoteApiError
 import com.advancedtelematic.libats.http.logging.RequestLoggingActor
 import javax.inject.{Inject, Named}
 import play.api.http.Status

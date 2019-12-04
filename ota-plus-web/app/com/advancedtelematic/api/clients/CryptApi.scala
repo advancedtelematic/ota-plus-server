@@ -1,12 +1,13 @@
-package com.advancedtelematic.api
+package com.advancedtelematic.api.clients
 
 import java.time.Instant
 import java.util.UUID
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.model.Uri.{NamedHost, Path}
+import akka.http.scaladsl.model.{StatusCodes, Uri}
 import brave.play.{TraceData, ZipkinTraceServiceLike}
+import com.advancedtelematic.api.Errors.{MalformedResponse, RemoteApiError, UnexpectedResponse}
+import com.advancedtelematic.api._
 import play.api.Configuration
 import play.api.http.{HttpEntity, Status}
 import play.api.libs.json._
@@ -96,7 +97,7 @@ class CryptApi(conf: Configuration, apiExec: ApiClientExec)
     getAccount(accountName, _.validate[CryptAccountInfo])
   }
 
-  def getAccountGatewayUri(accountInfo: CryptAccountInfo) =
+  def getAccountGatewayUri(accountInfo: CryptAccountInfo): Uri =
     Uri("https", Uri.Authority(accountInfo.hostName, gatewayPort))
 
   def getCredentials(accountName: String)

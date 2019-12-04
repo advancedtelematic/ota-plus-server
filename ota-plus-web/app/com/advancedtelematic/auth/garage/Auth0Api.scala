@@ -1,7 +1,8 @@
 package com.advancedtelematic.auth.garage
 
 import akka.Done
-import com.advancedtelematic.api.{ApiClientExec, ApiRequest, OtaPlusConfig, UnexpectedResponse}
+import com.advancedtelematic.api.Errors.UnexpectedResponse
+import com.advancedtelematic.api.{ApiClientExec, ApiRequest, OtaPlusConfig}
 import com.advancedtelematic.auth.OAuthConfig
 import play.api.Configuration
 import play.api.libs.json.Json

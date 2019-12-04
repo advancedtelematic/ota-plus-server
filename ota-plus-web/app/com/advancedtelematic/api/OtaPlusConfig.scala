@@ -2,12 +2,6 @@ package com.advancedtelematic.api
 
 import play.api.Configuration
 
-import scala.util.control.NoStackTrace
-
-case class ConfigurationException(msg: String = "")
-  extends Exception(s"Could not get required configuration " + msg)
-    with NoStackTrace
-
 case class OtaApiUri(serviceName: String, uri: String)
 
 trait OtaPlusConfig {
