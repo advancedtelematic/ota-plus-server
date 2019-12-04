@@ -1,7 +1,8 @@
 package com.advancedtelematic.provisioning
 
 import brave.play.TraceData
-import com.advancedtelematic.api.{ApiClientExec, CryptApi}
+import com.advancedtelematic.api.ApiClientExec
+import com.advancedtelematic.api.clients.CryptApi
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.play.PlaySpec

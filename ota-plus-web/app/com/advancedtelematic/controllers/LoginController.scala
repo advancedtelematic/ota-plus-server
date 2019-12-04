@@ -5,18 +5,8 @@ import java.time.Instant
 import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{
-  AccessToken,
-  IdToken,
-  IdentityClaims,
-  LoginAction,
-  LogoutAction,
-  SessionCodecs,
-  TokenExchange,
-  Tokens,
-  UiAuthAction
-}
+import com.advancedtelematic.api.Errors.UnexpectedResponse
+import com.advancedtelematic.auth._
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike

@@ -1,8 +1,7 @@
 package com.advancedtelematic.auth.garage
 
+import com.advancedtelematic.api.Errors.UnexpectedResponse
 import javax.inject.Inject
-
-import com.advancedtelematic.api.UnexpectedResponse
 import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, TokenExchange, Tokens}
 import play.api.Configuration
 import play.api.http.{HeaderNames, MimeTypes}
