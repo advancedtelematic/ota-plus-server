@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const ExternalLink = ({ className, children, onClick, url }) => (
@@ -20,7 +20,7 @@ ExternalLink.propTypes = {
 
 styled.propTypes = {
   size: PropTypes.string,
-  theme: DefaultTheme
+  theme: PropTypes.shape({})
 };
 
 export const sizeVariants = {

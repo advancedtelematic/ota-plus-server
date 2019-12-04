@@ -1,0 +1,17 @@
+#page-home {
+  width: 100%;
+}
+
+.stepper-btn-tooltip {
+  .ant-tooltip-inner {
+    border-radius: 2px;
+    padding: 2px 8px;
+    min-height: 24px;
+    font-size: 0.93em;
+    background-color: white;
+    color: rgba(15,22,33,0.8);
+  }  
+  .ant-tooltip-arrow {
+    border-top-color: white !important;
+  }
+}
