@@ -240,9 +240,15 @@ export const assets = {
   DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
+export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
+export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
+export const GROUP_ICON = '/assets/img/new-app/24/device-group-active-outline-24.svg';
 export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
 export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
+export const SOFTWARE_ICON = '/assets/img/new-app/24/software-versions-active-outline-24.svg';
+export const UPDATE_ICON = '/assets/img/new-app/24/software-updates-active-outline-24.svg';
+export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
 
 /**
  * cookies
@@ -279,3 +285,15 @@ export const FEATURES = {
  */
 
 export const MAX_REGISTRATION_CREDENTIALS_TTL = 35040;// 35040 hours = 4 years
+
+/**
+ * Icon paths for homepage stepper
+ */
+
+export const ICON_PATHS = [
+  DEVICE_ICON,
+  SOFTWARE_ICON,
+  GROUP_ICON,
+  UPDATE_ICON,
+  CAMPAIGNS_ICON
+];

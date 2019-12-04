@@ -19,6 +19,8 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 export default class GroupsStore {
   @observable groupsFetchAsync = {};
 
+  @observable groupStatsFetchAsync = {};
+
   @observable groupsLoadMoreFetchAsync = {};
 
   @observable groupsCreateFetchAsync = {};
@@ -46,6 +48,8 @@ export default class GroupsStore {
   @observable classicGroups = [];
 
   @observable groups = [];
+
+  @observable groupsTotal = 0;
 
   @observable wizardGroups = [];
 
@@ -99,6 +103,15 @@ export default class GroupsStore {
       type: 'artificial',
       groupName: 'all',
     };
+  }
+
+  async fetchGroupStats() {
+    try {
+      const { data } = await axios.get(API_GROUPS_FETCH);
+      this.groupsTotal = data.total;
+    } catch (err) {
+      this.groupStatsFetchAsync = handleAsyncError(err);
+    }
   }
 
   fetchGroups(async = 'groupsFetchAsync') {

@@ -53,3 +53,21 @@ export const UPDATE_STATUSES = {
   FINISHED: 'Finished',
   INSTALLING: 'installing'
 };
+
+/*
+ *  Stepper
+ */
+
+export const ANT_STEP_STATUS = {
+  WAIT: 'wait',
+  PROCESS: 'process',
+  DONE: 'done'
+};
+
+export const STEP_STATUS = {
+  INACTIVE: 'inactive',
+  ACTIVE: 'active',
+  DONE: 'done'
+};
+
+export const STEP_TYPES = ['devices', 'softwareVersion', 'deviceGroup', 'softwareUpdates', 'campaigns'];
