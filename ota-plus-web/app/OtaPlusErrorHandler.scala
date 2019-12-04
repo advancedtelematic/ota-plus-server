@@ -1,6 +1,5 @@
+import com.advancedtelematic.api.Errors.{RemoteApiError, RemoteApiIOError, RemoteApiParseError}
 import javax.inject._
-
-import com.advancedtelematic.api.{RemoteApiError, RemoteApiIOError, RemoteApiParseError}
 import play.api.http.DefaultHttpErrorHandler
 import play.api._
 import play.api.mvc._

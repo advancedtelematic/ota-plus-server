@@ -14,6 +14,7 @@ import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import PathBinders.segment
+import com.advancedtelematic.api.clients.CryptApi
 
 import scala.concurrent.ExecutionContext
 
@@ -39,7 +40,7 @@ class ProvisioningController @Inject()(val conf: Configuration,
   }
 
   val provisioningInfo: Action[AnyContent] = authAction.async { implicit request =>
-    import CryptAccountInfo._
+    import com.advancedtelematic.api.clients.CryptAccountInfo._
     cryptApi.getAccountInfo(accountName(request)).map {
       case Some(x) => Ok(Json.obj(
         "hostName" -> x.hostName,
