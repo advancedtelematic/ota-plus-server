@@ -2,7 +2,8 @@ package com.advancedtelematic.auth.oidc
 
 import akka.http.scaladsl.util.FastFuture
 import brave.play.{TraceData, ZipkinTraceServiceLike}
-import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
+import com.advancedtelematic.api.Errors.RemoteApiError
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.{AccessToken, Tokens}
 import com.advancedtelematic.controllers.UserId
 import com.advancedtelematic.libats.data.DataType.Namespace

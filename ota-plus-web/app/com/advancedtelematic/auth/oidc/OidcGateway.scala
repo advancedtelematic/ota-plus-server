@@ -3,7 +3,7 @@ package com.advancedtelematic.auth.oidc
 import java.security.PublicKey
 
 import akka.http.scaladsl.model.Uri
-import com.advancedtelematic.api.{MalformedResponse, UnexpectedResponse}
+import com.advancedtelematic.api.Errors.{MalformedResponse, UnexpectedResponse}
 import com.advancedtelematic.auth.oidc.OidcConfiguration.Url
 import com.advancedtelematic.auth._
 import javax.crypto.SecretKey

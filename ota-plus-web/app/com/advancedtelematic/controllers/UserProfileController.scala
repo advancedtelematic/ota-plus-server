@@ -4,7 +4,8 @@ import java.util.UUID
 
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
-import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError, UnexpectedResponse}
+import com.advancedtelematic.api.Errors.{RemoteApiError, UnexpectedResponse}
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.oidc.OidcGateway
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction, IdentityClaims}
 import javax.inject.{Inject, Singleton}

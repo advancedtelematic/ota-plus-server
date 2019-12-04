@@ -1,6 +1,7 @@
 package com.advancedtelematic.api
 
 import brave.play.ZipkinTraceServiceLike
+import com.advancedtelematic.api.clients._
 import com.advancedtelematic.auth.garage.Auth0Api
 import play.api.Configuration
 

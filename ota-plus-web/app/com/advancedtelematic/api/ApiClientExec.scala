@@ -1,13 +1,14 @@
 package com.advancedtelematic.api
 
-import javax.inject.Inject
-
+import com.advancedtelematic.api.Errors.{RemoteApiError, RemoteApiIOError, RemoteApiParseError}
 import com.fasterxml.jackson.core.JsonParseException
+import javax.inject.Inject
 import play.api.http.HttpEntity
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
-import play.api.mvc.{ResponseHeader, Result}
 import play.api.mvc.Results.Ok
+import play.api.mvc.{ResponseHeader, Result}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 

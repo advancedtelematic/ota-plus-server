@@ -3,10 +3,10 @@ package com.advancedtelematic.provisioning
 import akka.http.scaladsl.model.Uri.NamedHost
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.advancedtelematic.api.CryptAccountInfo
 import java.time.{Clock, Instant}
 import java.time.temporal.ChronoUnit
 
+import com.advancedtelematic.api.clients.CryptAccountInfo
 import mockws.{MockWS, MockWSHelpers}
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.Json
