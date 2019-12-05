@@ -4,7 +4,6 @@
 
 # Home page
 GET     /                                        com.advancedtelematic.controllers.Application.index
-GET     /newui/                                  com.advancedtelematic.controllers.Application.newMain
 GET     /recently_created                        com.advancedtelematic.controllers.FeedController.activityFeed(types: Option[String], limit: Option[Int])
 
 # Map static resources from the /public folder to the /assets URL path
