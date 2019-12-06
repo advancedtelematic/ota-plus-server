@@ -222,7 +222,7 @@ class ProfileOrganization extends Component {
                 {organizationUsers.map((item, index) => (
                   <div className="organization-info" key={`organization-info-user-${index}`}>
                     <div className="column name" id="organization-name">
-                      {item}
+                      {item.email}
                     </div>
                   </div>
                 ))}
