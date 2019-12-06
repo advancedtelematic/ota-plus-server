@@ -82,3 +82,15 @@ export const OTA_FOOTER_TERMS = 'OTA_Footer_terms';
 export const OTA_FOOTER_PRIVACY = 'OTA_Footer_privacy';
 export const OTA_FOOTER_CONTACT = 'OTA_Footer_Contact';
 export const OTA_FOOTER_LANGUAGES = 'OTA_Footer_Languages';
+
+/* Homepage */
+export const OTA_HOME_ADD_SHARED_CREDENTIALS = 'OTA_Home_Add_Shared_Credentials';
+export const OTA_HOME_ADD_SOFTWARE = 'OTA_Home_Add_Software';
+export const OTA_HOME_CREATE_GROUP = 'OTA_Home_Create_Group';
+export const OTA_HOME_CREATE_UPDATE = 'OTA_Home_Create_Update';
+export const OTA_HOME_CREATE_CAMPAIGN = 'OTA_Home_Create_Campaign';
+export const OTA_HOME_READ_DEVICE = 'OTA_Home_Read_Device';
+export const OTA_HOME_READ_SOFTWARE = 'OTA_Home_Read_Software';
+export const OTA_HOME_READ_GROUP = 'OTA_Home_Read_Group';
+export const OTA_HOME_READ_UPDATE = 'OTA_Home_Read_Update';
+export const OTA_HOME_READ_CAMPAIGN = 'OTA_Home_Read_Campaign';

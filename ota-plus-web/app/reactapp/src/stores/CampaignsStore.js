@@ -31,6 +31,10 @@ import { getOverallCampaignStatistics } from '../helpers/campaignHelper';
 export default class CampaignsStore {
   @observable campaignsFetchAsyncAll = {};
 
+  @observable campaignsStatsFetchAsync = {};
+
+  @observable campaignsWithErrorsFetchAsync = {};
+
   @observable campaignsFetchAsync = {
     all: {},
     prepared: {},
@@ -74,6 +78,10 @@ export default class CampaignsStore {
   @observable campaignsMtuCreateAsync = {};
 
   @observable campaigns = [];
+
+  @observable campaignsTotal = 0;
+
+  @observable campaignsWithErrorsTotal = 0;
 
   @observable preparedCampaigns = [];
 
@@ -127,6 +135,24 @@ export default class CampaignsStore {
       .catch((error) => {
         this.campaignsMtuCreateAsync = handleAsyncError(error);
       });
+  }
+
+  async fetchCampaignsStats() {
+    try {
+      const { data } = await axios.get(API_CAMPAIGNS_FETCH);
+      this.campaignsTotal = data.total;
+    } catch (err) {
+      this.campaignsStatsFetchAsync = handleAsyncError(err);
+    }
+  }
+
+  async fetchCampaignsWithErrors() {
+    try {
+      const { data } = await axios.get(`${API_CAMPAIGNS_FETCH}?withErrors=true`);
+      this.campaignsWithErrorsTotal = data.total;
+    } catch (err) {
+      this.campaignsWithErrorsFetchAsync = handleAsyncError(err);
+    }
   }
 
   fetch(status = '', offset = 0, latestOnly = false, limit = null) {

@@ -29,6 +29,12 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
 
+  @observable devicesStatsFetchAsync = {};
+
+  @observable notSeenRecentlyDevicesFetchAsync = {};
+
+  @observable ungroupedDevicesFetchAsync = {};
+
   @observable devicesByFilterFetchAsync = {};
 
   @observable devicesLoadMoreAsync = {};
@@ -64,6 +70,10 @@ export default class DevicesStore {
   @observable devices = [];
 
   @observable devicesTotalCount = null;
+
+  @observable notSeenRecentlyDevicesTotal = 0;
+
+  @observable ungroupedDevicesTotal = 0;
 
   @observable devicesInitialTotalCount = null;
 
@@ -135,6 +145,34 @@ export default class DevicesStore {
     return _.sortBy(this.devices, device => device.lastSeen)
       .reverse()
       .slice(0, 10);
+  }
+
+  async fetchDevicesStats() {
+    try {
+      const { data } = await axios.get(`${API_DEVICES_SEARCH}`);
+      this.devicesTotalCount = data.total;
+    } catch (err) {
+      this.devicesStatsFetchAsync = handleAsyncError(err);
+    }
+  }
+
+  async fetchNotSeenRecentlyDevices() {
+    const hours = 24;
+    try {
+      const { data } = await axios.get(`${API_DEVICES_SEARCH}?notSeenSinceHours=${hours}`);
+      this.notSeenRecentlyDevicesTotal = data.total;
+    } catch (err) {
+      this.notSeenRecentlyDevicesFetchAsync = handleAsyncError(err);
+    }
+  }
+
+  async fetchUngroupedDevices() {
+    try {
+      const { data } = await axios.get(`${API_DEVICES_SEARCH}?grouped=false`);
+      this.ungroupedDevicesTotal = data.total;
+    } catch (err) {
+      this.ungroupedDevicesFetchAsync = handleAsyncError(err);
+    }
   }
 
   deleteDevice(id) {
