@@ -1,8 +1,0 @@
-@mixin font-face($font-family, $url, $font-weight, $font-style: normal) {
-  @font-face {
-    font-family: $font-family;
-    src: url('#{$url}.ttf') format('truetype');
-    font-weight: $font-weight;
-    font-style: $font-style;
-  }
-}
