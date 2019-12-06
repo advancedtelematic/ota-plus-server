@@ -202,7 +202,8 @@ class Main extends Component {
     const { location } = this.props;
     const pageId = `page-${getCurrentLocation(location) || 'dashboard'}`;
     const { stores, ...rest } = this.props;
-    const { userStore } = stores;
+    const { featuresStore, userStore } = stores;
+    const { features } = featuresStore;
     const isTermsAccepted = userStore.isTermsAccepted();
     const contractsCheckCompleted = userStore.contractsCheckCompleted();
     return (
@@ -225,6 +226,7 @@ class Main extends Component {
                 <Routes
                   {...rest}
                   addNewWizard={this.addNewWizard}
+                  features={features}
                   uiUserProfileEdit={this.uiUserProfileEdit}
                   switchToSWRepo={this.switchToSWRepo}
                   uiAutoFeatureActivation={this.uiAutoFeatureActivation}

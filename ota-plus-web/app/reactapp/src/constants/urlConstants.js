@@ -19,3 +19,9 @@ export const URL_STEPPER_SOFTWARE_DOCS = 'https://docs.ota.here.com/getstarted/d
 export const URL_STEPPER_UPDATES_CTA = '/updates';
 export const URL_STEPPER_UPDATES_DOCS = 'https://docs.ota.here.com/getstarted/dev/get-started.html#_software_updates';
 export const URL_USER_GUIDE = 'https://docs.ota.here.com/ota-web/dev/index.html';
+
+/* URL docs links */
+export const URL_DOCS_LINKS_CREATE_CAMPAIGNS = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_setting_up_the_campaign';
+export const URL_DOCS_LINKS_DEVICE_GROUPS = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_device_groups';
+export const URL_DOCS_LINKS_SOFTWARE_UPDATES = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_preparing_the_software_update';
+export const URL_DOCS_LINKS_TROUBLESHOOT_CAMPAIGN = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_monitoring_the_campaign';
