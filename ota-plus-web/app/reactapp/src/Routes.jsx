@@ -17,6 +17,7 @@ import {
   FireworksPage,
   SoftwareRepositoryAlpha,
   TermsAndConditions,
+  HomePage,
 } from './pages';
 import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys, ProfileOrganization } from './components/profile';
 
@@ -38,6 +39,16 @@ const Routes = ({
         <DashboardPage
           {...props}
           addNewWizard={addNewWizard}
+          uiAutoFeatureActivation={uiAutoFeatureActivation}
+          uiUserProfileMenu={uiUserProfileMenu}
+        />
+      )}
+    />
+    <Route
+      path="/home"
+      render={props => (
+        <HomePage
+          {...props}
           uiAutoFeatureActivation={uiAutoFeatureActivation}
           uiUserProfileMenu={uiUserProfileMenu}
         />

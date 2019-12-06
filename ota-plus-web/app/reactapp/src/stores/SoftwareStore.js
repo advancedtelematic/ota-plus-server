@@ -67,6 +67,8 @@ export default class SoftwareStore {
 
   @observable packages = [];
 
+  @observable versionsTotal = 0;
+
   @observable preparedPackages = [];
 
   @observable packagesSort = 'asc';
@@ -196,6 +198,7 @@ export default class SoftwareStore {
       .get(API_SOFTWARE)
       .then((response) => {
         const packages = response.data.signed.targets;
+        this.versionsTotal = Object.keys(packages).length;
         that.formatPackages(packages);
         that.fetchComments();
         const filepaths = that.getFilepaths();
