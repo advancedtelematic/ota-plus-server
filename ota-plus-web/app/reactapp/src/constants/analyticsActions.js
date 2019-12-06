@@ -94,3 +94,7 @@ export const OTA_HOME_READ_SOFTWARE = 'OTA_Home_Read_Software';
 export const OTA_HOME_READ_GROUP = 'OTA_Home_Read_Group';
 export const OTA_HOME_READ_UPDATE = 'OTA_Home_Read_Update';
 export const OTA_HOME_READ_CAMPAIGN = 'OTA_Home_Read_Campaign';
+export const OTA_HOME_READ_GROUP_EXAMPLES = 'OTA_Home_Read_Group_Examples';
+export const OTA_HOME_READ_UPDATE_EXAMPLES = 'OTA_Home_Read_Update_Examples';
+export const OTA_HOME_READ_CAMPAIGN_EXAMPLES = 'OTA_Home_Read_Campaign_Examples';
+export const OTA_HOME_READ_TROUBLESHOOT_EXAMPLES = 'OTA_Home_Read_Troubleshoot_Examples';

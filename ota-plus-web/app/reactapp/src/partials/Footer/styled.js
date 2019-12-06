@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, Icon, Menu } from 'antd';
-import ExternalLink from '../ExternalLink';
+import { ExternalLink } from '..';
 
 export const FooterContainer = styled.footer`
   height: 49px;

@@ -57,5 +57,5 @@ export {
   Title,
   Container,
   Button,
-  ExternalLink
+  ExternalLink,
 };
