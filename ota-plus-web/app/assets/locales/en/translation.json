@@ -441,9 +441,5 @@
     "updates.creating.wizard.update_list_name": "Software update name",
     "updates.creating.wizard.update_list_name_placeholder": "Name",
     "updates.details.title": "Software Update Details",
-    "updates.title": "All Software Updates",
-    "warnings.sizeverify.description_1": "HERE OTA Connect works best in a browser window that is at least <strong>{{width}} x {{height}}</strong>.",
-    "warnings.sizeverify.description_2": "You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.",
-    "warnings.sizeverify.title": "Tip",
-    "warnings.sizeverify.dontshow": "Don't show this again"
+    "updates.title": "All Software Updates"
 }

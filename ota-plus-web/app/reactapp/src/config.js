@@ -162,12 +162,6 @@ export const DEFAULT_THEME_CONFIG = {
 };
 
 /**
- * minimum recommended viewport
- */
-export const VIEWPORT_MIN_WIDTH = 1280;
-export const VIEWPORT_MIN_HEIGHT = 768;
-
-/**
  * updates
  */
 export const LIMIT_UPDATES_WIZARD = 5;
