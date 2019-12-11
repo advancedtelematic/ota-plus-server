@@ -17,8 +17,8 @@ import Routes from '../Routes';
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
-import { VIEWPORT_MIN_WIDTH, VIEWPORT_MIN_HEIGHT, FEATURES } from '../config';
-import { SizeVerify, UploadBox } from '../partials';
+import { FEATURES } from '../config';
+import { UploadBox } from '../partials';
 import { Footer } from '../partials/Footer';
 import Navbar from '../partials/Navbar';
 import Wizard from '../components/campaigns/Wizard';
@@ -234,7 +234,6 @@ class Main extends Component {
                   uiCredentialsDownload={this.uiCredentialsDownload}
                 />
               </FadeAnimation>
-              <SizeVerify minWidth={VIEWPORT_MIN_WIDTH} minHeight={VIEWPORT_MIN_HEIGHT} />
               <UploadBox minimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} />
               {this.wizards}
               <Minimized
