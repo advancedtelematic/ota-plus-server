@@ -53,7 +53,9 @@ export default class CampaignsStore {
 
   @observable campaignsLatestFetchAsync = {};
 
-  @observable campaignsSafeFetchAsync = {};
+  @observable campaignsSafeFetchAsync = {
+    all: {},
+  };
 
   @observable campaignsSingleFetchAsync = {};
 
@@ -214,10 +216,10 @@ export default class CampaignsStore {
         this.campaigns = campaigns;
         this.fetchAllCampaignsStatistics(this.campaigns);
 
-        this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
+        this[async][status] = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        this.campaignsFetchAsync[status] = handleAsyncError(error);
+        this[async][status] = handleAsyncError(error);
       });
   }
 
