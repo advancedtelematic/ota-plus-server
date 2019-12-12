@@ -43,6 +43,7 @@ object LoggingFilter {
                 (responseCode: Int, responseContentLength: Long): Map[String, String] = {
     val endTime     = System.currentTimeMillis
     val serviceTime = endTime - startTime
+    val forwardedFor = requestHeader.headers.get("x-forwarded-for").map("http_x_forwarded_for" -> _).toMap
     val traceId = requestHeader.headers.get("x-b3-traceid").map("traceid" -> _).toMap
 
     Map(
@@ -52,7 +53,7 @@ object LoggingFilter {
       "http_stime" -> serviceTime.toString,
       "http_status" -> responseCode.toString,
       "http_service_name" -> serviceName) ++
-      traceId ++
+      traceId ++ forwardedFor ++
       (if (responseContentLength > 0) Map("http_content_ln" -> responseContentLength.toString) else Map.empty)
   }
 
