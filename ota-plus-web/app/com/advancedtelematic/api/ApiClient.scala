@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.util.ByteString
 import brave.play.{TraceData, TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.ApiRequest.UserOptions
-import com.advancedtelematic.controllers.FeatureName
+import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import play.api.libs.json._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, WSAuthScheme, WSClient, WSRequest, WSResponse}
@@ -78,6 +78,9 @@ trait ApiRequest { self =>
       transform(_.addHttpHeaders("x-ats-namespace" -> n.get))
     } getOrElse self
   }
+
+  def withUser(userId: UserId): ApiRequest =
+    transform(_.addHttpHeaders("x-here-user-id" -> userId.id))
 
   def withToken(token: String): ApiRequest =
     transform(_.addHttpHeaders(("Authorization", "Bearer " + token)))

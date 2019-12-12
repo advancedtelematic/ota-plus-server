@@ -96,11 +96,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
                         (implicit ec: ExecutionContext, traceData: TraceData): Future[Boolean] =
     userOrganizations(userId).map(_.map(_.namespace)).map(_.contains(namespace))
 
-  def organizationRequest(namespace: Namespace, method: String, path: String, body: Option[JsValue])
+  def organizationRequest(namespace: Namespace, userId: UserId, method: String, path: String, body: Option[JsValue])
                          (implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"organizations/${segment(namespace.get)}/$path")
       .transform(_.withMethod(method))
       .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
+      .withUser(userId)
       .execResult(apiExec)
 
   def getCredentialsBundle(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[Result] =
