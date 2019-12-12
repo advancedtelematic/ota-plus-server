@@ -24,6 +24,11 @@ import Navbar from '../partials/Navbar';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
 
+const DASHBOARD_PATH = {
+  OLD: '/',
+  NEW: '/home'
+};
+
 @inject('stores')
 @observer
 class Main extends Component {
@@ -94,7 +99,7 @@ class Main extends Component {
   }
 
   async componentDidMount() {
-    const { stores, t } = this.props;
+    const { history, stores, t } = this.props;
     const { userStore, featuresStore } = stores;
     if (this.uiUserProfileMenu) {
       await featuresStore.fetchFeatures();
@@ -109,6 +114,9 @@ class Main extends Component {
         return;
       }
       const { features } = featuresStore;
+      if (features.includes(FEATURES.NEW_HOMEPAGE) && history.location.pathname === DASHBOARD_PATH.OLD) {
+        history.push(DASHBOARD_PATH.NEW);
+      }
       if (features.includes(FEATURES.ORGANIZATIONS)) {
         userStore.getOrganizations();
       }
@@ -178,9 +186,11 @@ class Main extends Component {
 
   locationChange = () => {
     const { stores, history } = this.props;
-    const { userStore } = stores;
-    if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && history.location.pathname !== '/') {
-      history.push('/');
+    const { featuresStore, userStore } = stores;
+    const { features } = featuresStore;
+    const path = features.includes(FEATURES.NEW_HOMEPAGE) ? DASHBOARD_PATH.NEW : DASHBOARD_PATH.OLD;
+    if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && history.location.pathname !== path) {
+      history.push(path);
     }
   };
 

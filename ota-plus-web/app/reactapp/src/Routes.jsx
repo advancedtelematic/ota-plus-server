@@ -34,30 +34,34 @@ const Routes = ({
   uiCredentialsDownload
 }) => (
   <Switch>
-    <Route
-      exact
-      path="/"
-      render={props => (
-        <DashboardPage
-          {...props}
-          addNewWizard={addNewWizard}
-          uiAutoFeatureActivation={uiAutoFeatureActivation}
-          uiUserProfileMenu={uiUserProfileMenu}
+    {features.includes(FEATURES.NEW_HOMEPAGE)
+      ? (
+        <Route
+          path="/home"
+          render={props => (
+            <HomePage
+              {...props}
+              uiAutoFeatureActivation={uiAutoFeatureActivation}
+              uiUserProfileMenu={uiUserProfileMenu}
+            />
+          )}
         />
-      )}
-    />
-    {features.includes(FEATURES.NEW_HOMEPAGE) && (
-      <Route
-        path="/home"
-        render={props => (
-          <HomePage
-            {...props}
-            uiAutoFeatureActivation={uiAutoFeatureActivation}
-            uiUserProfileMenu={uiUserProfileMenu}
-          />
-        )}
-      />
-    )}
+      )
+      : (
+        <Route
+          exact
+          path="/"
+          render={props => (
+            <DashboardPage
+              {...props}
+              addNewWizard={addNewWizard}
+              uiAutoFeatureActivation={uiAutoFeatureActivation}
+              uiUserProfileMenu={uiUserProfileMenu}
+            />
+          )}
+        />
+      )
+    }
     <Route path="/fireworks" component={FireworksPage} />
     <Route path="/devices" render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path="/device/:id" component={DevicePage} />
@@ -98,6 +102,7 @@ const Routes = ({
 
 Routes.propTypes = {
   addNewWizard: PropTypes.func,
+  features: PropTypes.arrayOf(PropTypes.string),
   uiUserProfileEdit: PropTypes.bool,
   switchToSWRepo: PropTypes.bool,
   uiAutoFeatureActivation: PropTypes.bool,
