@@ -12,6 +12,8 @@ import { FEATURES } from '../../../config';
 function mountNavbar(features, props) {
   if (features) {
     stores.featuresStore.features = features;
+  } else {
+    stores.featuresStore.features = [];
   }
   return mount(
     <MemoryRouter>
@@ -29,6 +31,10 @@ describe('<Navbar />', () => {
 
   beforeEach(() => {
     wrapper = mountNavbar();
+  });
+
+  afterEach(() => {
+    wrapper.unmount();
   });
 
   it('renders correctly', () => {
@@ -54,5 +60,12 @@ describe('<Navbar />', () => {
     wrapper.unmount();
     wrapper = mountNavbar(null, { uiUserProfileMenu: true });
     expect(wrapper.exists(AccountSidebar)).toEqual(true);
+  });
+
+  it('should hide Dashboard when Home(beta) is visible', () => {
+    expect(wrapper.exists('#navbar-link-')).toEqual(true);
+    wrapper.unmount();
+    wrapper = mountNavbar([FEATURES.NEW_HOMEPAGE]);
+    expect(wrapper.exists('#navbar-link-')).toEqual(false);
   });
 });

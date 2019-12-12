@@ -47,8 +47,9 @@ const Navbar = ({ uiUserProfileMenu }) => {
 
     if (features.includes(FEATURES.NEW_HOMEPAGE)) {
       publicLinks.push({ actionType: OTA_NAV_HOMEPAGE, name: t('navigation.home'), to: '/home', isBeta: true });
+    } else {
+      publicLinks.push({ name: t('navigation.dashboard'), to: '/', isBeta: false });
     }
-    publicLinks.push({ name: t('navigation.dashboard'), to: '/', isBeta: false });
     publicLinks.push({ actionType: OTA_NAV_DEVICES, name: t('navigation.devices'), to: '/devices', isBeta: false });
     publicLinks.push({
       actionType: OTA_NAV_SOFTWARE_VERSIONS,
