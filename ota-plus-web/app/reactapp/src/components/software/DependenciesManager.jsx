@@ -206,7 +206,7 @@ class DependenciesManager extends Component {
         title={(
           <span>
             {t('software.dependencies.modal_title')}
-            <Tag color="#48dad0" className="alpha-tag">ALPHA</Tag>
+            <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
           </span>
         )}
         topActions={(
