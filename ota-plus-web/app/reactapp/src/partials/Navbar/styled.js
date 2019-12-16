@@ -72,7 +72,7 @@ export const Link = styled(NavLink)`
   font-size: 1.24em;
   color: ${({ theme }) => theme.palette.whiteTranslucent};
   padding: 0 14px;
-  :hover {
+  :hover, :focus {
     background-color: ${({ theme }) => theme.palette.secondaryTranslucent};
     color: ${({ theme }) => theme.palette.whiteTranslucent};
   }

@@ -152,6 +152,7 @@ class ContentPanel extends Component {
         <DeviceItem
           device={device}
           goToDetails={this.goToDetails}
+          index={index}
           showDeleteConfirmation={showDeleteConfirmation}
           showEditName={showEditName}
           key={`device-item-${index}-${device.uuid}`}

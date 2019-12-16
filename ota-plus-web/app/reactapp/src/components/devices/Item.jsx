@@ -12,6 +12,9 @@ import { Dropdown } from '../../partials';
 import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 import { GROUP_GROUP_TYPE_REAL, GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
 
+const KEY_CODE_ENTER = 13;
+const TAB_INDEX_INITIAL_NUMBER = 10;
+
 const deviceSource = {
   beginDrag(props) {
     const { groupsStore } = props.stores;
@@ -56,7 +59,7 @@ class Item extends Component {
 
   render() {
     const semiTransparent = 0.4;
-    const { device, goToDetails, showDeleteConfirmation, showEditName, t } = this.props;
+    const { device, goToDetails, index, showDeleteConfirmation, showEditName, t } = this.props;
     const { uuid, deviceId, deviceName, deviceStatus, lastSeen } = device;
     const { isDragging, connectDragSource } = this.props;
     const opacity = isDragging ? semiTransparent : 1;
@@ -77,7 +80,16 @@ class Item extends Component {
     }
 
     return connectDragSource(
-      <div className="devices-panel__device">
+      <div
+        className="devices-panel__device"
+        onKeyDown={(e) => {
+          if (e.keyCode === KEY_CODE_ENTER) {
+            goToDetails(uuid);
+          }
+        }}
+        tabIndex={TAB_INDEX_INITIAL_NUMBER + index}
+        role="button"
+      >
         <div
           className="hover-area"
           style={{ opacity }}
@@ -146,6 +158,7 @@ Item.propTypes = {
   stores: PropTypes.shape({}),
   device: PropTypes.shape({}).isRequired,
   goToDetails: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   showDeleteConfirmation: PropTypes.func,
