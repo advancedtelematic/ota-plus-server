@@ -1,7 +1,10 @@
 stages:
+  - prepare
   - test
   - build image
   - trigger deploy
+  - update deployment
+  - integration test
   - publish-docs-if-changed
   - veracode scan
   - deps scan
@@ -10,6 +13,7 @@ stages:
 
 variables:
   VAULT_ADDR: "http://vault.sit-ota.aws.in.here.com"
+  SERVICE_IMAGE: "advancedtelematic/ota-plus-web"
 
 test:
   stage: test
@@ -27,10 +31,13 @@ test:
 build docker image:
   stage: build image
   except:
-    - schedules
+    refs:
+      - schedules
+      - deploy/sit
   only:
-    - master
-    - deploy/rome
+    refs:
+      - master
+      - /^deploy/.*$/
   tags:
     - docker-sock
   image: advancedtelematic/app-gitlab-job:0.0.1
@@ -130,3 +137,7 @@ trigger-docsite-build:
   trigger:
     project: olp/edge/ota/documentation/ota-connect-docs
     branch: master
+
+include:
+  - project: olp/edge/ota/testing/dynamic-hats
+    file: /.gitlab-ci.yml
