@@ -51,16 +51,11 @@ class DependenciesModal extends Component {
 
   constructor(props) {
     super(props);
-    const { devicesStore, softwareStore, campaignsStore } = props.stores;
+    const { devicesStore, softwareStore } = props.stores;
     this.devicesFetchHandler = new AsyncStatusCallbackHandler(
       devicesStore,
       'devicesFetchAsync',
       this.devicesFetched.bind(this)
-    );
-    this.campaignsFetchHandler = new AsyncStatusCallbackHandler(
-      campaignsStore,
-      'campaignsSafeFetchAsync',
-      this.campaignsFetched.bind(this)
     );
     this.packagesFetchHandler = new AsyncStatusCallbackHandler(
       softwareStore,
@@ -76,11 +71,11 @@ class DependenciesModal extends Component {
   }
 
   componentDidMount() {
-    const { history, stores, status } = this.props;
-    const { devicesStore, campaignsStore, softwareStore } = stores;
+    const { history, stores } = this.props;
+    const { devicesStore, softwareStore } = stores;
     devicesStore.fetchDevices().then(() => {
       if (history.location !== '/software') {
-        campaignsStore.fetchCampaigns(status, 'campaignsSafeFetchAsync');
+        this.campaignsFetched();
       } else {
         softwareStore.fetchPackages();
       }
@@ -92,7 +87,6 @@ class DependenciesModal extends Component {
     const { stores } = this.props;
     const { devicesStore } = stores;
     this.devicesFetchHandler();
-    this.campaignsFetchHandler();
     this.packagesFetchHandler();
     devicesStore.reset();
     window.removeEventListener('resize', this.resizeSankey);
@@ -187,9 +181,7 @@ class DependenciesModal extends Component {
   }
 
   packagesFetched() {
-    const { stores, status } = this.props;
-    const { campaignsStore } = stores;
-    campaignsStore.fetchCampaigns(status, 'campaignsSafeFetchAsync');
+    this.campaignsFetched();
   }
 
   campaignsFetched() {
