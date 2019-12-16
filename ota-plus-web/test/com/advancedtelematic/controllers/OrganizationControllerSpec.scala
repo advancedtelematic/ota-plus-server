@@ -16,7 +16,7 @@ import play.api.mvc.Results
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class NamespaceControllerSpec extends PlaySpec
+class OrganizationControllerSpec extends PlaySpec
   with GuiceOneAppPerSuite
   with BeforeAndAfterAll
   with MockWSHelpers
@@ -43,12 +43,12 @@ class NamespaceControllerSpec extends PlaySpec
       .build()
 
   "Switching namespace" should {
-    val controller = app.injector.instanceOf[NamespaceController]
+    val controller = app.injector.instanceOf[OrganizationController]
 
     "redirect to index and update the session namespace" in {
       val request =
         FakeRequest("GET", s"/organizations/$userAllowedNamespace/index").withAuthSession(userAllowedNamespace)
-      val result = call(controller.switchNamespace(Namespace(userAllowedNamespace)), request)
+      val result = call(controller.switchOrganization(Namespace(userAllowedNamespace)), request)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/")
       session(result).apply("namespace") mustBe userAllowedNamespace

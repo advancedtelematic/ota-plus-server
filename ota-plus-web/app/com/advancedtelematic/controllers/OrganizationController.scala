@@ -14,12 +14,12 @@ import play.api.{Configuration, Logger}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class NamespaceController @Inject()(val conf: Configuration,
-                                    val ws: WSClient,
-                                    val clientExec: ApiClientExec,
-                                    implicit val tracer: ZipkinTraceServiceLike,
-                                    authAction: PlainAction,
-                                    components: ControllerComponents)(implicit exec: ExecutionContext)
+class OrganizationController @Inject()(val conf: Configuration,
+                                       val ws: WSClient,
+                                       val clientExec: ApiClientExec,
+                                       implicit val tracer: ZipkinTraceServiceLike,
+                                       authAction: PlainAction,
+                                       components: ControllerComponents)(implicit exec: ExecutionContext)
   extends AbstractController(components) with ApiClientSupport with ZipkinTraceImplicits {
 
   private val log = Logger(this.getClass)
@@ -31,7 +31,7 @@ class NamespaceController @Inject()(val conf: Configuration,
       override def unbind(key: String, ns: Namespace): String = ns.get
   }
 
-  def switchNamespace(namespace: Namespace): Action[AnyContent] = authAction.async { implicit request =>
+  def switchOrganization(namespace: Namespace): Action[AnyContent] = authAction.async { implicit request =>
     val userId = request.idToken.userId
       userProfileApi.namespaceIsAllowed(userId, namespace).map {
         case false =>
@@ -49,6 +49,8 @@ class NamespaceController @Inject()(val conf: Configuration,
     }
 
   def proxyRequest(path: String): Action[AnyContent]= authAction.async { implicit request =>
-    userProfileApi.organizationRequest(request.namespace, request.method, path, request.body.asJson)
+    userProfileApi.organizationRequest(
+      request.namespace, request.idToken.userId, request.method, path, request.body.asJson
+    )
   }
 }
