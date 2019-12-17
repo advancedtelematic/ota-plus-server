@@ -22,7 +22,7 @@ case class UserPass(user: String, pass: String)
 
 case class Feature(feature: FeatureName, client_id: Option[UUID], enabled: Boolean)
 
-case class UserOrganization(namespace: Namespace, name: String, isDefault: Boolean)
+case class UserOrganization(namespace: Namespace, name: String)
 
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
