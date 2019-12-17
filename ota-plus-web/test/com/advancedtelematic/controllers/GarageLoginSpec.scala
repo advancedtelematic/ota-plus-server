@@ -93,7 +93,6 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
         Json.obj(
         "namespace" -> namespace,
         "name" -> "My Organization",
-        "isDefault" -> true
       ))))
 
     case ("GET", url) if ".*/api/v1/users/.*".r.findFirstIn(url).isDefined =>
