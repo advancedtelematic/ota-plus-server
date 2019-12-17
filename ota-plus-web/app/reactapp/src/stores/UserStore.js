@@ -14,6 +14,7 @@ import {
   API_USER_ACTIVE_DEVICE_COUNT,
   API_USER_DEVICES_SEEN,
   API_USER_CONTRACTS,
+  API_USER_DEFAULT_ORGANIZATION,
   API_USER_ORGANIZATIONS,
   API_USER_ORGANIZATIONS_ADD_USER,
   API_USER_ORGANIZATIONS_GET_USERS,
@@ -102,7 +103,8 @@ export default class UserStore {
       if (namespaceCookie) {
         userOrganization = data.find(organization => organization.namespace === namespaceCookie);
       } else {
-        userOrganization = data.find(organization => organization.isDefault);
+        const { data } = await axios.get(API_USER_DEFAULT_ORGANIZATION);
+        userOrganization = data;
         Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, userOrganization.namespace);
       }
       this.userOrganizationName = userOrganization.name;
