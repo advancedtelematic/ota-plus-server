@@ -16,7 +16,7 @@ const DocsLinksWrapper = styled.div`
   position: relative;
   height: 288px;
   width: 320px;
-  margin-top: 10px;
+  margin-top: 30px;
 `;
 
 const List = styled.ul`
