@@ -35,9 +35,8 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   implicit val userOrganizationR: Reads[UserOrganization] = {
     (
       (__ \ "namespace").read[Namespace] and
-        (__ \ "name").read[String] and
-        (__ \ "isDefault").read[Boolean]
-      )(UserOrganization.apply _)
+      (__ \ "name").read[String]
+    )(UserOrganization.apply _)
   }
 
   def getUser(userId: UserId)(implicit traceData: TraceData): Future[JsValue] =
