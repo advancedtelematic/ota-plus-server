@@ -39,8 +39,15 @@ const styleVariants = theme => ({
     }
   },
   link: {
-    '&, :hover, :focus, :active': {
-      color: theme.palette.primary
+    color: theme.palette.primary,
+    backgroundColor: 'transparent !important',
+    border: 'none !important',
+    boxShadow: 'none',
+    ':hover': {
+      color: theme.palette.primaryTranslucent,
+    },
+    ':focus, :active': {
+      color: theme.palette.primaryDarkened
     },
   }
 });

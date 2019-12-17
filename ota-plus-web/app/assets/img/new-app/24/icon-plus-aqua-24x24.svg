@@ -13,14 +13,7 @@
     </defs>
     <g id="Page-1-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Home-page---type-dropdown---1-item" transform="translate(-917.000000, -995.000000)">
-            <rect fill="#F3F3F4" x="0" y="0" width="1280" height="1132"></rect>
             <g id="team-module" transform="translate(897.000000, 777.000000)">
-                <g id="BG">
-                    <g>
-                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
-                    </g>
-                </g>
                 <g id="Buttons/CC/Tertiary/Default" transform="translate(20.000000, 215.000000)">
                     <rect id="safety-area" x="0" y="0" width="137" height="30"></rect>
                     <g id="Icons/icon-plus-aqua-24x24" transform="translate(0.000000, 3.000000)" fill="#00B6B2">
