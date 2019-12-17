@@ -31,7 +31,6 @@ class OrganizationControllerSpec extends PlaySpec
         Json.obj(
           "namespace" -> userAllowedNamespace,
           "name" -> "My Organization",
-          "isDefault" -> true
         ))))
   }
 
