@@ -95,13 +95,13 @@ export default class UserStore {
     resetAsync(this.getOrganizationsAsync, true);
     try {
       const response = await axios.get(API_USER_ORGANIZATIONS);
-      const { data } = response;
-      this.userOrganizations = data;
+      const responseData = response.data;
+      this.userOrganizations = responseData;
       const namespaceCookie = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
       let userOrganization;
       // we have to get organization based on cookie (if it exists) or default one by isDefault flag
       if (namespaceCookie) {
-        userOrganization = data.find(organization => organization.namespace === namespaceCookie);
+        userOrganization = responseData.find(organization => organization.namespace === namespaceCookie);
       } else {
         const { data } = await axios.get(API_USER_DEFAULT_ORGANIZATION);
         userOrganization = data;

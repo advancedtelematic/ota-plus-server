@@ -2,13 +2,18 @@ import { COLORS, SHADOWS } from './constants/styleConstants';
 
 const theme = {
   palette: {
+    backgroundPrimary: COLORS.BACKGROUND_PRIMARY,
+    backgroundSecondary: COLORS.BACKGROUND_SECONDARY,
+    listBackground: COLORS.LIST_BACKGROUND,
     primary: COLORS.PRIMARY,
     primaryTranslucent: COLORS.PRIMARY_TRANSLUCENT,
     primaryDarkened: COLORS.PRIMARY_DARKENED,
     secondary: COLORS.SECONDARY,
     secondaryTranslucent: COLORS.SECONDARY_TRANSLUCENT,
+    secondaryTranslucent08: COLORS.SECONDARY_TRANSLUCENT_08,
     white: COLORS.WHITE,
     whiteAlpha02: COLORS.WHITE_ALPHA_02,
+    whiteAlpha08: COLORS.WHITE_ALPHA_08,
     lightGrey: COLORS.LIGHT_GREY,
     lightGreen: COLORS.LIGHT_GREEN,
     whiteTranslucent: COLORS.WHITE_TRANSLUCENT,

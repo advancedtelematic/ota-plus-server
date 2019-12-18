@@ -71,3 +71,19 @@ export const STEP_STATUS = {
 };
 
 export const STEP_TYPES = ['devices', 'softwareVersion', 'deviceGroup', 'softwareUpdates', 'campaigns'];
+
+export const ACTIVITIES_TYPE = {
+  CAMPAIGN: 'campaign',
+  DEVICE: 'devices',
+  DEVICE_GROUP: 'device_group',
+  SOFTWARE_UPDATE: 'update',
+  SOFTWARE_VERSION: 'software'
+};
+
+export const ACTIVITIES_TYPE_PARAMS = [
+  ACTIVITIES_TYPE.CAMPAIGN,
+  ACTIVITIES_TYPE.DEVICE,
+  ACTIVITIES_TYPE.DEVICE_GROUP,
+  ACTIVITIES_TYPE.SOFTWARE_UPDATE,
+  ACTIVITIES_TYPE.SOFTWARE_VERSION
+];

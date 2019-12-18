@@ -17,7 +17,7 @@ export const API_FETCH_MULTI_TARGET_UPDATES = '/api/v1/admin/devices';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v1/assignments';
 export const API_CANCEL_UPDATE_PENDING_APPROVAL = '/api/v2/campaigns';
 export const API_NAMESPACE_SETUP_STEPS = '/organization/setup';
-
+export const API_RECENTLY_CREATED = '/recently_created?types=$types&limit=10';
 /*
  *  User
  */
@@ -236,16 +236,22 @@ export const assets = {
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
 export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
+export const CAMPAIGNS_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-distribute-solid-24.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
+export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
 export const GROUP_ICON = '/assets/img/new-app/24/device-group-active-outline-24.svg';
+export const GROUP_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_group_connected-outline-24.svg';
 export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
 export const PEOPLE_ICON = '/assets/img/new-app/24/people-active-outline-24.svg';
 export const PLUS_ICON = '/assets/img/new-app/24/icon-plus-aqua-24x24.svg';
 export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 export const SOFTWARE_ICON = '/assets/img/new-app/24/software-versions-active-outline-24.svg';
+export const SOFTWARE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-software-outline-24.svg';
 export const UPDATE_ICON = '/assets/img/new-app/24/software-updates-active-outline-24.svg';
+export const UPDATE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-tuner-outline-24.svg';
 export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
+export const NO_ITEMS_ICON = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24.svg';
 
 /**
  * cookies
