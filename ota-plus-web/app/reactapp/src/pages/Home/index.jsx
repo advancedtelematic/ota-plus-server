@@ -10,6 +10,7 @@ import { SanityCheckContainer, Terms } from '../../containers';
 import { Loader } from '../../partials';
 import DashboardStepper from '../../components/dashboard/new/DashboardStepper';
 import DocsLinks from '../../components/dashboard/new/DocsLinks';
+import BuildTeam from '../../components/dashboard/new/BuildTeam';
 import { HomeWrapper, LoadingIcon } from './styled';
 
 function useStoreData() {
@@ -73,6 +74,7 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
         {isStepperLoading
           ? <LoadingIcon type="loading" spin />
           : <DashboardStepper />}
+        <BuildTeam />
         <DocsLinks />
       </HomeWrapper>
     </MetaData>

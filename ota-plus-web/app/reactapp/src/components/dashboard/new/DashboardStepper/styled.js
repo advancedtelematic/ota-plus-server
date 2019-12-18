@@ -32,6 +32,7 @@ const StepperWrapper = styled.div`
   flex-direction: column;
   background-color: #3F454D;
   position: relative;
+  margin-bottom: 30px;
 `;
 
 const Stepper = styled(Steps)`

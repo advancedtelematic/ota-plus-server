@@ -34,6 +34,7 @@ const DocsLinks = () => {
               id="docs-links-link-device-groups"
               onClick={() => sendAction(OTA_HOME_READ_GROUP_EXAMPLES)}
               url={URL_DOCS_LINKS_DEVICE_GROUPS}
+              weight="medium"
             >
               {t('dashboard.docs-links.link-create-device-groups')}
             </ExternalLink>
@@ -44,6 +45,7 @@ const DocsLinks = () => {
               id="docs-links-link-update-software"
               onClick={() => sendAction(OTA_HOME_READ_UPDATE_EXAMPLES)}
               url={URL_DOCS_LINKS_SOFTWARE_UPDATES}
+              weight="medium"
             >
               {t('dashboard.docs-links.link-create-software-updates')}
             </ExternalLink>
@@ -54,6 +56,7 @@ const DocsLinks = () => {
               id="docs-links-link-create-campaigns"
               onClick={() => sendAction(OTA_HOME_READ_CAMPAIGN_EXAMPLES)}
               url={URL_DOCS_LINKS_CREATE_CAMPAIGNS}
+              weight="medium"
             >
               {t('dashboard.docs-links.link-create-campaigns')}
             </ExternalLink>
@@ -64,6 +67,7 @@ const DocsLinks = () => {
               id="docs-links-link-troubleshoot-campaigns"
               onClick={() => sendAction(OTA_HOME_READ_TROUBLESHOOT_EXAMPLES)}
               url={URL_DOCS_LINKS_TROUBLESHOOT_CAMPAIGN}
+              weight="medium"
             >
               {t('dashboard.docs-links.link-create-troubleshoot-campaigns')}
             </ExternalLink>
