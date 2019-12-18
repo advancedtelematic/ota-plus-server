@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { Icon as AntdIcon } from 'antd';
 
+export const GridContainer = styled.div`
+  display: flex;
+`;
+
 export const HomeWrapper = styled.div`
   width: 100%;
   padding: 54px 30px 30px 30px;

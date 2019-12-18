@@ -43,7 +43,6 @@ class DependenciesModal extends Component {
 
   static propTypes = {
     stores: PropTypes.shape({}),
-    status: PropTypes.string,
     hide: PropTypes.func,
     activeItemName: PropTypes.string,
     shown: PropTypes.bool,
