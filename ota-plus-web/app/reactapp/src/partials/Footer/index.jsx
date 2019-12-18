@@ -32,7 +32,6 @@ const renderLinks = links => (
     <ExternalLink
       key={`${link.url}-${link.name}`}
       onClick={() => sendAction(link.actionType)}
-      size="small"
       url={link.url}
     >
       {link.name}

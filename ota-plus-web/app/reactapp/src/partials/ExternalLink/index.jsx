@@ -19,25 +19,24 @@ ExternalLink.propTypes = {
 };
 
 styled.propTypes = {
-  size: PropTypes.string,
+  weight: PropTypes.string,
   theme: PropTypes.shape({})
 };
 
-export const sizeVariants = {
-  small: {
-    fontSize: '1.0em',
-    fontWeight: 300
+export const weightVariants = {
+  medium: {
+    fontWeight: 500
   },
   default: {
-    fontSize: '0.93em',
-    fontWeight: 500
+    fontWeight: 300
   }
 };
 
-export default styled(ExternalLink)(({ theme, size = 'default' }) => ({
+export default styled(ExternalLink)(({ theme, weight = 'default' }) => ({
   textDecoration: 'none',
+  fontSize: '1em',
   '&, :hover': {
     color: theme.palette.primary,
-    ...sizeVariants[size]
+    ...weightVariants[weight]
   }
 }));
