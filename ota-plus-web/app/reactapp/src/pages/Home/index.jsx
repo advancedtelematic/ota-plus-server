@@ -11,7 +11,8 @@ import { Loader } from '../../partials';
 import DashboardStepper from '../../components/dashboard/new/DashboardStepper';
 import DocsLinks from '../../components/dashboard/new/DocsLinks';
 import BuildTeam from '../../components/dashboard/new/BuildTeam';
-import { HomeWrapper, LoadingIcon } from './styled';
+import RecentActivity from '../../components/dashboard/new/RecentActivity';
+import { GridContainer, HomeWrapper, LoadingIcon } from './styled';
 
 function useStoreData() {
   const { stores } = useStores();
@@ -22,6 +23,7 @@ function useStoreData() {
     softwareStore: stores.softwareStore,
     updatesStore: stores.updatesStore,
     provisioningStore: stores.provisioningStore,
+    recentlyCreatedStore: stores.recentlyCreatedStore,
     sanityCheckCompleted: stores.provisioningStore.sanityCheckCompleted,
     userStore: stores.userStore
   }));
@@ -36,6 +38,7 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
     softwareStore,
     updatesStore,
     provisioningStore,
+    recentlyCreatedStore,
     sanityCheckCompleted,
     userStore,
   } = useStoreData();
@@ -51,6 +54,7 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
         updatesStore.fetchUpdates(),
         campaignsStore.fetchCampaignsStats(),
         campaignsStore.fetchCampaignsWithErrors(),
+        recentlyCreatedStore.fetchRecentlyCreated()
       ]);
       setIsStepperLoading(false);
     }
@@ -74,8 +78,13 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
         {isStepperLoading
           ? <LoadingIcon type="loading" spin />
           : <DashboardStepper />}
-        <BuildTeam />
-        <DocsLinks />
+        <GridContainer>
+          <RecentActivity />
+          <div>
+            <BuildTeam />
+            <DocsLinks />
+          </div>
+        </GridContainer>
       </HomeWrapper>
     </MetaData>
   );
