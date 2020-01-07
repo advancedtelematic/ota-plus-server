@@ -27,11 +27,17 @@ class FeedController @Inject()(val conf: Configuration,
 
   private val defaultLimit = conf.get[Int]("app.homepage.recently_created.limit")
 
-  private def fetchRemoteActivityFeed(namespace: Namespace, limit: Int)(resourceType: String)
+  private def fetchRemoteActivityFeed(namespace: Namespace, userId: UserId, limit: Int)(resourceType: String)
                              (implicit traceData: TraceData): Future[Seq[FeedResource]] = {
 
     implicit val resourceReads: Reads[Seq[FeedResource]] = feedResourcesReads(resourceType.toLowerCase)
     resourceType.toLowerCase match {
+      case "member" =>
+        userProfileApi
+          .organizationMembershipEvents(namespace, userId, limit)
+          .map(_ \ "values")
+          .map(_.as[Seq[FeedResource]])
+
       case "device" =>
         deviceRegistryApi
           .recentDevices(namespace, limit)
@@ -90,10 +96,11 @@ class FeedController @Inject()(val conf: Configuration,
   def activityFeed(types: Option[String], limit: Option[Int]): Action[AnyContent] =
     authAction.async { implicit request =>
       val namespace = request.namespace
+      val userId = request.idToken.userId
       val l = limit.getOrElse(defaultLimit)
-      val ts = types.getOrElse("device,device_group,campaign,update,software")
+      val ts = types.getOrElse("member,device,device_group,campaign,update,software")
       Future
-        .traverse(ts.split(",").toSeq)(fetchRemoteActivityFeed(namespace, l))
+        .traverse(ts.split(",").toSeq)(fetchRemoteActivityFeed(namespace, userId, l))
         .map(_.flatten)
         .map(_.sortBy(_.createdAt)(Ordering[Instant].reverse))
         .map(_.take(l))

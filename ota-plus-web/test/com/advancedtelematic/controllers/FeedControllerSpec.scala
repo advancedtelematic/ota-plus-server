@@ -28,13 +28,28 @@ class FeedControllerSpec extends PlaySpec
   with ScalaFutures
   with Results {
 
+  private val userProfileUri = "http://user-profile.com"
   private val campaignerUri = "http://campaigner.com"
   private val deviceRegistryUri = "http://device-registry.com"
   private val directorUri = "http://director.com"
   private val repoServerUri = "http://repo-server.com"
-  private val testNamespace = Gen.uuid.map(_.toString).map(uuid => s"HERE-$uuid").sample.get
+  private val testNamespace = Gen.uuid.map(_.toString).map(uuid => s"urn:here-ota:namespace:$uuid").sample.get
 
   private val genInstant = Gen.resize(1000000000, Gen.posNum[Long]).map(Instant.ofEpochSecond)
+  private val genUserId = Gen.uuid.map(_.toString).map(uuid => s"HERE-$uuid")
+
+  private val genMembers = for {
+    memberId <- Gen.option(genUserId)
+    memberEmail <- Gen.resize(100, Gen.alphaNumStr)
+    eventType <- Gen.oneOf("UserJoined", "UserEvicted", "UserLeft")
+    createdAt <- genInstant
+  } yield FeedResource(createdAt, "member", Json.obj(
+    "namespace" -> testNamespace,
+    "memberId" -> memberId,
+    "memberEmail" -> memberEmail,
+    "eventType" -> eventType,
+    "createdAt" -> createdAt,
+  ))
 
   private val genDevice = for {
     uuid <- Gen.uuid
@@ -117,6 +132,7 @@ class FeedControllerSpec extends PlaySpec
     "createdAt" -> createdAt,
   ))
 
+  private val members = Gen.listOf(genMembers).sample.get
   private val devices = Gen.listOf(genDevice).sample.get
   private val deviceGroups = Gen.listOf(genDeviceGroup).sample.get
   private val campaigns = Gen.listOf(genCampaign).sample.get
@@ -124,6 +140,12 @@ class FeedControllerSpec extends PlaySpec
   private val softwares = Gen.listOf(genSoftware).sample.get
 
   val mock = MockWS {
+    case (GET, url) if url == s"$userProfileUri/api/v1/organizations/$testNamespace/membership_events" =>
+      Action(_ => Ok(Json.obj(
+        "total" -> members.length,
+        "values" -> members.map(_.resource)
+      )))
+
     case (GET, url) if url == s"$deviceRegistryUri/api/v1/devices" =>
       Action(_ => Ok(Json.obj(
         "total" -> devices.length,
@@ -209,6 +231,7 @@ class FeedControllerSpec extends PlaySpec
 
   implicit override lazy val app: play.api.Application =
     new GuiceApplicationBuilder()
+      .configure("userprofile.uri" -> userProfileUri)
       .configure("campaigner.uri" -> campaignerUri)
       .configure("deviceregistry.uri" -> deviceRegistryUri)
       .configure("director.uri" -> directorUri)
@@ -223,6 +246,7 @@ class FeedControllerSpec extends PlaySpec
     implicit val frr: Reads[FeedResource] = Json.reads[FeedResource]
 
     val resourcesByType: Map[String, List[FeedResource]] = Seq(
+      "member" -> members,
       "device" -> devices,
       "device_group" -> deviceGroups,
       "campaign" -> campaigns,

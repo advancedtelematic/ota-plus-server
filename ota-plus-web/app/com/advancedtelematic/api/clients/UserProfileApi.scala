@@ -95,6 +95,14 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
                         (implicit ec: ExecutionContext, traceData: TraceData): Future[Boolean] =
     userOrganizations(userId).map(_.map(_.namespace)).map(_.contains(namespace))
 
+  def organizationMembershipEvents(namespace: Namespace, userId: UserId, limit: Int)
+                                  (implicit traceData: TraceData): Future[JsValue] =
+    userProfileRequest(s"organizations/${segment(namespace.get)}/membership_events")
+      .transform(_.withMethod("GET"))
+      .transform(_.addQueryStringParameters("limit" -> limit.toString))
+      .withUser(userId)
+      .execJsonValue(apiExec)
+
   def organizationRequest(namespace: Namespace, userId: UserId, method: String, path: String, body: Option[JsValue])
                          (implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"organizations/${segment(namespace.get)}/$path")
