@@ -74,7 +74,7 @@ export const STEP_TYPES = ['devices', 'softwareVersion', 'deviceGroup', 'softwar
 
 export const ACTIVITIES_TYPE = {
   CAMPAIGN: 'campaign',
-  DEVICE: 'devices',
+  DEVICE: 'device',
   DEVICE_GROUP: 'device_group',
   SOFTWARE_UPDATE: 'update',
   SOFTWARE_VERSION: 'software'
