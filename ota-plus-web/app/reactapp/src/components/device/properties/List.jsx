@@ -73,6 +73,7 @@ class List extends Component {
       unmanaged = true;
       isPackageInstalled = true;
     }
+    const installButtonDisabled = isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length;
     const unmanagedPackage = (
       <div className="wrapper-center">
         {t('devices.mtu.properties.installed_outside_ota_description')}
@@ -248,18 +249,21 @@ class List extends Component {
             <Tooltip title={t('devices.mtu.properties.install_tooltip')} placement="left">
               <button
                 type="button"
-                className="properties-panel__install-button btn-primary"
+                className={`properties-panel__install-button btn-primary ${installButtonDisabled ? 'disabled' : ''}`}
                 label={t('devices.mtu.properties.install')}
                 title={t('devices.mtu.properties.install')}
                 id={`button-install-package-${expandedPackage.id.name}-${expandedPackage.id.version}`}
-                onClick={installPackage.bind(this, {
-                  target: expandedPackage.filepath,
-                  hash: expandedPackage.packageHash,
-                  targetLength: expandedPackage.targetLength,
-                  targetFormat: expandedPackage.targetFormat,
-                  generateDiff: false,
-                })}
-                disabled={isPackageQueued || isPackageInstalled || devicesStore.multiTargetUpdates.length}
+                onClick={() => installButtonDisabled
+                  ? undefined
+                  : installPackage.bind(this, {
+                    target: expandedPackage.filepath,
+                    hash: expandedPackage.packageHash,
+                    targetLength: expandedPackage.targetLength,
+                    targetFormat: expandedPackage.targetFormat,
+                    generateDiff: false,
+                  })
+                }
+
               >
                 {t('devices.mtu.properties.install')}
               </button>

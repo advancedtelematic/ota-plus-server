@@ -866,5 +866,10 @@
       font-size: 22px;
       font-weight: 300;
     }
+
+    &__install-button.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
   }
 }
