@@ -89,7 +89,7 @@ export const ListDate = styled.div`
 `;
 
 export const ListNoDataWrapper = styled.div`
-  height: 100%;
+  height: 288px;
   width: 100%;  
   display: flex;
   justify-content: center;
@@ -111,6 +111,7 @@ export const ListNoDataDescription = styled.div`
   font-size: 13px;
   line-height: 18px;
   text-align: center;
+  white-space: pre-line;
 `;
 
 export const MenuCheckbox = styled(Checkbox)`
@@ -167,8 +168,8 @@ export const RecentActivityWrapper = styled.div(({ empty, theme }) => ({
   flexDirection: 'column',
   backgroundColor: theme.palette.backgroundSecondary,
   position: 'relative',
-  height: empty ? '240px' : 'auto',
-  minHeight: '240px',
+  height: empty ? '288px' : 'auto',
+  minHeight: '288px',
 }));
 
 export const RightContainer = styled.div`
