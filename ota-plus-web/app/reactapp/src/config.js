@@ -280,6 +280,7 @@ export const FEATURES = {
   NEW_HOMEPAGE: 'new_home_page',
   OLP_CAMPAIGN: 'olp_campaign',
   ORGANIZATIONS: 'organizations',
+  PSEUDO_LOCALISATION: 'pseudo_localisation',
   SEQUENCER_CAMPAIGN: 'sequencer_campaign'
 };
 
@@ -299,4 +300,15 @@ export const ICON_PATHS = [
   GROUP_ICON,
   UPDATE_ICON,
   CAMPAIGNS_ICON
+];
+
+/**
+ * Language changing in footer
+ */
+export const LANGUAGE_SYMBOL_ENGLISH = 'en';
+export const LANGUAGE_SYMBOL_PSEUDO = 'zz';
+
+export const SUPPORTED_LANGUAGES = [
+  { language: LANGUAGE_SYMBOL_ENGLISH, textKey: 'footer.language.english' },
+  { language: LANGUAGE_SYMBOL_PSEUDO, textKey: 'footer.language.pseudo' }
 ];

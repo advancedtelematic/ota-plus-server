@@ -18,7 +18,7 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     // please see: https://www.i18next.com/overview/configuration-options
-    whitelist: ['en', 'zh'],
+    whitelist: ['en', 'zh', 'zz'],
     load: 'languageOnly',
     fallbackLng: 'en', // language to use if translations in user language are not available
     ns: ['translation'], // string or array of namespaces to load
@@ -45,7 +45,7 @@ i18n
       lookupFromSubdomainIndex: 0,
 
       // cache user language on
-      caches: [],
+      caches: ['cookie'],
       excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
 
       // optional htmlTag with lang attribute, the default is:
