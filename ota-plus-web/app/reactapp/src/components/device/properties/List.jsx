@@ -255,7 +255,7 @@ class List extends Component {
                 id={`button-install-package-${expandedPackage.id.name}-${expandedPackage.id.version}`}
                 onClick={() => installButtonDisabled
                   ? undefined
-                  : installPackage.bind(this, {
+                  : installPackage({
                     target: expandedPackage.filepath,
                     hash: expandedPackage.packageHash,
                     targetLength: expandedPackage.targetLength,
