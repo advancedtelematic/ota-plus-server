@@ -5,7 +5,10 @@ import java.time.temporal.ChronoUnit
 import java.util.Base64
 
 import akka.actor.ActorSystem
+import brave.play.{TraceData, ZipkinTraceServiceLike}
 import com.advancedtelematic.PlayMessageBusPublisher
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
+import com.advancedtelematic.api.Errors.RemoteApiError
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdToken, IdentityClaims, SessionCodecs}
 import com.advancedtelematic.controllers.{UserId, UserLogin}
 import com.advancedtelematic.libats.data.DataType.Namespace
@@ -17,17 +20,23 @@ import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
-                              configuration: Configuration,
-                              tokenBuilder: AccessTokenBuilder,
+class NoLoginAction @Inject()(val conf: Configuration,
                               val parser: BodyParsers.Default,
-                              val executionContext: ExecutionContext)(implicit system: ActorSystem)
-    extends com.advancedtelematic.auth.LoginAction {
+                              val clientExec: ApiClientExec,
+                              val tracer: ZipkinTraceServiceLike,
+                              val executionContext: ExecutionContext,
+                              messageBus: PlayMessageBusPublisher,
+                              tokenBuilder: AccessTokenBuilder
+                             )(implicit system: ActorSystem)
+  extends com.advancedtelematic.auth.LoginAction with ApiClientSupport {
 
   import system.dispatcher
 
   private lazy val log           = Logger(this.getClass)
-  private lazy val fakeNamespace = configuration.get[String]("oidc.namespace")
+  private lazy val fakeNamespace = conf.get[String]("oidc.namespace")
+  private lazy val email         = "guest@here.com"
+  private lazy val userName      = "Guest User"
+  implicit private lazy val traceData = TraceData(tracer.tracing.tracer().newTrace())
 
   private def namespace(request: Request[AnyContent]): String = {
     val fromHeader = for {
@@ -40,10 +49,17 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
     fromHeader.getOrElse(fakeNamespace)
   }
 
+  private def ensureNsExists(ns: Namespace, userId: UserId) =
+    userProfileApi
+      .getUser(userId)
+      .recoverWith {
+        case RemoteApiError(result, _) if result.header.status == 404 =>
+          userProfileApi.createUser(userId, userName, email, Some(ns))
+      }
+
   override def apply(request: Request[AnyContent]) = {
     val fakeNamespace = namespace(request)
-    val email         = "guest@advancedtelematic.com"
-    val idToken       = IdToken.from(fakeNamespace, "Guest User", "guest", email)
+    val idToken       = IdToken.from(fakeNamespace, userName , "guest", email)
     val accessToken =
       tokenBuilder.mkToken(fakeNamespace, Instant.now().plus(30, ChronoUnit.DAYS), Set(s"namespace.${fakeNamespace}"))
 
@@ -59,11 +75,11 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
 
     messageBus.publishSafe(UserLogin(
         fakeNamespace,
-        Some(IdentityClaims(UserId(fakeNamespace), "guest", None, email)),
+        Some(IdentityClaims(UserId(fakeNamespace), userName, None, email)),
         Namespace(fakeNamespace),
         Instant.now()))
 
-    Future.successful(result)
+    ensureNsExists(Namespace(fakeNamespace), UserId(fakeNamespace)).map(_ => result)
   }
 }
 

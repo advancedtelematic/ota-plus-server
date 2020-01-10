@@ -4,20 +4,41 @@ import java.util.Base64
 
 import _root_.akka.stream.Materializer
 import com.advancedtelematic.auth.UiAuthAction
+import com.advancedtelematic.auth.garage.NoLoginAction
+import mockws.MockWS
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.mvc._
-
-import scala.concurrent.{ExecutionContext, Future}
-import com.advancedtelematic.auth.garage.NoLoginAction
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
+import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
-  val application = new GuiceApplicationBuilder()
+  private val userProfileUri = "http://user-profile.com"
+  private val testNamespace = "test-namespace"
+
+  private val mock = MockWS {
+    case (GET, url) if s"$userProfileUri/api/v1/users/(.*)".r.findAllIn(url).nonEmpty =>
+      val ns = s"$userProfileUri/api/v1/users/(.*)".r.findAllIn(url).matchData.map(_.group(1)).toSeq.head
+      val response =
+        if (ns == testNamespace) Ok(Json.obj())
+        else NotFound(Json.obj())
+      Action(_ => response)
+
+    case (POST, url) if s"$userProfileUri/api/v1/users/(.*)".r.findAllIn(url).nonEmpty =>
+      Action(_ => Ok(Json.obj()))
+  }
+
+  lazy val application = new GuiceApplicationBuilder()
+    .overrides(bind[WSClient].to(mock))
+    .configure("userprofile.uri" -> userProfileUri)
     .configure("authplus.token" -> "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow")
-    .configure("oidc.namespace" -> "test-namespace")
+    .configure("oidc.namespace" -> testNamespace)
     .configure("oidc.loginAction" -> "com.advancedtelematic.auth.garage.NoLoginAction")
     .build
 
@@ -82,7 +103,7 @@ class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Result
       status(result) must be(303)
       redirectLocation(result) must contain("/")
 
-      session(result).data("namespace") must be("test-namespace")
+      session(result).data("namespace") mustBe testNamespace
     }
   }
 }
