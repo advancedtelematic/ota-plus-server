@@ -26,9 +26,7 @@ import {
   Title,
   TopContainer
 } from './styled';
-import {
-  NO_ITEMS_ICON
-} from '../../../../config';
+import { NO_ITEMS_ICON } from '../../../../config';
 import {
   getListDescription,
   getListIcon,
@@ -70,6 +68,7 @@ function useStoreData() {
 const RecentActivity = () => {
   const [menuItemsSelected, setMenuItemsSelected] = useState(MENU_ITEMS.map(() => true));
   const [menuSelectedLength, setMenuSelectedLength] = useState(MENU_ITEMS.length);
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false);
   const { devicesTotalCount, isFetching, recentlyCreated } = useStoreData();
   const { t } = useTranslation();
   const { stores } = useStores();
@@ -100,11 +99,17 @@ const RecentActivity = () => {
             <FilterTitle id="recent-activity-filter-title">
               {t('dashboard.recent-activity.filter-menu.title')}
             </FilterTitle>
-            <Dropdown id="recent-activity-filter-dropdown" overlay={filterMenu(t, menuItemsSelected, handleMenuChange)}>
+            <Dropdown
+              id="recent-activity-filter-dropdown"
+              onVisibleChange={(visible) => {
+                setFilterMenuVisible(visible);
+              }}
+              overlay={filterMenu(t, menuItemsSelected, handleMenuChange)}
+            >
               <ButtonStyled id="recent-activity-filter-button">
                 <ButtonText>{t('dashboard.recent-activity.filter-menu.type')}</ButtonText>
                 <MenuSelectedLength>{menuSelectedLength}</MenuSelectedLength>
-                <DropdownIcon type="up" />
+                <DropdownIcon type={filterMenuVisible ? 'up' : 'down'} />
               </ButtonStyled>
             </Dropdown>
           </RightContainer>

@@ -181,7 +181,7 @@ export const RightContainer = styled.div`
 
 export const Title = styled.div`
   height: 30px;
-  width: 200px;
+  width: 300px;
   color: ${({ theme }) => theme.palette.white};
   font-size: 22px;
   font-weight: bold;

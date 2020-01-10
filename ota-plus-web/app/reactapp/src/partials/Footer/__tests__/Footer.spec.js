@@ -1,33 +1,47 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
+import { mount, shallow } from 'enzyme';
 import { ThemeProvider } from 'styled-components';
+import { Provider } from 'mobx-react';
 import theme from '../../../theme';
 import { Footer } from '..';
 import * as analyticsHelper from '../../../helpers/analyticsHelper';
 import {
   OTA_FOOTER_CONTACT,
+  OTA_FOOTER_LANGUAGES,
   OTA_FOOTER_PRIVACY,
   OTA_FOOTER_TERMS
 } from '../../../constants/analyticsActions';
+import { FEATURES } from '../../../config';
+import FeaturesStore from '../../../stores/FeaturesStore';
 
-function mountFooter(props) {
+const mockedProps = {
+  url: URL
+};
+
+const mockedStores = {
+  featuresStore: new FeaturesStore(),
+};
+
+function mountFooter(stores = mockedStores, props = mockedProps) {
   return mount(
-    <ThemeProvider theme={theme}>
-      <Footer {...props} />
-    </ThemeProvider>
+    <Provider stores={stores}>
+      <ThemeProvider theme={theme}>
+        <Footer {...props} />
+      </ThemeProvider>
+    </Provider>
   );
 }
 
 const EXTERNAL_LINK_COUNT = 3;
 
+jest.mock('../../../i18n');
+
 describe('<Footer />', () => {
   let wrapper;
 
   beforeEach(() => {
-    const props = {
-      url: URL
-    };
-    wrapper = mountFooter(props);
+    wrapper = mountFooter();
   });
 
   afterEach(() => {
@@ -39,7 +53,7 @@ describe('<Footer />', () => {
   });
 
   it('should have app footer tag', () => {
-    expect(wrapper.exists('#app-footer')).toEqual(true);
+    expect(wrapper.exists('#footer-container')).toEqual(true);
   });
 
   it('should have proper ExternalLink count', () => {
@@ -74,5 +88,38 @@ describe('<Footer />', () => {
 
   it('should have copyright tag', () => {
     expect(wrapper.exists('#footer-copyright-tag')).toEqual(true);
+  });
+
+  it('should render language dropdown menu with one item', () => {
+    const dropdown = wrapper.find('#footer-language-dropdown');
+    const submenu = mount(<ThemeProvider theme={theme}><div>{dropdown.first().prop('overlay')}</div></ThemeProvider>);
+    expect(submenu.exists('#footer-language-menu')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-0')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-1')).toEqual(false);
+  });
+
+  it('should render language dropdown menu with 2 items', () => {
+    const stores = {
+      featuresStore: new FeaturesStore(),
+    };
+    stores.featuresStore.features = [FEATURES.PSEUDO_LOCALISATION];
+    wrapper = mountFooter(stores);
+    const dropdown = wrapper.find('#footer-language-dropdown');
+    const submenu = mount(<ThemeProvider theme={theme}><div>{dropdown.first().prop('overlay')}</div></ThemeProvider>);
+    expect(submenu.exists('#footer-language-menu')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-0')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-1')).toEqual(true);
+  });
+
+  it('should click on language dropdown menu', () => {
+    analyticsHelper.sendAction = jest.fn();
+    const dropdown = wrapper.find('#footer-language-dropdown');
+    const submenu = shallow(<div>{dropdown.first().prop('overlay')}</div>);
+    expect(submenu.exists('#footer-language-menu')).toEqual(true);
+    const languageMenu = submenu.find('#footer-language-menu');
+    act(() => {
+      languageMenu.simulate('click', { key: 0 });
+    });
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_FOOTER_LANGUAGES);
   });
 });
