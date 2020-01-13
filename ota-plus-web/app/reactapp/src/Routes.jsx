@@ -85,7 +85,7 @@ const Routes = ({
         >
           <Switch>
             <Route path="/profile/edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-            <Route path="/profile/organization" component={ProfileOrganization} />
+            <Route path="/profile/environments" component={ProfileOrganization} />
             <Route path="/profile/usage" component={ProfileUsage} />
             <Route
               path="/profile/access-keys"

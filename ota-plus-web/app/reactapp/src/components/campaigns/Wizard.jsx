@@ -7,9 +7,9 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Form from 'formsy-antd';
 import { withTranslation } from 'react-i18next';
-import { Button, notification, Tag } from 'antd';
+import { notification, Tag } from 'antd';
 
-import { OTAModal, Loader, SearchBar } from '../../partials';
+import { Button, OTAModal, Loader, SearchBar, ModalTitleWrapper } from '../../partials';
 import UpdateDetails from '../updates/UpdateDetails';
 import {
   WizardStep1,
@@ -22,7 +22,7 @@ import {
 } from './wizardSteps';
 import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
 import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
-import { FEATURES } from '../../config';
+import { FEATURES, CAMPAIGNS_ICON_GRAY } from '../../config';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -386,7 +386,9 @@ class Wizard extends Component {
                 {this.isLastStep() ? (
                   <Button
                     htmlType="button"
-                    className="btn-primary btn-red"
+                    type="primary"
+                    light="true"
+                    className="btn-red"
                     id="wizard-launch-button"
                     onClick={this.launch}
                     disabled={!currentStep.isFinished}
@@ -396,7 +398,8 @@ class Wizard extends Component {
                 ) : (
                   <Button
                     htmlType="button"
-                    className="btn-primary"
+                    type="primary"
+                    light="true"
                     id="next-step"
                     onClick={this.nextStep}
                     disabled={!currentStep.isFinished}
@@ -413,9 +416,14 @@ class Wizard extends Component {
     );
     return (
       <OTAModal
-        title={
-          !this.currentDetails ? t('campaigns.wizard.add_new_campaign') : t('campaigns.wizard.campaign_update_details')
-        }
+        title={(
+          <ModalTitleWrapper>
+            <img src={CAMPAIGNS_ICON_GRAY} />
+            {!this.currentDetails
+              ? t('campaigns.wizard.add_new_campaign')
+              : t('campaigns.wizard.campaign_update_details')}
+          </ModalTitleWrapper>
+        )}
         topActions={(
           <div className="top-actions">
             <div

@@ -126,7 +126,7 @@ class Updates extends Component {
                   <div>{"You haven't created any updates yet."}</div>
                   <div>
                     <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>
-                      <span>{'Create software update'}</span>
+                      <span>{'Create update'}</span>
                     </a>
                   </div>
                 </div>

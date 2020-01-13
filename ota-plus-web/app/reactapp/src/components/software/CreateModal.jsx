@@ -5,14 +5,15 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Form, Input } from 'formsy-antd';
-import { Row, Col, Button, Input as TextInput } from 'antd';
+import { Row, Col, Button as AntdButton, Input as TextInput } from 'antd';
 import serialize from 'form-serialize';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
-import { OTAModal, Loader, FormSelect, OperationCompletedInfo } from '../../partials';
+import { Button, OTAModal, Loader, FormSelect, OperationCompletedInfo, ModalTitleWrapper } from '../../partials';
 import { URL_SOFTWARE_PUSHING_UPDATES } from '../../constants/urlConstants';
+import { SOFTWARE_ICON_GRAY } from '../../config';
 
 @inject('stores')
 @observer
@@ -161,14 +162,14 @@ class CreateModal extends Component {
             <div className="upload-wrapper">
               {!fileDropped && (
                 <div>
-                  <Button
+                  <AntdButton
                     htmlType="button"
                     className="add-button file-input"
                     onClick={this.onFileUploadClick}
                     id="choose-software"
                   >
                     <div>{t('software.create_modal.choose_file')}</div>
-                  </Button>
+                  </AntdButton>
                   <div className="description">{t('software.create_modal.file_information')}</div>
                 </div>
               )}
@@ -206,14 +207,15 @@ class CreateModal extends Component {
         <Row className="row no-margin-bottom no-margin-top">
           <Col span={24}>
             <div className="body-actions no-margin">
-              <button
-                type="submit"
-                className="btn-primary"
+              <Button
+                light="true"
+                htmlType="submit"
+                type="primary"
                 disabled={!isSubmitEnabled}
                 id="add-new-package-confirm"
               >
                 {t('software.create_modal.add')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
@@ -221,7 +223,12 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={t('software.create_modal.title')}
+        title={(
+          <ModalTitleWrapper>
+            <img src={SOFTWARE_ICON_GRAY} />
+            {t('software.create_modal.title')}
+          </ModalTitleWrapper>
+        )}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>

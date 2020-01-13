@@ -92,7 +92,7 @@ class UpdatesWizardDetailListItem extends Component {
             </Checkbox>
             {this.updateFromAny && (
               <span className="no-sw-version__warning">
-                {t('updates.creating.wizard..no_sw_version_warning')}
+                {t('updates.creating.wizard.no_sw_version_warning')}
               </span>
             )}
           </Col>

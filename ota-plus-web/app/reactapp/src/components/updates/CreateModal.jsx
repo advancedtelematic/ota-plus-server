@@ -5,15 +5,15 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { OTAModal } from '../../partials';
+import { Button, ModalTitleWrapper, OTAModal } from '../../partials';
 
 import { contains } from '../../utils/Helpers';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';
+import { UPDATE_ICON_GRAY } from '../../config';
 
 const wizardSteps = [
   {
@@ -212,7 +212,6 @@ class CreateModal extends Component {
               <div style={{ display: 'flex' }}>
                 <Button
                   htmlType="button"
-                  className="btn-primary"
                   id="wizard-back-button"
                   onClick={this.prevStep}
                   style={{ marginRight: '10px' }}
@@ -220,8 +219,10 @@ class CreateModal extends Component {
                   {t('updates.creating.back')}
                 </Button>
                 <Button
+                  light="true"
+                  type="primary"
                   htmlType="button"
-                  className="btn-primary pull-right"
+                  className="pull-right"
                   id="wizard-launch-button"
                   disabled={!currentStep.isFinished}
                   onClick={this.createMtu}
@@ -232,9 +233,10 @@ class CreateModal extends Component {
             )
           ) : (
             <Button
+              light="true"
+              type="primary"
               htmlType="button"
               disabled={!currentStep.isFinished}
-              className="btn-primary"
               id="next"
               onClick={this.nextStep}
             >
@@ -246,7 +248,12 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={showDetails ? t('updates.creating.update_details') : t('updates.creating.create_update')}
+        title={(
+          <ModalTitleWrapper>
+            <img src={UPDATE_ICON_GRAY} />
+            {showDetails ? t('updates.creating.update_details') : t('updates.creating.create_update')}
+          </ModalTitleWrapper>
+        )}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" id="close-update-modal" onClick={hide}>

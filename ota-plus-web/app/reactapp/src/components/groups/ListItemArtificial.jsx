@@ -82,7 +82,7 @@ class ListItemArtificial extends Component {
                 selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInSmartGroup' });
               }}
             >
-              <span>Not in a smart group: </span>
+              <span>Not in a smart device group: </span>
               <span>{t('devices.device_count', { count: devicesStore.devicesUngroupedCountNotInSmartGroup })}</span>
             </div>
             <div

@@ -50,7 +50,7 @@ h3 {
   &--sm {
     text-transform: none;
     font-size: 11px;
-    width: 110px;
+    min-width: 110px;
   }
   &-primary {
     background: $color-mint;
