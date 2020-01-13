@@ -51,7 +51,7 @@ class NavigationProfile extends Component {
           <ul className="links">
             <li>
               <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={hideDropdown}>
-                {'Provisioning keys'}
+                {'Credentials (provisioning)'}
               </Link>
             </li>
           </ul>
@@ -69,11 +69,11 @@ class NavigationProfile extends Component {
               <li>
                 <Link
                   className="centered"
-                  to="/profile/organization"
+                  to="/profile/environments"
                   id="dropdown-link-organization"
                   onClick={hideDropdown}
                 >
-                  {'Organization'}
+                  {'Environment'}
                   <Tag color="#48dad0" className="alpha-tag--nav">BETA</Tag>
                 </Link>
               </li>
@@ -86,7 +86,7 @@ class NavigationProfile extends Component {
             {uiCredentialsDownload && (
               <li>
                 <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={hideDropdown}>
-                  {'Provisioning keys'}
+                  {'Credentials (provisioning)'}
                 </Link>
               </li>
             )}

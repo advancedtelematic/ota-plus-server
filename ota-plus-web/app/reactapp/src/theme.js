@@ -8,6 +8,7 @@ const theme = {
     primary: COLORS.PRIMARY,
     primaryTranslucent: COLORS.PRIMARY_TRANSLUCENT,
     primaryDarkened: COLORS.PRIMARY_DARKENED,
+    primaryDarkened2: COLORS.PRIMARY_DARKENED_2,
     secondary: COLORS.SECONDARY,
     secondaryTranslucent: COLORS.SECONDARY_TRANSLUCENT,
     secondaryTranslucent08: COLORS.SECONDARY_TRANSLUCENT_08,

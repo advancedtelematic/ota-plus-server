@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Form } from 'formsy-antd';
-import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { SubHeader, SearchBar } from '../../partials';
+import { Button, SubHeader, SearchBar } from '../../partials';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_CAMPAIGN } from '../../constants/analyticsActions';
 
@@ -32,7 +31,6 @@ class ContentPanelHeader extends Component {
           <div className="add-group-campaign">
             <Button
               htmlType="button"
-              className="ant-btn-outlined"
               onClick={(e) => {
                 e.preventDefault();
                 addNewWizard('groups');

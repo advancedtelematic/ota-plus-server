@@ -2,9 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import { Button } from 'antd';
-import { OTAModal } from '../../../partials';
+import { Button, OTAModal } from '../../../partials';
 
 const Tooltip = ({ shown, hide }) => {
   const content = (
@@ -14,7 +12,7 @@ const Tooltip = ({ shown, hide }) => {
         {'Here, you can create and manage the provisioning keys linked to your account.'}
       </div>
       <div className="body-actions">
-        <Button htmlType="button" className="btn-primary" onClick={hide} id="provisioning-keys-got-it">
+        <Button type="primary" light="true" htmlType="button" onClick={hide} id="provisioning-keys-got-it">
           Got it
         </Button>
       </div>
@@ -25,7 +23,7 @@ const Tooltip = ({ shown, hide }) => {
     <OTAModal
       title={(
         <div className="heading">
-          <div className="internal">Provisioning Keys</div>
+          <div className="internal">{'Credentials (provisioning)'}</div>
         </div>
       )}
       content={content}

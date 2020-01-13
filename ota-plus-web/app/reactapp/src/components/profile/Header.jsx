@@ -31,14 +31,14 @@ class Header extends Component {
         )}
         {features.includes(FEATURES.ORGANIZATIONS) && (
           <NavLink
-            to="/profile/organization"
+            to="/profile/environments"
             activeClassName="profile-nav__list-item--active"
             className="profile-nav__list-item"
             id="organization-link"
           >
             <div>
               <span>
-                Organization
+                Environments
                 <Tag color="#48dad0" className="alpha-tag">
                   BETA
                 </Tag>
@@ -65,7 +65,7 @@ class Header extends Component {
           id="provisioning-keys-link"
         >
           <div>
-            Provisioning keys
+            {'Credentials (provisioning)'}
             <span className="profile-nav__bottom-line" />
           </div>
         </NavLink>
@@ -106,7 +106,7 @@ class Header extends Component {
           id="provisioning-keys-link"
         >
           <div>
-            Provisioning keys
+            {'Credentials (provisioning)'}
             <span className="profile-nav__bottom-line" />
           </div>
         </NavLink>

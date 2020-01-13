@@ -57,6 +57,7 @@ class CampaignsWizardUpdateList extends Component {
                           selected={selected}
                           onChange={this.onChangeSelected}
                           showDetails={showUpdateDetails}
+                          showIcon
                           sourceType={update.source.sourceType}
                         />
                       );

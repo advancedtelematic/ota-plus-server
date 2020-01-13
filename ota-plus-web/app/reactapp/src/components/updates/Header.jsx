@@ -3,10 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'antd';
 import { Form } from 'formsy-antd';
-
-import { SearchBar, SubHeader } from '../../partials';
+import { Button, SearchBar, SubHeader } from '../../partials';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_UPDATES_CREATE_UPDATE } from '../../constants/analyticsActions';
 
@@ -42,15 +40,13 @@ class Header extends Component {
                   />
                 </Form>
                 <Button
-                  htmlType="button"
-                  className="ant-btn ant-btn-outlined"
                   id="add-new-update"
                   onClick={() => {
                     showCreateModal(null);
                     sendAction(OTA_UPDATES_CREATE_UPDATE);
                   }}
                 >
-                  {'Create software update'}
+                  {'Create update'}
                 </Button>
               </div>
             </div>

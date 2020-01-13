@@ -208,7 +208,7 @@ class List extends Component {
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">ECU types:</span>
+                  <span className="properties-panel__info-data-subtitle">Control unit types:</span>
                   <span id={this.generateIdTag('version-hardware-types-value', expandedPackage)}>
                     {_.map(expandedPackage.hardwareIds, (hardwareId, index) => (
                       <span className="app-label" key={index}>

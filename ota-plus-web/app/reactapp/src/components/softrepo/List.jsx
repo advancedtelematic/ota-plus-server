@@ -246,7 +246,7 @@ class List extends Component {
                     </Col>
                   </Row>
                   <div className="ecus">
-                    <h5>ECUs</h5>
+                    <h5>Control units</h5>
                     {_.map(groupItem.ecus, (ecu, key) => (
                       <p key={key}>{ecu}</p>
                     ))}
