@@ -26,6 +26,8 @@ function mountNavbar(features, props) {
   );
 }
 
+jest.mock('../../../i18n');
+
 describe('<Navbar />', () => {
   let wrapper;
 

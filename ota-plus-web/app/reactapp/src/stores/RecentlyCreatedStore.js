@@ -3,6 +3,7 @@
 
 import { observable } from 'mobx';
 import axios from 'axios';
+import moment from 'moment';
 import { API_RECENTLY_CREATED } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { ACTIVITIES_TYPE, ACTIVITIES_TYPE_PARAMS } from '../constants';
@@ -16,7 +17,7 @@ export default class RecentlyCreatedStore {
     resetAsync(this.recentlyCreatedFetchAsync);
   }
 
-  createItemData = (date, name, type) => ({ date, title: name, type });
+  createItemData = (date, name, type) => ({ date: moment(date).format('ddd MMM D YYYY HH:mm'), title: name, type });
 
   async fetchRecentlyCreated(types = ACTIVITIES_TYPE_PARAMS) {
     resetAsync(this.recentlyCreatedFetchAsync, true);

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useObserver } from 'mobx-react';
 import { Dropdown } from 'antd';
 import {
   OTA_FOOTER_CONTACT,
@@ -8,6 +9,7 @@ import {
   OTA_FOOTER_TERMS
 } from '../../constants/analyticsActions';
 import { sendAction } from '../../helpers/analyticsHelper';
+import { getLanguage, getCurrentLanguageIndex, isLanguageSupported } from '../../helpers/languageHelper';
 
 import {
   ButtonStyled,
@@ -26,6 +28,9 @@ import {
   URL_FOOTER_PRIVACY_POLICY,
   URL_FOOTER_SERVICE_TERMS
 } from '../../constants/urlConstants';
+import { FEATURES, SUPPORTED_LANGUAGES, LANGUAGE_SYMBOL_PSEUDO } from '../../config';
+import i18n from '../../i18n';
+import { useStores } from '../../stores/hooks';
 
 const renderLinks = links => (
   links.map(link => (
@@ -39,18 +44,25 @@ const renderLinks = links => (
   ))
 );
 
-const handleLanguageMenuClick = () => {
-  // TODO: add languages switching. There is a need for event pass as an argument.
-  sendAction(OTA_FOOTER_LANGUAGES);
-};
+const languages = (t, supportedLanguages) => supportedLanguages.map(item => t(item.textKey));
 
-const languageMenu = t => (
-  <MenuStyled onClick={handleLanguageMenuClick}>
-    <MenuItemStyled key="1">
-      {t('footer.language.english')}
-    </MenuItemStyled>
+const languageMenu = (t, handleLanguageMenuClick, supportedLanguages) => (
+  <MenuStyled id="footer-language-menu" onClick={handleLanguageMenuClick}>
+    {languages(t, supportedLanguages).map((item, index) => (
+      <MenuItemStyled id={`footer-language-menu-item-${index}`} key={`${index}`}>
+        {item}
+      </MenuItemStyled>
+    ))}
   </MenuStyled>
 );
+
+function useStoreData() {
+  const { stores } = useStores();
+  return useObserver(() => ({
+    features: stores.featuresStore.features,
+    usePseudoLocalisation: stores.featuresStore.features.includes(FEATURES.PSEUDO_LOCALISATION),
+  }));
+}
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -60,15 +72,52 @@ export const Footer = () => {
     { actionType: OTA_FOOTER_CONTACT, name: t('footer.links.contact-us'), url: URL_FOOTER_CONTACT_US }
   ];
 
+  const { features, usePseudoLocalisation } = useStoreData();
+  const [supportedLanguages, setSupportedLanguages] = useState([]);
+  const [languageSelectedIndex, setLanguageSelectedIndex] = useState(getCurrentLanguageIndex(supportedLanguages));
+  useEffect(() => {
+    const supportedLanguagesTemp = [];
+    SUPPORTED_LANGUAGES.forEach((item) => {
+      switch (item.language) {
+        case LANGUAGE_SYMBOL_PSEUDO:
+          if (usePseudoLocalisation) {
+            supportedLanguagesTemp.push(item);
+          }
+          break;
+        default:
+          supportedLanguagesTemp.push(item);
+          break;
+      }
+    });
+    setSupportedLanguages(supportedLanguagesTemp);
+    if (!isLanguageSupported(getLanguage(), supportedLanguagesTemp)) {
+      const { language } = supportedLanguagesTemp[0];
+      setLanguageSelectedIndex(0);
+      i18n.changeLanguage(language);
+    }
+  }, [features]);
+
+  const handleLanguageMenuClick = (event) => {
+    const key = parseInt(event.key, 10);
+    setLanguageSelectedIndex(key);
+    const { language } = supportedLanguages[key];
+    i18n.changeLanguage(language);
+    sendAction(OTA_FOOTER_LANGUAGES);
+  };
   return (
-    <FooterContainer id="app-footer">
+    <FooterContainer id="footer-container">
       {renderLinks(links)}
-      <RightContainer>
+      <RightContainer id="footer-container-right">
         <LanguageTag id="footer-language-tag">{t('footer.language')}</LanguageTag>
-        <Dropdown overlay={languageMenu(t)}>
-          <ButtonStyled>
-            <ButtonText>{t('footer.language.english')}</ButtonText>
-            <IconStyled type="down" />
+        <Dropdown
+          id="footer-language-dropdown"
+          overlay={languageMenu(t, handleLanguageMenuClick, supportedLanguages)}
+        >
+          <ButtonStyled id="footer-language-button">
+            <ButtonText id="footer-language-button-text">
+              {languages(t, supportedLanguages)[languageSelectedIndex]}
+            </ButtonText>
+            <IconStyled id="footer-language-button-icon" type="down" />
           </ButtonStyled>
         </Dropdown>
         <CopyrightTag id="footer-copyright-tag">{t('footer.copyright')}</CopyrightTag>

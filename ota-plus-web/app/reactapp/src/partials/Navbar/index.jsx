@@ -29,6 +29,7 @@ import {
   Ul
 } from './styled';
 import { sendAction } from '../../helpers/analyticsHelper';
+import { getLanguage } from '../../helpers/languageHelper';
 
 function useFeatures() {
   const { stores } = useStores();
@@ -41,7 +42,6 @@ const Navbar = ({ uiUserProfileMenu }) => {
   const [links, setLinks] = useState([]);
   const { t } = useTranslation();
   const { features } = useFeatures();
-
   useEffect(() => {
     const publicLinks = [];
 
@@ -81,7 +81,7 @@ const Navbar = ({ uiUserProfileMenu }) => {
     }
 
     setLinks(publicLinks);
-  }, [features]);
+  }, [features, getLanguage()]);
 
   const onClick = (actionType) => {
     if (actionType) {

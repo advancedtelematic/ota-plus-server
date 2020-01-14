@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 const Description = styled.div`
-  height: 48px;
   width: 274px;
   color: ${({ theme }) => theme.palette.whiteTranslucent};
   font-size: 13px;
@@ -44,7 +43,7 @@ const StyledIcon = styled.img`
 
 const Title = styled.div`
   height: 30px;
-  width: 119px;
+  width: 240px;
   color: ${({ theme }) => theme.palette.white};
   font-size: 22px;
   font-weight: bold;
