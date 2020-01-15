@@ -7,6 +7,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 
 import { Row, Col, Checkbox } from 'antd';
 import { FormSelect } from '../../../../partials';
@@ -61,7 +62,7 @@ class UpdatesWizardDetailListItem extends Component {
   };
 
   render() {
-    const { item, wizardData, onStep2DataSelect, stores } = this.props;
+    const { item, wizardData, onStep2DataSelect, stores, t } = this.props;
     const { softwareStore } = stores;
     const { update } = wizardData;
     const {
@@ -91,8 +92,7 @@ class UpdatesWizardDetailListItem extends Component {
             </Checkbox>
             {this.updateFromAny && (
               <span className="no-sw-version__warning">
-                {'If you select this option, you’ll be upgrading to the new version on all ECUs. '}
-                {'Bear in mind that older software versions might not upgrade properly due to version incompatibility.'}
+                {t('updates.creating.wizard..no_sw_version_warning')}
               </span>
             )}
           </Col>
@@ -194,7 +194,8 @@ UpdatesWizardDetailListItem.propTypes = {
   stores: PropTypes.shape({}),
   item: PropTypes.shape({}),
   wizardData: PropTypes.shape({}),
-  onStep2DataSelect: PropTypes.func
+  onStep2DataSelect: PropTypes.func,
+  t: PropTypes.func.isRequired
 };
 
-export default UpdatesWizardDetailListItem;
+export default withTranslation()(UpdatesWizardDetailListItem);
