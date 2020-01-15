@@ -94,6 +94,8 @@ export const Footer = () => {
       const { language } = supportedLanguagesTemp[0];
       setLanguageSelectedIndex(0);
       i18n.changeLanguage(language);
+    } else if (languageSelectedIndex !== getCurrentLanguageIndex(supportedLanguagesTemp)) {
+      setLanguageSelectedIndex(getCurrentLanguageIndex(supportedLanguagesTemp));
     }
   }, [features]);
 
