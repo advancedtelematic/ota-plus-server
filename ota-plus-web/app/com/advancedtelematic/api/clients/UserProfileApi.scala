@@ -4,12 +4,13 @@ import java.util.UUID
 
 import akka.Done
 import brave.play.{TraceData, ZipkinTraceServiceLike}
-import com.advancedtelematic.api.{ApiClientExec, ApiRequest, Feature, OtaPlusConfig, UserOrganization}
+import cats.syntax.option._
+import com.advancedtelematic.api._
 import com.advancedtelematic.controllers.PathBinders.segment
 import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import play.api.Configuration
-import play.api.libs.json.{JsString, JsValue, Json, Reads, Writes, __}
+import play.api.libs.json._
 import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,11 +43,17 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   def getUser(userId: UserId)(implicit traceData: TraceData): Future[JsValue] =
     userProfileRequest("users/" + segment(userId.id)).execJsonValue(apiExec)
 
-  def createUser(userId: UserId, name: String, email: String)(implicit traceData: TraceData): Future[JsValue] =
+  def createUser(userId: UserId, name: String, email: String, ns: Option[Namespace])
+                (implicit traceData: TraceData): Future[JsValue] = {
+    val params = Json.obj(
+      Seq("name" -> name.some, "email" -> email.some, "namespace" -> ns.map(_.get))
+        .collect { case (k, Some(v)) => k -> Json.toJsFieldJsValueWrapper(v) }: _*
+    )
     userProfileRequest(s"users/${userId.id}")
       .transform(_.withMethod("POST"))
-      .transform(_.withBody(Json.obj("name" -> name, "email"-> email)))
+      .transform(_.withBody(params))
       .execJsonValue(apiExec)
+  }
 
   def getFeature(namespace: Namespace, feature: FeatureName)(implicit traceData: TraceData): Future[Feature] =
     userProfileRequest("organizations/" + segment(namespace.get) + "/features/" + feature.get)
