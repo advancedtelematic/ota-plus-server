@@ -38,7 +38,7 @@ class NamespaceFromUserProfile @Inject()(val conf: Configuration,
     oidcGateway
       .getUserInfo(accessToken)
       .flatMap { ic =>
-        userProfileApi.createUser(userId, ic.name, ic.email)
+        userProfileApi.createUser(userId, ic.name, ic.email, None)
       }
 
   override def apply(tokens: Tokens): Future[Namespace] = {
