@@ -17,7 +17,7 @@ const BuildTeam = () => {
         <Title id="build-team-title">{t('dashboard.build-team.title')}</Title>
       </TitleWrapper>
       <Description id="build-team-desc">{t('dashboard.build-team.description')}</Description>
-      <Link to="/profile/organization">
+      <Link to="/profile/environments">
         <AddMembersButton type="link" id="build-team-add-btn" onClick={() => sendAction(OTA_HOME_ADD_MEMBER)}>
           <img src={PLUS_ICON} />
           {t('dashboard.build-team.button-title')}

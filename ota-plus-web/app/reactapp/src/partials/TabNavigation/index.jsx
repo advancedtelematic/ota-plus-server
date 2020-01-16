@@ -3,10 +3,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button, Dropdown, Icon, Menu, Tag } from 'antd';
+import { Dropdown, Tag } from 'antd';
 import { Form } from 'formsy-antd';
 import { action, observable, observe } from 'mobx';
-
+import Button from '../Button';
+import SearchBar from '../SearchBar';
+import { ButtonStyled, ButtonText, IconStyled, MenuItemStyled, MenuStyled } from './styled';
 import {
   CAMPAIGNS_STATUSES,
   CAMPAIGNS_STATUS_TAB_TITLE,
@@ -16,9 +18,8 @@ import {
   CAMPAIGNS_STATUS_LAUNCHED,
   CAMPAIGNS_STATUS_FINISHED,
   CAMPAIGNS_STATUS_CANCELLED
-} from '../config';
-import SearchBar from './SearchBar';
-import { sendAction } from '../helpers/analyticsHelper';
+} from '../../config';
+import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_CAMPAIGNS_SEE_ALL,
   OTA_CAMPAIGNS_FILTER_PREPARATION,
@@ -27,7 +28,7 @@ import {
   OTA_CAMPAIGNS_FILTER_CANCELED,
   OTA_CAMPAIGNS_CREATE_CAMPAIGN,
   OTA_CAMPAIGNS_SEARCH_CAMPAIGN
-} from '../constants/analyticsActions';
+} from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -56,13 +57,13 @@ class TabNavigation extends Component {
     this.filterChangeCallback = this.filterChangeCallback.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.menu = (
-      <Menu onClick={this.handleMenuClick}>
+      <MenuStyled onClick={this.handleMenuClick}>
         {CAMPAIGNS_STATUSES.map(status => (
-          <Menu.Item key={status}>
+          <MenuItemStyled key={status}>
             {CAMPAIGNS_STATUS_TAB_TITLE[status]}
-          </Menu.Item>
+          </MenuItemStyled>
         ))}
-      </Menu>
+      </MenuStyled>
     );
     this.fetchCampaignsCancelHandler = observe(campaignsStore, (change) => {
       if (change.name === 'campaignsCancelAsync' && change.object[change.name].isFetching === false) {
@@ -207,21 +208,18 @@ class TabNavigation extends Component {
             <div className="tab-navigation__buttons">
               <div className="tab-navigation__drop-down-container">
                 <Dropdown overlay={this.menu}>
-                  <Button
-                    htmlType="button"
-                    className="ant-btn ant-btn-hero drop-down"
-                  >
-                    {CAMPAIGNS_STATUS_TAB_TITLE[this.activeTab]}
-                    <Icon type="down" />
-                  </Button>
+                  <ButtonStyled>
+                    <ButtonText>
+                      {CAMPAIGNS_STATUS_TAB_TITLE[this.activeTab]}
+                    </ButtonText>
+                    <IconStyled type="down" />
+                  </ButtonStyled>
                 </Dropdown>
               </div>
               <Form className="tab-navigation__form-search-campaigns-filter">
                 <SearchBar value={filterValue} changeAction={this.filterChangeCallback} id="search-campaigns-filter" />
               </Form>
               <Button
-                htmlType="button"
-                className="ant-btn ant-btn-outlined"
                 id="button-create-campaign"
                 onClick={(event) => {
                   event.preventDefault();
@@ -229,7 +227,7 @@ class TabNavigation extends Component {
                   sendAction(OTA_CAMPAIGNS_CREATE_CAMPAIGN);
                 }}
               >
-                {'Create Campaign'}
+                {'Create campaign'}
               </Button>
             </div>
           </div>

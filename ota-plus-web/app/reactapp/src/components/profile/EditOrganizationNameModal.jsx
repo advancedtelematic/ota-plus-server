@@ -81,8 +81,8 @@ class EditOrganizationNameModal extends Component {
               name="organizationName"
               className="input-wrapper"
               isEditable={!userStore.editOrganizationNameAsync.isFetching}
-              title="Organization name"
-              label="Organization name"
+              title="Environment name"
+              label="Environment name"
               placeholder="Name"
               id="organization-edit-name-input"
               defaultValue={organization.name}

@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form } from 'formsy-antd';
-import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { SubHeader, SearchBar } from '../../../partials';
+import { Button, SubHeader, SearchBar } from '../../../partials';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import { OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS } from '../../../constants/analyticsActions';
 
@@ -31,7 +30,6 @@ class Header extends Component {
         )}
         <Button
           htmlType="button"
-          className="ant-btn ant-btn-outlined"
           id="button-add-new-key"
           onClick={(event) => {
             event.preventDefault();

@@ -493,17 +493,23 @@
 
           &.group {
             .icon {
-              border: 1px solid #b9b9b9;
+              border: 1px solid #b9b9b9;              
               margin: 0;
               border-radius: 6px;
               width: 50px;
               height: 50px;
               &--default {
-                background: url($group-default-image-url) 50% 50% no-repeat;
+                background: url($group-default-dark-image-url) no-repeat;
+                background-size: 64% 64%;
+                background-position: center;
+                background-color: #B7B9BC;
               }
 
               &--smart {
-                background: url($group-smart-image-url) 50% 50% no-repeat;
+                background: url($group-default-dark-image-url) no-repeat;
+                background-size: 64% 64%;
+                background-position: center;
+                background-color: #B7B9BC;
               }
             }
 

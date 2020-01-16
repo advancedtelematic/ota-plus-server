@@ -6,10 +6,9 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import serialize from 'form-serialize';
 import _ from 'lodash';
-import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { OTAModal } from '../../partials';
+import { Button, ModalTitleWrapper, OTAModal } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { Step1, Step2 } from './createWizard';
 import {
@@ -23,6 +22,7 @@ import {
 } from '../../constants/groupConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_SMART_GROUP, OTA_DEVICES_CREATE_FIXED_GROUP } from '../../constants/analyticsActions';
+import { GROUP_ICON_GRAY } from '../../config';
 
 const wizardSteps = [
   {
@@ -211,8 +211,9 @@ class CreateModal extends Component {
         <div className="body-actions">
           {this.isLastStep() ? (
             <Button
-              htmlType="button"
-              className="btn-primary pull-right"
+              light="true"
+              type="primary"
+              className="pull-right"
               id="wizard-launch-butto"
               disabled={!currentStep.isFinished}
               onClick={this.createGroup}
@@ -221,9 +222,9 @@ class CreateModal extends Component {
             </Button>
           ) : (
             <Button
-              htmlType="button"
+              light="true"
+              type="primary"
               disabled={!currentStep.isFinished}
-              className="btn-primary"
               id="next"
               onClick={this.nextStep}
             >
@@ -235,7 +236,12 @@ class CreateModal extends Component {
     );
     return (
       <OTAModal
-        title={<div>{t('groups.creating.create_new_group')}</div>}
+        title={(
+          <ModalTitleWrapper>
+            <img src={GROUP_ICON_GRAY} />
+            {t('groups.creating.create_new_group')}
+          </ModalTitleWrapper>
+        )}
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>

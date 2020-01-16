@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button as AntdButton } from 'antd';
 import PropTypes from 'prop-types';
 
-const styleVariants = theme => ({
+const darkStyleVariants = theme => ({
   default: {
     color: theme.palette.primary,
     borderColor: theme.palette.primary,
@@ -36,7 +36,7 @@ const styleVariants = theme => ({
     ':focus, :active': {
       backgroundColor: theme.palette.primaryDarkened,
       borderColor: theme.palette.primaryDarkened,
-    }
+    },
   },
   link: {
     color: theme.palette.primary,
@@ -52,15 +52,41 @@ const styleVariants = theme => ({
   }
 });
 
-const Button = styled(AntdButton)(({ theme, type = 'default' }) => ({
+const lightStyleVariants = theme => ({
+  primary: {
+    span: {
+      color: '#FFFFFF',
+    },
+    backgroundColor: theme.palette.primaryDarkened,
+    borderColor: theme.palette.primaryDarkened,
+    ':hover': {
+      backgroundColor: theme.palette.primary,
+      borderColor: theme.palette.primary,
+    },
+    ':focus, :active': {
+      backgroundColor: theme.palette.primaryDarkened2,
+      borderColor: theme.palette.primaryDarkened2,
+    },
+    '&.ant-btn[disabled]': {
+      border: 'none',
+      backgroundColor: 'rgba(0,182,178,0.4)',
+      color: '#FFFFFF'
+    }
+  }
+});
+
+const styleVariants = (theme, light) => light ? lightStyleVariants(theme) : darkStyleVariants(theme);
+
+const Button = styled(AntdButton)(({ theme, type = 'default', light = false }) => ({
   borderRadius: '1px',
   minWidth: '180px',
   fontWeight: 500,
   fontSize: '1em',
-  ...styleVariants(theme)[type]
+  ...styleVariants(theme, light)[type]
 }));
 
 Button.propTypes = {
+  light: PropTypes.oneOf(['true', 'false']),
   theme: PropTypes.shape({}),
   type: PropTypes.oneOf(['default', 'primary', 'link'])
 };

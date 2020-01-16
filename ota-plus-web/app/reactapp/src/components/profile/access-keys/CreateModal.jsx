@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Form } from 'formsy-antd';
 import { Row, Col, DatePicker } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../../utils';
-import { OTAModal, AsyncResponse, FormInput } from '../../../partials';
+import { Button, OTAModal, AsyncResponse, FormInput } from '../../../partials';
 import { MAX_REGISTRATION_CREDENTIALS_TTL } from '../../../config';
 
 @inject('stores')
@@ -118,14 +118,15 @@ class CreateModal extends Component {
           </Col>
         </Row>
         <div className="body-actions">
-          <button
-            type="submit"
+          <Button
+            type="primary"
+            light="true"
+            htmlType="submit"
             disabled={this.submitButtonDisabled || provisioningKeyCreateAsync.isFetching}
-            className="btn-primary"
             id="add-new-key-confirm"
           >
             Add key
-          </button>
+          </Button>
         </div>
       </Form>
     );

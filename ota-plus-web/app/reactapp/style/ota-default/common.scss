@@ -2023,6 +2023,7 @@ input {
 }
 
 .btn-red {
+  border: #ff0000 !important;
   background: #ff0000 !important;
 }
 
@@ -2208,6 +2209,11 @@ input {
   width: 100%;
   &:nth-child(2n+1) {
     background-color: $device-item-bg;
+  }
+  .selectable-update-icon {
+    margin-right: 6px;
+    opacity: 0.7;
+    width: 22px;
   }
 }
 
