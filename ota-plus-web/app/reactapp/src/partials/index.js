@@ -27,6 +27,7 @@ import Title from './Title';
 import Container from './Container';
 import Button from './Button';
 import ExternalLink from './ExternalLink';
+import ModalTitleWrapper from './ModalTitleWrapper';
 
 export {
   TabNavigation,
@@ -56,4 +57,5 @@ export {
   Container,
   Button,
   ExternalLink,
+  ModalTitleWrapper
 };

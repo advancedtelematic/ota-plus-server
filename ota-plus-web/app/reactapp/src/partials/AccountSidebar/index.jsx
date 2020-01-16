@@ -10,7 +10,7 @@ import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_NAV_SIGNOUT,
   OTA_NAV_PROFILE,
-  OTA_NAV_ORGANIZATION,
+  OTA_NAV_ENVIRONMENTS,
   OTA_NAV_USAGE,
   OTA_NAV_CREDENTIALS,
   OTA_NAV_TERMS
@@ -45,7 +45,7 @@ const AccountSidebar = () => {
 
   links.push({ actionType: OTA_NAV_PROFILE, name: 'profile', to: '/profile/edit', isBeta: false });
   if (features.includes(FEATURES.ORGANIZATIONS)) {
-    links.push({ actionType: OTA_NAV_ORGANIZATION, name: 'organization', to: '/profile/organization', isBeta: true });
+    links.push({ actionType: OTA_NAV_ENVIRONMENTS, name: 'organization', to: '/profile/environments', isBeta: true });
   }
   links.push({ actionType: OTA_NAV_USAGE, name: 'usage', to: '/profile/usage', isBeta: false });
   links.push({ actionType: OTA_NAV_CREDENTIALS, name: 'keys', to: '/profile/access-keys', isBeta: false });

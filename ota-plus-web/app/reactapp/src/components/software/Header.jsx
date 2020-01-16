@@ -3,9 +3,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Tag } from 'antd';
+import { Tag } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
+import Button from '../../partials/Button';
 import { FEATURES } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
@@ -94,8 +95,6 @@ class Header extends Component {
         {!switchToSWRepo && (
           <div className="tab-navigation__buttons">
             <Button
-              htmlType="button"
-              className="ant-btn ant-btn-outlined"
               id="add-new-software"
               onClick={() => {
                 showCreateModal(null);

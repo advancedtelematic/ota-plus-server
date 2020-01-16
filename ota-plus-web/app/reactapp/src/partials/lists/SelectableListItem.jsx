@@ -5,11 +5,12 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
 import { Button, Checkbox } from 'antd';
+import { UPDATE_ICON_GRAY } from '../../config';
 
 @observer
 class SelectableListItem extends Component {
   render() {
-    const { item, selected, onChange, showDetails, sourceType } = this.props;
+    const { item, selected, onChange, showDetails, showIcon } = this.props;
 
     return (
       <div className="item select-ecu-item" id={`button-select-${item.type}-${item.name}`} title={item.name}>
@@ -20,7 +21,12 @@ class SelectableListItem extends Component {
           style={{ display: 'flex', marginLeft: '12px' }}
         >
           <div className="item item__info">
-            <span className={`icon ${sourceType === 'external' ? 'icon--external' : 'icon--internal'}`} />
+            {showIcon && (
+              <img
+                src={UPDATE_ICON_GRAY}
+                className="selectable-update-icon"
+              />
+            )}
             <span className="name">{item.name}</span>
             <span className="description">{item.description}</span>
           </div>
@@ -43,10 +49,10 @@ class SelectableListItem extends Component {
 }
 
 SelectableListItem.propTypes = {
+  showIcon: PropTypes.bool,
   item: PropTypes.shape({}).isRequired,
   selected: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
-  sourceType: PropTypes.string,
   showDetails: PropTypes.func,
 };
 

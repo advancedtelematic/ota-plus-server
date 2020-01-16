@@ -3,10 +3,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Button } from 'antd';
 import { Trans, withTranslation } from 'react-i18next';
 
-import { OTAModal } from '../../../partials';
+import { Button, OTAModal } from '../../../partials';
 
 @observer
 class SecondaryEcuDetails extends Component {
@@ -24,7 +23,7 @@ class SecondaryEcuDetails extends Component {
           {t('devices.hardware.secondary_ecus_description', { returnObjects: true })}
         </Trans>
         <div className="body-actions">
-          <Button htmlType="button" className="btn-primary" onClick={hideDetails}>
+          <Button light type="primary" htmlType="button" onClick={hideDetails}>
             {t('devices.hardware.got_it')}
           </Button>
         </div>

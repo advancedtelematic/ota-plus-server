@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { Button, Divider, Radio } from 'antd';
+import { Divider, Radio } from 'antd';
 import { Form } from 'formsy-antd';
 import Cookies from 'js-cookie';
 import { observer, inject } from 'mobx-react';
@@ -13,7 +13,7 @@ import moment from 'moment';
 import encodeUrl from 'encodeurl';
 
 import EditOrganizationNameModal from './EditOrganizationNameModal';
-import { Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
+import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
 import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
 import { MetaData } from '../../utils';
 import { sendAction } from '../../helpers/analyticsHelper';
@@ -207,8 +207,10 @@ class ProfileOrganization extends Component {
                   />
                 </Form>
                 <Button
+                  className="float-left"
                   htmlType="button"
-                  className="ant-btn ant-btn-primary float-left"
+                  type="primary"
+                  light="true"
                   id="button-add-registered-user"
                   onClick={this.addRegisteredUser}
                 >
@@ -233,7 +235,7 @@ class ProfileOrganization extends Component {
             <EditOrganizationNameModal
               modalTitle={(
                 <div className="title">
-                  {'Rename organization'}
+                  {'Rename environment'}
                 </div>
               )}
               shown={menuEditShowMenu}

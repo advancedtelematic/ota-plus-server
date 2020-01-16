@@ -98,10 +98,10 @@ const ItemVersions = ({ groupItem }) => (
                       {`Length: ${versionItem.length}`}
                     </span>
                     <span className="light">
-                      {`Installed on ${versionItem.installedOnEcus} ECU(s)`}
+                      {`Installed on ${versionItem.installedOnEcus} control unit(s)`}
                     </span>
                     <span className="light">
-                      {'ECU types: '}
+                      {'Control unit types: '}
                       {_.map(versionItem.id, (id, key) => (
                         <span key={key} className="app-label">
                           {id}
