@@ -33,6 +33,8 @@ GET     /authorization_error                     com.advancedtelematic.controlle
 
 GET     /health                                  com.advancedtelematic.controllers.HealthController.health
 GET     /health/version                          com.advancedtelematic.controllers.HealthController.version
+GET     /metric/:name                           com.advancedtelematic.controllers.MetricsController.metric(name: String)
+GET     /metrics                                 com.advancedtelematic.controllers.MetricsController.metricSamples(name: List[String])
 
 # User profile
 GET     /user/profile                            com.advancedtelematic.controllers.UserProfileController.getUserProfile
