@@ -7,7 +7,7 @@ lazy val Library = new {
     val Akka            = "2.5.9"
     val JsonWebSecurity = "0.4.5"
     val MockWs          = "2.6.2"
-    val LibAts          = "0.3.0-38-g6acedb6"
+    val LibAts          = "0.3.0-78-g3dcc1c5"
     val LibTuf          = "0.7.0-33-g214dfb1"
     val Netty           = "4.1.19.Final"
     val ScalaCheck      = "1.13.4"
@@ -25,7 +25,7 @@ lazy val Library = new {
     "com.advancedtelematic" %% "libats",
     "com.advancedtelematic" %% "libats-messaging",
     "com.advancedtelematic" %% "libats-logging",
-    "com.advancedtelematic" %% "libats-http"
+    "com.advancedtelematic" %% "libats-metrics",
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf       = "com.advancedtelematic" %% "libtuf"        % Version.LibTuf
