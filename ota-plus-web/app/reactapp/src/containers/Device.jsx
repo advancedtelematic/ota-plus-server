@@ -30,6 +30,7 @@ import {
   OVERVIEW_PANEL_TAB_ID_1,
   OVERVIEW_PANEL_TAB_ID_2
 } from '../constants/deviceConstants';
+import { DDV_ACTIVE_TAB_ID, UNMANAGED_KEY } from '../config';
 
 @inject('stores')
 @observer
@@ -38,7 +39,7 @@ class Device extends Component {
 
   @observable fileDropped = null;
 
-  @observable activeTabId = '0';
+  @observable activeTabId = DDV_ACTIVE_TAB_ID;
 
   @observable ECUselected = false;
 
@@ -162,7 +163,7 @@ class Device extends Component {
     if (e) e.preventDefault();
     const { stores } = this.props;
     const { softwareStore } = stores;
-    const isPackageUnmanaged = pack === 'unmanaged';
+    const isPackageUnmanaged = pack === UNMANAGED_KEY;
     if (isPackageUnmanaged) {
       softwareStore.expandedPackage = {
         unmanaged: true,

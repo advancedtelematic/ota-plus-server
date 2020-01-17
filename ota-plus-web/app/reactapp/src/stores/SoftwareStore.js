@@ -22,11 +22,25 @@ import {
   API_DELETE_SOFTWARE,
   API_UPDATES_SEARCH,
   API_CAMPAIGNS_FETCH_SINGLE,
+  CAMPAIGN_CORRELATION_ID,
   DEVICE_HISTORY_LIMIT,
+  LOCAL_STORAGE_DELETED_PACKAGES_KEY,
+  LOCAL_STORAGE_DELETED_VERSIONS_KEY,
+  ONDEVICE_SOFTWARE_LIMIT,
+  OSTREE_FORMAT,
   PACKAGES_DEFAULT_TAB,
+  PAGE_DEVICE,
+  PAGE_PACKAGES,
+  SOFTWARE_DELETE_ALL_DONE,
+  SOFTWARE_FETCH_ASYNC,
+  SOFTWARE_HISTORY_LIMIT,
   SOFTWARES_LIMIT_LATEST,
+  SORT_DIR_ASC,
+  SORT_DIR_DESC,
+  STATUS,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
+
 
 export default class SoftwareStore {
   @observable packagesDeleteAsync = {};
@@ -71,11 +85,11 @@ export default class SoftwareStore {
 
   @observable preparedPackages = [];
 
-  @observable packagesSort = 'asc';
+  @observable packagesSort = SORT_DIR_ASC;
 
   @observable preparedOndevicePackages = {};
 
-  @observable packagesOndeviceSort = 'asc';
+  @observable packagesOndeviceSort = SORT_DIR_ASC;
 
   @observable packagesUploading = [];
 
@@ -95,7 +109,7 @@ export default class SoftwareStore {
 
   @observable ondevicePackagesTotalCount = null;
 
-  @observable ondevicePackagesLimit = 25;
+  @observable ondevicePackagesLimit = ONDEVICE_SOFTWARE_LIMIT;
 
   @observable ondeviceFilter = '';
 
@@ -107,7 +121,7 @@ export default class SoftwareStore {
 
   @observable packagesHistoryTotalCount = null;
 
-  @observable packagesHistoryLimit = 10;
+  @observable packagesHistoryLimit = SOFTWARE_HISTORY_LIMIT;
 
   @observable expandedPackage = null;
 
@@ -155,7 +169,7 @@ export default class SoftwareStore {
       store.deletePackage(versions[index].filepath).then(() => {
         index += 1;
         if (index >= versions.length) {
-          return 'done';
+          return SOFTWARE_DELETE_ALL_DONE;
         }
         return request();
       });
@@ -191,7 +205,7 @@ export default class SoftwareStore {
       });
   }
 
-  fetchPackages(async = 'packagesFetchAsync') {
+  fetchPackages(async = SOFTWARE_FETCH_ASYNC) {
     const that = this;
     resetAsync(that[async], true);
     return axios
@@ -207,7 +221,7 @@ export default class SoftwareStore {
           .then((resp) => {
             that.prepareFilePaths(resp.data);
             switch (that.page) {
-              case 'device':
+              case PAGE_DEVICE:
                 that.prepareDevicePackages();
                 break;
               default:
@@ -218,7 +232,7 @@ export default class SoftwareStore {
           })
           .catch(() => {
             switch (that.page) {
-              case 'device':
+              case PAGE_DEVICE:
                 that.prepareDevicePackages();
                 break;
               default:
@@ -234,7 +248,7 @@ export default class SoftwareStore {
   }
 
   fetchPackagesWithLimit(limit) {
-    this.fetchPackages('packagesFetchAsync', limit);
+    this.fetchPackages(SOFTWARE_FETCH_ASYNC, limit);
   }
 
   getFilepaths() {
@@ -273,7 +287,7 @@ export default class SoftwareStore {
         createdAt: pack.custom ? pack.custom.createdAt : null,
         updatedAt: pack.custom ? pack.custom.updatedAt : null,
         description: pack.hashes.sha256,
-        targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
+        targetFormat: pack.custom ? pack.custom.targetFormat : OSTREE_FORMAT,
         targetLength: pack.length,
         id: {
           name: pack.custom ? pack.custom.name : filepath,
@@ -294,8 +308,8 @@ export default class SoftwareStore {
       packs.push(formattedPack);
     });
 
-    const deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
-    const deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
+    const deletedPackageNames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DELETED_PACKAGES_KEY));
+    const deletedVersions = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DELETED_VERSIONS_KEY));
     this.packages = _.filter(
       packs, pack => !_.includes(deletedPackageNames, pack.id.name) && !_.includes(deletedVersions, pack.id.version)
     );
@@ -339,11 +353,11 @@ export default class SoftwareStore {
     axios
       .put(this.packageURI(entryName, data.packageName, data.version, hardwareIds), formData, config)
       .then((response) => {
-        uploadObj.status = 'success';
+        uploadObj.status = STATUS.SUCCESS;
         this.packagesCreateAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        uploadObj.status = 'error';
+        uploadObj.status = STATUS.ERROR;
         this.packagesCreateAsync = handleAsyncError(error);
       });
     uploadObj.source = source;
@@ -365,10 +379,10 @@ export default class SoftwareStore {
                   this.prepareBlacklist();
                 }
                 switch (this.page) {
-                  case 'device':
+                  case PAGE_DEVICE:
                     this.prepareDevicePackages();
                     break;
-                  case 'packages':
+                  case PAGE_PACKAGES:
                     this.preparePackages(this.packagesSort, true);
                     break;
                   default:
@@ -400,11 +414,11 @@ export default class SoftwareStore {
         } else {
           this.blacklist = response.data;
           switch (this.page) {
-            case 'device':
+            case PAGE_DEVICE:
               this.prepareDevicePackages();
               this.prepareOndevicePackages();
               break;
-            case 'packages':
+            case PAGE_PACKAGES:
               this.preparePackages();
               break;
             default:
@@ -500,7 +514,7 @@ export default class SoftwareStore {
           this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name
         );
         switch (this.page) {
-          case 'device':
+          case PAGE_DEVICE:
             this.prepareOndevicePackages();
             this.ondevicePackagesCurrentPage += 1;
             this.ondevicePackagesTotalCount = response.data.total;
@@ -522,7 +536,7 @@ export default class SoftwareStore {
       .then((response) => {
         this.autoInstalledPackages = response.data;
         switch (this.page) {
-          case 'device':
+          case PAGE_DEVICE:
             this.prepareDevicePackages();
             break;
           default:
@@ -560,8 +574,8 @@ export default class SoftwareStore {
           this,
         );
         _.each(data, (item) => {
-          if (item.correlationId && item.correlationId.search('urn:here-ota:campaign:') >= 0) {
-            const campaignId = item.correlationId.substring('urn:here-ota:campaign:'.length);
+          if (item.correlationId && item.correlationId.search(CAMPAIGN_CORRELATION_ID) >= 0) {
+            const campaignId = item.correlationId.substring(CAMPAIGN_CORRELATION_ID.length);
             const afterCampaign = _.after(
               data.values.length,
               () => {
@@ -691,7 +705,7 @@ export default class SoftwareStore {
     };
     Object.keys(groupedPackages)
       .sort((a, b) => {
-        if (packagesSort !== 'undefined' && packagesSort === 'desc') {
+        if (packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC) {
           return b.localeCompare(a);
         }
         return a.localeCompare(b);
@@ -710,7 +724,7 @@ export default class SoftwareStore {
         }
       });
     if (!_.isEmpty(specialGroup['#'])) {
-      sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+      sortedPackages = packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC
         ? Object.assign(specialGroup, sortedPackages)
         : Object.assign(sortedPackages, specialGroup);
     }
@@ -760,7 +774,7 @@ export default class SoftwareStore {
       const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
-          if (packagesSort !== 'undefined' && packagesSort === 'desc') return b.localeCompare(a);
+          if (packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC) return b.localeCompare(a);
           return a.localeCompare(b);
         })
         .forEach((key) => {
@@ -774,7 +788,7 @@ export default class SoftwareStore {
           else specialGroup['#'].push(groupedPackages[key]);
         });
       if (!_.isEmpty(specialGroup['#'])) {
-        sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+        sortedPackages = packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC
           ? Object.assign(specialGroup, sortedPackages)
           : Object.assign(sortedPackages, specialGroup);
       }
@@ -826,7 +840,7 @@ export default class SoftwareStore {
       const specialGroup = { '#': [] };
       Object.keys(groupedPackages)
         .sort((a, b) => {
-          if (packagesSort !== 'undefined' && packagesSort === 'desc') return b.localeCompare(a);
+          if (packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC) return b.localeCompare(a);
           return a.localeCompare(b);
         })
         .forEach((key) => {
@@ -840,7 +854,7 @@ export default class SoftwareStore {
           else specialGroup['#'].push(groupedPackages[key]);
         });
       if (!_.isEmpty(specialGroup['#'])) {
-        sortedPackages = packagesSort !== 'undefined' && packagesSort === 'desc'
+        sortedPackages = packagesSort !== 'undefined' && packagesSort === SORT_DIR_DESC
           ? Object.assign(specialGroup, sortedPackages)
           : Object.assign(sortedPackages, specialGroup);
       }
@@ -930,9 +944,9 @@ export default class SoftwareStore {
     this.page = null;
     this.packages = [];
     this.preparedPackages = [];
-    this.packagesSort = 'asc';
+    this.packagesSort = SORT_DIR_ASC;
     this.preparedOndevicePackages = {};
-    this.packagesOndeviceSort = 'asc';
+    this.packagesOndeviceSort = SORT_DIR_ASC;
     this.packagesUploading = [];
     this.blacklist = [];
     this.preparedBlacklist = [];
@@ -993,7 +1007,7 @@ export default class SoftwareStore {
       filepath: pack.filename,
       createdAt: pack.custom ? pack.custom.createdAt : null,
       updatedAt: pack.custom ? pack.custom.updatedAt : null,
-      targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
+      targetFormat: pack.custom ? pack.custom.targetFormat : OSTREE_FORMAT,
       targetLength: pack.length,
       hardwareIds,
       description: pack.checksum.hash,
@@ -1016,7 +1030,7 @@ export default class SoftwareStore {
       this.packages.push(formattedPack);
     }
     switch (this.page) {
-      case 'device':
+      case PAGE_DEVICE:
         this.prepareDevicePackages();
         break;
       default:

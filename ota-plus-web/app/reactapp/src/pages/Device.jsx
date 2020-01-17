@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { DeviceContainer } from '../containers';
+import { PAGE_DEVICE } from '../config';
 
 @inject('stores')
 @observer
@@ -27,7 +28,7 @@ class Device extends Component {
     const { stores, match } = this.props;
     const { softwareStore, devicesStore } = stores;
     const { params } = match;
-    softwareStore.page = 'device';
+    softwareStore.page = PAGE_DEVICE;
     devicesStore.fetchDevice(params.id);
     softwareStore.fetchPackages();
     softwareStore.fetchPackagesHistory(params.id, softwareStore.packagesHistoryFilter);

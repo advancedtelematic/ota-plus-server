@@ -12,9 +12,17 @@ import {
   API_GROUPS_DEVICES_FETCH,
   API_GROUPS_ADD_DEVICE,
   API_GROUPS_REMOVE_DEVICE,
-  API_DEVICES_SEARCH
+  API_DEVICES_SEARCH,
+  GROUP_TYPE,
+  GROUPS_CREATE_FETCH_ASYNC,
+  GROUPS_FETCH_ASYNC,
+  NUM_DEVICES_BY_EXP_ASYNC
 } from '../config';
+import { ARTIFICIAL, GROUP_ALL } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
+
+export const GROUPS_LIMIT = 10;
+export const GROUPS_WIZARD_LIMIT = 10;
 
 export default class GroupsStore {
   @observable groupsFetchAsync = {};
@@ -64,11 +72,11 @@ export default class GroupsStore {
   @observable numberOfDevicesByExpression = 0;
 
   @observable selectedGroup = {
-    type: 'artificial',
-    groupName: 'all',
+    type: ARTIFICIAL,
+    groupName: GROUP_ALL,
   };
 
-  @observable groupsLimit = 10;
+  @observable groupsLimit = GROUPS_LIMIT;
 
   @observable groupsOffset = 0;
 
@@ -76,7 +84,7 @@ export default class GroupsStore {
 
   @observable groupsWizardOffset = 0;
 
-  @observable groupsWizardLimit = 10;
+  @observable groupsWizardLimit = GROUPS_WIZARD_LIMIT;
 
   @observable hasMoreWizardGroups = false;
 
@@ -100,8 +108,8 @@ export default class GroupsStore {
 
   selectDefaultGroup() {
     this.selectedGroup = {
-      type: 'artificial',
-      groupName: 'all',
+      type: ARTIFICIAL,
+      groupName: GROUP_ALL,
     };
   }
 
@@ -114,7 +122,7 @@ export default class GroupsStore {
     }
   }
 
-  fetchGroups(async = 'groupsFetchAsync') {
+  fetchGroups(async = GROUPS_FETCH_ASYNC) {
     resetAsync(this[async], true);
     this.groupsOffset = 0;
 
@@ -127,8 +135,8 @@ export default class GroupsStore {
             groups.length,
             () => {
               this.groups = groups;
-              this.classicGroups = _.filter(groups, group => group.groupType === 'static');
-              this.smartGroups = _.filter(groups, group => group.groupType === 'dynamic');
+              this.classicGroups = _.filter(groups, group => group.groupType === GROUP_TYPE.STATIC);
+              this.smartGroups = _.filter(groups, group => group.groupType === this.GROUP_TYPE.DYNAMIC);
               this.prepareGroups(this.groups);
               this[async] = handleAsyncSuccess(response);
             },
@@ -168,10 +176,12 @@ export default class GroupsStore {
             () => {
               this.groups = _.uniq(this.groups.concat(groups), group => group.id);
               this.classicGroups = _.uniq(
-                _.filter(this.classicGroups.concat(groups), group => group.groupType === 'static'), group => group.id
+                _.filter(this.classicGroups.concat(groups), group => group.groupType === GROUP_TYPE.STATIC),
+                group => group.id
               );
               this.smartGroups = _.uniq(
-                _.filter(this.smartGroups.concat(groups), group => group.groupType === 'dynamic'), group => group.id
+                _.filter(this.smartGroups.concat(groups), group => group.groupType === GROUP_TYPE.DYNAMIC),
+                group => group.id
               );
               this.prepareGroups(this.groups);
               this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
@@ -291,7 +301,7 @@ export default class GroupsStore {
       })
       .then((response) => {
         this.latestCreatedGroupId = response.data;
-        this.fetchGroups('groupsCreateFetchAsync');
+        this.fetchGroups(GROUPS_CREATE_FETCH_ASYNC);
         this.groupsCreateAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
@@ -314,7 +324,7 @@ export default class GroupsStore {
       })
       .then((response) => {
         this.latestCreatedGroupId = response.data;
-        this.fetchGroups('groupsCreateFetchAsync');
+        this.fetchGroups(GROUPS_CREATE_FETCH_ASYNC);
         this.groupsCreateAsync = handleAsyncSuccess(response);
         return response;
       })
@@ -332,7 +342,7 @@ export default class GroupsStore {
         this.groupsRenameAsync = handleAsyncSuccess(response);
         this.updateGroupData(id, { groupName: name });
         this.selectedGroup = {
-          type: 'real',
+          type: GROUP_TYPE.REAL,
           groupName: name,
         };
 
@@ -396,7 +406,7 @@ export default class GroupsStore {
   }
 
   // for smartGroup creation wizard
-  fetchNumberOfDevicesByExpression(expression, async = 'numberOfDevicesByExpressionAsync') {
+  fetchNumberOfDevicesByExpression(expression, async = NUM_DEVICES_BY_EXP_ASYNC) {
     return axios
       .get(`${API_DEVICES_SEARCH}/count?expression=${expression}`)
       .then((response) => {
