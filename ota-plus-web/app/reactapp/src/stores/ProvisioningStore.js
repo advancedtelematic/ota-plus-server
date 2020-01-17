@@ -10,7 +10,11 @@ import {
   API_PROVISIONING_DETAILS,
   API_PROVISIONING_KEYS_FETCH,
   API_PROVISIONING_KEY_CREATE,
-  API_NAMESPACE_SETUP_STEPS
+  API_NAMESPACE_SETUP_STEPS,
+  NAMESPACE_SETUP_TIMEOUT_MS,
+  PROV_NOTIFICATION_DURATION_SEC,
+  SORT_DIR_ASC,
+  SORT_DIR_DESC,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { HTTP_CODE_200_OK } from '../constants/httpCodes';
@@ -36,7 +40,7 @@ export default class ProvisioningStore {
 
   @observable provisioningKeys = [];
 
-  @observable provisioningKeysSort = 'asc';
+  @observable provisioningKeysSort = SORT_DIR_ASC;
 
   @observable preparedProvisioningKeys = [];
 
@@ -70,7 +74,7 @@ export default class ProvisioningStore {
     this.preparedProvisioningKeys = keys.sort((a, b) => {
       const aName = a.description;
       const bName = b.description;
-      if (sort !== 'undefined' && sort === 'desc') return bName.localeCompare(aName);
+      if (sort !== 'undefined' && sort === SORT_DIR_DESC) return bName.localeCompare(aName);
       return aName.localeCompare(bName);
     });
   }
@@ -111,7 +115,7 @@ export default class ProvisioningStore {
           const that = this;
           setTimeout(() => {
             that.namespaceSetup();
-          }, 800);
+          }, NAMESPACE_SETUP_TIMEOUT_MS);
           this.namespaceSetupFetchAsync = handleAsyncError(error);
         },
       );
@@ -185,7 +189,7 @@ export default class ProvisioningStore {
         message: 'Please try again later.',
         // eslint-disable-next-line max-len
         description: 'If this is a new account, it may take some time to generate the keys for your repository. If the error persists, please try logging in again.',
-        duration: 6
+        duration: PROV_NOTIFICATION_DURATION_SEC
       });
     }
   }
@@ -201,7 +205,7 @@ export default class ProvisioningStore {
     this.provisioningDetails = {};
     this.initialProvisioningKeys = [];
     this.provisioningKeys = [];
-    this.provisioningKeysSort = 'asc';
+    this.provisioningKeysSort = SORT_DIR_ASC;
     this.preparedProvisioningKeys = [];
     this.provisioningFilter = '';
     this.sanityCheckCompleted = false;

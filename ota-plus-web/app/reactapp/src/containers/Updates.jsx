@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
 import { Loader } from '../partials';
 
-import { UPDATES_LIMIT_PER_PAGE } from '../config';
+import { UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE } from '../config';
 import { MetaData } from '../utils';
 import { sendAction } from '../helpers/analyticsHelper';
 import {
@@ -75,7 +75,7 @@ class Updates extends Component {
     this.setState({ pageNumber: page });
     const { stores } = this.props;
     const { updatesStore } = stores;
-    updatesStore.fetchUpdates('updatesFetchAsync', (page - 1) * pageSize);
+    updatesStore.fetchUpdates(UPDATES_FETCH_ASYNC, (page - 1) * pageSize);
   };
 
   showTotalTemplate = (total, range) => (total > 0 ? `${range[0]}-${range[1]} of ${total}` : '');

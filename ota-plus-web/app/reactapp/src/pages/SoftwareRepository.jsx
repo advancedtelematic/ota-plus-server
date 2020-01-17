@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { FadeAnimation } from '../utils';
 import { SoftwareContainer } from '../containers';
+import { PAGE_PACKAGES } from '../config';
 
 @inject('stores')
 @observer
@@ -17,7 +18,7 @@ class SoftwareRepository extends Component {
   componentDidMount() {
     const { stores } = this.props;
     const { softwareStore } = stores;
-    softwareStore.page = 'packages';
+    softwareStore.page = PAGE_PACKAGES;
     softwareStore.fetchPackages();
   }
 

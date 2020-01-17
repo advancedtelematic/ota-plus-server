@@ -18,6 +18,8 @@ import {
   OTA_DEVICES_SEE_UNGROUPED,
   OTA_DEVICES_SEARCH_DEVICE
 } from '../constants/analyticsActions';
+import { GROUPS_FETCH_DEVICES_ASYNC } from '../config';
+import { URL_GET_STARTED } from '../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -50,7 +52,7 @@ class Devices extends Component {
     super(props);
     const { groupsStore, devicesStore } = props.stores;
     this.fetchUngroupedDevicesHandler = observe(groupsStore, (change) => {
-      if (change.name === 'groupsFetchDevicesAsync' && change.object[change.name].isFetching === false) {
+      if (change.name === GROUPS_FETCH_DEVICES_ASYNC && change.object[change.name].isFetching === false) {
         devicesStore.fetchUngroupedDevicesCount();
       }
     });
@@ -201,7 +203,7 @@ class Devices extends Component {
               </div>
               <div>{t('devices.empty.no_devices')}</div>
               <a
-                href="https://docs.atsgarage.com/quickstarts/start-intro.html"
+                href={URL_GET_STARTED}
                 className="add-button light"
                 id="add-new-device"
                 rel="noopener noreferrer"
