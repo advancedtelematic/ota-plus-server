@@ -13,7 +13,6 @@ import {
   API_PACKAGES_BLACKLIST,
   API_PACKAGES_UPDATE_BLACKLISTED,
   API_PACKAGES_REMOVE_FROM_BLACKLIST,
-  API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH,
   API_SOFTWARE_DEVICE_SOFTWARE,
   API_SOFTWARE_DEVICE_HISTORY,
   API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL,
@@ -61,8 +60,6 @@ export default class SoftwareStore {
 
   @observable packagesRemoveFromBlacklistAsync = {};
 
-  @observable packagesAffectedDevicesCountFetchAsync = {};
-
   @observable packagesOndeviceFetchAsync = {};
 
   @observable packagesAutoInstalledFetchAsync = {};
@@ -98,8 +95,6 @@ export default class SoftwareStore {
   @observable preparedBlacklist = [];
 
   @observable blacklistedPackage = {};
-
-  @observable affectedDevicesCount = {};
 
   @observable autoInstalledPackages = [];
 
@@ -139,7 +134,6 @@ export default class SoftwareStore {
     resetAsync(this.packagesBlacklistAsync);
     resetAsync(this.packagesUpdateBlacklistedAsync);
     resetAsync(this.packagesRemoveFromBlacklistAsync);
-    resetAsync(this.packagesAffectedDevicesCountFetchAsync);
     resetAsync(this.packagesOndeviceFetchAsync);
     resetAsync(this.packagesAutoInstalledFetchAsync);
     resetAsync(this.packagesHistoryFetchAsync);
@@ -482,19 +476,6 @@ export default class SoftwareStore {
       })
       .catch((error) => {
         this.packagesRemoveFromBlacklistAsync = handleAsyncError(error);
-      });
-  }
-
-  fetchAffectedDevicesCount(data) {
-    resetAsync(this.packagesAffectedDevicesCountFetchAsync, true);
-    return axios
-      .get(`${API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH}/${data.name}/${data.version}/preview`)
-      .then((response) => {
-        this.affectedDevicesCount = response.data;
-        this.packagesAffectedDevicesCountFetchAsync = handleAsyncSuccess(response);
-      })
-      .catch((error) => {
-        this.packagesAffectedDevicesCountFetchAsync = handleAsyncError(error);
       });
   }
 
@@ -920,9 +901,7 @@ export default class SoftwareStore {
     resetAsync(this.packagesBlacklistAsync);
     resetAsync(this.packagesUpdateBlacklistedAsync);
     resetAsync(this.packagesRemoveFromBlacklistAsync);
-    resetAsync(this.packagesAffectedDevicesCountFetchAsync);
     this.blacklistedPackage = {};
-    this.affectedDevicesCount = {};
   }
 
   reset() {
@@ -935,7 +914,6 @@ export default class SoftwareStore {
     resetAsync(this.packagesBlacklistAsync);
     resetAsync(this.packagesUpdateBlacklistedAsync);
     resetAsync(this.packagesRemoveFromBlacklistAsync);
-    resetAsync(this.packagesAffectedDevicesCountFetchAsync);
     resetAsync(this.packagesAutoInstalledFetchAsync);
     resetAsync(this.packagesHistoryFetchAsync);
     resetAsync(this.packagesEnableAutoInstallAsync);
@@ -952,7 +930,6 @@ export default class SoftwareStore {
     this.preparedBlacklist = [];
     this.preparedBlacklistRaw = [];
     this.blacklistedPackage = {};
-    this.affectedDevicesCount = {};
     this.autoInstalledPackages = [];
     this.packagesHistory = [];
     this.ondevicePackages = [];

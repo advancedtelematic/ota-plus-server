@@ -7,8 +7,6 @@ case class OtaApiUri(serviceName: String, uri: String)
 trait OtaPlusConfig {
   val conf: Configuration
 
-  val coreApiUri = OtaApiUri("core", conf.underlying.getString("core.uri"))
-
   val resolverApiUri = OtaApiUri("resolver", conf.underlying.getString("resolver.uri"))
 
   val devicesApiUri = OtaApiUri("device-registry", conf.underlying.getString("deviceregistry.uri"))
