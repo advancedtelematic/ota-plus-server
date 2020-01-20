@@ -8,7 +8,13 @@ import {
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
   API_UPDATES_CREATE,
   LIMIT_UPDATES_WIZARD,
-  UPDATES_LIMIT_PER_PAGE
+  SHA_256,
+  UPDATES_FETCH_ASYNC,
+  UPDATES_LIMIT_PER_PAGE,
+  UPDATES_SAFE_FETCH_ASYNC,
+  UPDATES_WIZARD_FETCH_ASYNC,
+  UPDATES_WIZARD_LOAD_MORE_ASYNC,
+  WIZARD_KEY,
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
@@ -83,7 +89,7 @@ export default class UpdatesStore {
           from: {
             target: values.fromVersion.filepath,
             checksum: {
-              method: 'sha256',
+              method: SHA_256,
               hash: values.fromVersion.packageHash,
             },
             targetLength: values.fromVersion.targetLength,
@@ -92,7 +98,7 @@ export default class UpdatesStore {
         to: {
           target: values.toVersion.filepath,
           checksum: {
-            method: 'sha256',
+            method: SHA_256,
             hash: values.toVersion.packageHash,
           },
           targetLength: values.toVersion.targetLength,
@@ -111,7 +117,7 @@ export default class UpdatesStore {
     return axios
       .post(API_UPDATES_CREATE, data)
       .then((response) => {
-        this.fetchUpdates('updatesSafeFetchAsync');
+        this.fetchUpdates(UPDATES_SAFE_FETCH_ASYNC);
         this.updatesCreateAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
@@ -119,7 +125,7 @@ export default class UpdatesStore {
       });
   }
 
-  fetchUpdates(async = 'updatesFetchAsync', dataOffset = 0) {
+  fetchUpdates(async = UPDATES_FETCH_ASYNC, dataOffset = 0) {
     resetAsync(this[async], true);
     const limit = `limit=${this.updatesLimitPage}`;
     const nameContains = `nameContains=${this.updateFilter.toLowerCase()}`;
@@ -138,7 +144,7 @@ export default class UpdatesStore {
       });
   }
 
-  fetchWizardUpdates(selectedGroupIds, async = 'updatesWizardFetchAsync') {
+  fetchWizardUpdates(selectedGroupIds, async = UPDATES_WIZARD_FETCH_ASYNC) {
     resetAsync(this[async], true);
     const groupApi = selectedGroupIds.map(groupId => `&groupId=${groupId}`).join('');
     const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard}${groupApi}`;
@@ -146,7 +152,7 @@ export default class UpdatesStore {
       .get(apiAddress)
       .then((response) => {
         this.updatesWizard = response.data.values;
-        this.prepareUpdates('wizard');
+        this.prepareUpdates(WIZARD_KEY);
         this[async] = handleAsyncSuccess(response);
       })
       .catch((error) => {
@@ -154,7 +160,7 @@ export default class UpdatesStore {
       });
   }
 
-  loadMoreWizardUpdates(async = 'updatesWizardLoadMoreAsync') {
+  loadMoreWizardUpdates(async = UPDATES_WIZARD_LOAD_MORE_ASYNC) {
     resetAsync(this[async], true);
     const apiAddress = `${API_UPDATES_SEARCH}?limit=${this.updatesLimitWizard}&offset=${this.updatesOffsetWizard + this.updatesLimitWizard}`;
 
@@ -162,7 +168,7 @@ export default class UpdatesStore {
       .get(apiAddress)
       .then((response) => {
         this.updatesWizard = _.uniqBy(this.updatesWizard.concat(response.data.values), item => item.uuid);
-        this.prepareUpdates('wizard');
+        this.prepareUpdates(WIZARD_KEY);
         this[async] = handleAsyncSuccess(response);
 
         this.updatesWizardOffset = response.data.offset;
@@ -205,7 +211,7 @@ export default class UpdatesStore {
   }
 
   prepareUpdates(mode = null) {
-    const updates = mode === 'wizard' ? this.sortUpdates(this.updatesWizard) : this.updates;
+    const updates = mode === WIZARD_KEY ? this.sortUpdates(this.updatesWizard) : this.updates;
     const specialGroup = {
       '#': [],
     };
@@ -228,7 +234,7 @@ export default class UpdatesStore {
       sortedUpdates = Object.assign(sortedUpdates, specialGroup);
     }
 
-    if (mode === 'wizard') {
+    if (mode === WIZARD_KEY) {
       this.preparedUpdatesWizard = sortedUpdates;
     } else {
       this.preparedUpdates = sortedUpdates;
@@ -237,7 +243,7 @@ export default class UpdatesStore {
 
   filterUpdates(filter) {
     this.updateFilter = filter;
-    this.fetchUpdates('updatesFetchAsync', 0);
+    this.fetchUpdates(UPDATES_FETCH_ASYNC, 0);
   }
 
   reset() {

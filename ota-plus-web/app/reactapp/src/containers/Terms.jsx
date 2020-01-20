@@ -11,6 +11,7 @@ import moment from 'moment';
 import { Button, Checkbox } from 'antd';
 import { OTAModal } from '../partials';
 import * as contracts from '../../contracts';
+import { URL_PRIVACY, URL_TERMS_AND_CONDITIONS } from '../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -86,7 +87,7 @@ class Terms extends Component {
                 id="service-terms-link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href="https://developer.here.com/terms-and-conditions"
+                href={URL_TERMS_AND_CONDITIONS}
               >
                 {' '}
                 terms and conditions
@@ -98,7 +99,7 @@ class Terms extends Component {
                 rel="noopener noreferrer"
                 target="_blank"
                 id="privacy-policy-link"
-                href="https://legal.here.com/en-gb/privacy"
+                href={URL_PRIVACY}
               >
                 privacy policy
               </a>

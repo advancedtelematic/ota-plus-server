@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react';
 import Cookies from 'js-cookie';
 import _ from 'lodash';
 import { FadeAnimation } from '../utils';
+import { FIREWORKS_ACKNOWLEDGED_KEY } from '../config';
 
 @inject('stores')
 @observer
@@ -19,7 +20,7 @@ class Fireworks extends Component {
   componentWillMount() {
     const { stores } = this.props;
     const { devicesStore } = stores;
-    Cookies.set('fireworksPageAcknowledged', 1);
+    Cookies.set(FIREWORKS_ACKNOWLEDGED_KEY, 1);
     devicesStore.fetchDevicesCount();
   }
 
