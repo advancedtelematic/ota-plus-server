@@ -9,7 +9,8 @@ import { ANT_STEP_STATUS, STEP_STATUS, STEP_TYPES } from '../../../../constants'
 import {
   URL_STEPPER_CAMPAIGNS_CTA,
   URL_STEPPER_CAMPAIGNS_DOCS,
-  URL_STEPPER_DEVICES_CTA,
+  URL_STEPPER_DEVICES_CTA_BUTTON,
+  URL_STEPPER_DEVICES_CTA_LINK,
   URL_STEPPER_DEVICES_DOCS,
   URL_STEPPER_GROUPS_CTA,
   URL_STEPPER_GROUPS_DOCS,
@@ -81,34 +82,39 @@ const DashboardStepper = () => {
 
   const LINKS_DATA = [
     {
-      cta: URL_STEPPER_DEVICES_CTA,
+      ctaButton: URL_STEPPER_DEVICES_CTA_BUTTON,
+      ctaLink: URL_STEPPER_DEVICES_CTA_LINK,
       docs: URL_STEPPER_DEVICES_DOCS,
       ctaActionType: OTA_HOME_ADD_SHARED_CREDENTIALS,
       docsActionType: OTA_HOME_READ_DEVICE
     },
     {
-      cta: URL_STEPPER_SOFTWARE_CTA,
+      ctaButton: URL_STEPPER_SOFTWARE_CTA,
+      ctaLink: URL_STEPPER_SOFTWARE_CTA,
       docs: URL_STEPPER_SOFTWARE_DOCS,
       tooltip: t('dashboard.stepper.tooltip-1'),
       ctaActionType: OTA_HOME_ADD_SOFTWARE,
       docsActionType: OTA_HOME_READ_SOFTWARE
     },
     {
-      cta: URL_STEPPER_GROUPS_CTA,
+      ctaButton: URL_STEPPER_GROUPS_CTA,
+      ctaLink: URL_STEPPER_GROUPS_CTA,
       docs: URL_STEPPER_GROUPS_DOCS,
       tooltip: t('dashboard.stepper.tooltip-1'),
       ctaActionType: OTA_HOME_CREATE_GROUP,
       docsActionType: OTA_HOME_READ_GROUP
     },
     {
-      cta: URL_STEPPER_UPDATES_CTA,
+      ctaButton: URL_STEPPER_UPDATES_CTA,
+      ctaLink: URL_STEPPER_UPDATES_CTA,
       docs: URL_STEPPER_UPDATES_DOCS,
       tooltip: t('dashboard.stepper.tooltip-2'),
       ctaActionType: OTA_HOME_CREATE_UPDATE,
       docsActionType: OTA_HOME_READ_UPDATE
     },
     {
-      cta: URL_STEPPER_CAMPAIGNS_CTA,
+      ctaButton: URL_STEPPER_CAMPAIGNS_CTA,
+      ctaLink: URL_STEPPER_CAMPAIGNS_CTA,
       docs: URL_STEPPER_CAMPAIGNS_DOCS,
       tooltip: t('dashboard.stepper.tooltip-3'),
       ctaActionType: OTA_HOME_CREATE_CAMPAIGN,

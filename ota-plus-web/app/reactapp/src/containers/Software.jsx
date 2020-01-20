@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { action, observable, observe, onBecomeObserved } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
@@ -54,6 +55,7 @@ class Software extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     highlightedPackage: PropTypes.string,
+    history: PropTypes.shape({}),
     t: PropTypes.func.isRequired
   };
 
@@ -72,6 +74,11 @@ class Software extends Component {
         this.applyTab(change);
       });
       onBecomeObserved(this, SWITCH_TO_SW_REPO_KEY, this.resumeScope);
+    }
+    const { history } = this.props;
+    const { state } = history.location;
+    if (state && state.openWizard) {
+      this.showCreateModal();
     }
   }
 
@@ -322,4 +329,4 @@ class Software extends Component {
   }
 }
 
-export default withTranslation()(Software);
+export default withTranslation()(withRouter(Software));

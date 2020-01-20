@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
@@ -26,6 +27,7 @@ import { URL_GET_STARTED } from '../constants/urlConstants';
 class Devices extends Component {
   static propTypes = {
     addNewWizard: PropTypes.func,
+    history: PropTypes.shape({}),
     stores: PropTypes.shape({}),
     t: PropTypes.func.isRequired,
   };
@@ -60,6 +62,11 @@ class Devices extends Component {
 
   componentDidMount() {
     sendAction(OTA_DEVICES_SEE_ALL);
+    const { history } = this.props;
+    const { state } = history.location;
+    if (state && state.openWizard) {
+      this.showCreateGroupModal();
+    }
   }
 
   componentWillUnmount() {
@@ -244,4 +251,4 @@ class Devices extends Component {
   }
 }
 
-export default withTranslation()(Devices);
+export default withTranslation()(withRouter(Devices));
