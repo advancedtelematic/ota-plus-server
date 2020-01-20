@@ -15,7 +15,7 @@ import {
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 } from '../components/software';
-import { FEATURES } from '../config';
+import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SWITCH_TO_SW_REPO_KEY } from '../config';
 import { MetaData } from '../utils';
 
 @inject('stores')
@@ -71,7 +71,7 @@ class Software extends Component {
       this.cancelObserveTabChange = observe(softwareStore, (change) => {
         this.applyTab(change);
       });
-      onBecomeObserved(this, 'switchToSWRepo', this.resumeScope);
+      onBecomeObserved(this, SWITCH_TO_SW_REPO_KEY, this.resumeScope);
     }
   }
 
@@ -85,7 +85,7 @@ class Software extends Component {
     const { stores } = this.props;
     const { softwareStore } = stores;
 
-    this.switchToSWRepo = tab === 'advanced';
+    this.switchToSWRepo = tab === ADVANCED_TAB_KEY;
     softwareStore.activeTab = tab;
     this.updateHeaderTitle();
   };
@@ -100,7 +100,7 @@ class Software extends Component {
   applyTab = (change) => {
     const { name, newValue } = change;
 
-    if (name === 'activeTab') {
+    if (name === ACTIVE_TAB_KEY) {
       this.setActive(newValue);
     }
   };

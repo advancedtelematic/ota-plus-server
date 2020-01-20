@@ -146,6 +146,9 @@ export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/reg
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_DOWNLOAD = '/user/credentials';
 
+export const NAMESPACE_SETUP_TIMEOUT_MS = 800;
+export const PROV_NOTIFICATION_DURATION_SEC = 6;
+
 /* default values, limits, definitions */
 /*
  * ant design config
@@ -166,7 +169,12 @@ export const DEFAULT_THEME_CONFIG = {
  * updates
  */
 export const LIMIT_UPDATES_WIZARD = 5;
+export const UPDATES_FETCH_ASYNC = 'updatesFetchAsync';
 export const UPDATES_LIMIT_PER_PAGE = 10;
+export const UPDATES_SAFE_FETCH_ASYNC = 'updatesSafeFetchAsync';
+export const UPDATES_WIZARD_FETCH_ASYNC = 'updatesWizardFetchAsync';
+export const UPDATES_WIZARD_LOAD_MORE_ASYNC = 'updatesWizardLoadMoreAsync';
+export const WIZARD_KEY = 'wizard';
 
 /**
  * packages
@@ -188,6 +196,10 @@ export const CAMPAIGNS_STATUS_FINISHED = 'finished';
 export const CAMPAIGNS_STATUS_CANCELLED = 'cancelled';
 export const CAMPAIGNS_STATUS_SCHEDULED = 'scheduled';
 
+export const CAMPAIGNS_FETCH_ASYNC = 'campaignsFetchAsync';
+export const CAMPAIGNS_SINGLE_FETCH_ASYNC = 'campaignsSingleFetchAsync';
+export const CAMPAIGNS_SINGLE_STATS_FETCH_ASYNC = 'campaignsSingleStatisticsFetchAsync';
+
 export const CAMPAIGNS_STATUSES = [
   CAMPAIGNS_STATUS_ALL,
   CAMPAIGNS_STATUS_PREPARED,
@@ -205,19 +217,83 @@ export const CAMPAIGNS_STATUS_TAB_TITLE = {
 export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_ALL;
 
 /**
+ * Misc
+ */
+
+export const FIREWORKS_ACKNOWLEDGED_KEY = 'fireworksPageAcknowledged';
+export const PAGE_DEVICE = 'device';
+export const PAGE_PACKAGES = 'packages';
+export const SHA_256 = 'sha256';
+export const SORT_DIR_ASC = 'asc';
+export const SORT_DIR_DESC = 'desc';
+export const STATUS = {
+  SUCCESS: 'success',
+  WAITING: 'waiting',
+  ERROR: 'error'
+};
+
+/**
  * devices
  */
 
+export const APPROVAL_PENDING_CAMP_FETCH_ASYNC = 'approvalPendingCampaignsFetchAsync';
+export const DDV_ACTIVE_TAB_ID = '0';
+export const DEVICE_HISTORY_LIMIT = 10;
+export const DEVICE_STATUS = {
+  UP_TO_DATE: 'UpToDate'
+};
 export const DEVICES_LIMIT_LATEST = 4;
 export const DEVICES_LIMIT_PER_PAGE = 30;
-export const DEVICE_HISTORY_LIMIT = 10;
+export const DEVICES_FETCH_ASYNC = 'devicesFetchAsync';
+export const EVENTS_FETCH_ASYNC = 'eventsFetchAsync';
+export const IN_ANY_GROUP = 'inAnyGroup';
+export const MISSING_DEVICE_CODE = 'missing_device';
+export const NOT_IN_SMART_GROUP = 'notInSmartGroup';
+export const NOT_IN_FIXED_GROUP = 'notInFixedGroup';
+export const NOT_SEEN_RECENTLY_HOURS = 72;
+export const UNGROUPED = 'ungrouped';
+export const UNGROUPED_DEVICES_COUNT_FETCH_ASYNC = 'ungroupedDevicesCountFetchAsync';
+export const UNMANAGED_KEY = 'unmanaged';
+
+/**
+ * Groups
+ */
+
+export const GROUP_TYPE = {
+  DYNAMIC: 'dynamic',
+  STATIC: 'static',
+  REAL: 'real'
+};
+export const GROUPS_CREATE_FETCH_ASYNC = 'groupsCreateFetchAsync';
+export const GROUPS_FETCH_ASYNC = 'groupsFetchAsync';
+export const GROUPS_FETCH_DEVICES_ASYNC = 'groupsFetchDevicesAsync';
+export const NUM_DEVICES_BY_EXP_ASYNC = 'numberOfDevicesByExpressionAsync';
 
 /**
  * softwares
  */
 
+export const ACTIVE_TAB_KEY = 'activeTab';
+export const ADVANCED_TAB_KEY = 'advanced';
+export const CAMPAIGN_CORRELATION_ID = 'urn:here-ota:campaign:';
+export const LOCAL_STORAGE_DELETED_PACKAGES_KEY = 'deletedPackages';
+export const LOCAL_STORAGE_DELETED_VERSIONS_KEY = 'deletedVersions';
+export const ONDEVICE_SOFTWARE_LIMIT = 25;
+export const OSTREE_FORMAT = 'OSTREE';
+export const SOFTWARE_DELETE_ALL_DONE = 'done';
+export const SOFTWARE_FETCH_ASYNC = 'packagesFetchAsync';
+export const SOFTWARE_HISTORY_LIMIT = 10;
 export const SOFTWARES_LIMIT_LATEST = 4;
 export const SOFTWARES_LIMIT_PER_PAGE = 30;
+export const SWITCH_TO_SW_REPO_KEY = 'switchToSWRepo';
+
+/**
+ * Hardware
+ */
+
+export const HARDWARE_IDS_LIMIT = 1000;
+export const PROPERTY_CHILDREN = 'children';
+export const PROPERTY_NAME = 'name';
 
 /**
  * default relative paths used in app

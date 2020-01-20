@@ -14,6 +14,9 @@ import {
   API_CAMPAIGNS_CANCEL_REQUEST,
   API_CAMPAIGNS_RETRY_SINGLE,
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
+  CAMPAIGNS_FETCH_ASYNC,
+  CAMPAIGNS_SINGLE_FETCH_ASYNC,
+  CAMPAIGNS_SINGLE_STATS_FETCH_ASYNC,
   CAMPAIGNS_STATUSES,
   CAMPAIGNS_STATUS_ALL,
   CAMPAIGNS_STATUS_LAUNCHED,
@@ -22,6 +25,7 @@ import {
   CAMPAIGNS_STATUS_SCHEDULED,
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
+  SORT_DIR_ASC
 } from '../config';
 import { CAMPAIGN_RETRY_STATUSES } from '../constants';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -91,7 +95,7 @@ export default class CampaignsStore {
 
   @observable campaignsFilter = '';
 
-  @observable campaignsSort = 'asc';
+  @observable campaignsSort = SORT_DIR_ASC;
 
   @observable campaign = {};
 
@@ -204,7 +208,7 @@ export default class CampaignsStore {
     }
   }
 
-  fetchCampaigns(status = 'all', async = 'campaignsFetchAsync', dataOffset = 0) {
+  fetchCampaigns(status = CAMPAIGNS_STATUS_ALL, async = CAMPAIGNS_FETCH_ASYNC, dataOffset = 0) {
     this.campaigns = [];
     // first reset all possible active asyncs
     resetAll(this[async]);
@@ -223,7 +227,7 @@ export default class CampaignsStore {
       });
   }
 
-  fetchLatestCampaigns(limit = 10) {
+  fetchLatestCampaigns(limit = CAMPAIGNS_LIMIT_PER_PAGE) {
     const latestOnly = true;
     this.latestCampaigns = [];
     resetAsync(this.campaignsLatestFetchAsync, true);
@@ -239,7 +243,7 @@ export default class CampaignsStore {
       });
   }
 
-  fetchCampaign(id, mainAsync = 'campaignsSingleFetchAsync', statsAsync = 'campaignsSingleStatisticsFetchAsync') {
+  fetchCampaign(id, mainAsync = CAMPAIGNS_SINGLE_FETCH_ASYNC, statsAsync = CAMPAIGNS_SINGLE_STATS_FETCH_ASYNC) {
     resetAsync(this[mainAsync], true);
     return this.fetchCampaignSingle(id)
       .then((response) => {
@@ -406,7 +410,7 @@ export default class CampaignsStore {
     this.preparedCampaigns = [];
     this.overallCampaignsCount = null;
     this.campaignsFilter = '';
-    this.campaignsSort = 'asc';
+    this.campaignsSort = SORT_DIR_ASC;
     this.campaign = {};
     this.campaignData = {};
     this.fullScreenMode = false;

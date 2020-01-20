@@ -4,7 +4,14 @@
 import { observable } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
-import { API_ECUS_FETCH, API_ECUS_PUBLIC_KEY_FETCH, API_HARDWARE_IDS_FETCH } from '../config';
+import {
+  API_ECUS_FETCH,
+  API_ECUS_PUBLIC_KEY_FETCH,
+  API_HARDWARE_IDS_FETCH,
+  HARDWARE_IDS_LIMIT,
+  PROPERTY_CHILDREN,
+  PROPERTY_NAME
+} from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
 export default class HardwareStore {
@@ -24,7 +31,7 @@ export default class HardwareStore {
 
   @observable hardwareIds = [];
 
-  @observable hardwareIdsLimit = 1000;
+  @observable hardwareIdsLimit = HARDWARE_IDS_LIMIT;
 
   @observable hardwareIdsCurrentPage = 0;
 
@@ -144,15 +151,15 @@ export default class HardwareStore {
       _.each(data, (value, property) => {
         pairs[property] = value;
         pairs.name = data.description ? this.capitalize(data.description) : this.capitalize(data.class);
-        if (property === 'children') {
+        if (property === PROPERTY_CHILDREN) {
           that.prepareHardware(data.children);
         }
       });
       that.hardware.push(pairs);
       that.filteredHardware.push(pairs);
     }
-    that.hardware = _.sortBy(that.hardware, 'name');
-    that.filteredHardware = _.sortBy(that.filteredHardware, 'name');
+    that.hardware = _.sortBy(that.hardware, PROPERTY_NAME);
+    that.filteredHardware = _.sortBy(that.filteredHardware, PROPERTY_NAME);
   }
 
   fetchPublicKey(deviceId, ecuId) {
