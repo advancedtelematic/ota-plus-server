@@ -136,7 +136,7 @@ export default class GroupsStore {
             () => {
               this.groups = groups;
               this.classicGroups = _.filter(groups, group => group.groupType === GROUP_TYPE.STATIC);
-              this.smartGroups = _.filter(groups, group => group.groupType === this.GROUP_TYPE.DYNAMIC);
+              this.smartGroups = _.filter(groups, group => group.groupType === GROUP_TYPE.DYNAMIC);
               this.prepareGroups(this.groups);
               this[async] = handleAsyncSuccess(response);
             },
