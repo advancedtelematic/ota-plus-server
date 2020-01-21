@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
@@ -39,6 +40,7 @@ class Campaigns extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     highlight: PropTypes.string,
+    history: PropTypes.shape({}),
     addNewWizard: PropTypes.func,
     t: PropTypes.func.isRequired
   };
@@ -51,6 +53,12 @@ class Campaigns extends Component {
 
   componentDidMount() {
     sendAction(OTA_CAMPAIGNS_SEE_ALL);
+    const { history } = this.props;
+    const { state } = history.location;
+    if (state && state.openWizard) {
+      const { addNewWizard } = this.props;
+      addNewWizard();
+    }
   }
 
   toggle = (campaign) => {
@@ -161,4 +169,4 @@ class Campaigns extends Component {
   }
 }
 
-export default withTranslation()(Campaigns);
+export default withTranslation()(withRouter(Campaigns));

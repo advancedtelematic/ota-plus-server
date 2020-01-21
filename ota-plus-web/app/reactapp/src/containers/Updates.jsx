@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Pagination } from 'antd';
@@ -43,6 +44,11 @@ class Updates extends Component {
 
   componentDidMount() {
     sendAction(OTA_UPDATES_SEE_ALL);
+    const { history } = this.props;
+    const { state } = history.location;
+    if (state && state.openWizard) {
+      this.showCreateModal();
+    }
   }
 
   showCreateModal = (e) => {
@@ -153,8 +159,9 @@ class Updates extends Component {
 }
 
 Updates.propTypes = {
+  history: PropTypes.shape({}),
   stores: PropTypes.shape({}),
   t: PropTypes.func.isRequired
 };
 
-export default withTranslation()(Updates);
+export default withTranslation()(withRouter(Updates));
