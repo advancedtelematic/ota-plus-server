@@ -2,7 +2,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observable } from 'mobx';
+import { withRouter } from 'react-router-dom';
+import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 
@@ -23,6 +24,24 @@ class Provisioning extends Component {
 
   @observable
   createModalShown = false;
+
+  componentDidMount() {
+    const { stores } = this.props;
+    const { provisioningStore } = stores;
+    this.preparedProvisioningKeysChange = observe(provisioningStore, (change) => {
+      if (change.name === 'preparedProvisioningKeys') {
+        const { history } = this.props;
+        const { state } = history.location;
+        if (state && state.openWizard && provisioningStore.preparedProvisioningKeys.length === 0) {
+          this.showCreateModal();
+        }
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.preparedProvisioningKeysChange();
+  }
 
   showTooltip = (e) => {
     if (e) e.preventDefault();
@@ -89,8 +108,9 @@ class Provisioning extends Component {
 }
 
 Provisioning.propTypes = {
+  history: PropTypes.shape({}),
   stores: PropTypes.shape({}),
   t: PropTypes.func.isRequired
 };
 
-export default withTranslation()(Provisioning);
+export default withTranslation()(withRouter(Provisioning));
