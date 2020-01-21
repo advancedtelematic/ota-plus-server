@@ -31,7 +31,8 @@ const generateCardProps = status => ({
   status,
   title: 'Device group',
   links: {
-    cta: '/devices',
+    ctaButton: '/devices',
+    ctaLink: '/devices',
     docs: 'https://here.com/',
     ctaActionType: 'CTAActionType',
     docsActionType: 'DOCSActionType'
