@@ -14,6 +14,7 @@ import {
   OTA_SOFTWARE_SEE_ADVANCED,
   OTA_SOFTWARE_ADD_SOFTWARE
 } from '../../constants/analyticsActions';
+import { SubHeader } from '../../partials';
 
 @inject('stores')
 @observer
@@ -63,48 +64,55 @@ class Header extends Component {
     const { featuresStore } = stores;
     const { features } = featuresStore;
     return (
-      <div className="tab-navigation">
-        {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
-          <ul className="tab-navigation__links">
-            <li
-              onClick={() => {
-                this.setActive('compact');
-                sendAction(OTA_SOFTWARE_SEE_ALL);
-              }}
-              className={`tab-navigation__link ${this.isActive('compact')}`}
-            >
-              <span>{t('software.tabs.compact')}</span>
-            </li>
-            <li
-              onClick={() => {
-                this.setActive('advanced');
-                sendAction(OTA_SOFTWARE_SEE_ADVANCED);
-              }}
-              className={`tab-navigation__link ${this.isActive('advanced')}`}
-            >
-              <span>
-                {t('software.tabs.advanced')}
-                <Tag color="#48dad0" className="alpha-tag">
-                  BETA
-                </Tag>
-              </span>
-            </li>
-          </ul>
-        )}
+      <div>
+        <div className="tab-navigation">
+          {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
+            <ul className="tab-navigation__links">
+              <li
+                onClick={() => {
+                  this.setActive('compact');
+                  sendAction(OTA_SOFTWARE_SEE_ALL);
+                }}
+                className={`tab-navigation__link ${this.isActive('compact')}`}
+              >
+                <span>{t('software.tabs.compact')}</span>
+              </li>
+              <li
+                onClick={() => {
+                  this.setActive('advanced');
+                  sendAction(OTA_SOFTWARE_SEE_ADVANCED);
+                }}
+                className={`tab-navigation__link ${this.isActive('advanced')}`}
+              >
+                <span>
+                  {t('software.tabs.advanced')}
+                  <Tag color="#48dad0" className="alpha-tag">
+                    BETA
+                  </Tag>
+                </span>
+              </li>
+            </ul>
+          )}
 
-        {!switchToSWRepo && (
-          <div className="tab-navigation__buttons">
-            <Button
-              id="add-new-software"
-              onClick={() => {
-                showCreateModal(null);
-                sendAction(OTA_SOFTWARE_ADD_SOFTWARE);
-              }}
-            >
-              {t('software.action_buttons.add_software')}
-            </Button>
-          </div>
-        )}
+          {!switchToSWRepo && (
+            <div className="tab-navigation__buttons">
+              <Button
+                id="add-new-software"
+                onClick={() => {
+                  showCreateModal(null);
+                  sendAction(OTA_SOFTWARE_ADD_SOFTWARE);
+                }}
+              >
+                {t('software.action_buttons.add_software')}
+              </Button>
+            </div>
+          )}
+        </div>
+        <SubHeader className="software-repository-subheader">
+          <div className="software-repository-subheader__item">{t('software.header.name')}</div>
+          <div className="software-repository-subheader__item versions">{t('software.header.versions')}</div>
+          <div className="software-repository-subheader__item installed-on">{t('software.header.coverage')}</div>
+        </SubHeader>
       </div>
     );
   }
