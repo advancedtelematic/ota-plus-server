@@ -16,13 +16,13 @@
     justify-content: normal;
 
     &__item {
-      flex-grow: 1;
+      flex: 1;
       color: $dashboard-header-text;
       font-weight: 500;
       text-transform: uppercase;
 
       &.description {
-        flex-grow: 4;
+        flex: 4;
       }
     }
 
@@ -95,5 +95,5 @@
   .header {
     height: 45px;
   }
-  
+
 }
