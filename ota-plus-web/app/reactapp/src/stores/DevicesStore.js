@@ -138,6 +138,8 @@ export default class DevicesStore {
 
   @observable currentDeviceStatus = null;
 
+  @observable devicesFetchingError = false;
+
   constructor() {
     resetAsync(this.devicesFetchAsync);
     resetAsync(this.ungroupedDevicesCountFetchAsync);
@@ -213,6 +215,7 @@ export default class DevicesStore {
 
   fetchDevices(filter = '', groupId, ungrouped, async = DEVICES_FETCH_ASYNC, limit = DEVICES_LIMIT_PER_PAGE) {
     resetAsync(this[async], true);
+    this.devicesFetchingError = false;
     this.devicesOffset = 0;
     this.devicesCurrentPage = 1;
     this.devicesFilter = filter;
@@ -257,9 +260,11 @@ export default class DevicesStore {
           }
         }
         this.prepareDevices();
+        this.devicesFetchingError = false;
         this[async] = handleAsyncSuccess(response);
       })
       .catch((error) => {
+        this.devicesFetchingError = true;
         this[async] = handleAsyncError(error);
       });
   }
