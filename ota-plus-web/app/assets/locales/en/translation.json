@@ -190,6 +190,7 @@
     "devices.empty.no_devices": "You currently have no devices to manage. Try provisioning some devices first.",
     "devices.empty_group_fixed": "This group is empty. Please, drag and drop devices here.",
     "devices.empty_group_smart": "This smart device group isn't matching any devices. Either provision some matching devices, or recreate the smart device group with different filter settings.",
+    "devices.empty.technical_issues": "We are experiencing some technical issues while getting devices data. Please try again soon.",
     "devices.hardware.activated": "Activated",
     "devices.hardware.close": "Close",
     "devices.hardware.copy_to_clipboard": "Copy to clipboard",
