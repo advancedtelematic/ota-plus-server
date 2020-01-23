@@ -50,3 +50,4 @@ PATCH   /organization                     com.advancedtelematic.controllers.Orga
 GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
 GET     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 POST    /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
+DELETE  /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
