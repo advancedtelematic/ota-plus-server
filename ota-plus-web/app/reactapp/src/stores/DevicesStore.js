@@ -430,7 +430,7 @@ export default class DevicesStore {
   fetchMultiTargetUpdates(id) {
     resetAsync(this.mtuFetchAsync, true);
     return axios
-      .get(`${API_FETCH_MULTI_TARGET_UPDATES}/${id}/queue`)
+      .get(`${API_FETCH_MULTI_TARGET_UPDATES}/${id}`)
       .then((response) => {
         const { data } = response;
         const after = _.after(

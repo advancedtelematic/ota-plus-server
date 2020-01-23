@@ -13,7 +13,7 @@ export const APP_LOCALSTORAGE = 'HERE-OTAConnect';
  */
 export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER = '/api/v1/multi_target_updates';
 export const API_CREATE_MULTI_TARGET_UPDATE = '/api/v1/admin/devices';
-export const API_FETCH_MULTI_TARGET_UPDATES = '/api/v1/admin/devices';
+export const API_FETCH_MULTI_TARGET_UPDATES = '/api/v1/assignments';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v1/assignments';
 export const API_CANCEL_UPDATE_PENDING_APPROVAL = '/api/v2/campaigns';
 export const API_NAMESPACE_SETUP_STEPS = '/organization/setup';
