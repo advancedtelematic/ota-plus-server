@@ -48,9 +48,14 @@ class OrganizationController @Inject()(val conf: Configuration,
       }
     }
 
-  def proxyRequest(path: String): Action[AnyContent]= authAction.async { implicit request =>
+  def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
     userProfileApi.organizationRequest(
-      request.namespace, request.idToken.userId, request.method, path, request.body.asJson
+      request.namespace,
+      request.idToken.userId,
+      request.method,
+      path,
+      request.queryString.mapValues(_.mkString(",")),
+      request.body.asJson
     )
   }
 }
