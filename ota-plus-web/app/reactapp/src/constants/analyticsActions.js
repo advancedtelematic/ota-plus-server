@@ -75,6 +75,7 @@ export const OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES = 'OTA_Campaigns_Extract_Faile
 export const OTA_PROFILE_RENAME = 'OTA_Profile_Rename';
 export const OTA_ENVIRONMENT_SWITCH = 'OTA_Environment_Switch';
 export const OTA_ENVIRONMENT_ADD_MEMBER = 'OTA_Environment_Add_Member';
+export const OTA_ENVIRONMENT_REMOVE_MEMBER = 'OTA_Environment_Remove_Member';
 export const OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS = 'OTA_Provisioning_Create_Shared_Credentials';
 
 /* Footer */

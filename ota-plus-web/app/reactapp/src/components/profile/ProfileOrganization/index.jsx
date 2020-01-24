@@ -5,20 +5,31 @@ import { Divider, Radio } from 'antd';
 import { Form } from 'formsy-antd';
 import Cookies from 'js-cookie';
 import { observer, inject } from 'mobx-react';
+import { observe } from 'mobx';
 import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
-import { observe } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import encodeUrl from 'encodeurl';
-
-import EditOrganizationNameModal from './EditOrganizationNameModal';
-import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
-import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
-import { MetaData } from '../../utils';
-import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
-import { OTA_ENVIRONMENT_SWITCH, OTA_ENVIRONMENT_ADD_MEMBER } from '../../constants/analyticsActions';
-import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../constants/analyticsViews';
+import WarningModal from '../WarningModal';
+import EditOrganizationNameModal from '../EditOrganizationNameModal';
+import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../../partials';
+import { MetaData } from '../../../utils';
+import { sendAction, setAnalyticsView } from '../../../helpers/analyticsHelper';
+import {
+  OTA_ENVIRONMENT_SWITCH,
+  OTA_ENVIRONMENT_ADD_MEMBER,
+  OTA_ENVIRONMENT_REMOVE_MEMBER
+} from '../../../constants/analyticsActions';
+import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../../constants/analyticsViews';
+import { OwnerTag, RemoveButton } from './styled';
+import {
+  API_USER_ORGANIZATIONS_SWITCH_NAMESPACE,
+  REMOVAL_MODAL_TYPE,
+  ORGANIZATION_NAMESPACE_COOKIE,
+  TRASHBIN_ICON,
+  WARNING_MODAL_TYPE
+} from '../../../config';
 
 @inject('stores')
 @observer
@@ -33,6 +44,7 @@ class ProfileOrganization extends Component {
     const { stores, t } = props;
     const { userStore } = stores;
     this.state = {
+      removalModalOpenType: undefined,
       memberAddedAt: undefined,
       menuEditShownIndex: -1,
       menuEditShowMenu: false,
@@ -40,6 +52,7 @@ class ProfileOrganization extends Component {
       organizationSelectedIndex: userStore.userOrganizations.findIndex(
         organization => organization.namespace === userStore.userOrganizationNamespace
       ),
+      selectedUserEmail: '',
       userEmail: '',
       userEmailError: false,
     };
@@ -59,6 +72,7 @@ class ProfileOrganization extends Component {
     const { stores } = this.props;
     const { userStore } = stores;
     userStore.getOrganizationUsers();
+    userStore.getCurrentOrganization();
     setAnalyticsView(ANALYTICS_VIEW_ENVIRONMENTS);
   }
 
@@ -86,6 +100,48 @@ class ProfileOrganization extends Component {
     const { stores } = this.props;
     const { userStore } = stores;
     const { namespace } = userStore.userOrganizations[value];
+    this.setUserOrganization(namespace);
+  };
+
+  populateRemovalModal = (t) => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    const { user } = userStore;
+    const { removalModalOpenType, selectedUserEmail } = this.state;
+
+    switch (removalModalOpenType) {
+      case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
+        return {
+          type: WARNING_MODAL_TYPE.DEFAULT,
+          title: t('profile.organization.remove_modal.title.self'),
+          desc: t('profile.organization.remove_modal.desc.self'),
+          cancelButtonProps: {
+            title: t('profile.organization.remove_modal.cancel'),
+          },
+          confirmButtonProps: {
+            title: t('profile.organization.remove_modal.confirm.self'),
+            onClick: () => this.handleMemberRemoval(user.email),
+          },
+          onClose: this.closeRemovalModal,
+        };
+      default:
+        return {
+          type: WARNING_MODAL_TYPE.DANGER,
+          title: t('profile.organization.remove_modal.title'),
+          desc: t('profile.organization.remove_modal.desc'),
+          cancelButtonProps: {
+            title: t('profile.organization.remove_modal.cancel'),
+          },
+          confirmButtonProps: {
+            title: t('profile.organization.remove_modal.confirm'),
+            onClick: () => this.handleMemberRemoval(selectedUserEmail),
+          },
+          onClose: this.closeRemovalModal,
+        };
+    }
+  };
+
+  setUserOrganization = (namespace) => {
     if (namespace) {
       const pathOrigin = window.location.origin;
       const subUrl = API_USER_ORGANIZATIONS_SWITCH_NAMESPACE.replace('$namespace', namespace);
@@ -121,6 +177,32 @@ class ProfileOrganization extends Component {
     this.setState({ menuEditShowMenu: false });
   };
 
+  openRemovalModal = (email) => {
+    this.setState({ removalModalOpenType: REMOVAL_MODAL_TYPE.MEMBER_REMOVAL, selectedUserEmail: email });
+  };
+
+  openSelfRemovalModal = () => {
+    this.setState({ removalModalOpenType: REMOVAL_MODAL_TYPE.SELF_REMOVAL });
+  };
+
+  closeRemovalModal = () => {
+    this.setState({ removalModalOpenType: undefined });
+  };
+
+  handleMemberRemoval = (email) => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    const { user } = userStore;
+    sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
+    if (user.email === email) {
+      userStore.deleteMemberFromOrganization(email);
+      this.setUserOrganization(user.profile.defaultNamespace);
+    } else {
+      userStore.deleteMemberFromOrganization(email, true);
+    }
+    this.closeRemovalModal();
+  };
+
   render() {
     const {
       memberAddedAt,
@@ -128,14 +210,18 @@ class ProfileOrganization extends Component {
       menuEditShowMenu,
       organization,
       organizationSelectedIndex,
+      removalModalOpenType,
       userEmail,
       userEmailError
     } = this.state;
     const { stores, t } = this.props;
     const { userStore } = stores;
+    const { currentOrganization, user } = userStore;
     const namespace = userStore.userOrganizationNamespace;
     const organizations = userStore.userOrganizations;
     const organizationUsers = userStore.userOrganizationUsers;
+    const envOwnerEmail = Object.keys(currentOrganization).length && currentOrganization.creatorEmail;
+
     const userCurrentNamespace = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
     return (
       <div className="profile-container" id="profile-organization">
@@ -223,11 +309,24 @@ class ProfileOrganization extends Component {
             <span>
               <Divider type="horizontal" />
               <div className="email-list">
-                {organizationUsers.map((item, index) => (
-                  <div className="organization-info" key={`organization-info-user-${index}`}>
+                {organizationUsers.map(({ email }, index) => (
+                  <div className="organization-info organization-info--space-between" key={`organization-info-user-${index}`}>
                     <div className="column name" id="organization-name">
-                      {item.email}
+                      {email}
+                      {email === envOwnerEmail && <OwnerTag>{t('profile.organization.owner')}</OwnerTag>}
                     </div>
+                    {envOwnerEmail && email !== envOwnerEmail && (
+                      <RemoveButton
+                        id="organization-remove-btn"
+                        onClick={() => email === user.email
+                          ? this.openSelfRemovalModal()
+                          : this.openRemovalModal(email)
+                        }
+                      >
+                        <img src={TRASHBIN_ICON} />
+                        <span>{t('profile.organization.members.remove')}</span>
+                      </RemoveButton>
+                    )}
                   </div>
                 ))}
               </div>
@@ -244,6 +343,9 @@ class ProfileOrganization extends Component {
               hide={this.hideOrganizationEditModal}
               organization={organization}
             />
+          )}
+          {removalModalOpenType && (
+            <WarningModal {...this.populateRemovalModal(t)} />
           )}
         </MetaData>
       </div>
