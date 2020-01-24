@@ -174,6 +174,26 @@ class Devices extends Component {
     sendAction(OTA_DEVICES_SEARCH_DEVICE);
   };
 
+  getEmptyDevicesMessage = (t, devicesFetchingError) => devicesFetchingError
+    ? (
+      <div>
+        <div>{t('devices.empty.technical_issues')}</div>
+      </div>
+    ) : (
+      <div>
+        <div>{t('devices.empty.no_devices')}</div>
+        <a
+          href={URL_GET_STARTED}
+          className="add-button light"
+          id="add-new-device"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span>{t('devices.empty.add_new')}</span>
+        </a>
+      </div>
+    );
+
   render() {
     const { addNewWizard, stores, t } = this.props;
     const { devicesStore, groupsStore } = stores;
@@ -208,16 +228,7 @@ class Devices extends Component {
               <div>
                 <img src="/assets/img/icons/white/devices.svg" alt="Icon" />
               </div>
-              <div>{t('devices.empty.no_devices')}</div>
-              <a
-                href={URL_GET_STARTED}
-                className="add-button light"
-                id="add-new-device"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <span>{t('devices.empty.add_new')}</span>
-              </a>
+              {this.getEmptyDevicesMessage(t, devicesStore.devicesFetchingError)}
             </div>
           </div>
         )}
