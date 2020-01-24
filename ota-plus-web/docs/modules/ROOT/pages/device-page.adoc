@@ -24,7 +24,7 @@ On this tab, you can see all the updates that were performed on the device. If a
 Failed updates are indicated in red with the failure code that the device reported.
 
 [.thumb]
-image::s9-device_history.png[image]
+image::img::s9-device_history.png[image]
 
 == Install Software on the Device
 
@@ -41,6 +41,6 @@ image::s9-device_history.png[image]
 * OTA Connect will remotely install the software on your test device.
 
 [.thumb]
-image::s5-install_device.png[image]
+image::img::s5-install_device.png[image]
 
 Note that this isn't the standard way to install new software in production. The standard way is to install the software update as part of a link:campaigns.adoc[campaign].

@@ -21,7 +21,7 @@ In this step you can configure the campaign so that end users must consent to th
 6.  Click *Next* which takes you to the *Summary* step, then click *Launch*.
 
 [.thumb]
-image::s7-create_campaign.png[image]
+image::img::s7-create_campaign.png[image]
 
 === Monitor a Campaign
 
@@ -39,7 +39,7 @@ In the campaign list, click your campaign.
 You should see the progress details for your campaign.
 
 [.thumb]
-image::s8-monitor_campaign.png[image]
+image::img::s8-monitor_campaign.png[image]
 
 You'll see a summary of all the update attempts for each device grouped by status:
 
@@ -52,7 +52,7 @@ You'll see a summary of all the update attempts for each device grouped by statu
 *Failure* indicates the number of devices where the update attempt failed.
 
 * If there are update failures, the campaign details include a breakdown by individual failure code.
-* To get a list of individual devices affected by the failure code, click the Export image::download.png[Icon,20,20] button next to the relevant failure code.
+* To get a list of individual devices affected by the failure code, click the Export image::img::download.png[Icon,20,20] button next to the relevant failure code.
 
 *Not Processed* indicates devices that weren't processed by the OTA Connect server for some strange reason.
 

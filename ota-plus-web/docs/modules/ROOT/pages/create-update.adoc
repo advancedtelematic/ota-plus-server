@@ -18,4 +18,4 @@ When you create an update configuration, you need to define two basic "assignmen
 * Click *Save*.
 +
 [.thumb]
-image::s6-create_update.png[image]
+image::img::s6-create_update.png[image]
