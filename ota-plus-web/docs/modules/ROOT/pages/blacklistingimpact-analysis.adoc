@@ -17,9 +17,9 @@ If you've blacklisted some software, you can see how many devices or vehicles ar
 
 1.  Navigate to the *Devices* page.
 2.  Search for a device that you know is running the defective software and open the device details for that device
-3.  In the HARDWARE section, locate the primary ECU and click the info icon image::info.png[Icon,20,20].
+3.  In the HARDWARE section, locate the primary ECU and click the info icon image::img::info.png[Icon,20,20].
 4.  In the window that appears, click the *Packages* tab and use the search box to filter for the defective software version.
-5.  Click the blacklist icon image::ban_grey.png[Icon,20,20] next to the version number.
+5.  Click the blacklist icon image::img::ban_grey.png[Icon,20,20] next to the version number.
 
 *To see the impact of blacklisted software, follow this step:*
 
@@ -33,5 +33,5 @@ For example:
 ** That means, out of all the devices that are running blacklisted software, 54% are running the blacklisted software "IVI-Bluetooth_V2-1".
 
 [.thumb]
-image::s10-impact_analysis.png[image]
+image::img::s10-impact_analysis.png[image]
 
