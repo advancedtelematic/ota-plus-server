@@ -8,7 +8,7 @@
 Once you have provisioned your devices, you should see them show up in the OTA Connect user interface.
 
 [.thumb]
-image::s2-find.png[image]
+image::img::s2-find.png[image]
 
 *To see all your devices, follow this step:*
 
@@ -42,4 +42,4 @@ Since every character in the VIN number has a meaning, we could select *Has char
 The smart group is "smart" because any new vehicles that register with OTA Connect will be filtered into this group as long as they also match the filter criteria.
 
 [.thumb]
-image::s3-group.png[image]
+image::img::s3-group.png[image]

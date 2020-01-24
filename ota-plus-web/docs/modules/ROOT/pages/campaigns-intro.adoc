@@ -4,25 +4,25 @@ The term "campaign" is borrowed from the advertising and marketing industry. For
 
 In the context of software updates, the "audience" is your end users. As explained in the xref:device-groups.adoc[Device Groups] section, groups provide you with a way to segment your audience based on the attributes of your devices.
 
-The "content" of a campaign is defined in an update configuration because the update configuration specifies the software to deliver.  
+The "content" of a campaign is defined in an update configuration because the update configuration specifies the software to deliver.
 
 So when you create a campaign, you need to specify these two critera:
 
 .Key Criteria for a Campaign
 [cols="1a,1a",options="header"]
 |====================
-| Device Groups | Update Configuration 
+| Device Groups | Update Configuration
 |
-image::workflow-group.png[image,180]
+image::img::workflow-group.png[image,180]
 These groups form your target audience. Devices are typically grouped by attributes such as region and model.
 |
-image::workflow-update.png[image,100]
+image::img::workflow-update.png[image,100]
 The update configuration defines the new software that each device should receive.
 
 It also refines your targeting criteria by specifying the hardware and software prerequisites for the target devices.
 |====================
 
-A campaign also includes settings that affect the end user experience. 
+A campaign also includes settings that affect the end user experience.
 
 Before you create a campaign, you also need to consider other criteria such as end user consent.
 

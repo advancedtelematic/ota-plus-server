@@ -12,4 +12,4 @@ In this step you can configure the campaign so that end users must consent to th
 6.  Click *Next* which takes you to the *Summary* step, then click *Launch*.
 
 [.thumb]
-image::s7-create_campaign.png[image]
+image::img::s7-create_campaign.png[image]
