@@ -32,6 +32,7 @@ export const API_USER_ORGANIZATIONS = '/user/organizations';
 export const API_USER_ORGANIZATIONS_SWITCH_NAMESPACE = '/organizations/$namespace/index';
 export const API_USER_ORGANIZATIONS_ADD_USER = '/organization/users';
 export const API_USER_ORGANIZATIONS_GET_USERS = '/organization/tentative_users';
+export const API_USER_ORGANIZATION_DELETE_MEMBER = '/organization/users';
 export const API_USER_ORGANIZATION_EDIT = '/organization';
 
 /*
@@ -221,6 +222,10 @@ export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_ALL;
  */
 
 export const FIREWORKS_ACKNOWLEDGED_KEY = 'fireworksPageAcknowledged';
+export const REMOVAL_MODAL_TYPE = {
+  MEMBER_REMOVAL: 'memberRemoval',
+  SELF_REMOVAL: 'selfRemoval'
+};
 export const PAGE_DEVICE = 'device';
 export const PAGE_PACKAGES = 'packages';
 export const SHA_256 = 'sha256';
@@ -230,6 +235,11 @@ export const STATUS = {
   SUCCESS: 'success',
   WAITING: 'waiting',
   ERROR: 'error'
+};
+
+export const WARNING_MODAL_TYPE = {
+  DANGER: 'danger',
+  DEFAULT: 'default',
 };
 
 /**
@@ -328,6 +338,7 @@ export const UPDATE_ICON = '/assets/img/new-app/24/software-updates-active-outli
 export const UPDATE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-tuner-outline-24.svg';
 export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
 export const NO_ITEMS_ICON = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24.svg';
+export const TRASHBIN_ICON = '/assets/img/new-app/16/trashbin.svg';
 
 /**
  * cookies
