@@ -27,7 +27,7 @@ You'll see a summary of all the update attempts for each device grouped by statu
 *Failure* indicates the number of devices where the update attempt failed.
 
 * If there are update failures, the campaign details include a breakdown by individual failure code.
-* To get a list of individual devices affected by the failure code, click the Export image::img::download.png[Icon,20,20] button next to the relevant failure code.
+* To get a list of individual devices affected by the failure code, click the Export image:img::download.png[Icon,20,20] button next to the relevant failure code.
 
 *Not Processed* indicates devices that weren't processed by the OTA Connect server for some strange reason.
 
