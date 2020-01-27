@@ -13,12 +13,13 @@ import { Loader } from '../partials';
 
 import { UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE } from '../config';
 import { MetaData } from '../utils';
-import { sendAction } from '../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
   OTA_UPDATES_SEE_ALL,
   OTA_UPDATES_SEE_DETAILS,
   OTA_UPDATES_SEARCH_UPDATE
 } from '../constants/analyticsActions';
+import { ANALYTICS_VIEW_SOFTWARE_UPDATES } from '../constants/analyticsViews';
 
 const PAGE_NUMBER_DEFAULT = 1;
 
@@ -49,6 +50,7 @@ class Updates extends Component {
     if (state && state.openWizard) {
       this.showCreateModal();
     }
+    setAnalyticsView(ANALYTICS_VIEW_SOFTWARE_UPDATES);
   }
 
   showCreateModal = (e) => {

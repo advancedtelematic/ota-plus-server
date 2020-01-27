@@ -14,7 +14,7 @@ import {
 } from '../components/device';
 import { SoftwareCreateModal } from '../components/software';
 import { getDeviceHttpStatusErrorMessage } from '../helpers/deviceHelper';
-import { sendAction } from '../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
   OTA_DEVICE_CANCEL_CAMPAIGN,
   OTA_DEVICE_SEE_OVERVIEW,
@@ -25,6 +25,7 @@ import {
   OTA_DEVICE_LAUNCH_AUTOMATIC_UPDATE,
   OTA_DEVICE_LAUNCH_SINGLE_UPDATE
 } from '../constants/analyticsActions';
+import { ANALYTICS_VIEW_DEVICE_DETAIL_VIEW } from '../constants/analyticsViews';
 import {
   OVERVIEW_PANEL_TAB_ID_0,
   OVERVIEW_PANEL_TAB_ID_1,
@@ -46,6 +47,10 @@ class Device extends Component {
   @observable triggerPackages = false;
 
   @observable expandedPackageName = null;
+
+  componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_DEVICE_DETAIL_VIEW);
+  }
 
   componentWillUnmount = () => {
     const { stores } = this.props;

@@ -6,12 +6,18 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { BlacklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip } from '../components/impactanalysis';
+import { setAnalyticsView } from '../helpers/analyticsHelper';
+import { ANALYTICS_VIEW_IMPACT_ANALYSIS } from '../constants/analyticsViews';
 
 @inject('stores')
 @observer
 class ImpactAnalysis extends Component {
   @observable
   tooltipShown = false;
+
+  componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_IMPACT_ANALYSIS);
+  }
 
   showTooltip = (e) => {
     if (e) e.preventDefault();
