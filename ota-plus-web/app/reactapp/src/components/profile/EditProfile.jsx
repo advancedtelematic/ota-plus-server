@@ -10,8 +10,9 @@ import { withTranslation } from 'react-i18next';
 import { Loader, AsyncResponse } from '../../partials';
 import { resetAsync } from '../../utils/Common';
 import { AsyncStatusCallbackHandler, MetaData } from '../../utils';
-import { sendAction } from '../../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import { OTA_PROFILE_RENAME } from '../../constants/analyticsActions';
+import { ANALYTICS_VIEW_PROFILE } from '../../constants/analyticsViews';
 
 @inject('stores')
 @observer
@@ -30,6 +31,10 @@ class EditProfile extends Component {
     const { userStore } = stores;
     this.renameHandler = new AsyncStatusCallbackHandler(userStore, 'userUpdateAsync', this.handleResponse.bind(this));
     this.title = t('profile.title');
+  }
+
+  componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_PROFILE);
   }
 
   componentWillReceiveProps(nextProps) {

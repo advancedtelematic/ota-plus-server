@@ -12,7 +12,8 @@ import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
-import { sendAction } from '../helpers/analyticsHelper';
+import { ANALYTICS_VIEW_DEVICES } from '../constants/analyticsViews';
+import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
   OTA_DEVICES_SEE_ALL,
   OTA_DEVICES_SEE_GROUPED,
@@ -61,6 +62,7 @@ class Devices extends Component {
   }
 
   componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_DEVICES);
     sendAction(OTA_DEVICES_SEE_ALL);
     const { history } = this.props;
     const { state } = history.location;

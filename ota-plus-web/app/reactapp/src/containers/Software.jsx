@@ -18,6 +18,8 @@ import {
 } from '../components/software';
 import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SWITCH_TO_SW_REPO_KEY } from '../config';
 import { MetaData } from '../utils';
+import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
+import { setAnalyticsView } from '../helpers/analyticsHelper';
 
 @inject('stores')
 @observer
@@ -80,6 +82,7 @@ class Software extends Component {
     if (state && state.openWizard) {
       this.showCreateModal();
     }
+    setAnalyticsView(ANALYTICS_VIEW_SOFTWARE_VERSIONS);
   }
 
   componentWillUnmount() {
