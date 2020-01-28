@@ -110,11 +110,17 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .withUser(userId)
       .execJsonValue(apiExec)
 
-  def organizationRequest(namespace: Namespace, userId: UserId, method: String, path: String, body: Option[JsValue])
-                         (implicit traceData: TraceData): Future[Result] =
+  def organizationRequest(namespace: Namespace,
+                          userId: UserId,
+                          method: String,
+                          path: String,
+                          queryParams: Map[String, String],
+                          body: Option[JsValue]
+                         )(implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"organizations/${segment(namespace.get)}/$path")
       .transform(_.withMethod(method))
-      .transform(r => body.map(json => r.withBody(json)).getOrElse(r))
+      .transform(_.withQueryStringParameters(queryParams.toSeq: _*))
+      .transform(r => body.fold(r)(r.withBody))
       .withUser(userId)
       .execResult(apiExec)
 
