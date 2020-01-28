@@ -16,8 +16,9 @@ import EditOrganizationNameModal from './EditOrganizationNameModal';
 import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../partials';
 import { API_USER_ORGANIZATIONS_SWITCH_NAMESPACE, ORGANIZATION_NAMESPACE_COOKIE } from '../../config';
 import { MetaData } from '../../utils';
-import { sendAction } from '../../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import { OTA_ENVIRONMENT_SWITCH, OTA_ENVIRONMENT_ADD_MEMBER } from '../../constants/analyticsActions';
+import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../constants/analyticsViews';
 
 @inject('stores')
 @observer
@@ -58,6 +59,7 @@ class ProfileOrganization extends Component {
     const { stores } = this.props;
     const { userStore } = stores;
     userStore.getOrganizationUsers();
+    setAnalyticsView(ANALYTICS_VIEW_ENVIRONMENTS);
   }
 
   componentWillUnmount() {

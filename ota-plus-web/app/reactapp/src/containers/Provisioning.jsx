@@ -15,6 +15,8 @@ import {
   ProvisioningList,
   ProvisioningCreateModal
 } from '../components/profile/access-keys';
+import { setAnalyticsView } from '../helpers/analyticsHelper';
+import { ANALYTICS_VIEW_CREDENTIALS_PROVISIONING } from '../constants/analyticsViews';
 
 @inject('stores')
 @observer
@@ -37,6 +39,7 @@ class Provisioning extends Component {
         }
       }
     });
+    setAnalyticsView(ANALYTICS_VIEW_CREDENTIALS_PROVISIONING);
   }
 
   componentWillUnmount() {
