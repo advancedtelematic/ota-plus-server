@@ -13,7 +13,7 @@ import { resetAsync } from '../utils/Common';
 import { CampaignsContentPanel, RetryModal } from '../components/campaigns';
 import { CampaignCancelCampaignModal } from '../components/campaign';
 import { MetaData } from '../utils';
-import { sendAction } from '../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
   OTA_CAMPAIGNS_SEE_ALL,
   OTA_CAMPAIGNS_SEE_DETAILS,
@@ -21,6 +21,7 @@ import {
   OTA_CAMPAIGNS_CANCEL_CAMPAIGN,
   OTA_CAMPAIGNS_RETRY_FAILED_DEVICES
 } from '../constants/analyticsActions';
+import { ANALYTICS_VIEW_CAMPAIGNS } from '../constants/analyticsViews';
 
 @inject('stores')
 @observer
@@ -59,6 +60,7 @@ class Campaigns extends Component {
       const { addNewWizard } = this.props;
       addNewWizard();
     }
+    setAnalyticsView(ANALYTICS_VIEW_CAMPAIGNS);
   }
 
   toggle = (campaign) => {

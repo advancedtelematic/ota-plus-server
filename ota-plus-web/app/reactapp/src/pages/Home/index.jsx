@@ -12,6 +12,8 @@ import DashboardStepper from '../../components/dashboard/new/DashboardStepper';
 import DocsLinks from '../../components/dashboard/new/DocsLinks';
 import BuildTeam from '../../components/dashboard/new/BuildTeam';
 import RecentActivity from '../../components/dashboard/new/RecentActivity';
+import { ANALYTICS_VIEW_HOMEPAGE } from '../../constants/analyticsViews';
+import { setAnalyticsView } from '../../helpers/analyticsHelper';
 import { GridContainer, HomeWrapper, LoadingIcon } from './styled';
 
 function useStoreData() {
@@ -65,6 +67,7 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
       provisioningStore.namespaceSetup();
     }
     fetchAll();
+    setAnalyticsView(ANALYTICS_VIEW_HOMEPAGE);
   }, []);
 
   const isTermsAccepted = userStore.isTermsAccepted();

@@ -7,6 +7,8 @@ import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import Items from './usage/Items';
 import { MetaData } from '../../utils';
+import { setAnalyticsView } from '../../helpers/analyticsHelper';
+import { ANALYTICS_VIEW_USAGE } from '../../constants/analyticsViews';
 
 const startTime = moment([2017, 0, 1]);
 const currentTime = moment();
@@ -26,6 +28,10 @@ class Usage extends Component {
     userStore.setUsageInitial(startTime, monthsCount);
     this.fetchUsage();
     this.title = t('profile.usage.title');
+  }
+
+  componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_USAGE);
   }
 
   fetchUsage = () => {
