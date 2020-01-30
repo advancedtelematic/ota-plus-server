@@ -22,7 +22,7 @@ import {
 } from '../../constants/groupConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_SMART_GROUP, OTA_DEVICES_CREATE_FIXED_GROUP } from '../../constants/analyticsActions';
-import { GROUP_ICON_GRAY } from '../../config';
+import { GROUP_ICON_GRAY, GROUP_DYNAMIC_ICON } from '../../config';
 
 const wizardSteps = [
   {
@@ -200,6 +200,7 @@ class CreateModal extends Component {
 
   render() {
     const { shown, hide, t } = this.props;
+    const { groupType } = this.wizardData;
     const currentStep = this.steps[this.currentStepId];
     const step = (
       <span>
@@ -238,7 +239,14 @@ class CreateModal extends Component {
       <OTAModal
         title={(
           <ModalTitleWrapper>
-            <img src={GROUP_ICON_GRAY} />
+            {this.isLastStep() && (
+              <img
+                src={groupType === GROUP_GROUP_TYPE_CLASSIC
+                  ? GROUP_ICON_GRAY
+                  : GROUP_DYNAMIC_ICON
+              }
+              />
+            )}
             {t('groups.creating.create_new_group')}
           </ModalTitleWrapper>
         )}

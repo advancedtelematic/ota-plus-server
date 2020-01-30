@@ -12,6 +12,7 @@ import { AsyncResponse } from '../../../partials';
 import { getUpdateDetails } from '../../../helpers/updateDetailsHelper';
 import { NO_VERSION_INFO } from '../../../constants';
 import { HTTP_CODE_200_OK } from '../../../constants/httpCodes';
+import { GROUP_TYPE, UPDATE_ICON_GRAY } from '../../../config';
 
 @inject('stores')
 @observer
@@ -52,6 +53,7 @@ class WizardStep7 extends Component {
             {t('campaigns.wizard.steps.summary.warning')}
           </Row>
           <div className="title">
+            <img className="box-summary__title-icon" src={UPDATE_ICON_GRAY} />
             {t('campaigns.wizard.software_version')}
           </div>
           <div className="desc">
@@ -107,7 +109,7 @@ class WizardStep7 extends Component {
             <div className="wrapper-groups">
               {_.map(wizardData.groups, (group, index) => (
                 <div className="element-box group" key={index}>
-                  <div className="icon" />
+                  <div className={`icon icon--${group.groupType === GROUP_TYPE.STATIC ? 'default' : 'smart'}`} />
                   <div className="desc">
                     <div className="title" id="wizard-summary-group-name">
                       {group.groupName}
