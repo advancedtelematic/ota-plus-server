@@ -20,6 +20,7 @@ import {
   API_USER_ORGANIZATIONS_GET_USERS,
   API_USER_ORGANIZATION_EDIT,
   ORGANIZATION_NAMESPACE_COOKIE,
+  API_USER_ORGANIZATION_DELETE_MEMBER,
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -36,6 +37,8 @@ export default class UserStore {
   @observable contractsFetchAsync = {};
 
   @observable contractsAcceptAsync = {};
+
+  @observable currentOrganization = {};
 
   @observable userUpdateAsync = {};
 
@@ -64,7 +67,9 @@ export default class UserStore {
     this.activatedDevicesFetchAsync = observable.map();
     this.activeDevicesFetchAsync = observable.map();
     this.connectedDevicesFetchAsync = observable.map();
+    this.deleteMemberFromOrganizationAsync = observable.map();
     this.editOrganizationNameAsync = observable.map();
+    this.getCurrentOrganizationAsync = observable.map();
     this.getOrganizationsAsync = observable.map();
     this.getOrganizationUsersAsync = observable.map();
     this.addUserToOrganizationAsync = observable.map();
@@ -73,10 +78,25 @@ export default class UserStore {
     resetAsync(this.userChangePasswordAsync);
     resetAsync(this.contractsFetchAsync);
     resetAsync(this.contractsAcceptAsync);
+    resetAsync(this.deleteMemberFromOrganizationAsync);
     resetAsync(this.editOrganizationNameAsync);
+    resetAsync(this.getCurrentOrganizationAsync);
     resetAsync(this.getOrganizationsAsync);
     resetAsync(this.getOrganizationUsersAsync);
     resetAsync(this.addUserToOrganizationAsync);
+  }
+
+  deleteMemberFromOrganization = async (email, refetchMembers) => {
+    resetAsync(this.deleteMemberFromOrganizationAsync, true);
+    try {
+      const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${email}`);
+      this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);
+      if (refetchMembers) {
+        this.getOrganizationUsers();
+      }
+    } catch (error) {
+      this.deleteMemberFromOrganizationAsync = handleAsyncError(error);
+    }
   }
 
   editOrganizationName = async (name) => {
@@ -88,6 +108,18 @@ export default class UserStore {
       this.getOrganizations();
     } catch (error) {
       this.editOrganizationNameAsync = handleAsyncError(error);
+    }
+  };
+
+  getCurrentOrganization = async () => {
+    resetAsync(this.getCurrentOrganizationAsync, true);
+    try {
+      const response = await axios.get(API_USER_ORGANIZATION_EDIT);
+      const { data } = response;
+      this.currentOrganization = data;
+      this.getCurrentOrganizationAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getCurrentOrganizationAsync = handleAsyncError(error);
     }
   };
 
