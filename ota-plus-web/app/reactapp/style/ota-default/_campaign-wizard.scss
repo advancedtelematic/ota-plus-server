@@ -472,6 +472,19 @@
                     width: 40px;
                     height: 40px;
                     display: inline-block;
+                    &--default {
+                      background: url($group-default-dark-image-url) no-repeat;
+                      background-size: 64% 64%;
+                      background-position: center;
+                      background-color: #B7B9BC;
+                    }
+      
+                    &--smart {
+                      background: url($group-smart-dark-image-url) no-repeat;
+                      background-size: 64% 64%;
+                      background-position: center;
+                      background-color: #B7B9BC;
+                    }
                   }
                 }
               }
@@ -506,7 +519,7 @@
               }
 
               &--smart {
-                background: url($group-default-dark-image-url) no-repeat;
+                background: url($group-smart-dark-image-url) no-repeat;
                 background-size: 64% 64%;
                 background-position: center;
                 background-color: #B7B9BC;
@@ -532,12 +545,18 @@
           .title {
             font-weight: bold;
             font-size: 18px;
-            margin-top: 20px;
+          }
+          &__title-icon {
+            height: 22px;
+            width: 22px;
+            padding-bottom: 4px;
+            margin-right: 6px;
           }
           .warning {
             color: $campaign-cancelled-color;
             font-size: 11px;
             line-height: 17px;
+            margin-bottom: 20px;
           }
           .desc {
             .package-container {

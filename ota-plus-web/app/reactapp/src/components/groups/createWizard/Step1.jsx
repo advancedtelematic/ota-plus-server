@@ -7,6 +7,7 @@ import { withTranslation } from 'react-i18next';
 
 import { GROUP_GROUP_TYPE_CLASSIC, GROUP_GROUP_TYPE_SMART } from '../../../constants/groupConstants';
 import Option from './step1/Option';
+import { GROUP_DYNAMIC_ICON, GROUP_ICON_GRAY } from '../../../config';
 
 class Step1 extends Component {
   constructor(props) {
@@ -33,6 +34,10 @@ class Step1 extends Component {
         {map(this.options, option => (
           <Option
             key={option.alias}
+            iconSrc={option.alias === GROUP_GROUP_TYPE_CLASSIC
+              ? GROUP_ICON_GRAY
+              : GROUP_DYNAMIC_ICON
+            }
             title={option.title}
             teaser={option.teaser}
             selectOption={() => {
