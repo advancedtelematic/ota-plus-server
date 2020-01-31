@@ -39,8 +39,8 @@ const DashboardStepperCard = ({ id, buttonTitle, description, iconPath, statValu
   const history = useHistory();
 
   const handleCTABtnClick = () => {
-    const { ctaButton, ctaActionType } = links;
-    sendAction(ctaActionType);
+    const { ctaButton, ctaButtonActionType } = links;
+    sendAction(ctaButtonActionType);
     history.push({
       pathname: ctaButton,
       state: { openWizard: true }
@@ -67,7 +67,10 @@ const DashboardStepperCard = ({ id, buttonTitle, description, iconPath, statValu
   return (
     <Card status={status} id={id} elevation={0}>
       <div>
-        <Link to={links.ctaLink}>
+        <Link
+          onClick={() => { sendAction(links.ctaLinkActionType); }}
+          to={links.ctaLink}
+        >
           <TitleWrapper>
             <TitleIcon src={iconPath} />
             <Title size="small" id={`${id}-title`}>{title}</Title>
@@ -112,7 +115,9 @@ DashboardStepperCard.propTypes = {
   title: PropTypes.string.isRequired,
   links: PropTypes.shape({
     ctaButton: PropTypes.string,
+    ctaButtonActionType: PropTypes.string,
     ctaLink: PropTypes.string,
+    ctaLinkActionType: PropTypes.string,
     docs: PropTypes.string,
     tooltip: PropTypes.string
   }),

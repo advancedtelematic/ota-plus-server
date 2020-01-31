@@ -4,10 +4,10 @@ import { Container, ExternalLink } from '../../../../partials';
 import { Description, DocsLinksWrapper, List, ListItem, StyledIcon, Title } from './styled';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import {
-  OTA_HOME_READ_CAMPAIGN_EXAMPLES,
-  OTA_HOME_READ_GROUP_EXAMPLES,
-  OTA_HOME_READ_TROUBLESHOOT_EXAMPLES,
-  OTA_HOME_READ_UPDATE_EXAMPLES
+  OTA_HOME_READ_EXAMPLES_GROUP,
+  OTA_HOME_READ_EXAMPLES_UPDATE,
+  OTA_HOME_READ_EXAMPLES_CAMPAIGN,
+  OTA_HOME_READ_EXAMPLES_TROUBLESHOOT,
 } from '../../../../constants/analyticsActions';
 import {
   URL_DOCS_LINKS_CREATE_CAMPAIGNS,
@@ -32,7 +32,7 @@ const DocsLinks = () => {
             <StyledIcon src={ICON_DEVICES} />
             <ExternalLink
               id="docs-links-link-device-groups"
-              onClick={() => sendAction(OTA_HOME_READ_GROUP_EXAMPLES)}
+              onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_GROUP)}
               url={URL_DOCS_LINKS_DEVICE_GROUPS}
               weight="medium"
             >
@@ -43,7 +43,7 @@ const DocsLinks = () => {
             <StyledIcon src={ICON_SOFTWARE_UPDATES} />
             <ExternalLink
               id="docs-links-link-update-software"
-              onClick={() => sendAction(OTA_HOME_READ_UPDATE_EXAMPLES)}
+              onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_UPDATE)}
               url={URL_DOCS_LINKS_SOFTWARE_UPDATES}
               weight="medium"
             >
@@ -54,7 +54,7 @@ const DocsLinks = () => {
             <StyledIcon src={ICON_CAMPAIGNS} />
             <ExternalLink
               id="docs-links-link-create-campaigns"
-              onClick={() => sendAction(OTA_HOME_READ_CAMPAIGN_EXAMPLES)}
+              onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_CAMPAIGN)}
               url={URL_DOCS_LINKS_CREATE_CAMPAIGNS}
               weight="medium"
             >
@@ -65,7 +65,7 @@ const DocsLinks = () => {
             <StyledIcon src={ICON_CAMPAIGNS} />
             <ExternalLink
               id="docs-links-link-troubleshoot-campaigns"
-              onClick={() => sendAction(OTA_HOME_READ_TROUBLESHOOT_EXAMPLES)}
+              onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_TROUBLESHOOT)}
               url={URL_DOCS_LINKS_TROUBLESHOOT_CAMPAIGN}
               weight="medium"
             >
