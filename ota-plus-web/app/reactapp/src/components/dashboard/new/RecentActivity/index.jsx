@@ -31,8 +31,7 @@ import {
   getDeviceGroupListIcon,
   getListDescription,
   getListIcon,
-  sendFilterLatestAction,
-  sendSeeLatestAction,
+  sendFilterLatestAction
 } from '../../../../helpers/recentActivityHelper';
 import { ACTIVITIES_TYPE } from '../../../../constants';
 import { useStores } from '../../../../stores/hooks';
@@ -76,18 +75,13 @@ const RecentActivity = () => {
   const handleMenuChange = (event) => {
     const key = parseInt(event.key, 10);
     menuItemsSelected[key] = !menuItemsSelected[key];
-    if (menuItemsSelected[key]) {
-      const menuItemType = MENU_ITEMS[key].type;
-      sendFilterLatestAction(menuItemType);
-    }
+    const menuItemType = MENU_ITEMS[key].type;
+    sendFilterLatestAction(menuItemType, menuItemsSelected[key]);
     setMenuItemsSelected(menuItemsSelected);
     const selectedLength = menuItemsSelected.filter(item => item).length;
     setMenuSelectedLength(selectedLength);
     const selectedItems = MENU_ITEMS.filter((item, index) => menuItemsSelected[index]);
     const params = selectedItems.map(item => item.type);
-    params.forEach((item) => {
-      sendSeeLatestAction(item);
-    });
     stores.recentlyCreatedStore.fetchRecentlyCreated(params);
   };
 

@@ -20,16 +20,21 @@ import {
   URL_STEPPER_UPDATES_DOCS
 } from '../../../../constants/urlConstants';
 import {
-  OTA_HOME_ADD_SHARED_CREDENTIALS,
-  OTA_HOME_ADD_SOFTWARE,
+  OTA_HOME_PROVISION_DEVICES,
+  OTA_HOME_UPLOAD_SOFTWARE,
   OTA_HOME_CREATE_GROUP,
   OTA_HOME_CREATE_UPDATE,
   OTA_HOME_CREATE_CAMPAIGN,
-  OTA_HOME_READ_DEVICE,
-  OTA_HOME_READ_SOFTWARE,
-  OTA_HOME_READ_GROUP,
-  OTA_HOME_READ_UPDATE,
-  OTA_HOME_READ_CAMPAIGN,
+  OTA_HOME_ALL_DEVICES,
+  OTA_HOME_ALL_SOFTWARE,
+  OTA_HOME_ALL_GROUPS,
+  OTA_HOME_ALL_UPDATES,
+  OTA_HOME_ALL_CAMPAIGNS,
+  OTA_HOME_READ_MORE_DEVICE,
+  OTA_HOME_READ_MORE_SOFTWARE,
+  OTA_HOME_READ_MORE_GROUP,
+  OTA_HOME_READ_MORE_UPDATE,
+  OTA_HOME_READ_MORE_CAMPAIGN,
 } from '../../../../constants/analyticsActions';
 
 export const getStepStatus = (activeCondition, doneCondition) => {
@@ -85,40 +90,45 @@ const DashboardStepper = () => {
       ctaButton: URL_STEPPER_DEVICES_CTA_BUTTON,
       ctaLink: URL_STEPPER_DEVICES_CTA_LINK,
       docs: URL_STEPPER_DEVICES_DOCS,
-      ctaActionType: OTA_HOME_ADD_SHARED_CREDENTIALS,
-      docsActionType: OTA_HOME_READ_DEVICE
+      ctaButtonActionType: OTA_HOME_PROVISION_DEVICES,
+      ctaLinkActionType: OTA_HOME_ALL_DEVICES,
+      docsActionType: OTA_HOME_READ_MORE_DEVICE
     },
     {
       ctaButton: URL_STEPPER_SOFTWARE_CTA,
       ctaLink: URL_STEPPER_SOFTWARE_CTA,
       docs: URL_STEPPER_SOFTWARE_DOCS,
       tooltip: t('dashboard.stepper.tooltip-1'),
-      ctaActionType: OTA_HOME_ADD_SOFTWARE,
-      docsActionType: OTA_HOME_READ_SOFTWARE
+      ctaButtonActionType: OTA_HOME_UPLOAD_SOFTWARE,
+      ctaLinkActionType: OTA_HOME_ALL_SOFTWARE,
+      docsActionType: OTA_HOME_READ_MORE_SOFTWARE
     },
     {
       ctaButton: URL_STEPPER_GROUPS_CTA,
       ctaLink: URL_STEPPER_GROUPS_CTA,
       docs: URL_STEPPER_GROUPS_DOCS,
       tooltip: t('dashboard.stepper.tooltip-1'),
-      ctaActionType: OTA_HOME_CREATE_GROUP,
-      docsActionType: OTA_HOME_READ_GROUP
+      ctaButtonActionType: OTA_HOME_CREATE_GROUP,
+      ctaLinkActionType: OTA_HOME_ALL_GROUPS,
+      docsActionType: OTA_HOME_READ_MORE_GROUP
     },
     {
       ctaButton: URL_STEPPER_UPDATES_CTA,
       ctaLink: URL_STEPPER_UPDATES_CTA,
       docs: URL_STEPPER_UPDATES_DOCS,
       tooltip: t('dashboard.stepper.tooltip-2'),
-      ctaActionType: OTA_HOME_CREATE_UPDATE,
-      docsActionType: OTA_HOME_READ_UPDATE
+      ctaButtonActionType: OTA_HOME_CREATE_UPDATE,
+      ctaLinkActionType: OTA_HOME_ALL_UPDATES,
+      docsActionType: OTA_HOME_READ_MORE_UPDATE
     },
     {
       ctaButton: URL_STEPPER_CAMPAIGNS_CTA,
       ctaLink: URL_STEPPER_CAMPAIGNS_CTA,
       docs: URL_STEPPER_CAMPAIGNS_DOCS,
       tooltip: t('dashboard.stepper.tooltip-3'),
-      ctaActionType: OTA_HOME_CREATE_CAMPAIGN,
-      docsActionType: OTA_HOME_READ_CAMPAIGN
+      ctaButtonActionType: OTA_HOME_CREATE_CAMPAIGN,
+      ctaLinkActionType: OTA_HOME_ALL_CAMPAIGNS,
+      docsActionType: OTA_HOME_READ_MORE_CAMPAIGN
     }
   ];
 

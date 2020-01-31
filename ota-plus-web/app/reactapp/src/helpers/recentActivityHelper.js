@@ -10,16 +10,21 @@ import {
 } from '../config';
 import { sendAction } from './analyticsHelper';
 import {
-  OTA_HOME_FILTER_LATEST_CAMPAIGN,
-  OTA_HOME_FILTER_LATEST_DEVICE,
-  OTA_HOME_FILTER_LATEST_GROUP,
-  OTA_HOME_FILTER_LATEST_SOFTWARE,
-  OTA_HOME_FILTER_LATEST_UPDATE,
-  OTA_HOME_SEE_LATEST_CAMPAIGN,
-  OTA_HOME_SEE_LATEST_DEVICE,
-  OTA_HOME_SEE_LATEST_GROUP,
-  OTA_HOME_SEE_LATEST_SOFTWARE,
-  OTA_HOME_SEE_LATEST_UPDATE
+  OTA_HOME_FILTER_SELECT_RECENT_CAMPAIGNS,
+  OTA_HOME_FILTER_DESELECT_RECENT_CAMPAIGNS,
+  OTA_HOME_FILTER_SELECT_RECENT_DEVICES,
+  OTA_HOME_FILTER_DESELECT_RECENT_DEVICES,
+  OTA_HOME_FILTER_SELECT_RECENT_GROUPS,
+  OTA_HOME_FILTER_DESELECT_RECENT_GROUPS,
+  OTA_HOME_FILTER_SELECT_RECENT_SOFTWARE,
+  OTA_HOME_FILTER_DESELECT_RECENT_SOFTWARE,
+  OTA_HOME_FILTER_SELECT_RECENT_UPDATES,
+  OTA_HOME_FILTER_DESELECT_RECENT_UPDATES,
+  OTA_HOME_SEE_ACCESS_RECENT_DEVICE_DETAILS,
+  OTA_HOME_SEE_ACCESS_RECENT_SOFTWARE_DETAILS,
+  OTA_HOME_SEE_ACCESS_RECENT_GROUP_DETAILS,
+  OTA_HOME_SEE_ACCESS_RECENT_UPDATE_DETAILS,
+  OTA_HOME_SEE_ACCESS_RECENT_CAMPAIGN_DETAILS,
 } from '../constants/analyticsActions';
 
 export const getDeviceGroupListIcon = (groupType) => {
@@ -64,22 +69,42 @@ export const getListDescription = (t, type) => {
   }
 };
 
-export const sendFilterLatestAction = (menuItemType) => {
+export const sendFilterLatestAction = (menuItemType, selected) => {
   switch (menuItemType) {
     case ACTIVITIES_TYPE.CAMPAIGN:
-      sendAction(OTA_HOME_FILTER_LATEST_CAMPAIGN);
+      if (selected) {
+        sendAction(OTA_HOME_FILTER_SELECT_RECENT_CAMPAIGNS);
+      } else {
+        sendAction(OTA_HOME_FILTER_DESELECT_RECENT_CAMPAIGNS);
+      }
       break;
     case ACTIVITIES_TYPE.DEVICE:
-      sendAction(OTA_HOME_FILTER_LATEST_DEVICE);
+      if (selected) {
+        sendAction(OTA_HOME_FILTER_SELECT_RECENT_DEVICES);
+      } else {
+        sendAction(OTA_HOME_FILTER_DESELECT_RECENT_DEVICES);
+      }
       break;
     case ACTIVITIES_TYPE.DEVICE_GROUP:
-      sendAction(OTA_HOME_FILTER_LATEST_GROUP);
+      if (selected) {
+        sendAction(OTA_HOME_FILTER_SELECT_RECENT_GROUPS);
+      } else {
+        sendAction(OTA_HOME_FILTER_DESELECT_RECENT_GROUPS);
+      }
       break;
     case ACTIVITIES_TYPE.SOFTWARE_UPDATE:
-      sendAction(OTA_HOME_FILTER_LATEST_UPDATE);
+      if (selected) {
+        sendAction(OTA_HOME_FILTER_SELECT_RECENT_UPDATES);
+      } else {
+        sendAction(OTA_HOME_FILTER_DESELECT_RECENT_UPDATES);
+      }
       break;
     case ACTIVITIES_TYPE.SOFTWARE_VERSION:
-      sendAction(OTA_HOME_FILTER_LATEST_SOFTWARE);
+      if (selected) {
+        sendAction(OTA_HOME_FILTER_SELECT_RECENT_SOFTWARE);
+      } else {
+        sendAction(OTA_HOME_FILTER_DESELECT_RECENT_SOFTWARE);
+      }
       break;
     default:
       break;
@@ -89,19 +114,19 @@ export const sendFilterLatestAction = (menuItemType) => {
 export const sendSeeLatestAction = (item) => {
   switch (item) {
     case ACTIVITIES_TYPE.CAMPAIGN:
-      sendAction(OTA_HOME_SEE_LATEST_CAMPAIGN);
+      sendAction(OTA_HOME_SEE_ACCESS_RECENT_CAMPAIGN_DETAILS);
       break;
     case ACTIVITIES_TYPE.DEVICE:
-      sendAction(OTA_HOME_SEE_LATEST_DEVICE);
+      sendAction(OTA_HOME_SEE_ACCESS_RECENT_DEVICE_DETAILS);
       break;
     case ACTIVITIES_TYPE.DEVICE_GROUP:
-      sendAction(OTA_HOME_SEE_LATEST_GROUP);
+      sendAction(OTA_HOME_SEE_ACCESS_RECENT_GROUP_DETAILS);
       break;
     case ACTIVITIES_TYPE.SOFTWARE_UPDATE:
-      sendAction(OTA_HOME_SEE_LATEST_UPDATE);
+      sendAction(OTA_HOME_SEE_ACCESS_RECENT_UPDATE_DETAILS);
       break;
     case ACTIVITIES_TYPE.SOFTWARE_VERSION:
-      sendAction(OTA_HOME_SEE_LATEST_SOFTWARE);
+      sendAction(OTA_HOME_SEE_ACCESS_RECENT_SOFTWARE_DETAILS);
       break;
     default:
       break;

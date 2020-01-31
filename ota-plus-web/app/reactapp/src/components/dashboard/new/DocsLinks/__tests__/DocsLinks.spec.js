@@ -5,10 +5,10 @@ import theme from '../../../../../theme';
 import DocsLinks from '../index';
 import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
 import {
-  OTA_HOME_READ_CAMPAIGN_EXAMPLES,
-  OTA_HOME_READ_GROUP_EXAMPLES,
-  OTA_HOME_READ_TROUBLESHOOT_EXAMPLES,
-  OTA_HOME_READ_UPDATE_EXAMPLES
+  OTA_HOME_READ_EXAMPLES_CAMPAIGN,
+  OTA_HOME_READ_EXAMPLES_GROUP,
+  OTA_HOME_READ_EXAMPLES_TROUBLESHOOT,
+  OTA_HOME_READ_EXAMPLES_UPDATE
 } from '../../../../../constants/analyticsActions';
 
 function mountDocsLinks(props) {
@@ -64,10 +64,10 @@ describe('<DocsLinks />', () => {
     wrapper.find('ExternalLink').forEach((node) => {
       node.simulate('click');
     });
-    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_CAMPAIGN_EXAMPLES);
-    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_GROUP_EXAMPLES);
-    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_TROUBLESHOOT_EXAMPLES);
-    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_UPDATE_EXAMPLES);
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_EXAMPLES_CAMPAIGN);
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_EXAMPLES_GROUP);
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_EXAMPLES_TROUBLESHOOT);
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_EXAMPLES_UPDATE);
     expect(analyticsHelper.sendAction).toHaveBeenCalledTimes(EXTERNAL_LINK_COUNT);
   });
 
