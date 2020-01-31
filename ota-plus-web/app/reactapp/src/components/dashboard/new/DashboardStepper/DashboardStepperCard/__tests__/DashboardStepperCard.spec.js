@@ -34,7 +34,8 @@ const generateCardProps = status => ({
     ctaButton: '/devices',
     ctaLink: '/devices',
     docs: 'https://here.com/',
-    ctaActionType: 'CTAActionType',
+    ctaButtonActionType: 'CTAButtonActionType',
+    ctaLinkActionType: 'CTALinkActionType',
     docsActionType: 'DOCSActionType'
   },
 });
@@ -67,6 +68,6 @@ describe('<DashboardStepperCard />', () => {
     analyticsHelper.sendAction = jest.fn();
     wrapper = mountComponent(generateCardProps(STEP_STATUS.DONE));
     wrapper.find('#deviceGroup-card-action-btn').first().simulate('click');
-    expect(analyticsHelper.sendAction).toBeCalledWith('CTAActionType');
+    expect(analyticsHelper.sendAction).toBeCalledWith('CTAButtonActionType');
   });
 });
