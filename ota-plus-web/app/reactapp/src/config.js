@@ -325,6 +325,7 @@ export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.
 export const CAMPAIGNS_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-distribute-solid-24.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
 export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
+export const GROUP_DYNAMIC_ICON = '/assets/img/new-app/24/LUI-icon-pd-device_group_smart_filter-outline-24.svg';
 export const GROUP_ICON = '/assets/img/new-app/24/device-group-active-outline-24.svg';
 export const GROUP_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_group_connected-outline-24.svg';
 export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';

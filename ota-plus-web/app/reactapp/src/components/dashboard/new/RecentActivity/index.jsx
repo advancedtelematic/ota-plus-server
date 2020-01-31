@@ -28,10 +28,11 @@ import {
 } from './styled';
 import { NO_ITEMS_ICON } from '../../../../config';
 import {
+  getDeviceGroupListIcon,
   getListDescription,
   getListIcon,
   sendFilterLatestAction,
-  sendSeeLatestAction
+  sendSeeLatestAction,
 } from '../../../../helpers/recentActivityHelper';
 import { ACTIVITIES_TYPE } from '../../../../constants';
 import { useStores } from '../../../../stores/hooks';
@@ -119,9 +120,14 @@ const RecentActivity = () => {
         <ListStyled
           id="recent-activity-list"
           dataSource={recentlyCreated}
-          renderItem={({ date, title, type }, index) => (
+          renderItem={({ date, title, type, groupType }, index) => (
             <ListItem id={`recent-activity-list-item-${index}`} key={index}>
-              <ListIcon src={getListIcon(type)} />
+              <ListIcon
+                src={type === ACTIVITIES_TYPE.DEVICE_GROUP
+                  ? getDeviceGroupListIcon(groupType)
+                  : getListIcon(type)
+                }
+              />
               <div>
                 <ListTitle>{title}</ListTitle>
                 <ListDescription>{getListDescription(t, type)}</ListDescription>

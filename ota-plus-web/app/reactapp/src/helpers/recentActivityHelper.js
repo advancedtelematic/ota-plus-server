@@ -2,9 +2,11 @@ import { ACTIVITIES_TYPE } from '../constants';
 import {
   CAMPAIGNS_ICON_GRAY,
   DEVICE_ICON_GRAY,
+  GROUP_DYNAMIC_ICON,
   GROUP_ICON_GRAY,
+  GROUP_TYPE,
   SOFTWARE_ICON_GRAY,
-  UPDATE_ICON_GRAY
+  UPDATE_ICON_GRAY,
 } from '../config';
 import { sendAction } from './analyticsHelper';
 import {
@@ -19,6 +21,15 @@ import {
   OTA_HOME_SEE_LATEST_SOFTWARE,
   OTA_HOME_SEE_LATEST_UPDATE
 } from '../constants/analyticsActions';
+
+export const getDeviceGroupListIcon = (groupType) => {
+  switch (groupType) {
+    case GROUP_TYPE.DYNAMIC:
+      return GROUP_DYNAMIC_ICON;
+    default:
+      return GROUP_ICON_GRAY;
+  }
+};
 
 export const getListIcon = (type) => {
   switch (type) {

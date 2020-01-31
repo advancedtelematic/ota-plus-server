@@ -19,6 +19,11 @@ export default class RecentlyCreatedStore {
 
   createItemData = (date, name, type) => ({ date: moment(date).format('ddd MMM D YYYY HH:mm'), title: name, type });
 
+  createDeviceGroupItemData = (date, name, type, groupType) => ({
+    ...this.createItemData(date, name, type),
+    groupType
+  });
+
   async fetchRecentlyCreated(types = ACTIVITIES_TYPE_PARAMS) {
     resetAsync(this.recentlyCreatedFetchAsync, true);
     try {
@@ -35,7 +40,12 @@ export default class RecentlyCreatedStore {
             recentlyCreated.push(this.createItemData(item.createdAt, item.resource.deviceName, item._type));
             break;
           case ACTIVITIES_TYPE.DEVICE_GROUP:
-            recentlyCreated.push(this.createItemData(item.createdAt, item.resource.groupName, item._type));
+            recentlyCreated.push(this.createDeviceGroupItemData(
+              item.createdAt,
+              item.resource.groupName,
+              item._type,
+              item.resource.groupType
+            ));
             break;
           case ACTIVITIES_TYPE.SOFTWARE_UPDATE:
             recentlyCreated.push(this.createItemData(item.createdAt, item.resource.name, item._type));

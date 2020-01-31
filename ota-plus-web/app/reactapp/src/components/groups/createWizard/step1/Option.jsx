@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Option = ({ selectOption, isSelected, title, teaser }) => (
+const Option = ({ selectOption, iconSrc, isSelected, title, teaser }) => (
   <div
     className="wizard__option"
     onClick={() => {
@@ -19,6 +19,7 @@ const Option = ({ selectOption, isSelected, title, teaser }) => (
           selectOption();
         }}
       />
+      <img className="wizard__select-icon" src={iconSrc} />
       <div className="wizard__select-title">{title}</div>
     </div>
     <div className="wizard__teaser" id={`wizard__teaser-${title}`}>
@@ -29,6 +30,7 @@ const Option = ({ selectOption, isSelected, title, teaser }) => (
 
 Option.propTypes = {
   selectOption: PropTypes.func,
+  iconSrc: PropTypes.string,
   isSelected: PropTypes.bool,
   title: PropTypes.string,
   teaser: PropTypes.string
