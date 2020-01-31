@@ -5,9 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../../../../../theme';
 import BuildTeam from '..';
 import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
-import {
-  OTA_HOME_ADD_MEMBER,
-} from '../../../../../constants/analyticsActions';
+import { OTA_HOME_ADD_MEMBERS } from '../../../../../constants/analyticsActions';
 
 function mountComponent(props) {
   return mount(
@@ -41,6 +39,6 @@ describe('<BuildTeam />', () => {
   it('should call sendAction upon clicking "Add Member" button', () => {
     analyticsHelper.sendAction = jest.fn();
     wrapper.find('#build-team-add-btn').first().simulate('click');
-    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_ADD_MEMBER);
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_ADD_MEMBERS);
   });
 });

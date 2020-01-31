@@ -19,7 +19,7 @@ import { Loader } from '../../partials';
 import { ARTIFICIAL } from '../../constants';
 import { DEVICES_LIMIT_PER_PAGE, FEATURES } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
-import { OTA_DEVICES_SEE_DEVICE } from '../../constants/analyticsActions';
+import { OTA_DEVICES_SEE_DEVICE_DETAILS } from '../../constants/analyticsActions';
 
 const connections = {
   live: {
@@ -112,7 +112,7 @@ class ContentPanel extends Component {
     const { history } = this.props;
     if (e) e.preventDefault();
     history.push(`/device/${deviceId}`);
-    sendAction(OTA_DEVICES_SEE_DEVICE);
+    sendAction(OTA_DEVICES_SEE_DEVICE_DETAILS);
   };
 
   loadDevices = async () => {
