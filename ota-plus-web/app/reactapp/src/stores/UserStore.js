@@ -89,7 +89,8 @@ export default class UserStore {
   deleteMemberFromOrganization = async (email, refetchMembers) => {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);
     try {
-      const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${email}`);
+      const encodedEmail = encodeURIComponent(email);
+      const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${encodedEmail}`);
       this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);
       if (refetchMembers) {
         this.getOrganizationUsers();
