@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useObserver } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Cookies from "js-cookie";
 import { makeAcronym } from '../../utils/stringUtils';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
-import { FEATURES, SIGN_OUT_ICON } from '../../config';
+import { FEATURES, ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_NAV_SIGNOUT,
@@ -106,7 +107,15 @@ const AccountSidebar = () => {
         <LinksContainer>
           {renderLinks(links)}
         </LinksContainer>
-        <a href="/logout" rel="noopener noreferrer" id="sidebar-signout" onClick={() => sendAction(OTA_NAV_SIGNOUT)}>
+        <a
+          href="/logout"
+          rel="noopener noreferrer"
+          id="sidebar-signout"
+          onClick={() => {
+            Cookies.remove(ORGANIZATION_NAMESPACE_COOKIE);
+            sendAction(OTA_NAV_SIGNOUT)
+        }}
+        >
           <Signout>
             <SignoutIcon src={SIGN_OUT_ICON} />
             <Title size="small" id="sidebar-signout-title">{t('account-settings.links.sign-out')}</Title>
