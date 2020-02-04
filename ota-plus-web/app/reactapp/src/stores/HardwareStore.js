@@ -165,7 +165,7 @@ export default class HardwareStore {
   fetchPublicKey(deviceId, ecuId) {
     resetAsync(this.hardwarePublicKeyFetchAsync, true);
     return axios
-      .get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecus/public_key?ecu_serial=${ecuId}`)
+      .get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecus/${ecuId}/public_key`)
       .then(
         (response) => {
           this.publicKey = response.data;
