@@ -1,5 +1,6 @@
 
 export const ANALYTICS_VIEW_HOMEPAGE = 'Home';
+export const ANALYTICS_VIEW_OLD_DASHBOARD = 'Old dashboard';
 export const ANALYTICS_VIEW_DEVICES = 'Devices';
 export const ANALYTICS_VIEW_DEVICE_DETAIL_VIEW = 'Device Detail View';
 export const ANALYTICS_VIEW_SOFTWARE_VERSIONS = 'Software versions';
