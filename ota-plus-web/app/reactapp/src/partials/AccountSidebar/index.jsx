@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useObserver } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import { makeAcronym } from '../../utils/stringUtils';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
@@ -113,8 +113,8 @@ const AccountSidebar = () => {
           id="sidebar-signout"
           onClick={() => {
             Cookies.remove(ORGANIZATION_NAMESPACE_COOKIE);
-            sendAction(OTA_NAV_SIGNOUT)
-        }}
+            sendAction(OTA_NAV_SIGNOUT);
+          }}
         >
           <Signout>
             <SignoutIcon src={SIGN_OUT_ICON} />

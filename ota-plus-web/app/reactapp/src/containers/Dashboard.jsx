@@ -9,6 +9,8 @@ import { withTranslation } from 'react-i18next';
 import { LatestCreatedCampaigns, LastDevices, LastSoftware } from '../components/dashboard';
 import { Dropdown } from '../partials';
 import { SoftwareCreateModal } from '../components/software';
+import { setAnalyticsView } from '../helpers/analyticsHelper';
+import { ANALYTICS_VIEW_OLD_DASHBOARD } from '../constants/analyticsViews';
 
 @observer
 class Dashboard extends Component {
@@ -24,6 +26,10 @@ class Dashboard extends Component {
     addNewWizard: PropTypes.func,
     t: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    setAnalyticsView(ANALYTICS_VIEW_OLD_DASHBOARD);
+  }
 
   showSoftwareCreateModal = (e) => {
     if (e) e.preventDefault();
