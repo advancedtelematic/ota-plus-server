@@ -33,13 +33,15 @@ import {
   NOT_IN_SMART_GROUP,
   NOT_IN_FIXED_GROUP,
   NOT_SEEN_RECENTLY_HOURS,
+  UNGROUPED,
+  UNGROUPED_DEVICES_COUNT_FETCH_ASYNC,
+} from '../config';
+import {
   SHA_256,
   SORT_DIR_ASC,
   SORT_DIR_DESC,
   STATUS,
-  UNGROUPED,
-  UNGROUPED_DEVICES_COUNT_FETCH_ASYNC,
-} from '../config';
+} from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { HTTP_CODE_200_OK, HTTP_CODE_404_NOT_FOUND } from '../constants/httpCodes';
 

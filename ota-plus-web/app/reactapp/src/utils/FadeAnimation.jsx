@@ -3,12 +3,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
+import { ANIMATION_TYPE } from '../constants';
 
 const FadeAnimation = ({ runOnMount, display, children }) => (
   <VelocityTransitionGroup
     component="span"
-    enter={{ animation: 'fadeIn', display }}
-    leave={{ animation: 'fadeOut', display }}
+    enter={{ animation: ANIMATION_TYPE.FADE_IN, display }}
+    leave={{ animation: ANIMATION_TYPE.FADE_OUT, display }}
     runOnMount={runOnMount}
   >
     {children}

@@ -22,7 +22,7 @@ import {
 } from '../../constants/groupConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_SMART_GROUP, OTA_DEVICES_CREATE_FIXED_GROUP } from '../../constants/analyticsActions';
-import { GROUP_ICON_GRAY, GROUP_DYNAMIC_ICON } from '../../config';
+import { assets, GROUP_ICON_GRAY, GROUP_DYNAMIC_ICON } from '../../config';
 
 const wizardSteps = [
   {
@@ -253,7 +253,7 @@ class CreateModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" id="create-group-modal_close-icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" id="create-group-modal_close-icon" />
             </div>
           </div>
         )}

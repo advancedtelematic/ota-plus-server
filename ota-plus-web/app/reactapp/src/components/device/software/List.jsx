@@ -13,8 +13,13 @@ import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
+import { EVENTS, SLIDE_ANIMATION_TYPE } from '../../../constants';
 
 const HEADER_HEIGHT = 28;
+const HEADERS_CUMULATIVE_HEIGHT = 225;
+const START_INTERVAL_SCROLL_TIMEOUT_MS = 10;
+const ON_PACKAGE_CHANGE_TIMEOUT_MS = 50;
+const SCROLL_DURATION = 800;
 
 @inject('stores')
 @observer
@@ -42,13 +47,13 @@ class List extends Component {
         setTimeout(() => {
           that.listScroll();
           that.highlightInstalledPackage(softwareStore.expandedPackage);
-        }, 50);
+        }, ON_PACKAGE_CHANGE_TIMEOUT_MS);
       }
     });
   }
 
   componentDidMount() {
-    this.listRef.current.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener(EVENTS.SCROLL, this.listScroll);
     this.listScroll();
   }
 
@@ -61,7 +66,7 @@ class List extends Component {
 
   componentWillUnmount() {
     this.packagesChangeHandler();
-    this.listRef.current.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener(EVENTS.SCROLL, this.listScroll);
   }
 
   generateHeadersPositions = () => {
@@ -156,8 +161,8 @@ class List extends Component {
         const { top: newTop } = document.getElementById(`button-package-${pack.id.name}`).getBoundingClientRect();
         top = newTop;
       }
-      const scrollTo = scrollTop + top - 225;
-      animatedScroll(this.listRef.current, scrollTo, 800);
+      const scrollTo = scrollTop + top - HEADERS_CUMULATIVE_HEIGHT;
+      animatedScroll(this.listRef.current, scrollTo, SCROLL_DURATION);
     }
   }
 
@@ -166,7 +171,7 @@ class List extends Component {
     const that = this;
     const intervalId = setInterval(() => {
       that.listScroll();
-    }, 10);
+    }, START_INTERVAL_SCROLL_TIMEOUT_MS);
     this.tmpIntervalId = intervalId;
   }
 
@@ -341,7 +346,7 @@ class List extends Component {
                     />
                     <VelocityTransitionGroup
                       enter={{
-                        animation: 'slideDown',
+                        animation: SLIDE_ANIMATION_TYPE.DOWN,
                         begin: () => {
                           that.startIntervalListScroll();
                         },
@@ -350,7 +355,7 @@ class List extends Component {
                         },
                       }}
                       leave={{
-                        animation: 'slideUp',
+                        animation: SLIDE_ANIMATION_TYPE.UP,
                         begin: () => {
                           that.startIntervalListScroll();
                         },
@@ -364,7 +369,7 @@ class List extends Component {
                           <li>
                             <VelocityTransitionGroup
                               enter={{
-                                animation: 'slideDown',
+                                animation: SLIDE_ANIMATION_TYPE.DOWN,
                                 begin: () => {
                                   that.startIntervalListScroll();
                                 },
@@ -373,7 +378,7 @@ class List extends Component {
                                 },
                               }}
                               leave={{
-                                animation: 'slideUp',
+                                animation: SLIDE_ANIMATION_TYPE.UP,
                                 begin: () => {
                                   that.startIntervalListScroll();
                                 },

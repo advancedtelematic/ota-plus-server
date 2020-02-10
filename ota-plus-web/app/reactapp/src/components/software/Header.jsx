@@ -7,7 +7,7 @@ import { Tag } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import Button from '../../partials/Button';
-import { FEATURES } from '../../config';
+import { FEATURES, PACKAGES_ADVANCED_TAB, PACKAGES_DEFAULT_TAB } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_SOFTWARE_SEE_ALL,
@@ -70,19 +70,19 @@ class Header extends Component {
             <ul className="tab-navigation__links">
               <li
                 onClick={() => {
-                  this.setActive('compact');
+                  this.setActive(PACKAGES_DEFAULT_TAB);
                   sendAction(OTA_SOFTWARE_SEE_ALL);
                 }}
-                className={`tab-navigation__link ${this.isActive('compact')}`}
+                className={`tab-navigation__link ${this.isActive(PACKAGES_DEFAULT_TAB)}`}
               >
                 <span>{t('software.tabs.compact')}</span>
               </li>
               <li
                 onClick={() => {
-                  this.setActive('advanced');
+                  this.setActive(PACKAGES_ADVANCED_TAB);
                   sendAction(OTA_SOFTWARE_SEE_ADVANCED);
                 }}
-                className={`tab-navigation__link ${this.isActive('advanced')}`}
+                className={`tab-navigation__link ${this.isActive(PACKAGES_ADVANCED_TAB)}`}
               >
                 <span>
                   {t('software.tabs.advanced')}

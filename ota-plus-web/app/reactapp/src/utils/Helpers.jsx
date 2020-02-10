@@ -1,6 +1,7 @@
 /** @format */
 
 import _ from 'lodash';
+import { DATA_TYPE, SHA_256 } from '../constants';
 
 const contains = (objects, item, compareAs) => {
   const useId = _.isUndefined(compareAs);
@@ -9,11 +10,11 @@ const contains = (objects, item, compareAs) => {
 
   if (useId) {
     compare = { id: item.id };
-  } else if (compareAs === 'update') {
+  } else if (compareAs === DATA_TYPE.UPDATE) {
     compare = {
       uuid: item.uuid,
     };
-  } else if (compareAs === 'hardware') {
+  } else if (compareAs === DATA_TYPE.HARDWARE) {
     compare = {
       name: item.name,
     };
@@ -33,7 +34,7 @@ const prepareUpdateObject = (data) => {
       from: {
         target: item.from.target,
         checksum: {
-          method: 'sha256',
+          method: SHA_256,
           hash: item.from.hash,
         },
         targetLength: item.from.targetLength,
@@ -41,7 +42,7 @@ const prepareUpdateObject = (data) => {
       to: {
         target: item.to.target,
         checksum: {
-          method: 'sha256',
+          method: SHA_256,
           hash: item.to.hash,
         },
         targetLength: item.to.targetLength,

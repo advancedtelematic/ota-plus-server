@@ -5,6 +5,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
+import { METADATA_TYPES } from '../../../constants';
 
 const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
   const metadata = campaign.metadata.length ? campaign.metadata : null;
@@ -54,36 +55,36 @@ const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
             <span id={`update-id-${campaign.id}`}>{'Require OTA client\'s approval before installation'}</span>
           </div>
           )}
-          {metadata && metadata.find(el => el.type === 'DESCRIPTION') && (
+          {metadata && metadata.find(el => el.type === METADATA_TYPES.DESCRIPTION) && (
           <div className="overview-panel__item-header--update__name">
             <span id={`update-id-title-${campaign.id}`} className="overview-panel__item-header__label">
               {t('devices.mtu.approval_pending.notification_text')}
             </span>
-            <span id={`update-id-${campaign.id}`}>{metadata.find(el => el.type === 'DESCRIPTION').value}</span>
+            <span id={`update-id-${campaign.id}`}>{metadata.find(el => el.type === METADATA_TYPES.DESCRIPTION).value}</span>
           </div>
           )}
         </div>
         <div className="overview-panel__item-header--update">
-          {metadata && metadata.find(el => el.type === 'ESTIMATED_PREPARATION_DURATION') && (
+          {metadata && metadata.find(el => el.type === METADATA_TYPES.PRE_DURATION) && (
           <div className="overview-panel__item-header--update__name">
             <span id={`update-id-title-${campaign.id}`} className="overview-panel__item-header__label">
               {t('devices.mtu.approval_pending.estimated_time_to_prepare')}
             </span>
             <span id={`update-id-${campaign.id}`}>
               {moment.utc(
-                parseInt(metadata.find(el => el.type === 'ESTIMATED_PREPARATION_DURATION').value, 10) * 1000
+                parseInt(metadata.find(el => el.type === METADATA_TYPES.PRE_DURATION).value, 10) * 1000
               ).format('HH:mm:ss')}
             </span>
           </div>
           )}
-          {metadata && metadata.find(el => el.type === 'ESTIMATED_INSTALLATION_DURATION') && (
+          {metadata && metadata.find(el => el.type === METADATA_TYPES.INSTALL_DURATION) && (
           <div className="overview-panel__item-header--update__description">
             <span id={`update-id-title-${campaign.id}`} className="overview-panel__item-header__label">
               {t('devices.mtu.approval_pending.estimated_time_to_install')}
             </span>
             <span id={`update-id-${campaign.id}`}>
               {moment.utc(
-                parseInt(metadata.find(el => el.type === 'ESTIMATED_INSTALLATION_DURATION').value, 10) * 1000
+                parseInt(metadata.find(el => el.type === METADATA_TYPES.INSTALL_DURATION).value, 10) * 1000
               ).format('HH:mm:ss')}
             </span>
           </div>

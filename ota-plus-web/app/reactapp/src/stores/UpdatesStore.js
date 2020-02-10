@@ -8,7 +8,6 @@ import {
   API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
   API_UPDATES_CREATE,
   LIMIT_UPDATES_WIZARD,
-  SHA_256,
   UPDATES_FETCH_ASYNC,
   UPDATES_LIMIT_PER_PAGE,
   UPDATES_SAFE_FETCH_ASYNC,
@@ -16,6 +15,7 @@ import {
   UPDATES_WIZARD_LOAD_MORE_ASYNC,
   WIZARD_KEY,
 } from '../config';
+import { SHA_256 } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
 export default class UpdatesStore {

@@ -3,11 +3,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { VelocityTransitionGroup } from 'velocity-react';
+import { SLIDE_ANIMATION_TYPE } from '../constants';
 
 const SlideAnimation = ({ display, changeDisplay, runOnMount, children }) => (
   <VelocityTransitionGroup
-    enter={{ animation: 'slideDown', display: changeDisplay ? display : undefined }}
-    leave={{ animation: 'slideUp', display: changeDisplay ? display : undefined }}
+    enter={{ animation: SLIDE_ANIMATION_TYPE.DOWN, display: changeDisplay ? display : undefined }}
+    leave={{ animation: SLIDE_ANIMATION_TYPE.UP, display: changeDisplay ? display : undefined }}
     runOnMount={runOnMount}
   >
     {children}

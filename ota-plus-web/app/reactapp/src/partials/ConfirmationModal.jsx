@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import OTAModal from './OTAModal';
+import { assets } from '../config';
 
 class ConfirmationModal extends Component {
   continue = () => {
@@ -44,7 +45,7 @@ class ConfirmationModal extends Component {
         topActions={(
           <div className="top-actions flex-end" id="confirmation-modal-top-actions">
             <div className="modal-close" onClick={hide} id="confirmation-modal-close">
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
 )}

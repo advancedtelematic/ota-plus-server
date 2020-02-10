@@ -4,6 +4,8 @@
 import _ from 'lodash';
 import Cookies from 'js-cookie';
 import { ORGANIZATION_NAMESPACE_COOKIE } from '../config';
+import { STATUS } from '../constants';
+import { HTTP_CODE_401_UNAUTHORIZED } from '../constants/httpCodes';
 
 const doLogout = () => {
   document.getElementById('logout').submit();
@@ -26,7 +28,7 @@ const resetAll = (asyncCollection, isFetching = false) => {
 };
 
 const handleAsyncSuccess = response => ({
-  status: 'success',
+  status: STATUS.SUCCESS,
   code: response.status,
   data: response.data,
   isFetching: false,
@@ -35,12 +37,12 @@ const handleAsyncSuccess = response => ({
 const handleAsyncError = (error) => {
   error.response = error.response || { status: null, data: {} };
 
-  if (error.response.status === 401) {
+  if (error.response.status === HTTP_CODE_401_UNAUTHORIZED) {
     doLogout();
   }
 
   return {
-    status: 'error',
+    status: STATUS.ERROR,
     code: error.response.status,
     data: error.response.data,
     isFetching: false,

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '../../../partials';
-import { WARNING_MODAL_TYPE } from '../../../config';
+import { WARNING_MODAL_TYPE } from '../../../constants';
 
 export const BackgroundMask = styled.div`
   position: absolute;

@@ -10,7 +10,7 @@ import {
   Title,
   TopBar
 } from './styled';
-import { WARNING_MODAL_TYPE } from '../../../config';
+import { WARNING_MODAL_TYPE } from '../../../constants';
 
 const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps, onClose }) => (
   <>

@@ -25,9 +25,8 @@ import {
   CAMPAIGNS_STATUS_SCHEDULED,
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_DEFAULT_TAB,
-  SORT_DIR_ASC
 } from '../config';
-import { CAMPAIGN_RETRY_STATUSES } from '../constants';
+import { CAMPAIGN_RETRY_STATUSES, SORT_DIR_ASC } from '../constants';
 import { resetAll, resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { prepareUpdateObject } from '../utils/Helpers';
 import { getOverallCampaignStatistics } from '../helpers/campaignHelper';
