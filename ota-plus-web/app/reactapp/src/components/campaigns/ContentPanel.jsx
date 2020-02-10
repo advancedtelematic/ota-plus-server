@@ -11,9 +11,16 @@ import _ from 'lodash';
 import ListHeader from './ListHeader';
 import List from './List';
 import Loader from '../../partials/Loader';
-
-import { CAMPAIGNS_LIMIT_PER_PAGE, CAMPAIGNS_DEFAULT_TAB, CAMPAIGNS_PAGE_NUMBER_DEFAULT } from '../../config';
 import TabNavigation from '../../partials/TabNavigation';
+
+import {
+  ACTIVE_TAB_KEY,
+  CAMPAIGNS_DEFAULT_TAB,
+  CAMPAIGNS_FETCH_ASYNC,
+  CAMPAIGNS_FILTER,
+  CAMPAIGNS_LIMIT_PER_PAGE,
+  CAMPAIGNS_PAGE_NUMBER_DEFAULT,
+} from '../../config';
 
 @inject('stores')
 @observer
@@ -40,12 +47,12 @@ class ContentPanel extends Component {
 
     this.cancelObserveTabChange = observe(campaignsStore, (change) => {
       this.applyTab(change);
-      if (change.name === 'campaignsFilter') {
+      if (change.name === CAMPAIGNS_FILTER) {
         this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
       }
     });
 
-    onBecomeObserved(this, 'activeTab', this.resumeScope);
+    onBecomeObserved(this, ACTIVE_TAB_KEY, this.resumeScope);
   }
 
   componentWillUnmount() {
@@ -92,7 +99,7 @@ class ContentPanel extends Component {
   applyTab = (change) => {
     const { name, newValue } = change;
 
-    if (name === 'activeTab') {
+    if (name === ACTIVE_TAB_KEY) {
       this.setActive(newValue);
       this.setState({ pageNumber: CAMPAIGNS_PAGE_NUMBER_DEFAULT });
       this.fetchCampaignsData(1, CAMPAIGNS_LIMIT_PER_PAGE);
@@ -103,7 +110,7 @@ class ContentPanel extends Component {
     const { stores } = this.props;
     const { campaignsStore } = stores;
 
-    campaignsStore.fetchCampaigns(this.activeTab, 'campaignsFetchAsync', (page - 1) * pageSize);
+    campaignsStore.fetchCampaigns(this.activeTab, CAMPAIGNS_FETCH_ASYNC, (page - 1) * pageSize);
   };
 
   render() {

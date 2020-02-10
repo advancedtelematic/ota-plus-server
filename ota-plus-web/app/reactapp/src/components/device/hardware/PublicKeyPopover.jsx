@@ -9,6 +9,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import { withTranslation } from 'react-i18next';
 
 import { Loader } from '../../../partials';
+import { ANIMATION_TYPE } from '../../../constants';
 
 @inject('stores')
 @observer
@@ -44,10 +45,10 @@ class PublicKeyPopover extends Component {
               </CopyToClipboard>
               <VelocityTransitionGroup
                 enter={{
-                  animation: 'fadeIn',
+                  animation: ANIMATION_TYPE.FADE_IN,
                 }}
                 leave={{
-                  animation: 'fadeOut',
+                  animation: ANIMATION_TYPE.FADE_OUT,
                 }}
               >
                 {copied ? <span className="clipboard-copied">{t('devices.hardware.public_key_copied')}</span> : null}

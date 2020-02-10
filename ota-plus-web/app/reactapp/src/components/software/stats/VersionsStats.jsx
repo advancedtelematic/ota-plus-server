@@ -8,6 +8,12 @@ import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
 import { withTranslation } from 'react-i18next';
 
+const CHARTS_CONFIG = {
+  DEFAULT_HEIGHT: 175,
+  DEFAULT_WIDTH: 175,
+  CUTOUT_PERCENTAGE: 75
+};
+
 @observer
 class VersionsStats extends Component {
   @observable installedOnEcusTotal = 0;
@@ -89,10 +95,10 @@ class VersionsStats extends Component {
             <div>
               <Doughnut
                 data={toJS(this.stats)}
-                width={175}
-                height={175}
+                width={CHARTS_CONFIG.DEFAULT_WIDTH}
+                height={CHARTS_CONFIG.DEFAULT_HEIGHT}
                 options={{
-                  cutoutPercentage: 75,
+                  cutoutPercentage: CHARTS_CONFIG.CUTOUT_PERCENTAGE,
                 }}
               />
             </div>

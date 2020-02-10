@@ -142,7 +142,7 @@ export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/reg
 export const API_PROVISIONING_DOWNLOAD = '/user/credentials';
 
 export const NAMESPACE_SETUP_TIMEOUT_MS = 800;
-export const PROV_NOTIFICATION_DURATION_SEC = 6;
+export const NOTIFICATION_DURATION_SEC = 6;
 
 /* default values, limits, definitions */
 /*
@@ -176,11 +176,13 @@ export const WIZARD_KEY = 'wizard';
  */
 
 export const PACKAGES_DEFAULT_TAB = 'compact';
+export const PACKAGES_ADVANCED_TAB = 'advanced';
 
 /**
  * campaigns
  */
 
+export const CAMPAIGNS_FILTER = 'campaignsFilter';
 export const CAMPAIGNS_PAGE_NUMBER_DEFAULT = 1;
 export const CAMPAIGNS_LIMIT_LATEST = 4;
 export const CAMPAIGNS_LIMIT_PER_PAGE = 10;
@@ -215,26 +217,7 @@ export const CAMPAIGNS_DEFAULT_TAB = CAMPAIGNS_STATUS_ALL;
  * Misc
  */
 
-export const FIREWORKS_ACKNOWLEDGED_KEY = 'fireworksPageAcknowledged';
-export const REMOVAL_MODAL_TYPE = {
-  MEMBER_REMOVAL: 'memberRemoval',
-  SELF_REMOVAL: 'selfRemoval'
-};
-export const PAGE_DEVICE = 'device';
-export const PAGE_PACKAGES = 'packages';
-export const SHA_256 = 'sha256';
-export const SORT_DIR_ASC = 'asc';
-export const SORT_DIR_DESC = 'desc';
-export const STATUS = {
-  SUCCESS: 'success',
-  WAITING: 'waiting',
-  ERROR: 'error'
-};
-
-export const WARNING_MODAL_TYPE = {
-  DANGER: 'danger',
-  DEFAULT: 'default',
-};
+export const INFINITY_SCROLL_THRESHOLD = 250;
 
 /**
  * devices
@@ -271,6 +254,12 @@ export const GROUP_TYPE = {
 export const GROUPS_CREATE_FETCH_ASYNC = 'groupsCreateFetchAsync';
 export const GROUPS_FETCH_ASYNC = 'groupsFetchAsync';
 export const GROUPS_FETCH_DEVICES_ASYNC = 'groupsFetchDevicesAsync';
+export const GROUPS_FILTER_CONDITIONS = {
+  CONTAINS: 'contains',
+  DIFF_CHAR: 'has a character different from',
+  EQUAL_CHAR: 'has a character equal to',
+  POSITION: 'position'
+};
 export const NUM_DEVICES_BY_EXP_ASYNC = 'numberOfDevicesByExpressionAsync';
 
 /**

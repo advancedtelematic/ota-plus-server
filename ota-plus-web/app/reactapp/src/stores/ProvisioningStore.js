@@ -12,10 +12,9 @@ import {
   API_PROVISIONING_KEY_CREATE,
   API_NAMESPACE_SETUP_STEPS,
   NAMESPACE_SETUP_TIMEOUT_MS,
-  PROV_NOTIFICATION_DURATION_SEC,
-  SORT_DIR_ASC,
-  SORT_DIR_DESC,
+  NOTIFICATION_DURATION_SEC,
 } from '../config';
+import { SORT_DIR_ASC, SORT_DIR_DESC } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { HTTP_CODE_200_OK } from '../constants/httpCodes';
 
@@ -189,7 +188,7 @@ export default class ProvisioningStore {
         message: 'Please try again later.',
         // eslint-disable-next-line max-len
         description: 'If this is a new account, it may take some time to generate the keys for your repository. If the error persists, please try logging in again.',
-        duration: PROV_NOTIFICATION_DURATION_SEC
+        duration: NOTIFICATION_DURATION_SEC
       });
     }
   }

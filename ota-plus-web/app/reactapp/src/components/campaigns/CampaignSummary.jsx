@@ -16,6 +16,11 @@ import {
   CAMPAIGNS_STATUS_TAB_TITLE
 } from '../../config';
 
+const LOADER_CONFIG = {
+  SIZE: 30,
+  THICKNESS: 5
+};
+
 @observer
 class CampaignSummary extends Component {
   static propTypes = {
@@ -118,7 +123,7 @@ class CampaignSummary extends Component {
             <div id="campaign-more-info">{t('campaigns.more_info')}</div>
           ) : (
             <div className="wrapper-center">
-              <Loader size={30} thickness={5} />
+              <Loader size={LOADER_CONFIG.SIZE} thickness={LOADER_CONFIG.THICKNESS} />
             </div>
           )}
         </div>

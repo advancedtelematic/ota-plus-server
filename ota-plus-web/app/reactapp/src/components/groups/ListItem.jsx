@@ -7,7 +7,7 @@ import { observable } from 'mobx';
 import { withTranslation } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
 
-import { GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
+import { GROUP_GROUP_TYPE_STATIC, GROUP_GROUP_TYPE_REAL } from '../../constants/groupConstants';
 import RenameModal from './RenameModal';
 import { Dropdown } from '../../partials';
 
@@ -62,7 +62,7 @@ class ListItem extends Component {
         className={`groups-panel__item${isSelected ? ' groups-panel__item--selected' : ''}${isOver ? ' groups-panel__item--active' : ''}`}
         id={`button-group-${group.groupName}`}
         onClick={() => {
-          selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart });
+          selectGroup({ type: GROUP_GROUP_TYPE_REAL, groupName: group.groupName, id: group.id, isSmart });
         }}
       >
         {!isSmart ? (
@@ -86,7 +86,7 @@ class ListItem extends Component {
                   id="edit-comment"
                   onClick={(e) => {
                     e.preventDefault();
-                    selectGroup({ type: 'real', groupName: group.groupName, id: group.id, isSmart });
+                    selectGroup({ type: GROUP_GROUP_TYPE_REAL, groupName: group.groupName, id: group.id, isSmart });
                     this.showRenameModal();
                   }}
                 >

@@ -11,6 +11,7 @@ import { withTranslation } from 'react-i18next';
 import { FormInput, FormTextarea, Loader } from '../../../partials';
 import { SelectableListItem } from '../../../partials/lists';
 import { contains } from '../../../utils/Helpers';
+import { DATA_TYPE } from '../../../constants';
 
 @inject('stores')
 @observer
@@ -28,7 +29,7 @@ class Step1 extends Component {
     const hardwareList = [];
     _.each(hardwareStore.hardwareIds, (id) => {
       hardwareList.push({
-        type: 'hardware',
+        type: DATA_TYPE.HARDWARE,
         name: id,
       });
     });
@@ -80,9 +81,9 @@ class Step1 extends Component {
               ) : (
                 _.map(hardwareList, (item) => {
                   const { selectedHardwares } = wizardData;
-                  const selected = contains(selectedHardwares, item, 'hardware');
+                  const selected = contains(selectedHardwares, item, DATA_TYPE.HARDWARE);
                   // eslint-disable-next-line no-param-reassign
-                  item.type = 'hardware';
+                  item.type = DATA_TYPE.HARDWARE;
                   return (
                     <SelectableListItem
                       key={item.name}

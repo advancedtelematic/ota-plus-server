@@ -13,6 +13,7 @@ import SoftwareCancelUploadModal from '../components/software/CancelUploadModal'
 import SoftwareCancelAllUploadsModal from '../components/software/CancelAllUploadsModal';
 import { ConvertBytes } from '../utils';
 import OTAModal from './OTAModal';
+import { assets } from '../config';
 
 @inject('stores')
 @observer
@@ -202,7 +203,7 @@ class UploadBox extends Component {
               <img src="/assets/img/icons/minimize.svg" alt="Icon" />
             </div>
             <div className="modal-close" onClick={this.close} id="close-upload-box">
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

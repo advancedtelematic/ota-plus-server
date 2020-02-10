@@ -5,11 +5,13 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
+import { IN_ANY_GROUP, NOT_IN_FIXED_GROUP, NOT_IN_SMART_GROUP, UNGROUPED } from '../../config';
+import { GROUP_ALL, ARTIFICIAL } from '../../constants';
 
 const groupTarget = {
   drop(props, monitor) {
     const device = monitor.getItem();
-    if (props.group.name === 'ungrouped') {
+    if (props.group.name === UNGROUPED) {
       props.onDeviceDrop(device, null);
     }
   },
@@ -31,13 +33,13 @@ class ListItemArtificial extends Component {
     const { groupsStore, devicesStore } = stores;
     const { ungrouped } = groupsStore.selectedGroup;
     return connectDropTarget(
-      group.name === 'all' ? (
+      group.name === GROUP_ALL ? (
         <div
           title={group.friendlyName}
           id={group.identifier}
           className={`groups-panel__item groups-panel__item--artificial${isSelected ? ' groups-panel__item--selected' : ''}${isOver ? ' groups-panel__item--active' : ''}`}
           onClick={() => {
-            selectGroup({ type: 'artificial', groupName: group.name, id: group.id });
+            selectGroup({ type: ARTIFICIAL, groupName: group.name, id: group.id });
           }}
           key={group.name}
         >
@@ -60,12 +62,12 @@ class ListItemArtificial extends Component {
             <div
               className={
                 `groups-panel__item-subtitle${
-                  ungrouped === 'inAnyGroup' ? ' groups-panel__item-subtitle--selected' : ''
+                  ungrouped === IN_ANY_GROUP ? ' groups-panel__item-subtitle--selected' : ''
                 }${isOver ? ' groups-panel__item-subtitle--active' : ''}`
               }
               id={`group-${group.name}-devices`}
               onClick={() => {
-                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'inAnyGroup' });
+                selectGroup({ type: ARTIFICIAL, groupName: group.name, id: group.id, ungrouped: IN_ANY_GROUP });
               }}
             >
               <span>Not in a group: </span>
@@ -74,12 +76,12 @@ class ListItemArtificial extends Component {
             <div
               className={
                 `groups-panel__item-subtitle${
-                  ungrouped === 'notInSmartGroup' ? ' groups-panel__item-subtitle--selected' : ''
+                  ungrouped === NOT_IN_SMART_GROUP ? ' groups-panel__item-subtitle--selected' : ''
                 }${isOver ? ' groups-panel__item-subtitle--active' : ''}`
               }
               id={`group-${group.name}-devices`}
               onClick={() => {
-                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInSmartGroup' });
+                selectGroup({ type: ARTIFICIAL, groupName: group.name, id: group.id, ungrouped: NOT_IN_SMART_GROUP });
               }}
             >
               <span>Not in a smart device group: </span>
@@ -88,12 +90,12 @@ class ListItemArtificial extends Component {
             <div
               className={
                 `groups-panel__item-subtitle${
-                  ungrouped === 'notInFixedGroup' ? ' groups-panel__item-subtitle--selected' : ''
+                  ungrouped === NOT_IN_FIXED_GROUP ? ' groups-panel__item-subtitle--selected' : ''
                 }${isOver ? ' groups-panel__item-subtitle--active' : ''}`
               }
               id={`group-${group.name}-devices`}
               onClick={() => {
-                selectGroup({ type: 'artificial', groupName: group.name, id: group.id, ungrouped: 'notInFixedGroup' });
+                selectGroup({ type: ARTIFICIAL, groupName: group.name, id: group.id, ungrouped: NOT_IN_FIXED_GROUP });
               }}
             >
               <span>{t('groups.not_in_a_fixed_group')}</span>

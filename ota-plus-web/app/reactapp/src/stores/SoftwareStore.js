@@ -28,16 +28,18 @@ import {
   ONDEVICE_SOFTWARE_LIMIT,
   OSTREE_FORMAT,
   PACKAGES_DEFAULT_TAB,
-  PAGE_DEVICE,
-  PAGE_PACKAGES,
   SOFTWARE_DELETE_ALL_DONE,
   SOFTWARE_FETCH_ASYNC,
   SOFTWARE_HISTORY_LIMIT,
   SOFTWARES_LIMIT_LATEST,
+} from '../config';
+import {
+  PAGE_DEVICE,
+  PAGE_PACKAGES,
   SORT_DIR_ASC,
   SORT_DIR_DESC,
   STATUS,
-} from '../config';
+} from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 
 

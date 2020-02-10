@@ -13,7 +13,7 @@ import moment from 'moment';
 
 import { Button, OTAModal, Loader, FormSelect, OperationCompletedInfo, ModalTitleWrapper } from '../../partials';
 import { URL_SOFTWARE_PUSHING_UPDATES } from '../../constants/urlConstants';
-import { SOFTWARE_ICON_GRAY } from '../../config';
+import { assets, SOFTWARE_ICON_GRAY } from '../../config';
 
 @inject('stores')
 @observer
@@ -232,7 +232,7 @@ class CreateModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

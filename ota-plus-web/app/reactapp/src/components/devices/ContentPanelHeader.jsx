@@ -9,6 +9,8 @@ import { withTranslation } from 'react-i18next';
 import { Button, SubHeader, SearchBar } from '../../partials';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_CAMPAIGN } from '../../constants/analyticsActions';
+import { UNGROUPED } from '../../config';
+import { DATA_TYPE } from '../../constants';
 
 @inject('stores')
 @observer
@@ -27,13 +29,13 @@ class ContentPanelHeader extends Component {
     const { selectedGroup } = groupsStore;
     return (
       <SubHeader>
-        {selectedGroup.id && selectedGroup.id !== 'ungrouped' && (
+        {selectedGroup.id && selectedGroup.id !== UNGROUPED && (
           <div className="add-group-campaign">
             <Button
               htmlType="button"
               onClick={(e) => {
                 e.preventDefault();
-                addNewWizard('groups');
+                addNewWizard(DATA_TYPE.GROUPS);
                 sendAction(OTA_DEVICES_CREATE_CAMPAIGN);
               }}
             >

@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { SubHeader, FormInput } from '../../partials';
+import { GROUPS_FILTER_CONDITIONS } from '../../config';
 
 const CHARACTER_POSITION_REGEXP_PATTERN = '\\((.*?)\\)';
+const DEVICE_ID = 'Device ID';
 
 @inject('stores')
 @observer
@@ -20,32 +22,32 @@ class ContentPanelSubheader extends Component {
     expressionsArray.forEach((element) => {
       const singleExpressionAfterSplit = element.split(' ');
       let singleExpressionToDisplay = [];
-      if (element.search('contains') > 0) {
+      if (element.search(GROUPS_FILTER_CONDITIONS.CONTAINS) > 0) {
         // line below to support old type of expression closed in parenthesis
         if (singleExpressionAfterSplit[2].charAt(singleExpressionAfterSplit[2].length - 1) === ')') {
           singleExpressionAfterSplit[2] = singleExpressionAfterSplit[2].slice(0, -1);
         }
-        singleExpressionToDisplay = ['Device ID', 'contains', singleExpressionAfterSplit[2]];
+        singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.CONTAINS, singleExpressionAfterSplit[2]];
 
         return expressionsArrayToDisplay.push({
           expression: singleExpressionToDisplay,
-          type: 'contains',
+          type: GROUPS_FILTER_CONDITIONS.CONTAINS,
         });
       }
-      if (element.search('position') > 0) {
+      if (element.search(GROUPS_FILTER_CONDITIONS.POSITION) > 0) {
         // we need to get value between () brackets
         // for example: the input is "deviceid,position(13),is,8" and the output is ["(15)", "15"]
         const [, character] = element.match(CHARACTER_POSITION_REGEXP_PATTERN);
         const position = singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1];
         if (element.search('not') < 0) {
-          singleExpressionToDisplay = ['Device ID', 'has a character equal to', position, `in position ${character}`];
+          singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.EQUAL_CHAR, position, `in position ${character}`];
         } else if (element.search('not') > 0) {
-          singleExpressionToDisplay = ['Device ID', 'has a character different from', position, `in position ${character}`];
+          singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.DIFF_CHAR, position, `in position ${character}`];
         }
 
         return expressionsArrayToDisplay.push({
           expression: singleExpressionToDisplay,
-          type: 'position',
+          type: GROUPS_FILTER_CONDITIONS.POSITION,
         });
       }
       return true;
@@ -71,7 +73,7 @@ class ContentPanelSubheader extends Component {
             />
           </div>
 
-          {singleFilter.type === 'contains' && (
+          {singleFilter.type === GROUPS_FILTER_CONDITIONS.CONTAINS && (
           <div className="filter__block" style={{ flex: 4 }}>
             <FormInput
               id="word"
@@ -82,7 +84,7 @@ class ContentPanelSubheader extends Component {
             />
           </div>
           )}
-          {singleFilter.type === 'position' && (
+          {singleFilter.type === GROUPS_FILTER_CONDITIONS.POSITION && (
           <div className="filter__block filter__block--double" style={{ display: 'flex', flex: 4 }}>
             <div className="filter__block" style={{ flex: 1 }}>
               <FormInput

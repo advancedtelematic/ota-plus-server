@@ -25,11 +25,10 @@ import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../../constants/analyticsViews';
 import { OwnerTag, RemoveButton } from './styled';
 import {
   API_USER_ORGANIZATIONS_SWITCH_NAMESPACE,
-  REMOVAL_MODAL_TYPE,
   ORGANIZATION_NAMESPACE_COOKIE,
-  TRASHBIN_ICON,
-  WARNING_MODAL_TYPE
+  TRASHBIN_ICON
 } from '../../../config';
+import { REMOVAL_MODAL_TYPE, WARNING_MODAL_TYPE } from '../../../constants';
 
 @inject('stores')
 @observer
