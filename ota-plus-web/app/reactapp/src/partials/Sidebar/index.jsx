@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import { Drawer } from 'antd';
 import { SIZES } from '../../constants/styleConstants';
 
+const NAVBARS_HEIGHT = SIZES.NAVBAR_HEIGHT + SIZES.SUBNAVBAR_HEIGHT;
+
 const Sidebar = ({ children, onClose, visible }) => (
   <Drawer
-    width={SIZES.SIDEBAR_WIDTH}
+    width={`${SIZES.SIDEBAR_WIDTH}px`}
     maskStyle={{
       backgroundColor: 'transparent',
-      top: `-${SIZES.NAVBAR_HEIGHT}`,
+      top: `-${NAVBARS_HEIGHT}px`,
     }}
     style={{
-      top: SIZES.NAVBAR_HEIGHT,
-      maxHeight: `calc(100% - ${SIZES.NAVBAR_HEIGHT})`
+      top: `${NAVBARS_HEIGHT}px`,
+      maxHeight: `calc(100% - ${NAVBARS_HEIGHT}px)`
     }}
     bodyStyle={{
       padding: 0
