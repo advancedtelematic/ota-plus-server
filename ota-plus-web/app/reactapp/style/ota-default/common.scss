@@ -2236,7 +2236,7 @@ input {
   display: flex;
   flex-wrap: wrap;
   align-content: space-between;
-  height: calc(100vh - #{$navigation-bar-height});
+  height: calc(100vh - #{$navigation-bars-height});
   overflow-y: auto;
 }
 

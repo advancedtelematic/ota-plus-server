@@ -46,7 +46,7 @@ export const DropdownIcon = styled(Icon)`
 `;
 
 export const ListStyled = styled(List)`
-  background-color: ${({ theme }) => theme.palette.listBackground};
+  background-color: ${({ theme }) => theme.palette.backgroundLight};
   margin: 20px;
 `;
 

@@ -30,6 +30,7 @@ export const OTA_NAV_SOFTWARE_VERSIONS = 'OTA_Nav_Software_Versions';
 export const OTA_NAV_SOFTWARE_UPDATES = 'OTA_Nav_Software_Updates';
 export const OTA_NAV_CAMPAIGNS = 'OTA_Nav_Campaigns';
 export const OTA_NAV_IMPACT = 'OTA_Nav_Impact';
+export const OTA_NAV_ENV_SWITCH = 'OTA_Nav_Env_Switch';
 export const OTA_NAV_GET_STARTED = 'OTA_Nav_Get_Started';
 export const OTA_NAV_DEV_GUIDE = 'OTA_Nav_Dev_Guide';
 export const OTA_NAV_USER_GUIDE = 'OTA_Nav_User_Guide';

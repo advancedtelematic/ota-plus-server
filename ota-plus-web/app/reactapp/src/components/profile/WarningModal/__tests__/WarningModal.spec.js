@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import WarningModal from '..';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
-import { WARNING_MODAL_TYPE } from '../../../../config';
+import { WARNING_MODAL_TYPE } from '../../../../constants';
 
 function mountComponent(props) {
   return mount(
