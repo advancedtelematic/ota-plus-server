@@ -88,11 +88,6 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
           .withBody(body))
       .execResult(apiExec)
 
-  def userProfileRequest(userId: UserId, method: String, path: String)(implicit traceData: TraceData): Future[Result] =
-    userProfileRequest(s"users/${segment(userId.id)}/$path")
-      .transform(_.withMethod(method))
-      .execResult(apiExec)
-
   def userOrganizations(userId: UserId)(implicit traceData: TraceData): Future[Set[UserOrganization]] =
     userProfileRequest(s"users/${segment(userId.id)}/organizations")
       .transform(_.withMethod("GET"))
@@ -109,6 +104,18 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .transform(_.addQueryStringParameters("limit" -> limit.toString))
       .withUser(userId)
       .execJsonValue(apiExec)
+
+  def setNewDefaultOrganization(userId: UserId, newNamespace: Namespace)
+                               (implicit traceData: TraceData): Future[Result] =
+    userProfileRequest(s"users/${segment(userId.id)}/organizations/default")
+      .transform(_.withMethod("PATCH"))
+      .transform(_.withBody(Json.obj("namespace" -> newNamespace.get)))
+      .execResult(apiExec)
+
+  def userProfileRequest(userId: UserId, method: String, path: String)(implicit traceData: TraceData): Future[Result] =
+    userProfileRequest(s"users/${segment(userId.id)}/$path")
+      .transform(_.withMethod(method))
+      .execResult(apiExec)
 
   def organizationRequest(namespace: Namespace,
                           userId: UserId,
