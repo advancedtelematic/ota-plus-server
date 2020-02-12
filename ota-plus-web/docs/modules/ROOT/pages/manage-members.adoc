@@ -1,0 +1,25 @@
+= Manage members in environments
+
+[NOTE]
+====
+This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
+====
+
+You can add colleagues to your environments to collaborate on devices, device groups, software versions, software updates, and campaigns. People that you want to add to your environment must have an OTA Connect account. Also, you can remove members from the environments to which you have access, but you cannot remove the owner of the environment.
+
+To manage members in the environments to which you have access:
+
+1. Log in to OTA Connect.
+2. In the upper-right corner, click the profile menu.
++
+Under your name is your active environment. Make sure that your active environment is the environment in which you want to manage members. If needed, xref:find-and-change-environments.adoc[change] your active environment.
+3. On the profile menu, click *Environments*.
+4. In the *Member* section, do one of the following:
+    * To add a member, specify the email address of the colleague that you want to add to your environment, and then click *Add member*.
++
+The new member appears in the *Members* section and has access to all the resources in the environment.
+
+    * To remove a member, next to the email of the member that you want to remove, click *Remove*, and then click *Yes, remove*.
++
+The member that you removed can no longer access the resources in the environment.
+
