@@ -85,7 +85,7 @@ class Application @Inject() (ws: TraceWSClient,
   private def apiByPath(version: ApiVersion, path: String) : Option[OtaApiUri] = {
     val pathComponents = path.split("/").toList
 
-    val proxiedPrefixes = coreProxiedPrefixes orElse
+    val proxiedPrefixes =
       deviceRegistryProxiedPrefixes orElse
       resolverProxiedPrefixes orElse
       auditorProxiedPrefixes orElse
@@ -109,25 +109,13 @@ class Application @Inject() (ws: TraceWSClient,
     case (_, "assignments" :: _) => directorApiUri
   }
 
-  private val coreProxiedPrefixes: Dispatcher = {
-    case (_, "packages" :: _) => coreApiUri
-    case (_, "devices_info" :: _) => coreApiUri
-    case (_, "device_updates" :: _) => coreApiUri
-    case (_, "vehicle_updates" :: _) => coreApiUri
-    case (_, "update_requests" :: _) => coreApiUri
-    case (_, "history" :: _) => coreApiUri
-    case (_, "blacklist" :: _) => coreApiUri
-    case (_, "impact" :: _) => coreApiUri
-    case (ApiVersion.v1, "campaigns" :: _) => coreApiUri
-    case (_, "auto_install" :: _) => coreApiUri
-  }
-
   private val deviceRegistryProxiedPrefixes: Dispatcher = {
     case (_, "devices" :: _) => devicesApiUri
     case (_, "device_groups" :: _) => devicesApiUri
     case (_, "device_count" :: _) => devicesApiUri
     case (_, "active_device_count" :: _) => devicesApiUri
     case (_, "device_packages" :: _) => devicesApiUri
+    case (_, "package_lists" :: _) => devicesApiUri
   }
 
   private val resolverProxiedPrefixes: Dispatcher = {

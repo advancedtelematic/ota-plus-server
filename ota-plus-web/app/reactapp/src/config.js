@@ -102,12 +102,11 @@ export const API_SOFTWARE_COMMENTS = '/api/v1/user_repo/comments';
  */
 export const API_PACKAGES_COUNT_VERSION_BY_NAME = '/api/v1/device_packages';
 export const API_PACKAGES_COUNT_DEVICE_AND_GROUP = '/api/v1/device_count';
-export const API_PACKAGES_BLACKLIST_FETCH = '/api/v1/blacklist';
-export const API_PACKAGES_PACKAGE_BLACKLISTED_FETCH = '/api/v1/blacklist';
-export const API_PACKAGES_BLACKLIST = '/api/v1/blacklist';
-export const API_PACKAGES_UPDATE_BLACKLISTED = '/api/v1/blacklist';
-export const API_PACKAGES_REMOVE_FROM_BLACKLIST = '/api/v1/blacklist';
-export const API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH = '/api/v1/blacklist';
+export const API_PACKAGES_BLACKLIST_FETCH = '/api/v1/package_lists';
+export const API_PACKAGES_PACKAGE_BLACKLISTED_FETCH = '/api/v1/package_lists';
+export const API_PACKAGES_BLACKLIST = '/api/v1/package_lists';
+export const API_PACKAGES_UPDATE_BLACKLISTED = '/api/v1/package_lists';
+export const API_PACKAGES_REMOVE_FROM_BLACKLIST = '/api/v1/package_lists';
 
 /*
  *  Campaigns
@@ -131,11 +130,6 @@ export const API_CAMPAIGNS_LEGACY_CANCEL = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CANCEL_REQUEST = '/api/v1/update_requests';
 export const API_CAMPAIGNS_STATISTICS_FAILURES_SINGLE = '/api/v1/devices';
 export const API_CAMPAIGNS_RETRY_SINGLE = '/api/v2/campaigns';
-
-/*
- *  Impact analysis
- */
-export const API_IMPACT_ANALYSIS_FETCH = '/api/v1/impact/blacklist';
 
 /*
  *  Provisioning
