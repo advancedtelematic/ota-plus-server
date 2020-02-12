@@ -87,7 +87,6 @@ class Application @Inject() (ws: TraceWSClient,
 
     val proxiedPrefixes =
       deviceRegistryProxiedPrefixes orElse
-      resolverProxiedPrefixes orElse
       auditorProxiedPrefixes orElse
       directorProxiedPrefixes orElse
       repoProxiedPrefixes orElse
@@ -116,15 +115,6 @@ class Application @Inject() (ws: TraceWSClient,
     case (_, "active_device_count" :: _) => devicesApiUri
     case (_, "device_packages" :: _) => devicesApiUri
     case (_, "package_lists" :: _) => devicesApiUri
-  }
-
-  private val resolverProxiedPrefixes: Dispatcher = {
-    case (_, "resolver" :: _) => resolverApiUri
-    case (_, "firmware" :: _) => resolverApiUri
-    case (_, "filters" :: _) => resolverApiUri
-    case (_, "components" :: _) => resolverApiUri
-    case (_, "resolve" :: _) => resolverApiUri
-    case (_, "package_filters" :: _) => resolverApiUri
   }
 
   private val repoProxiedPrefixes: Dispatcher = {
