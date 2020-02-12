@@ -52,8 +52,6 @@ class BlacklistModal extends Component {
       if (newBlacklistAction.mode === 'edit') {
         softwareStore.fetchBlacklist();
         softwareStore.fetchBlacklistedPackage(data);
-      } else {
-        softwareStore.fetchAffectedDevicesCount(data);
       }
     }
   }
