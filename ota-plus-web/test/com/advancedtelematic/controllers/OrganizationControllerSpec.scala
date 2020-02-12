@@ -32,6 +32,8 @@ class OrganizationControllerSpec extends PlaySpec
           "namespace" -> userAllowedNamespace,
           "name" -> "My Organization",
         ))))
+    case (PATCH, url) if s"$userProfileUri/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
+      Action(_ => NoContent)
   }
 
   implicit override lazy val app: play.api.Application =

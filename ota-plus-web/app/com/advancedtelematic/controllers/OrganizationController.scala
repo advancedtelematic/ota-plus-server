@@ -40,6 +40,7 @@ class OrganizationController @Inject()(val conf: Configuration,
           redirectToIndex
         case true =>
           log.info(s"User ${userId.id} switches to the namespace ${namespace.get}")
+          userProfileApi.setNewDefaultOrganization(userId, namespace)
           redirectToIndex.withSession(
             "namespace" -> namespace.get,
             "id_token" -> request.idToken.value,
