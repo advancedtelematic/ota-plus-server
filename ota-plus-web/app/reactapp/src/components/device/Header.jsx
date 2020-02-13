@@ -88,7 +88,7 @@ class Header extends Component {
             </div>
             )}
           </FadeAnimation>
-)}
+        )}
         device={device}
         backButtonShown
       >
@@ -162,7 +162,7 @@ class Header extends Component {
                     <Trans id="delete-device-confirmation-modal-text">
                       {t('devices.delete_confirmation', { device_name: device.deviceName })}
                     </Trans>
-)}
+                  )}
                 />
               )}
               {this.editNameShown && (

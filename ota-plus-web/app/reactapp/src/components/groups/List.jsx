@@ -6,10 +6,13 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { VelocityTransitionGroup } from 'velocity-react';
 
-import { GROUP_GROUP_TYPE_DYNAMIC } from '../../constants/groupConstants';
+import { GROUP_GROUP_TYPE_DYNAMIC, GROUP_GROUP_TYPE_REAL } from '../../constants/groupConstants';
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../utils';
 import { Loader } from '../../partials';
+import { SLIDE_ANIMATION_TYPE } from '../../constants';
+
+const TRANSITION_DURATION_MS = 400;
 
 @inject('stores')
 @observer
@@ -21,11 +24,11 @@ class List extends Component {
       <span>
         <VelocityTransitionGroup
           enter={{
-            animation: 'slideDown',
+            animation: SLIDE_ANIMATION_TYPE.DOWN,
           }}
           leave={{
-            animation: 'slideUp',
-            duration: 400,
+            animation: SLIDE_ANIMATION_TYPE.UP,
+            duration: TRANSITION_DURATION_MS,
           }}
           component="span"
         >
@@ -47,7 +50,7 @@ class List extends Component {
                 {!_.isEmpty(groupsStore.preparedGroups)
                   ? _.map(groupsStore.preparedGroups, groups => _.map(groups, (group) => {
                     const { type, groupName } = groupsStore.selectedGroup;
-                    const isSelected = type === 'real' && groupName === group.groupName;
+                    const isSelected = type === GROUP_GROUP_TYPE_REAL && groupName === group.groupName;
                     let isSmart = false;
                     if (group.groupType === GROUP_GROUP_TYPE_DYNAMIC) {
                       isSmart = true;

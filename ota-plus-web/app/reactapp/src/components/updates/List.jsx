@@ -7,8 +7,10 @@ import { observable, observe } from 'mobx';
 import _ from 'lodash';
 
 import ListItem from './ListItem';
+import { EVENTS } from '../../constants';
 
 const headerHeight = 30;
+const ON_UPDATE_CHANGE_TIMEOUT_MS = 50;
 
 @inject('stores')
 @observer
@@ -30,19 +32,19 @@ class List extends Component {
         const that = this;
         setTimeout(() => {
           that.listScroll();
-        }, 50);
+        }, ON_UPDATE_CHANGE_TIMEOUT_MS);
       }
     });
   }
 
   componentDidMount() {
-    this.listRef.current.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener(EVENTS.SCROLL, this.listScroll);
     this.listScroll();
   }
 
   componentWillUnmount() {
     this.updatesChangeHandler();
-    this.listRef.current.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener(EVENTS.SCROLL, this.listScroll);
   }
 
   generateHeadersPositions = () => {

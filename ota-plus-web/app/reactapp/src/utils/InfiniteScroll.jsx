@@ -1,6 +1,8 @@
 /** @format */
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { INFINITY_SCROLL_THRESHOLD } from '../config';
+import { EVENTS } from '../constants';
 
 export default class InfiniteScroll extends Component {
   static propTypes = {
@@ -24,7 +26,7 @@ export default class InfiniteScroll extends Component {
     isLoading: false,
     initialLoad: true,
     pageStart: 0,
-    threshold: 250,
+    threshold: INFINITY_SCROLL_THRESHOLD,
     useWindow: true,
     isReverse: false,
   };
@@ -98,8 +100,8 @@ export default class InfiniteScroll extends Component {
     if (useWindow === false) {
       scrollEl = this.scrollComponent.parentNode;
     }
-    scrollEl.addEventListener('scroll', this.scrollListener);
-    scrollEl.addEventListener('resize', this.scrollListener);
+    scrollEl.addEventListener(EVENTS.SCROLL, this.scrollListener);
+    scrollEl.addEventListener(EVENTS.RESIZE, this.scrollListener);
     if (initialLoad) {
       this.scrollListener();
     }
@@ -111,8 +113,8 @@ export default class InfiniteScroll extends Component {
     if (useWindow === false) {
       scrollEl = this.scrollComponent.parentNode;
     }
-    scrollEl.removeEventListener('scroll', this.scrollListener);
-    scrollEl.removeEventListener('resize', this.scrollListener);
+    scrollEl.removeEventListener(EVENTS.SCROLL, this.scrollListener);
+    scrollEl.removeEventListener(EVENTS.RESIZE, this.scrollListener);
   }
 
   render() {

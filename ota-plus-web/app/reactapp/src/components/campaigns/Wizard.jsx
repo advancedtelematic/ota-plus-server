@@ -22,7 +22,8 @@ import {
 } from './wizardSteps';
 import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
 import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
-import { FEATURES, CAMPAIGNS_ICON_GRAY } from '../../config';
+import { assets, FEATURES, CAMPAIGNS_ICON_GRAY, NOTIFICATION_DURATION_SEC } from '../../config';
+import { DATA_TYPE, STATUS } from '../../constants';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -81,11 +82,11 @@ class Wizard extends Component {
             notification.error({
               message: t('campaigns.error_descriptions.campaign_without_devices_title'),
               description: t('campaigns.error_descriptions.campaign_without_devices'),
-              duration: 6
+              duration: NOTIFICATION_DURATION_SEC
             });
-            const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === 'groups');
+            const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === DATA_TYPE.GROUPS);
             this.jumpToStep(groupsStepIndex);
-          } else if (change.object[change.name].status !== 'error') {
+          } else if (change.object[change.name].status !== STATUS.ERROR) {
             this.handleCampaignCreated();
           }
         }
@@ -448,7 +449,7 @@ class Wizard extends Component {
                 else hideWizard(wizardIdentifier, e);
               }}
             >
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

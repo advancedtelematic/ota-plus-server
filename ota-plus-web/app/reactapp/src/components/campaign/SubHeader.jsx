@@ -8,6 +8,7 @@ import { withTranslation } from 'react-i18next';
 
 import { Button, Tooltip } from 'antd';
 import { EditCampaignModal, Dropdown } from '../../partials';
+import { CAMPAIGNS_STATUS_LAUNCHED, CAMPAIGNS_STATUS_SCHEDULED } from '../../config';
 
 @inject('stores')
 @observer
@@ -55,7 +56,8 @@ class SubHeader extends Component {
       <div className="statistics__campaign-name">
         <h3>{campaign.name}</h3>
         <div className="statistics__campaign-actions">
-          {(campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled') && (
+          {(campaign.statistics.status === CAMPAIGNS_STATUS_LAUNCHED
+            || campaign.statistics.status === CAMPAIGNS_STATUS_SCHEDULED) && (
             <Tooltip title={t('campaigns.details.cancel_tooltip')} placement="left">
               <div className="cancel-campaign">
                 <Button

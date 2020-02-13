@@ -10,6 +10,8 @@ import { withTranslation } from 'react-i18next';
 
 import { Loader, OTAForm, FormSelect, FormInput } from '../../../partials';
 
+const VERSION_CHANGE_TIMEOUT = 500;
+
 @inject('stores')
 @observer
 class WizardStep5 extends Component {
@@ -158,7 +160,7 @@ class WizardStep5 extends Component {
     const $this = this;
     setTimeout(() => {
       $this.isLoading = false;
-    }, 500);
+    }, VERSION_CHANGE_TIMEOUT);
   };
 
   render() {

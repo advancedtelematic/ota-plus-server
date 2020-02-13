@@ -10,6 +10,11 @@ import { Tooltip } from 'antd';
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
 
+const MTU_TYPE = {
+  CAMPAIGN: 'campaign',
+  SINGLE_INSTALLATION: 'singleInstallation'
+};
+
 @inject('stores')
 @observer
 class MtuListItem extends Component {
@@ -20,11 +25,11 @@ class MtuListItem extends Component {
     const devicePrimaryEcu = device.directorAttributes.primary;
     const deviceSecondaryEcus = device.directorAttributes.secondary;
     const { correlationId, targets, campaign } = update;
-    const type = campaign ? 'campaign' : 'singleInstallation';
+    const type = campaign ? MTU_TYPE.CAMPAIGN : MTU_TYPE.SINGLE_INSTALLATION;
 
     return (
       <li className="overview-panel__item">
-        {type === 'campaign' ? (
+        {type === MTU_TYPE.CAMPAIGN ? (
           <div className="overview-panel__item-header">
             <div className="overview-panel__item-header--title overview-panel__item-header--title__queue">
               <div>

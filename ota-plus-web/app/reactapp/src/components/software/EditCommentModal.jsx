@@ -8,6 +8,7 @@ import serialize from 'form-serialize';
 import { withTranslation } from 'react-i18next';
 import { Row, Col } from 'antd';
 import { OTAModal, OTAForm, FormTextarea } from '../../partials';
+import { assets } from '../../config';
 
 @inject('stores')
 @observer
@@ -82,7 +83,7 @@ class EditCommentModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

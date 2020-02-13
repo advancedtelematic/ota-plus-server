@@ -9,6 +9,7 @@ import Statistics from './Statistics';
 import CampaignSummary from './CampaignSummary';
 
 import { assets } from '../../config';
+import { SLIDE_ANIMATION_TYPE } from '../../constants';
 
 @observer
 class ListItem extends Component {
@@ -25,10 +26,10 @@ class ListItem extends Component {
     return (
       <VelocityTransitionGroup
         enter={{
-          animation: 'slideDown',
+          animation: SLIDE_ANIMATION_TYPE.DOWN,
         }}
         leave={{
-          animation: 'slideUp',
+          animation: SLIDE_ANIMATION_TYPE.UP,
         }}
       >
         {isExpanded ? (

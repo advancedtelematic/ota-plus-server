@@ -10,6 +10,7 @@ import AsyncResponse from './AsyncResponse';
 import OTAForm from './OTAForm';
 import FormInput from './FormInput';
 import { AsyncStatusCallbackHandler } from '../utils';
+import { assets } from '../config';
 
 @inject('stores')
 @observer
@@ -101,7 +102,7 @@ class EditModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" id="close-modal" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

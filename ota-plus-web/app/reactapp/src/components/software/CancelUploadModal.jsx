@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import OTAModal from '../../partials/OTAModal';
+import { assets } from '../../config';
 
 @inject('stores')
 class CancelUploadModal extends Component {
@@ -44,7 +45,7 @@ class CancelUploadModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}
