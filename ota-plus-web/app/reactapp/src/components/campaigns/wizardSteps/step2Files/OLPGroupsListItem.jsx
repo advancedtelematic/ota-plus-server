@@ -8,6 +8,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import { Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { SLIDE_ANIMATION_TYPE } from '../../../../constants';
 
 const fakeOLP = {
   groupName: 'VINs Dynamic Config Campaign UPD66371823-Overheat',
@@ -68,7 +69,10 @@ class OLPGroupsListItem extends Component {
             </div>
           </div>
         </div>
-        <VelocityTransitionGroup enter={{ animation: 'slideDown' }} leave={{ animation: 'slideUp' }}>
+        <VelocityTransitionGroup
+          enter={{ animation: SLIDE_ANIMATION_TYPE.DOWN }}
+          leave={{ animation: SLIDE_ANIMATION_TYPE.UP }}
+        >
           {this.automaticCampaign
             && (
               <div className="automatic-campaign-tip">

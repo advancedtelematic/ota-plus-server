@@ -10,6 +10,8 @@ import { withTranslation } from 'react-i18next';
 
 import { OTAForm, FormInput } from '../../../partials';
 
+const FORM_WIDTH = '60%';
+
 @observer
 class WizardStep1 extends Component {
   static propTypes = {
@@ -37,7 +39,7 @@ class WizardStep1 extends Component {
             Use campaigns to push software updates to specific device groups.
             Before you continue, make sure that you&apos;ve created the necessary updates and device groups.
           </Row>
-          <OTAForm formWidth="60%" id="add-campaign-name-form" onSubmit={e => e.preventDefault()}>
+          <OTAForm formWidth={FORM_WIDTH} id="add-campaign-name-form" onSubmit={e => e.preventDefault()}>
             <FormInput
               label={t('campaigns.wizard.name')}
               name="name"

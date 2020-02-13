@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import ListItemArtificial from './ListItemArtificial';
+import { ARTIFICIAL } from '../../constants';
 
 @inject('stores')
 @observer
@@ -42,7 +43,7 @@ class ArtificialList extends Component {
       <div className="groups-panel__artificial-list">
         {_.map(this.groupsArtificial, (group) => {
           const { type, groupName } = groupsStore.selectedGroup;
-          const isSelected = type === 'artificial' && groupName === group.name;
+          const isSelected = type === ARTIFICIAL && groupName === group.name;
           return (
             <ListItemArtificial
               group={group}

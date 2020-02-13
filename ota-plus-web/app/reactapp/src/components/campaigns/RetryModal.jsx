@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 
 import { OTAModal } from '../../partials';
+import { assets } from '../../config';
 
 @inject('stores')
 @observer
@@ -57,7 +58,7 @@ class RetryModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

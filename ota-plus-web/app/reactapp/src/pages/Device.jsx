@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { DeviceContainer } from '../containers';
-import { PAGE_DEVICE } from '../config';
+import { PAGE_DEVICE } from '../constants';
 
 @inject('stores')
 @observer

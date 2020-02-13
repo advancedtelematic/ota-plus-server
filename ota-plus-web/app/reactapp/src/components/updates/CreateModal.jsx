@@ -13,7 +13,8 @@ import { contains } from '../../utils/Helpers';
 import Step1 from './createWizard/Step1';
 import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';
-import { UPDATE_ICON_GRAY } from '../../config';
+import { assets, UPDATE_ICON_GRAY } from '../../config';
+import { DATA_TYPE } from '../../constants';
 
 const wizardSteps = [
   {
@@ -161,7 +162,7 @@ class CreateModal extends Component {
     const { update } = this.wizardData;
     switch (type) {
       case 'hardwareId':
-        if (contains(hardwares, data, 'hardware')) {
+        if (contains(hardwares, data, DATA_TYPE.HARDWARE)) {
           this.wizardData.selectedHardwares = _.reject(hardwares, item => item.name === data.name);
           this.wizardData.update = _.omit(update, data.name);
         } else {
@@ -257,7 +258,7 @@ class CreateModal extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" id="close-update-modal" onClick={hide}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

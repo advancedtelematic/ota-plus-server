@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 
 import { Button, OTAModal } from '../../../partials';
+import { assets } from '../../../config';
 
 @observer
 class SecondaryEcuDetails extends Component {
@@ -36,7 +37,7 @@ class SecondaryEcuDetails extends Component {
         topActions={(
           <div className="top-actions flex-end">
             <div className="modal-close" onClick={hideDetails}>
-              <img src="/assets/img/icons/close.svg" alt="Icon" />
+              <img src={assets.DEFAULT_CLOSE_ICON} alt="Icon" />
             </div>
           </div>
         )}

@@ -87,3 +87,52 @@ export const ACTIVITIES_TYPE_PARAMS = [
   ACTIVITIES_TYPE.SOFTWARE_UPDATE,
   ACTIVITIES_TYPE.SOFTWARE_VERSION
 ];
+
+export const ANIMATION_TYPE = {
+  FADE_IN: 'fadeIn',
+  FADE_OUT: 'fadeOut'
+};
+
+export const DATA_TYPE = {
+  DEVICES: 'devices',
+  GROUPS: 'groups',
+  HARDWARE: 'hardware',
+  UPDATE: 'update',
+};
+
+/**
+ * Misc
+ */
+
+export const EVENTS = {
+  RESIZE: 'resize',
+  SCROLL: 'scroll'
+};
+export const FIREWORKS_ACKNOWLEDGED_KEY = 'fireworksPageAcknowledged';
+export const METADATA_TYPES = {
+  DESCRIPTION: 'DESCRIPTION',
+  INSTALL_DURATION: 'ESTIMATED_INSTALLATION_DURATION',
+  PRE_DURATION: 'ESTIMATED_PREPARATION_DURATION',
+};
+export const REMOVAL_MODAL_TYPE = {
+  MEMBER_REMOVAL: 'memberRemoval',
+  SELF_REMOVAL: 'selfRemoval'
+};
+export const PAGE_DEVICE = 'device';
+export const PAGE_PACKAGES = 'packages';
+export const SHA_256 = 'sha256';
+export const SLIDE_ANIMATION_TYPE = {
+  DOWN: 'slideDown',
+  UP: 'slideUp'
+};
+export const SORT_DIR_ASC = 'asc';
+export const SORT_DIR_DESC = 'desc';
+export const STATUS = {
+  SUCCESS: 'success',
+  WAITING: 'waiting',
+  ERROR: 'error'
+};
+export const WARNING_MODAL_TYPE = {
+  DANGER: 'danger',
+  DEFAULT: 'default',
+};

@@ -15,8 +15,14 @@ import { Dropdown, ConfirmationModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_SOFTWARE_SEE_DETAILS, OTA_SOFTWARE_DELETE_SOFTWARE } from '../../constants/analyticsActions';
+import { EVENTS, SLIDE_ANIMATION_TYPE } from '../../constants';
 
 const headerHeight = 28;
+const HEADERS_CUMULATIVE_HEIGHT = 150;
+const ON_HIGHLIGHT_PACKAGE_TRANSITION_DURATION_MS = 500;
+const ON_HIGHLIGHT_PACKAGE_TRANSITION_TIMEOUT_MS = 400;
+const ON_PACKAGE_CHANGE_TIMEOUT_MS = 50;
+const START_INTERVAL_SCROLL_TIMEOUT_MS = 10;
 
 @inject('stores')
 @observer
@@ -49,13 +55,13 @@ class List extends Component {
         const that = this;
         setTimeout(() => {
           that.listScroll();
-        }, 50);
+        }, ON_PACKAGE_CHANGE_TIMEOUT_MS);
       }
     });
   }
 
   componentDidMount() {
-    this.listRef.current.addEventListener('scroll', this.listScroll);
+    this.listRef.current.addEventListener(EVENTS.SCROLL, this.listScroll);
     this.listScroll();
   }
 
@@ -68,7 +74,7 @@ class List extends Component {
 
   componentWillUnmount() {
     this.packagesChangeHandler();
-    this.listRef.current.removeEventListener('scroll', this.listScroll);
+    this.listRef.current.removeEventListener(EVENTS.SCROLL, this.listScroll);
   }
 
   hideEditModal = () => {
@@ -158,10 +164,10 @@ class List extends Component {
       setExpandedPackageName(pack);
       const currentScrollTop = this.listRef.current.scrollTop;
       const elementCoords = document.getElementById(`button-package-${pack}`).getBoundingClientRect();
-      const scrollTo = currentScrollTop + elementCoords.top - 150;
+      const scrollTo = currentScrollTop + elementCoords.top - HEADERS_CUMULATIVE_HEIGHT;
       setTimeout(() => {
-        animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
-      }, 400);
+        animatedScroll(document.querySelector('.ios-list'), scrollTo, ON_HIGHLIGHT_PACKAGE_TRANSITION_DURATION_MS);
+      }, ON_HIGHLIGHT_PACKAGE_TRANSITION_TIMEOUT_MS);
     }
   };
 
@@ -196,7 +202,7 @@ class List extends Component {
     clearInterval(this.tmpIntervalId);
     const intervalId = setInterval(() => {
       this.listScroll();
-    }, 10);
+    }, START_INTERVAL_SCROLL_TIMEOUT_MS);
     this.tmpIntervalId = intervalId;
   }
 
@@ -244,7 +250,7 @@ class List extends Component {
                     />
                     <VelocityTransitionGroup
                       enter={{
-                        animation: 'slideDown',
+                        animation: SLIDE_ANIMATION_TYPE.DOWN,
                         begin: () => {
                           that.startIntervalListScroll();
                         },
@@ -253,7 +259,7 @@ class List extends Component {
                         },
                       }}
                       leave={{
-                        animation: 'slideUp',
+                        animation: SLIDE_ANIMATION_TYPE.UP,
                         begin: () => {
                           that.startIntervalListScroll();
                         },

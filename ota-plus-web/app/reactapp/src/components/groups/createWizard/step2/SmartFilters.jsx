@@ -9,6 +9,7 @@ import _ from 'lodash';
 
 import Filter from './Filter';
 import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
+import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
 
 const options = {
   nameFilterOptions: ['Device ID'],
@@ -53,13 +54,13 @@ class SmartFilters extends Component {
     this.filters.forEach((el) => {
       if (el.id === id) {
         switch (value) {
-          case 'contains':
+          case GROUPS_FILTER_CONDITIONS.CONTAINS:
             el.type = 'containsFilter';
             break;
-          case 'has a character equal to':
+          case GROUPS_FILTER_CONDITIONS.EQUAL_CHAR:
             el.type = 'positionFilter';
             break;
-          case 'has a character different from':
+          case GROUPS_FILTER_CONDITIONS.DIFF_CHAR:
             el.type = 'positionFilter';
             break;
           default:

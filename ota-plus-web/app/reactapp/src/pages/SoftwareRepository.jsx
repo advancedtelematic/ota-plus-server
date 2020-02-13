@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { FadeAnimation } from '../utils';
 import { SoftwareContainer } from '../containers';
-import { PAGE_PACKAGES } from '../config';
+import { PAGE_PACKAGES } from '../constants';
 
 @inject('stores')
 @observer

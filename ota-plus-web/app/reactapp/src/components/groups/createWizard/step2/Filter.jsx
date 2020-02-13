@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { FormInput, FormSelect } from '../../../../partials/index';
+import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
 
 @observer
 class Filter extends Component {
@@ -36,17 +37,17 @@ class Filter extends Component {
     }
 
     switch (condition) {
-      case 'contains':
+      case GROUPS_FILTER_CONDITIONS.CONTAINS:
         if (name && condition && word && word.length > 0) {
           expressionToSend = (`${name} ${condition} ${word}`);
         }
         break;
-      case 'has a character equal to':
+      case GROUPS_FILTER_CONDITIONS.EQUAL_CHAR:
         if (name && condition && position && character && character.length > 0) {
           expressionToSend = `${name} position(${position}) is ${character}`;
         }
         break;
-      case 'has a character different from':
+      case GROUPS_FILTER_CONDITIONS.DIFF_CHAR:
         if (name && condition && position && character && character.length > 0) {
           expressionToSend = `${name} position(${position}) is not ${character}`;
         }

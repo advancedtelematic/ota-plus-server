@@ -8,6 +8,7 @@ import { withTranslation } from 'react-i18next';
 import { AsyncResponse } from '../../../partials';
 import UpdatesWizardDetailList from './step2/UpdatesWizardDetailList';
 import UpdateDetails from '../UpdateDetails';
+import { HTTP_CODE_200_OK } from '../../../constants/httpCodes';
 
 @inject('stores')
 @observer
@@ -27,7 +28,7 @@ class Step2 extends Component {
           handledStatus="error"
           action={updatesStore.updatesCreateAsync}
           errorMsg={
-            updatesStore.updatesCreateAsync.status !== 200
+            updatesStore.updatesCreateAsync.status !== HTTP_CODE_200_OK
             && updatesStore.updatesCreateAsync.data
             && updatesStore.updatesCreateAsync.data.description
           }

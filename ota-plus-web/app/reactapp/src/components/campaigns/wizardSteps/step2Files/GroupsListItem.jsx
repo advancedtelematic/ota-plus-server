@@ -10,6 +10,7 @@ import { withTranslation } from 'react-i18next';
 
 import { GROUP_GROUP_TYPE_STATIC } from '../../../../constants/groupConstants';
 import { FEATURES } from '../../../../config';
+import { SLIDE_ANIMATION_TYPE } from '../../../../constants';
 
 @inject('stores')
 @observer
@@ -70,7 +71,10 @@ class GroupsListItem extends Component {
             </div>
           )}
         </div>
-        <VelocityTransitionGroup enter={{ animation: 'slideDown' }} leave={{ animation: 'slideUp' }}>
+        <VelocityTransitionGroup
+          enter={{ animation: SLIDE_ANIMATION_TYPE.DOWN }}
+          leave={{ animation: SLIDE_ANIMATION_TYPE.UP }}
+        >
           {this.automaticCampaign
             && (
               <div className="automatic-campaign-tip">

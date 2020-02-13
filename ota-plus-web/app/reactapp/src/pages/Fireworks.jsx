@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import Cookies from 'js-cookie';
 import _ from 'lodash';
 import { FadeAnimation } from '../utils';
-import { FIREWORKS_ACKNOWLEDGED_KEY } from '../config';
+import { FIREWORKS_ACKNOWLEDGED_KEY } from '../constants';
 
 @inject('stores')
 @observer

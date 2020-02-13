@@ -6,15 +6,24 @@ import { observer } from 'mobx-react';
 import _ from 'lodash';
 import { Doughnut } from 'react-chartjs-2';
 import { withTranslation } from 'react-i18next';
+import { DATA_TYPE } from '../../../constants';
+
+const RESULTS_TYPE = 'results';
+const CHARTS_CONFIG = {
+  BORDER_WIDTH: 5,
+  DEFAULT_HEIGHT: 250,
+  DEFAULT_WIDTH: 250,
+  CUTOUT_PERCENTAGE: 60
+};
 
 @observer
 class StatsBlock extends Component {
   render() {
     const { pack, size, type, t } = this.props;
     let availableColors = [];
-    if (type === 'groups' || type === 'devices') {
+    if (type === DATA_TYPE.GROUPS || type === DATA_TYPE.DEVICES) {
       availableColors = ['#FA9D00', '#069F71', '#670195', '#B7B9BC'];
-    } else if (type === 'results') {
+    } else if (type === RESULTS_TYPE) {
       availableColors = ['#06B87C', '#D0021B'];
     } else {
       availableColors = ['#1D5E6F', '#9DDDD4', '#fff', '#D3D3D3'];
@@ -29,16 +38,16 @@ class StatsBlock extends Component {
           label: [],
           backgroundColor: [],
           hoverBackgroundColor: [],
-          borderWidth: 5,
-          hoverBorderWidth: 5,
+          borderWidth: CHARTS_CONFIG.BORDER_WIDTH,
+          hoverBorderWidth: CHARTS_CONFIG.BORDER_WIDTH,
         },
       ],
     };
     let installedOnEcusTotal = 0;
     let data = pack.versions;
-    if (type === 'groups') {
+    if (type === DATA_TYPE.GROUPS) {
       data = pack.stats.groups;
-    } else if (type === 'results') {
+    } else if (type === RESULTS_TYPE) {
       data = pack.stats.installationResults;
     }
 
@@ -47,7 +56,7 @@ class StatsBlock extends Component {
         if (statsPackIndex < availableColors.length) {
           colorIndex += 1;
           statsPackIndex += 1;
-          if (type === 'groups' || type === 'results') {
+          if (type === DATA_TYPE.GROUPS || type === RESULTS_TYPE) {
             stats.datasets[0].data.push(version);
             stats.datasets[0].label.push(index);
             stats.datasets[0].backgroundColor.push(availableColors[colorIndex]);
@@ -55,7 +64,9 @@ class StatsBlock extends Component {
           } else {
             stats.datasets[0].data.push(version.installedOnEcus);
             stats.datasets[0].label.push(
-              type === 'devices' ? index : statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version
+              type === DATA_TYPE.DEVICES
+                ? index
+                : statsPackIndex === availableColors.length - 1 ? 'Other' : version.id.version
             );
             stats.datasets[0].backgroundColor.push(availableColors[colorIndex]);
             stats.datasets[0].hoverBackgroundColor.push(availableColors[colorIndex]);
@@ -75,7 +86,7 @@ class StatsBlock extends Component {
       <div className="chart-panel" id={`package-${pack.packageName}-stats`}>
         <div className={installedOnEcusTotal ? 'wrapper-center' : 'wrapper-center'}>
           <div className={installedOnEcusTotal ? 'total-count' : 'hide'}>{installedOnEcusTotal}</div>
-          {type === 'results' ? (
+          {type === RESULTS_TYPE ? (
             <div className="total-count">
               {`${stats.datasets[0].data[1]}%`}
             </div>
@@ -84,10 +95,10 @@ class StatsBlock extends Component {
             <div className="canvas-wrapper">
               <Doughnut
                 data={stats}
-                width={size.width || 250}
-                height={size.height || 250}
+                width={size.width || CHARTS_CONFIG.DEFAULT_WIDTH}
+                height={size.height || CHARTS_CONFIG.DEFAULT_HEIGHT}
                 options={{
-                  cutoutPercentage: 60,
+                  cutoutPercentage: CHARTS_CONFIG.CUTOUT_PERCENTAGE,
                 }}
               />
               <div className="colors-info">

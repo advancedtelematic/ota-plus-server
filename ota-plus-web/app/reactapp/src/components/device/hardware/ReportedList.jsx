@@ -6,8 +6,10 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
+import { EVENTS } from '../../../constants';
 
 const HEADER_HEIGHT = 28;
+const ON_PROPS_RECEIVE_TIMEOUT_MS = 50;
 
 @observer
 class ReportedList extends Component {
@@ -30,7 +32,7 @@ class ReportedList extends Component {
 
   componentDidMount() {
     if (this.listRef.current) {
-      this.listRef.current.addEventListener('scroll', this.listScroll);
+      this.listRef.current.addEventListener(EVENTS.SCROLL, this.listScroll);
       this.listScroll();
     }
   }
@@ -39,12 +41,12 @@ class ReportedList extends Component {
     const that = this;
     setTimeout(() => {
       that.listScroll();
-    }, 50);
+    }, ON_PROPS_RECEIVE_TIMEOUT_MS);
   }
 
   componentWillUnmount() {
     if (this.listRef.current) {
-      this.listRef.current.removeEventListener('scroll', this.listScroll);
+      this.listRef.current.removeEventListener(EVENTS.SCROLL, this.listScroll);
     }
   }
 

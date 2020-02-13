@@ -8,6 +8,7 @@ import { contains } from '../../../../utils/Helpers';
 
 import { SelectableListItem } from '../../../../partials/lists';
 import InfiniteScroll from '../../../../utils/InfiniteScroll';
+import { DATA_TYPE } from '../../../../constants';
 
 @inject('stores')
 @observer
@@ -49,7 +50,7 @@ class CampaignsWizardUpdateList extends Component {
                   <div key={firstLetter}>
                     <div className="header">{firstLetter}</div>
                     {_.map(updates, (update, index) => {
-                      const selected = contains(selectedUpdate, update, 'update');
+                      const selected = contains(selectedUpdate, update, DATA_TYPE.UPDATE);
                       return (
                         <SelectableListItem
                           key={index}
