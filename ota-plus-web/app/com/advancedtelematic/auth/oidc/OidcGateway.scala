@@ -83,7 +83,7 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
         "client_id"     -> Seq(oauthConfig.clientId),
         "redirect_uri"  -> Seq(oauthConfig.callbackURL),
         "scope"         -> Seq("openid profile email"),
-        "prompt"        -> Seq("login")
+        "realm-any"     -> Seq("true")
       ) ++ oauthConfig.parameters.mapValues(Seq(_)),
       Status.SEE_OTHER
     )
