@@ -54,13 +54,13 @@ $confirm-modal-title: #d0021b;
 $olp-group-layer: $warning-color;
 
 //size constants
-$navigation-bar-height: 50px;
+$navigation-bars-height: 80px;
 $footer-info-height: 60px;
 $profile-header-height: 180px;
 $profile-empty-container-height: 100px;
-$main-content-height: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height});
-$main-content-height-profile: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height} - #{$profile-header-height});
-$main-content-height-keys-empty: calc(100vh - #{$navigation-bar-height} - #{$footer-info-height} - #{$profile-header-height} - #{$profile-empty-container-height});
+$main-content-height: calc(100vh - #{$navigation-bars-height} - #{$footer-info-height});
+$main-content-height-profile: calc(100vh - #{$navigation-bars-height} - #{$footer-info-height} - #{$profile-header-height});
+$main-content-height-keys-empty: calc(100vh - #{$navigation-bars-height} - #{$footer-info-height} - #{$profile-header-height} - #{$profile-empty-container-height});
 
 //campaign stats
 $campaign-success-color: #44CA9D;

@@ -17,7 +17,7 @@ export const BetaTag = styled.div`
 `;
 
 export const NavContainer = styled.nav`
-  height: ${SIZES.NAVBAR_HEIGHT};
+  height: ${`${SIZES.NAVBAR_HEIGHT}px`};
   background-color: ${({ theme }) => theme.palette.secondary};
   display: flex;
   align-items: center;
@@ -60,7 +60,7 @@ export const Li = styled.li`
   justify-content: center;
   align-items: center;
   display: flex;
-  height: ${SIZES.NAVBAR_HEIGHT};
+  height: ${`${SIZES.NAVBAR_HEIGHT}px`};
 `;
 
 export const Link = styled(NavLink)`

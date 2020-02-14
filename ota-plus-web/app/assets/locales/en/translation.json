@@ -336,6 +336,8 @@
     "navigation.campaigns": "Campaigns",
     "navigation.dashboard": "Dashboard",
     "navigation.devices": "Devices",
+    "navigation.environments.selector.select_title": "SELECT AN ENVIRONMENT",
+    "navigation.environments.selector.title": "ENVIRONMENT:",
     "navigation.home": "Home",
     "navigation.impact-analysis": "Impact",
     "navigation.softwares": "Software versions",
