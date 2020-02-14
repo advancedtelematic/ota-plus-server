@@ -4,11 +4,13 @@ import { mount, shallow } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'mobx-react';
 import { ThemeProvider } from 'styled-components';
-import UserStore from '../../../stores/DevicesStore';
+import FeaturesStore from '../../../stores/FeaturesStore';
+import UserStore from '../../../stores/UserStore';
 import theme from '../../../theme';
 import SubNavBar from '../index';
 import * as analyticsHelper from '../../../helpers/analyticsHelper';
 import { OTA_NAV_ENV_SWITCH } from '../../../constants/analyticsActions';
+import { FEATURES } from '../../../config';
 
 const ENVIRONMENTS = [{ name: 'ENV_1', namespace: 'NAMESPACE_1' }, { name: 'ENV_2', namespace: 'NAMESPACE_2' }];
 const USER_ENVIRONMENT_NAMESPACE = 'NAMESPACE_1';
@@ -22,6 +24,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockedStores = {
+  featuresStore: new FeaturesStore(),
   userStore: new UserStore(),
 };
 
@@ -39,6 +42,7 @@ function mountSubNavBar(stores = mockedStores) {
 describe('<SubNavBar />', () => {
   let wrapper;
   beforeEach(() => {
+    mockedStores.featuresStore.features = [FEATURES.ORGANIZATIONS];
     mockedStores.userStore.userOrganizationName = USER_ENVIRONMENT_NAME;
     mockedStores.userStore.userOrganizationNamespace = USER_ENVIRONMENT_NAMESPACE;
     mockedStores.userStore.userOrganizations = ENVIRONMENTS;
