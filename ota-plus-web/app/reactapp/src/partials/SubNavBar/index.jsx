@@ -12,11 +12,13 @@ import { useStores } from '../../stores/hooks';
 import { changeUserEnvironment } from '../../helpers/environmentHelper';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_NAV_ENV_SWITCH } from '../../constants/analyticsActions';
+import { FEATURES } from '../../config';
 
 const useStoreData = () => {
-  const { stores: { userStore } } = useStores();
+  const { stores: { featuresStore, userStore } } = useStores();
   return useObserver(() => ({
     environments: userStore.userOrganizations,
+    features: featuresStore.features,
     userEnvironmentName: userStore.userOrganizationName,
     userEnvironmentNamespace: userStore.userOrganizationNamespace
   }));
@@ -24,7 +26,7 @@ const useStoreData = () => {
 
 const SubNavBar = ({ lightMode }) => {
   const { t } = useTranslation();
-  const { environments, userEnvironmentName, userEnvironmentNamespace } = useStoreData();
+  const { environments, features, userEnvironmentName, userEnvironmentNamespace } = useStoreData();
   const handleMenuClick = (event) => {
     const key = parseInt(event.key, 10);
     if (userEnvironmentNamespace !== environments[key].namespace) {
@@ -34,20 +36,23 @@ const SubNavBar = ({ lightMode }) => {
   };
   return (
     <SubNavBarContainer id="app-subnavbar" lightMode={lightMode}>
-      <EnvironmentContainer id="app-subnavbar-environment-container">
-        <EnvironmentTitle id="app-subnavbar-environment-title" lightMode={lightMode}>
-          {t('navigation.environments.selector.title')}
-        </EnvironmentTitle>
-        <EnvironmentsSelector
-          id="app-subnavbar-environment-selector"
-          handleMenuClick={handleMenuClick}
-          headerTitle={t('navigation.environments.selector.select_title')}
-          lightMode={lightMode}
-          environments={environments}
-          userEnvironmentNamespace={userEnvironmentNamespace}
-          userEnvironmentName={userEnvironmentName}
-        />
-      </EnvironmentContainer>
+      {features.includes(FEATURES.ORGANIZATIONS) && (
+        <EnvironmentContainer id="app-subnavbar-environment-container">
+          <EnvironmentTitle id="app-subnavbar-environment-title" lightMode={lightMode}>
+            {t('navigation.environments.selector.title')}
+          </EnvironmentTitle>
+          <EnvironmentsSelector
+            id="app-subnavbar-environment-selector"
+            handleMenuClick={handleMenuClick}
+            headerTitle={t('navigation.environments.selector.select_title')}
+            lightMode={lightMode}
+            environments={environments}
+            userEnvironmentNamespace={userEnvironmentNamespace}
+            userEnvironmentName={userEnvironmentName}
+          />
+        </EnvironmentContainer>
+      )
+      }
     </SubNavBarContainer>
   );
 };
