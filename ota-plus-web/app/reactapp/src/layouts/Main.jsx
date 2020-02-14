@@ -232,10 +232,12 @@ class Main extends Component {
                 uiCredentialsDownload={this.uiCredentialsDownload}
                 addNewWizard={this.addNewWizard}
               />
-              <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
+              {features.includes(FEATURES.ORGANIZATIONS) && (
+                <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
+              )}
             </div>
           )}
-          <div className="app-flex-container">
+          <div className={`app-flex-container ${features.includes(FEATURES.ORGANIZATIONS) ? 'organizations' : ''}`}>
             <div id={pageId}>
               <FadeAnimation>
                 <Routes

@@ -2236,8 +2236,11 @@ input {
   display: flex;
   flex-wrap: wrap;
   align-content: space-between;
-  height: calc(100vh - #{$navigation-bars-height});
+  height: calc(100vh - #{$navigation-bar-height});
   overflow-y: auto;
+  &.organizations {
+    height: calc(100vh - #{$navigation-bars-height});
+  }
 }
 
 .legal-info-footer {
