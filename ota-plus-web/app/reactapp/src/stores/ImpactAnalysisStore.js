@@ -11,5 +11,4 @@ export default class ImpactAnalysisStore {
   constructor() {
     resetAsync(this.impactAnalysisFetchAsync);
   }
-
 }

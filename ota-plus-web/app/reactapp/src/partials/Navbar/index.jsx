@@ -6,6 +6,12 @@ import { useObserver } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 import { useStores } from '../../stores/hooks';
 import { COLORS } from '../../constants/styleConstants';
+import {
+  LOCATION_CAMPAIGNS,
+  LOCATION_IMPACT_ANALYSIS,
+  LOCATION_UPDATES,
+  LOCATION_SOFTWARE_REPOSITORY
+} from '../../constants/locationConstants';
 import { FEATURES } from '../../config';
 import {
   OTA_NAV_DEVICES,
@@ -54,20 +60,20 @@ const Navbar = ({ uiUserProfileMenu }) => {
     publicLinks.push({
       actionType: OTA_NAV_SOFTWARE_VERSIONS,
       name: t('navigation.softwares'),
-      to: '/software-repository',
+      to: `/${LOCATION_SOFTWARE_REPOSITORY}`,
       isBeta: false
     });
     publicLinks.push({
       actionType: OTA_NAV_SOFTWARE_UPDATES,
       name: t('navigation.updates'),
-      to: '/updates',
+      to: `/${LOCATION_UPDATES}`,
       isBeta: false
     });
     publicLinks.push(
       {
         actionType: OTA_NAV_CAMPAIGNS,
         name: t('navigation.campaigns'),
-        to: '/campaigns',
+        to: `/${LOCATION_CAMPAIGNS}`,
         isBeta: false
       }
     );
@@ -75,7 +81,7 @@ const Navbar = ({ uiUserProfileMenu }) => {
       publicLinks.push({
         actionType: OTA_NAV_IMPACT,
         name: t('navigation.impact-analysis'),
-        to: '/impact-analysis',
+        to: `/${LOCATION_IMPACT_ANALYSIS}`,
         isBeta: false
       });
     }

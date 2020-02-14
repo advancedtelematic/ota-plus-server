@@ -86,7 +86,7 @@ export const Signout = styled.div`
   align-items: center;
   position: absolute;
   left: 0;
-  bottom: 50px;
+  bottom: 80px;
   height: 70px;
   width: 100%;
   border-top: 1px solid rgba(15,22,33,0.15);

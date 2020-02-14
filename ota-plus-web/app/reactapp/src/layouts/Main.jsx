@@ -21,8 +21,10 @@ import { FEATURES } from '../config';
 import { UploadBox } from '../partials';
 import { Footer } from '../partials/Footer';
 import Navbar from '../partials/Navbar';
+import SubNavBar from '../partials/SubNavBar';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
+import { LOCATION_PROFILE } from '../constants/locationConstants';
 
 const DASHBOARD_PATH = {
   OLD: '/',
@@ -220,15 +222,18 @@ class Main extends Component {
       <ThemeProvider theme={theme}>
         <div>
           {((contractsCheckCompleted && isTermsAccepted) || !this.uiUserProfileMenu) && (
-            <Navbar
-              location={pageId}
-              toggleSWRepo={this.toggleSWRepo}
-              uiUserProfileEdit={this.uiUserProfileEdit}
-              switchToSWRepo={this.switchToSWRepo}
-              uiUserProfileMenu={this.uiUserProfileMenu}
-              uiCredentialsDownload={this.uiCredentialsDownload}
-              addNewWizard={this.addNewWizard}
-            />
+            <div>
+              <Navbar
+                location={pageId}
+                toggleSWRepo={this.toggleSWRepo}
+                uiUserProfileEdit={this.uiUserProfileEdit}
+                switchToSWRepo={this.switchToSWRepo}
+                uiUserProfileMenu={this.uiUserProfileMenu}
+                uiCredentialsDownload={this.uiCredentialsDownload}
+                addNewWizard={this.addNewWizard}
+              />
+              <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
+            </div>
           )}
           <div className="app-flex-container">
             <div id={pageId}>

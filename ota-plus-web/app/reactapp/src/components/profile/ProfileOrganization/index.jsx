@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import isEmail from 'validator/lib/isEmail';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
-import encodeUrl from 'encodeurl';
 import WarningModal from '../WarningModal';
 import EditOrganizationNameModal from '../EditOrganizationNameModal';
 import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../../partials';
@@ -22,9 +21,9 @@ import {
   OTA_ENVIRONMENT_REMOVE_MEMBER
 } from '../../../constants/analyticsActions';
 import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../../constants/analyticsViews';
+import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { OwnerTag, RemoveButton } from './styled';
 import {
-  API_USER_ORGANIZATIONS_SWITCH_NAMESPACE,
   ORGANIZATION_NAMESPACE_COOKIE,
   TRASHBIN_ICON
 } from '../../../config';
@@ -141,13 +140,7 @@ class ProfileOrganization extends Component {
   };
 
   setUserOrganization = (namespace) => {
-    if (namespace) {
-      const pathOrigin = window.location.origin;
-      const subUrl = API_USER_ORGANIZATIONS_SWITCH_NAMESPACE.replace('$namespace', namespace);
-      const redirectUrl = encodeUrl(`${pathOrigin}${subUrl}`);
-      Cookies.set(ORGANIZATION_NAMESPACE_COOKIE, namespace);
-      window.location.replace(redirectUrl);
-    }
+    changeUserEnvironment(namespace);
     sendAction(OTA_ENVIRONMENT_SWITCH);
   };
 
