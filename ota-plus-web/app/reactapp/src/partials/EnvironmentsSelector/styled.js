@@ -47,7 +47,7 @@ export const MenuItemStyled = styled(Menu.Item)`
   display: inline-flex;
   float: left;
   height: 58px;
-  padding: 9px 12px 5px 0;
+  padding: 9px 0px 5px 0;
   width: 320px;
   &:hover, &:focus {
     background: ${({ lightmode, theme }) => lightmode ? theme.palette.backgroundLightSelected : theme.palette.backgroundSelected};
@@ -76,13 +76,16 @@ export const MenuStyled = styled(Menu)`
   background-color: ${({ lightmode, theme }) => lightmode ? theme.palette.white : theme.palette.backgroundPrimary};
   border: 0;
   border-radius: 0;
+  margin-top: -1px;
   padding: 0;
-  max-height: 316px;
-  overflow: scroll;
+  max-height: ${({ itemsheight }) => `${27 + itemsheight}px`};//316px;
+  overflow-x: hidden;
+  overflow-y: ${({ showscrolly }) => showscrolly ? 'scroll' : 'hidden'};
 `;
 
 export const MenuTextContainer = styled.div`
   padding-top: 4px;
+  width: 316px;
 `;
 
 export const MenuTextName = styled.div(({ lightMode, theme }) => ({
@@ -90,12 +93,22 @@ export const MenuTextName = styled.div(({ lightMode, theme }) => ({
   fontSize: '13px',
   fontWeight: '500',
   lineHeight: '16px',
-  paddingLeft: '5px'
+  marginLeft: '5px',
+  marginRight: '5px',
+  width: '306px',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis'
 }));
 
 export const MenuTextNamespace = styled.div(({ lightMode, theme }) => ({
   color: lightMode ? theme.palette.texts.darkAlpha : theme.palette.whiteAlpha04,
   fontSize: '13px',
   lineHeight: '15px',
-  paddingLeft: '5px'
+  marginLeft: '5px',
+  marginRight: '5px',
+  width: '306px',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis'
 }));
