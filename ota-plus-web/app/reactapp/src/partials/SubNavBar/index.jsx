@@ -36,7 +36,7 @@ const SubNavBar = ({ lightMode }) => {
   };
   return (
     <SubNavBarContainer id="app-subnavbar" lightMode={lightMode}>
-      {features.includes(FEATURES.ORGANIZATIONS) && (
+      {features.includes(FEATURES.ORGANIZATIONS) && environments.length && (
         <EnvironmentContainer id="app-subnavbar-environment-container">
           <EnvironmentTitle id="app-subnavbar-environment-title" lightMode={lightMode}>
             {t('navigation.environments.selector.title')}

@@ -14,8 +14,17 @@ import {
   MenuStyled,
 } from './styled';
 
+const ENVIRONMENTS_DEFAULT_NUMBER = 5;
+const MENU_ITEM_HEIGHT = 58;
+
 const environmentsMenu = (handleMenuClick, headerTitle, lightMode, environments, namespaceSelected) => (
-  <MenuStyled id="environment-selector-menu" lightmode={lightMode ? 1 : 0} onClick={handleMenuClick}>
+  <MenuStyled
+    id="environment-selector-menu"
+    itemsheight={MENU_ITEM_HEIGHT * ENVIRONMENTS_DEFAULT_NUMBER}
+    lightmode={lightMode ? 1 : 0}
+    onClick={handleMenuClick}
+    showscrolly={environments.length > ENVIRONMENTS_DEFAULT_NUMBER ? 1 : 0}
+  >
     <MenuItemGroupStyled id="environment-selector-menu-header" lightmode={lightMode ? 1 : 0} title={headerTitle}>
       {environments.map((item, index) => (
         <MenuItemStyled
