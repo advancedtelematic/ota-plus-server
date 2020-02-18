@@ -16,12 +16,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait NamespaceProvider extends (Tokens => Future[Namespace])
 
-class NamespaceFromIdentity extends NamespaceProvider {
-  override def apply(tokens: Tokens): Future[Namespace] = FastFuture.successful{
-    Namespace(tokens.idToken.userId.id)
-  }
-}
-
 class NamespaceFromUserProfile @Inject()(val conf: Configuration,
                                          val ws: WSClient,
                                          val clientExec: ApiClientExec,
