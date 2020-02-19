@@ -1,0 +1,23 @@
+= Create an environment
+
+[NOTE]
+====
+This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
+====
+
+You may need to have different environments for pre-production and production. Instead of creating multiple accounts for each environment, you can now create additional environments using only one account.
+
+*To create an environment:*
+
+1. Log in to https://connect.ota.here.com[OTA Connect, window="_blank"].
+2. In the upper-right corner, click the profile menu, and then click *Environments*.
+3. On the *Environments* tab, click *Create environment*.
+4. In the *Create environment* dialog box, enter the environment name.
++
+The environment name should not exceed 30 characters and can contain letters, numbers, and the following specific characters: `' " . , : ; _ - / ( )`.
+
+5. Click *Create*.
++
+Your environment is created. You can find it in the list of the environments to which you have access. In the *Members* list, next to your email, the *Creator* label appears. As an environment creator, you can leave or be removed from your additional environments. However, you cannot leave or be removed from your home environment that you get upon registration. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
+
+You can now xref:manage-members.adoc[add] your colleagues to the environment.

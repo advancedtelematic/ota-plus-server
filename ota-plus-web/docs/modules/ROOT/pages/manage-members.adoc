@@ -5,11 +5,11 @@
 This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
 ====
 
-You can add colleagues to your environments to collaborate on devices, device groups, software versions, software updates, and campaigns. People that you want to add to your environment must have an OTA Connect account. Also, you can remove members from the environments to which you have access, but you cannot remove the owner of the environment.
+You can add colleagues to your environments to collaborate on devices, device groups, software versions, software updates, and campaigns. For example, you may need to collaborate with your developers on device provisioning. People that you want to add to your environment must have an OTA Connect account. Also, you can remove members from the environments to which you have access, but you cannot remove the owner of the environment.
 
-To manage members in the environments to which you have access:
+*To manage members in the environments to which you have access:*
 
-1. Log in to OTA Connect.
+1. Log in to https://connect.ota.here.com[OTA Connect, window="_blank"].
 2. In the upper-right corner, click the profile menu.
 +
 Under your name is your active environment. Make sure that your active environment is the environment in which you want to manage members. If needed, xref:find-and-change-environments.adoc[change] your active environment.
@@ -18,8 +18,12 @@ Under your name is your active environment. Make sure that your active environme
     * To add a member, specify the email address of the colleague that you want to add to your environment, and then click *Add member*.
 +
 The new member appears in the *Members* section and has access to all the resources in the environment.
++
+IMPORTANT: The user should be registered in OTA Connect before you add them to the environment. Otherwise, they will not see the environment. If the user is added before they are registered, for the user to see the environment, remove the user, register this user, and then add again.
 
     * To remove a member, next to the email of the member that you want to remove, click *Remove*, and then click *Yes, remove*.
++
+You can remove a member with the *Creator* label but not the member with the *Owner* label as it is their home environment. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
 +
 The member that you removed can no longer access the resources in the environment.
 
