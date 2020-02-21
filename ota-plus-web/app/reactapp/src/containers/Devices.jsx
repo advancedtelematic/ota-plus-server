@@ -20,7 +20,7 @@ import {
   OTA_DEVICES_SEE_UNGROUPED,
   OTA_DEVICES_SEARCH_DEVICE
 } from '../constants/analyticsActions';
-import { GROUPS_FETCH_DEVICES_ASYNC } from '../config';
+import { DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
 import { URL_GET_STARTED } from '../constants/urlConstants';
 
 @inject('stores')
@@ -129,7 +129,8 @@ class Devices extends Component {
     groupsStore.selectedGroup = group;
     const groupId = group.id || null;
     const ungrouped = group.ungrouped || null;
-    devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped);
+    devicesStore.resetPageNumber();
+    devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
     if (group.isSmart) {
       groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
     }
@@ -156,7 +157,8 @@ class Devices extends Component {
     const { selectedGroup } = groupsStore;
     const selectedGroupId = selectedGroup.id || null;
     const ungrouped = groupsStore.selectedGroup.ungrouped || null;
-    devicesStore.fetchDevices('', selectedGroupId, ungrouped);
+    devicesStore.resetPageNumber();
+    devicesStore.fetchDevices(devicesStore.devicesFilter, selectedGroupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
   };
 
   changeSort = (sort, e) => {
@@ -172,7 +174,8 @@ class Devices extends Component {
     const { devicesStore, groupsStore } = stores;
     const groupId = groupsStore.selectedGroup.id;
     const ungrouped = groupsStore.selectedGroup.ungrouped || null;
-    devicesStore.fetchDevices(filter, groupId, ungrouped);
+    devicesStore.resetPageNumber();
+    devicesStore.fetchDevices(filter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
     sendAction(OTA_DEVICES_SEARCH_DEVICE);
   };
 

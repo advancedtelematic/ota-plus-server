@@ -25,8 +25,8 @@ import {
   APPROVAL_PENDING_CAMP_FETCH_ASYNC,
   DEVICE_HISTORY_LIMIT,
   DEVICE_STATUS,
-  DEVICES_FETCH_ASYNC,
   DEVICES_LIMIT_PER_PAGE,
+  DEVICES_PAGE_NUMBER_DEFAULT,
   EVENTS_FETCH_ASYNC,
   IN_ANY_GROUP,
   MISSING_DEVICE_CODE,
@@ -90,6 +90,8 @@ export default class DevicesStore {
 
   @observable devicesTotalCount = null;
 
+  @observable devicesPageNumber = DEVICES_PAGE_NUMBER_DEFAULT;
+
   @observable notSeenRecentlyDevicesTotal = 0;
 
   @observable ungroupedDevicesTotal = 0;
@@ -103,8 +105,6 @@ export default class DevicesStore {
   @observable devicesUngroupedCountNotInSmartGroup = 0;
 
   @observable devicesUngroupedCountNotInFixedGroup = 0;
-
-  @observable devicesCurrentPage = 1;
 
   @observable devicesOffset = 0;
 
@@ -215,11 +215,10 @@ export default class DevicesStore {
       });
   }
 
-  fetchDevices(filter = '', groupId, ungrouped, async = DEVICES_FETCH_ASYNC, limit = DEVICES_LIMIT_PER_PAGE) {
-    resetAsync(this[async], true);
+  fetchDevices(filter = '', groupId, ungrouped, limit = DEVICES_LIMIT_PER_PAGE, offset = 0) {
+    resetAsync(this.devicesFetchAsync, true);
     this.devicesFetchingError = false;
-    this.devicesOffset = 0;
-    this.devicesCurrentPage = 1;
+    this.devicesOffset = offset;
     this.devicesFilter = filter;
     this.devicesGroupFilter = groupId;
     let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
@@ -263,16 +262,16 @@ export default class DevicesStore {
         }
         this.prepareDevices();
         this.devicesFetchingError = false;
-        this[async] = handleAsyncSuccess(response);
+        this.devicesFetchAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
         this.devicesFetchingError = true;
-        this[async] = handleAsyncError(error);
+        this.devicesFetchAsync = handleAsyncError(error);
       });
   }
 
   fetchDevicesWithLimit(limit) {
-    this.fetchDevices('', undefined, undefined, DEVICES_FETCH_ASYNC, limit);
+    this.fetchDevices('', undefined, undefined, limit);
   }
 
   fetchUngroupedDevicesCount(async = UNGROUPED_DEVICES_COUNT_FETCH_ASYNC) {
@@ -292,17 +291,16 @@ export default class DevicesStore {
       });
   }
 
-  loadMoreDevices = (filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE, newOffset) => {
+  loadMoreDevices = (filter = '', groupId, limit = DEVICES_LIMIT_PER_PAGE, offset) => {
     resetAsync(this.devicesLoadMoreAsync, true);
-    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${newOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${offset}`;
     if (groupId && groupId === UNGROUPED) apiAddress += '&grouped=false';
     else if (groupId) apiAddress += `&groupId=${groupId}`;
     return axios
       .get(apiAddress)
       .then((response) => {
-        this.devicesCurrentPage += 1;
-        this.devicesOffset = newOffset;
-        this.devices = _.uniqBy(this.devices.concat(response.data.values), item => item.uuid);
+        this.devicesOffset = offset;
+        this.devices = _.uniqBy(response.data.values, item => item.uuid);
         this.prepareDevices();
         this.devicesLoadMoreAsync = handleAsyncSuccess(response);
       })
@@ -799,7 +797,6 @@ export default class DevicesStore {
     resetAsync(this.ungroupedDevicesCountFetchAsync);
     this.devices = [];
     this.devicesTotalCount = null;
-    this.devicesCurrentPage = 1;
     this.devicesOffset = 0;
     this.devicesFilter = '';
     this.devicesSort = SORT_DIR_ASC;
@@ -842,5 +839,9 @@ export default class DevicesStore {
       if (devicesSort !== 'undefined' && devicesSort === SORT_DIR_DESC) return bName.localeCompare(aName);
       return aName.localeCompare(bName);
     });
+  }
+
+  resetPageNumber() {
+    this.devicesPageNumber = DEVICES_PAGE_NUMBER_DEFAULT;
   }
 }

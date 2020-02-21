@@ -7,8 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { observe } from 'mobx';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
-import InfiniteScroll from 'react-infinite-scroller';
-import { Tag } from 'antd';
+import { Pagination, Tag } from 'antd';
 
 import DeviceItem from './Item';
 import BarChart from './BarChart';
@@ -17,9 +16,15 @@ import ContentPanelHeader from './ContentPanelHeader';
 import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { ARTIFICIAL } from '../../constants';
-import { DEVICES_LIMIT_PER_PAGE, FEATURES } from '../../config';
+import {
+  DEVICES_FETCH_NAME_DEVICES_FILTER,
+  DEVICES_LIMIT_PER_PAGE,
+  DEVICES_PAGE_NUMBER_DEFAULT,
+  FEATURES,
+} from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_SEE_DEVICE_DETAILS } from '../../constants/analyticsActions';
+
 
 const connections = {
   live: {
@@ -93,13 +98,11 @@ class ContentPanel extends Component {
 
   constructor(props) {
     super(props);
-    this.deviceOffsetsFetchedCache = new Set();
     const { stores } = this.props;
     const { devicesStore } = stores;
     this.cancelObserveDevicesStoreChange = observe(devicesStore, (change) => {
-      if (change.name === 'devicesTotalCount' || change.name === 'devicesFilter') {
-        // we have to clean the cache when device count or filter has changed
-        this.deviceOffsetsFetchedCache.clear();
+      if (change.name === DEVICES_FETCH_NAME_DEVICES_FILTER) {
+        devicesStore.devicesPageNumber = DEVICES_PAGE_NUMBER_DEFAULT;
       }
     });
   }
@@ -115,20 +118,15 @@ class ContentPanel extends Component {
     sendAction(OTA_DEVICES_SEE_DEVICE_DETAILS);
   };
 
-  loadDevices = async () => {
+  onPageChange = (page, pageSize) => {
     const { stores } = this.props;
     const { devicesStore } = stores;
-    const {
-      devicesFilter,
-      devicesGroupFilter,
-      devicesOffset
-    } = devicesStore;
-    const newOffset = devicesOffset + DEVICES_LIMIT_PER_PAGE;
-    if (!this.deviceOffsetsFetchedCache.has(newOffset)) {
-      this.deviceOffsetsFetchedCache.add(newOffset);
-      await devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter, DEVICES_LIMIT_PER_PAGE, newOffset);
-    }
+    const { devicesFilter, devicesGroupFilter } = devicesStore;
+    devicesStore.devicesPageNumber = page;
+    devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter, DEVICES_LIMIT_PER_PAGE, (page - 1) * pageSize);
   };
+
+  showTotalTemplate = (total, range) => (total > 0 ? `${range[0]}-${range[1]} of ${total}` : '');
 
   render() {
     const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard, t } = this.props;
@@ -136,16 +134,16 @@ class ContentPanel extends Component {
     const { features } = featuresStore;
     const {
       devices,
-      devicesCurrentPage,
       devicesFilter,
-      devicesLimit,
-      devicesTotalCount
+      devicesTotalCount,
+      devicesPageNumber
     } = devicesStore;
     const { selectedGroup } = groupsStore;
     const { type, isSmart } = selectedGroup;
 
     const isGroupsKPIEnabled = features.includes(FEATURES.DASHBOARD_CHARTS);
     const items = [];
+    const isFetchingDevices = devicesStore.devicesFetchAsync.isFetching || devicesStore.devicesLoadMoreAsync.isFetching;
 
     _.map(devices, (device, index) => {
       items.push(
@@ -163,12 +161,7 @@ class ContentPanel extends Component {
         />
       );
     });
-    // this loader div should be kept because of react-infinite-scroller requirements
-    const loader = (
-      <div className="loader" key="infinite-scroller-loader-devices">
-        {t('common.infinite_scroller.loader_content')}
-      </div>
-    );
+
     return (
       <div className="devices-panel">
         <ContentPanelHeader devicesFilter={devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
@@ -183,40 +176,45 @@ class ContentPanel extends Component {
         <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
           <div
             className={`devices-panel__list${isGroupsKPIEnabled ? ' devices-panel__list--alpha' : ''}`}
-            ref={this.scrollParentRef}
           >
-            <InfiniteScroll
-              className="wrapper-infinite-scroll"
-              pageStart={0}
-              loadMore={this.loadDevices}
-              hasMore={devicesCurrentPage < devicesTotalCount / devicesLimit}
-              useWindow={false}
-              getScrollParent={() => this.scrollParentRef}
-              loader={loader}
-              threshold={250}
-            >
-              {devicesStore.devicesFetchAsync.isFetching && (
-                <div className="wrapper-center">
-                  <Loader />
+            {isFetchingDevices ? (
+              <div className="wrapper-center">
+                <Loader />
+              </div>
+            )
+              : (
+                <div id="devices-list-container" className="devices-panel_container">
+                  {devices.length ? (
+                    <div>
+                      {items}
+                    </div>
+                  ) : (
+                    <div className="devices-panel__list-empty-wrapper">
+                      <div className="devices-panel__list-empty">
+                        {type === ARTIFICIAL
+                          ? t('devices.all_grouped')
+                          : isSmart
+                            ? t('devices.empty_group_smart')
+                            : t('devices.empty_group_fixed')
+                        }
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
-              {devices.length ? (
-                <div>
-                  {items}
-                </div>
-              ) : (
-                <div className="wrapper-center">
-                  <div className="devices-panel__list-empty">
-                    {type === ARTIFICIAL
-                      ? t('devices.all_grouped')
-                      : isSmart
-                        ? t('devices.empty_group_smart')
-                        : t('devices.empty_group_fixed')
-                    }
-                  </div>
-                </div>
-              )}
-            </InfiniteScroll>
+            {devices.length
+            && !isFetchingDevices
+            && (
+              <div className="ant-pagination__wrapper clearfix">
+                <Pagination
+                  current={devicesPageNumber}
+                  defaultPageSize={DEVICES_LIMIT_PER_PAGE}
+                  onChange={this.onPageChange}
+                  total={devicesTotalCount}
+                  showTotal={this.showTotalTemplate}
+                />
+              </div>
+            )}
           </div>
           {isGroupsKPIEnabled && (
             <div className="devices-panel__dashboard">

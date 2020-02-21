@@ -230,8 +230,9 @@ export const DEVICE_STATUS = {
   UP_TO_DATE: 'UpToDate'
 };
 export const DEVICES_LIMIT_LATEST = 4;
-export const DEVICES_LIMIT_PER_PAGE = 30;
-export const DEVICES_FETCH_ASYNC = 'devicesFetchAsync';
+export const DEVICES_LIMIT_PER_PAGE = 24;
+export const DEVICES_PAGE_NUMBER_DEFAULT = 1;
+export const DEVICES_FETCH_NAME_DEVICES_FILTER = 'devicesFilter';
 export const EVENTS_FETCH_ASYNC = 'eventsFetchAsync';
 export const IN_ANY_GROUP = 'inAnyGroup';
 export const MISSING_DEVICE_CODE = 'missing_device';
