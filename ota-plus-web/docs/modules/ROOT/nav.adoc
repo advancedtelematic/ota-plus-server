@@ -2,7 +2,6 @@
 .Get started
 * xref:index.adoc[Introduction] 
 * xref:get-access.adoc[Get access]
-// TODO * xref:switch-orgs.adoc[Switching Organizations]
 * xref:ota-workflow-campaign-manager.adoc[OTA update workflow]
 
 .Devices
