@@ -15,6 +15,7 @@ const theme = {
     primaryDarkened2: COLORS.PRIMARY_DARKENED_2,
     secondary: COLORS.SECONDARY,
     secondaryTranslucent: COLORS.SECONDARY_TRANSLUCENT,
+    secondaryTranslucent03: COLORS.SECONDARY_TRANSLUCENT_03,
     secondaryTranslucent08: COLORS.SECONDARY_TRANSLUCENT_08,
     white: COLORS.WHITE,
     whiteAlpha02: COLORS.WHITE_ALPHA_02,
@@ -25,6 +26,7 @@ const theme = {
     whiteTranslucent: COLORS.WHITE_TRANSLUCENT,
     disabledText: COLORS.DISABLED_TEXT,
     error: COLORS.ERROR,
+    errorMild: COLORS.ERROR_MILD,
     texts: {
       black: COLORS.TEXT_BLACK,
       dark: COLORS.TEXT_DARK,
