@@ -307,6 +307,7 @@ export const assets = {
 };
 export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
 export const CAMPAIGNS_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-distribute-solid-24.svg';
+export const CLOSE_MODAL_ICON = '/assets/img/new-app/24/close-cross-24.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
 export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
 export const GROUP_DYNAMIC_ICON = '/assets/img/new-app/24/LUI-icon-pd-device_group_smart_filter-outline-24.svg';

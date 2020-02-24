@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { Component } from 'react';
-import { Divider, Radio } from 'antd';
+import { Divider, Radio, Tooltip } from 'antd';
 import { Form } from 'formsy-antd';
 import Cookies from 'js-cookie';
 import { observer, inject } from 'mobx-react';
@@ -11,6 +11,7 @@ import isEmail from 'validator/lib/isEmail';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import WarningModal from '../WarningModal';
+import CreateEnvModal from '../CreateEnvModal';
 import EditOrganizationNameModal from '../EditOrganizationNameModal';
 import { Button, Dropdown, OperationCompletedInfo, SearchBar } from '../../../partials';
 import { MetaData } from '../../../utils';
@@ -18,11 +19,12 @@ import { sendAction, setAnalyticsView } from '../../../helpers/analyticsHelper';
 import {
   OTA_ENVIRONMENT_SWITCH,
   OTA_ENVIRONMENT_ADD_MEMBER,
+  OTA_ENVIRONMENT_CREATE_ENV,
   OTA_ENVIRONMENT_REMOVE_MEMBER
 } from '../../../constants/analyticsActions';
 import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../../constants/analyticsViews';
 import { changeUserEnvironment } from '../../../helpers/environmentHelper';
-import { OwnerTag, RemoveButton } from './styled';
+import { CreateEnvButton, OwnerTag, RemoveButton } from './styled';
 import {
   ORGANIZATION_NAMESPACE_COOKIE,
   TRASHBIN_ICON
@@ -42,6 +44,7 @@ class ProfileOrganization extends Component {
     const { stores, t } = props;
     const { userStore } = stores;
     this.state = {
+      createEnvModalOpen: false,
       removalModalOpenType: undefined,
       memberAddedAt: undefined,
       menuEditShownIndex: -1,
@@ -177,8 +180,20 @@ class ProfileOrganization extends Component {
     this.setState({ removalModalOpenType: REMOVAL_MODAL_TYPE.SELF_REMOVAL });
   };
 
+  toggleCreateEnvModal = () => {
+    this.setState(({ createEnvModalOpen }) => ({ createEnvModalOpen: !createEnvModalOpen }));
+  };
+
   closeRemovalModal = () => {
     this.setState({ removalModalOpenType: undefined });
+  };
+
+  handleCreateEnvironment = (envName) => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    sendAction(OTA_ENVIRONMENT_CREATE_ENV);
+    userStore.createEnvironment(envName);
+    this.toggleCreateEnvModal();
   };
 
   handleMemberRemoval = (email) => {
@@ -197,6 +212,7 @@ class ProfileOrganization extends Component {
 
   render() {
     const {
+      createEnvModalOpen,
       memberAddedAt,
       menuEditShownIndex,
       menuEditShowMenu,
@@ -213,11 +229,21 @@ class ProfileOrganization extends Component {
     const organizations = userStore.userOrganizations;
     const organizationUsers = userStore.userOrganizationUsers;
     const envOwnerEmail = Object.keys(currentOrganization).length && currentOrganization.creatorEmail;
+    const isHomeEnv = currentOrganization.isInitial;
 
     const userCurrentNamespace = Cookies.get(ORGANIZATION_NAMESPACE_COOKIE);
     return (
       <div className="profile-container" id="profile-organization">
         <MetaData title={this.title}>
+          <CreateEnvButton
+            htmlType="button"
+            type="primary"
+            light="true"
+            id="button-create-env"
+            onClick={this.toggleCreateEnvModal}
+          >
+            {t('profile.organization.create-env')}
+          </CreateEnvButton>
           <span>
             <div className="section-header">
               <div className="column name-header">{t('profile.organization.name')}</div>
@@ -305,9 +331,19 @@ class ProfileOrganization extends Component {
                   <div className="organization-info organization-info--space-between" key={`organization-info-user-${index}`}>
                     <div className="column name" id="organization-name">
                       {email}
-                      {email === envOwnerEmail && <OwnerTag>{t('profile.organization.owner')}</OwnerTag>}
+                      {email === envOwnerEmail && (isHomeEnv
+                        ? (
+                          <Tooltip placement="right" title={t('profile.organization.owner-tooltip')}>
+                            <OwnerTag>{t('profile.organization.owner')}</OwnerTag>
+                          </Tooltip>
+                        )
+                        : (
+                          <Tooltip placement="right" title={t('profile.organization.creator-tooltip')}>
+                            <OwnerTag>{t('profile.organization.creator')}</OwnerTag>
+                          </Tooltip>
+                        ))}
                     </div>
-                    {envOwnerEmail && email !== envOwnerEmail && (
+                    {((envOwnerEmail && email !== envOwnerEmail) || !isHomeEnv) && (
                       <RemoveButton
                         id="organization-remove-btn"
                         onClick={() => email === user.email
@@ -338,6 +374,9 @@ class ProfileOrganization extends Component {
           )}
           {removalModalOpenType && (
             <WarningModal {...this.populateRemovalModal(t)} />
+          )}
+          {createEnvModalOpen && (
+            <CreateEnvModal onClose={this.toggleCreateEnvModal} onConfirm={this.handleCreateEnvironment} />
           )}
         </MetaData>
       </div>
