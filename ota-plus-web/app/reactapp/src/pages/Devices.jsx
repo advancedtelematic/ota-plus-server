@@ -9,6 +9,7 @@ import { withTranslation } from 'react-i18next';
 
 import { MetaData, FadeAnimation } from '../utils';
 import { DevicesContainer } from '../containers';
+import { DEVICES_LIMIT_PER_PAGE } from '../config';
 
 @DragDropContext(HTML5Backend)
 @inject('stores')
@@ -26,7 +27,9 @@ class Devices extends Component {
     const { selectedGroup } = groupsStore;
     const groupId = selectedGroup.id || null;
     const ungrouped = groupsStore.selectedGroup.ungrouped || null;
-    devicesStore.fetchDevices('', groupId, ungrouped);
+    devicesStore.fetchDevices(
+      '', groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, (devicesStore.devicesPageNumber - 1) * DEVICES_LIMIT_PER_PAGE
+    );
     devicesStore.fetchUngroupedDevicesCount();
     groupsStore.fetchGroups();
   }
