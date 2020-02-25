@@ -2,16 +2,23 @@
 :page-partial:
 // tag::provisioning[]
 
-**Device Provisioning** is the process of attaching individual credentials and certificates to a device. {product-name} automates this process for you, allowing you to use the same unmodified disk image on many different devices and registering each one with {product-name-short} the first time it boots.
+To provision devices, you need to attach individual credentials and certificates to a device. {product-name} automates this process for you: you can use the same unmodified disk image on many different devices and register each device with {product-name-short} when you boot it for the first time.
 
-Go to the {app-url}/#/profile/access-keys[**Provisioning Keys**, window="_blank"] tab of your profile.
+*To get a provisioning key:*
 
-image::img::s1-prov.png[]
+1. Go to the {app-url}/#/profile/access-keys[**Credentials (provisioning)**, window="_blank"] tab of your profile.
+2. Click **Add key**.
++
+[.lightbackground]
+image::img::add_key.png[image,700]
 
-Create a new key, select its period of validity, and then download it.
+3. In the *Add new key* dialog box, specify the key description, select its period of validity, and then click **Add key**.
++
+[.lightbackground]
+image::img::add_new_key.png[image,400]
 
-image::img::screenshot_provisioning_key_2.png[]
+The .zip file is added to the list of credentials. The file contains the provisioning key and credentials that your build system uses to publish images. You do not need to unzip the file. Save it somewhere on your computer. You will need the file when you set up your Yocto build or configure the {product-name} client.
 
-It comes as a zip file containing a provisioning key and credentials for your build system to publish images. You don't need to unzip it; just save it somewhere. You'll need it when you set up your Yocto build or configure the {product-name} client.
+For a more in-depth technical description of device provisioning, see the xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Client guide.
 
 // end::provisioning[]

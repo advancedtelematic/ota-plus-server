@@ -1,18 +1,23 @@
-= Manage Devices
+= Manage devices
 
-== See all Your Devices
+== See all devices
 
-*To see all your devices, follow this step:*
+You can find all of the provisioned devices on the *Devices* tab.
 
-* Navigate to the https://connect.ota.here.com/#/devices[Devices] page and select the *All Devices* or *Ungrouped Devices* menu items.
+*To see all your devices:*
 
-If you haven't created any device groups yet, all your provisioned devices should show up as "ungrouped".
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. In the *Groups* pane, select *All devices*.
++
+image::img::all_devices.png[image,400]
++
+You get the list of all devices that are provisioned in your environment. 
 
-Click the name of a device in the main list to see more details for that device.
+To see more details about a device, click the needed device. The page with device details opens.
 
-== Install Software on a Single Device
+== Install a software update on a single device
 
-If you just want to update the software on a single device, you can skip the normal workflow of creating update configurations and campaigns. You can install the software directly from the device details page.
+If you just want to update the software on a single device, you can skip the normal workflow of creating software updates and campaigns. You can install the software directly on the device details page.
 
 include::partial$devices.adoc[tags=single-device-install-steps]
 
