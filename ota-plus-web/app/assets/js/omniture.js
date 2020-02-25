@@ -1,5 +1,5 @@
 var nkT = {
-  pName :"HERE OTA Connect",
+  pName :"Omniture JS Script",
   sCountry :"Global",
   sLang :"en"
 };
