@@ -112,9 +112,14 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .transform(_.withBody(Json.obj("namespace" -> newNamespace.get)))
       .execResult(apiExec)
 
-  def userProfileRequest(userId: UserId, method: String, path: String)(implicit traceData: TraceData): Future[Result] =
+  def userProfileRequest(userId: UserId,
+                         method: String,
+                         path: String,
+                         body: Option[JsValue]
+                        )(implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"users/${segment(userId.id)}/$path")
       .transform(_.withMethod(method))
+      .transform(r => body.fold(r)(r.withBody))
       .execResult(apiExec)
 
   def organizationRequest(namespace: Namespace,

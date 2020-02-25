@@ -43,6 +43,7 @@ PUT     /user/profile/billing_info               com.advancedtelematic.controlle
 POST    /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword
 GET     /user/credentials/:uuid                  com.advancedtelematic.controllers.UserProfileController.getUserCredentialsBundle(uuid: UUID)
 GET     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
+POST    /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 
 # Namespaces AKA organizations
