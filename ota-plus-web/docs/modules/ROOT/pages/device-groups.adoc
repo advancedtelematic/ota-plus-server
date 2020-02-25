@@ -1,10 +1,10 @@
-= Device Groups
+= Device groups
 
-Once enough devices have been provisioned, you should organize them into groups so that you can target them in your campaigns.
+You can organize your provisioned devices into groups to target them in your campaigns.
 
-There have two types of group: *fixed group* and *smart group*.
+There are two types of device groups:
 
 * The xref:create-fixed-group.adoc[*fixed group*] type is useful if you already have a fixed list of devices that you want to update.
-* The xref:create-smart-group.adoc[*smart group*] type is useful if you know the selection criteria for devices to update but don't yet have a fixed list of devices.
+* The xref:create-smart-group.adoc[*smart group*] type is useful if you know the selection criteria for devices that you want to update but do not yet have a fixed list of devices.
 +
-Even if you do have a list, smart groups can also come in handy when your list is constantly being appended with new devices. Smart groups automatically group newly provisioned devices that match certain selection criteria.
+Even if you do have a fixed list of devices, smart groups can also come in handy when you constantly add new devices to your list. Smart groups automatically group newly provisioned devices that match certain selection criteria.
