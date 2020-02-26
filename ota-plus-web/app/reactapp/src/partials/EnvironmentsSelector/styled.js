@@ -5,7 +5,6 @@ export const ButtonStyled = styled(Button)`
   background-color: transparent;
   border: 0px;
   color: ${({ theme }) => theme.palette.white};
-  display: flex;
   font-size: 1.00em;
   height: 24px;
   line-height: 18px;
