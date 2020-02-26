@@ -119,7 +119,7 @@ class UserProfileController @Inject()(val conf: Configuration,
   }
 
   def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
-    userProfileApi.userProfileRequest(request.idToken.userId, request.method, path)
+    userProfileApi.userProfileRequest(request.idToken.userId, request.method, path, request.body.asJson)
   }
 
 }
