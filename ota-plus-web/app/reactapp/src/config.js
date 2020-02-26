@@ -377,7 +377,9 @@ export const ICON_PATHS = [
 /**
  * Language changing in footer
  */
+export const LANGUAGE_SYMBOL_CHINESE = 'zh';
 export const LANGUAGE_SYMBOL_ENGLISH = 'en';
+export const LANGUAGE_SYMBOL_JAPANESE = 'ja';
 export const LANGUAGE_SYMBOL_PSEUDO = 'zz';
 
 export const SUPPORTED_LANGUAGES = [
