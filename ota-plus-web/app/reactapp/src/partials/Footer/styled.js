@@ -50,7 +50,6 @@ export const ButtonStyled = styled(Button)`
   border: 1px solid ${({ theme }) => theme.palette.whiteTranslucent};;
   border-radius: 2px;
   color: ${({ theme }) => theme.palette.white};
-  display: flex;
   font-size: 1.00em;
   font-family: "Fira Sans";
   line-height: 18px;

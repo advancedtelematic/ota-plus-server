@@ -6,7 +6,7 @@ export const ButtonStyled = styled(Button)`
   border: 1px solid ${({ theme }) => theme.palette.secondaryTranslucent};
   border-radius: 0px;
   color: ${({ theme }) => theme.palette.whiteAlpha08};
-  display: flex;
+  display: inline-block;
   font-size: 13px;
   font-weight: 500;
   line-height: 18px;
@@ -25,7 +25,7 @@ export const ButtonText = styled.span`
   font-weight: 400;
   margin-left: 2px;
   text-align: left;
-  width: 90%;
+  width: 81%;
 `;
 
 export const FilterTitle = styled.span`
@@ -149,6 +149,7 @@ export const MenuSelectedLength = styled.div`
   height: 18px;
   width: 7px;
   color: ${({ theme }) => theme.palette.whiteAlpha08};
+  display: inline-block;
   font-size: 13px;
   font-weight: 400;
   line-height: 18px;
