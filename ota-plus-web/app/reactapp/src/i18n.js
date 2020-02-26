@@ -18,7 +18,7 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     // please see: https://www.i18next.com/overview/configuration-options
-    whitelist: ['en', 'zh', 'zz'],
+    whitelist: ['ja', 'en', 'zh', 'zz'],
     load: 'languageOnly',
     fallbackLng: 'en', // language to use if translations in user language are not available
     ns: ['translation'], // string or array of namespaces to load
