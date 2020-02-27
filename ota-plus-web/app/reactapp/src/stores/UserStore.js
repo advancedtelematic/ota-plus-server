@@ -67,6 +67,7 @@ export default class UserStore {
     this.activatedDevicesFetchAsync = observable.map();
     this.activeDevicesFetchAsync = observable.map();
     this.connectedDevicesFetchAsync = observable.map();
+    this.createEnvironmentAsync = observable.map();
     this.deleteMemberFromOrganizationAsync = observable.map();
     this.editOrganizationNameAsync = observable.map();
     this.getCurrentOrganizationAsync = observable.map();
@@ -78,6 +79,7 @@ export default class UserStore {
     resetAsync(this.userChangePasswordAsync);
     resetAsync(this.contractsFetchAsync);
     resetAsync(this.contractsAcceptAsync);
+    resetAsync(this.createEnvironmentAsync);
     resetAsync(this.deleteMemberFromOrganizationAsync);
     resetAsync(this.editOrganizationNameAsync);
     resetAsync(this.getCurrentOrganizationAsync);
@@ -85,6 +87,17 @@ export default class UserStore {
     resetAsync(this.getOrganizationUsersAsync);
     resetAsync(this.addUserToOrganizationAsync);
   }
+
+  createEnvironment = async (name) => {
+    resetAsync(this.createEnvironmentAsync, true);
+    try {
+      const response = await axios.post(API_USER_ORGANIZATIONS, { name });
+      this.getOrganizations();
+      this.createEnvironmentAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.createEnvironmentAsync = handleAsyncError(error);
+    }
+  };
 
   deleteMemberFromOrganization = async (email, refetchMembers) => {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);

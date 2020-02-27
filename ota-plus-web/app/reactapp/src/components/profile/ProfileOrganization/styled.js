@@ -2,6 +2,11 @@
 import styled from 'styled-components';
 import { Button } from '../../../partials';
 
+export const CreateEnvButton = styled(Button)`
+  float: left;
+  margin-bottom: 16px;
+`;
+
 export const OwnerTag = styled.div`
   height: 15px;
   padding: 0 12px;
