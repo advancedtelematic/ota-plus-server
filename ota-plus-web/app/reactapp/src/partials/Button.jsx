@@ -53,6 +53,15 @@ const darkStyleVariants = theme => ({
 });
 
 const lightStyleVariants = theme => ({
+  default: {
+    '&, :hover, :focus': {
+      border: '1px solid #00B6B2',
+      color: '#00B6B2'
+    },
+    ':hover, :focus': {
+      opacity: 0.8,
+    },
+  },
   primary: {
     span: {
       color: '#FFFFFF',

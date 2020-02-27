@@ -279,6 +279,17 @@ h3 {
 
 .ant-tooltip {
   font-family: 'Fira Sans', sans-serif;
+  font-size: 13px;
+  color: #F1F5FF;
+  line-height: 18px;
+  &-inner {
+    border-radius: 2px;
+    background-color: #0F1621;
+  }
+}
+
+.ant-tooltip-placement-right .ant-tooltip-arrow {
+  border-right-color: #0F1621;
 }
 
 
