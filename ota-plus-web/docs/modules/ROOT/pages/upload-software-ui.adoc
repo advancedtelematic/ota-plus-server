@@ -1,16 +1,28 @@
-== Upload Software Versions in the OTA Connect Portal
+== Upload software versions
 
-This procedure mostly relevant if you want to work with software packages rather than disk images. It's also useful if you just want to test that your devices can detect and download new file updates.
-Otherwise, the most efficent way to upload software is to build disk images that contain your new software versions. The disk images are automatically uploaded during the build process. You can find more information about this process in the OTA Connect Client guide.
+Follow this procedure if you want to work with software packages rather than software images. It is also useful if you want to test that your devices can detect and download new file updates.
 
-*To upload a software version in the OTA Connect Portal, follow these steps:*
+Otherwise, the most efficient way to upload a software version is to build software images that contain your new software versions. The software images are automatically uploaded during the build process. You can find more information about this process in the xref:ota-client::pushing-updates.adoc[Add software to your Yocto image] section of the OTA Connect Developer guide.
 
-1.  In the main menu, click https://connect.ota.here.com/#/software-repository[Software Repository].
-2.  Click the *Add software* button on the top right.
-3.  In the window that appears, enter a *name* for your software, the software *version*, and in the *ECU Types* dropdown, select the type of ECU that your software is intended for.
-4.  Click *Choose File*, browse for the software file, and click *Add* to upload the software.
+*To upload a software version:*
 
-[.thumb]
-image::img::s4-software_upload.png[image]
+. Go to the https://connect.ota.here.com/#/software-repository[*Software versions*, window="_blank"] tab.
+. In the upper-right corner, under the name of your active environment, click *Upload software*.
++
+image::img::upload_software_button.png[image,300]
+. In *Software name*, specify the name of your software version.
+. In *Version*, specify the number or name of your software version.
+. From *Control unit types*, select the type or types of the engine control unit (ECU) for which your software version is intended.
+. Click *Choose file*, and then select the needed file that contains your software version.
++
+IMPORTANT: You are responsible for the content of the software versions and their impact on the devices. Ensure that you have tested them and can provide the necessary support for your end users.
++
+[.lightbackground]
+image::img::upload_software.png[image,600]
+. Click *Add*
 
-If you want to upload another version of the same software, you can repeat this process and enter a newer *version*.
+The new software version appears in the software version list.
+
+If you want to upload another version of the same software, you can repeat this process and enter a newer version number.
+
+You can now use the new software version to xref:create-update.adoc[create a software update].

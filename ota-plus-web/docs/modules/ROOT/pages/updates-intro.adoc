@@ -1,20 +1,21 @@
-= What is an Update Configuration?
+= What is a software update?
 
-An update configuration is a set of instructions that you can later use in a campaign. These instructions specify the software versions that should be updated.
+A software update is a set of instructions that you can use in a campaign. These instructions specify the software versions that should be updated.
 
 image::img::workflow-update.png[image]
 
-Before you start creating update configuration, make sure that you've provisioned some target devices and uploaded your new software versions.
+== Prerequisites
 
-Here's why these two prerequisites are important:
+Before you create a software update, make sure that you have provisioned target devices and uploaded new software versions.
 
-* You need to know what ECU types are available to target.
+Here is why these two prerequisites are important:
+
+* You need to know what control unit (ECU) types are available.
 +
-When you provision devices in your fleet, OTA Connect collection information about the different types of ECUs that are installed on your devices and the software that they're currently running. OTA Connect can then provide you with a list of ECU types that were detected across your fleet.
-
+When you provision devices in your group, OTA Connect collects information about the different types of ECUs that are installed on your devices and the software versions that they are currently running. Then, OTA Connect provides you with a list of ECU types that were detected across your group.
 
 * You need to know what software versions are compatible with your targeted ECUs.
 +
 image::img::software-ecus.png[image]
 +
-When you upload new software versions, you're required to specify a target ECU either in your build configuration or in the OTA Connect user interface. This allows OTA Connect to store lists of software versions that are compatible with each ECU type.
+When you upload new software versions, you should specify a target ECU in your build configuration or the OTA Connect user interface. This allows OTA Connect to store lists of software versions that are compatible with each ECU type.
