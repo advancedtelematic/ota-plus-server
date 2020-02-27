@@ -93,7 +93,7 @@ const AccountSidebar = () => {
       <Avatar id="sidebar-avatar" onClick={openSidebar} isActive={isSidebarVisible}>
         {acronym}
       </Avatar>
-      <Sidebar onClose={onClose} visible={isSidebarVisible}>
+      <Sidebar onClose={onClose} visible={isSidebarVisible} features={features}>
         <DrawerHeader>
           <Title size="large" id="sidebar-username">{userName}</Title>
           {features.includes(FEATURES.ORGANIZATIONS) && (

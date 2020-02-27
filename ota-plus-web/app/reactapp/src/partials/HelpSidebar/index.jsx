@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useObserver } from 'mobx-react';
 import { Title } from '..';
 import Sidebar from '../Sidebar';
 import { HELP_ICON_DARK } from '../../config';
@@ -17,12 +18,21 @@ import {
   SidebarHeader,
   Support
 } from './styled';
+import { useStores } from '../../stores/hooks';
 
 const ARROW_RIGHT = String.fromCharCode(8594);
+
+function useStoreData() {
+  const { stores } = useStores();
+  return useObserver(() => ({
+    features: stores.featuresStore.features
+  }));
+}
 
 const HelpSidebar = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { t } = useTranslation();
+  const { features } = useStoreData();
 
   const links = [
     { actionType: OTA_NAV_GET_STARTED, name: 'get-started', to: URL_GET_STARTED },
@@ -61,7 +71,7 @@ const HelpSidebar = () => {
   return (
     <>
       <Support id="help-icon" onClick={openSidebar} isActive={isSidebarVisible} />
-      <Sidebar onClose={onClose} visible={isSidebarVisible}>
+      <Sidebar onClose={onClose} visible={isSidebarVisible} features={features}>
         <SidebarHeader>
           <HelpIcon src={HELP_ICON_DARK} />
           <Title size="large">{t('help-sidebar.title')}</Title>
