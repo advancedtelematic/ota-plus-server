@@ -44,7 +44,7 @@ const SubNavBar = ({ lightMode }) => {
           <EnvironmentsSelector
             id="app-subnavbar-environment-selector"
             handleMenuClick={handleMenuClick}
-            headerTitle={t('navigation.environments.selector.select_title')}
+            headerTitle={t('navigation.environments.selector.selecttitle')}
             lightMode={lightMode}
             environments={environments}
             userEnvironmentNamespace={userEnvironmentNamespace}
