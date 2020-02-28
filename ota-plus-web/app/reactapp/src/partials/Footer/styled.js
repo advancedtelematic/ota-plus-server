@@ -50,11 +50,12 @@ export const ButtonStyled = styled(Button)`
   border: 1px solid ${({ theme }) => theme.palette.whiteTranslucent};;
   border-radius: 2px;
   color: ${({ theme }) => theme.palette.white};
+  display: inline-block;
   font-size: 1.00em;
   font-family: "Fira Sans";
   line-height: 18px;
   margin-right: 20px;
-  padding: 0 5px;
+  padding: 0 10px 0 5px;
   width: 160px;
   &:hover, &:focus {
     color: ${({ theme }) => theme.palette.white};
