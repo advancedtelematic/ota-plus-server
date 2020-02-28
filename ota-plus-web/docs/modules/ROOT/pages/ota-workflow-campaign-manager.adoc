@@ -1,4 +1,4 @@
-= The Workflow of an OTA Update
+= OTA update workflow
 
 To deploy OTA updates in production, we use the concept of a campaign. We'll go into more details about campaigns later, but to understand the workflow, you first need to understand what goes into a campaign.
 
