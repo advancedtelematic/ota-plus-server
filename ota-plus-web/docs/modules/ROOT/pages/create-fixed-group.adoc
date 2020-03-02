@@ -1,38 +1,55 @@
 = Create a fixed group
 
-To create a fixed group, you need to explicitly specify the devices that you want to add. 
+To create a fixed group, you need to add the devices that you want to group by <<drag, dragging>> them to the group or xref:upload-list[uploading] a list of device IDs. 
 
-*To create a fixed group, follow these steps:*
+[[drag]]
+*To create a fixed device group by dragging devices:*
 
-. Open the https://connect.ota.here.com/#/devices[Devices] tab and click *+Add group*.
-. Select *Fixed Group* and click *Next*.
-. In the next window, enter a group name.
-. Click *Create* to finish creating your group.
-. Open the *All devices* or *Ungrouped devices* section, then drag and drop each device on to the group that you just created.
-
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. In the *Groups* pane, click *Create group*.
++
+image::img::create_group.png[image,500]
+. Select *Fixed device group*, and then click *Next*.
+. Specify the group name.
+. Click *Create*.
++
+The created group appears in the *Groups* pane.
+. In the *Groups* pane, click the *All devices* section or the needed item in the *Ungrouped devices* section, and then drag the needed devices to the group that you created.
 // MC: Add animated gif and automate it
 
+You group is now populated with devices.
+
+anchor:upload-list[]
 +++ <details><summary> +++
-*Advanced: Group devices by uploading a list*
+*Advanced: Create a fixed device group by uploading a list of device IDs*
 +++ </summary><div> +++
 
-If you have a large volume of devices, you can add them to a fixed group by importing a list of device IDs. Bear in mind that this feature is currently experimental and might not work as expected.
+If you have a large number of devices, you can add them to a fixed group by importing a list of device IDs.
 
-To create this list, you first need to know the device IDs for all the devices that you've provisioned. The best way to create this list is to have your developers xref:ota-client::use-your-own-deviceid.adoc[define the device IDs] and ask them for list of the device IDs that they've provisioned. You need to get this list in from your developers because there's currently no way to export a list of provisioned device IDs from the OTA Connect portal.
+To group devices by adding a list of device IDs:
+
+. Create a list of device IDs.
++
+Currently, there is no way to export a list of provisioned device IDs from the OTA Connect portal. The best way to create this list is to have your developers xref:ota-client::use-your-own-deviceid.adoc[define the device IDs] and ask them for the list of the device IDs that they provisioned.
 // MC: This would be solved by https://saeljira.it.here.com/browse/OTA-3306 if anyone besides me cared about it.
-
++
 Your list of device IDs needs to be a `.txt` file with one ID on each line. 
-Unfortunately, the import wont work if the text file contains Windows-style line breaks. To tidy up the file format, open the text file in a text editor such as Notepad++ and make sure there are no carriage return characters, and the lines are separated only by new line characters. 
+Make sure there are no carriage return characters, and the lines are separated only by new line characters.
 
-* In Notepad++ you can click the *Show All Characters* button to show non-printable characters such as tabs and new lines.
-* In Notepad++ you also find carriage returns by searching for the regular expression "`\r`".
-
-*To create a fixed group and upload a list of device IDs, follow these steps:*
-
-. Open the https://connect.ota.here.com/#/devices[Devices] tab and click *+Add group*.
-. Select *Fixed Group* and click *Next*.
-. In the next window, enter a group name.
-. Upload your list and click *Create*.
-. Open the group that you just created and check that your devices were added correctly.
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. In the *Groups* pane, click *Create group*.
++
+image::img::create_group.png[image,500]
+. Select *Fixed device group*, and then click *Next*.
+. Specify the group name.
+. Click *Choose file*.
++
+[.lightbackground]
+image::img::choose_file.png[image,700,align="left"]
+. Select the file that contains the list of device IDs.
+. Click *Create*.
++
+The created group appears in the *Groups* pane.
+Open the group that you just created and check that your devices were added correctly.
 
 +++ </div></details> +++
