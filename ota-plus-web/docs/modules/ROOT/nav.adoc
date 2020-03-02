@@ -5,7 +5,7 @@
 * xref:ota-workflow-campaign-manager.adoc[OTA update workflow]
 
 .Devices
-* xref:manage-device-prov.adoc[Provisioning]
+* xref:manage-device-prov.adoc[What is device provisioning?]
 ** xref:create-provisioning-key.adoc[Get a provisioning key]
 * xref:device-groups.adoc[Device groups]
 ** xref:create-fixed-group.adoc[Create a fixed group]
