@@ -1,38 +1,32 @@
 = Monitor Campaigns
 
-After you launch a campaign you can open the *Campaign Details* to monitor the progress of the campaign and look for any installation issues.
+After you launch a campaign, you can open the campaign details to monitor the progress of the campaign and look for any installation issues.
 
-*To see the Campaign Details, follow these steps:*
+*To see the campaign details:*
 
-Click *Campaigns* and click a status tab.
+. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
++
+In the campaigns list, you can find the following information about each campaign:
 
-* Assuming your campaign is still running you would click the *Running* tab.
-* If your campaign is a test campaign, it might finish quickly, in which case, you'll find it on the *Finished* tab
+* Name
+* Creation date
+* Status:
+** *In preparation*—your campaign is preparing for the launch.
+** *Running*—your campaign is still in the process and has not finished.
+** *Finished*—your campaign has completed.
+** *Canceled*—your campaign was canceled.
+* Number of devices that are included in the campaign
+* Percentage of devices with the *Failed*, *Successful*, *Installing*, and *Not applicable* statuses.
+. Navigate to the needed campaign, and next to it, click *More info*.
++
+You get information on the campaign total progress.
++
+[.lightbackground]
+image::img::campaign_details.png[image,1000]
++
+You see a summary of all the update attempts for each device grouped by status:
 
-In the campaign list, click your campaign.
-
-You should see the progress details for your campaign.
-
-[.thumb]
-image::img::s8-monitor_campaign.png[image]
-
-You'll see a summary of all the update attempts for each device grouped by status:
-
-*Success* indicates the number of devices where the software was successfully updated.
-
-*Queued* indicates the number of devices that are still waiting to be updated.
-
-* These devices might be offline or the OTA Connect server is waiting until a previous batch of updates has completed.
-
-*Failure* indicates the number of devices where the update attempt failed.
-
-* If there are update failures, the campaign details include a breakdown by individual failure code.
-* To get a list of individual devices affected by the failure code, click the Export image:img::download.png[Icon,20,20] button next to the relevant failure code.
-
-*Not Processed* indicates devices that weren't processed by the OTA Connect server for some strange reason.
-
-*Not Impacted* indicates devices that were targeted by the campaign by were ignored because they did not match the criteria of the selected update.
-
-* A common cause for this status is when the device is not running the same version of the software that is defined in the *From* criteria of the update.
-
-*Canceled* indicates updates that were canceled either on the device itself or from the device details page of an individual device.
+* *Failed*—indicates the number of devices that failed to install at least one software update. For more details about the failure, see the reported failure code. To get a list of individual devices affected by the failure code, next to the relevant failure code, click the export button (image:img::download.png[Icon,20,20]).
+* *Success*—indicates the number of devices that successfully installed the software updates.
+* *Installing*—indicates the number of devices that are still installing one or more software updates.
+* *Not applicable*—indicates the number of devices where none of the control units or software versions match the targeting criteria of the software update. It can also indicate devices that are now installing software updates from another campaign, or devices where the software update has been canceled.
