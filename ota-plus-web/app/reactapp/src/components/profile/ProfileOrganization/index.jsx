@@ -217,7 +217,6 @@ class ProfileOrganization extends Component {
       menuEditShownIndex,
       menuEditShowMenu,
       organization,
-      organizationSelectedIndex,
       removalModalOpenType,
       userEmail,
       userEmailError
@@ -256,7 +255,7 @@ class ProfileOrganization extends Component {
               <div className="organization-info" key={`organization-info-${item.namespace}`}>
                 <div className={`column name ${item.namespace === namespace ? 'selected' : ''}`} id="organization-name">
                   <Radio
-                    checked={index === organizationSelectedIndex}
+                    checked={item.namespace === namespace}
                     onChange={this.organizationChangeCallback}
                     value={index}
                   />
