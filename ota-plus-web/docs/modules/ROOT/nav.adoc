@@ -14,25 +14,25 @@
 // TODO * Update a Smart Group
 // TODO * Delete groups
 
-.Software
-* xref:software-upload-methods.adoc[Software upload methods]
-** xref:upload-software-ui.adoc[Upload Software]
-// TODO: * xref:manage-software.adoc[Manage Software Versions]
-* xref:blacklist-software.adoc[Blacklisting bad software]
+.Software versions
+* xref:software-upload-methods.adoc[Upload methods]
+** xref:upload-software-ui.adoc[Upload a software version]
+// TODO: * xref:manage-software.adoc[Manage software versions]
+* xref:blacklist-software.adoc[Blacklist bad software packages]
 
 
-.Updates
-* xref:updates-intro.adoc[What is an update configuration?]
-* xref:create-update.adoc[Create an update configuration]
-// TODO: xref:manage-updates.adoc[Manage Update Configurations]
+.Software updates
+* xref:updates-intro.adoc[What is a software update?]
+* xref:create-update.adoc[Create a software update]
+// TODO: xref:manage-updates.adoc[Manage update configurations]
 
 .Campaigns
 * xref:campaigns-intro.adoc[What is a campaign?]
 * xref:create-campaigns.adoc[Create a campaign]
 * xref:monitor-campaigns.adoc[Monitor campaigns]
 
-// TODO * xref:retry-campaigns.adoc[Retry Failed Installations]
-// TODO * xref:manage-campaigns.adoc[Manage Campaigns]
+// TODO * xref:retry-campaigns.adoc[Retry failed installations]
+// TODO * xref:manage-campaigns.adoc[Manage campaigns]
 
 .Environments image:img::beta-icon.svg[Beta]
 * xref:environments-intro.adoc[What is an environment?]
