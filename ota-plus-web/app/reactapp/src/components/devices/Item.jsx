@@ -7,10 +7,12 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 
 import { Dropdown } from '../../partials';
 import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 import { GROUP_GROUP_TYPE_REAL, GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
+import { DEVICE_LAST_UPDATED_DATE_FORMAT } from '../../constants/datesTimesConstants';
 
 const deviceSource = {
   beginDrag(props) {
@@ -60,7 +62,6 @@ class Item extends Component {
     const { uuid, deviceId, deviceName, deviceStatus, lastSeen } = device;
     const { isDragging, connectDragSource } = this.props;
     const opacity = isDragging ? semiTransparent : 1;
-    const lastSeenDate = new Date(lastSeen);
     let deviceStatusMessage = t('devices.statuses.unknown');
     switch (deviceStatus) {
       case DEVICE_STATUS_UP_TO_DATE:
@@ -129,7 +130,7 @@ class Item extends Component {
                 <span>
                   {
                     t('devices.last_updated_item',
-                      { date: lastSeenDate.toDateString(), time: lastSeenDate.toLocaleTimeString() })
+                      { date: moment(lastSeen).format(DEVICE_LAST_UPDATED_DATE_FORMAT) })
                   }
                 </span>
               )

@@ -9,6 +9,7 @@ import { withTranslation } from 'react-i18next';
 
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
+import { DEVICE_MTU_RECEIVED_AT } from '../../../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -64,7 +65,7 @@ class MtuListItem extends Component {
             </span>
             <span id={`received-at-${item.correlationId}`}>
               {moment(item.eventTime ? item.eventTime : item.receivedAt)
-                .format('ddd MMM DD YYYY, h:mm A')}
+                .format(DEVICE_MTU_RECEIVED_AT)}
             </span>
           </div>
         </div>

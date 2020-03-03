@@ -5,12 +5,14 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Trans, withTranslation } from 'react-i18next';
+import moment from 'moment';
 
 import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
 import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
+import { DEVICE_SUMMARY_DATE_FORMAT } from '../../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -61,9 +63,6 @@ class Header extends Component {
     const { stores, t } = this.props;
     const { devicesStore } = stores;
     const { device } = devicesStore;
-    const lastSeenDate = new Date(device.lastSeen);
-    const createdDate = new Date(device.createdAt);
-    const activatedDate = new Date(device.activatedAt);
     let deviceStatus = t('devices.statuses.unknown');
     switch (device.deviceStatus) {
       case DEVICE_STATUS_UP_TO_DATE:
@@ -102,7 +101,7 @@ class Header extends Component {
                     <span className="page-header__device-report-label">{t('devices.hardware.created')}</span>
                     <div className="page-header__device-report-desc">
                       {device.createdAt
-                        ? `${createdDate.toDateString()} ${createdDate.toLocaleTimeString()}`
+                        ? moment(device.createdAt).format(DEVICE_SUMMARY_DATE_FORMAT)
                         : t('devices.statistics.not_reported')
                       }
                     </div>
@@ -111,7 +110,7 @@ class Header extends Component {
                     <span className="page-header__device-report-label">{t('devices.hardware.activated')}</span>
                     <div className="page-header__device-report-desc">
                       {device.activatedAt
-                        ? `${activatedDate.toDateString()} ${activatedDate.toLocaleTimeString()}`
+                        ? moment(device.activatedAt).format(DEVICE_SUMMARY_DATE_FORMAT)
                         : t('devices.statistics.not_reported')
                       }
                     </div>
@@ -123,7 +122,7 @@ class Header extends Component {
                     <span className="page-header__device-report-label">{t('devices.hardware.last_seen_online')}</span>
                     <div className="page-header__device-report-desc">
                       {deviceStatus !== t('devices.statuses.unknown')
-                        ? `${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`
+                        ? moment(device.lastSeen).format(DEVICE_SUMMARY_DATE_FORMAT)
                         : getDeviceHttpStatusErrorMessage(device.httpStatus)
                       }
                     </div>

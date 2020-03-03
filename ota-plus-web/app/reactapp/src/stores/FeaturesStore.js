@@ -22,6 +22,7 @@ export default class FeaturesStore {
       const { data, ...rest } = await axios.get(API_FEATURES_FETCH);
       data.map(feature => this.features.push(feature.id));
 
+
       this.featuresFetchAsync = handleAsyncSuccess({ data, ...rest });
     } catch (error) {
       this.featuresFetchAsync = handleAsyncError(error);

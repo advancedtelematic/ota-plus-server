@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useObserver } from 'mobx-react';
@@ -36,6 +36,7 @@ import {
 import { ACTIVITIES_TYPE } from '../../../../constants';
 import { useStores } from '../../../../stores/hooks';
 import { Loader } from '../../../../partials';
+import { getLanguage } from '../../../../helpers/languageHelper';
 
 const MENU_ITEMS = [
   { type: ACTIVITIES_TYPE.DEVICE, title: 'dashboard.recent-activity.filter-menu.item-devices' },
@@ -61,7 +62,7 @@ function useStoreData() {
   return useObserver(() => ({
     devicesTotalCount: stores.devicesStore.devicesTotalCount,
     isFetching: stores.recentlyCreatedStore.recentlyCreatedFetchAsync.isFetching,
-    recentlyCreated: stores.recentlyCreatedStore.recentlyCreated,
+    recentlyCreatedItems: stores.recentlyCreatedStore.recentlyCreatedItems
   }));
 }
 
@@ -69,7 +70,7 @@ const RecentActivity = () => {
   const [menuItemsSelected, setMenuItemsSelected] = useState(MENU_ITEMS.map(() => true));
   const [menuSelectedLength, setMenuSelectedLength] = useState(MENU_ITEMS.length);
   const [filterMenuVisible, setFilterMenuVisible] = useState(false);
-  const { devicesTotalCount, isFetching, recentlyCreated } = useStoreData();
+  const { devicesTotalCount, isFetching, recentlyCreatedItems } = useStoreData();
   const { t } = useTranslation();
   const { stores } = useStores();
   const handleMenuChange = (event) => {
@@ -85,8 +86,12 @@ const RecentActivity = () => {
     stores.recentlyCreatedStore.fetchRecentlyCreated(params);
   };
 
+  useEffect(() => {
+    stores.recentlyCreatedStore.updateRecentlyCreatedItems();
+  }, [getLanguage()]);
+
   return (
-    <RecentActivityWrapper id="recent-activity-wrapper" empty={recentlyCreated.length === 0}>
+    <RecentActivityWrapper id="recent-activity-wrapper" empty={recentlyCreatedItems.length === 0}>
       <TopContainer id="recent-activity-top-container">
         <Title id="docs-links-title">{t('dashboard.recent-activity.title')}</Title>
         {devicesTotalCount > 0 && (
@@ -110,10 +115,10 @@ const RecentActivity = () => {
           </RightContainer>
         )}
       </TopContainer>
-      { recentlyCreated.length && devicesTotalCount > 0 && !isFetching ? (
+      { recentlyCreatedItems.length && devicesTotalCount > 0 && !isFetching ? (
         <ListStyled
           id="recent-activity-list"
-          dataSource={recentlyCreated}
+          dataSource={recentlyCreatedItems}
           renderItem={({ date, title, type, groupType }, index) => (
             <ListItem id={`recent-activity-list-item-${index}`} key={index}>
               <ListIcon

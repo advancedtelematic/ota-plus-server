@@ -11,6 +11,7 @@ import { withTranslation } from 'react-i18next';
 
 import { Row, Col, Checkbox } from 'antd';
 import { FormSelect } from '../../../../partials';
+import { SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT } from '../../../../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -41,7 +42,7 @@ class UpdatesWizardDetailListItem extends Component {
     });
     const formattedData = versions
       && versions.map(version => ({
-        text: `${version.id.version} Created at: ${moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}`,
+        text: `${version.id.version} Created: ${moment(version.createdAt).format(SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT)}`,
         id: version.id.version,
         value: version.filepath,
         version,
