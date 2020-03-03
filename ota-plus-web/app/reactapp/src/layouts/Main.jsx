@@ -10,6 +10,7 @@ import { notification } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import { ThemeProvider } from 'styled-components';
+import moment from 'moment';
 import theme from '../theme';
 
 import Routes from '../Routes';
@@ -25,6 +26,7 @@ import SubNavBar from '../partials/SubNavBar';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
 import { LOCATION_PROFILE } from '../constants/locationConstants';
+import { getLanguage, getMomentLocale } from '../helpers/languageHelper';
 
 const DASHBOARD_PATH = {
   OLD: '/',
@@ -124,6 +126,7 @@ class Main extends Component {
       }
       userStore.fetchContracts();
     }
+    moment.locale(getMomentLocale(getLanguage()));
   }
 
   componentWillUnmount() {

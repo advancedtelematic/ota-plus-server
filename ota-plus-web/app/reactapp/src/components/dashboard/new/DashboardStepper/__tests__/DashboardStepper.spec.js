@@ -20,6 +20,8 @@ function mountComponent(props) {
   );
 }
 
+jest.mock('../../../../../i18n');
+
 describe('<DashboardStepper />', () => {
   let wrapper;
 

@@ -10,15 +10,10 @@ import RecentlyCreatedStore from '../../../../../stores/RecentlyCreatedStore';
 import { ACTIVITIES_TYPE } from '../../../../../constants';
 import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key.toUpperCase()
-  }),
-  withTranslation: () => y => y
-}));
+jest.mock('../../../../../i18n');
 
-const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_EMPTY = 'DASHBOARD.RECENT-ACTIVITY.NO-DATA.EMPTY';
-const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_NOTHING_CREATED = 'DASHBOARD.RECENT-ACTIVITY.NO-DATA.NOTHING-CREATED';
+const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_EMPTY = 'dashboard.recent-activity.no-data.empty';
+const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_NOTHING_CREATED = 'dashboard.recent-activity.no-data.nothing-created';
 
 const mockedStores = {
   devicesStore: new DevicesStore(),
@@ -52,18 +47,19 @@ describe('<RecentActivity />', () => {
     expect(wrapper.exists('#recent-activity-list')).toEqual(false);
   });
 
-  it('should render with devicesTotalCount > 0 && recentlyCreated.lenght > 0', () => {
+  it('should render with devicesTotalCount > 0 && recentlyCreated.length > 0', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 1;
-    stores.recentlyCreatedStore.recentlyCreated = [{
+    stores.recentlyCreatedStore.recentlyCreatedItems = [{
       date: '2019-12-23 12:17',
       title: 'title',
       type: ACTIVITIES_TYPE.CAMPAIGN
     }];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
+    stores.recentlyCreatedStore.updateRecentlyCreatedItems = () => {};
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(true);
@@ -77,7 +73,7 @@ describe('<RecentActivity />', () => {
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 1;
-    stores.recentlyCreatedStore.recentlyCreated = [];
+    stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: true };
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
@@ -93,7 +89,7 @@ describe('<RecentActivity />', () => {
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 1;
-    stores.recentlyCreatedStore.recentlyCreated = [];
+    stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
@@ -112,7 +108,7 @@ describe('<RecentActivity />', () => {
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 0;
-    stores.recentlyCreatedStore.recentlyCreated = [];
+    stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
@@ -131,7 +127,7 @@ describe('<RecentActivity />', () => {
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 1;
-    stores.recentlyCreatedStore.recentlyCreated = [{
+    stores.recentlyCreatedStore.recentlyCreatedItems = [{
       date: '2019-12-23 12:17',
       title: 'title-campaign',
       type: ACTIVITIES_TYPE.CAMPAIGN
@@ -151,7 +147,7 @@ describe('<RecentActivity />', () => {
       recentlyCreatedStore: new RecentlyCreatedStore(),
     };
     stores.devicesStore.devicesTotalCount = 1;
-    stores.recentlyCreatedStore.recentlyCreated = [{
+    stores.recentlyCreatedStore.recentlyCreatedItems = [{
       date: '2019-12-23 12:17',
       title: 'title-campaign',
       type: ACTIVITIES_TYPE.CAMPAIGN

@@ -35,7 +35,7 @@ describe('<CreateEnvModal />', () => {
   it('should validate input', () => {
     const eventValid = {
       target: {
-        value: 'New env name'
+        value: 'New-env-name'
       }
     };
     const eventTooLong = {
@@ -49,7 +49,7 @@ describe('<CreateEnvModal />', () => {
       }
     };
     wrapper.find('input').simulate('change', eventValid);
-    expect(wrapper.find('input').props().value).toBe('New env name');
+    expect(wrapper.find('input').props().value).toBe('New-env-name');
     expect(wrapper.exists('#error-msg')).toEqual(false);
 
     wrapper.find('input').simulate('change', eventTooLong);

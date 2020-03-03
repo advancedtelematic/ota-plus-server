@@ -22,6 +22,8 @@ function mountComponent(props) {
   );
 }
 
+jest.mock('../../../../../../i18n');
+
 const generateCardProps = status => ({
   id: 'deviceGroup-card',
   buttonTitle: 'Create group',

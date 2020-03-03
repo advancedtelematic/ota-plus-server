@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
+import { DEVICE_MTU_RECEIVED_AT } from '../../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -63,8 +64,7 @@ class MtuListItem extends Component {
               {t('devices.mtu.history.received_at')}
             </span>
             <span id={`received-at-${item.correlationId}`}>
-              {moment(item.eventTime ? item.eventTime : item.receivedAt)
-                .format('ddd MMM DD YYYY, h:mm A')}
+              {getFormattedDateTime(item.eventTime ? item.eventTime : item.receivedAt, DEVICE_MTU_RECEIVED_AT)}
             </span>
           </div>
         </div>

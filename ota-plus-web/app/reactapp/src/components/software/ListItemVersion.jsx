@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import moment from 'moment';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import { Dropdown } from '../../partials';
@@ -15,6 +14,8 @@ import {
   OTA_SOFTWARE_EDIT_COMMENT,
   OTA_SOFTWARE_EDIT_DEPENDENCIES
 } from '../../constants/analyticsActions';
+import { SOFTWARE_VERSION_DATE_FORMAT } from '../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -94,13 +95,13 @@ class ListItemVersion extends Component {
                 <div className="c-package__sw-row">
                   <span className="c-package__sw-subtitle">{t('software.details.created_at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-created-at-${version.id.version.substring(0, 8)}`}>
-                    {moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
+                    {getFormattedDateTime(version.createdAt, SOFTWARE_VERSION_DATE_FORMAT)}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
                   <span className="c-package__sw-subtitle">{t('software.details.updated_at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-updated-at-${version.id.version.substring(0, 8)}`}>
-                    {moment(version.updatedAt).format('ddd MMM DD YYYY, h:mm:ss A')}
+                    {getFormattedDateTime(version.updatedAt, SOFTWARE_VERSION_DATE_FORMAT)}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
