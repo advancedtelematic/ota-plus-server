@@ -25,6 +25,8 @@ function mountComponent(features, props) {
   );
 }
 
+jest.mock('../../../i18n');
+
 describe('<AccountSidebar />', () => {
   let wrapper;
 

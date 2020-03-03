@@ -9,6 +9,11 @@ import Items from './usage/Items';
 import { MetaData } from '../../utils';
 import { setAnalyticsView } from '../../helpers/analyticsHelper';
 import { ANALYTICS_VIEW_USAGE } from '../../constants/analyticsViews';
+import {
+  USAGE_DATE_DATA_FORMAT,
+  USAGE_DATE_MONTH_DATA_FORMAT,
+  USAGE_DATE_YEAR_DATA_FORMAT
+} from '../../constants/datesTimesConstants';
 
 const startTime = moment([2017, 0, 1]);
 const currentTime = moment();
@@ -16,7 +21,7 @@ const monthsCount = currentTime.diff(startTime, 'months');
 const months = [];
 for (let i = 0; i <= monthsCount; i += 1) {
   const date = moment(startTime).add(i, 'months');
-  months.push(date.format('YYYYMM'));
+  months.push(date.format(USAGE_DATE_DATA_FORMAT));
 }
 
 @inject('stores')
@@ -42,7 +47,10 @@ class Usage extends Component {
       const endTimeTmp = moment(startTimeTmp).add(1, 'months');
       userStore.fetchActivatedDeviceCount(startTimeTmp, endTimeTmp);
       userStore.fetchActiveDeviceCount(startTimeTmp, endTimeTmp);
-      userStore.fetchConnectedDeviceCount(startTimeTmp.format('YYYY'), startTimeTmp.format('MM'));
+      userStore.fetchConnectedDeviceCount(
+        startTimeTmp.format(USAGE_DATE_YEAR_DATA_FORMAT),
+        startTimeTmp.format(USAGE_DATE_MONTH_DATA_FORMAT)
+      );
     }
   };
 

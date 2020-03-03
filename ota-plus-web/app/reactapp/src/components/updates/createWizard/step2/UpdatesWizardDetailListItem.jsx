@@ -5,12 +5,13 @@ import { Form } from 'formsy-antd';
 import _ from 'lodash';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
 import { Row, Col, Checkbox } from 'antd';
 import { FormSelect } from '../../../../partials';
+import { SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT } from '../../../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -41,7 +42,7 @@ class UpdatesWizardDetailListItem extends Component {
     });
     const formattedData = versions
       && versions.map(version => ({
-        text: `${version.id.version} Created at: ${moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}`,
+        text: `${version.id.version} Created: ${getFormattedDateTime(version.createdAt, SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT)}`,
         id: version.id.version,
         value: version.filepath,
         version,

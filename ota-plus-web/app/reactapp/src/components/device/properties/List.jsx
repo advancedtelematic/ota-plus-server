@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
 
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
+import { DEVICE_PROPERTIES_DATE_FORMAT } from '../../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -163,21 +164,21 @@ class List extends Component {
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">Created at:</span>
+                  <span className="properties-panel__info-data-subtitle">Created:</span>
                   <span
                     className="properties-panel__info-data-value"
                     id={this.generateIdTag('version-created-at-value', expandedPackage)}
                   >
-                    {moment(expandedPackage.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
+                    {getFormattedDateTime(expandedPackage.createdAt, DEVICE_PROPERTIES_DATE_FORMAT)}
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">Updated at:</span>
+                  <span className="properties-panel__info-data-subtitle">Updated:</span>
                   <span
                     className="properties-panel__info-data-value"
                     id={this.generateIdTag('version-updated-at-value', expandedPackage)}
                   >
-                    {moment(expandedPackage.updatedAt).format('ddd MMM DD YYYY, h:mm:ss A')}
+                    {getFormattedDateTime(expandedPackage.updatedAt, DEVICE_PROPERTIES_DATE_FORMAT)}
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">

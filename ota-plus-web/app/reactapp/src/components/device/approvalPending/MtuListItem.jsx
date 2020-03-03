@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
 import { METADATA_TYPES } from '../../../constants';
+import { DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT } from '../../../constants/datesTimesConstants';
 
 const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
   const metadata = campaign.metadata.length ? campaign.metadata : null;
@@ -73,7 +74,7 @@ const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
             <span id={`update-id-${campaign.id}`}>
               {moment.utc(
                 parseInt(metadata.find(el => el.type === METADATA_TYPES.PRE_DURATION).value, 10) * 1000
-              ).format('HH:mm:ss')}
+              ).format(DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT)}
             </span>
           </div>
           )}
@@ -85,7 +86,7 @@ const MtuListItem = ({ campaign, cancelApprovalPendingCampaign, t }) => {
             <span id={`update-id-${campaign.id}`}>
               {moment.utc(
                 parseInt(metadata.find(el => el.type === METADATA_TYPES.INSTALL_DURATION).value, 10) * 1000
-              ).format('HH:mm:ss')}
+              ).format(DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT)}
             </span>
           </div>
           )}

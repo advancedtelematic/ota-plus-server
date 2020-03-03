@@ -11,12 +11,9 @@ import { withTranslation } from 'react-i18next';
 
 import { FormTextarea, FormInput, TimePicker } from '../../../partials';
 import { FEATURES } from '../../../config';
+import { METADATA_TYPES } from '../../../constants';
+import { DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT } from '../../../constants/datesTimesConstants';
 
-const metadataTypes = {
-  DESCRIPTION: 'DESCRIPTION',
-  INSTALL_DUR: 'ESTIMATED_INSTALLATION_DURATION',
-  PRE_DUR: 'ESTIMATED_PREPARATION_DURATION',
-};
 @inject('stores')
 @observer
 class WizardStep4 extends Component {
@@ -71,19 +68,19 @@ class WizardStep4 extends Component {
     _.each(timeObject, (value, key) => {
       timeString += `${value}${key !== 'seconds' ? ':' : null}`;
     });
-    return `${moment(timeString, 'HH:mm:ss').diff(moment().startOf('day'), 'seconds')}`;
+    return `${moment(timeString, DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT).diff(moment().startOf('day'), 'seconds')}`;
   };
 
   getTimeFromSeconds = seconds => new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
 
   getPreparationTime = (time) => {
     const timeString = this.parseTime(time);
-    this.addToWizardData(metadataTypes.PRE_DUR, timeString);
+    this.addToWizardData(METADATA_TYPES.PRE_DURATION, timeString);
   };
 
   getInstallationTime = (time) => {
     const timeString = this.parseTime(time);
-    this.addToWizardData(metadataTypes.INSTALL_DUR, timeString);
+    this.addToWizardData(METADATA_TYPES.INSTALL_DURATION, timeString);
   };
 
   clearInput = () => {
@@ -144,8 +141,8 @@ class WizardStep4 extends Component {
             label={!isConsentReuseEnabled ? t('campaigns.wizard.steps.user_consent.release_note') : ''}
             id="internal_driver-description"
             defaultValue={DESCRIPTION || ''}
-            onValid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
-            onInvalid={e => this.addToWizardData(metadataTypes.DESCRIPTION, e.target.value)}
+            onValid={e => this.addToWizardData(METADATA_TYPES.DESCRIPTION, e.target.value)}
+            onInvalid={e => this.addToWizardData(METADATA_TYPES.DESCRIPTION, e.target.value)}
           />
         </div>
         <div className="translations">
@@ -167,7 +164,7 @@ class WizardStep4 extends Component {
               <span className="time-value">
                 <TimePicker
                   defaultValue={this.getTimeFromSeconds(ESTIMATED_PREPARATION_DURATION || '00')}
-                  id={`timepicker_${metadataTypes.PRE_DUR}`}
+                  id={`timepicker_${METADATA_TYPES.PRE_DURATION}`}
                   onValid={this.getPreparationTime}
                 />
               </span>
@@ -179,7 +176,7 @@ class WizardStep4 extends Component {
               <span className="time-value">
                 <TimePicker
                   defaultValue={this.getTimeFromSeconds(ESTIMATED_INSTALLATION_DURATION || '00')}
-                  id={`timepicker_${metadataTypes.INSTALL_DUR}`}
+                  id={`timepicker_${METADATA_TYPES.INSTALL_DURATION}`}
                   onValid={this.getInstallationTime}
                 />
               </span>

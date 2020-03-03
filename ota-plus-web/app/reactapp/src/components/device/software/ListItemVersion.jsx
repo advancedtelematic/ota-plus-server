@@ -3,12 +3,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import moment from 'moment';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import { sendAction } from '../../../helpers/analyticsHelper';
 import { OTA_DEVICE_SEE_SOFTWARE } from '../../../constants/analyticsActions';
+import { DEVICE_SOFTWARE_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -50,7 +51,7 @@ class ListItemVersion extends Component {
           <div className="software-panel__version-block">
             <span className="software-panel__version-subtitle">{t('devices.software.created_at')}</span>
             <span className="software-panel__version-value">
-              {moment(version.createdAt).format('ddd MMM DD YYYY, h:mm:ss A')}
+              {getFormattedDateTime(version.createdAt, DEVICE_SOFTWARE_CREATED_DATE_FORMAT)}
             </span>
           </div>
         </div>

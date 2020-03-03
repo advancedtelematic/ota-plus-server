@@ -90,15 +90,17 @@ describe('<Footer />', () => {
     expect(wrapper.exists('#footer-copyright-tag')).toEqual(true);
   });
 
-  it('should render language dropdown menu with one item', () => {
+  it('should render language dropdown menu with 3 items', () => {
     const dropdown = wrapper.find('#footer-language-dropdown');
     const submenu = mount(<ThemeProvider theme={theme}><div>{dropdown.first().prop('overlay')}</div></ThemeProvider>);
     expect(submenu.exists('#footer-language-menu')).toEqual(true);
     expect(submenu.exists('#footer-language-menu-item-0')).toEqual(true);
-    expect(submenu.exists('#footer-language-menu-item-1')).toEqual(false);
+    expect(submenu.exists('#footer-language-menu-item-1')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-2')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item3')).toEqual(false);
   });
 
-  it('should render language dropdown menu with 2 items', () => {
+  it('should render language dropdown menu with 4 items', () => {
     const stores = {
       featuresStore: new FeaturesStore(),
     };
@@ -109,6 +111,8 @@ describe('<Footer />', () => {
     expect(submenu.exists('#footer-language-menu')).toEqual(true);
     expect(submenu.exists('#footer-language-menu-item-0')).toEqual(true);
     expect(submenu.exists('#footer-language-menu-item-1')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-2')).toEqual(true);
+    expect(submenu.exists('#footer-language-menu-item-3')).toEqual(true);
   });
 
   it('should click on language dropdown menu', () => {
