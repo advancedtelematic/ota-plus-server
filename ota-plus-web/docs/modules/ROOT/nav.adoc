@@ -41,7 +41,7 @@
 * xref:manage-members.adoc[Manage members in environments]
 
 
-.Use Cases
-* xref:use-case-ecm.adoc[Updating the engine shutdown calibration on an ECM]
+.Use cases
+* xref:use-case-ecm.adoc[Update engine shutdown calibration on an ECM]
 
 // Common Gotchas? Troubleshooting?
