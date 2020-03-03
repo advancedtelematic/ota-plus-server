@@ -25,12 +25,13 @@ const WebsocketHandler = function (wsUrl, stores) {
         ) {
           const { campaignsStore, devicesStore, groupsStore, softwareStore } = stores;
           const { type: groupType, groupName } = groupsStore.selectedGroup;
+          const isDDVOpen = window.location.href.indexOf('/device/') > -1;
           console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
           switch (type) {
             case WEB_EVENTS.DEVICE_SEEN:
               if (_.isString(data.uuid) && new Date(data.lastSeen).getTime()) {
                 devicesStore.updateDeviceData(data.uuid, { lastSeen: data.lastSeen });
-                if (window.location.href.indexOf('/device/') > -1) {
+                if (isDDVOpen) {
                   /*
                    *  Since updates are out of web-events scope,
                    * manually toggle inFlight flag until further updates refetch
@@ -67,7 +68,7 @@ const WebsocketHandler = function (wsUrl, stores) {
               softwareStore.fetchBlacklist();
               break;
             case WEB_EVENTS.UPDATE_SPEC:
-              if (window.location.href.indexOf('/device/') > -1 && devicesStore.device.uuid === data.device) {
+              if (isDDVOpen && devicesStore.device.uuid === data.device) {
                 devicesStore.fetchMultiTargetUpdates(data.device);
                 if (data.status === UPDATE_STATUSES.FINISHED) {
                   softwareStore.fetchPackagesHistory(data.device, softwareStore.packagesHistoryFilter, true);
@@ -89,7 +90,9 @@ const WebsocketHandler = function (wsUrl, stores) {
             case WEB_EVENTS.DEVICE_EVENT_MESSAGE:
               if (_.isString(data.deviceUuid)) {
                 devicesStore.updateStatus(data.deviceUuid, UPDATE_STATUSES.INSTALLING);
-                devicesStore.fetchEvents(data.deviceUuid);
+                if ((isDDVOpen && devicesStore.device.uuid === data.deviceUuid) || !isDDVOpen) {
+                  devicesStore.fetchEvents(data.deviceUuid);
+                }
               }
               break;
             default:
