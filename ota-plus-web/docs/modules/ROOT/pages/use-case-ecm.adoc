@@ -1,6 +1,6 @@
 = Update engine shutdown calibration on an ECM 
 
-Suppose that you work for a vehicle brand called "Lannister". Your vehicles are popular in Scandinavia, but you have been receiving complaints about a specific problem: in winter, people keep their engines on when waiting in their vehicles so that they can use the heating system to stay warm. However, the engines keep automatically shutting down after a minute or so. This means that people have to constantly restart their engines.
+Suppose that you work for a vehicle brand called "Lannista". Your vehicles are popular in Scandinavia, but you have been receiving complaints about a specific problem: in winter, people keep their engines on when waiting in their vehicles so that they can use the heating system to stay warm. However, the engines keep automatically shutting down after a minute or so. This means that people have to constantly restart their engines.
 Your head developer tells you that this is the software problem. To save energy, an idling engine is configured to shut down after the temperature falls below a certain level. Luckily, you can fix this issue with an OTA update.
 
 == Your production environment
