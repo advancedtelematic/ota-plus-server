@@ -22,4 +22,4 @@ You can also change your active environment from anywhere in the portal: under t
 +
 The OTA Connect portal reloads, and the *Home* page of the selected environment opens. 
 
-In the environments to which you have access, you can xref:manage-members.adoc[add and remove] members.
+In the environments to which you have access, you can xref:manage-members.adoc[add and remove] members. If you need to have separate spaces for different projects, you can xref:create-environment.adoc[create] new environments.

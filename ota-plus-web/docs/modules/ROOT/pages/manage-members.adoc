@@ -23,5 +23,7 @@ IMPORTANT: The user should be registered in OTA Connect before you add them to t
 
     * To remove a member, next to the email of the member that you want to remove, click *Remove*, and then click *Yes, remove*.
 +
+You can remove a member with the *Creator* label but not the member with the *Owner* label as it is their home environment. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
++
 The member that you removed can no longer access the resources in the environment.
 

@@ -7,6 +7,10 @@ This feature is in beta and is only visible to users who are part of our beta pr
 
 An environment is your working space where you can create and manage software update projects.
 
-You can share your environment with your colleagues to work together on devices, device groups, software versions, software updates, and campaigns. You can also become a member of other environments and collaborate on their projects.
+Upon registration, you become the owner of one home environment. You cannot leave or be removed from your home environment. If you want to delete it, you have to cancel your account and contact us.
+
+Apart from your home environment, you can xref:create-environment.adoc[create] additional environments to manage different software update projects and share environment resources with your colleagues. For example, you may need to have different environments for pre-production and production. You can leave or be removed from the additional environments that you created.
+
+If you need to work together with colleagues on device provisioning, device groups, software versions, software updates, and campaigns, you can xref:manage-members.adoc[add] your colleagues to your environment. You can also become a member of other environments and collaborate on their projects.
 
 In the environments to which you have access, you can xref:manage-members.adoc[add and remove] members as well as xref:find-and-change-environments.adoc[switch] between the environments.
