@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useObserver } from 'mobx-react';
 import { Dropdown } from 'antd';
+import moment from 'moment';
 import {
   OTA_FOOTER_CONTACT,
   OTA_FOOTER_LANGUAGES,
@@ -9,7 +10,12 @@ import {
   OTA_FOOTER_TERMS
 } from '../../constants/analyticsActions';
 import { sendAction } from '../../helpers/analyticsHelper';
-import { getLanguage, getCurrentLanguageIndex, isLanguageSupported } from '../../helpers/languageHelper';
+import {
+  getCurrentLanguageIndex,
+  getLanguage,
+  getMomentLocale,
+  isLanguageSupported
+} from '../../helpers/languageHelper';
 
 import {
   ButtonStyled,
@@ -94,6 +100,7 @@ export const Footer = () => {
       const { language } = supportedLanguagesTemp[0];
       setLanguageSelectedIndex(0);
       i18n.changeLanguage(language);
+      moment.locale(getMomentLocale(language));
     } else if (languageSelectedIndex !== getCurrentLanguageIndex(supportedLanguagesTemp)) {
       setLanguageSelectedIndex(getCurrentLanguageIndex(supportedLanguagesTemp));
     }
@@ -104,6 +111,7 @@ export const Footer = () => {
     setLanguageSelectedIndex(key);
     const { language } = supportedLanguages[key];
     i18n.changeLanguage(language);
+    moment.locale(getMomentLocale(language));
     sendAction(OTA_FOOTER_LANGUAGES);
   };
   return (

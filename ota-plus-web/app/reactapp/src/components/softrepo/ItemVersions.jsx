@@ -81,10 +81,10 @@ const ItemVersions = ({ groupItem }) => (
                         {`Version: ${version}`}
                       </span>
                       <span className="light">
-                        {`Created at: ${versionItem.created}`}
+                        {`Created: ${versionItem.created}`}
                       </span>
                       <span className="light">
-                        {`Updated at: ${versionItem.updated}`}
+                        {`Updated: ${versionItem.updated}`}
                       </span>
                       <span className="light">
                         {`Hash: ${versionItem.hash}`}

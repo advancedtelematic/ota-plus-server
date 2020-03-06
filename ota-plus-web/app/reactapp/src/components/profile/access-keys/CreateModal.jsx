@@ -11,6 +11,7 @@ import { Row, Col, DatePicker } from 'antd';
 import { AsyncStatusCallbackHandler } from '../../../utils';
 import { Button, OTAModal, AsyncResponse, FormInput } from '../../../partials';
 import { assets, MAX_REGISTRATION_CREDENTIALS_TTL } from '../../../config';
+import { CREDENTIALS_PROVISIONING_DATA_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -52,7 +53,7 @@ class CreateModal extends Component {
   submitForm = () => {
     const data = {
       description: this.description,
-      until: moment(this.untilTime).format('YYYY-MM-DD'),
+      until: moment(this.untilTime).format(CREDENTIALS_PROVISIONING_DATA_DATE_FORMAT),
     };
     const { stores } = this.props;
     const { provisioningStore } = stores;
@@ -108,7 +109,7 @@ class CreateModal extends Component {
               name="until"
               defaultValue={this.untilTime}
               onChange={this.handleDateChange}
-              format="YYYY-MM-DD"
+              format={CREDENTIALS_PROVISIONING_DATA_DATE_FORMAT}
               showToday={false}
               id="add-new-key-valid-until"
               disabled={provisioningKeyCreateAsync.isFetching}

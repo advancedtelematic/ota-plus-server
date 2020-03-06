@@ -30,6 +30,7 @@ import {
   HTTP_CODE_503_SERVICE_UNAVAILABLE,
   HTTP_CODE_202_ACCEPTED
 } from '../constants/httpCodes';
+import { DEVICE_ACTIVATED_DATE_DATA_FORMAT, USAGE_DATE_DATA_FORMAT } from '../constants/datesTimesConstants';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -297,7 +298,7 @@ export default class UserStore {
   }
 
   fetchActivatedDeviceCount(startTime, endTime) {
-    const objKey = startTime.format('YYYYMM');
+    const objKey = startTime.format(DEVICE_ACTIVATED_DATE_DATA_FORMAT);
     resetAsync(this.activatedDevicesFetchAsync.get(objKey), true);
     return axios
       .get(`${API_USER_ACTIVE_DEVICE_COUNT}?start=${encodeURIComponent(startTime.toISOString())}&end=${encodeURIComponent(endTime.toISOString())}`)
@@ -315,7 +316,7 @@ export default class UserStore {
   }
 
   fetchActiveDeviceCount(startTime, endTime) {
-    const objKey = startTime.format('YYYYMM');
+    const objKey = startTime.format(DEVICE_ACTIVATED_DATE_DATA_FORMAT);
     resetAsync(this.activeDevicesFetchAsync.get(objKey), true);
     return axios
       .get(`${API_USER_ACTIVE_DEVICE_COUNT}?start=${encodeURIComponent(new Date(0).toISOString())}&end=${encodeURIComponent(endTime.toISOString())}`)
@@ -353,7 +354,7 @@ export default class UserStore {
   setUsageInitial(startTime, monthsCount) {
     for (let i = 0; i <= monthsCount; i += 1) {
       const startTimeTmp = moment(startTime).add(i, 'months');
-      const objKey = startTimeTmp.format('YYYYMM');
+      const objKey = startTimeTmp.format(USAGE_DATE_DATA_FORMAT);
       this.activatedDevices.set(objKey, {});
       this.activeDevices.set(objKey, {});
       this.connectedDevices.set(objKey, {});
