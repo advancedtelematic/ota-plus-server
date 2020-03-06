@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { ACTIVITIES_TYPE } from '../constants';
 import {
   CAMPAIGNS_ICON_GRAY,
@@ -26,6 +27,8 @@ import {
   OTA_HOME_SEE_ACCESS_RECENT_UPDATE_DETAILS,
   OTA_HOME_SEE_ACCESS_RECENT_CAMPAIGN_DETAILS,
 } from '../constants/analyticsActions';
+import { RECENTLY_CREATED_DATE_FORMAT } from '../constants/datesTimesConstants';
+import { getFormattedDateTime } from './datesTimesHelper';
 
 export const getDeviceGroupListIcon = (groupType) => {
   switch (groupType) {
@@ -131,4 +134,44 @@ export const sendSeeLatestAction = (item) => {
     default:
       break;
   }
+};
+
+export const createItemData = (date, name, type) => (
+  { date: getFormattedDateTime(date, RECENTLY_CREATED_DATE_FORMAT), title: name, type }
+);
+
+export const createDeviceGroupItemData = (date, name, type, groupType) => ({
+  ...createItemData(date, name, type),
+  groupType
+});
+
+export const prepareRecentlyCreatedItems = (data) => {
+  const recentlyCreated = [];
+  data.forEach((item) => {
+    switch (item._type) {
+      case ACTIVITIES_TYPE.CAMPAIGN:
+        recentlyCreated.push(createItemData(item.createdAt, item.resource.name, item._type));
+        break;
+      case ACTIVITIES_TYPE.DEVICE:
+        recentlyCreated.push(createItemData(item.createdAt, item.resource.deviceName, item._type));
+        break;
+      case ACTIVITIES_TYPE.DEVICE_GROUP:
+        recentlyCreated.push(createDeviceGroupItemData(
+          item.createdAt,
+          item.resource.groupName,
+          item._type,
+          item.resource.groupType
+        ));
+        break;
+      case ACTIVITIES_TYPE.SOFTWARE_UPDATE:
+        recentlyCreated.push(createItemData(item.createdAt, item.resource.name, item._type));
+        break;
+      case ACTIVITIES_TYPE.SOFTWARE_VERSION:
+        recentlyCreated.push(createItemData(item.createdAt, item.resource.name, item._type));
+        break;
+      default:
+        break;
+    }
+  });
+  return recentlyCreated;
 };

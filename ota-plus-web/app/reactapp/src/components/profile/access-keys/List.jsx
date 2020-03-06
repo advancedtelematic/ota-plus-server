@@ -2,25 +2,28 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
-import { observable } from 'mobx';
+import { inject } from 'mobx-react';
 import _ from 'lodash';
 import ListItem from './ListItem';
 import NoKeys from './NoKeys';
 import { Loader } from '../../../partials';
 
 @inject('stores')
-@observer
 class List extends Component {
-  @observable isAccountSetup = false;
+  constructor() {
+    super();
+    this.state = { isAccountSetup: false };
+  }
 
   async componentDidMount() {
     const { stores } = this.props;
     const { userStore } = stores;
-    this.isAccountSetup = await userStore.checkIfAccountActive();
+    const isAccountSetup = await userStore.checkIfAccountActive();
+    this.setState({ isAccountSetup });
   }
 
   render() {
+    const { isAccountSetup } = this.state;
     const { showTooltip, stores } = this.props;
     const { provisioningStore } = stores;
     return provisioningStore.preparedProvisioningKeys.length ? (
@@ -33,7 +36,7 @@ class List extends Component {
         </div>
         <div className="keys-info">
           {_.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => (
-            <ListItem provisioningKey={provisioningKey} key={index} isExportable={this.isAccountSetup} />
+            <ListItem provisioningKey={provisioningKey} key={index} isExportable={isAccountSetup} />
           ))}
         </div>
       </span>

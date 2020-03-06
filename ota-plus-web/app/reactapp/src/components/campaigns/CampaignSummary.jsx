@@ -3,11 +3,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import moment from 'moment';
 import { Tooltip } from 'antd';
 import { withTranslation } from 'react-i18next';
 import { Loader } from '../../partials';
 import { getCampaignSummaryData } from '../../helpers/campaignHelper';
+import { CAMPAIGN_SUMMARY_CREATED_DATE_FORMAT } from '../../constants/datesTimesConstants';
+import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
 
 import {
   CAMPAIGNS_STATUS_FINISHED,
@@ -70,7 +71,7 @@ class CampaignSummary extends Component {
           {campaign.name}
         </div>
         <div className="campaigns__column" id={`campaign-start-date-${campaign.id}`}>
-          {moment(campaign.createdAt).format('DD.MM.YYYY HH:mm')}
+          {getFormattedDateTime(campaign.createdAt, CAMPAIGN_SUMMARY_CREATED_DATE_FORMAT)}
         </div>
         <div className="campaigns__column" id={`campaign-status-${campaign.id}`}>
           {CAMPAIGNS_STATUS_TAB_TITLE[type]}

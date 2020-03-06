@@ -7,12 +7,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { withTranslation } from 'react-i18next';
+import { DEVICE_INSTALLATION_EVENT_DATE_FORMAT } from '../../constants/datesTimesConstants';
 
 import {
   INSTALLATION_EVENT_ERROR,
   INSTALLATION_EVENT_PENDING,
   INSTALLATION_EVENT_SUCCESS
 } from '../../constants/deviceConstants';
+import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -45,7 +47,7 @@ class InstallationEvents extends Component {
     events
       && events.map((el) => {
         const receivedAt = moment(el.receivedAt);
-        const time = receivedAt.format('ddd MMM DD YYYY, h:mm:ss A');
+        const time = getFormattedDateTime(el.receivedAt, DEVICE_INSTALLATION_EVENT_DATE_FORMAT);
         switch (el.eventType.id) {
           case 'EcuDownloadStarted':
             if (preparedEvents.ecuDownloadStarted.receivedAt.isAfter(receivedAt)) {

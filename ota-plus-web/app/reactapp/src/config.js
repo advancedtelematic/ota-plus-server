@@ -376,7 +376,7 @@ export const ICON_PATHS = [
 ];
 
 /**
- * Language changing in footer
+ * Language changing
  */
 export const LANGUAGE_SYMBOL_CHINESE = 'zh';
 export const LANGUAGE_SYMBOL_ENGLISH = 'en';
@@ -389,3 +389,10 @@ export const SUPPORTED_LANGUAGES = [
   { language: LANGUAGE_SYMBOL_JAPANESE, textKey: 'footer.language.japanese' },
   { language: LANGUAGE_SYMBOL_PSEUDO, textKey: 'footer.language.pseudo' }
 ];
+
+export const i18ToMomenLocaleMapping = {
+  en: 'en',
+  ja: 'ja',
+  zh: 'zh-cn',
+  zz: 'en'
+};

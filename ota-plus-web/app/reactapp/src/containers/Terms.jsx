@@ -12,6 +12,7 @@ import { Button, Checkbox } from 'antd';
 import { OTAModal } from '../partials';
 import * as contracts from '../../contracts';
 import { URL_PRIVACY, URL_TERMS_AND_CONDITIONS } from '../constants/urlConstants';
+import { SERVICE_TERMS_AGREED_DATE_FORMAT } from '../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -103,7 +104,7 @@ class Terms extends Component {
               >
                 privacy policy
               </a>
-              <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
+              <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format(SERVICE_TERMS_AGREED_DATE_FORMAT)})` : '.'}</div>
             </div>
           </div>
           {!terms.accepted && (

@@ -1,8 +1,14 @@
+/* eslint-disable no-underscore-dangle */
 import { ACTIVITIES_TYPE } from '../../constants';
+import { getFormattedDateTime } from '../datesTimesHelper';
+import { RECENTLY_CREATED_DATE_FORMAT } from '../../constants/datesTimesConstants';
 import {
+  createItemData,
+  createDeviceGroupItemData,
   getDeviceGroupListIcon,
   getListDescription,
   getListIcon,
+  prepareRecentlyCreatedItems,
   sendFilterLatestAction,
   sendSeeLatestAction
 } from '../recentActivityHelper';
@@ -33,6 +39,24 @@ import {
   OTA_HOME_SEE_ACCESS_RECENT_CAMPAIGN_DETAILS,
 } from '../../constants/analyticsActions';
 import * as analyticsHelper from '../analyticsHelper';
+
+const recentlyCreatedData = [
+  { createdAt: '2020-03-02T12:28:42Z',
+    _type: ACTIVITIES_TYPE.CAMPAIGN,
+    resource: { name: 'CAMPAIGN_1' } },
+  { createdAt: '2020-02-26T13:52:58Z',
+    _type: ACTIVITIES_TYPE.DEVICE,
+    resource: { deviceName: 'Mississippi_77819629' } },
+  { createdAt: '2020-03-02T12:27:10Z',
+    _type: ACTIVITIES_TYPE.DEVICE_GROUP,
+    resource: { groupName: 'FIXED_2020_03_02', groupType: GROUP_TYPE.STATIC } },
+  { createdAt: '2020-03-02T13:07:27Z',
+    _type: ACTIVITIES_TYPE.SOFTWARE_VERSION,
+    resource: { name: 'VERSION_1' } },
+  { createdAt: '2020-03-02T12:27:35Z',
+    _type: ACTIVITIES_TYPE.SOFTWARE_UPDATE,
+    resource: { name: 'UPDATE_1' } }
+];
 
 describe('recentActivityHelper', () => {
   it('should return proper description', () => {
@@ -115,5 +139,70 @@ describe('recentActivityHelper', () => {
     expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_SEE_ACCESS_RECENT_UPDATE_DETAILS);
     expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_SEE_ACCESS_RECENT_SOFTWARE_DETAILS);
     expect(analyticsHelper.sendAction).toHaveBeenCalledTimes(5);
+  });
+
+  it('should create proper device item data', () => {
+    const item = recentlyCreatedData[0];
+    const itemData = createItemData(item.createdAt, item.resource.name, item._type);
+    expect(itemData).toEqual(
+      {
+        date: getFormattedDateTime(item.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+        title: item.resource.name,
+        type: item._type
+      }
+    );
+  });
+
+  it('should create proper device group item data', () => {
+    const item = recentlyCreatedData[2];
+    const itemData = createDeviceGroupItemData(item.createdAt, item.resource.name, item._type, item.resource.groupType);
+    expect(itemData).toEqual(
+      {
+        date: getFormattedDateTime(item.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+        title: item.resource.name,
+        type: item._type,
+        groupType: item.resource.groupType
+      }
+    );
+  });
+
+  it('should prepare device items data', () => {
+    const items = [...recentlyCreatedData, { _type: undefined }];
+    const itemsData = prepareRecentlyCreatedItems(items);
+    const item0 = recentlyCreatedData[0];
+    const item1 = recentlyCreatedData[1];
+    const item2 = recentlyCreatedData[2];
+    const item3 = recentlyCreatedData[3];
+    const item4 = recentlyCreatedData[4];
+    expect(itemsData).toEqual(
+      [
+        {
+          date: getFormattedDateTime(item0.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+          title: item0.resource.name,
+          type: item0._type
+        },
+        {
+          date: getFormattedDateTime(item1.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+          title: item1.resource.deviceName,
+          type: item1._type
+        },
+        {
+          date: getFormattedDateTime(item2.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+          title: item2.resource.groupName,
+          type: item2._type,
+          groupType: item2.resource.groupType
+        },
+        {
+          date: getFormattedDateTime(item3.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+          title: item3.resource.name,
+          type: item3._type
+        },
+        {
+          date: getFormattedDateTime(item4.createdAt, RECENTLY_CREATED_DATE_FORMAT),
+          title: item4.resource.name,
+          type: item4._type
+        }
+      ]
+    );
   });
 });

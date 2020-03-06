@@ -19,6 +19,8 @@ function mountComponent(props) {
   );
 }
 
+jest.mock('../../../i18n');
+
 describe('<HelpSidebar />', () => {
   let wrapper;
 

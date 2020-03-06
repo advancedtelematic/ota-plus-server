@@ -5,6 +5,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import { Loader } from '../../../partials';
+import {
+  USAGE_ITEM_DATE_FORMAT,
+  USAGE_DATE_MONTH_DATA_FORMAT,
+  USAGE_DATE_YEAR_DATA_FORMAT
+} from '../../../constants/datesTimesConstants';
 
 @inject('stores')
 @observer
@@ -18,13 +23,16 @@ class Item extends Component {
       const endTimeTmp = moment(startTimeTmp).add(1, 'months');
       userStore.fetchActivatedDeviceCount(startTimeTmp, endTimeTmp);
       userStore.fetchActiveDeviceCount(startTimeTmp, endTimeTmp);
-      userStore.fetchConnectedDeviceCount(startTimeTmp.format('YYYY'), startTimeTmp.format('MM'));
+      userStore.fetchConnectedDeviceCount(
+        startTimeTmp.format(USAGE_DATE_YEAR_DATA_FORMAT),
+        startTimeTmp.format(USAGE_DATE_MONTH_DATA_FORMAT)
+      );
     }
   }
 
   render() {
     const { usage, fetch, date } = this.props;
-    const dateFormatted = date.format('MMM YYYY');
+    const dateFormatted = date.format(USAGE_ITEM_DATE_FORMAT);
     return (
       <div className="box">
         <div className="column" id={`month-${dateFormatted}`}>
