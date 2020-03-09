@@ -1,9 +1,9 @@
 package com.advancedtelematic.provisioning
 
-import akka.util.ByteString
-import java.time.{Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoField
+import java.time.{Instant, LocalDate, ZoneOffset}
 
+import akka.util.ByteString
 import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.TokenUtils
 import com.advancedtelematic.auth.AccessToken
