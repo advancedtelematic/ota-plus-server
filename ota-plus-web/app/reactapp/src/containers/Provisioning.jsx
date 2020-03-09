@@ -91,7 +91,11 @@ class Provisioning extends Component {
               provisioningFilter={provisioningStore.provisioningFilter}
               changeFilter={this.changeFilter}
             />
-            <ProvisioningList showTooltip={this.showTooltip} />
+            <ProvisioningList
+              preparedProvisioningKeys={provisioningStore.preparedProvisioningKeys}
+              provisioningKeyAreFetching={provisioningStore.provisioningKeysFetchAsync.isFetching}
+              showTooltip={this.showTooltip}
+            />
           </span>
         ) : (
           <div className="wrapper-center">
