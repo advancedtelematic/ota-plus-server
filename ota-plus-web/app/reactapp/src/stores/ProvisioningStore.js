@@ -70,7 +70,7 @@ export default class ProvisioningStore {
     this.provisioningKeysSort = sort;
     const keys = this.provisioningKeys;
 
-    this.preparedProvisioningKeys = keys.sort((a, b) => {
+    this.preparedProvisioningKeys = keys.slice().sort((a, b) => {
       const aName = a.description;
       const bName = b.description;
       if (sort !== 'undefined' && sort === SORT_DIR_DESC) return bName.localeCompare(aName);
