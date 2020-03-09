@@ -24,9 +24,8 @@ class List extends Component {
 
   render() {
     const { isAccountSetup } = this.state;
-    const { showTooltip, stores } = this.props;
-    const { provisioningStore } = stores;
-    return provisioningStore.preparedProvisioningKeys.length ? (
+    const { showTooltip, preparedProvisioningKeys, provisioningKeyAreFetching } = this.props;
+    return preparedProvisioningKeys.length ? (
       <span>
         <div className="section-header">
           <div className="column">Name</div>
@@ -35,12 +34,12 @@ class List extends Component {
           <div className="column">Download</div>
         </div>
         <div className="keys-info">
-          {_.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => (
+          {_.map(preparedProvisioningKeys, (provisioningKey, index) => (
             <ListItem provisioningKey={provisioningKey} key={index} isExportable={isAccountSetup} />
           ))}
         </div>
       </span>
-    ) : provisioningStore.provisioningKeysFetchAsync.isFetching ? (
+    ) : provisioningKeyAreFetching ? (
       <div className="wrapper-center">
         <Loader />
       </div>
@@ -51,6 +50,8 @@ class List extends Component {
 }
 
 List.propTypes = {
+  preparedProvisioningKeys: PropTypes.arrayOf(PropTypes.shape({})),
+  provisioningKeyAreFetching: PropTypes.bool,
   stores: PropTypes.shape({}),
   showTooltip: PropTypes.func
 };
