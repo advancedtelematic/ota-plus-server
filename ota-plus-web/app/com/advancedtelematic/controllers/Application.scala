@@ -9,6 +9,8 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
+import com.advancedtelematic.NamespaceDirectorChangedListener.{Director, DirectorV1, DirectorV2}
+import com.advancedtelematic.NamespaceDirectorConfig
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
 import javax.inject.{Inject, Singleton}
@@ -22,8 +24,8 @@ import play.filters.csrf.CSRF
 import play.api.Configuration
 
 import scala.concurrent.Future
-
 import com.advancedtelematic.controllers.Data.OmnitureSource
+import com.advancedtelematic.libats.data.DataType.Namespace
 
 final case class UiToggles(
   atsGarageTheme: Boolean,
@@ -59,13 +61,14 @@ class Application @Inject() (ws: TraceWSClient,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
                              val apiAuth: PlainAction,
-                             tokenBuilder: AccessTokenBuilder)
+                             tokenBuilder: AccessTokenBuilder,
+                             namespaceDirectorConfig: NamespaceDirectorConfig)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig with ZipkinTraceImplicits {
 
   import ApiVersion.ApiVersion
 
   implicit val ec = components.executionContext
-  val auditLogger = LoggerFactory.getLogger("audit")
+  private val _log = LoggerFactory.getLogger(this.getClass)
 
   private[this] val oauthConfig = OAuthConfig(conf)
   private[this] val uiToggles = UiToggles(conf)
@@ -82,13 +85,13 @@ class Application @Inject() (ws: TraceWSClient,
    * @param path The path of the request
    * @return The service to proxy to
    */
-  private def apiByPath(version: ApiVersion, path: String) : Option[OtaApiUri] = {
+  private def apiByPath(ns: Namespace, version: ApiVersion, path: String) : Option[OtaApiUri] = {
     val pathComponents = path.split("/").toList
 
     val proxiedPrefixes =
       deviceRegistryProxiedPrefixes orElse
       auditorProxiedPrefixes orElse
-      directorProxiedPrefixes orElse
+      directorProxiedPrefixes(ns) orElse
       repoProxiedPrefixes orElse
       campaignerProxiedPrefixes
 
@@ -102,10 +105,18 @@ class Application @Inject() (ws: TraceWSClient,
     case (_, "auditor" :: "update_reports" :: _) => auditorApiUri
   }
 
-  private val directorProxiedPrefixes: Dispatcher = {
-    case (_, "multi_target_updates" :: _) => directorApiUri
-    case (_, "admin" :: _) => directorApiUri
-    case (_, "assignments" :: _) => directorApiUri
+  private def directorProxiedPrefixes(ns: Namespace): Dispatcher = {
+    def directorUri(ns: Namespace): OtaApiUri = {
+      val directorUri = namespaceDirectorConfig.getUri(ns)
+      _log.info("Using {} for {}", directorUri, ns)
+      directorUri
+    }
+
+    {
+      case (_, "multi_target_updates" :: _) => directorUri(ns)
+      case (_, "admin" :: _) => directorUri(ns)
+      case (_, "assignments" :: _) => directorUri(ns)
+    }
   }
 
   private val deviceRegistryProxiedPrefixes: Dispatcher = {
@@ -176,7 +187,7 @@ class Application @Inject() (ws: TraceWSClient,
    */
   def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
     apiAuth.async(bodySource) { implicit req =>
-      apiByPath(version, path) match {
+      apiByPath(req.namespace, version, path) match {
         case Some(p) => proxyTo(p)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
       }
