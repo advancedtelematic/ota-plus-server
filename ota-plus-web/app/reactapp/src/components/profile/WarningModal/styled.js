@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '../../../partials';
-import { WARNING_MODAL_TYPE } from '../../../constants';
+import { WARNING_MODAL_COLOR } from '../../../constants';
 
 export const BackgroundMask = styled.div`
   position: absolute;
@@ -18,7 +18,7 @@ export const BackgroundMask = styled.div`
 
 export const ButtonsWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 370px;
   margin: 30px auto;
 `;
@@ -26,7 +26,7 @@ export const ButtonsWrapper = styled.div`
 export const Description = styled.div`
   font-size: 1.231em;
   font-weight: 400;
-  padding: 0 32px;
+  padding: 0 60px;
   line-height: 20px;
   text-align: center;
   background-color: ${({ theme }) => theme.palette.white};
@@ -51,19 +51,21 @@ export const StyledButton = styled(Button)`
 
 export const CancelButton = styled(({ colorTheme, ...restProps }) => <StyledButton {...restProps} />)`  
   &, :hover, :focus {
-    border: 1px solid ${props => props.colorTheme === WARNING_MODAL_TYPE.DANGER ? '#CF001A' : '#00B6B2'};
-    color: ${props => props.colorTheme === WARNING_MODAL_TYPE.DANGER ? '#CF001A' : '#00B6B2'};
+    border: 1px solid ${props => props.colorTheme};
+    color: ${props => WARNING_MODAL_COLOR.INFO ? props.theme.palette.texts.black : props.colorTheme};
+    background-color: ${props => props.colorTheme && WARNING_MODAL_COLOR.INFO};
   }
   :hover, :focus {
     opacity: 0.8;
   }
 `;
 
-export const ConfirmButton = styled(({ colorTheme, ...restProps }) => <StyledButton {...restProps} />)`  
+export const ConfirmButton = styled(({ colorTheme, ...restProps }) => <StyledButton {...restProps} />)`
+  margin-left: 30px;
   &, :hover, :focus {
     border: none;
     color: ${({ theme }) => theme.palette.white};
-    background-color: ${props => props.colorTheme === WARNING_MODAL_TYPE.DANGER ? '#CF001A' : '#00B6B2'};
+    background-color: ${props => props.colorTheme};
   }
   :hover, :focus {
     opacity: 0.8;
@@ -81,5 +83,5 @@ export const Title = styled.h1`
 export const TopBar = styled.div`
   height: 20px;
   width: 100%;
-  background-color: ${({ colorTheme }) => colorTheme === WARNING_MODAL_TYPE.DANGER ? '#CF001A' : '#00B6B2'};
+  background-color: ${({ colorTheme }) => colorTheme};
 `;

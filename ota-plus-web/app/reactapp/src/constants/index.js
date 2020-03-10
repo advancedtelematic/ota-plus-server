@@ -132,7 +132,8 @@ export const STATUS = {
   WAITING: 'waiting',
   ERROR: 'error'
 };
-export const WARNING_MODAL_TYPE = {
-  DANGER: 'danger',
-  DEFAULT: 'default',
+export const WARNING_MODAL_COLOR = {
+  DANGER: '#CF001A',
+  DEFAULT: '#00B6B2',
+  INFO: '#FFBD09'
 };
