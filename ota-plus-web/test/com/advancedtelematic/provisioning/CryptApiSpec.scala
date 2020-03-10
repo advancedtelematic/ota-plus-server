@@ -17,7 +17,8 @@ class CryptApiSpec extends PlaySpec with GuiceOneAppPerSuite with ScalaFutures {
   implicit val noTraceData = TraceData(tracer.tracing.tracer().newTrace())
 
   implicit override lazy val app: Application =
-    new GuiceApplicationBuilder().configure("crypt.uri" -> MockCrypt.CryptHost).build()
+    new GuiceApplicationBuilder()
+      .configure("crypt.uri" -> MockCrypt.CryptHost).build()
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(5, Seconds), interval = Span(200, Millis))

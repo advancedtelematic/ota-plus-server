@@ -42,8 +42,8 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
   val defaultToken = TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId)
   val rateLimitToken = TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId)
 
-  import play.api.data._
   import play.api.data.Forms._
+  import play.api.data._
   val tokenRequestForm = Form(
     tuple(
       "grant_type" -> nonEmptyText,
