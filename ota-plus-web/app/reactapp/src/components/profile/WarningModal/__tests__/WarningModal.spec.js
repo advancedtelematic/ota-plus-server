@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import WarningModal from '..';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
-import { WARNING_MODAL_TYPE } from '../../../../constants';
+import { WARNING_MODAL_COLOR } from '../../../../constants';
 
 function mountComponent(props) {
   return mount(
@@ -18,7 +18,7 @@ describe('<WarningModal />', () => {
 
   beforeEach(() => {
     const props = {
-      type: WARNING_MODAL_TYPE.DANGER,
+      type: WARNING_MODAL_COLOR.DANGER,
       title: 'Title',
       desc: 'Description',
       cancelButtonProps: {

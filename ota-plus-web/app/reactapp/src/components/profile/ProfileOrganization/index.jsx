@@ -20,6 +20,7 @@ import {
   OTA_ENVIRONMENT_SWITCH,
   OTA_ENVIRONMENT_ADD_MEMBER,
   OTA_ENVIRONMENT_CREATE_ENV,
+  OTA_ENVIRONMENT_REACH_MAX_ENV,
   OTA_ENVIRONMENT_REMOVE_MEMBER
 } from '../../../constants/analyticsActions';
 import { ANALYTICS_VIEW_ENVIRONMENTS } from '../../../constants/analyticsViews';
@@ -29,7 +30,7 @@ import {
   ORGANIZATION_NAMESPACE_COOKIE,
   TRASHBIN_ICON
 } from '../../../config';
-import { REMOVAL_MODAL_TYPE, WARNING_MODAL_TYPE } from '../../../constants';
+import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 
 @inject('stores')
 @observer
@@ -113,7 +114,7 @@ class ProfileOrganization extends Component {
     switch (removalModalOpenType) {
       case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
         return {
-          type: WARNING_MODAL_TYPE.DEFAULT,
+          type: WARNING_MODAL_COLOR.DEFAULT,
           title: t('profile.organization.remove_modal.title.self'),
           desc: t('profile.organization.remove_modal.desc.self'),
           cancelButtonProps: {
@@ -127,7 +128,7 @@ class ProfileOrganization extends Component {
         };
       default:
         return {
-          type: WARNING_MODAL_TYPE.DANGER,
+          type: WARNING_MODAL_COLOR.DANGER,
           title: t('profile.organization.remove_modal.title'),
           desc: t('profile.organization.remove_modal.desc'),
           cancelButtonProps: {
@@ -188,6 +189,13 @@ class ProfileOrganization extends Component {
     this.setState({ removalModalOpenType: undefined });
   };
 
+  closeMaxEnvModal = () => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    userStore.maxEnvReached = false;
+    sendAction(OTA_ENVIRONMENT_REACH_MAX_ENV);
+  }
+
   handleCreateEnvironment = (envName) => {
     const { stores } = this.props;
     const { userStore } = stores;
@@ -223,7 +231,7 @@ class ProfileOrganization extends Component {
     } = this.state;
     const { stores, t } = this.props;
     const { userStore } = stores;
-    const { currentOrganization, user } = userStore;
+    const { currentOrganization, maxEnvReached, user } = userStore;
     const namespace = userStore.userOrganizationNamespace;
     const organizations = userStore.userOrganizations;
     const organizationUsers = userStore.userOrganizationUsers;
@@ -376,6 +384,17 @@ class ProfileOrganization extends Component {
           )}
           {createEnvModalOpen && (
             <CreateEnvModal onClose={this.toggleCreateEnvModal} onConfirm={this.handleCreateEnvironment} />
+          )}
+          {maxEnvReached && (
+            <WarningModal
+              type={WARNING_MODAL_COLOR.INFO}
+              title={t('profile.organization.max-env-modal.title')}
+              desc={t('profile.organization.max-env-modal.desc')}
+              cancelButtonProps={{
+                title: t('profile.organization.max-env-modal.close'),
+              }}
+              onClose={this.closeMaxEnvModal}
+            />
           )}
         </MetaData>
       </div>
