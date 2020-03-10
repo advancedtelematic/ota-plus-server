@@ -10,7 +10,7 @@ import {
   Title,
   TopBar
 } from './styled';
-import { WARNING_MODAL_TYPE } from '../../../constants';
+import { WARNING_MODAL_COLOR } from '../../../constants';
 
 const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps, onClose }) => (
   <>
@@ -20,19 +20,21 @@ const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps
       <Title>{title}</Title>
       <Description>{desc}</Description>
       <ButtonsWrapper>
-        <CancelButton id="cancel-remove-btn" colorTheme={type} onClick={onClose}>
+        <CancelButton id="cancel-btn" colorTheme={type} onClick={onClose}>
           {cancelButtonProps.title}
         </CancelButton>
-        <ConfirmButton id="confirm-remove-btn" colorTheme={type} onClick={confirmButtonProps.onClick}>
-          {confirmButtonProps.title}
-        </ConfirmButton>
+        {confirmButtonProps && (
+          <ConfirmButton id="confirm-btn" colorTheme={type} onClick={confirmButtonProps.onClick}>
+            {confirmButtonProps.title}
+          </ConfirmButton>
+        )}
       </ButtonsWrapper>
     </ModalContainer>
   </>
 );
 
 WarningModal.propTypes = {
-  type: PropTypes.oneOf([WARNING_MODAL_TYPE.DANGER, WARNING_MODAL_TYPE.DEFAULT]),
+  type: PropTypes.oneOf([WARNING_MODAL_COLOR.DANGER, WARNING_MODAL_COLOR.DEFAULT, WARNING_MODAL_COLOR.INFO]),
   title: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   cancelButtonProps: PropTypes.shape({

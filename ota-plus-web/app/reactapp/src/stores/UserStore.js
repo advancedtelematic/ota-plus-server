@@ -26,6 +26,7 @@ import {
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import * as contracts from '../../contracts';
 import {
+  HTTP_CODE_400_BAD_REQUEST,
   HTTP_CODE_429_TOO_MANY_REQUESTS,
   HTTP_CODE_503_SERVICE_UNAVAILABLE,
   HTTP_CODE_202_ACCEPTED
@@ -40,6 +41,8 @@ export default class UserStore {
   @observable contractsAcceptAsync = {};
 
   @observable currentOrganization = {};
+
+  @observable maxEnvReached = false;
 
   @observable userUpdateAsync = {};
 
@@ -96,6 +99,9 @@ export default class UserStore {
       this.getOrganizations();
       this.createEnvironmentAsync = handleAsyncSuccess(response);
     } catch (error) {
+      if (error.response.status === HTTP_CODE_400_BAD_REQUEST) {
+        this.maxEnvReached = true;
+      }
       this.createEnvironmentAsync = handleAsyncError(error);
     }
   };
