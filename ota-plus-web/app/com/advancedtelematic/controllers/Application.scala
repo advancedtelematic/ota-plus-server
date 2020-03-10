@@ -9,7 +9,6 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
-import com.advancedtelematic.NamespaceDirectorChangedListener.{Director, DirectorV1, DirectorV2}
 import com.advancedtelematic.NamespaceDirectorConfig
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
