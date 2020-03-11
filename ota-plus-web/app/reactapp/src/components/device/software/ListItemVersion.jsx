@@ -50,7 +50,7 @@ class ListItemVersion extends Component {
             </span>
           </div>
           <div className="software-panel__version-block">
-            <span className="software-panel__version-subtitle">{t('devices.software.created_at')}</span>
+            <span className="software-panel__version-subtitle">{t('devices.software.created-at')}</span>
             <span className="software-panel__version-value">
               {getFormattedDateTime(version.createdAt, DEVICE_SOFTWARE_CREATED_DATE_FORMAT)}
             </span>

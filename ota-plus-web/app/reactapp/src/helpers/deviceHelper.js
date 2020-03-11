@@ -16,7 +16,7 @@ export const getDeviceHttpStatusErrorMessage = (errorCode) => {
       message = 'Please try again later';
       break;
     default:
-      message = 'Never seen online';
+      message = 'Never online';
       break;
   }
   return message;

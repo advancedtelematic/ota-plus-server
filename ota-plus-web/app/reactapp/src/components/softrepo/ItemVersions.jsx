@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Row, Col } from 'antd';
 import _ from 'lodash';
+import { withTranslation } from 'react-i18next';
 import StatsBlock from '../software/stats/StatsBlock';
 
-const ItemVersions = ({ groupItem }) => (
+const ItemVersions = ({ groupItem, t }) => (
   <Row
     className="row versions-details"
     onClick={(e) => {
@@ -81,10 +82,10 @@ const ItemVersions = ({ groupItem }) => (
                         {`Version: ${version}`}
                       </span>
                       <span className="light">
-                        {`Created: ${versionItem.created}`}
+                        {t('software.repository.created', versionItem.created)}
                       </span>
                       <span className="light">
-                        {`Updated: ${versionItem.updated}`}
+                        {t('software.repository.updated', versionItem.updated)}
                       </span>
                       <span className="light">
                         {`Hash: ${versionItem.hash}`}
@@ -120,7 +121,8 @@ const ItemVersions = ({ groupItem }) => (
 );
 
 ItemVersions.propTypes = {
-  groupItem: PropTypes.shape({})
+  groupItem: PropTypes.shape({}),
+  t: PropTypes.func.isRequired
 };
 
-export default ItemVersions;
+export default withTranslation()(ItemVersions);

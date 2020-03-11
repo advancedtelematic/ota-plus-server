@@ -165,7 +165,7 @@ class List extends Component {
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">Created:</span>
+                  <span className="properties-panel__info-data-subtitle">{t('devices.mtu.properties.created')}</span>
                   <span
                     className="properties-panel__info-data-value"
                     id={this.generateIdTag('version-created-at-value', expandedPackage)}
@@ -174,7 +174,7 @@ class List extends Component {
                   </span>
                 </div>
                 <div className="properties-panel__info-data-block">
-                  <span className="properties-panel__info-data-subtitle">Updated:</span>
+                  <span className="properties-panel__info-data-subtitle">{t('devices.mtu.properties.updated')}</span>
                   <span
                     className="properties-panel__info-data-value"
                     id={this.generateIdTag('version-updated-at-value', expandedPackage)}

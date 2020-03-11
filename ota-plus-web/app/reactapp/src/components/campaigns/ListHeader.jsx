@@ -23,7 +23,7 @@ class ListHeader extends Component {
         <div className="campaigns__column">{t('campaigns.list_item.name')}</div>
         {showColumns && (
           <>
-            <div className="campaigns__column">{t('campaigns.list_item.created_at')}</div>
+            <div className="campaigns__column">{t('campaigns.list-item.created-at')}</div>
             <div className="campaigns__column">{t('campaigns.list_item.status')}</div>
             <div className="campaigns__column">{t('campaigns.list_item.selected_devices')}</div>
             <div className="campaigns__column">{t('campaigns.list_item.failed_percentage')}</div>

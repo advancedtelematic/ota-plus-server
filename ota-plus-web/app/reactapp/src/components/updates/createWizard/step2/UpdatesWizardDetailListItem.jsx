@@ -29,7 +29,7 @@ class UpdatesWizardDetailListItem extends Component {
   }
 
   formatVersions = (type, name) => {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { softwareStore } = stores;
     const { preparedPackages } = softwareStore;
     let versions = null;
@@ -42,7 +42,7 @@ class UpdatesWizardDetailListItem extends Component {
     });
     const formattedData = versions
       && versions.map(version => ({
-        text: `${version.id.version} Created: ${getFormattedDateTime(version.createdAt, SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT)}`,
+        text: `${t('updates.creating.wizard.version.created', version.id.version, getFormattedDateTime(version.createdAt, SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT))}`,
         id: version.id.version,
         value: version.filepath,
         version,
