@@ -5,7 +5,9 @@
 This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
 ====
 
-You may need to have different environments for pre-production and production. Instead of creating multiple accounts for each environment, you can now create additional environments using only one account.
+You may need to have different environments for pre-production and production. Instead of creating multiple accounts for each environment, you can now create up to 10 additional environments using only one account.
+
+IMPORTANT: If you create 10 additional environments, even if you leave them all, you cannot create one more additional environment.
 
 *To create an environment:*
 
