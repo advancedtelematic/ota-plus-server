@@ -9,7 +9,9 @@ An environment is your working space where you can create and manage software up
 
 Upon registration, you become the owner of one home environment. You cannot leave or be removed from your home environment. If you want to delete it, you have to cancel your account and contact us.
 
-Apart from your home environment, you can xref:create-environment.adoc[create] additional environments to manage different software update projects and share environment resources with your colleagues. For example, you may need to have different environments for pre-production and production. You can leave or be removed from the additional environments that you created.
+Apart from your home environment, you can xref:create-environment.adoc[create] up to 10 additional environments to manage different software update projects and share environment resources with your colleagues. For example, you may need to have different environments for pre-production and production. You can leave or be removed from the additional environments that you created.
+
+IMPORTANT: The limit of 10 additional environments applies even if you leave the environments that you have created. There is currently no way to delete environments.
 
 If you need to work together with colleagues on device provisioning, device groups, software versions, software updates, and campaigns, you can xref:manage-members.adoc[add] your colleagues to your environment. You can also become a member of other environments and collaborate on their projects.
 
