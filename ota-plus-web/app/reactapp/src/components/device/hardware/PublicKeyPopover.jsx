@@ -10,6 +10,7 @@ import { withTranslation } from 'react-i18next';
 
 import { Loader } from '../../../partials';
 import { ANIMATION_TYPE } from '../../../constants';
+import { KEY_ICON_BLACK, KEY_ICON_WHITE } from '../../../config';
 
 @inject('stores')
 @observer
@@ -69,9 +70,9 @@ class PublicKeyPopover extends Component {
         onVisibleChange={visible => changePopoverVisibility(serial, visible)}
       >
         {active ? (
-          <img src="/assets/img/icons/white/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
+          <img src={KEY_ICON_WHITE} className="hardware-panel__ecu-action--key-size" alt="Icon" />
         ) : (
-          <img src="/assets/img/icons/black/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
+          <img src={KEY_ICON_BLACK} className="hardware-panel__ecu-action--key-size" alt="Icon" />
         )}
       </Popover>
     );

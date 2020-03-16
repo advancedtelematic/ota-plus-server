@@ -9,6 +9,12 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import { Loader, OTAForm, FormSelect, FormInput } from '../../../partials';
+import {
+  MANAGER_ICON_DANGER_WHITE,
+  MANAGER_ICON_SUCCESS,
+  MANAGER_ICON_SUCCESS_WHITE,
+  MANAGER_ICON_WARNING_WHITE,
+} from '../../../config';
 
 const VERSION_CHANGE_TIMEOUT = 500;
 
@@ -171,18 +177,18 @@ class WizardStep5 extends Component {
         {this.blocks.length ? (
           isOneIncompatible ? (
             <div className="top-alert danger" id="compatibility-issue">
-              <img src="/assets/img/icons/white/manager-danger.png" alt="Icon" />
+              <img src={MANAGER_ICON_DANGER_WHITE} alt="Icon" />
               {t('campaigns.wizard.compatibility_issue')}
             </div>
           ) : (
             <div className="top-alert warning" id="missing-dependencies">
-              <img src="/assets/img/icons/white/manager-warning.png" alt="Icon" />
+              <img src={MANAGER_ICON_WARNING_WHITE} alt="Icon" />
               {t('campaigns.wizard.missing_dependencies')}
             </div>
           )
         ) : (
           <div className="top-alert success" id="success">
-            <img src="/assets/img/icons/white/manager-success.png" alt="Icon" />
+            <img src={MANAGER_ICON_SUCCESS_WHITE} alt="Icon" />
             {t('campaigns.wizard.dependencies_check')}
           </div>
         )}
@@ -276,7 +282,7 @@ class WizardStep5 extends Component {
         ) : (
           <div className="wrapper-center">
             <div className="step-pass" id="step-pass">
-              <img src="/assets/img/icons/manager-success.svg" alt="Icon" />
+              <img src={MANAGER_ICON_SUCCESS} alt="Icon" />
               {t('campaigns.wizard.no_dependency_issues')}
             </div>
           </div>

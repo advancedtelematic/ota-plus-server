@@ -11,7 +11,7 @@ import { withTranslation } from 'react-i18next';
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
 import { Loader } from '../partials';
 
-import { UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE } from '../config';
+import { SOFTWARE_ICON_OLD_WHITE, UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE } from '../config';
 import { MetaData } from '../utils';
 import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
@@ -130,7 +130,7 @@ class Updates extends Component {
               <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
               <div className="wrapper-center">
                 <div className="page-intro">
-                  <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
+                  <img src={SOFTWARE_ICON_OLD_WHITE} alt="Icon" />
                   <div>{"You haven't created any updates yet."}</div>
                   <div>
                     <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>

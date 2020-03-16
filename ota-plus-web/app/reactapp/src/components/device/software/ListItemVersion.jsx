@@ -10,6 +10,7 @@ import { sendAction } from '../../../helpers/analyticsHelper';
 import { OTA_DEVICE_SEE_SOFTWARE } from '../../../constants/analyticsActions';
 import { DEVICE_SOFTWARE_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
+import { BAN_ICON_RED, CROSS_ICON_RED } from '../../../config';
 
 @inject('stores')
 @observer
@@ -59,14 +60,14 @@ class ListItemVersion extends Component {
           {blacklistedPackage && version.id.version === installedPackage ? (
             <img
               className="software-panel__version-icon"
-              src="/assets/img/icons/red_cross.svg"
+              src={CROSS_ICON_RED}
               id={`image-blacklisted-and-installed-${version.id.version.substring(0, 8)}`}
               alt="Icon"
             />
           ) : blacklistedPackage ? (
             <img
               className="software-panel__version-icon"
-              src="/assets/img/icons/ban_red.png"
+              src={BAN_ICON_RED}
               id={`image-blacklisted-${version.id.version.substring(0, 8)}`}
               alt="Icon"
             />

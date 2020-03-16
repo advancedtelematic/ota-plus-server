@@ -4,6 +4,7 @@ import React from 'react';
 import { map } from 'lodash';
 import { observer } from 'mobx-react';
 import MinimizedBox from './MinimizedBox';
+import { REOPEN_ICON } from '../../config';
 
 const MinimizedWizards = observer(({ minimizedWizards, toggleWizard }) => (
   <span>
@@ -16,7 +17,7 @@ const MinimizedWizards = observer(({ minimizedWizards, toggleWizard }) => (
           title="Maximize wizard"
           onClick={toggleWizard.bind(this, wizard.id, wizard.name)}
         >
-          <img src="/assets/img/icons/reopen.svg" alt="Icon" />
+          <img src={REOPEN_ICON} alt="Icon" />
         </a>
       );
       return <MinimizedBox key={wizard.id} name={name} actions={actions} />;

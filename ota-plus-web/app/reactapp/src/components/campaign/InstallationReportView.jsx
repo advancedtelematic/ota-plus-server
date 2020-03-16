@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { Button, Tooltip } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { API_CAMPAIGNS_STATISTICS_SINGLE } from '../../config';
+import { API_CAMPAIGNS_STATISTICS_SINGLE, DOWNLOAD_ICON } from '../../config';
 import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES } from '../../constants/analyticsActions';
@@ -107,7 +107,7 @@ class InstallationReportView extends Component {
                       }
                       placement="left"
                     >
-                      <img src="/assets/img/icons/download.svg" alt="Icon" />
+                      <img src={DOWNLOAD_ICON} alt="Icon" />
                     </Tooltip>
                   </div>
                 </div>

@@ -305,25 +305,57 @@ export const assets = {
   DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
+export const BAN_ICON_RED = '/assets/img/icons/ban_red.png';
 export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
 export const CAMPAIGNS_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-distribute-solid-24.svg';
+export const CAMPAIGNS_ICON_GREEN = '/assets/img/new-app/24/campaigns-active-solid-24-green.svg';
+export const CAMPAIGNS_ICON_WHITE = '/assets/img/icons/white/campaigns.svg';
+export const CANCEL_ICON_THIN = '/assets/img/icons/black/cancel-thin.svg';
 export const CLOSE_MODAL_ICON = '/assets/img/new-app/24/close-cross-24.svg';
+export const CROSS_ICON_RED = '/assets/img/icons/red_cross.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
 export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
+export const DEVICE_ICON_GREEN = '/assets/img/new-app/24/devices-active-outline-24-green.svg';
+export const DEVICE_ICON_OLD_WHITE = '/assets/img/icons/white/devices.svg';
+export const DOWNLOAD_ICON = '/assets/img/icons/download.svg';
+export const DOWNLOAD_KEY_ICON = '/assets/img/icons/download_key.svg';
+export const EXIT_FULLSCREEN_ICON = '/assets/img/icons/exit-fullscreen.svg';
+export const FIREWORKS_CHECK_ICON = '/assets/img/icons/fireworks_check.svg';
 export const GROUP_DYNAMIC_ICON = '/assets/img/new-app/24/LUI-icon-pd-device_group_smart_filter-outline-24.svg';
 export const GROUP_ICON = '/assets/img/new-app/24/device-group-active-outline-24.svg';
 export const GROUP_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_group_connected-outline-24.svg';
 export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';
+export const HERE_ICON = '/assets/img/HERE_pos.png';
+export const IMPACT_TOOLTIP_IMG = '/assets/img/impact_tooltip.jpg';
+export const INFO_ICON_BLACK = '/assets/img/icons/black/info.svg';
+export const INFO_ICON_WHITE = '/assets/img/icons/white/info.svg';
+export const KEY_ICON_BLACK = '/assets/img/icons/black/key.svg';
+export const KEY_ICON_WHITE = '/assets/img/icons/white/key.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
+export const MANAGER_ICON_DANGER_WHITE = '/assets/img/icons/white/manager-danger.png';
+export const MANAGER_ICON_SUCCESS = '/assets/img/icons/manager-success.svg';
+export const MANAGER_ICON_SUCCESS_WHITE = '/assets/img/icons/white/manager-success.png';
+export const MANAGER_ICON_WARNING_WHITE = '/assets/img/icons/white/manager-warning.png';
+export const MAXIMIZE_ICON = '/assets/img/icons/maximize.svg';
+export const MINIMIZE_ICON = '/assets/img/icons/minimize.svg';
 export const PEOPLE_ICON = '/assets/img/new-app/24/people-active-outline-24.svg';
 export const PLUS_ICON = '/assets/img/new-app/24/icon-plus-aqua-24x24.svg';
+export const POINTS_GIF = '/assets/img/icons/points.gif';
+export const REOPEN_ICON = '/assets/img/icons/reopen.svg';
+export const SETTINGS_ICON_BIG = '/assets/img/icons/Settings_Icon_big.svg';
 export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 export const SOFTWARE_ICON = '/assets/img/new-app/24/software-versions-active-outline-24.svg';
 export const SOFTWARE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-software-outline-24.svg';
+export const SOFTWARE_ICON_OLD_WHITE = '/assets/img/icons/white/packages.svg';
 export const UPDATE_ICON = '/assets/img/new-app/24/software-updates-active-outline-24.svg';
 export const UPDATE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-tuner-outline-24.svg';
+export const UPDATE_ICON_GREEN = '/assets/img/new-app/24/software-updates-active-outline-24-green.svg';
 export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
 export const NO_ITEMS_ICON = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24.svg';
+export const QUESTIONMARK_ICON_BLACK = '/assets/img/icons/black/questionmark.svg';
+export const QUESTIONMARK_ICON_WHITE = '/assets/img/icons/white/questionmark.svg';
+export const TICK_ICON_BLACK = '/assets/img/icons/black/tick.svg';
+export const TICK_ICON_GREEN = '/assets/img/icons/green_tick.svg';
 export const TRASHBIN_ICON = '/assets/img/new-app/16/trashbin.svg';
 
 /**

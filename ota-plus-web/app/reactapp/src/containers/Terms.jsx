@@ -13,6 +13,7 @@ import { OTAModal } from '../partials';
 import * as contracts from '../../contracts';
 import { URL_PRIVACY, URL_TERMS_AND_CONDITIONS } from '../constants/urlConstants';
 import { SERVICE_TERMS_AGREED_DATE_FORMAT } from '../constants/datesTimesConstants';
+import { HERE_ICON } from '../config';
 
 @inject('stores')
 @observer
@@ -68,7 +69,7 @@ class Terms extends Component {
       <div className={`terms ${isTermsAccepted ? '' : 'fill-screen'}`}>
         <div className="wrapper wrapper-center wrapper-responsive">
           <div className="logo logo--terms">
-            <img src="/assets/img/HERE_pos.png" alt="HERE" />
+            <img src={HERE_ICON} alt="HERE" />
           </div>
           <div className="title title--terms">This is a 90-day trial, for evaluation purposes only</div>
           <p className="subtitle--terms">

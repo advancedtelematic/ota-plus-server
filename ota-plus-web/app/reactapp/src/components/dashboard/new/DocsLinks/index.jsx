@@ -15,10 +15,11 @@ import {
   URL_DOCS_LINKS_SOFTWARE_UPDATES,
   URL_DOCS_LINKS_TROUBLESHOOT_CAMPAIGN
 } from '../../../../constants/urlConstants';
-
-const ICON_CAMPAIGNS = '/assets/img/new-app/24/campaigns-active-solid-24-green.svg';
-const ICON_DEVICES = '/assets/img/new-app/24/devices-active-outline-24-green.svg';
-const ICON_SOFTWARE_UPDATES = '/assets/img/new-app/24/software-updates-active-outline-24-green.svg';
+import {
+  CAMPAIGNS_ICON_GREEN,
+  DEVICE_ICON_GREEN,
+  UPDATE_ICON_GREEN
+} from '../../../../config';
 
 const DocsLinks = () => {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ const DocsLinks = () => {
         <Description id="docs-links-desc">{t('dashboard.docs-links.description')}</Description>
         <List>
           <ListItem>
-            <StyledIcon src={ICON_DEVICES} />
+            <StyledIcon src={DEVICE_ICON_GREEN} />
             <ExternalLink
               id="docs-links-link-device-groups"
               onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_GROUP)}
@@ -40,7 +41,7 @@ const DocsLinks = () => {
             </ExternalLink>
           </ListItem>
           <ListItem>
-            <StyledIcon src={ICON_SOFTWARE_UPDATES} />
+            <StyledIcon src={UPDATE_ICON_GREEN} />
             <ExternalLink
               id="docs-links-link-update-software"
               onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_UPDATE)}
@@ -51,7 +52,7 @@ const DocsLinks = () => {
             </ExternalLink>
           </ListItem>
           <ListItem>
-            <StyledIcon src={ICON_CAMPAIGNS} />
+            <StyledIcon src={CAMPAIGNS_ICON_GREEN} />
             <ExternalLink
               id="docs-links-link-create-campaigns"
               onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_CAMPAIGN)}
@@ -62,7 +63,7 @@ const DocsLinks = () => {
             </ExternalLink>
           </ListItem>
           <ListItem>
-            <StyledIcon src={ICON_CAMPAIGNS} />
+            <StyledIcon src={CAMPAIGNS_ICON_GREEN} />
             <ExternalLink
               id="docs-links-link-troubleshoot-campaigns"
               onClick={() => sendAction(OTA_HOME_READ_EXAMPLES_TROUBLESHOOT)}
