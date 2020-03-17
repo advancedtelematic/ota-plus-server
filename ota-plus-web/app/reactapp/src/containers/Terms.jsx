@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
-import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 
 import { Button, Checkbox } from 'antd';
@@ -15,6 +14,7 @@ import * as contracts from '../../contracts';
 import { URL_PRIVACY, URL_TERMS_AND_CONDITIONS } from '../constants/urlConstants';
 import { SERVICE_TERMS_AGREED_DATE_FORMAT } from '../constants/datesTimesConstants';
 import { HERE_ICON } from '../config';
+import { getFormattedDateTime } from '../helpers/datesTimesHelper';
 
 @inject('stores')
 @observer
@@ -40,6 +40,8 @@ class Terms extends Component {
     const { userStore } = stores;
     let terms = _.find(userStore.contracts, obj => contracts.default[obj.contract]);
     const agreedDate = terms && terms.accepted;
+    const agreedDateFormatted = getFormattedDateTime(agreedDate, SERVICE_TERMS_AGREED_DATE_FORMAT);
+
     terms = terms || { contract: contracts.defaultName };
     const htmlDoc = terms && terms.contract ? { __html: contracts.default[terms.contract] } : null;
     const contractModalContent = (
@@ -108,7 +110,7 @@ class Terms extends Component {
                 privacy policy
               </a>
               <div className="agreed--terms">
-                {checked ? t('terms.agreed-on', moment(agreedDate).format(SERVICE_TERMS_AGREED_DATE_FORMAT)) : '.'}
+                {checked ? t('terms.agreed-on', { date: agreedDateFormatted }) : '.'}
               </div>
             </div>
           </div>
