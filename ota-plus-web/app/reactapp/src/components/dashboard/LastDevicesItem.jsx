@@ -34,7 +34,7 @@ class LastDevicesItem extends Component {
           {device.deviceName}
         </div>
         <div className="dashboard__body-col">
-          {deviceStatus !== t('devices.statuses.unknown') ? <span>{`${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`}</span> : <span>Never seen online</span>}
+          {deviceStatus !== t('devices.statuses.unknown') ? <span>{`${lastSeenDate.toDateString()} ${lastSeenDate.toLocaleTimeString()}`}</span> : <span>Never online</span>}
         </div>
         <div className="dashboard__body-col">{deviceStatus}</div>
       </Link>

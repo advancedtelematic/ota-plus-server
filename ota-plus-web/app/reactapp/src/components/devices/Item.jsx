@@ -129,12 +129,12 @@ class Item extends Component {
               ? (
                 <span>
                   {
-                    t('devices.last_updated_item',
+                    t('devices.last-updated-item',
                       { date: getFormattedDateTime(lastSeen, DEVICE_LAST_UPDATED_DATE_FORMAT) })
                   }
                 </span>
               )
-              : <span>{t('devices.never_seen_online')}</span>
+              : <span>{t('devices.never-seen-online')}</span>
             }
           </div>
         </div>

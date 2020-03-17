@@ -115,13 +115,13 @@ class ProfileOrganization extends Component {
       case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
         return {
           type: WARNING_MODAL_COLOR.DEFAULT,
-          title: t('profile.organization.remove_modal.title.self'),
-          desc: t('profile.organization.remove_modal.desc.self'),
+          title: t('profile.organization.remove-modal.title.self'),
+          desc: t('profile.organization.remove-modal.desc.self'),
           cancelButtonProps: {
-            title: t('profile.organization.remove_modal.cancel'),
+            title: t('profile.organization.remove-modal.cancel'),
           },
           confirmButtonProps: {
-            title: t('profile.organization.remove_modal.confirm.self'),
+            title: t('profile.organization.remove-modal.confirm.self'),
             onClick: () => this.handleMemberRemoval(user.email),
           },
           onClose: this.closeRemovalModal,
@@ -129,13 +129,13 @@ class ProfileOrganization extends Component {
       default:
         return {
           type: WARNING_MODAL_COLOR.DANGER,
-          title: t('profile.organization.remove_modal.title'),
-          desc: t('profile.organization.remove_modal.desc'),
+          title: t('profile.organization.remove-modal.title'),
+          desc: t('profile.organization.remove-modal.desc'),
           cancelButtonProps: {
-            title: t('profile.organization.remove_modal.cancel'),
+            title: t('profile.organization.remove-modal.cancel'),
           },
           confirmButtonProps: {
-            title: t('profile.organization.remove_modal.confirm'),
+            title: t('profile.organization.remove-modal.confirm'),
             onClick: () => this.handleMemberRemoval(selectedUserEmail),
           },
           onClose: this.closeRemovalModal,
@@ -257,7 +257,7 @@ class ProfileOrganization extends Component {
               <div className="column id-header">{t('profile.organization.id')}</div>
             </div>
             <div className="description">
-              {t('profile.organization.name_description')}
+              {t('profile.organization.name-description')}
             </div>
             {organizations.map((item, index) => (
               <div className="organization-info" key={`organization-info-${item.namespace}`}>
@@ -300,14 +300,14 @@ class ProfileOrganization extends Component {
               </div>
               <div className="anim-info-container member-adding">
                 <OperationCompletedInfo
-                  info={t('profile.organization.member_added')}
+                  info={t('profile.organization.member-added')}
                   trigger={
                     { createdAt: memberAddedAt }
                   }
                 />
               </div>
               <div className="description">
-                {t('profile.organization.members_description')}
+                {t('profile.organization.members-description')}
               </div>
               <div className="adding-user-content">
                 <Form className="adding-user-form" id="add-registered-user-form">
@@ -315,7 +315,7 @@ class ProfileOrganization extends Component {
                     additionalClassName={`white ${userEmailError ? 'error-border' : 'dark-border'}`}
                     changeAction={this.userEmailChangeCallback}
                     id="add-registered-user-search-bar"
-                    placeholder={t('profile.organization.add_registered_members_placeholder')}
+                    placeholder={t('profile.organization.add-registered-members-placeholder')}
                     value={userEmail}
                   />
                 </Form>
@@ -327,7 +327,7 @@ class ProfileOrganization extends Component {
                   id="button-add-registered-user"
                   onClick={this.addRegisteredUser}
                 >
-                  {t('profile.organization.add_registered_members')}
+                  {t('profile.organization.add-registered-members')}
                 </Button>
               </div>
             </span>

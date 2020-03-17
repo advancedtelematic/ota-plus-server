@@ -119,7 +119,7 @@ class Header extends Component {
                     className="page-header__device-report-item page-header__device-report-item--last-seen"
                     id="last-seen-online-info"
                   >
-                    <span className="page-header__device-report-label">{t('devices.hardware.last_seen_online')}</span>
+                    <span className="page-header__device-report-label">{t('devices.hardware.last-seen-online')}</span>
                     <div className="page-header__device-report-desc">
                       {deviceStatus !== t('devices.statuses.unknown')
                         ? getFormattedDateTime(device.lastSeen, DEVICE_SUMMARY_DATE_FORMAT)

@@ -93,13 +93,13 @@ class ListItemVersion extends Component {
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">{t('software.details.created_at')}</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.created-at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-created-at-${version.id.version.substring(0, 8)}`}>
                     {getFormattedDateTime(version.createdAt, SOFTWARE_VERSION_DATE_FORMAT)}
                   </span>
                 </div>
                 <div className="c-package__sw-row">
-                  <span className="c-package__sw-subtitle">{t('software.details.updated_at')}</span>
+                  <span className="c-package__sw-subtitle">{t('software.details.updated-at')}</span>
                   <span className="c-package__sw-value" id={`package-${packageName}-updated-at-${version.id.version.substring(0, 8)}`}>
                     {getFormattedDateTime(version.updatedAt, SOFTWARE_VERSION_DATE_FORMAT)}
                   </span>

@@ -7,6 +7,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import moment from 'moment';
+import { withTranslation } from 'react-i18next';
 
 import { Button, Checkbox } from 'antd';
 import { OTAModal } from '../partials';
@@ -25,7 +26,8 @@ class Terms extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     checked: PropTypes.bool,
-    history: PropTypes.shape({})
+    history: PropTypes.shape({}),
+    t: PropTypes.func.isRequired
   };
 
   toggleModal = (e) => {
@@ -34,7 +36,7 @@ class Terms extends Component {
   };
 
   render() {
-    const { stores, checked, history } = this.props;
+    const { stores, checked, history, t } = this.props;
     const { userStore } = stores;
     let terms = _.find(userStore.contracts, obj => contracts.default[obj.contract]);
     const agreedDate = terms && terms.accepted;
@@ -105,7 +107,9 @@ class Terms extends Component {
               >
                 privacy policy
               </a>
-              <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format(SERVICE_TERMS_AGREED_DATE_FORMAT)})` : '.'}</div>
+              <div className="agreed--terms">
+                {checked ? t('terms.agreed-on', moment(agreedDate).format(SERVICE_TERMS_AGREED_DATE_FORMAT)) : '.'}
+              </div>
             </div>
           </div>
           {!terms.accepted && (
@@ -149,4 +153,4 @@ class Terms extends Component {
   }
 }
 
-export default withRouter(Terms);
+export default withTranslation()(withRouter(Terms));
