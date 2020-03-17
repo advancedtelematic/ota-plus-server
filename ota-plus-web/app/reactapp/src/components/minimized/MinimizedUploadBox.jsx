@@ -3,8 +3,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-
 import MinimizedBox from './MinimizedBox';
+import { REOPEN_ICON } from '../../config';
 
 const MinimizedUploadBox = inject('stores')(
   observer(({ t, uploadBoxMinimized, toggleUploadBoxMode, stores }) => {
@@ -21,7 +21,7 @@ const MinimizedUploadBox = inject('stores')(
         title={t('software.uploading.maximize_upload_box')}
         onClick={toggleUploadBoxMode.bind(this)}
       >
-        <img src="/assets/img/icons/reopen.svg" alt="Icon" />
+        <img src={REOPEN_ICON} alt="Icon" />
       </a>
     );
     return uploadBoxMinimized ? <MinimizedBox name={name} actions={actions} /> : null;

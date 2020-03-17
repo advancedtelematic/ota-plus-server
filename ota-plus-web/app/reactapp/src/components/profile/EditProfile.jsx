@@ -13,6 +13,7 @@ import { AsyncStatusCallbackHandler, MetaData } from '../../utils';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import { OTA_PROFILE_RENAME } from '../../constants/analyticsActions';
 import { ANALYTICS_VIEW_PROFILE } from '../../constants/analyticsViews';
+import { assets, CANCEL_ICON_THIN, SETTINGS_ICON_BIG, TICK_ICON_BLACK } from '../../config';
 
 @inject('stores')
 @observer
@@ -149,12 +150,12 @@ class EditProfile extends Component {
                 <div className="column">
                   {window.atsGarageTheme ? (
                     <Avatar
-                      src={userStore.user.picture ? userStore.user.picture : '/assets/img/icons/profile.png'}
+                      src={userStore.user.picture ? userStore.user.picture : assets.DEFAULT_PROFILE_PICTURE}
                       className="icon-profile"
                       id="user-avatar"
                     />
                   ) : (
-                    <Avatar src="/assets/img/icons/Settings_Icon_big.svg" className="icon-profile" id="user-avatar" />
+                    <Avatar src={SETTINGS_ICON_BIG} className="icon-profile" id="user-avatar" />
                   )}
                 </div>
                 <div className="column name" id="user-name">
@@ -186,14 +187,14 @@ class EditProfile extends Component {
                         <span className="rename-box__user-actions">
                           {this.newNameLength ? (
                             <img
-                              src="/assets/img/icons/black/tick.svg"
+                              src={TICK_ICON_BLACK}
                               className="rename-box__icon rename-box__icon--save save"
                               alt="Icon"
                               onClick={this.rename}
                             />
                           ) : null}
                           <img
-                            src="/assets/img/icons/black/cancel-thin.svg"
+                            src={CANCEL_ICON_THIN}
                             alt="Icon"
                             className="rename-box__icon rename-box__icon--cancel cancel"
                             onClick={this.cancelRename}

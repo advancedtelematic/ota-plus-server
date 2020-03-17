@@ -13,6 +13,7 @@ import { DeviceHardwarePackagesInstalledList } from './packages';
 import { Loader, SubHeader, SearchBar } from '../../../partials';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import { OTA_DEVICE_SEE_PRIMARY_HARDWARE, OTA_DEVICE_SEE_PRIMARY_PACKAGE } from '../../../constants/analyticsActions';
+import { INFO_ICON_BLACK, INFO_ICON_WHITE } from '../../../config';
 
 @inject('stores')
 @observer
@@ -152,9 +153,9 @@ class Overlay extends Component {
         onVisibleChange={changeHardwareOverlayVisibility}
       >
         {active ? (
-          <img src="/assets/img/icons/white/info.svg" className="hardware-panel__ecu-action--details-size" alt="Icon" />
+          <img src={INFO_ICON_WHITE} className="hardware-panel__ecu-action--details-size" alt="Icon" />
         ) : (
-          <img src="/assets/img/icons/black/info.svg" className="hardware-panel__ecu-action--details-size" alt="Icon" />
+          <img src={INFO_ICON_BLACK} className="hardware-panel__ecu-action--details-size" alt="Icon" />
         )}
       </Popover>
     );

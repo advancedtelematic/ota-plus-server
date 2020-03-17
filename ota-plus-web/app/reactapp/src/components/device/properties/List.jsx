@@ -10,6 +10,7 @@ import { Tooltip } from 'antd';
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 import { DEVICE_PROPERTIES_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
+import { BAN_ICON_RED, CROSS_ICON_RED, TICK_ICON_GREEN } from '../../../config';
 
 @inject('stores')
 @observer
@@ -101,7 +102,7 @@ class List extends Component {
                     </span>
                     <img
                       className="properties-panel__info-status-icon"
-                      src="/assets/img/icons/red_cross.svg"
+                      src={CROSS_ICON_RED}
                       alt=""
                       id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)}
                     />
@@ -113,7 +114,7 @@ class List extends Component {
                     </span>
                     <img
                       className="properties-panel__info-status-icon"
-                      src="/assets/img/icons/ban_red.png"
+                      src={BAN_ICON_RED}
                       alt=""
                       id={this.generateIdTag('blacklisted-icon', expandedPackage)}
                     />
@@ -138,7 +139,7 @@ class List extends Component {
                     <span id="image-installed-checkmark">{t('common.statuses.installed')}</span>
                     <img
                       className="properties-panel__info-status-icon"
-                      src="/assets/img/icons/green_tick.svg"
+                      src={TICK_ICON_GREEN}
                       alt=""
                       id={this.generateIdTag('installed-icon', expandedPackage)}
                     />

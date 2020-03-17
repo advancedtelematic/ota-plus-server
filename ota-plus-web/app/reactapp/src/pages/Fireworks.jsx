@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import _ from 'lodash';
 import { FadeAnimation } from '../utils';
 import { FIREWORKS_ACKNOWLEDGED_KEY } from '../constants';
+import { FIREWORKS_CHECK_ICON } from '../config';
 
 @inject('stores')
 @observer
@@ -38,7 +39,7 @@ class Fireworks extends Component {
           <div className="fireworks">
             <div className="fireworks__title">CONGRATULATIONS</div>
             <div className="fireworks__body">
-              <img className="fireworks__icon" src="/assets/img/icons/fireworks_check.svg" alt="Image" />
+              <img className="fireworks__icon" src={FIREWORKS_CHECK_ICON} alt="Image" />
               <div className="fireworks__subtitle">Your first device is online!</div>
               <div className="fireworks__text">
                 Every time you build a new image, you can send it to this device over the air.

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { CREDENTIALS_PROVISIONING_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
+import { DOWNLOAD_KEY_ICON } from '../../../config';
 
 @inject('stores')
 class ListItem extends Component {
@@ -29,7 +30,7 @@ class ListItem extends Component {
         </div>
         <div className="column">
           <img
-            src="/assets/img/icons/download_key.svg"
+            src={DOWNLOAD_KEY_ICON}
             className={isExportable ? 'download-key-link' : 'download-key-link--disabled'}
             id={`download-key-link-${provisioningKey.description}`}
             alt="Icon"

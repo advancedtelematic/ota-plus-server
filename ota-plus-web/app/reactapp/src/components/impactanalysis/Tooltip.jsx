@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { OTAModal } from '../../partials';
+import { IMPACT_TOOLTIP_IMG } from '../../config';
 
 const Tooltip = ({ shown, hide }) => (
   <OTAModal
@@ -32,7 +33,7 @@ const Tooltip = ({ shown, hide }) => (
           {'or roll them back to an older version.'}
           <br />
           <br />
-          <img src="/assets/img/impact_tooltip.jpg" alt="" />
+          <img src={IMPACT_TOOLTIP_IMG} alt="" />
         </div>
         <div className="body-actions">
           <button

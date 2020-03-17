@@ -22,7 +22,15 @@ import {
 } from './wizardSteps';
 import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
 import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
-import { assets, FEATURES, CAMPAIGNS_ICON_GRAY, NOTIFICATION_DURATION_SEC } from '../../config';
+import {
+  assets,
+  CAMPAIGNS_ICON_GRAY,
+  EXIT_FULLSCREEN_ICON,
+  FEATURES,
+  MAXIMIZE_ICON,
+  MINIMIZE_ICON,
+  NOTIFICATION_DURATION_SEC
+} from '../../config';
 import { DATA_TYPE, STATUS } from '../../constants';
 
 const initialCurrentStepId = 0;
@@ -432,13 +440,13 @@ class Wizard extends Component {
               onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData.name)}
               id="minimize-wizard"
             >
-              <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+              <img src={MINIMIZE_ICON} alt="Icon" />
             </div>
             <div className={`toggle-fullscreen${campaignsStore.fullScreenMode ? ' on' : ' off'}`} onClick={this.toggleFullScreen}>
               {campaignsStore.fullScreenMode ? (
-                <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
+                <img src={EXIT_FULLSCREEN_ICON} alt="Icon" id="exit-fullscreen-wizard" />
               ) : (
-                <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
+                <img src={MAXIMIZE_ICON} alt="Icon" id="enter-fullscreen-wizard" />
               )}
             </div>
             <div

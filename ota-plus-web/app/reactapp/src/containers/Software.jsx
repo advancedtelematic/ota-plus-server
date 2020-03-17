@@ -16,7 +16,7 @@ import {
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 } from '../components/software';
-import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SWITCH_TO_SW_REPO_KEY } from '../config';
+import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SOFTWARE_ICON_OLD_WHITE, SWITCH_TO_SW_REPO_KEY } from '../config';
 import { MetaData } from '../utils';
 import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
 import { setAnalyticsView } from '../helpers/analyticsHelper';
@@ -251,7 +251,7 @@ class Software extends Component {
             <div className="wrapper-center">
               <div className="page-intro">
                 <div>
-                  <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
+                  <img src={SOFTWARE_ICON_OLD_WHITE} alt="Icon" />
                 </div>
                 <div>{t('software.empty.no_software')}</div>
                 <div>

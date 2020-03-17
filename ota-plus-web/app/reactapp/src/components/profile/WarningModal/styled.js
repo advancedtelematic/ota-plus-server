@@ -53,7 +53,7 @@ export const CancelButton = styled(({ colorTheme, ...restProps }) => <StyledButt
   &, :hover, :focus {
     border: 1px solid ${props => props.colorTheme};
     color: ${props => WARNING_MODAL_COLOR.INFO ? props.theme.palette.texts.black : props.colorTheme};
-    background-color: ${props => props.colorTheme && WARNING_MODAL_COLOR.INFO};
+    background-color: ${props => props.colorTheme === WARNING_MODAL_COLOR.INFO && WARNING_MODAL_COLOR.INFO};
   }
   :hover, :focus {
     opacity: 0.8;

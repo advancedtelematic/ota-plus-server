@@ -20,7 +20,7 @@ import {
   OTA_DEVICES_SEE_UNGROUPED,
   OTA_DEVICES_SEARCH_DEVICE
 } from '../constants/analyticsActions';
-import { DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
+import { DEVICE_ICON_OLD_WHITE, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
 import { URL_GET_STARTED } from '../constants/urlConstants';
 
 @inject('stores')
@@ -231,7 +231,7 @@ class Devices extends Component {
           <div className="wrapper-center">
             <div className="page-intro">
               <div>
-                <img src="/assets/img/icons/white/devices.svg" alt="Icon" />
+                <img src={DEVICE_ICON_OLD_WHITE} alt="Icon" />
               </div>
               {this.getEmptyDevicesMessage(t, devicesStore.devicesFetchingError)}
             </div>

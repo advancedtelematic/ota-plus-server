@@ -10,6 +10,7 @@ import { withTranslation } from 'react-i18next';
 import { DeviceHardwareSecondaryEcuDetails, DevicePrimaryEcu, DeviceSecondaryEcu } from './hardware';
 import { FadeAnimation } from '../../utils';
 import { PackageBlacklistModal } from '../software';
+import { QUESTIONMARK_ICON_BLACK, QUESTIONMARK_ICON_WHITE } from '../../config';
 
 @inject('stores')
 @observer
@@ -119,7 +120,7 @@ class HardwarePanel extends Component {
           {t('devices.hardware.secondary_ecus_title')}
           {isPrimaryEcuActive ? (
             <img
-              src="/assets/img/icons/black/questionmark.svg"
+              src={QUESTIONMARK_ICON_BLACK}
               alt=""
               className="hardware-panel__icon-secondary"
               onClick={this.showSecondaryDescription}
@@ -127,7 +128,7 @@ class HardwarePanel extends Component {
             />
           ) : (
             <img
-              src="/assets/img/icons/white/questionmark.svg"
+              src={QUESTIONMARK_ICON_WHITE}
               alt=""
               className="hardware-panel__icon-secondary"
               onClick={this.showSecondaryDescription}

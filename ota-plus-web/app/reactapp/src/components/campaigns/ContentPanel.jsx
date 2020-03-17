@@ -18,6 +18,7 @@ import {
   CAMPAIGNS_DEFAULT_TAB,
   CAMPAIGNS_FETCH_ASYNC,
   CAMPAIGNS_FILTER,
+  CAMPAIGNS_ICON_WHITE,
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_PAGE_NUMBER_DEFAULT,
 } from '../../config';
@@ -145,7 +146,7 @@ class ContentPanel extends Component {
           ) : (
             <div className="wrapper-center">
               <div className="page-intro">
-                <img src="/assets/img/icons/white/campaigns.svg" alt="Icon" />
+                <img src={CAMPAIGNS_ICON_WHITE} alt="Icon" />
                 <div>{t('campaigns.no_campaigns')}</div>
                 <div>
                   <a
