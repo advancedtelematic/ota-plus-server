@@ -8,6 +8,7 @@ export const URL_FOOTER_SERVICE_TERMS = 'https://legal.here.com/en-gb/terms';
 export const URL_GET_STARTED = 'https://docs.ota.here.com/getstarted/dev/index.html';
 export const URL_QUICKSTART = 'https://docs.ota.here.com/getstarted/dev/get-started.html';
 export const URL_PRIVACY = 'https://legal.here.com/en-gb/privacy';
+export const URL_RELEASE_NOTES = 'https://docs.ota.here.com/ota-rns/dev/index.html';
 export const URL_SOFTWARE_PUSHING_UPDATES = 'https://docs.ota.here.com/ota-client/dev/pushing-updates.html';
 export const URL_STEPPER_CAMPAIGNS_CTA = '/campaigns';
 export const URL_STEPPER_CAMPAIGNS_DOCS = 'https://docs.ota.here.com/getstarted/dev/get-started.html#_campaigns';

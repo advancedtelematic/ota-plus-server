@@ -46,8 +46,8 @@ describe('<HelpSidebar />', () => {
     expect(wrapper.exists('.ant-drawer-open')).toEqual(false);
   });
 
-  it('should display 4 links', () => {
-    const linksCount = 4;
+  it('should display 5 links', () => {
+    const linksCount = 5;
     wrapper.find('#help-icon').first().simulate('click');
     expect(wrapper.find('a').length).toBe(linksCount);
   });

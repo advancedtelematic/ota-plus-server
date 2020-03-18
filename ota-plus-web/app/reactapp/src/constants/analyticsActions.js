@@ -35,6 +35,7 @@ export const OTA_NAV_GET_STARTED = 'OTA_Nav_Get_Started';
 export const OTA_NAV_DEV_GUIDE = 'OTA_Nav_Dev_Guide';
 export const OTA_NAV_USER_GUIDE = 'OTA_Nav_User_Guide';
 export const OTA_NAV_CONTACT = 'OTA_Nav_Contact';
+export const OTA_NAV_RELEASE_NOTES = 'OTA_Nav_Release_Notes';
 export const OTA_NAV_PROFILE = 'OTA_Nav_Profile';
 export const OTA_NAV_ENVIRONMENTS = 'OTA_Nav_Environments';
 export const OTA_NAV_USAGE = 'OTA_Nav_Usage';
