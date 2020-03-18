@@ -1,10 +1,5 @@
 = Manage members in environments
 
-[NOTE]
-====
-This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
-====
-
 You can add colleagues to your environments to collaborate on devices, device groups, software versions, software updates, and campaigns. For example, you may need to collaborate with your developers on device provisioning. People that you want to add to your environment must have an OTA Connect account. Also, you can remove members from the environments to which you have access, but you cannot remove the owner of the environment.
 
 *To manage members in the environments to which you have access:*
