@@ -49,6 +49,10 @@ class OrganizationController @Inject()(val conf: Configuration,
       }
     }
 
+  def getOrganizationTentativeUsers(namespace: Namespace): Action[AnyContent] = authAction.async { implicit request =>
+    userProfileApi.organizationRequest(namespace, request.idToken.userId, "GET", "tentative_users", Map.empty, None)
+  }
+
   def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
     userProfileApi.organizationRequest(
       request.namespace,
