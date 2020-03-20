@@ -4,13 +4,20 @@ import { useObserver } from 'mobx-react';
 import { Title } from '..';
 import Sidebar from '../Sidebar';
 import { HELP_ICON_DARK } from '../../config';
-import { URL_GET_STARTED, MAIL_SUPPORT, URL_DEV_GUIDE, URL_USER_GUIDE } from '../../constants/urlConstants';
+import {
+  MAIL_SUPPORT,
+  URL_DEV_GUIDE,
+  URL_GET_STARTED,
+  URL_RELEASE_NOTES,
+  URL_USER_GUIDE
+} from '../../constants/urlConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
-  OTA_NAV_GET_STARTED,
+  OTA_NAV_CONTACT,
   OTA_NAV_DEV_GUIDE,
-  OTA_NAV_USER_GUIDE,
-  OTA_NAV_CONTACT
+  OTA_NAV_GET_STARTED,
+  OTA_NAV_RELEASE_NOTES,
+  OTA_NAV_USER_GUIDE
 } from '../../constants/analyticsActions';
 import {
   HelpIcon,
@@ -38,6 +45,7 @@ const HelpSidebar = () => {
     { actionType: OTA_NAV_GET_STARTED, name: 'get-started', to: URL_GET_STARTED },
     { actionType: OTA_NAV_DEV_GUIDE, name: 'developer-guide', to: URL_DEV_GUIDE },
     { actionType: OTA_NAV_USER_GUIDE, name: 'user-guide', to: URL_USER_GUIDE },
+    { actionType: OTA_NAV_RELEASE_NOTES, name: 'release-notes', to: URL_RELEASE_NOTES },
     { actionType: OTA_NAV_CONTACT, name: 'contact', to: MAIL_SUPPORT }
   ];
 
