@@ -49,7 +49,8 @@ PUT     /user/*path                       com.advancedtelematic.controllers.User
 # Namespaces AKA organizations
 GET     /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
 PATCH   /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
-GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
 GET     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 POST    /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 DELETE  /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
+GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
+GET     /organizations/:namespace/tentative_users   com.advancedtelematic.controllers.OrganizationController.getOrganizationTentativeUsers(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
