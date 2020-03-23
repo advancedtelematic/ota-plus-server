@@ -50,24 +50,10 @@ describe('<Navbar />', () => {
     expect(wrapper.exists('#navbar-link-impact-analysis')).toEqual(true);
   });
 
-  it('should display Home(Beta) tab when feature flag is toggled', () => {
-    expect(wrapper.exists('#navbar-link-home')).toEqual(false);
-    wrapper.unmount();
-    wrapper = mountNavbar([FEATURES.NEW_HOMEPAGE]);
-    expect(wrapper.exists('#navbar-link-home')).toEqual(true);
-  });
-
   it('should display Avatar(account sidebar toggle) if uiUserProfileMenu is set to true', () => {
     expect(wrapper.exists(AccountSidebar)).toEqual(false);
     wrapper.unmount();
     wrapper = mountNavbar(null, { uiUserProfileMenu: true });
     expect(wrapper.exists(AccountSidebar)).toEqual(true);
-  });
-
-  it('should hide Dashboard when Home(beta) is visible', () => {
-    expect(wrapper.exists('#navbar-link-')).toEqual(true);
-    wrapper.unmount();
-    wrapper = mountNavbar([FEATURES.NEW_HOMEPAGE]);
-    expect(wrapper.exists('#navbar-link-')).toEqual(false);
   });
 });

@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { makeAcronym } from '../../utils/stringUtils';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
-import { FEATURES, ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
+import { ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_NAV_SIGNOUT,
@@ -31,7 +31,6 @@ import {
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
-    features: stores.featuresStore.features,
     user: stores.userStore.user,
     organizationName: stores.userStore.userOrganizationName
   }));
@@ -40,14 +39,12 @@ function useStoreData() {
 const AccountSidebar = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { t } = useTranslation();
-  const { features, organizationName, user } = useStoreData();
+  const { organizationName, user } = useStoreData();
 
   const links = [];
 
   links.push({ actionType: OTA_NAV_PROFILE, name: 'profile', to: '/profile/edit', isBeta: false });
-  if (features.includes(FEATURES.ORGANIZATIONS)) {
-    links.push({ actionType: OTA_NAV_ENVIRONMENTS, name: 'organization', to: '/profile/environments', isBeta: true });
-  }
+  links.push({ actionType: OTA_NAV_ENVIRONMENTS, name: 'organization', to: '/profile/environments', isBeta: false });
   links.push({ actionType: OTA_NAV_USAGE, name: 'usage', to: '/profile/usage', isBeta: false });
   links.push({ actionType: OTA_NAV_CREDENTIALS, name: 'keys', to: '/profile/access-keys', isBeta: false });
   links.push({ actionType: OTA_NAV_TERMS, name: 'terms', to: '/policy', isBeta: false });
@@ -93,16 +90,13 @@ const AccountSidebar = () => {
       <Avatar id="sidebar-avatar" onClick={openSidebar} isActive={isSidebarVisible}>
         {acronym}
       </Avatar>
-      <Sidebar onClose={onClose} visible={isSidebarVisible} features={features}>
+      <Sidebar onClose={onClose} visible={isSidebarVisible}>
         <DrawerHeader>
           <Title size="large" id="sidebar-username">{userName}</Title>
-          {features.includes(FEATURES.ORGANIZATIONS) && (
-            <div id="sidebar-header-org">
-              <span>{t('account-settings.label.organization')}</span>
-              <OrganizationName>{organizationName}</OrganizationName>
-              <BetaTag>{t('miscellaneous.beta')}</BetaTag>
-            </div>
-          )}
+          <div id="sidebar-header-org">
+            <span>{t('account-settings.label.organization')}</span>
+            <OrganizationName>{organizationName}</OrganizationName>
+          </div>
         </DrawerHeader>
         <LinksContainer>
           {renderLinks(links)}

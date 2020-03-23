@@ -382,9 +382,7 @@ export const FEATURES = {
   DEPENDENCY_CAMPAIGN: 'dependency_campaign',
   DEPENDENCY_SOFTWARE: 'dependency_software',
   IMPACT_ANALYSIS: 'impact_analysis',
-  NEW_HOMEPAGE: 'new_home_page',
   OLP_CAMPAIGN: 'olp_campaign',
-  ORGANIZATIONS: 'organizations',
   PSEUDO_LOCALISATION: 'pseudo_localisation',
   SEQUENCER_CAMPAIGN: 'sequencer_campaign'
 };

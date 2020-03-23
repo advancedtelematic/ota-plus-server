@@ -41,13 +41,13 @@ export const DrawerHeader = styled.div`
   & > div {
     display: flex;
     align-items: center;
-  }
-  & > div > span:not(:last-child) {
     font-size: 0.93em;
     font-weight: 400;
     letter-spacing: 0.1px;
     line-height: 18px;
     color: rgba(15,22,33,0.6);
+  }
+  & > div > span:first-child {    
     margin-right: 5px;
   }
 `;

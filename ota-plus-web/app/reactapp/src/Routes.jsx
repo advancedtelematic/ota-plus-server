@@ -5,7 +5,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import {
-  DashboardPage,
   DevicesPage,
   DevicePage,
   SoftwareRepositoryPage,
@@ -20,13 +19,11 @@ import {
   HomePage,
 } from './pages';
 import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys, ProfileOrganization } from './components/profile';
-import { FEATURES } from './config';
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
 const Routes = ({
   addNewWizard,
-  features,
   uiUserProfileEdit,
   switchToSWRepo,
   uiUserProfileMenu,
@@ -34,34 +31,16 @@ const Routes = ({
   uiCredentialsDownload
 }) => (
   <Switch>
-    {features.includes(FEATURES.NEW_HOMEPAGE)
-      ? (
-        <Route
-          path="/home"
-          render={props => (
-            <HomePage
-              {...props}
-              uiAutoFeatureActivation={uiAutoFeatureActivation}
-              uiUserProfileMenu={uiUserProfileMenu}
-            />
-          )}
+    <Route
+      path="/home"
+      render={props => (
+        <HomePage
+          {...props}
+          uiAutoFeatureActivation={uiAutoFeatureActivation}
+          uiUserProfileMenu={uiUserProfileMenu}
         />
-      )
-      : (
-        <Route
-          exact
-          path="/"
-          render={props => (
-            <DashboardPage
-              {...props}
-              addNewWizard={addNewWizard}
-              uiAutoFeatureActivation={uiAutoFeatureActivation}
-              uiUserProfileMenu={uiUserProfileMenu}
-            />
-          )}
-        />
-      )
-    }
+      )}
+    />
     <Route path="/fireworks" component={FireworksPage} />
     <Route path="/devices" render={props => <DevicesPage {...props} addNewWizard={addNewWizard} />} />
     <Route path="/device/:id" component={DevicePage} />

@@ -6,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../../../theme';
 import stores from '../../../stores';
 import AccountSidebar from '..';
-import { FEATURES } from '../../../config';
 import { LinkContent, Signout } from '../styled';
 
 function mountComponent(features, props) {
@@ -56,21 +55,10 @@ describe('<AccountSidebar />', () => {
     expect(wrapper.exists('.ant-drawer-open')).toEqual(false);
   });
 
-  it('should display 4 links and sign-out link by default', () => {
-    const linksCount = 4;
+  it('should display 5 links and sign-out link by default', () => {
+    const linksCount = 5;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);
-  });
-
-  it('should display Organization related content when feature flag is toggled on', () => {
-    wrapper.unmount();
-    // Should now display 5 links instead of 4
-    const linksCount = 5;
-    wrapper = mountComponent([FEATURES.ORGANIZATIONS]);
-    wrapper.find('#sidebar-avatar').first().simulate('click');
-    expect(wrapper.find(LinkContent).length).toBe(linksCount);
-    expect(wrapper.exists('#account-sidebar-link-organization')).toEqual(true);
-    expect(wrapper.exists('#sidebar-header-org')).toEqual(true);
   });
 });
