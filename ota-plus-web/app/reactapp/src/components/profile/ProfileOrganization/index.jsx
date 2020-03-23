@@ -295,7 +295,7 @@ class ProfileOrganization extends Component {
               </div>
             ))}
             <span>
-              <div className="section-header adding-user">
+              <div className="section-header adding-user" style={{ marginTop: '40px' }}>
                 <div className="column name-header">{t('profile.organization.members')}</div>
               </div>
               <div className="anim-info-container member-adding">

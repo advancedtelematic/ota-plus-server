@@ -17,6 +17,14 @@ strong {
   font-weight: 700;
 }
 
+.env-tooltip {
+  max-width: 200px;
+  letter-spacing: 0.2px;
+  .ant-tooltip-inner {
+    padding: 3px 8px;
+  }
+}
+
 .clearfix {
   &:before {
     display: table;

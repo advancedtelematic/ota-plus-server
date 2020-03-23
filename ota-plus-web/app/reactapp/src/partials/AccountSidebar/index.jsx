@@ -44,7 +44,7 @@ const AccountSidebar = () => {
   const links = [];
 
   links.push({ actionType: OTA_NAV_PROFILE, name: 'profile', to: '/profile/edit', isBeta: false });
-  links.push({ actionType: OTA_NAV_ENVIRONMENTS, name: 'organization', to: '/profile/environments', isBeta: false });
+  links.push({ actionType: OTA_NAV_ENVIRONMENTS, name: 'organization', to: '/environments', isBeta: false });
   links.push({ actionType: OTA_NAV_USAGE, name: 'usage', to: '/profile/usage', isBeta: false });
   links.push({ actionType: OTA_NAV_CREDENTIALS, name: 'keys', to: '/profile/access-keys', isBeta: false });
   links.push({ actionType: OTA_NAV_TERMS, name: 'terms', to: '/policy', isBeta: false });

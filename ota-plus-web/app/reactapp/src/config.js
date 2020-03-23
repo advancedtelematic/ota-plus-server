@@ -31,7 +31,7 @@ export const API_USER_DEFAULT_ORGANIZATION = '/user/organizations/default';
 export const API_USER_ORGANIZATIONS = '/user/organizations';
 export const API_USER_ORGANIZATIONS_SWITCH_NAMESPACE = '/organizations/$namespace/index';
 export const API_USER_ORGANIZATIONS_ADD_USER = '/organization/users';
-export const API_USER_ORGANIZATIONS_GET_USERS = '/organization/tentative_users';
+export const API_USER_ORGANIZATIONS_GET_USERS = namespace => `/organizations/${namespace}/tentative_users`;
 export const API_USER_ORGANIZATION_DELETE_MEMBER = '/organization/users';
 export const API_USER_ORGANIZATION_EDIT = '/organization';
 
@@ -319,6 +319,7 @@ export const DEVICE_ICON_GREEN = '/assets/img/new-app/24/devices-active-outline-
 export const DEVICE_ICON_OLD_WHITE = '/assets/img/icons/white/devices.svg';
 export const DOWNLOAD_ICON = '/assets/img/icons/download.svg';
 export const DOWNLOAD_KEY_ICON = '/assets/img/icons/download_key.svg';
+export const ENVIRONMENTS_ICON = '/assets/img/new-app/24/icon24-masking.svg';
 export const EXIT_FULLSCREEN_ICON = '/assets/img/icons/exit-fullscreen.svg';
 export const FIREWORKS_CHECK_ICON = '/assets/img/icons/fireworks_check.svg';
 export const GROUP_DYNAMIC_ICON = '/assets/img/new-app/24/LUI-icon-pd-device_group_smart_filter-outline-24.svg';

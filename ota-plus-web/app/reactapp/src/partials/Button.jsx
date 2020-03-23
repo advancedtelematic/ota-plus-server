@@ -91,6 +91,9 @@ const Button = styled(AntdButton)(({ theme, type = 'default', light = false }) =
   minWidth: '180px',
   fontWeight: 500,
   fontSize: '1em',
+  '&.ant-btn-lg': {
+    fontSize: '16px',
+  },
   ...styleVariants(theme, light)[type]
 }));
 

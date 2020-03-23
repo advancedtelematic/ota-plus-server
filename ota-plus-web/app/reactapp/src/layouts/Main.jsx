@@ -24,13 +24,18 @@ import Navbar from '../partials/Navbar';
 import SubNavBar from '../partials/SubNavBar';
 import Wizard from '../components/campaigns/Wizard';
 import { Minimized } from '../components/minimized';
-import { LOCATION_PROFILE } from '../constants/locationConstants';
+import { LOCATION_ENVIRONMENTS, LOCATION_PROFILE } from '../constants/locationConstants';
 import { getLanguage, getMomentLocale } from '../helpers/languageHelper';
 
 const DASHBOARD_PATH = {
   OLD: '/',
   NEW: '/home'
 };
+
+const LIGHT_THEMED_PATHS = [
+  LOCATION_ENVIRONMENTS,
+  LOCATION_PROFILE
+];
 
 @inject('stores')
 @observer
@@ -230,7 +235,7 @@ class Main extends Component {
                 uiCredentialsDownload={this.uiCredentialsDownload}
                 addNewWizard={this.addNewWizard}
               />
-              <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
+              <SubNavBar lightMode={LIGHT_THEMED_PATHS.includes(getCurrentLocation(location))} />
             </div>
           )}
           <div className="app-flex-container organizations">

@@ -13,6 +13,7 @@ export const OwnerTag = styled.div`
   border-radius: 2px;
   background-color: ${({ theme }) => theme.palette.primaryDarkened};
   color: ${({ theme }) => theme.palette.white};
+  cursor: default;
   font-size: 0.85em;
   font-weight: 500;
   letter-spacing: 0.28px;
