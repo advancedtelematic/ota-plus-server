@@ -12,13 +12,11 @@ import { useStores } from '../../stores/hooks';
 import { changeUserEnvironment } from '../../helpers/environmentHelper';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_NAV_ENV_SWITCH } from '../../constants/analyticsActions';
-import { FEATURES } from '../../config';
 
 const useStoreData = () => {
-  const { stores: { featuresStore, userStore } } = useStores();
+  const { stores: { userStore } } = useStores();
   return useObserver(() => ({
     environments: userStore.userOrganizations,
-    features: featuresStore.features,
     userEnvironmentName: userStore.userOrganizationName,
     userEnvironmentNamespace: userStore.userOrganizationNamespace
   }));
@@ -26,7 +24,7 @@ const useStoreData = () => {
 
 const SubNavBar = ({ lightMode }) => {
   const { t } = useTranslation();
-  const { environments, features, userEnvironmentName, userEnvironmentNamespace } = useStoreData();
+  const { environments, userEnvironmentName, userEnvironmentNamespace } = useStoreData();
   const handleMenuClick = (event) => {
     const key = parseInt(event.key, 10);
     if (userEnvironmentNamespace !== environments[key].namespace) {
@@ -36,7 +34,7 @@ const SubNavBar = ({ lightMode }) => {
   };
   return (
     <SubNavBarContainer id="app-subnavbar" lightMode={lightMode}>
-      {features.includes(FEATURES.ORGANIZATIONS) && environments.length && (
+      {environments.length && (
         <EnvironmentContainer id="app-subnavbar-environment-container">
           <EnvironmentTitle id="app-subnavbar-environment-title" lightMode={lightMode}>
             {t('navigation.environments.selector.title')}

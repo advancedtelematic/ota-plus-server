@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react';
 
 import { Tag } from 'antd';
 import Dropdown from './Dropdown';
-import { ORGANIZATION_NAMESPACE_COOKIE, FEATURES } from '../config';
+import { ORGANIZATION_NAMESPACE_COOKIE } from '../config';
 
 @inject('stores')
 @observer
@@ -40,9 +40,7 @@ class NavigationProfile extends Component {
   };
 
   render() {
-    const { stores, settingsOnly, uiCredentialsDownload, uiUserProfileEdit, hideDropdown } = this.props;
-    const { featuresStore } = stores;
-    const { features } = featuresStore;
+    const { settingsOnly, uiCredentialsDownload, uiUserProfileEdit, hideDropdown } = this.props;
     const showUserMenu = !settingsOnly && uiCredentialsDownload;
 
     return (
@@ -65,19 +63,17 @@ class NavigationProfile extends Component {
                 </Link>
               </li>
             )}
-            {features.includes(FEATURES.ORGANIZATIONS) && (
-              <li>
-                <Link
-                  className="centered"
-                  to="/profile/environments"
-                  id="dropdown-link-organization"
-                  onClick={hideDropdown}
-                >
-                  {'Environment'}
-                  <Tag color="#48dad0" className="alpha-tag--nav">BETA</Tag>
-                </Link>
-              </li>
-            )}
+            <li>
+              <Link
+                className="centered"
+                to="/profile/environments"
+                id="dropdown-link-organization"
+                onClick={hideDropdown}
+              >
+                {'Environment'}
+                <Tag color="#48dad0" className="alpha-tag--nav">BETA</Tag>
+              </Link>
+            </li>
             <li>
               <Link to="/profile/usage" id="dropdown-link-usage" onClick={hideDropdown}>
                 {'Usage'}

@@ -18,7 +18,6 @@ import Routes from '../Routes';
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
-import { FEATURES } from '../config';
 import { UploadBox } from '../partials';
 import { Footer } from '../partials/Footer';
 import Navbar from '../partials/Navbar';
@@ -117,13 +116,10 @@ class Main extends Component {
         });
         return;
       }
-      const { features } = featuresStore;
-      if (features.includes(FEATURES.NEW_HOMEPAGE) && history.location.pathname === DASHBOARD_PATH.OLD) {
+      if (history.location.pathname === DASHBOARD_PATH.OLD) {
         history.push(DASHBOARD_PATH.NEW);
       }
-      if (features.includes(FEATURES.ORGANIZATIONS)) {
-        userStore.getOrganizations();
-      }
+      userStore.getOrganizations();
       userStore.fetchContracts();
     }
     moment.locale(getMomentLocale(getLanguage()));
@@ -191,9 +187,8 @@ class Main extends Component {
 
   locationChange = () => {
     const { stores, history } = this.props;
-    const { featuresStore, userStore } = stores;
-    const { features } = featuresStore;
-    const path = features.includes(FEATURES.NEW_HOMEPAGE) ? DASHBOARD_PATH.NEW : DASHBOARD_PATH.OLD;
+    const { userStore } = stores;
+    const path = DASHBOARD_PATH.NEW;
     if (this.uiUserProfileMenu && !userStore.isTermsAccepted() && history.location.pathname !== path) {
       history.push(path);
     }
@@ -235,12 +230,10 @@ class Main extends Component {
                 uiCredentialsDownload={this.uiCredentialsDownload}
                 addNewWizard={this.addNewWizard}
               />
-              {features.includes(FEATURES.ORGANIZATIONS) && (
-                <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
-              )}
+              <SubNavBar lightMode={getCurrentLocation(location) === LOCATION_PROFILE} />
             </div>
           )}
-          <div className={`app-flex-container ${features.includes(FEATURES.ORGANIZATIONS) ? 'organizations' : ''}`}>
+          <div className="app-flex-container organizations">
             <div id={pageId}>
               <FadeAnimation>
                 <Routes

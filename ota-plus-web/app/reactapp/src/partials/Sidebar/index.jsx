@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Drawer } from 'antd';
 import { SIZES } from '../../constants/styleConstants';
-import { FEATURES } from '../../config';
 
-const Sidebar = ({ children, onClose, visible, features }) => {
-  const NAVBARS_HEIGHT = features.includes(FEATURES.ORGANIZATIONS)
-    ? SIZES.NAVBAR_HEIGHT + SIZES.SUBNAVBAR_HEIGHT : SIZES.NAVBAR_HEIGHT;
+const Sidebar = ({ children, onClose, visible }) => {
+  const NAVBARS_HEIGHT = SIZES.NAVBAR_HEIGHT + SIZES.SUBNAVBAR_HEIGHT;
 
   return (
     <Drawer
@@ -36,7 +34,6 @@ Sidebar.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  features: PropTypes.arrayOf(PropTypes.string),
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired
 };

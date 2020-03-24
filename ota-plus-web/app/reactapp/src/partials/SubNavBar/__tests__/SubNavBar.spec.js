@@ -10,7 +10,6 @@ import theme from '../../../theme';
 import SubNavBar from '../index';
 import * as analyticsHelper from '../../../helpers/analyticsHelper';
 import { OTA_NAV_ENV_SWITCH } from '../../../constants/analyticsActions';
-import { FEATURES } from '../../../config';
 
 const ENVIRONMENTS = [{ name: 'ENV_1', namespace: 'NAMESPACE_1' }, { name: 'ENV_2', namespace: 'NAMESPACE_2' }];
 const USER_ENVIRONMENT_NAMESPACE = 'NAMESPACE_1';
@@ -42,7 +41,6 @@ function mountSubNavBar(stores = mockedStores) {
 describe('<SubNavBar />', () => {
   let wrapper;
   beforeEach(() => {
-    mockedStores.featuresStore.features = [FEATURES.ORGANIZATIONS];
     mockedStores.userStore.userOrganizationName = USER_ENVIRONMENT_NAME;
     mockedStores.userStore.userOrganizationNamespace = USER_ENVIRONMENT_NAMESPACE;
     mockedStores.userStore.userOrganizations = ENVIRONMENTS;
