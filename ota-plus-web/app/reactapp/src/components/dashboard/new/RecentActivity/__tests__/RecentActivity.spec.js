@@ -7,6 +7,7 @@ import theme from '../../../../../theme';
 import RecentActivity from '../index';
 import DevicesStore from '../../../../../stores/DevicesStore';
 import RecentlyCreatedStore from '../../../../../stores/RecentlyCreatedStore';
+import SoftwareStore from '../../../../../stores/SoftwareStore';
 import { ACTIVITIES_TYPE } from '../../../../../constants';
 import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
 
@@ -18,6 +19,7 @@ const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_NOTHING_CREATED = 'dashboard.recent
 const mockedStores = {
   devicesStore: new DevicesStore(),
   recentlyCreatedStore: new RecentlyCreatedStore(),
+  softwareStore: new SoftwareStore()
 };
 
 function mountRecentActivity(stores = mockedStores) {
@@ -51,6 +53,7 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 1;
     stores.recentlyCreatedStore.recentlyCreatedItems = [{
@@ -60,6 +63,7 @@ describe('<RecentActivity />', () => {
     }];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
     stores.recentlyCreatedStore.updateRecentlyCreatedItems = () => {};
+    stores.softwareStore.versionsTotal = 0;
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(true);
@@ -71,10 +75,12 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 1;
     stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: true };
+    stores.softwareStore.versionsTotal = 0;
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(true);
@@ -87,10 +93,12 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 1;
     stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
+    stores.softwareStore.versionsTotal = 0;
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(true);
@@ -106,10 +114,12 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 0;
     stores.recentlyCreatedStore.recentlyCreatedItems = [];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
+    stores.softwareStore.versionsTotal = 0;
     wrapper = mountRecentActivity(stores);
     expect(wrapper.find('RecentActivity')).toHaveLength(1);
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(false);
@@ -125,6 +135,7 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 1;
     stores.recentlyCreatedStore.recentlyCreatedItems = [{
@@ -133,6 +144,7 @@ describe('<RecentActivity />', () => {
       type: ACTIVITIES_TYPE.CAMPAIGN
     }];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
+    stores.softwareStore.versionsTotal = 0;
     wrapper = mountRecentActivity(stores);
     const dropdown = wrapper.find('#recent-activity-filter-dropdown');
     const submenu = mount(<ThemeProvider theme={theme}><div>{dropdown.first().prop('overlay')}</div></ThemeProvider>);
@@ -145,6 +157,7 @@ describe('<RecentActivity />', () => {
     const stores = {
       devicesStore: new DevicesStore(),
       recentlyCreatedStore: new RecentlyCreatedStore(),
+      softwareStore: new SoftwareStore()
     };
     stores.devicesStore.devicesTotalCount = 1;
     stores.recentlyCreatedStore.recentlyCreatedItems = [{
@@ -154,6 +167,7 @@ describe('<RecentActivity />', () => {
     }];
     stores.recentlyCreatedStore.recentlyCreatedFetchAsync = { isFetching: false };
     stores.recentlyCreatedStore.fetchRecentlyCreated = jest.fn();
+    stores.softwareStore.versionsTotal = 0;
     analyticsHelper.sendAction = jest.fn();
     wrapper = mountRecentActivity(stores);
     const dropdown = wrapper.find('#recent-activity-filter-dropdown');
