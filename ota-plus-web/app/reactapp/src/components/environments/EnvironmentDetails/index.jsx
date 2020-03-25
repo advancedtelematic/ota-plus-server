@@ -1,75 +1,104 @@
-/** @format */
-
-import React, { Component } from 'react';
-import { Divider, Tooltip } from 'antd';
-import { Form } from 'formsy-antd';
-import { observer, inject } from 'mobx-react';
-import PropTypes from 'prop-types';
-import isEmail from 'validator/lib/isEmail';
-import { withTranslation } from 'react-i18next';
-import moment from 'moment';
-import WarningModal from '../../profile/WarningModal';
-import { Button, OperationCompletedInfo, SearchBar } from '../../../partials';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useObserver } from 'mobx-react';
+import { Tabs } from 'antd';
+import { useStores } from '../../../stores/hooks';
+import EnvironmentDetailsHeader from '../EnvironmentDetailsHeader';
+import EnvironmentMembersList from '../EnvironmentMembersList';
+import AddMemberModal from '../modals/AddMemberModal';
+import RenameEnvModal from '../modals/RenameEnvModal';
+import WarningModal from '../modals/WarningModal';
+import { StyledTabs } from './styled';
+import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
   OTA_ENVIRONMENT_ADD_MEMBER,
-  OTA_ENVIRONMENT_REMOVE_MEMBER
+  OTA_ENVIRONMENT_REMOVE_MEMBER,
+  OTA_ENVIRONMENT_RENAME,
+  OTA_ENVIRONMENT_SWITCH
 } from '../../../constants/analyticsActions';
-import { OwnerTag, RemoveButton } from '../../profile/ProfileOrganization/styled';
-import { TRASHBIN_ICON } from '../../../config';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 
-@inject('stores')
-@observer
-class ProfileOrganization extends Component {
-  static propTypes = {
-    canEdit: PropTypes.bool.isRequired,
-    namespace: PropTypes.string.isRequired,
-    stores: PropTypes.shape({ userStore: PropTypes.shape({}).isRequired }).isRequired,
-    t: PropTypes.func.isRequired
+const MEMBERS_TAB_KEY = '1';
+
+function useStoreData() {
+  const { stores } = useStores();
+  return useObserver(() => ({
+    currentEnvironment: stores.userStore.currentOrganization,
+    environmentMembers: stores.userStore.userOrganizationUsers,
+    user: stores.userStore.user,
+  }));
+}
+
+const EnvironmentDetails = () => {
+  const { t } = useTranslation();
+  const { stores } = useStores();
+  const { currentEnvironment, environmentMembers, user } = useStoreData();
+  const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
+  const [renameEnvModalOpen, setRenameEnvModalOpen] = useState(false);
+  const [removalModal, setRemovalModal] = useState({
+    type: undefined
+  });
+  const { name, namespace } = currentEnvironment;
+
+
+  useEffect(() => () => {
+    stores.userStore.userOrganizationUsers = [];
+    stores.userStore.currentOrganization = {};
+    stores.userStore.showEnvDetails = false;
+  }, []);
+
+  const toggleAddMemberModal = () => {
+    setAddMemberModalOpen(!addMemberModalOpen);
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      removalModalOpenType: undefined,
-      memberAddedAt: undefined,
-      selectedUserEmail: '',
-      userEmail: '',
-      userEmailError: false,
-    };
-  }
+  const handleAddMember = (email) => {
+    stores.userStore.addUserToOrganization(email, namespace);
+    toggleAddMemberModal();
+    sendAction(OTA_ENVIRONMENT_ADD_MEMBER);
+  };
 
-  componentWillUnmount() {
-    const { stores } = this.props;
-    const { userStore } = stores;
-    userStore.showEnvDetails = false;
-    userStore.userOrganizationUsers = [];
-  }
+  const toggleRenameEnvModal = () => {
+    setRenameEnvModalOpen(!renameEnvModalOpen);
+  };
 
-  addRegisteredUser = (event) => {
-    event.preventDefault();
-    const { userEmail } = this.state;
-    if (isEmail(userEmail)) {
-      const { stores } = this.props;
-      const { userStore } = stores;
-      const { userOrganizationNamespace } = userStore;
-      userStore.addUserToOrganization(userEmail, userOrganizationNamespace).then(() => {
-        this.setState({ memberAddedAt: moment().format(), userEmail: '' });
-        sendAction(OTA_ENVIRONMENT_ADD_MEMBER);
-      });
+  const handleRenameEnvironment = (newName) => {
+    stores.userStore.editOrganizationName(newName, namespace);
+    toggleRenameEnvModal();
+    sendAction(OTA_ENVIRONMENT_RENAME);
+  };
+
+  const openRemovalModal = (email) => {
+    if (email) {
+      setRemovalModal({ type: REMOVAL_MODAL_TYPE.MEMBER_REMOVAL, selectedUserEmail: email });
     } else {
-      this.setState({ userEmailError: true });
+      setRemovalModal({ type: REMOVAL_MODAL_TYPE.SELF_REMOVAL });
     }
   };
 
-  populateRemovalModal = (t) => {
-    const { stores } = this.props;
-    const { userStore } = stores;
-    const { user } = userStore;
-    const { removalModalOpenType, selectedUserEmail } = this.state;
+  const closeRemovalModal = () => {
+    setRemovalModal({ type: undefined });
+  };
 
-    switch (removalModalOpenType) {
+  const setUserOrganization = (newNamespace) => {
+    changeUserEnvironment(newNamespace);
+    sendAction(OTA_ENVIRONMENT_SWITCH);
+  };
+
+  const handleMemberRemoval = (email) => {
+    if (user.email === email) {
+      stores.userStore.deleteMemberFromOrganization(email, false);
+      setUserOrganization(user.profile.defaultNamespace);
+    } else {
+      stores.userStore.deleteMemberFromOrganization(email, true);
+    }
+    closeRemovalModal();
+    sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
+  };
+
+  const populateRemovalModal = () => {
+    const { type, selectedUserEmail } = removalModal;
+    switch (type) {
       case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
         return {
           type: WARNING_MODAL_COLOR.DEFAULT,
@@ -80,9 +109,9 @@ class ProfileOrganization extends Component {
           },
           confirmButtonProps: {
             title: t('profile.organization.remove-modal.confirm.self'),
-            onClick: () => this.handleMemberRemoval(user.email),
+            onClick: () => handleMemberRemoval(user.email),
           },
-          onClose: this.closeRemovalModal,
+          onClose: closeRemovalModal,
         };
       default:
         return {
@@ -94,151 +123,43 @@ class ProfileOrganization extends Component {
           },
           confirmButtonProps: {
             title: t('profile.organization.remove-modal.confirm'),
-            onClick: () => this.handleMemberRemoval(selectedUserEmail),
+            onClick: () => handleMemberRemoval(selectedUserEmail),
           },
-          onClose: this.closeRemovalModal,
+          onClose: closeRemovalModal,
         };
     }
   };
 
-  userEmailChangeCallback = (value) => {
-    this.setState({ userEmail: value, userEmailError: false });
-  };
+  return (
+    <div>
+      <EnvironmentDetailsHeader
+        envInfo={currentEnvironment}
+        onAddMemberBtnClick={toggleAddMemberModal}
+        onRenameBtnClick={toggleRenameEnvModal}
+      />
+      <StyledTabs defaultActiveKey={MEMBERS_TAB_KEY} animated={false}>
+        <Tabs.TabPane key={MEMBERS_TAB_KEY} tab={t('profile.organization.members')}>
+          {environmentMembers.length > 0 && (
+            <EnvironmentMembersList
+              envInfo={currentEnvironment}
+              environmentMembers={environmentMembers}
+              onRemoveBtnClick={openRemovalModal}
+              user={user}
+            />
+          )}
+        </Tabs.TabPane>
+      </StyledTabs>
+      {addMemberModalOpen && (
+        <AddMemberModal onClose={toggleAddMemberModal} onConfirm={handleAddMember} />
+      )}
+      {renameEnvModalOpen && (
+        <RenameEnvModal currentName={name} onClose={toggleRenameEnvModal} onConfirm={handleRenameEnvironment} />
+      )}
+      {removalModal.type && (
+        <WarningModal {...populateRemovalModal()} />
+      )}
+    </div>
+  );
+};
 
-  openRemovalModal = (email) => {
-    this.setState({ removalModalOpenType: REMOVAL_MODAL_TYPE.MEMBER_REMOVAL, selectedUserEmail: email });
-  };
-
-  openSelfRemovalModal = () => {
-    this.setState({ removalModalOpenType: REMOVAL_MODAL_TYPE.SELF_REMOVAL });
-  };
-
-  closeRemovalModal = () => {
-    this.setState({ removalModalOpenType: undefined });
-  };
-
-  handleMemberRemoval = (email) => {
-    const { stores } = this.props;
-    const { userStore } = stores;
-    const { user, userOrganizationNamespace } = userStore;
-    sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
-    if (user.email === email) {
-      userStore.deleteMemberFromOrganization(email, true);
-      this.setUserOrganization(user.profile.defaultNamespace);
-    } else {
-      userStore.deleteMemberFromOrganization(email, true, userOrganizationNamespace);
-    }
-    this.closeRemovalModal();
-  };
-
-  render() {
-    const {
-      memberAddedAt,
-      removalModalOpenType,
-      userEmail,
-      userEmailError
-    } = this.state;
-    const { canEdit, stores, t } = this.props;
-    const { userStore } = stores;
-    const { currentOrganization, user } = userStore;
-    const { isInitial } = currentOrganization;
-    const organizationUsers = userStore.userOrganizationUsers;
-    const envOwnerEmail = Object.keys(currentOrganization).length && currentOrganization.creatorEmail;
-
-    return (
-      <div id="page-profile">
-        <div
-          className="profile-container"
-          id="profile-organization"
-          style={{ minHeight: 'calc(100vh - 130px)', width: '100vw' }}
-        >
-          <>
-            <span>
-              <span>
-                <div className="section-header adding-user">
-                  <div className="column name-header">{t('profile.organization.members')}</div>
-                </div>
-                {canEdit && (
-                  <>
-                    <div className="anim-info-container member-adding">
-                      <OperationCompletedInfo
-                        info={t('profile.organization.member-added')}
-                        trigger={
-                        { createdAt: memberAddedAt }
-                      }
-                      />
-                    </div>
-                    <div className="description">
-                      {t('profile.organization.members-description')}
-                    </div>
-                    <div className="adding-user-content">
-                      <Form className="adding-user-form" id="add-registered-user-form">
-                        <SearchBar
-                          additionalClassName={`white ${userEmailError ? 'error-border' : 'dark-border'}`}
-                          changeAction={this.userEmailChangeCallback}
-                          id="add-registered-user-search-bar"
-                          placeholder={t('profile.organization.add-registered-members-placeholder')}
-                          value={userEmail}
-                        />
-                      </Form>
-                      <Button
-                        className="float-left"
-                        htmlType="button"
-                        type="primary"
-                        light="true"
-                        id="button-add-registered-user"
-                        onClick={this.addRegisteredUser}
-                      >
-                        {t('profile.organization.add-registered-members')}
-                      </Button>
-                    </div>
-                    <Divider type="horizontal" />
-                  </>
-                )}
-              </span>
-              <span>
-                <div className={canEdit ? 'email-list' : ''}>
-                  {organizationUsers.map(({ email }, index) => (
-                    <div className="organization-info organization-info--space-between" key={`organization-info-user-${index}`}>
-                      <div className="column name" id={email}>
-                        {email}
-                        {canEdit && email === envOwnerEmail && (isInitial
-                          ? (
-                            <Tooltip placement="right" title={t('profile.organization.owner-tooltip')}>
-                              <OwnerTag>{t('profile.organization.owner')}</OwnerTag>
-                            </Tooltip>
-                          )
-                          : (
-                            <Tooltip placement="right" title={t('profile.organization.creator-tooltip')}>
-                              <OwnerTag>{t('profile.organization.creator')}</OwnerTag>
-                            </Tooltip>
-                          ))}
-                      </div>
-                      {canEdit && ((envOwnerEmail && email !== envOwnerEmail) || !isInitial) && (
-                        <RemoveButton
-                          id={`${email}-remove-btn`}
-                          onClick={() => email === user.email
-                            ? this.openSelfRemovalModal()
-                            : this.openRemovalModal(email)
-                          }
-                        >
-                          <img src={TRASHBIN_ICON} />
-                          <span>{t('profile.organization.members.remove')}</span>
-                        </RemoveButton>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </span>
-            </span>
-            {removalModalOpenType && (
-              <WarningModal {...this.populateRemovalModal(t)} />
-            )}
-          </>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default withTranslation()(ProfileOrganization);
+export default EnvironmentDetails;

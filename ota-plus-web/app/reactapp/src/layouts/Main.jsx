@@ -125,7 +125,6 @@ class Main extends Component {
         history.push(DASHBOARD_PATH.NEW);
       }
       userStore.getOrganizations();
-      userStore.getCurrentOrganization();
       userStore.fetchContracts();
     }
     moment.locale(getMomentLocale(getLanguage()));

@@ -8,6 +8,8 @@ import _ from 'lodash';
 
 import {
   API_NAMESPACE_SETUP_STEPS,
+  API_ORGANIZATIONS,
+  API_ORGANIZATIONS_USERS,
   API_USER_DETAILS,
   API_USER_UPDATE,
   API_USER_CHANGE_PASSWORD,
@@ -16,11 +18,8 @@ import {
   API_USER_CONTRACTS,
   API_USER_DEFAULT_ORGANIZATION,
   API_USER_ORGANIZATIONS,
-  API_USER_ORGANIZATIONS_ADD_USER,
   API_USER_ORGANIZATIONS_GET_USERS,
-  API_USER_ORGANIZATION_EDIT,
   ORGANIZATION_NAMESPACE_COOKIE,
-  API_USER_ORGANIZATION_DELETE_MEMBER,
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -110,11 +109,11 @@ export default class UserStore {
     }
   };
 
-  deleteMemberFromOrganization = async (email, refetchMembers, namespace) => {
+  deleteMemberFromOrganization = async (email, refetchMembers, namespace = this.currentOrganization.namespace) => {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);
     try {
       const encodedEmail = encodeURIComponent(email);
-      const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${encodedEmail}`);
+      const response = await axios.delete(`${API_ORGANIZATIONS_USERS(namespace)}?email=${encodedEmail}`);
       this.getOrganizations();
       this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);
       if (refetchMembers) {
@@ -125,22 +124,23 @@ export default class UserStore {
     }
   }
 
-  editOrganizationName = async (name) => {
+  editOrganizationName = async (name, namespace) => {
     resetAsync(this.editOrganizationNameAsync, true);
     try {
-      const url = API_USER_ORGANIZATION_EDIT;
+      const url = `${API_ORGANIZATIONS}/${namespace}`;
       const response = await axios.patch(url, { name });
       this.editOrganizationNameAsync = handleAsyncSuccess(response);
+      this.getOrganization(namespace);
       this.getOrganizations();
     } catch (error) {
       this.editOrganizationNameAsync = handleAsyncError(error);
     }
   };
 
-  getCurrentOrganization = async () => {
+  getOrganization = async (namespace = this.userOrganizationNamespace) => {
     resetAsync(this.getCurrentOrganizationAsync, true);
     try {
-      const response = await axios.get(API_USER_ORGANIZATION_EDIT);
+      const response = await axios.get(`${API_ORGANIZATIONS}/${namespace}`);
       const { data } = response;
       this.currentOrganization = data;
       this.getCurrentOrganizationAsync = handleAsyncSuccess(response);
@@ -173,7 +173,7 @@ export default class UserStore {
     }
   };
 
-  getOrganizationUsers = async (namespace = this.currentOrganization.namespace) => {
+  getOrganizationUsers = async (namespace = this.userOrganizationNamespace) => {
     resetAsync(this.getOrganizationUsersAsync, true);
     try {
       const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS(namespace));
@@ -187,7 +187,7 @@ export default class UserStore {
 
   addUserToOrganization = (email, namespace) => {
     resetAsync(this.addUserToOrganizationAsync, true);
-    return axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email })
+    return axios.post(API_ORGANIZATIONS_USERS(namespace), { email })
       .then((response) => {
         this.getOrganizationUsers(namespace);
         this.getOrganizations();

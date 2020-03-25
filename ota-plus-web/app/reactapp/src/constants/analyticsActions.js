@@ -82,6 +82,7 @@ export const OTA_ENVIRONMENT_CREATE_ENV = 'OTA_Environment_Create_Env';
 export const OTA_ENVIRONMENT_DETAILS = 'OTA_Environment_Details';
 export const OTA_ENVIRONMENT_REACH_MAX_ENV = 'OTA_Environment_Reach_Max_Env';
 export const OTA_ENVIRONMENT_REMOVE_MEMBER = 'OTA_Environment_Remove_Member';
+export const OTA_ENVIRONMENT_RENAME = 'OTA_Environment_Rename';
 export const OTA_PROVISIONING_CREATE_SHARED_CREDENTIALS = 'OTA_Provisioning_Create_Shared_Credentials';
 
 /* Footer */

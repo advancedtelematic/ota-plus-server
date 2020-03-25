@@ -42,7 +42,6 @@ describe('<Environments />', () => {
   let wrapper;
 
   const mockCreateEnv = jest.fn();
-  const mockGetCurrentOrganization = jest.fn();
   const mockGetOrganizations = jest.fn();
   const mockGetOrganizationUsers = jest.fn();
 
@@ -53,7 +52,6 @@ describe('<Environments />', () => {
     mockedStores.userStore.user.profile = USER_PROFILE;
     mockedStores.userStore.showEnvDetails = false;
     mockedStores.userStore.createEnvironment = mockCreateEnv;
-    mockedStores.userStore.getCurrentOrganization = mockGetCurrentOrganization;
     mockedStores.userStore.getOrganizations = mockGetOrganizations;
     mockedStores.userStore.getOrganizationUsers = mockGetOrganizationUsers;
     wrapper = mountComponent();
@@ -68,7 +66,6 @@ describe('<Environments />', () => {
   });
 
   it('should fetch organizations info on mount', () => {
-    expect(mockGetCurrentOrganization).toHaveBeenCalled();
     expect(mockGetOrganizations).toHaveBeenCalled();
   });
 

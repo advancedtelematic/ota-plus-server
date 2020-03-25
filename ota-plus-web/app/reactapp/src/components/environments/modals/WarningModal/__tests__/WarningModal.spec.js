@@ -2,8 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import WarningModal from '..';
 import { ThemeProvider } from 'styled-components';
-import theme from '../../../../theme';
-import { WARNING_MODAL_COLOR } from '../../../../constants';
+import theme from '../../../../../theme';
+import { WARNING_MODAL_COLOR } from '../../../../../constants';
 
 function mountComponent(props) {
   return mount(

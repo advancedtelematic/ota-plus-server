@@ -5,8 +5,8 @@ import { useStores } from '../../stores/hooks';
 import EnvironmentsHeader from '../../components/environments/EnvironmentsHeader';
 import EnvironmentsList from '../../components/environments/EnvironmentsList';
 import EnvironmentDetails from '../../components/environments/EnvironmentDetails';
-import CreateEnvModal from '../../components/profile/CreateEnvModal';
-import WarningModal from '../../components/profile/WarningModal';
+import CreateEnvModal from '../../components/environments/modals/CreateEnvModal';
+import WarningModal from '../../components/environments/modals/WarningModal';
 import { EnvListWrapper } from './styled';
 import { MetaData } from '../../utils';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
@@ -21,8 +21,6 @@ import { WARNING_MODAL_COLOR } from '../../constants';
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
-    canEditEnv: stores.userStore.canEditEnv,
-    currentEnvNamespace: stores.userStore.userOrganizationNamespace,
     environments: stores.userStore.userOrganizations,
     maxEnvReached: stores.userStore.maxEnvReached,
     profile: stores.userStore.user.profile,
@@ -33,9 +31,8 @@ function useStoreData() {
 const Environments = () => {
   const { t } = useTranslation();
   const { stores } = useStores();
-  const { canEditEnv, currentEnvNamespace, environments, maxEnvReached, profile, showEnvDetails } = useStoreData();
+  const { environments, maxEnvReached, profile, showEnvDetails } = useStoreData();
   const [createEnvModalOpen, setCreateEnvModalOpen] = useState(false);
-  const [selectedEnvNamespace, setSelectedEnvNamespace] = useState('');
 
   useEffect(() => {
     stores.userStore.getOrganizations();
@@ -61,8 +58,7 @@ const Environments = () => {
 
   const handleShowEnvDetails = (namespace) => {
     stores.userStore.getOrganizationUsers(namespace);
-    stores.userStore.canEditEnv = namespace === currentEnvNamespace;
-    setSelectedEnvNamespace(namespace);
+    stores.userStore.getOrganization(namespace);
     stores.userStore.showEnvDetails = true;
     sendAction(OTA_ENVIRONMENT_DETAILS);
   };
@@ -72,12 +68,7 @@ const Environments = () => {
   return (
     <MetaData title={t('profile.organization.title')}>
       {showEnvDetails
-        ? (
-          <EnvironmentDetails
-            canEdit={canEditEnv}
-            namespace={selectedEnvNamespace}
-          />
-        )
+        ? <EnvironmentDetails />
         : (
           <div>
             <EnvironmentsHeader

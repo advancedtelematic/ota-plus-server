@@ -10,11 +10,11 @@ import {
   InputLabel,
   ModalContainer,
   StyledButton,
-  Subtitle,
   Title
-} from './styled';
-import { CLOSE_MODAL_ICON } from '../../../config';
-import { ENVIRONMENT_NAME_REGEX } from '../../../constants/regexPatterns';
+} from '../sharedStyled';
+import { Subtitle } from './styled';
+import { CLOSE_MODAL_ICON } from '../../../../config';
+import { ENVIRONMENT_NAME_REGEX } from '../../../../constants/regexPatterns';
 
 const MAX_ENV_LENGTH = 30;
 const noError = { isError: false, msg: '' };
