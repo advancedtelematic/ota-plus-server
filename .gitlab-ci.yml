@@ -2,10 +2,10 @@ stages:
   - prepare
   - test
   - build image
+  - publish-docs-if-changed
   - trigger deploy
   - update deployment
   - integration test
-  - publish-docs-if-changed
   - veracode scan
   - deps scan
   - generate pages
