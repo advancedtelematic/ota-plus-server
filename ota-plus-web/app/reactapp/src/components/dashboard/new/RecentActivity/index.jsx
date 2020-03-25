@@ -60,8 +60,8 @@ const filterMenu = (t, menuItemsSelected, handleMenuChange) => (
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
-    devicesTotalCount: stores.devicesStore.devicesTotalCount,
     isFetching: stores.recentlyCreatedStore.recentlyCreatedFetchAsync.isFetching,
+    itemsTotalCount: stores.devicesStore.devicesTotalCount + stores.softwareStore.versionsTotal,
     recentlyCreatedItems: stores.recentlyCreatedStore.recentlyCreatedItems
   }));
 }
@@ -70,7 +70,7 @@ const RecentActivity = () => {
   const [menuItemsSelected, setMenuItemsSelected] = useState(MENU_ITEMS.map(() => true));
   const [menuSelectedLength, setMenuSelectedLength] = useState(MENU_ITEMS.length);
   const [filterMenuVisible, setFilterMenuVisible] = useState(false);
-  const { devicesTotalCount, isFetching, recentlyCreatedItems } = useStoreData();
+  const { isFetching, itemsTotalCount, recentlyCreatedItems } = useStoreData();
   const { t } = useTranslation();
   const { stores } = useStores();
   const handleMenuChange = (event) => {
@@ -94,7 +94,7 @@ const RecentActivity = () => {
     <RecentActivityWrapper id="recent-activity-wrapper" empty={recentlyCreatedItems.length === 0}>
       <TopContainer id="recent-activity-top-container">
         <Title id="docs-links-title">{t('dashboard.recent-activity.title')}</Title>
-        {devicesTotalCount > 0 && (
+        {itemsTotalCount > 0 && (
           <RightContainer>
             <FilterTitle id="recent-activity-filter-title">
               {t('dashboard.recent-activity.filter-menu.title')}
@@ -115,7 +115,7 @@ const RecentActivity = () => {
           </RightContainer>
         )}
       </TopContainer>
-      { recentlyCreatedItems.length && devicesTotalCount > 0 && !isFetching ? (
+      { recentlyCreatedItems.length && itemsTotalCount > 0 && !isFetching ? (
         <ListStyled
           id="recent-activity-list"
           dataSource={recentlyCreatedItems}
@@ -142,7 +142,7 @@ const RecentActivity = () => {
               <div>
                 <ListNoDataIcon src={NO_ITEMS_ICON} />
                 <ListNoDataDescription id="recent-activity-no-data-description">
-                  { devicesTotalCount === 0
+                  { itemsTotalCount === 0
                     ? t('dashboard.recent-activity.no-data.nothing-created')
                     : t('dashboard.recent-activity.no-data.empty')
                   }
