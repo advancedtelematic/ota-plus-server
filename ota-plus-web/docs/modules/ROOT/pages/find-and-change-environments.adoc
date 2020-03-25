@@ -1,10 +1,5 @@
 = Find and change environments
 
-[NOTE]
-====
-This feature is in beta and is only visible to users who are part of our beta program. If you would like to join the beta program, contact us at link:mailto:otaconnect.support@here.com[otaconnect.support@here.com] to request access.
-====
-
 You can share your environment with your colleagues and become a member of other environments.
 
 *To find the list of environments to which you have access and switch between them:*

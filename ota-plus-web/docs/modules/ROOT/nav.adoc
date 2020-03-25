@@ -34,7 +34,7 @@
 // TODO * xref:retry-campaigns.adoc[Retry failed installations]
 // TODO * xref:manage-campaigns.adoc[Manage campaigns]
 
-.Environments image:img::beta-icon.svg[Beta]
+.Environments
 * xref:environments-intro.adoc[What is an environment?]
 * xref:find-and-change-environments.adoc[Find and change environments]
 * xref:create-environment.adoc[Create an environment]
