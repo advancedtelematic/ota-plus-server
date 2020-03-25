@@ -44,6 +44,8 @@ export default class UserStore {
 
   @observable maxEnvReached = false;
 
+  @observable showEnvDetails = false;
+
   @observable userUpdateAsync = {};
 
   @observable userChangePasswordAsync = {};
@@ -106,14 +108,14 @@ export default class UserStore {
     }
   };
 
-  deleteMemberFromOrganization = async (email, refetchMembers) => {
+  deleteMemberFromOrganization = async (email, refetchMembers, namespace) => {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);
     try {
       const encodedEmail = encodeURIComponent(email);
       const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${encodedEmail}`);
       this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);
       if (refetchMembers) {
-        this.getOrganizationUsers();
+        this.getOrganizationUsers(namespace);
       }
     } catch (error) {
       this.deleteMemberFromOrganizationAsync = handleAsyncError(error);
@@ -168,10 +170,10 @@ export default class UserStore {
     }
   };
 
-  getOrganizationUsers = async () => {
+  getOrganizationUsers = async (namespace) => {
     resetAsync(this.getOrganizationUsersAsync, true);
     try {
-      const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS);
+      const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS(namespace));
       const { data } = response;
       this.userOrganizationUsers = data;
       this.getOrganizationUsersAsync = handleAsyncSuccess(response);
@@ -180,11 +182,11 @@ export default class UserStore {
     }
   };
 
-  addUserToOrganization = (email) => {
+  addUserToOrganization = (email, namespace) => {
     resetAsync(this.addUserToOrganizationAsync, true);
     return axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email })
       .then((response) => {
-        this.getOrganizationUsers();
+        this.getOrganizationUsers(namespace);
         this.addUserToOrganizationAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {

@@ -12,9 +12,9 @@ const styleVariants = () => ({
     marginBottom: '20px'
   },
   large: {
-    fontSize: '2.29em',
-    lineHeight: '40px',
-    marginBottom: '22px'
+    fontSize: '32px',
+    lineHeight: '42px',
+    marginBottom: 0
   }
 });
 

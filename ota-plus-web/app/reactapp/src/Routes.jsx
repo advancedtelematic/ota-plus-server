@@ -7,6 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import {
   DevicesPage,
   DevicePage,
+  EnvironmentsPage,
   SoftwareRepositoryPage,
   UpdatesPage,
   CampaignsPage,
@@ -18,7 +19,7 @@ import {
   TermsAndConditions,
   HomePage,
 } from './pages';
-import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys, ProfileOrganization } from './components/profile';
+import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './components/profile';
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
@@ -53,6 +54,7 @@ const Routes = ({
     <Route path="/impact-analysis" component={ImpactAnalysisPage} />
     <Route path="/software-repository-alpha" component={SoftwareRepositoryAlpha} />
     <Route path="/policy" component={TermsAndConditions} />
+    <Route path="/environments" component={EnvironmentsPage} />
     <Route
       path="/profile"
       render={props => (
@@ -64,7 +66,6 @@ const Routes = ({
         >
           <Switch>
             <Route path="/profile/edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-            <Route path="/profile/environments" component={ProfileOrganization} />
             <Route path="/profile/usage" component={ProfileUsage} />
             <Route
               path="/profile/access-keys"

@@ -26,19 +26,6 @@ class Header extends Component {
           </NavLink>
         )}
         <NavLink
-          to="/profile/environments"
-          activeClassName="profile-nav__list-item--active"
-          className="profile-nav__list-item"
-          id="organization-link"
-        >
-          <div>
-            <span>
-              Environments
-            </span>
-            <span className="profile-nav__bottom-line" />
-          </div>
-        </NavLink>
-        <NavLink
           to="/profile/usage"
           activeClassName="profile-nav__list-item--active"
           className="profile-nav__list-item"
