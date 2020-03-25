@@ -42,7 +42,7 @@ class UpdatesWizardDetailListItem extends Component {
     });
     const formattedData = versions
       && versions.map(version => ({
-        text: `${t('updates.creating.wizard.version.created', version.id.version, getFormattedDateTime(version.createdAt, SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT))}`,
+        text: `${t('updates.creating.wizard.version.created', { version: version.id.version, date: getFormattedDateTime(version.createdAt, SOFTWARE_UPDATE_VERSIONS_DATE_FORMAT) })}`,
         id: version.id.version,
         value: version.filepath,
         version,
