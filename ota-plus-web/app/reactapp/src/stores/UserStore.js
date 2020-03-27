@@ -113,6 +113,7 @@ export default class UserStore {
     try {
       const encodedEmail = encodeURIComponent(email);
       const response = await axios.delete(`${API_USER_ORGANIZATION_DELETE_MEMBER}?email=${encodedEmail}`);
+      this.getOrganizations();
       this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);
       if (refetchMembers) {
         this.getOrganizationUsers(namespace);
@@ -187,6 +188,7 @@ export default class UserStore {
     return axios.post(API_USER_ORGANIZATIONS_ADD_USER, { email })
       .then((response) => {
         this.getOrganizationUsers(namespace);
+        this.getOrganizations();
         this.addUserToOrganizationAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
