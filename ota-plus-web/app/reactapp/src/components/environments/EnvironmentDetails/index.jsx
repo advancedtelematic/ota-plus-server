@@ -199,7 +199,7 @@ class ProfileOrganization extends Component {
                 <div className={canEdit ? 'email-list' : ''}>
                   {organizationUsers.map(({ email }, index) => (
                     <div className="organization-info organization-info--space-between" key={`organization-info-user-${index}`}>
-                      <div className="column name" id="organization-name">
+                      <div className="column name" id={email}>
                         {email}
                         {canEdit && email === envOwnerEmail && (isHomeEnv
                           ? (
@@ -215,7 +215,7 @@ class ProfileOrganization extends Component {
                       </div>
                       {canEdit && ((envOwnerEmail && email !== envOwnerEmail) || !isHomeEnv) && (
                         <RemoveButton
-                          id="organization-remove-btn"
+                          id={`${email}-remove-btn`}
                           onClick={() => email === user.email
                             ? this.openSelfRemovalModal()
                             : this.openRemovalModal(email)
