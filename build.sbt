@@ -98,6 +98,7 @@ lazy val routesSettings = {
       "com.advancedtelematic.controllers.PathBinders._",
       "com.advancedtelematic.controllers.FeatureName",
       "java.util.UUID",
+      "com.advancedtelematic.libats.data.DataType.Namespace",
       "com.advancedtelematic.libtuf.data.TufDataType.KeyType",
       "com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType"
     ),

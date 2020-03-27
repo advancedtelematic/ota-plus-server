@@ -46,11 +46,15 @@ GET     /user/*path                       com.advancedtelematic.controllers.User
 POST    /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 
-# Namespaces AKA organizations
+# Namespaces AKA organizations AKA environments
 GET     /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
-PATCH   /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
+GET     /organizations/:namespace         com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path="", namespace: Namespace)
 GET     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
+GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: Namespace)
+GET     /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
+PATCH   /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
+PATCH   /organizations/:namespace         com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path="", namespace: Namespace)
 POST    /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
+POST    /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
 DELETE  /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
-GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
-GET     /organizations/:namespace/tentative_users   com.advancedtelematic.controllers.OrganizationController.getOrganizationTentativeUsers(namespace: com.advancedtelematic.libats.data.DataType.Namespace)
+DELETE  /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
