@@ -3,7 +3,7 @@ package com.advancedtelematic.controllers
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.auth.{PlainAction, SessionCodecs}
+import com.advancedtelematic.auth.{AuthorizedSessionRequest, PlainAction, SessionCodecs}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
@@ -11,7 +11,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.api.{Configuration, Logger}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class OrganizationController @Inject()(val conf: Configuration,
@@ -49,18 +49,20 @@ class OrganizationController @Inject()(val conf: Configuration,
       }
     }
 
-  def getOrganizationTentativeUsers(namespace: Namespace): Action[AnyContent] = authAction.async { implicit request =>
-    userProfileApi.organizationRequest(namespace, request.idToken.userId, "GET", "tentative_users", Map.empty, None)
-  }
-
-  def proxyRequest(path: String): Action[AnyContent] = authAction.async { implicit request =>
+  private def buildOrganizationRequest(path: String, namespace: Namespace)
+                                      (implicit request: AuthorizedSessionRequest[AnyContent]): Future[Result] =
     userProfileApi.organizationRequest(
-      request.namespace,
+      namespace,
       request.idToken.userId,
       request.method,
       path,
       request.queryString.mapValues(_.mkString(",")),
       request.body.asJson
     )
-  }
+
+  def proxyRequest(path: String): Action[AnyContent] =
+    authAction.async(implicit request => buildOrganizationRequest(path, request.namespace))
+
+  def proxyRequestForNs(path: String, namespace: Namespace): Action[AnyContent] =
+    authAction.async(implicit request => buildOrganizationRequest(path, namespace))
 }
