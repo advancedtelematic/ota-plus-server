@@ -36,6 +36,8 @@ import { DEVICE_ACTIVATED_DATE_DATA_FORMAT, USAGE_DATE_DATA_FORMAT } from '../co
 export default class UserStore {
   @observable userFetchAsync = {};
 
+  @observable canEditEnv = false;
+
   @observable contractsFetchAsync = {};
 
   @observable contractsAcceptAsync = {};
@@ -171,7 +173,7 @@ export default class UserStore {
     }
   };
 
-  getOrganizationUsers = async (namespace) => {
+  getOrganizationUsers = async (namespace = this.currentOrganization.namespace) => {
     resetAsync(this.getOrganizationUsersAsync, true);
     try {
       const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS(namespace));
