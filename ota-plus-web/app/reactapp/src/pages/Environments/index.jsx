@@ -21,6 +21,7 @@ import { WARNING_MODAL_COLOR } from '../../constants';
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
+    canEditEnv: stores.userStore.canEditEnv,
     currentEnvNamespace: stores.userStore.userOrganizationNamespace,
     environments: stores.userStore.userOrganizations,
     maxEnvReached: stores.userStore.maxEnvReached,
@@ -32,13 +33,12 @@ function useStoreData() {
 const Environments = () => {
   const { t } = useTranslation();
   const { stores } = useStores();
-  const { currentEnvNamespace, environments, maxEnvReached, profile, showEnvDetails } = useStoreData();
+  const { canEditEnv, currentEnvNamespace, environments, maxEnvReached, profile, showEnvDetails } = useStoreData();
   const [createEnvModalOpen, setCreateEnvModalOpen] = useState(false);
   const [selectedEnvNamespace, setSelectedEnvNamespace] = useState('');
 
   useEffect(() => {
     stores.userStore.getOrganizations();
-    stores.userStore.getCurrentOrganization();
     setAnalyticsView(ANALYTICS_VIEW_ENVIRONMENTS);
   }, []);
 
@@ -61,6 +61,7 @@ const Environments = () => {
 
   const handleShowEnvDetails = (namespace) => {
     stores.userStore.getOrganizationUsers(namespace);
+    stores.userStore.canEditEnv = namespace === currentEnvNamespace;
     setSelectedEnvNamespace(namespace);
     stores.userStore.showEnvDetails = true;
     sendAction(OTA_ENVIRONMENT_DETAILS);
@@ -73,7 +74,7 @@ const Environments = () => {
       {showEnvDetails
         ? (
           <EnvironmentDetails
-            canEdit={currentEnvNamespace === selectedEnvNamespace}
+            canEdit={canEditEnv}
             namespace={selectedEnvNamespace}
           />
         )

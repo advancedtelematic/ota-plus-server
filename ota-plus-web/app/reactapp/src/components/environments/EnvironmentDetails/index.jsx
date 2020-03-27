@@ -43,6 +43,7 @@ class ProfileOrganization extends Component {
   componentWillUnmount() {
     const { stores } = this.props;
     const { userStore } = stores;
+    userStore.showEnvDetails = false;
     userStore.userOrganizationUsers = [];
   }
 
