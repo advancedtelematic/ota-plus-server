@@ -138,12 +138,12 @@ class ProfileOrganization extends Component {
       userEmail,
       userEmailError
     } = this.state;
-    const { canEdit, namespace, stores, t } = this.props;
+    const { canEdit, stores, t } = this.props;
     const { userStore } = stores;
     const { currentOrganization, user } = userStore;
+    const { isInitial } = currentOrganization;
     const organizationUsers = userStore.userOrganizationUsers;
     const envOwnerEmail = Object.keys(currentOrganization).length && currentOrganization.creatorEmail;
-    const isHomeEnv = namespace === user.profile.initialNamespace;
 
     return (
       <div id="page-profile">
@@ -202,7 +202,7 @@ class ProfileOrganization extends Component {
                     <div className="organization-info organization-info--space-between" key={`organization-info-user-${index}`}>
                       <div className="column name" id={email}>
                         {email}
-                        {canEdit && email === envOwnerEmail && (isHomeEnv
+                        {canEdit && email === envOwnerEmail && (isInitial
                           ? (
                             <Tooltip placement="right" title={t('profile.organization.owner-tooltip')}>
                               <OwnerTag>{t('profile.organization.owner')}</OwnerTag>
@@ -214,7 +214,7 @@ class ProfileOrganization extends Component {
                             </Tooltip>
                           ))}
                       </div>
-                      {canEdit && ((envOwnerEmail && email !== envOwnerEmail) || !isHomeEnv) && (
+                      {canEdit && ((envOwnerEmail && email !== envOwnerEmail) || !isInitial) && (
                         <RemoveButton
                           id={`${email}-remove-btn`}
                           onClick={() => email === user.email
