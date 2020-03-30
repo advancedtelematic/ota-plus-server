@@ -386,7 +386,7 @@
     "profile.organization.remove-modal.title": "Remove member?",
     "profile.organization.remove-modal.title.self": "Leave environment?",
     "profile.organization.rename": "Rename environment",
-    "profile.organization.title": "Environment",
+    "profile.organization.title": "Environments",
     "profile.provisioning_keys.add_key": "Add key",
     "profile.provisioning_keys.no_keys_button_title": "What is this?",
     "profile.provisioning_keys.no_keys_description": "There aren't any keys yet. Try creating your first key. If this is a new account, it may take some time to generate the keys for your repository.",
