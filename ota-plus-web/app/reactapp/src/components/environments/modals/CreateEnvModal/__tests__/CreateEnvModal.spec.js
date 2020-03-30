@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import CreateEnvModal from '..';
 import { ThemeProvider } from 'styled-components';
-import theme from '../../../../theme';
+import theme from '../../../../../theme';
 
 function mountComponent(props) {
   return mount(

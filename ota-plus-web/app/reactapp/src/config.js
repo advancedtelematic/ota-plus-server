@@ -21,6 +21,8 @@ export const API_RECENTLY_CREATED = '/recently_created?types=$types&limit=10';
 /*
  *  User
  */
+export const API_ORGANIZATIONS = '/organizations';
+export const API_ORGANIZATIONS_USERS = namespace => `/organizations/${namespace}/users`;
 export const API_USER_DETAILS = '/user/profile';
 export const API_USER_CONTRACTS = '/user/contracts';
 export const API_USER_UPDATE = '/user/profile';
@@ -30,10 +32,8 @@ export const API_USER_DEVICES_SEEN = '/api/v1/auditor/devices_seen_in';
 export const API_USER_DEFAULT_ORGANIZATION = '/user/organizations/default';
 export const API_USER_ORGANIZATIONS = '/user/organizations';
 export const API_USER_ORGANIZATIONS_SWITCH_NAMESPACE = '/organizations/$namespace/index';
-export const API_USER_ORGANIZATIONS_ADD_USER = '/organization/users';
 export const API_USER_ORGANIZATIONS_GET_USERS = namespace => `/organizations/${namespace}/tentative_users`;
 export const API_USER_ORGANIZATION_DELETE_MEMBER = '/organization/users';
-export const API_USER_ORGANIZATION_EDIT = '/organization';
 
 /*
  *  Features

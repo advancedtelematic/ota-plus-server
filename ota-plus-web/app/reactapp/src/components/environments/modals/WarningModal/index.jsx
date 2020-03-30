@@ -10,12 +10,12 @@ import {
   Title,
   TopBar
 } from './styled';
-import { WARNING_MODAL_COLOR } from '../../../constants';
+import { WARNING_MODAL_COLOR } from '../../../../constants';
 
 const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps, onClose }) => (
   <>
     <BackgroundMask onClick={onClose} />
-    <ModalContainer>
+    <ModalContainer id="warning-modal">
       <TopBar colorTheme={type} />
       <Title>{title}</Title>
       <Description>{desc}</Description>

@@ -14,8 +14,7 @@ const BuildTeam = () => {
 
   const handleAddMemberClick = () => {
     stores.userStore.getOrganizationUsers();
-    stores.userStore.getCurrentOrganization();
-    stores.userStore.canEditEnv = true;
+    stores.userStore.getOrganization();
     stores.userStore.showEnvDetails = true;
     sendAction(OTA_HOME_ADD_MEMBERS);
   };
