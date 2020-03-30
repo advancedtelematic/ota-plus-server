@@ -26,11 +26,11 @@ const EnvironmentDetailsHeader = ({
             <>
               <Title>{name}</Title>
               <TextsWrapper>
-                <Prefix>{t('profile.organization.details.by')}</Prefix>
+                <Prefix>{t('profile.organization.details.id')}</Prefix>
                 <div>{namespace}</div>
                 <Prefix>{t('profile.organization.details.created')}</Prefix>
                 <div>{getFormattedDateTime(createdAt, RECENTLY_CREATED_DATE_FORMAT)}</div>
-                <Prefix>{t('profile.organization.details.id')}</Prefix>
+                <Prefix>{t('profile.organization.details.by')}</Prefix>
                 <div>{creatorEmail}</div>
               </TextsWrapper>
             </>
