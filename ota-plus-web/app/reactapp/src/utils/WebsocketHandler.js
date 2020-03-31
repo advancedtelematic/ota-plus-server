@@ -26,6 +26,7 @@ const WebsocketHandler = function (wsUrl, stores) {
           const { campaignsStore, devicesStore, groupsStore, softwareStore } = stores;
           const { type: groupType, groupName } = groupsStore.selectedGroup;
           const isDDVOpen = window.location.href.indexOf('/device/') > -1;
+          const isCampaignsViewOpen = window.location.href.indexOf('/campaigns/') > -1;
           console.log(`WebSocket message (${type}) data: ${JSON.stringify(data)}`);
           switch (type) {
             case WEB_EVENTS.DEVICE_SEEN:
@@ -75,8 +76,8 @@ const WebsocketHandler = function (wsUrl, stores) {
                   softwareStore.fetchOndevicePackages(data.device, null);
                 }
               }
-              if (data.status === UPDATE_STATUSES.FINISHED) {
-                if (campaignsStore.campaign) {
+              if (isCampaignsViewOpen && data.status === UPDATE_STATUSES.FINISHED) {
+                if (campaignsStore.campaign && _.isString(campaignsStore.campaign.id)) {
                   campaignsStore.fetchCampaign(campaignsStore.campaign.id);
                 }
                 campaignsStore.fetchCampaigns(campaignsStore.activeTab);
@@ -90,7 +91,7 @@ const WebsocketHandler = function (wsUrl, stores) {
             case WEB_EVENTS.DEVICE_EVENT_MESSAGE:
               if (_.isString(data.deviceUuid)) {
                 devicesStore.updateStatus(data.deviceUuid, UPDATE_STATUSES.INSTALLING);
-                if ((isDDVOpen && devicesStore.device.uuid === data.deviceUuid) || !isDDVOpen) {
+                if (isDDVOpen && devicesStore.device.uuid === data.deviceUuid) {
                   devicesStore.fetchEvents(data.deviceUuid);
                 }
               }
