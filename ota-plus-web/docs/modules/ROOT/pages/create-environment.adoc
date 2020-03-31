@@ -6,15 +6,15 @@ IMPORTANT: The limit of 10 additional environments applies even if you leave the
 
 *To create an environment:*
 
-1. Log in to https://connect.ota.here.com[OTA Connect, window="_blank"].
+1. Log in to your https://connect.ota.here.com[OTA Connect account, window="_blank"].
 2. In the upper-right corner, click the profile menu, and then click *Environments*.
-3. On the *Environments* tab, click *Create environment*.
+3. On the *Environments* page, click *Create environment*.
 4. In the *Create environment* dialog box, enter the environment name.
 +
 The environment name should not exceed 30 characters and can contain letters, numbers, and the following specific characters: `' " . , : ; _ - / ( )`.
 
 5. Click *Create*.
 +
-Your environment is created. You can find it in the list of the environments to which you have access. In the *Members* list, next to your email, the *Creator* label appears. As an environment creator, you can leave or be removed from your additional environments. However, you cannot leave or be removed from your home environment that you get upon registration. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
+The page with the details about the created environment opens. In the *Members* list, next to your email, the *Creator* label appears. As an environment creator, you can leave or be removed from your additional environments. However, you cannot leave or be removed from your home environment that you get upon registration. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
 
 You can now xref:manage-members.adoc[add] your colleagues to the environment.
