@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { FEATURES } from '../../config';
 
 @inject('stores')
 @observer
 class Header extends Component {
   render() {
-    const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { stores, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+    const { featuresStore } = stores;
+    const { features } = featuresStore;
     const fullNavigation = (
       <div className="profile-nav__list">
         {uiUserProfileEdit && (
@@ -25,17 +28,19 @@ class Header extends Component {
             </div>
           </NavLink>
         )}
-        <NavLink
-          to="/profile/usage"
-          activeClassName="profile-nav__list-item--active"
-          className="profile-nav__list-item"
-          id="usage-link"
-        >
-          <div>
-            Usage
-            <span className="profile-nav__bottom-line" />
-          </div>
-        </NavLink>
+        {features.includes(FEATURES.USAGE) && (
+          <NavLink
+            to="/profile/usage"
+            activeClassName="profile-nav__list-item--active"
+            className="profile-nav__list-item"
+            id="usage-link"
+          >
+            <div>
+              Usage
+              <span className="profile-nav__bottom-line" />
+            </div>
+          </NavLink>
+        )}
         <NavLink
           to="/profile/access-keys"
           activeClassName="profile-nav__list-item--active"
