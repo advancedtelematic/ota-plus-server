@@ -1,6 +1,6 @@
 
 const fs = require('fs-extra');
-const unzip = require('unzip');
+const unzip = require('unzipper');
 
 const APP_LOCALIZATIONS_DIRECTORY = '../assets/locales';
 const APP_LOCALIZATION_FILE_NAME = 'translation.json';
