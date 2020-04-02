@@ -7,6 +7,7 @@ import theme from '../../../theme';
 import stores from '../../../stores';
 import AccountSidebar from '..';
 import { LinkContent, Signout } from '../styled';
+import { FEATURES } from '../../../config';
 
 function mountComponent(features, props) {
   if (features) {
@@ -55,10 +56,20 @@ describe('<AccountSidebar />', () => {
     expect(wrapper.exists('.ant-drawer-open')).toEqual(false);
   });
 
-  it('should display 5 links and sign-out link by default', () => {
+  it('should display 4 links, sign-out link by default and without usage link', () => {
+    const linksCount = 4;
+    wrapper.find('#sidebar-avatar').first().simulate('click');
+    expect(wrapper.find(LinkContent).length).toBe(linksCount);
+    expect(wrapper.find(Signout).length).toBe(1);
+    expect(wrapper.exists('#account-sidebar-link-usage')).toEqual(false);
+  });
+
+  it('should display 5 links, sign-out link by default and usage link', () => {
+    wrapper = mountComponent([FEATURES.USAGE]);
     const linksCount = 5;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);
+    expect(wrapper.exists('#account-sidebar-link-usage')).toEqual(true);
   });
 });

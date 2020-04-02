@@ -385,7 +385,8 @@ export const FEATURES = {
   IMPACT_ANALYSIS: 'impact_analysis',
   OLP_CAMPAIGN: 'olp_campaign',
   PSEUDO_LOCALISATION: 'pseudo_localisation',
-  SEQUENCER_CAMPAIGN: 'sequencer_campaign'
+  SEQUENCER_CAMPAIGN: 'sequencer_campaign',
+  USAGE: 'usage'
 };
 
 /**

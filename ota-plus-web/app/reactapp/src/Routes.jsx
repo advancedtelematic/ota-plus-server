@@ -20,11 +20,13 @@ import {
   HomePage,
 } from './pages';
 import { ProfileEditProfile, ProfileUsage, ProfileAccessKeys } from './components/profile';
+import { FEATURES } from './config';
 
 const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === 'true';
 
 const Routes = ({
   addNewWizard,
+  features,
   uiUserProfileEdit,
   switchToSWRepo,
   uiUserProfileMenu,
@@ -66,7 +68,9 @@ const Routes = ({
         >
           <Switch>
             <Route path="/profile/edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
-            <Route path="/profile/usage" component={ProfileUsage} />
+            {features.includes(FEATURES.USAGE) && (
+              <Route path="/profile/usage" component={ProfileUsage} />
+            )}
             <Route
               path="/profile/access-keys"
               render={ownProps => <ProfileAccessKeys {...ownProps} uiCredentialsDownload={uiCredentialsDownload} />}
