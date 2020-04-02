@@ -1,0 +1,17 @@
+= Leave an environment
+
+If you are no longer involved in a software update project and do not need access to environment resources, you can leave this environment, but you cannot leave your home environment.
+
+*To leave an environment:*
+
+1. Log in to your https://connect.ota.here.com[OTA Connect account, window="_blank"].
+2. In the upper-right corner, click the profile menu, and then click *Environments*.
+3. Click the environment that you want to leave.
++
+The page with environment details opens.
+4. In the *Member* list, next to your email, click *Leave*.
++
+NOTE: If you are the only member of the environment, after you leave it, the environment will be permanently deleted.
+5. In the *Leave environment* dialog box, click *Yes, leave*.
+
+You are no longer a member of this environment and cannot access its resources. If you want to join the environment again, an environment member should xref:manage-members.adoc[add] you to it.
