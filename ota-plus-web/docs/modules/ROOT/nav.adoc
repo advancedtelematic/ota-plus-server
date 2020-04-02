@@ -39,6 +39,7 @@
 * xref:find-and-change-environments.adoc[Find and change environments]
 * xref:create-environment.adoc[Create an environment]
 * xref:manage-members.adoc[Manage members in environments]
+* xref:rename-environments.adoc[Rename environments]
 
 
 .Use cases
