@@ -12,7 +12,6 @@ import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import { Button, OTAModal, Loader, FormSelect, OperationCompletedInfo, ModalTitleWrapper } from '../../partials';
-import { URL_SOFTWARE_PUSHING_UPDATES } from '../../constants/urlConstants';
 import { assets, SOFTWARE_ICON_GRAY } from '../../config';
 
 @inject('stores')
@@ -100,15 +99,7 @@ class CreateModal extends Component {
     const directorForm = (
       <Form onValidSubmit={this.submitForm} id="software-create-form">
         <Row className="gutter-bottom">
-          {t('software.create_modal.intro_1')}
-          <a
-            href={URL_SOFTWARE_PUSHING_UPDATES}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {t('software.create_modal.intro_link')}
-          </a>
-          {t('software.create_modal.intro_2')}
+          {t('software.create-modal.description')}
         </Row>
         <Row className="row">
           <Col span={12}>
@@ -158,7 +149,7 @@ class CreateModal extends Component {
           </Col>
         </Row>
         <Row className="row no-margin-bottom no-margin-top">
-          <Col span={12}>
+          <Col>
             <div className="upload-wrapper">
               {!fileDropped && (
                 <div>
@@ -170,7 +161,7 @@ class CreateModal extends Component {
                   >
                     <div>{t('software.create_modal.choose_file')}</div>
                   </AntdButton>
-                  <div className="description">{t('software.create_modal.file_information')}</div>
+                  <div className="description">{t('software.create-modal.file-information')}</div>
                 </div>
               )}
               <input
@@ -188,8 +179,12 @@ class CreateModal extends Component {
                 style={{ display: 'none' }}
                 required
               />}
-
             </div>
+
+          </Col>
+        </Row>
+        <Row className="row no-margin-bottom no-margin-top">
+          <Col span={12}>
             <div className="anim-info-container">
               <OperationCompletedInfo
                 info={t(
