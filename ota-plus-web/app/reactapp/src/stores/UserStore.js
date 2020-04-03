@@ -3,6 +3,7 @@
 import Cookies from 'js-cookie';
 import { observable } from 'mobx';
 import axios from 'axios';
+import encodeUrl from 'encodeurl';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -127,7 +128,7 @@ export default class UserStore {
   editOrganizationName = async (name, namespace) => {
     resetAsync(this.editOrganizationNameAsync, true);
     try {
-      const url = `${API_ORGANIZATIONS}/${namespace}`;
+      const url = encodeUrl(`${API_ORGANIZATIONS}/${namespace}`);
       const response = await axios.patch(url, { name });
       this.editOrganizationNameAsync = handleAsyncSuccess(response);
       this.getOrganization(namespace);
@@ -140,7 +141,7 @@ export default class UserStore {
   getOrganization = async (namespace = this.userOrganizationNamespace) => {
     resetAsync(this.getCurrentOrganizationAsync, true);
     try {
-      const response = await axios.get(`${API_ORGANIZATIONS}/${namespace}`);
+      const response = await axios.get(encodeUrl(`${API_ORGANIZATIONS}/${namespace}`));
       const { data } = response;
       this.currentOrganization = data;
       this.getCurrentOrganizationAsync = handleAsyncSuccess(response);
@@ -176,7 +177,7 @@ export default class UserStore {
   getOrganizationUsers = async (namespace = this.userOrganizationNamespace) => {
     resetAsync(this.getOrganizationUsersAsync, true);
     try {
-      const response = await axios.get(API_USER_ORGANIZATIONS_GET_USERS(namespace));
+      const response = await axios.get(encodeUrl(API_USER_ORGANIZATIONS_GET_USERS(namespace)));
       const { data } = response;
       this.userOrganizationUsers = data;
       this.getOrganizationUsersAsync = handleAsyncSuccess(response);
