@@ -1,20 +1,20 @@
 package com.advancedtelematic.controllers
 
-import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import java.time.temporal.ChronoUnit
+import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import java.util.UUID
 
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
-import javax.inject.{Inject, Singleton}
 import com.advancedtelematic.api._
+import com.advancedtelematic.api.clients.{CryptApi, KeyServerApi, RepoServerApi}
 import com.advancedtelematic.auth.{ApiAuthAction, AuthorizedRequest}
+import com.advancedtelematic.controllers.PathBinders.segment
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import PathBinders.segment
-import com.advancedtelematic.api.clients.CryptApi
 
 import scala.concurrent.ExecutionContext
 
@@ -28,6 +28,8 @@ class ProvisioningController @Inject()(val conf: Configuration,
     extends AbstractController(components) with OtaPlusConfig with ApiClientSupport with ZipkinTraceImplicits {
 
   val cryptApi = new CryptApi(conf, clientExec)
+  val reposerverApi = new RepoServerApi(conf, clientExec)
+  val keyserverApi = new KeyServerApi(conf, clientExec)
 
   def accountName(request: AuthorizedRequest[_]): String = segment(request.namespace.get)
 
@@ -79,4 +81,12 @@ class ProvisioningController @Inject()(val conf: Configuration,
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
     }
   }
+
+  def keysStatus: Action[AnyContent] = authAction.async { implicit request =>
+    for {
+      repoId <- reposerverApi.fetchRepoId(request.namespace)
+      online <- keyserverApi.areKeysOnline(repoId)
+    } yield Ok(Json.obj("keys-online" -> online))
+  }
+
 }

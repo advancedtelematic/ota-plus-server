@@ -2,10 +2,11 @@ package com.advancedtelematic.api.clients
 
 import akka.stream.Materializer
 import brave.play.{TraceData, ZipkinTraceServiceLike}
+import cats.syntax.show._
 import com.advancedtelematic.api.Errors.RemoteApiParseError
 import com.advancedtelematic.api.{ApiClientExec, ApiRequest, OtaPlusConfig}
 import com.advancedtelematic.libtuf.data.TufCodecs.tufKeyPairDecoder
-import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
+import com.advancedtelematic.libtuf.data.TufDataType.{RepoId, TufKeyPair}
 import play.api.Configuration
 import play.api.http.Status
 
@@ -45,4 +46,17 @@ class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec)
       }
     }
   }
+
+  /**
+   * Check if the target keys for this TUF repo have been taken offline.
+   * We check "against" 404 instead of "in favour" of 200 to have a bias towards the keys being online.
+   * For example, if we receive some 5XX error, it's probably safer to assume that
+   * the keys are online. But when the keys are surely offline, keyserver will respond with 404.
+   */
+  def areKeysOnline(repoId: RepoId)
+                   (implicit executionContext: ExecutionContext, traceData: TraceData): Future[Boolean] =
+    request(s"root/${repoId.show}/keys/targets/pairs")
+      .transform(_.withMethod("HEAD"))
+      .execResult(apiExec)
+      .map(_.header.status != 404)
 }

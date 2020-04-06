@@ -15,6 +15,7 @@ PUT     /api/v1/provisioning/activate            com.advancedtelematic.controlle
 POST    /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.credentialsRegistration
 GET     /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.getCredentials
 GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: UUID)
+GET     /api/v1/keys/status                      com.advancedtelematic.controllers.ProvisioningController.keysStatus
 
 GET     /api/v1/features                         com.advancedtelematic.controllers.UserProfileController.getFeatures
 
