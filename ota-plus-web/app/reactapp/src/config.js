@@ -317,6 +317,7 @@ export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg
 export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
 export const DEVICE_ICON_GREEN = '/assets/img/new-app/24/devices-active-outline-24-green.svg';
 export const DEVICE_ICON_OLD_WHITE = '/assets/img/icons/white/devices.svg';
+export const DOOR_EXIT_ICON = '/assets/img/new-app/16/door_leave.svg';
 export const DOWNLOAD_ICON = '/assets/img/icons/download.svg';
 export const DOWNLOAD_KEY_ICON = '/assets/img/icons/download_key.svg';
 export const ENVIRONMENTS_ICON = '/assets/img/new-app/24/icon24-masking.svg';

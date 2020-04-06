@@ -13,9 +13,8 @@ import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
   OTA_ENVIRONMENT_ADD_MEMBER,
-  OTA_ENVIRONMENT_REMOVE_MEMBER,
   OTA_ENVIRONMENT_RENAME,
-  OTA_ENVIRONMENT_SWITCH
+  OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 
@@ -40,7 +39,6 @@ const EnvironmentDetails = () => {
     type: undefined
   });
   const { name, namespace } = currentEnvironment;
-
 
   useEffect(() => () => {
     stores.userStore.userOrganizationUsers = [];
@@ -93,17 +91,19 @@ const EnvironmentDetails = () => {
       stores.userStore.deleteMemberFromOrganization(email, true);
     }
     closeRemovalModal();
-    sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
   };
 
   const populateRemovalModal = () => {
     const { type, selectedUserEmail } = removalModal;
+    const lastToLeave = environmentMembers.length === 1;
     switch (type) {
       case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
         return {
-          type: WARNING_MODAL_COLOR.DEFAULT,
+          type: lastToLeave ? WARNING_MODAL_COLOR.DANGER : WARNING_MODAL_COLOR.DEFAULT,
           title: t('profile.organization.remove-modal.title.self'),
-          desc: t('profile.organization.remove-modal.desc.self'),
+          desc: t(lastToLeave
+            ? 'profile.organization.remove-modal.desc.self.last'
+            : 'profile.organization.remove-modal.desc.self'),
           cancelButtonProps: {
             title: t('profile.organization.remove-modal.cancel'),
           },

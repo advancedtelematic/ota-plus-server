@@ -46,6 +46,8 @@ export const OwnerTag = styled.div`
 `;
 
 export const RemoveButton = styled(Button)`
+  display: flex;
+  align-items: center;
   border: none;
   position: absolute;
   right: 30px;
@@ -59,6 +61,8 @@ export const RemoveButton = styled(Button)`
     opacity: 0.7;
   }
   & > img {
-    margin: 0 4px 4px 0;
+    height: 14px;
+    width: 14px;
+    margin: 0 4px 2px 0;
   }
 `;

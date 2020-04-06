@@ -32,6 +32,12 @@ import {
   HTTP_CODE_202_ACCEPTED
 } from '../constants/httpCodes';
 import { DEVICE_ACTIVATED_DATE_DATA_FORMAT, USAGE_DATE_DATA_FORMAT } from '../constants/datesTimesConstants';
+import { sendAction } from '../helpers/analyticsHelper';
+import {
+  OTA_ENVIRONMENT_LEAVE,
+  OTA_ENVIRONMENT_LEAVE_EMPTY,
+  OTA_ENVIRONMENT_REMOVE_MEMBER
+} from '../constants/analyticsActions';
 
 export default class UserStore {
   @observable userFetchAsync = {};
@@ -114,6 +120,11 @@ export default class UserStore {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);
     try {
       const encodedEmail = encodeURIComponent(email);
+      if (email === this.user.email) {
+        sendAction(this.userOrganizationUsers.length === 1 ? OTA_ENVIRONMENT_LEAVE_EMPTY : OTA_ENVIRONMENT_LEAVE);
+      } else {
+        sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
+      }
       const response = await axios.delete(`${API_ORGANIZATIONS_USERS(namespace)}?email=${encodedEmail}`);
       this.getOrganizations();
       this.deleteMemberFromOrganizationAsync = handleAsyncSuccess(response);

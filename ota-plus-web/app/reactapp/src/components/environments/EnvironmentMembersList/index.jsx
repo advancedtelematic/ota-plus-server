@@ -5,7 +5,7 @@ import { Tooltip } from 'antd';
 import { ListHeader, ListItem, ListStyled, OwnerTag, RemoveButton } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
-import { TRASHBIN_ICON } from '../../../config';
+import { DOOR_EXIT_ICON, TRASHBIN_ICON } from '../../../config';
 
 const EnvironmentMembersList = ({ envInfo, environmentMembers, onRemoveBtnClick, user }) => {
   const { t } = useTranslation();
@@ -43,8 +43,19 @@ const EnvironmentMembersList = ({ envInfo, environmentMembers, onRemoveBtnClick,
               id={`${email}-remove-btn`}
               onClick={() => onRemoveBtnClick(email === user.email ? false : email)}
             >
-              <img src={TRASHBIN_ICON} />
-              <span>{t('profile.organization.members.remove')}</span>
+              {email === user.email
+                ? (
+                  <>
+                    <img src={DOOR_EXIT_ICON} />
+                    <span>{t('profile.organization.members.leave')}</span>
+                  </>
+                )
+                : (
+                  <>
+                    <img src={TRASHBIN_ICON} />
+                    <span>{t('profile.organization.members.remove')}</span>
+                  </>
+                )}
             </RemoveButton>
           )}
         </ListItem>
