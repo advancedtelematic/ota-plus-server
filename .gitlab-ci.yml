@@ -19,7 +19,7 @@ test:
   stage: test
   tags:
     - docker-sock
-  image: advancedtelematic/gitlab-jobs:0.2.3
+  image: advancedtelematic/gitlab-jobs:0.2.4
   script:
     - sbt -sbt-dir ./.sbt -ivy ./.ivy2 ota-plus-web/ut:test
   cache:
@@ -40,7 +40,7 @@ build docker image:
       - /^deploy/.*$/
   tags:
     - docker-sock
-  image: advancedtelematic/app-gitlab-job:0.0.1
+  image: advancedtelematic/app-gitlab-job:0.0.2
   script:
     - env | sort
     - export VAULT_TOKEN=$(cat /opt/vault/token)
