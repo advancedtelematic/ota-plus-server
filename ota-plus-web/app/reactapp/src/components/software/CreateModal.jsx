@@ -10,9 +10,13 @@ import serialize from 'form-serialize';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
+import prettysize from 'prettysize';
 
 import { Button, OTAModal, Loader, FormSelect, OperationCompletedInfo, ModalTitleWrapper } from '../../partials';
-import { assets, SOFTWARE_ICON_GRAY } from '../../config';
+import { assets, SOFTWARE_ICON_GRAY, SOFTWARE_VERSION_FILE_LIMIT } from '../../config';
+import { isFileTooLarge } from '../../helpers/fileHelper';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_SOFTWARE_FAIL_SIZE } from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -25,12 +29,18 @@ class CreateModal extends Component {
 
   @observable fileUploadedAt = null;
 
+  @observable fileTooLarge = false;
+
+  @observable filePrettySize = undefined;
+
   @observable selectedHardwareIds = [];
 
   constructor(props) {
     super(props);
     this.fileUploadRef = React.createRef();
     this.fileUploadedAt = undefined;
+    this.fileTooLarge = false;
+    this.filePrettySize = undefined;
   }
 
   componentDidMount() {
@@ -66,10 +76,24 @@ class CreateModal extends Component {
   };
 
   onFileChange = (event) => {
-    /* toDo: split based of `\` only affects windows paths */
-    const name = event.target.value.split('\\').pop();
-    this.fileName = name;
-    this.fileUploadedAt = moment().format();
+    const { fileDropped } = this.props;
+    const file = fileDropped || this.fileUploadRef.current.files[0];
+
+    if (isFileTooLarge(file.size, SOFTWARE_VERSION_FILE_LIMIT)) {
+      const prettySize = prettysize(file.size, { places: 2 });
+      this.fileTooLarge = true;
+      this.filePrettySize = prettySize;
+      sendAction(OTA_SOFTWARE_FAIL_SIZE);
+    } else {
+      /* toDo: split based of `\` only affects windows paths */
+      const name = event.target.value.split('\\')
+        .pop();
+      this.fileName = name;
+      this.fileUploadedAt = moment()
+        .format();
+      this.fileTooLarge = false;
+      this.filePrettySize = undefined;
+    }
   };
 
   hideModal = (e) => {
@@ -77,6 +101,8 @@ class CreateModal extends Component {
     if (e) e.preventDefault();
     this.fileName = null;
     this.fileUploadedAt = undefined;
+    this.fileTooLarge = false;
+    this.filePrettySize = undefined;
     this.selectedHardwareIds = [];
     hide();
   };
@@ -95,7 +121,8 @@ class CreateModal extends Component {
     const isSubmitEnabled = this.softwareName
                             && this.softwareVersion
                             && this.selectedHardwareIds.length
-                            && this.fileName;
+                            && this.fileName
+                            && !this.fileTooLarge;
     const directorForm = (
       <Form onValidSubmit={this.submitForm} id="software-create-form">
         <Row className="gutter-bottom">
@@ -161,7 +188,14 @@ class CreateModal extends Component {
                   >
                     <div>{t('software.create_modal.choose_file')}</div>
                   </AntdButton>
-                  <div className="description">{t('software.create-modal.file-information')}</div>
+                  {this.fileTooLarge
+                    ? (
+                      <div className="description-error">
+                        {t('software.create-modal.file-upload-size-error', { size: this.filePrettySize })}
+                      </div>
+                    )
+                    : <div className="description">{t('software.create-modal.file-information')}</div>
+                  }
                 </div>
               )}
               <input
@@ -187,13 +221,17 @@ class CreateModal extends Component {
           <Col span={12}>
             <div className="anim-info-container">
               <OperationCompletedInfo
+                hidden={this.fileTooLarge}
                 info={t(
                   'software.create_modal.file_selected',
                   { file_name: (fileDropped && fileDropped.name) || this.fileName }
                 )}
                 preserve
                 trigger={
-                  { name: (fileDropped && fileDropped.name) || this.fileName, createdAt: this.fileUploadedAt }
+                  {
+                    name: !this.fileTooLarge && ((fileDropped && fileDropped.name) || this.fileName),
+                    createdAt: this.fileUploadedAt
+                  }
                 }
               />
             </div>

@@ -435,6 +435,7 @@
     "software.cancel_upload.single.warning": "Your upload is not complete. Would you like to cancel the upload?",
     "software.create-modal.description": "Upload new software versions manually. Full-device images built with OTA Connect developer tools are uploaded automatically. You're responsible for the content of the software versions and their impact on devices. Please take care, make sure software is properly tested and that customer support is available.",
     "software.create-modal.file-information": "Max 1 GB. For larger files, use the CLI. Upload speed depends on your network connection.",
+    "software.create-modal.file-upload-size-error": "{{size}} ! Can't upload files larger than 1 GB.",
     "software.create_modal.add": "Add",
     "software.create_modal.cancel_all": "Cancel all",
     "software.create_modal.choose_file": "Choose file",

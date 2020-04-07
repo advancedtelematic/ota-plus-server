@@ -52,6 +52,7 @@ export const OTA_SOFTWARE_DELETE_SOFTWARE = 'OTA_Software_Delete_Software';
 export const OTA_SOFTWARE_DELETE_VERSION = 'OTA_Software_Delete_Version';
 export const OTA_SOFTWARE_EDIT_COMMENT = 'OTA_Software_Edit_Comment';
 export const OTA_SOFTWARE_EDIT_DEPENDENCIES = 'OTA_Software_Edit_Dependencies';
+export const OTA_SOFTWARE_FAIL_SIZE = 'OTA_Software_Fail_Size';
 
 /* Updates */
 export const OTA_UPDATES_SEE_ALL = 'OTA_Updates_See_All';
