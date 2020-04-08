@@ -82,8 +82,9 @@ export const API_GROUPS_REMOVE_DEVICE = '/api/v1/device_groups';
  *  Software
  */
 export const API_SOFTWARE = '/api/v1/user_repo/targets.json';
-export const API_UPLOAD_SOFTWARE = '/api/v1/user_repo/targets';
 export const API_DELETE_SOFTWARE = '/api/v1/user_repo/targets';
+export const API_SOFTWARE_COMMENTS = '/api/v1/user_repo/comments';
+export const API_SOFTWARE_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
 export const API_SOFTWARE_DEVICE_SOFTWARE = '/api/v1/devices';
 export const API_SOFTWARE_DEVICE_AUTO_INSTALLED_SOFTWARE = '/api/v1/auto_install';
 export const API_SOFTWARE_DEVICE_QUEUE = '/api/v1/device_updates';
@@ -94,8 +95,8 @@ export const API_SOFTWARE_DEVICE_AUTO_INSTALL = '/api/v1/auto_install';
 export const API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL = '/api/v1/admin/devices';
 export const API_SOFTWARE_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_SOFTWARE_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
-export const API_SOFTWARE_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
-export const API_SOFTWARE_COMMENTS = '/api/v1/user_repo/comments';
+export const API_SOFTWARE_KEYS_STATUS = '/api/v1/keys/status';
+export const API_UPLOAD_SOFTWARE = '/api/v1/user_repo/targets';
 
 /*
  *  Linux packages

@@ -10,7 +10,7 @@ import {
   Title,
   TopBar
 } from './styled';
-import { WARNING_MODAL_COLOR } from '../../../../constants';
+import { WARNING_MODAL_COLOR } from '../../constants';
 
 const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps, onClose }) => (
   <>
@@ -36,7 +36,7 @@ const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps
 WarningModal.propTypes = {
   type: PropTypes.oneOf([WARNING_MODAL_COLOR.DANGER, WARNING_MODAL_COLOR.DEFAULT, WARNING_MODAL_COLOR.INFO]),
   title: PropTypes.string.isRequired,
-  desc: PropTypes.string.isRequired,
+  desc: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   cancelButtonProps: PropTypes.shape({
     title: PropTypes.string.isRequired,
   }),

@@ -29,6 +29,7 @@ import Button from './Button';
 import ExternalLink from './ExternalLink';
 import ModalTitleWrapper from './ModalTitleWrapper';
 import PageHeader from './PageHeader';
+import WarningModal from './WarningModal';
 
 export {
   TabNavigation,
@@ -59,5 +60,6 @@ export {
   Button,
   ExternalLink,
   ModalTitleWrapper,
-  PageHeader
+  PageHeader,
+  WarningModal
 };

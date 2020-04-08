@@ -6,15 +6,17 @@ import { inject, observer } from 'mobx-react';
 import { Tag } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
-import Button from '../../partials/Button';
 import { FEATURES, PACKAGES_ADVANCED_TAB, PACKAGES_DEFAULT_TAB } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
-  OTA_SOFTWARE_SEE_ALL,
+  OTA_SOFTWARE_ADD_SOFTWARE,
+  OTA_SOFTWARE_FAIL_ROTATION,
   OTA_SOFTWARE_SEE_ADVANCED,
-  OTA_SOFTWARE_ADD_SOFTWARE
+  OTA_SOFTWARE_SEE_ALL,
 } from '../../constants/analyticsActions';
-import { SubHeader } from '../../partials';
+import { Button, ExternalLink, SubHeader, WarningModal } from '../../partials';
+import { WARNING_MODAL_COLOR } from '../../constants';
+import { URL_ROTATING_KEYS } from '../../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -30,6 +32,10 @@ class Header extends Component {
     stores: {}
   };
 
+  state = {
+    showKeysOfflineModal: false
+  };
+
   componentWillMount() {
     const { stores } = this.props;
     const { softwareStore } = stores;
@@ -37,11 +43,33 @@ class Header extends Component {
   }
 
   componentDidMount() {
+    const { stores } = this.props;
+    const { softwareStore } = stores;
+    softwareStore.getKeysStatus();
     sendAction(OTA_SOFTWARE_SEE_ALL);
   }
 
   componentWillUnmount() {
     this.storeActive(this.activeTab);
+  }
+
+  toggleKeysOfflineModal = () => {
+    this.setState(state => ({
+      showKeysOfflineModal: !state.showKeysOfflineModal
+    }));
+  };
+
+  handleAddSoftwareBtnClick = () => {
+    const { showCreateModal, stores } = this.props;
+    const { softwareStore } = stores;
+    const { keysStatus } = softwareStore;
+    if (keysStatus['keys-online']) {
+      showCreateModal(null);
+    } else {
+      this.toggleKeysOfflineModal();
+      sendAction(OTA_SOFTWARE_FAIL_ROTATION);
+    }
+    sendAction(OTA_SOFTWARE_ADD_SOFTWARE);
   }
 
   @action
@@ -60,7 +88,8 @@ class Header extends Component {
   isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   render() {
-    const { showCreateModal, stores, switchToSWRepo, t } = this.props;
+    const { stores, switchToSWRepo, t } = this.props;
+    const { showKeysOfflineModal } = this.state;
     const { featuresStore } = stores;
     const { features } = featuresStore;
     return (
@@ -93,15 +122,11 @@ class Header extends Component {
               </li>
             </ul>
           )}
-
           {!switchToSWRepo && (
             <div className="tab-navigation__buttons">
               <Button
                 id="add-new-software"
-                onClick={() => {
-                  showCreateModal(null);
-                  sendAction(OTA_SOFTWARE_ADD_SOFTWARE);
-                }}
+                onClick={this.handleAddSoftwareBtnClick}
               >
                 {t('software.action_buttons.add_software')}
               </Button>
@@ -113,6 +138,25 @@ class Header extends Component {
           <div className="software-repository-subheader__item versions">{t('software.header.versions')}</div>
           <div className="software-repository-subheader__item installed-on">{t('software.header.coverage')}</div>
         </SubHeader>
+        {showKeysOfflineModal && (
+          <WarningModal
+            id="keys-offline-modal"
+            type={WARNING_MODAL_COLOR.INFO}
+            title={t('software.keys-offline-modal.title')}
+            desc={(
+              <span>
+                {t('software.keys-offline-modal.desc')}
+                <ExternalLink id="rotating-keys-link" url={URL_ROTATING_KEYS} weight="regular">
+                  {t('software.keys-offline-modal.desc-url')}
+                </ExternalLink>
+              </span>
+            )}
+            cancelButtonProps={{
+              title: t('software.keys-offline-modal.close'),
+            }}
+            onClose={this.toggleKeysOfflineModal}
+          />
+        )}
       </div>
     );
   }
