@@ -6,7 +6,7 @@ import EnvironmentsHeader from '../../components/environments/EnvironmentsHeader
 import EnvironmentsList from '../../components/environments/EnvironmentsList';
 import EnvironmentDetails from '../../components/environments/EnvironmentDetails';
 import CreateEnvModal from '../../components/environments/modals/CreateEnvModal';
-import WarningModal from '../../components/environments/modals/WarningModal';
+import { WarningModal } from '../../partials';
 import { EnvListWrapper } from './styled';
 import { MetaData } from '../../utils';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';

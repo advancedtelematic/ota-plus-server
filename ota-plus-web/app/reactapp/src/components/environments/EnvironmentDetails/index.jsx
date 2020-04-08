@@ -7,7 +7,7 @@ import EnvironmentDetailsHeader from '../EnvironmentDetailsHeader';
 import EnvironmentMembersList from '../EnvironmentMembersList';
 import AddMemberModal from '../modals/AddMemberModal';
 import RenameEnvModal from '../modals/RenameEnvModal';
-import WarningModal from '../modals/WarningModal';
+import { WarningModal } from '../../../partials';
 import { StyledTabs } from './styled';
 import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';

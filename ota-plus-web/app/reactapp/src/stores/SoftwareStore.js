@@ -18,6 +18,7 @@ import {
   API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL,
   API_SOFTWARE_COUNT_INSTALLED_ECUS,
   API_SOFTWARE_COMMENTS,
+  API_SOFTWARE_KEYS_STATUS,
   API_DELETE_SOFTWARE,
   API_UPDATES_SEARCH,
   API_CAMPAIGNS_FETCH_SINGLE,
@@ -44,6 +45,8 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 
 
 export default class SoftwareStore {
+  @observable getKeysStatusAsync = {};
+
   @observable packagesDeleteAsync = {};
 
   @observable packagesFetchAsync = {};
@@ -75,6 +78,10 @@ export default class SoftwareStore {
   @observable commentsFetchAsync = {};
 
   @observable commentUpdateAsync = {};
+
+  @observable keysStatus = {
+    'keys-online': false
+  };
 
   @observable page = null;
 
@@ -127,6 +134,7 @@ export default class SoftwareStore {
   @observable activeTab = PACKAGES_DEFAULT_TAB;
 
   constructor() {
+    resetAsync(this.getKeysStatusAsync);
     resetAsync(this.packagesDeleteAsync);
     resetAsync(this.packagesFetchAsync);
     resetAsync(this.packagesSafeFetchAsync);
@@ -607,6 +615,18 @@ export default class SoftwareStore {
       .catch((error) => {
         this.packagesHistoryFetchAsync = handleAsyncError(error);
       });
+  }
+
+  getKeysStatus = async () => {
+    resetAsync(this.getKeysStatusAsync, true);
+    try {
+      const response = await axios.get(API_SOFTWARE_KEYS_STATUS);
+      this.keysStatus = response.data;
+
+      this.getKeysStatusAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getKeysStatusAsync = handleAsyncError(error);
+    }
   }
 
   preparePackagesHistory() {

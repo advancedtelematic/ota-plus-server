@@ -27,6 +27,9 @@ export const weightVariants = {
   medium: {
     fontWeight: 500
   },
+  regular: {
+    fontWeight: 400,
+  },
   default: {
     fontWeight: 300
   }
