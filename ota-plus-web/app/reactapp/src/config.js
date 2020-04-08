@@ -429,3 +429,5 @@ export const i18ToMomenLocaleMapping = {
   zh: 'zh-cn',
   zz: 'en'
 };
+
+export const SOFTWARE_VERSION_FILE_LIMIT = 1024 * 1024 * 1024; // 1 GB

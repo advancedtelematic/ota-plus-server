@@ -783,6 +783,14 @@
       font-size: 11px;
       margin-left: 6px;
     }
+
+    .description-error {
+      color: $description-error;
+      display: inline-block;
+      font-weight: 500;
+      font-size: 12px;
+      margin-left: 6px;
+    }
   }
 }
 

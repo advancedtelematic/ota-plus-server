@@ -34,12 +34,12 @@ class OperationCompletedInfo extends Component {
   }
 
   render() {
-    const { info, preserve } = this.props;
+    const { hidden, info, preserve } = this.props;
     const { height } = this.state;
     return (
       <AnimateHeight
         duration={ANIMATION_DURATION}
-        height={height}
+        height={hidden ? 0 : height}
         className="AnimateHeight"
         onAnimationEnd={() => {
           if (!preserve) {
@@ -60,6 +60,7 @@ class OperationCompletedInfo extends Component {
 }
 
 OperationCompletedInfo.defaultProps = {
+  hidden: false,
   info: '',
   initialHeight: INITIAL_HEIGHT,
   preserve: false,
@@ -67,6 +68,7 @@ OperationCompletedInfo.defaultProps = {
 };
 
 OperationCompletedInfo.propTypes = {
+  hidden: PropTypes.bool,
   info: PropTypes.string,
   initialHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   preserve: PropTypes.bool,
