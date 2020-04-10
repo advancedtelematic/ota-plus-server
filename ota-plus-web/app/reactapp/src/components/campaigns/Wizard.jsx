@@ -32,6 +32,20 @@ import {
   NOTIFICATION_DURATION_SEC
 } from '../../config';
 import { DATA_TYPE, STATUS } from '../../constants';
+import { sendAction } from '../../helpers/analyticsHelper';
+import {
+  OTA_CAMPAIGNS_DESELECT_CONSENT,
+  OTA_CAMPAIGNS_SELECT_CONSENT,
+  OTA_CAMPAIGNS_SELECT_MULTI_GROUP,
+  OTA_CAMPAIGNS_SELECT_SINGLE_GROUP,
+  OTA_CAMPAIGNS_SELECT_UPDATE,
+  OTA_CAMPAIGNS_WRITE_CONSENT_TEXT,
+  OTA_CAMPAIGNS_WRITE_CONSENT_TIME,
+} from '../../constants/analyticsActions';
+
+const CONSENT_INTALL_TIME_KEY = 'ESTIMATED_INSTALLATION_DURATION';
+const CONSENT_PREPARE_TIME_KEY = 'ESTIMATED_PREPARATION_DURATION';
+const CONSENT_TEXT_KEY = 'DESCRIPTION';
 
 const initialCurrentStepId = 0;
 const initialWizardData = {
@@ -220,6 +234,30 @@ class Wizard extends Component {
   };
 
   nextStep = () => {
+    switch (this.currentStepId) {
+      case 1:
+        sendAction(this.wizardData.groups.length > 1
+          ? OTA_CAMPAIGNS_SELECT_MULTI_GROUP
+          : OTA_CAMPAIGNS_SELECT_SINGLE_GROUP);
+        break;
+      case 2:
+        if (this.wizardData.update.length) {
+          sendAction(OTA_CAMPAIGNS_SELECT_UPDATE);
+        }
+        break;
+      case 3:
+        sendAction(this.approvalNeeded ? OTA_CAMPAIGNS_SELECT_CONSENT : OTA_CAMPAIGNS_DESELECT_CONSENT);
+        if (this.wizardData.metadata[CONSENT_TEXT_KEY]) {
+          sendAction(OTA_CAMPAIGNS_WRITE_CONSENT_TEXT);
+        }
+        if (this.wizardData.metadata[CONSENT_PREPARE_TIME_KEY] || this.wizardData.metadata[CONSENT_INTALL_TIME_KEY]) {
+          sendAction(OTA_CAMPAIGNS_WRITE_CONSENT_TIME);
+        }
+        break;
+      default:
+        break;
+    }
+
     if (this.verifyIfPreviousStepsFinished(this.currentStepId) && !this.isLastStep()) {
       this.currentStepId = this.currentStepId + 1;
       this.filterValue = initialFilterValue;
