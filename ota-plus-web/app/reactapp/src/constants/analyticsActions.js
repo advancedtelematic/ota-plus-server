@@ -60,20 +60,30 @@ export const OTA_UPDATES_SEE_ALL = 'OTA_Updates_See_All';
 export const OTA_UPDATES_SEE_DETAILS = 'OTA_Updates_See_Details';
 export const OTA_UPDATES_CREATE_UPDATE = 'OTA_Updates_Create_Update';
 export const OTA_UPDATES_SEARCH_UPDATE = 'OTA_Updates_Search_Update';
+export const OTA_UPDATES_SELECT_MULTI_ECU = 'OTA_Updates_Select_Multi_ECU';
+export const OTA_UPDATES_SELECT_SINGLE_ECU = 'OTA_Updates_Select_Single_ECU';
 
 /* Campaigns */
-export const OTA_CAMPAIGNS_SEE_ALL = 'OTA_Campaigns_See_All';
-export const OTA_CAMPAIGNS_SEE_DETAILS = 'OTA_Campaigns_See_Details';
-export const OTA_CAMPAIGNS_SEE_DEPENDENCIES = 'OTA_Campaigns_See_Dependencies';
+export const OTA_CAMPAIGNS_CANCEL_CAMPAIGN = 'OTA_Campaigns_Cancel_Campaign';
+export const OTA_CAMPAIGNS_CHECKS_UPDATE = 'OTA_Campaigns_Checks_Update';
+export const OTA_CAMPAIGNS_CREATE_CAMPAIGN = 'OTA_Campaigns_Create_Campaign';
+export const OTA_CAMPAIGNS_DESELECT_CONSENT = 'OTA_Campaigns_Deselect_Consent';
+export const OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES = 'OTA_Campaigns_Extract_Failed_Devices';
+export const OTA_CAMPAIGNS_FILTER_CANCELED = 'OTA_Campaigns_Filter_Canceled';
+export const OTA_CAMPAIGNS_FILTER_FINISHED = 'OTA_Campaigns_Filter_Finished';
 export const OTA_CAMPAIGNS_FILTER_PREPARATION = 'OTA_Campaigns_Filter_Preparation';
 export const OTA_CAMPAIGNS_FILTER_RUNNING = 'OTA_Campaigns_Filter_Running';
-export const OTA_CAMPAIGNS_FILTER_FINISHED = 'OTA_Campaigns_Filter_Finished';
-export const OTA_CAMPAIGNS_FILTER_CANCELED = 'OTA_Campaigns_Filter_Canceled';
-export const OTA_CAMPAIGNS_CREATE_CAMPAIGN = 'OTA_Campaigns_Create_Campaign';
-export const OTA_CAMPAIGNS_SEARCH_CAMPAIGN = 'OTA_Campaigns_Search_Campaign';
-export const OTA_CAMPAIGNS_CANCEL_CAMPAIGN = 'OTA_Campaigns_Cancel_Campaign';
 export const OTA_CAMPAIGNS_RETRY_FAILED_DEVICES = 'OTA_Campaigns_Retry_Failed_Devices';
-export const OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES = 'OTA_Campaigns_Extract_Failed_Devices';
+export const OTA_CAMPAIGNS_SEARCH_CAMPAIGN = 'OTA_Campaigns_Search_Campaign';
+export const OTA_CAMPAIGNS_SEE_ALL = 'OTA_Campaigns_See_All';
+export const OTA_CAMPAIGNS_SEE_DEPENDENCIES = 'OTA_Campaigns_See_Dependencies';
+export const OTA_CAMPAIGNS_SEE_DETAILS = 'OTA_Campaigns_See_Details';
+export const OTA_CAMPAIGNS_SELECT_CONSENT = 'OTA_Campaigns_Select_Consent';
+export const OTA_CAMPAIGNS_SELECT_MULTI_GROUP = 'OTA_Campaigns_Select_Multi_Group';
+export const OTA_CAMPAIGNS_SELECT_SINGLE_GROUP = 'OTA_Campaigns_Select_Single_Group';
+export const OTA_CAMPAIGNS_SELECT_UPDATE = 'OTA_Campaigns_Select_Update';
+export const OTA_CAMPAIGNS_WRITE_CONSENT_TEXT = 'OTA_Campaigns_Write_Consent_Text';
+export const OTA_CAMPAIGNS_WRITE_CONSENT_TIME = 'OTA_Campaigns_Write_Consent_Time';
 
 /* Other */
 export const OTA_PROFILE_RENAME = 'OTA_Profile_Rename';

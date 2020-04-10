@@ -15,6 +15,8 @@ import Step2 from './createWizard/Step2';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { assets, UPDATE_ICON_GRAY } from '../../config';
 import { DATA_TYPE } from '../../constants';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_UPDATES_SELECT_MULTI_ECU, OTA_UPDATES_SELECT_SINGLE_ECU } from '../../constants/analyticsActions';
 
 const wizardSteps = [
   {
@@ -85,6 +87,10 @@ class CreateModal extends Component {
   isLastStep = () => this.currentStepId === this.steps.length - 1;
 
   nextStep = () => {
+    const { selectedHardwares } = this.wizardData;
+    if (this.currentStepId === 0) {
+      sendAction(selectedHardwares.length > 1 ? OTA_UPDATES_SELECT_MULTI_ECU : OTA_UPDATES_SELECT_SINGLE_ECU);
+    }
     if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId !== this.steps.length - 1) {
       this.currentStepId = this.currentStepId + 1;
     }

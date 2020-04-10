@@ -8,6 +8,8 @@ import { withTranslation } from 'react-i18next';
 
 import Loader from '../../../partials/Loader';
 import CampaignsWizardUpdateList from './step3Files/CampaignsWizardUpdateList';
+import { sendAction } from '../../../helpers/analyticsHelper';
+import { OTA_CAMPAIGNS_CHECKS_UPDATE } from '../../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -56,6 +58,7 @@ class WizardStep3 extends Component {
   showDetails = (update, mouseEvent) => {
     const { showUpdateDetails } = this.props;
     if (mouseEvent) mouseEvent.preventDefault();
+    sendAction(OTA_CAMPAIGNS_CHECKS_UPDATE);
     showUpdateDetails(update);
   };
 
