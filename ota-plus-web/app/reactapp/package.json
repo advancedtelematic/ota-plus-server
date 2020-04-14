@@ -120,7 +120,8 @@
   },
   "scripts": {
     "dev": " ./node_modules/webpack/bin/webpack.js -w",
-    "izumi-transform": "node scripts/izumiTextManager/izumiTextManager.js",
+    "izumi-check": "node scripts/izumiTextManager/izumiTextManager.js check",
+    "izumi-update": "node scripts/izumiTextManager/izumiTextManager.js update",
     "lint": "eslint src/** --ext .js,.jsx",
     "npm-check": "npm-check -p",
     "socket-rome": "curl -k https://web-events.rome.sit-ota.aws.in.here.com/",
