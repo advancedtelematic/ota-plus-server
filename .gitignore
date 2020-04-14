@@ -62,4 +62,4 @@ kube-env.sh
 *.env
 *.env.gpg
 /tmp
-ota-plus-web/app/reactapp/scripts/izumiTextManager/data
+release-izumi.zip
