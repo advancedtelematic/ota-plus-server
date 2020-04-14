@@ -2,6 +2,8 @@
 
 Follow this procedure if you want to work with software packages rather than software images. It is also useful if you want to test that your devices can detect and download new file updates.
 
+NOTE: If your software signing keys are xref:ota-client::rotating-signing-keys.adoc[taken offline], you won't be able to upload new software packages via OTA Connect. Use the link:https://github.com/advancedtelematic/ota-tuf/blob/master/cli/README.adoc#user-content-uploading-a-target-binary-to-reposerver[garage-sign, window="_blank"] tool on the command line instead.
+
 Otherwise, the most efficient way to upload a software version is to build software images that contain your new software versions. The software images are automatically uploaded during the build process. You can find more information about this process in the xref:ota-client::pushing-updates.adoc[Add software to your Yocto image] section of the OTA Connect Developer guide.
 
 IMPORTANT: You are responsible for the content of the software versions and their impact on the devices. Ensure that you have tested them and can provide the necessary support for your end users.
