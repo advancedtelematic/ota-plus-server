@@ -30,7 +30,7 @@ class ProvisioningControllerSpec extends PlaySpec
   val (offlineNs, offlineRepoId) = (Namespace.generate,  Gen.uuid.sample.get.toString)
 
   val mock = MockWS {
-    case (HEAD, url) if s"$reposerverUri/api/v1/user_repo/root.json".r.findFirstIn(url).isDefined =>
+    case (GET, url) if s"$reposerverUri/api/v1/user_repo/root.json".r.findFirstIn(url).isDefined =>
       Action(BodyParser.defaultBodyParser) { implicit request =>
         val repoId = request.headers.headers.find(_._1 == "x-ats-namespace").map(_._2).fold("") {
           case ns if ns == onlineNs.get => onlineRepoId

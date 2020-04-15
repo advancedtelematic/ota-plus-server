@@ -32,7 +32,7 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec)(implici
                  (implicit executionContext: ExecutionContext, traceData: TraceData): Future[RepoId] =
     request("user_repo/root.json")
       .withNamespace(Some(namespace))
-      .transform(_.withMethod("HEAD"))
+      .transform(_.withMethod("GET"))
       .execResult(apiExec)
       .map(_.header.headers.find(_._1 == "x-ats-tuf-repo-id").get._2)
       .map(s => RepoId(UUID.fromString(s)))
