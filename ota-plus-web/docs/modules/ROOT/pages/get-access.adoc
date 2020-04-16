@@ -4,7 +4,7 @@ You can register for a free account to get access to the OTA Connect Portal.
 
 *To register for the account:*
 
-1. Go to the xref:https://connect.ota.here.com[OTA Connect Portal].
+1. Go to the https://connect.ota.here.com[OTA Connect Portal^].
 2. Click *Register for a HERE account*.
 3. Specify your first name, last name, and email address.
 4. Create a password for your HERE Account.
