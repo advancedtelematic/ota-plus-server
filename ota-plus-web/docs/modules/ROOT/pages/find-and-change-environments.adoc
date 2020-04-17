@@ -9,7 +9,7 @@ You can share your environment with your colleagues and become a member of other
 +
 You see the list of environments to which you have access.
 +
-TIP: You can also see the list of environments to which you have access on the *Environments* page: in the upper-right corner, click the profile menu, and then click *Environments*. The highlighted environment is your active environment.
+TIP: You can also see the list of environments to which you have access on the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
 
 3. Click the environment to which you want to switch.
 +
