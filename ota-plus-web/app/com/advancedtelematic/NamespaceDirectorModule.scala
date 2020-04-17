@@ -9,13 +9,12 @@ import akka.kafka.scaladsl.Consumer
 import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Sink
-import com.advancedtelematic.NamespaceDirectorChangedListener.{Director, DirectorV1, DirectorV2}
 import com.advancedtelematic.api.{OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging.kafka.JsonDeserializer
-import com.advancedtelematic.libats.messaging_datatype.MessageLike
+import com.advancedtelematic.libats.messaging_datatype.DataType.{DirectorV1, DirectorV2, DirectorVersion}
+import com.advancedtelematic.libats.messaging_datatype.Messages.NamespaceDirectorChanged
 import com.google.inject.AbstractModule
-import io.circe.{Decoder, Encoder, Json}
 import javax.inject.{Inject, Singleton}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.ByteArrayDeserializer
@@ -24,39 +23,15 @@ import play.api.libs.concurrent.AkkaGuiceSupport
 
 import scala.concurrent.Future
 
-
-object NamespaceDirectorChangedListener {
-  sealed trait Director
-  case object DirectorV1 extends Director
-  case object DirectorV2 extends Director
-
-  case class NamespaceDirectorChanged(namespace: Namespace, director: Director)
-
-  import com.advancedtelematic.libats.codecs.CirceCodecs.{namespaceDecoder, namespaceEncoder}
-
-  implicit val directorEncoder: Encoder[Director] = Encoder.instance {
-    case DirectorV1 => Json.fromString("directorV1")
-    case DirectorV2 => Json.fromString("directorV2")
-  }
-  implicit val directorDecoder: Decoder[Director] = Decoder.decodeString.map(_.toLowerCase).flatMap {
-    case "directorv1" => Decoder.const(DirectorV1)
-    case "directorv2" => Decoder.const(DirectorV2)
-    case other => Decoder.failedWithMessage("Invalid value for `director`: " + other)
-  }
-
-  implicit val namespaceDirectorChangedDecoder: Decoder[NamespaceDirectorChanged] = io.circe.generic.semiauto.deriveDecoder
-  implicit val namespaceDirectorChangedMessageLike = MessageLike.derive[NamespaceDirectorChanged](_.namespace.get)
-}
-
 @Singleton
 class NamespaceDirectorConfig @Inject()(val conf: Configuration) extends OtaPlusConfig {
-  private val mapping = new ConcurrentHashMap[Namespace, Director]()
+  private val mapping = new ConcurrentHashMap[Namespace, DirectorVersion]()
 
-  def set(ns: Namespace, version: Director): Unit = {
+  def set(ns: Namespace, version: DirectorVersion): Unit = {
     mapping.put(ns, version)
   }
 
-  private def get(ns: Namespace): Director = {
+  private def get(ns: Namespace): DirectorVersion = {
     mapping.getOrDefault(ns, DirectorV1)
   }
 
@@ -73,10 +48,11 @@ class NamespaceDirectorChangedListener @Inject()(config: Configuration, namespac
 
   implicit val mat = ActorMaterializer()
 
-  import NamespaceDirectorChangedListener._
+  import com.advancedtelematic.libats.messaging_datatype.MessageCodecs.namespaceDirectorChangedCodec
+  import com.advancedtelematic.libats.messaging_datatype.Messages.namespaceDirectorChangedMessageLike
 
   override def preStart(): Unit = {
-    val consumerSettings = ConsumerSettings(context.system, new ByteArrayDeserializer, new JsonDeserializer[NamespaceDirectorChanged](namespaceDirectorChangedDecoder, throwException = true))
+    val consumerSettings = ConsumerSettings(context.system, new ByteArrayDeserializer, new JsonDeserializer[NamespaceDirectorChanged](namespaceDirectorChangedCodec, throwException = true))
       // every instance always consumes whole topic, no commit, unique group id
       .withGroupId(s"ota-plus-server-${namespaceDirectorChangedMessageLike.streamName}-${UUID.randomUUID().toString}")
       .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
