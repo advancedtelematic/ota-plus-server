@@ -61,6 +61,12 @@ const lightStyleVariants = theme => ({
     ':hover, :focus': {
       opacity: 0.8,
     },
+    '&.ant-btn[disabled]': {
+      color: theme.palette.primaryDarkened,
+      borderColor: theme.palette.primaryDarkened,
+      backgroundColor: 'transparent',
+      opacity: 0.3
+    }
   },
   primary: {
     span: {

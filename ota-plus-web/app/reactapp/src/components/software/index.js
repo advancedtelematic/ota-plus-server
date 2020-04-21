@@ -1,6 +1,6 @@
 /** @format */
 
-import SoftwareCreateModal from './CreateModal';
+import SoftwareCreateModal from './AddSoftwareModal';
 import PackageBlacklistModal from './BlacklistModal';
 import SoftwareHeader from './Header';
 import SoftwareList from './List';

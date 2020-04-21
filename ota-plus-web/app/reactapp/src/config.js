@@ -306,6 +306,7 @@ export const assets = {
   DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
+export const ATTENTION_ICON = '/assets/img/new-app/24/attention.svg';
 export const BAN_ICON_RED = '/assets/img/icons/ban_red.png';
 export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
 export const CAMPAIGNS_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-distribute-solid-24.svg';
@@ -360,6 +361,7 @@ export const QUESTIONMARK_ICON_WHITE = '/assets/img/icons/white/questionmark.svg
 export const TICK_ICON_BLACK = '/assets/img/icons/black/tick.svg';
 export const TICK_ICON_GREEN = '/assets/img/icons/green_tick.svg';
 export const TRASHBIN_ICON = '/assets/img/new-app/16/trashbin.svg';
+export const UPLOAD_ICON = '/assets/img/new-app/24/upload.svg';
 
 /**
  * cookies
