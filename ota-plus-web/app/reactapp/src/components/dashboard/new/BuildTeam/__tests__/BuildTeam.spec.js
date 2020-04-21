@@ -7,7 +7,11 @@ import UserStore from '../../../../../stores/UserStore';
 import theme from '../../../../../theme';
 import BuildTeam from '..';
 import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
-import { OTA_HOME_ADD_MEMBERS } from '../../../../../constants/analyticsActions';
+import {
+  OTA_HOME_ADD_MEMBERS,
+  OTA_HOME_CREATE_ENVIRONMENT,
+  OTA_HOME_READ_MORE_ENVIRONMENT
+} from '../../../../../constants/analyticsActions';
 
 const mockedStores = {
   userStore: new UserStore(),
@@ -58,5 +62,17 @@ describe('<BuildTeam />', () => {
   it('should fetch default environment members upon clicking "Add Member" button', () => {
     wrapper.find('#build-team-add-btn').first().simulate('click');
     expect(mockGetOrganizationUsers).toHaveBeenCalled();
+  });
+
+  it('should call sendAction upon clicking "Create Environment" button', () => {
+    analyticsHelper.sendAction = jest.fn();
+    wrapper.find('#build-team-create-env-btn').first().simulate('click');
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_CREATE_ENVIRONMENT);
+  });
+
+  it('should call sendAction upon clicking "Read more" link', () => {
+    analyticsHelper.sendAction = jest.fn();
+    wrapper.find('ExternalLink').first().simulate('click');
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_HOME_READ_MORE_ENVIRONMENT);
   });
 });

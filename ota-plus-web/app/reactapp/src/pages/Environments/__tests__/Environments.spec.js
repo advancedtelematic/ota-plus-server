@@ -110,4 +110,10 @@ describe('<Environments />', () => {
     expect(mockCreateEnv).toHaveBeenCalledWith(newEnvName);
     expect(wrapper.exists('#create-env-modal')).toEqual(false);
   });
+
+  it('should reset create environment value', () => {
+    mockedStores.userStore.environmentsCreateEnvironment = true;
+    wrapper = mountComponent();
+    expect(mockedStores.userStore.environmentsCreateEnvironment).toEqual(false);
+  });
 });

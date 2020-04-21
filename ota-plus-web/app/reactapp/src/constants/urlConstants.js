@@ -2,6 +2,7 @@ export const MAIL_SUPPORT = 'mailto:otaconnect.support@here.com';
 export const URL_AKTUALIZR_CONFIG_OPTIONS = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';
 export const URL_CONFIGURING_DEVICE = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
+export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';
 export const URL_FOOTER_CONTACT_US = 'mailto:otaconnect.support@here.com';
 export const URL_FOOTER_PRIVACY_POLICY = 'https://legal.here.com/en-gb/privacy';
 export const URL_FOOTER_SERVICE_TERMS = 'https://legal.here.com/en-gb/terms';

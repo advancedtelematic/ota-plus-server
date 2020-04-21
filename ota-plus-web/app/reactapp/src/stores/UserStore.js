@@ -54,6 +54,10 @@ export default class UserStore {
 
   @observable showEnvDetails = false;
 
+  @observable environmentsAddMember = false;
+
+  @observable environmentsCreateEnvironment = false;
+
   @observable userUpdateAsync = {};
 
   @observable userChangePasswordAsync = {};
