@@ -312,3 +312,13 @@ h3 {
 .ant-radio:hover .ant-radio-inner {
   border-color: $primary-color;
 }
+
+.ant-select-dropdown {
+  z-index: 9999;
+  li {
+    line-height: 30px;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }    
+  }
+}
