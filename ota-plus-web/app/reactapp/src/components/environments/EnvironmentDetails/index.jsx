@@ -50,6 +50,13 @@ const EnvironmentDetails = () => {
     setAddMemberModalOpen(!addMemberModalOpen);
   };
 
+  useEffect(() => {
+    if (stores.userStore.environmentsAddMember) {
+      stores.userStore.environmentsAddMember = false;
+      toggleAddMemberModal();
+    }
+  }, []);
+
   const handleAddMember = (email) => {
     stores.userStore.addUserToOrganization(email, namespace);
     toggleAddMemberModal();

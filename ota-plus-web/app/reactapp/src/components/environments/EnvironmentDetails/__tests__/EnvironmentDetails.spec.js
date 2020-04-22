@@ -64,6 +64,7 @@ describe('<EnvironmentDetails />', () => {
   const mockAddUserToOrganization = jest.fn();
 
   beforeEach(() => {
+    window.location.replace = jest.fn();
     mockedStores.userStore.currentOrganization = ENV_INFO;
     mockedStores.userStore.userOrganizationUsers = ENV_MEMBERS;
     mockedStores.userStore.user = USER;
@@ -135,5 +136,11 @@ describe('<EnvironmentDetails />', () => {
     expect(mockAddUserToOrganization).toHaveBeenCalledWith('dummy@here.com', ENV_INFO.namespace);
     expect(analyticsHelper.sendAction).toHaveBeenCalledWith(OTA_ENVIRONMENT_ADD_MEMBER);
     expect(wrapper.exists('#add-member-modal')).toEqual(false);
+  });
+
+  it('should reset adding member value', () => {
+    mockedStores.userStore.environmentsAddMember = true;
+    wrapper = mountComponent();
+    expect(mockedStores.userStore.environmentsAddMember).toEqual(false);
   });
 });

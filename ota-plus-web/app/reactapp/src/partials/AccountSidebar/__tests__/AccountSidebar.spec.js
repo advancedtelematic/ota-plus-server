@@ -57,7 +57,7 @@ describe('<AccountSidebar />', () => {
   });
 
   it('should display 4 links, sign-out link by default and without usage link', () => {
-    const linksCount = 4;
+    const linksCount = 3;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);
@@ -66,7 +66,7 @@ describe('<AccountSidebar />', () => {
 
   it('should display 5 links, sign-out link by default and usage link', () => {
     wrapper = mountComponent([FEATURES.USAGE]);
-    const linksCount = 5;
+    const linksCount = 4;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);

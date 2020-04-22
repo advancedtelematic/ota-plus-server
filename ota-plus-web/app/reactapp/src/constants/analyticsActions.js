@@ -107,6 +107,8 @@ export const OTA_FOOTER_LANGUAGES = 'OTA_Footer_Languages';
 
 /* Homepage */
 export const OTA_HOME_ADD_MEMBERS = 'OTA_Home_Add_Members';
+export const OTA_HOME_CREATE_ENVIRONMENT = 'OTA_Home_Create_Env';
+export const OTA_HOME_READ_MORE_ENVIRONMENT = 'OTA_Home_Read_More_Env';
 export const OTA_HOME_PROVISION_DEVICES = 'OTA_Home_Provision_Devices';
 export const OTA_HOME_UPLOAD_SOFTWARE = 'OTA_Home_Upload_Software';
 export const OTA_HOME_CREATE_GROUP = 'OTA_Home_Create_Group';

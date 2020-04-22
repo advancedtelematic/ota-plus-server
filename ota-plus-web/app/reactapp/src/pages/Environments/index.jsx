@@ -34,14 +34,18 @@ const Environments = () => {
   const { environments, maxEnvReached, profile, showEnvDetails } = useStoreData();
   const [createEnvModalOpen, setCreateEnvModalOpen] = useState(false);
 
-  useEffect(() => {
-    stores.userStore.getOrganizations();
-    setAnalyticsView(ANALYTICS_VIEW_ENVIRONMENTS);
-  }, []);
-
   const toggleCreateEnvModal = () => {
     setCreateEnvModalOpen(!createEnvModalOpen);
   };
+
+  useEffect(() => {
+    stores.userStore.getOrganizations();
+    setAnalyticsView(ANALYTICS_VIEW_ENVIRONMENTS);
+    if (stores.userStore.environmentsCreateEnvironment) {
+      stores.userStore.environmentsCreateEnvironment = false;
+      toggleCreateEnvModal();
+    }
+  }, []);
 
   const closeMaxEnvModal = () => {
     const { userStore } = stores;

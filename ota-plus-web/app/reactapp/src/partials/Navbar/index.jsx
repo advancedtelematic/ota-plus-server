@@ -8,6 +8,7 @@ import { useStores } from '../../stores/hooks';
 import { COLORS } from '../../constants/styleConstants';
 import {
   LOCATION_CAMPAIGNS,
+  LOCATION_ENVIRONMENTS,
   LOCATION_IMPACT_ANALYSIS,
   LOCATION_UPDATES,
   LOCATION_SOFTWARE_REPOSITORY
@@ -15,6 +16,7 @@ import {
 import { FEATURES } from '../../config';
 import {
   OTA_NAV_DEVICES,
+  OTA_NAV_ENVIRONMENTS,
   OTA_NAV_HOMEPAGE,
   OTA_NAV_SOFTWARE_VERSIONS,
   OTA_NAV_SOFTWARE_UPDATES,
@@ -81,6 +83,14 @@ const Navbar = ({ uiUserProfileMenu }) => {
         isBeta: false
       });
     }
+    publicLinks.push(
+      {
+        actionType: OTA_NAV_ENVIRONMENTS,
+        name: t('navigation.environments'),
+        to: `/${LOCATION_ENVIRONMENTS}`,
+        isBeta: false
+      }
+    );
 
     setLinks(publicLinks);
   }, [features, getLanguage()]);
