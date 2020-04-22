@@ -12,9 +12,6 @@ variables:
 
 test:
   stage: test
-  except:
-    changes:
-      - ota-plus-web/docs/**/*
   tags:
     - docker-sock
   image: advancedtelematic/gitlab-jobs:0.2.4
