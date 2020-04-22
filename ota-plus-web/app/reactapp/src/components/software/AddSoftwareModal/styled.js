@@ -187,7 +187,7 @@ export const Description = styled.p`
 export const ModalContainer = styled.div`
   position: absolute;
   z-index: 9999;
-  top: 220px;
+  top: 120px;
   left: calc(50% - 421px);
   width: 843px;
   border-radius: 3px;
