@@ -22,10 +22,13 @@ image::img::upload_software_button.png[image,300]
 NOTE: On the portal, the maximum file size limit for uploads is 1 GB. If you want to upload larger files (up to 3 GB), use the `garage-sign` tool on the command line.
 +
 [.lightbackground]
-image::img::upload_software_new_design.png[image,600]
+image::img::upload_software_new_design.png[image,90%]
 . Click *Upload*.
 +
 If your software is uploaded successfully, you see the "Software uploaded" message.
++
+[.lightbackground]
+image::img::software_uploaded_successfully.png[image,75%]
 . Click *Done*.
 
 The new software version appears in the software version list.
