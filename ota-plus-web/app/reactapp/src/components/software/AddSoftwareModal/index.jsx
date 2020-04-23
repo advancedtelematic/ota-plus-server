@@ -30,8 +30,8 @@ import { OTA_SOFTWARE_FAIL_SIZE } from '../../../constants/analyticsActions';
 
 const SelectOption = Select.Option;
 
-const Tag = ({ children, onClose }) => (
-  <Pill>
+const Tag = ({ children, id, onClose }) => (
+  <Pill id={id}>
     {children}
     <i className="fa fa-times" onClick={onClose} />
   </Pill>
@@ -42,6 +42,7 @@ Tag.propTypes = {
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node)
   ]),
+  id: PropTypes.string,
   onClose: PropTypes.func.isRequired
 };
 
@@ -156,7 +157,7 @@ const AddSoftwareModal = ({ hide }) => {
   return (
     <>
       <BackgroundMask onClick={hide} />
-      <ModalContainer>
+      <ModalContainer id="sw-create-modal">
         <CloseIcon src={CLOSE_MODAL_ICON} onClick={hide} id="close-icon" />
         <Title>{t('software.create-modal.title')}</Title>
         <Description>{t('software.create-modal.description')}</Description>
@@ -167,7 +168,7 @@ const AddSoftwareModal = ({ hide }) => {
           name="packageName"
           onChange={onInputChange('softwareName')}
         />
-        <InputLabel>{t('software.create-modal.software-name.label')}</InputLabel>
+        <InputLabel>{t('software.create-modal.software-version.label')}</InputLabel>
         <Input
           id="add-new-software-version"
           placeholder={t('software.create-modal.software-version.placeholder')}
@@ -181,9 +182,10 @@ const AddSoftwareModal = ({ hide }) => {
           value={formData.selectedHardwareIds.length ? t('software.create-modal.software-ecu.value') : undefined}
           onSelect={handleEcuSelect}
           onDropdownVisibleChange={isVisible}
+          dropdownClassName="ecu-select-list"
           suffixIcon={(
             <span>
-              <span>{formData.selectedHardwareIds.length || null}</span>
+              <span id="selected-ecus-count">{formData.selectedHardwareIds.length || null}</span>
               <i
                 className={`fa ${ecuDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}
                 style={{ opacity: formData.selectedHardwareIds.length ? 1 : 0.7 }}
@@ -192,7 +194,7 @@ const AddSoftwareModal = ({ hide }) => {
           )}
         >
           {hardwareIds.map(id => (
-            <SelectOption value={id} key={id} id={`${id}-option`}>
+            <SelectOption key={id} value={id} id={`${id}-option`}>
               {id}
               {formData.selectedHardwareIds.includes(id) && (
                 <i className="fa fa-check c-form__select-icon" />
@@ -203,7 +205,7 @@ const AddSoftwareModal = ({ hide }) => {
         {formData.selectedHardwareIds.length > 0 && (
           <PillsContainer>
             {formData.selectedHardwareIds.map(id => (
-              <Tag key={`${id}-pill`} id={`${id}-pill`} onClose={() => handleEcuSelect(id)}>
+              <Tag key={id} id={`${id}-pill`} onClose={() => handleEcuSelect(id)}>
                 {id}
               </Tag>
             ))}
@@ -229,11 +231,11 @@ const AddSoftwareModal = ({ hide }) => {
           {fileInfo.fileName
             ? (
               <>
-                <Tag id="attached-file-pill" onClose={removeFile}>
-                  <div>{fileInfo.fileName}</div>
+                <Tag onClose={removeFile}>
+                  <div id="attached-file-pill">{fileInfo.fileName}</div>
                 </Tag>
                 <Info error={fileInfo.fileTooLarge}>
-                  <span>{fileInfo.filePrettySize}</span>
+                  <span id="file-size-tip">{fileInfo.filePrettySize}</span>
                   {fileInfo.fileTooLarge && (
                     <>
                       <img src={ATTENTION_ICON} />
