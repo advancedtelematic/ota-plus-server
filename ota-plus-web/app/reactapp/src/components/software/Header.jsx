@@ -146,6 +146,7 @@ class Header extends Component {
             desc={(
               <span>
                 {t('software.keys-offline-modal.desc')}
+                {' '}
                 <ExternalLink id="rotating-keys-link" url={URL_ROTATING_KEYS} weight="regular">
                   {t('software.keys-offline-modal.desc-url')}
                 </ExternalLink>
