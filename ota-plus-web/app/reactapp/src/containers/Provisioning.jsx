@@ -94,7 +94,7 @@ class Provisioning extends Component {
             <ProvisioningList
               preparedProvisioningKeys={provisioningStore.preparedProvisioningKeys}
               provisioningKeyAreFetching={provisioningStore.provisioningKeysFetchAsync.isFetching}
-              showTooltip={this.showTooltip}
+              showCreateModal={this.showCreateModal}
             />
           </span>
         ) : (

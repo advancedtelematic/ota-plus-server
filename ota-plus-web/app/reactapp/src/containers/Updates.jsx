@@ -9,9 +9,9 @@ import { Pagination } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
-import { Loader } from '../partials';
+import { Loader, SecondaryButton } from '../partials';
 
-import { SOFTWARE_ICON_OLD_WHITE, UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE } from '../config';
+import { UPDATE_ICON, UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE, PLUS_ICON } from '../config';
 import { MetaData } from '../utils';
 import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
@@ -101,7 +101,7 @@ class Updates extends Component {
 
   render() {
     const { pageNumber } = this.state;
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { updatesStore } = stores;
     const { isFetching } = updatesStore.updatesFetchAsync;
     return (
@@ -130,12 +130,14 @@ class Updates extends Component {
               <UpdateHeader filterChangeCallback={this.filterChangeCallback} showCreateModal={this.showCreateModal} />
               <div className="wrapper-center">
                 <div className="page-intro">
-                  <img src={SOFTWARE_ICON_OLD_WHITE} alt="Icon" />
-                  <div>{"You haven't created any updates yet."}</div>
+                  <img src={UPDATE_ICON} alt="Icon" />
+                  <div>{t('updates.empty.no-updates-1')}</div>
+                  <div>{t('updates.empty.no-updates-2')}</div>
                   <div>
-                    <a href="#" className="add-button light" id="add-new-update" onClick={this.showCreateModal}>
-                      <span>{'Create update'}</span>
-                    </a>
+                    <SecondaryButton id="add-new-update" type="link" onClick={this.showCreateModal}>
+                      <img src={PLUS_ICON} />
+                      {t('updates.empty.add-new')}
+                    </SecondaryButton>
                   </div>
                 </div>
               </div>

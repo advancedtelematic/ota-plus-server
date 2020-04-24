@@ -20,8 +20,7 @@ import {
   OTA_DEVICES_SEE_UNGROUPED,
   OTA_DEVICES_SEARCH_DEVICE
 } from '../constants/analyticsActions';
-import { DEVICE_ICON_OLD_WHITE, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
-import { URL_GET_STARTED } from '../constants/urlConstants';
+import { DEVICE_ICON, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
 
 @inject('stores')
 @observer
@@ -182,20 +181,12 @@ class Devices extends Component {
   getEmptyDevicesMessage = (t, devicesFetchingError) => devicesFetchingError
     ? (
       <div>
-        <div>{t('devices.empty.technical_issues')}</div>
+        <div>{t('devices.empty.technical-issues')}</div>
       </div>
     ) : (
       <div>
-        <div>{t('devices.empty.no_devices')}</div>
-        <a
-          href={URL_GET_STARTED}
-          className="add-button light"
-          id="add-new-device"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <span>{t('devices.empty.add_new')}</span>
-        </a>
+        <div>{t('devices.empty.no-devices-1')}</div>
+        <div>{t('devices.empty.no-devices-2')}</div>
       </div>
     );
 
@@ -230,9 +221,7 @@ class Devices extends Component {
         ) : (
           <div className="wrapper-center">
             <div className="page-intro">
-              <div>
-                <img src={DEVICE_ICON_OLD_WHITE} alt="Icon" />
-              </div>
+              <img src={DEVICE_ICON} alt="Icon" />
               {this.getEmptyDevicesMessage(t, devicesStore.devicesFetchingError)}
             </div>
           </div>

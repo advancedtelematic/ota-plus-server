@@ -112,6 +112,9 @@ export const ListNoDataDescription = styled.div`
   line-height: 18px;
   text-align: center;
   white-space: pre-line;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const MenuCheckbox = styled(Checkbox)`

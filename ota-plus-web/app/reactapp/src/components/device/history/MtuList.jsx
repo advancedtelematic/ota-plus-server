@@ -8,7 +8,7 @@ import { withTranslation } from 'react-i18next';
 import { Pagination } from 'antd';
 
 import MtuListItem from './MtuListItem';
-import { DEVICE_HISTORY_LIMIT } from '../../../config';
+import { CAMPAIGNS_ICON_GRAY, DEVICE_HISTORY_LIMIT } from '../../../config';
 
 const PAGE_NUMBER_DEFAULT = 1;
 
@@ -37,7 +37,9 @@ class MtuList extends Component {
     const emptyHistory = (
       <div className="wrapper-center">
         <span className="overview-panel__empty">
-          {t('devices.mtu.history.no_updates')}
+          <img src={CAMPAIGNS_ICON_GRAY} />
+          <div>{t('devices.mtu.history.no-updates-1')}</div>
+          <div>{t('devices.mtu.history.no-updates-2')}</div>
         </span>
       </div>
     );

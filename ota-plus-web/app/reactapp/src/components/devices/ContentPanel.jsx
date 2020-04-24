@@ -21,6 +21,7 @@ import {
   DEVICES_LIMIT_PER_PAGE,
   DEVICES_PAGE_NUMBER_DEFAULT,
   FEATURES,
+  DEVICE_ICON,
 } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_SEE_DEVICE_DETAILS } from '../../constants/analyticsActions';
@@ -191,11 +192,22 @@ class ContentPanel extends Component {
                   ) : (
                     <div className="devices-panel__list-empty-wrapper">
                       <div className="devices-panel__list-empty">
+                        <img src={DEVICE_ICON} />
                         {type === ARTIFICIAL
                           ? t('devices.all_grouped')
                           : isSmart
-                            ? t('devices.empty_group_smart')
-                            : t('devices.empty_group_fixed')
+                            ? (
+                              <>
+                                <div>{t('devices.empty-group-smart-1')}</div>
+                                <div>{t('devices.empty-group-smart-2')}</div>
+                              </>
+                            )
+                            : (
+                              <>
+                                <div>{t('devices.empty-group-fixed-1')}</div>
+                                <div>{t('devices.empty-group-fixed-2')}</div>
+                              </>
+                            )
                         }
                       </div>
                     </div>

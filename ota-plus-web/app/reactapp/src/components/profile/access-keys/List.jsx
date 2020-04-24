@@ -24,7 +24,7 @@ class List extends Component {
 
   render() {
     const { isAccountSetup } = this.state;
-    const { showTooltip, preparedProvisioningKeys, provisioningKeyAreFetching } = this.props;
+    const { showCreateModal, preparedProvisioningKeys, provisioningKeyAreFetching } = this.props;
     return preparedProvisioningKeys.length ? (
       <span>
         <div className="section-header">
@@ -44,7 +44,7 @@ class List extends Component {
         <Loader />
       </div>
     ) : (
-      <NoKeys showTooltip={showTooltip} />
+      <NoKeys showCreateModal={showCreateModal} />
     );
   }
 }
@@ -53,7 +53,7 @@ List.propTypes = {
   preparedProvisioningKeys: PropTypes.arrayOf(PropTypes.shape({})),
   provisioningKeyAreFetching: PropTypes.bool,
   stores: PropTypes.shape({}),
-  showTooltip: PropTypes.func
+  showCreateModal: PropTypes.func
 };
 
 export default List;

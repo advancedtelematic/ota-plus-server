@@ -10,17 +10,18 @@ import _ from 'lodash';
 
 import ListHeader from './ListHeader';
 import List from './List';
-import Loader from '../../partials/Loader';
-import TabNavigation from '../../partials/TabNavigation';
+import { Loader, SecondaryButton, TabNavigation } from '../../partials';
 
 import {
   ACTIVE_TAB_KEY,
   CAMPAIGNS_DEFAULT_TAB,
   CAMPAIGNS_FETCH_ASYNC,
   CAMPAIGNS_FILTER,
-  CAMPAIGNS_ICON_WHITE,
+  CAMPAIGNS_ICON,
   CAMPAIGNS_LIMIT_PER_PAGE,
   CAMPAIGNS_PAGE_NUMBER_DEFAULT,
+  CAMPAIGNS_STATUS_ALL,
+  PLUS_ICON,
 } from '../../config';
 
 @inject('stores')
@@ -119,7 +120,7 @@ class ContentPanel extends Component {
     const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
       stores, t, toggleCampaign } = this.props;
     const { campaignsStore } = stores;
-    const { campaignsFetchAsync, campaigns, campaignsFilter } = campaignsStore;
+    const { activeTab, campaignsFetchAsync, campaigns, campaignsFilter } = campaignsStore;
 
     return (
       <span>
@@ -146,21 +147,28 @@ class ContentPanel extends Component {
           ) : (
             <div className="wrapper-center">
               <div className="page-intro">
-                <img src={CAMPAIGNS_ICON_WHITE} alt="Icon" />
-                <div>{t('campaigns.no_campaigns')}</div>
-                <div>
-                  <a
-                    href="#"
-                    className="add-button light"
-                    id="add-new-campaign"
-                    onClick={(event) => {
-                      if (event) event.preventDefault();
-                      addNewWizard();
-                    }}
-                  >
-                    <span>{t('campaigns.create')}</span>
-                  </a>
-                </div>
+                <img src={CAMPAIGNS_ICON} alt="Icon" />
+                {activeTab === CAMPAIGNS_STATUS_ALL ? (
+                  <>
+                    <div>{t('campaigns.no-campaigns-1')}</div>
+                    <div>{t('campaigns.no-campaigns-2')}</div>
+                    <div>
+                      <SecondaryButton
+                        type="link"
+                        id="add-new-campaign"
+                        onClick={(event) => {
+                          if (event) event.preventDefault();
+                          addNewWizard();
+                        }}
+                      >
+                        <img src={PLUS_ICON} />
+                        {t('campaigns.create')}
+                      </SecondaryButton>
+                    </div>
+                  </>
+                ) : (
+                  <div>{t('campaigns.no-campaigns.filtered')}</div>
+                )}
               </div>
             </div>
           )
