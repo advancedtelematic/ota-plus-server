@@ -4,17 +4,16 @@ You can rename any environment to which you have access, even if it is not your 
 
 *To rename an environment:*
 
-1. Log in to your https://connect.ota.here.com[OTA Connect account, window="_blank"].
-2. In the upper-right corner, click the profile menu, and then click *Environments*.
-3. On the *Environments* page, click the environment that you want to rename.
+. Go to the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
+. Click the environment that you want to rename.
 +
 The page with environment details opens.
 
-4. Next to the environment creation details, click *Rename*.
-5. In the *Rename environment* dialog box, enter the environment name.
+. Next to the environment creation details, click *Rename*.
+. In the *Rename environment* dialog box, enter the environment name.
 +
 The environment name should not exceed 30 characters and can contain letters, numbers, and the following specific characters: `' " . , : ; _ - / ( )`.
 
-6. Click *Rename*.
+. Click *Rename*.
 
 The new environment name appears on the page with environment details and in the list of environments.
