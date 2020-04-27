@@ -997,7 +997,7 @@ input {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  img {
+  & > img {
     width: 75px;
     margin-bottom: 15px;
   }

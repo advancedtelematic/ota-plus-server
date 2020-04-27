@@ -356,6 +356,7 @@ export const UPDATE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-tuner-outlin
 export const UPDATE_ICON_GREEN = '/assets/img/new-app/24/software-updates-active-outline-24-green.svg';
 export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
 export const NO_ITEMS_ICON = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24.svg';
+export const NO_ITEMS_ICON_WHITE = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24-white.svg';
 export const QUESTIONMARK_ICON_BLACK = '/assets/img/icons/black/questionmark.svg';
 export const QUESTIONMARK_ICON_WHITE = '/assets/img/icons/white/questionmark.svg';
 export const TICK_ICON_BLACK = '/assets/img/icons/black/tick.svg';

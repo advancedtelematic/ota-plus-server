@@ -6,8 +6,9 @@ import { observer, inject } from 'mobx-react';
 import { Row } from 'antd';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
-
+import { CAMPAIGNS_ICON_GRAY } from '../../../config';
 import MtuListItem from './MtuListItem';
+
 
 @inject('stores')
 @observer
@@ -19,7 +20,8 @@ class MtuQueueList extends Component {
       <div className="overview-panel__list">
         <div className="wrapper-center">
           <span className="overview-panel__empty">
-            {t('devices.mtu.queue.no_updates')}
+            <img src={CAMPAIGNS_ICON_GRAY} />
+            <div>{t('devices.mtu.queue.no-updates')}</div>
           </span>
         </div>
       </div>

@@ -115,7 +115,7 @@ const RecentActivity = () => {
           </RightContainer>
         )}
       </TopContainer>
-      { recentlyCreatedItems.length && itemsTotalCount > 0 && !isFetching ? (
+      {recentlyCreatedItems.length && itemsTotalCount > 0 && !isFetching ? (
         <ListStyled
           id="recent-activity-list"
           dataSource={recentlyCreatedItems}
@@ -143,7 +143,12 @@ const RecentActivity = () => {
                 <ListNoDataIcon src={NO_ITEMS_ICON} />
                 <ListNoDataDescription id="recent-activity-no-data-description">
                   { itemsTotalCount === 0
-                    ? t('dashboard.recent-activity.no-data.nothing-created')
+                    ? (
+                      <>
+                        <span>{t('dashboard.recent-activity.no-data.nothing-created-1')}</span>
+                        <span>{t('dashboard.recent-activity.no-data.nothing-created-2')}</span>
+                      </>
+                    )
                     : t('dashboard.recent-activity.no-data.empty')
                   }
                 </ListNoDataDescription>

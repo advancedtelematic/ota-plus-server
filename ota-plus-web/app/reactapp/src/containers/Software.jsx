@@ -7,7 +7,7 @@ import { action, observable, observe, onBecomeObserved } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
-import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
+import { Loader, DependenciesModal, ConfirmationModal, SecondaryButton } from '../partials';
 import SoftwareRepositoryAlpha from '../pages/SoftwareRepositoryAlpha';
 import {
   SoftwareCreateModal,
@@ -16,7 +16,7 @@ import {
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 } from '../components/software';
-import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SOFTWARE_ICON_OLD_WHITE, SWITCH_TO_SW_REPO_KEY } from '../config';
+import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SOFTWARE_ICON, SWITCH_TO_SW_REPO_KEY, PLUS_ICON } from '../config';
 import { MetaData } from '../utils';
 import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
 import { setAnalyticsView } from '../helpers/analyticsHelper';
@@ -250,19 +250,14 @@ class Software extends Component {
           ) : (
             <div className="wrapper-center">
               <div className="page-intro">
+                <img src={SOFTWARE_ICON} alt="Icon" />
+                <div>{t('software.empty.no-software-1')}</div>
+                <div>{t('software.empty.no-software-2')}</div>
                 <div>
-                  <img src={SOFTWARE_ICON_OLD_WHITE} alt="Icon" />
-                </div>
-                <div>{t('software.empty.no_software')}</div>
-                <div>
-                  <a
-                    href="#"
-                    className="add-button light"
-                    id="add-new-software"
-                    onClick={this.showCreateModal.bind(this, null)}
-                  >
-                    <span>{t('software.empty.add_new')}</span>
-                  </a>
+                  <SecondaryButton type="link" id="add-new-software" onClick={this.showCreateModal}>
+                    <img src={PLUS_ICON} />
+                    {t('software.empty.add-new')}
+                  </SecondaryButton>
                 </div>
               </div>
             </div>
