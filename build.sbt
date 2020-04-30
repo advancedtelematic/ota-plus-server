@@ -23,7 +23,6 @@ lazy val Library = new {
   lazy val jose4j         = "org.bitbucket.b_c" % "jose4j" % Version.Jose4j
   val LibAts = Set(
     "com.advancedtelematic" %% "libats",
-    "com.advancedtelematic" %% "libats-messaging",
     "com.advancedtelematic" %% "libats-logging",
     "com.advancedtelematic" %% "libats-metrics",
   ).map(_ % Version.LibAts)
@@ -158,6 +157,6 @@ lazy val `ota-plus-web` = project.in(file("ota-plus-web"))
     .settings(buildinfoSettings)
 
 lazy val atsRepos = Seq(
-  "ATS Releases" at "http://nexus.advancedtelematic.com:8081/content/repositories/releases",
-  "ATS Snapshots" at "http://nexus.advancedtelematic.com:8081/content/repositories/snapshots"
+  "ATS Releases" at "https://nexus.ota.here.com/content/repositories/releases",
+  "ATS Snapshots" at "http://nexus.ota.here.com/content/repositories/snapshots"
 )

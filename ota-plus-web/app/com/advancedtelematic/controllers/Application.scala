@@ -9,7 +9,6 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
-import com.advancedtelematic.NamespaceDirectorConfig
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
 import javax.inject.{Inject, Singleton}
@@ -60,14 +59,12 @@ class Application @Inject() (ws: TraceWSClient,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
                              val apiAuth: PlainAction,
-                             tokenBuilder: AccessTokenBuilder,
-                             namespaceDirectorConfig: NamespaceDirectorConfig)
+                             tokenBuilder: AccessTokenBuilder)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig with ZipkinTraceImplicits {
 
   import ApiVersion.ApiVersion
 
   implicit val ec = components.executionContext
-  private val _log = LoggerFactory.getLogger(this.getClass)
 
   private[this] val oauthConfig = OAuthConfig(conf)
   private[this] val uiToggles = UiToggles(conf)
@@ -90,7 +87,7 @@ class Application @Inject() (ws: TraceWSClient,
     val proxiedPrefixes =
       deviceRegistryProxiedPrefixes orElse
       auditorProxiedPrefixes orElse
-      directorProxiedPrefixes(ns) orElse
+      directorProxiedPrefixes orElse
       repoProxiedPrefixes orElse
       campaignerProxiedPrefixes
 
@@ -104,18 +101,10 @@ class Application @Inject() (ws: TraceWSClient,
     case (_, "auditor" :: "update_reports" :: _) => auditorApiUri
   }
 
-  private def directorProxiedPrefixes(ns: Namespace): Dispatcher = {
-    def directorUri(ns: Namespace): OtaApiUri = {
-      val directorUri = namespaceDirectorConfig.getUri(ns)
-      _log.info("Using {} for {}", directorUri, ns)
-      directorUri
-    }
-
-    {
-      case (_, "multi_target_updates" :: _) => directorUri(ns)
-      case (_, "admin" :: _) => directorUri(ns)
-      case (_, "assignments" :: _) => directorUri(ns)
-    }
+  private val directorProxiedPrefixes: Dispatcher = {
+    case (_, "multi_target_updates" :: _) => directorApiUri
+    case (_, "admin" :: _) => directorApiUri
+    case (_, "assignments" :: _) => directorApiUri
   }
 
   private val deviceRegistryProxiedPrefixes: Dispatcher = {
