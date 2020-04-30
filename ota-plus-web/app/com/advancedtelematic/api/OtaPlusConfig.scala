@@ -17,8 +17,6 @@ trait OtaPlusConfig {
 
   val directorApiUri = OtaApiUri("director", conf.underlying.getString("director.uri"))
 
-  val directorV2ApiUri = OtaApiUri("directorV2", conf.underlying.getString("directorV2.uri"))
-
   val repoApiUri = OtaApiUri("reposerver-internal", conf.underlying.getString("repo.uri"))
 
   val repoPubApiUri = OtaApiUri("reposerver", conf.underlying.getString("repo.pub.uri"))
