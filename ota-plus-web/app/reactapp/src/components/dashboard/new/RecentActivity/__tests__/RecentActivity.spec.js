@@ -14,7 +14,6 @@ import * as analyticsHelper from '../../../../../helpers/analyticsHelper';
 jest.mock('../../../../../i18n');
 
 const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_EMPTY = 'dashboard.recent-activity.no-data.empty';
-const TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_NOTHING_CREATED = 'dashboard.recent-activity.no-data.nothing-created';
 
 const mockedStores = {
   devicesStore: new DevicesStore(),
@@ -125,9 +124,6 @@ describe('<RecentActivity />', () => {
     expect(wrapper.exists('#recent-activity-filter-title')).toEqual(false);
     expect(wrapper.exists('#recent-activity-list')).toEqual(false);
     expect(wrapper.exists('#recent-activity-no-data-description')).toEqual(true);
-    expect(wrapper.find('#recent-activity-no-data-description').children().last().text()).toBe(
-      TEXT_DASHBOARD_RECENT_ACTIVITY_NO_DATA_NOTHING_CREATED
-    );
     expect(wrapper.exists('#recent-activity-no-data-loader')).toEqual(false);
   });
 

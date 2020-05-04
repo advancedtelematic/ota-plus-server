@@ -20,6 +20,9 @@ import {
   OTA_UPDATES_SEARCH_UPDATE
 } from '../constants/analyticsActions';
 import { ANALYTICS_VIEW_SOFTWARE_UPDATES } from '../constants/analyticsViews';
+import ReadMore from '../partials/ReadMore';
+import UnderlinedLink from '../partials/UnderlinedLink';
+import { URL_UPDATES_INTRO } from '../constants/urlConstants';
 
 const PAGE_NUMBER_DEFAULT = 1;
 
@@ -132,7 +135,10 @@ class Updates extends Component {
                 <div className="page-intro">
                   <img src={UPDATE_ICON} alt="Icon" />
                   <div>{t('updates.empty.no-updates-1')}</div>
-                  <div>{t('updates.empty.no-updates-2')}</div>
+                  <ReadMore>
+                    {t('updates.empty.no-updates-2')}
+                    <UnderlinedLink url={URL_UPDATES_INTRO}>{t('miscellaneous.read-more')}</UnderlinedLink>
+                  </ReadMore>
                   <div>
                     <SecondaryButton id="add-new-update" type="link" onClick={this.showCreateModal}>
                       <img src={PLUS_ICON} />

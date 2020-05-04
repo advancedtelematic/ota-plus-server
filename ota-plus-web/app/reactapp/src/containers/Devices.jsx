@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
-import { Loader, ConfirmationModal, EditModal } from '../partials';
+import { Loader, ConfirmationModal, EditModal, SecondaryButton } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
@@ -20,7 +20,11 @@ import {
   OTA_DEVICES_SEE_UNGROUPED,
   OTA_DEVICES_SEARCH_DEVICE
 } from '../constants/analyticsActions';
-import { DEVICE_ICON, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC } from '../config';
+import { DEVICE_ICON, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC, PLUS_ICON } from '../config';
+import UnderlinedLink from '../partials/UnderlinedLink';
+import { URL_PROVISIONING_CREDS } from '../constants/urlConstants';
+import ReadMore from '../partials/ReadMore';
+import { PATH_CREDENTIALS } from '../constants/locationConstants';
 
 @inject('stores')
 @observer
@@ -178,6 +182,13 @@ class Devices extends Component {
     sendAction(OTA_DEVICES_SEARCH_DEVICE);
   };
 
+  handleProvisioningPopup = () => {
+    const { history, stores } = this.props;
+    const { provisioningStore } = stores;
+    provisioningStore.openCreationPopup = true;
+    history.push(PATH_CREDENTIALS);
+  };
+
   getEmptyDevicesMessage = (t, devicesFetchingError) => devicesFetchingError
     ? (
       <div>
@@ -186,7 +197,14 @@ class Devices extends Component {
     ) : (
       <div>
         <div>{t('devices.empty.no-devices-1')}</div>
-        <div>{t('devices.empty.no-devices-2')}</div>
+        <ReadMore>
+          <span>{t('devices.empty.no-devices-2')}</span>
+          <UnderlinedLink url={URL_PROVISIONING_CREDS}>{t('miscellaneous.read-more')}</UnderlinedLink>
+        </ReadMore>
+        <SecondaryButton type="link" onClick={this.handleProvisioningPopup}>
+          <img src={PLUS_ICON} />
+          {t('devices.empty.button-title')}
+        </SecondaryButton>
       </div>
     );
 

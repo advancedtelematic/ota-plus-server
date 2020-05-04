@@ -47,6 +47,8 @@ export default class ProvisioningStore {
 
   @observable sanityCheckCompleted = false;
 
+  @observable openCreationPopup = false;
+
   constructor() {
     resetAsync(this.provisioningStatusFetchAsync);
     resetAsync(this.namespaceSetupFetchAsync);

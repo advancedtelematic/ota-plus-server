@@ -1,6 +1,10 @@
 export const MAIL_SUPPORT = 'mailto:otaconnect.support@here.com';
 export const URL_AKTUALIZR_CONFIG_OPTIONS = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';
+export const URL_CAMPAIGNS_INTRO = 'https://docs.ota.here.com/ota-web/dev/campaigns-intro.html';
+export const URL_CAMPAIGNS_MONITOR = 'https://docs.ota.here.com/ota-web/dev/monitor-campaigns.html';
 export const URL_CONFIGURING_DEVICE = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';
+export const URL_CREATE_FIXED_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html';
+export const URL_CREATE_SMART_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-smart-group.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
 export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';
 export const URL_FOOTER_CONTACT_US = 'mailto:otaconnect.support@here.com';
@@ -9,8 +13,12 @@ export const URL_FOOTER_SERVICE_TERMS = 'https://legal.here.com/en-gb/terms';
 export const URL_GET_STARTED = 'https://docs.ota.here.com/getstarted/dev/index.html';
 export const URL_QUICKSTART = 'https://docs.ota.here.com/getstarted/dev/get-started.html';
 export const URL_PRIVACY = 'https://legal.here.com/en-gb/privacy';
+export const URL_PROVISIONING_CREDS = 'https://docs.ota.here.com/getstarted/dev/generating-provisioning-credentials.html';
+export const URL_PROVISIONING_KEY = 'https://docs.ota.here.com/ota-web/dev/create-provisioning-key.html';
 export const URL_RELEASE_NOTES = 'https://docs.ota.here.com/ota-rns/dev/index.html';
 export const URL_ROTATING_KEYS = 'https://docs.ota.here.com/ota-client/latest/rotating-signing-keys.html';
+export const URL_SINGLE_DEVICE_UPDATE = 'https://docs.ota.here.com/ota-web/dev/manage-devices.html#_install_a_software_update_on_a_single_device';
+export const URL_SOFTWARE_UPLOAD_METHODS = 'https://docs.ota.here.com/ota-web/dev/software-upload-methods.html';
 export const URL_STEPPER_CAMPAIGNS_CTA = '/campaigns';
 export const URL_STEPPER_CAMPAIGNS_DOCS = 'https://docs.ota.here.com/getstarted/dev/get-started.html#_campaigns';
 export const URL_STEPPER_DEVICES_CTA_BUTTON = '/profile/access-keys';
@@ -23,6 +31,7 @@ export const URL_STEPPER_SOFTWARE_DOCS = 'https://docs.ota.here.com/getstarted/d
 export const URL_STEPPER_UPDATES_CTA = '/updates';
 export const URL_STEPPER_UPDATES_DOCS = 'https://docs.ota.here.com/getstarted/dev/get-started.html#_software_updates';
 export const URL_TERMS_AND_CONDITIONS = 'https://developer.here.com/terms-and-conditions';
+export const URL_UPDATES_INTRO = 'https://docs.ota.here.com/ota-web/dev/updates-intro.html';
 export const URL_USER_GUIDE = 'https://docs.ota.here.com/ota-web/dev/index.html';
 
 /* URL docs links */
