@@ -10,6 +10,7 @@ import { BlacklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip } from 
 import { setAnalyticsView } from '../helpers/analyticsHelper';
 import { ANALYTICS_VIEW_IMPACT_ANALYSIS } from '../constants/analyticsViews';
 import { SOFTWARE_ICON } from '../config';
+import ReadMore from '../partials/ReadMore';
 
 @inject('stores')
 @observer
@@ -53,7 +54,7 @@ class ImpactAnalysis extends Component {
             <div className="page-intro">
               <img src={SOFTWARE_ICON} alt="Icon" />
               <div>{t('impact.empty.no-packages-1')}</div>
-              <div>{t('impact.empty.no-packages-2')}</div>
+              <ReadMore>{t('impact.empty.no-packages-2')}</ReadMore>
             </div>
           </div>
         )}

@@ -8,6 +8,8 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import { CAMPAIGNS_ICON_GRAY } from '../../../config';
 import MtuListItem from './MtuListItem';
+import UnderlinedLink from '../../../partials/UnderlinedLink';
+import { URL_SINGLE_DEVICE_UPDATE } from '../../../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -19,7 +21,10 @@ class MtuList extends Component {
       <div className="wrapper-center">
         <span className="overview-panel__empty">
           <img src={CAMPAIGNS_ICON_GRAY} />
-          <div>{t('devices.mtu.approval_pending.no-updates')}</div>
+          <div>
+            <span>{t('devices.mtu.approvalpending.no-updates')}</span>
+            <UnderlinedLink url={URL_SINGLE_DEVICE_UPDATE}>{t('miscellaneous.read-more')}</UnderlinedLink>
+          </div>
         </span>
       </div>
     );

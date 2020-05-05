@@ -115,6 +115,9 @@ export const ListNoDataDescription = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  & > span:nth-child(2) {
+    
+  }
 `;
 
 export const MenuCheckbox = styled(Checkbox)`

@@ -990,6 +990,7 @@ input {
   color: #fff;
   background-color: black;
   font-size: 18px;
+  font-weight: 400;
   text-align: center;
   width: inherit;
   height: inherit;
@@ -1006,7 +1007,9 @@ input {
     color: $color-mint;
     font-size: 14px;
     margin-top: 15px;
-    display: block;
+  }
+  button {
+    margin: 0 auto;
   }
 }
 

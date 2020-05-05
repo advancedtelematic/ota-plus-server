@@ -25,6 +25,9 @@ import {
 } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_SEE_DEVICE_DETAILS } from '../../constants/analyticsActions';
+import ReadMore from '../../partials/ReadMore';
+import UnderlinedLink from '../../partials/UnderlinedLink';
+import { URL_CREATE_FIXED_GROUP, URL_CREATE_SMART_GROUP } from '../../constants/urlConstants';
 
 
 const connections = {
@@ -199,13 +202,27 @@ class ContentPanel extends Component {
                             ? (
                               <>
                                 <div>{t('devices.empty-group-smart-1')}</div>
-                                <div>{t('devices.empty-group-smart-2')}</div>
+                                <ReadMore>
+                                  <span>
+                                    {t('devices.empty-group-smart-2')}
+                                    <UnderlinedLink url={URL_CREATE_SMART_GROUP}>
+                                      {t('miscellaneous.read-more')}
+                                    </UnderlinedLink>
+                                  </span>
+                                </ReadMore>
                               </>
                             )
                             : (
                               <>
                                 <div>{t('devices.empty-group-fixed-1')}</div>
-                                <div>{t('devices.empty-group-fixed-2')}</div>
+                                <ReadMore>
+                                  <span>
+                                    {t('devices.empty-group-fixed-2')}
+                                    <UnderlinedLink url={URL_CREATE_FIXED_GROUP}>
+                                      {t('miscellaneous.read-more')}
+                                    </UnderlinedLink>
+                                  </span>
+                                </ReadMore>
                               </>
                             )
                         }

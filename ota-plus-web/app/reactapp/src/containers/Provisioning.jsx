@@ -66,6 +66,7 @@ class Provisioning extends Component {
     const { stores } = this.props;
     const { provisioningStore } = stores;
     this.createModalShown = false;
+    provisioningStore.openCreationPopup = false;
     resetAsync(provisioningStore.provisioningKeyCreateAsync);
   };
 
@@ -78,6 +79,7 @@ class Provisioning extends Component {
   render() {
     const { stores, t } = this.props;
     const { provisioningStore } = stores;
+    const { openCreationPopup } = provisioningStore;
     return (
       <span>
         {provisioningStore.provisioningStatusFetchAsync.isFetching ? (
@@ -108,7 +110,7 @@ class Provisioning extends Component {
         )}
         {/* TODO: still to check after finishing modal */}
         <ProvisioningTooltip shown={this.tooltipShown} hide={this.hideTooltip} />
-        <ProvisioningCreateModal shown={this.createModalShown} hide={this.hideCreateModal} />
+        <ProvisioningCreateModal shown={this.createModalShown || openCreationPopup} hide={this.hideCreateModal} />
       </span>
     );
   }

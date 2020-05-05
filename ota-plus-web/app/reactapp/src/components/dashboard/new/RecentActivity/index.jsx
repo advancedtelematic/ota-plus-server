@@ -37,6 +37,8 @@ import { ACTIVITIES_TYPE } from '../../../../constants';
 import { useStores } from '../../../../stores/hooks';
 import { Loader } from '../../../../partials';
 import { getLanguage } from '../../../../helpers/languageHelper';
+import UnderlinedLink from '../../../../partials/UnderlinedLink';
+import { URL_PROVISIONING_CREDS } from '../../../../constants/urlConstants';
 
 const MENU_ITEMS = [
   { type: ACTIVITIES_TYPE.DEVICE, title: 'dashboard.recent-activity.filter-menu.item-devices' },
@@ -146,7 +148,10 @@ const RecentActivity = () => {
                     ? (
                       <>
                         <span>{t('dashboard.recent-activity.no-data.nothing-created-1')}</span>
-                        <span>{t('dashboard.recent-activity.no-data.nothing-created-2')}</span>
+                        <span>
+                          {t('dashboard.recent-activity.no-data.nothing-created-2')}
+                          <UnderlinedLink url={URL_PROVISIONING_CREDS}>{t('miscellaneous.read-more')}</UnderlinedLink>
+                        </span>
                       </>
                     )
                     : t('dashboard.recent-activity.no-data.empty')

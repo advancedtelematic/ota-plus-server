@@ -22,7 +22,12 @@ import {
   CAMPAIGNS_PAGE_NUMBER_DEFAULT,
   CAMPAIGNS_STATUS_ALL,
   PLUS_ICON,
+  CAMPAIGNS_STATUS_LAUNCHED,
+  CAMPAIGNS_STATUS_FINISHED,
 } from '../../config';
+import ReadMore from '../../partials/ReadMore';
+import UnderlinedLink from '../../partials/UnderlinedLink';
+import { URL_CAMPAIGNS_INTRO, URL_CAMPAIGNS_MONITOR } from '../../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -148,10 +153,21 @@ class ContentPanel extends Component {
             <div className="wrapper-center">
               <div className="page-intro">
                 <img src={CAMPAIGNS_ICON} alt="Icon" />
-                {activeTab === CAMPAIGNS_STATUS_ALL ? (
+                {activeTab === CAMPAIGNS_STATUS_ALL || activeTab === CAMPAIGNS_STATUS_LAUNCHED ? (
                   <>
-                    <div>{t('campaigns.no-campaigns-1')}</div>
-                    <div>{t('campaigns.no-campaigns-2')}</div>
+                    <div>
+                      {t(activeTab === CAMPAIGNS_STATUS_LAUNCHED
+                        ? 'campaigns.no-campaigns-running'
+                        : 'campaigns.no-campaigns-1')}
+                    </div>
+                    <ReadMore>
+                      {t('campaigns.no-campaigns-2')}
+                      <UnderlinedLink
+                        url={activeTab === CAMPAIGNS_STATUS_LAUNCHED ? URL_CAMPAIGNS_MONITOR : URL_CAMPAIGNS_INTRO}
+                      >
+                        {t('miscellaneous.read-more')}
+                      </UnderlinedLink>
+                    </ReadMore>
                     <div>
                       <SecondaryButton
                         type="link"
@@ -167,7 +183,13 @@ class ContentPanel extends Component {
                     </div>
                   </>
                 ) : (
-                  <div>{t('campaigns.no-campaigns.filtered')}</div>
+                  <>
+                    <div>{activeTab === CAMPAIGNS_STATUS_FINISHED && t('campaigns.no-campaigns-finished-extra')}</div>
+                    <ReadMore>
+                      {t(`campaigns.no-campaigns-${activeTab}`)}
+                      <UnderlinedLink url={URL_CAMPAIGNS_MONITOR}>{t('miscellaneous.read-more')}</UnderlinedLink>
+                    </ReadMore>
+                  </>
                 )}
               </div>
             </div>

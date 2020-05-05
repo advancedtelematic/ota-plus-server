@@ -20,6 +20,9 @@ import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SOFTWARE_ICON, SWITCH_TO_SW
 import { MetaData } from '../utils';
 import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
 import { setAnalyticsView } from '../helpers/analyticsHelper';
+import ReadMore from '../partials/ReadMore';
+import UnderlinedLink from '../partials/UnderlinedLink';
+import { URL_SOFTWARE_UPLOAD_METHODS } from '../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -252,7 +255,10 @@ class Software extends Component {
               <div className="page-intro">
                 <img src={SOFTWARE_ICON} alt="Icon" />
                 <div>{t('software.empty.no-software-1')}</div>
-                <div>{t('software.empty.no-software-2')}</div>
+                <ReadMore>
+                  {t('software.empty.no-software-2')}
+                  <UnderlinedLink url={URL_SOFTWARE_UPLOAD_METHODS}>{t('miscellaneous.read-more')}</UnderlinedLink>
+                </ReadMore>
                 <div>
                   <SecondaryButton type="link" id="add-new-software" onClick={this.showCreateModal}>
                     <img src={PLUS_ICON} />
