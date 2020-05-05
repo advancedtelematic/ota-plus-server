@@ -30,4 +30,9 @@ class DeviceRegistryApi(val conf: Configuration, val apiExec: ApiClientExec)
     request(s"device_groups/$groupId/count")
       .withNamespace(Some(namespace))
       .execJsonValue(apiExec)
+
+  def availableDeviceTags(namespace: Namespace)(implicit traceData: TraceData): Future[JsValue] =
+    request(s"device_tags")
+      .withNamespace(Some(namespace))
+      .execJsonValue(apiExec)
 }

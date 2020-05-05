@@ -23,7 +23,13 @@ class OrganizationControllerSpec extends PlaySpec
   with Results {
 
   val userProfileUri = "http://user-profile.com"
+  val deviceRegistryUri = "http://device-registry.com"
   val userAllowedNamespace = "another|namespace"
+
+  val deviceTags = Json.arr(
+    Json.obj("tag_id" -> 0, "tag_name" -> "Some custom field"),
+    Json.obj("tag_id" -> 1, "tag_name" -> "Another custom field")
+  )
 
   val mock = MockWS {
     case (GET, url) if s"$userProfileUri/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
@@ -34,11 +40,14 @@ class OrganizationControllerSpec extends PlaySpec
         ))))
     case (PATCH, url) if s"$userProfileUri/api/v1/users/.*/organizations".r.findFirstIn(url).isDefined =>
       Action(_ => NoContent)
+    case (GET, url) if url == s"$deviceRegistryUri/api/v1/device_tags" =>
+      Action(_ => Ok(deviceTags))
   }
 
   implicit override lazy val app: play.api.Application =
     new GuiceApplicationBuilder()
       .configure("userprofile.uri" -> userProfileUri)
+      .configure("deviceregistry.uri" -> deviceRegistryUri)
       .overrides(bind[WSClient].to(mock))
       .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
       .build()
@@ -53,6 +62,17 @@ class OrganizationControllerSpec extends PlaySpec
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/")
       session(result).apply("namespace") mustBe userAllowedNamespace
+    }
+  }
+
+  "Getting the device tags in an organization" should {
+    val controller = app.injector.instanceOf[OrganizationController]
+
+    "fetch the tags" in {
+      val request = FakeRequest("GET", "/organization/custom_device_fields").withAuthSession(userAllowedNamespace)
+      val result = call(controller.deviceTagsInOrganization, request)
+      status(result) mustBe OK
+      contentAsJson(result) mustBe deviceTags
     }
   }
 

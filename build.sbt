@@ -5,7 +5,6 @@ name := "ota-plus-server"
 lazy val Library = new {
   object Version {
     val Akka            = "2.5.9"
-    val JsonWebSecurity = "0.4.5"
     val MockWs          = "2.6.2"
     val LibAts          = "0.3.0-98-g11dd194"
     val LibTuf          = "0.7.0-100-g789baa5"
@@ -158,5 +157,5 @@ lazy val `ota-plus-web` = project.in(file("ota-plus-web"))
 
 lazy val atsRepos = Seq(
   "ATS Releases" at "https://nexus.ota.here.com/content/repositories/releases",
-  "ATS Snapshots" at "http://nexus.ota.here.com/content/repositories/snapshots"
+  "ATS Snapshots" at "https://nexus.ota.here.com/content/repositories/snapshots"
 )

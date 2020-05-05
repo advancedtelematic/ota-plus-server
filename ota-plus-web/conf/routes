@@ -49,6 +49,7 @@ PUT     /user/*path                       com.advancedtelematic.controllers.User
 
 # Namespaces AKA organizations AKA environments
 GET     /organization                     com.advancedtelematic.controllers.OrganizationController.proxyRequest(path="")
+GET     /organization/custom_device_fields com.advancedtelematic.controllers.OrganizationController.deviceTagsInOrganization()
 GET     /organizations/:namespace         com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path="", namespace: Namespace)
 GET     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 GET     /organizations/:namespace/index   com.advancedtelematic.controllers.OrganizationController.switchOrganization(namespace: Namespace)
