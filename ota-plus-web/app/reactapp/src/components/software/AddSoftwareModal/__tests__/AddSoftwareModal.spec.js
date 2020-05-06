@@ -7,6 +7,7 @@ import theme from '../../../../theme';
 import HardwareStore from '../../../../stores/HardwareStore';
 import SoftwareStore from '../../../../stores/SoftwareStore';
 import * as analyticsHelper from '../../../../helpers/analyticsHelper';
+import { UPLOADING_STATUS } from '../../../../constants';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -103,5 +104,136 @@ describe('<AddSoftwareModal />', () => {
     expect(wrapper.exists('#attached-file-pill')).toEqual(true);
     wrapper.find('#attached-file-pill').first().find('i').simulate('click');
     expect(wrapper.exists('#attached-file-pill')).toEqual(false);
+  });
+
+  it('should display proper components for idle status', () => {
+    expect(wrapper.exists('#sw-create-modal-info-status-bar')).toEqual(false);
+    expect(wrapper.exists('#text-label-software-name')).toEqual(false);
+    expect(wrapper.exists('#add-new-software-name')).toEqual(true);
+    expect(wrapper.exists('#progress-bar')).toEqual(false);
+  });
+
+  it('should display proper components for in progress status', () => {
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    expect(wrapper.exists('#sw-create-modal-info-status-bar')).toEqual(false);
+    expect(wrapper.exists('#text-label-software-name')).toEqual(true);
+    expect(wrapper.exists('#add-new-software-name')).toEqual(false);
+    expect(wrapper.exists('#progress-bar')).toEqual(true);
+  });
+
+  it('should display cancel message', () => {
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    wrapper.find('#cancel-btn').first().simulate('click');
+    expect(wrapper.exists('#software-uploading-cancel-message')).toEqual(true);
+  });
+
+  it('should display proper components for cancel status and call cancel function', () => {
+    const cancelFunction = jest.fn();
+    mockedStores.softwareStore.packagesUploading = [
+      {
+        source: {
+          cancel: cancelFunction
+        }
+      }
+    ];
+    wrapper = mountComponent(props);
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    wrapper.find('#cancel-btn').first().simulate('click');
+    wrapper.find('#warning-confirm-btn').first().simulate('click');
+    expect(wrapper.exists('#sw-create-modal-info-status-bar')).toEqual(true);
+    expect(wrapper.exists('#text-label-software-name')).toEqual(false);
+    expect(wrapper.exists('#add-new-software-name')).toEqual(true);
+    expect(wrapper.exists('#progress-bar')).toEqual(false);
+    expect(cancelFunction).toHaveBeenCalled();
+  });
+
+  it('should display proper components for success status', () => {
+    mockedStores.softwareStore.createPackage = jest.fn((data, formData, hardwareIds, onUploadProgress, onFinished) => {
+      onFinished(UPLOADING_STATUS.SUCCESS);
+    });
+    wrapper = mountComponent(props);
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    expect(wrapper.exists('#sw-create-modal-info-status-bar')).toEqual(true);
+    expect(wrapper.exists('#text-label-software-name')).toEqual(true);
+    expect(wrapper.exists('#add-new-software-name')).toEqual(false);
+    expect(wrapper.exists('#progress-bar')).toEqual(false);
+  });
+
+  it('should display proper components for error status', () => {
+    mockedStores.softwareStore.createPackage = jest.fn((data, formData, hardwareIds, onUploadProgress, onFinished) => {
+      onFinished(UPLOADING_STATUS.ERROR);
+    });
+    wrapper = mountComponent(props);
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    expect(wrapper.exists('#sw-create-modal-info-status-bar')).toEqual(true);
+    expect(wrapper.exists('#text-label-software-name')).toEqual(false);
+    expect(wrapper.exists('#add-new-software-name')).toEqual(true);
+    expect(wrapper.exists('#progress-bar')).toEqual(false);
+  });
+
+  it('should display proper progress bar', () => {
+    const LOADED_DATA_SIZE = 500;
+    const TOTAL_DATA_SIZE = 1000;
+    const EXPECTED_PERCENTAGE = 50;
+    mockedStores.softwareStore.createPackage = jest.fn((data, formData, hardwareIds, onUploadProgress) => {
+      onUploadProgress(LOADED_DATA_SIZE, TOTAL_DATA_SIZE);
+    });
+    wrapper = mountComponent(props);
+    wrapper.find('#add-new-software-name').first().simulate('change', { target: { value: 'soft' } });
+    expect(wrapper.find('#add-new-software-name').find('input').props().value).toBe('soft');
+    wrapper.find('#add-new-software-version').first().simulate('change', { target: { value: '2.0' } });
+    expect(wrapper.find('#add-new-software-version').find('input').props().value).toBe('2.0');
+    wrapper.find('#ecu-types-select').first().simulate('click');
+    wrapper.find('.ant-select-dropdown').find('#hw-1-option').first().simulate('click');
+    wrapper.find('#choose-software').first().simulate('click');
+    wrapper.find('#file-input-hidden').simulate('change', { target: { files: ['test'], value: 'test' } });
+    expect(wrapper.find('#confirm-btn').first().prop('disabled')).toEqual(false);
+    wrapper.find('#confirm-btn').first().simulate('click');
+    expect(wrapper.find('#progress-bar').first().prop('widthPercentage')).toEqual(EXPECTED_PERCENTAGE);
   });
 });

@@ -4,8 +4,6 @@ import SoftwareCreateModal from './AddSoftwareModal';
 import PackageBlacklistModal from './BlacklistModal';
 import SoftwareHeader from './Header';
 import SoftwareList from './List';
-import SoftwareCancelUploadModal from './CancelUploadModal';
-import SoftwareCancelAllUploadsModal from './CancelAllUploadsModal';
 import SoftwareDependenciesManager from './DependenciesManager';
 import SoftwareEditCommentModal from './EditCommentModal';
 
@@ -14,8 +12,6 @@ export {
   PackageBlacklistModal,
   SoftwareHeader,
   SoftwareList,
-  SoftwareCancelUploadModal,
-  SoftwareCancelAllUploadsModal,
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 };

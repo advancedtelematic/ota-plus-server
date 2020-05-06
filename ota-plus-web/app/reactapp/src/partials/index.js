@@ -8,7 +8,6 @@ import OTAModal from './OTAModal';
 import Loader from './Loader';
 import AsyncResponse from './AsyncResponse';
 import SearchBar from './SearchBar';
-import UploadBox from './UploadBox';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
 import OTAForm from './OTAForm';
@@ -41,7 +40,6 @@ export {
   Loader,
   AsyncResponse,
   SearchBar,
-  UploadBox,
   DependenciesModal,
   Sequencer,
   OTAForm,

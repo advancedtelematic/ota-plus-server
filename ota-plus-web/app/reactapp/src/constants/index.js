@@ -132,8 +132,22 @@ export const STATUS = {
   WAITING: 'waiting',
   ERROR: 'error'
 };
+
+export const UPLOADING_STATUS = {
+  CANCELLED: 'cancelled',
+  ERROR: 'error',
+  IDLE: 'idle',
+  IN_PROGRESS: 'in_progress',
+  SUCCESS: 'success',
+};
+
 export const WARNING_MODAL_COLOR = {
   DANGER: '#CF001A',
   DEFAULT: '#00B6B2',
   INFO: '#FFBD09'
+};
+
+export const INFO_STATUS_BAR_TYPE = {
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS'
 };

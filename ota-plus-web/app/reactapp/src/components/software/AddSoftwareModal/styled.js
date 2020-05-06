@@ -89,6 +89,17 @@ export const InputLabel = styled.span`
   margin-bottom: 8px;
 `;
 
+export const TextLabelInput = styled.span`
+  display: block;
+  color: ${({ theme }) => theme.palette.texts.black};
+  height: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin-bottom: 24px;
+`;
+
 export const BackgroundMask = styled.div`
   position: absolute;
   z-index: 3001;
@@ -118,7 +129,12 @@ export const UploadButton = styled(Button)`
   }
 `;
 
+export const FileInfoSection = styled.div`
+    margin-top: 24px;
+`;
+
 export const UploadFileSection = styled.div`
+  display: ${({ displayed }) => displayed ? 'block' : 'none'};
   margin-top: 23px;
   margin-bottom: 40px;
   & > span {
@@ -185,13 +201,47 @@ export const Description = styled.p`
 `;
 
 export const ModalContainer = styled.div`
+  display: ${({ displayed }) => displayed ? 'block' : 'none'};
   position: absolute;
   z-index: 9999;
-  top: 120px;
+  top: 60px;
   left: calc(50% - 421px);
   width: 843px;
   border-radius: 3px;
   padding: 40px 30px 30px 40px;
   background-color: ${({ theme }) => theme.palette.white};
   overflow: hidden;
+`;
+
+export const InfoStatusBarContainer = styled.div`
+  margin: 0 0 20px 0;
+`;
+
+export const ProgressBar = styled.div`
+  height: 39px;
+  width: ${({ widthPercentage }) => `${widthPercentage}%`};;
+  background-color: ${({ theme }) => theme.palette.progressFill};
+`;
+
+export const ProgressBarContainer = styled.div`
+  height: 40px;
+  width: 593px;
+  border: 1px solid ${({ theme }) => theme.palette.primaryDarkenedAlpha_03};
+  display: flex;
+`;
+
+export const ProgressBarTextContainer = styled.div`
+  height: 40px;
+  width: 593px;
+  position: absolute;
+  text-align: center;
+`;
+
+export const ProgressBarText = styled.p`
+  color: ${({ theme }) => theme.palette.primaryDarkened};
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin-top: 10px;
+  font-weight: 400;
 `;
