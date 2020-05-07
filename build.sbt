@@ -109,6 +109,20 @@ lazy val buildinfoSettings = Seq(
   buildInfoOptions ++= Seq(BuildInfoOption.ToJson, BuildInfoOption.ToMap)
 )
 
+lazy val sonarSettings = Seq(
+  sonarProperties ++= Map(
+  "sonar.projectName" -> "OTA Connect Web App",
+  "sonar.projectKey" -> "ota-connect-web-app",
+  "sonar.sources" -> "ota-plus-web/app",
+  "sonar.tests" -> "ota-plus-web/test",
+  "sonar.scala.scoverage.reportPath" -> "ota-plus-web/target/scala-2.12/scoverage-report/scoverage.xml",
+  "sonar.host.url" -> "http://sonar.in.here.com",
+  "sonar.links.issue" -> "https://saeljira.it.here.com/projects/OTA/issues",
+  "sonar.links.scm" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server",
+  "sonar.links.ci" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server/pipelines",
+  "sonar.projectVersion" -> version.value,
+  "sonar.language" -> "scala"))
+
 lazy val `ota-plus-web` = project.in(file("ota-plus-web"))
     .settings(organization := "com.advancedtelematic")
     .settings(scalaVersion := "2.12.4")
@@ -154,6 +168,7 @@ lazy val `ota-plus-web` = project.in(file("ota-plus-web"))
     .enablePlugins(BuildInfoPlugin, PlayScala, PlayNettyServer, GitVersioning)
     .disablePlugins(PlayAkkaHttpServer)
     .settings(buildinfoSettings)
+    .settings(sonarSettings)
 
 lazy val atsRepos = Seq(
   "ATS Releases" at "https://nexus.ota.here.com/content/repositories/releases",

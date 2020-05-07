@@ -12,15 +12,13 @@ variables:
 
 test:
   stage: test
-  tags:
-    - docker-sock
   image: advancedtelematic/gitlab-jobs:0.2.4
   script:
-    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 ota-plus-web/ut:test
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
   cache:
     paths:
       - .ivy2/
-      - .sbt
+      - .sbt/
 
 build docker image:
   stage: build image
