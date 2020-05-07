@@ -70,7 +70,7 @@ class Filter extends Component {
             appendMenuToBodyTag
             options={options.nameFilterOptions}
             multiple={false}
-            visibleFieldsCount={5}
+            visibleFieldsCount={options.nameFilterOptions.length > 1 ? options.nameFilterOptions.length : 2}
             name="nameFilter"
             onChange={e => this.handleOnChange(e, 'name')}
           />

@@ -4,6 +4,7 @@
 import { observable, computed, extendObservable } from 'mobx';
 import axios from 'axios';
 import _ from 'lodash';
+import encodeUrl from 'encodeurl';
 
 import {
   API_DEVICES_SEARCH,
@@ -35,6 +36,7 @@ import {
   NOT_SEEN_RECENTLY_HOURS,
   UNGROUPED,
   UNGROUPED_DEVICES_COUNT_FETCH_ASYNC,
+  API_ORG_CUSTOM_DEVICE_FIELDS,
 } from '../config';
 import {
   SHA_256,
@@ -142,6 +144,10 @@ export default class DevicesStore {
 
   @observable devicesFetchingError = false;
 
+  @observable customDeviceFields = [];
+
+  @observable getCustomDeviceFieldsAsync = {};
+
   constructor() {
     resetAsync(this.devicesFetchAsync);
     resetAsync(this.ungroupedDevicesCountFetchAsync);
@@ -159,6 +165,7 @@ export default class DevicesStore {
     resetAsync(this.mtuCancelAsync);
     resetAsync(this.eventsFetchAsync);
     resetAsync(this.approvalPendingCampaignsFetchAsync);
+    resetAsync(this.getCustomDeviceFieldsAsync);
     this.devicesLimit = DEVICES_LIMIT_PER_PAGE;
   }
 
@@ -213,6 +220,18 @@ export default class DevicesStore {
       .catch((error) => {
         this.devicesDeleteAsync = handleAsyncError(error);
       });
+  }
+
+  getCustomDeviceFields = async () => {
+    resetAsync(this.getCustomDeviceFieldsAsync, true);
+    try {
+      const response = await axios.get(encodeUrl(API_ORG_CUSTOM_DEVICE_FIELDS));
+      const { data } = response;
+      this.customDeviceFields = data;
+      this.getCustomDeviceFieldsAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getCustomDeviceFieldsAsync = handleAsyncError(error);
+    }
   }
 
   fetchDevices(filter = '', groupId, ungrouped, limit = DEVICES_LIMIT_PER_PAGE, offset = 0) {
