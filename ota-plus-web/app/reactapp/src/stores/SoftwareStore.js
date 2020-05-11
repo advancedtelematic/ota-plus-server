@@ -39,10 +39,10 @@ import {
   PAGE_PACKAGES,
   SORT_DIR_ASC,
   SORT_DIR_DESC,
-  STATUS,
+  UPLOADING_STATUS,
 } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-
+import { SOFTWARE_VERSION_UPLOAD_CANCEL_MESSAGE } from '../constants/softwareConstants';
 
 export default class SoftwareStore {
   @observable getKeysStatusAsync = {};
@@ -326,7 +326,7 @@ export default class SoftwareStore {
 
   packageURI = (entryName, name, version, hardwareIds) => `${API_UPLOAD_SOFTWARE}/${entryName}?name=${encodeURIComponent(name)}&version=${encodeURIComponent(version)}&hardwareIds=${hardwareIds}`;
 
-  createPackage(data, formData, hardwareIds) {
+  createPackage(data, formData, hardwareIds, onUploadProgress, onFinished) {
     const source = axios.CancelToken.source();
     const length = this.packagesUploading.push({
       status: null,
@@ -350,6 +350,7 @@ export default class SoftwareStore {
         uploadObj.uploaded = progressEvent.loaded;
         uploadObj.upSpeed = upSpeed;
         uploadObj.lastUpTime = currentTime;
+        onUploadProgress(progressEvent.loaded, progressEvent.total);
       },
       cancelToken: source.token,
     };
@@ -357,11 +358,15 @@ export default class SoftwareStore {
     axios
       .put(this.packageURI(entryName, data.packageName, data.version, hardwareIds), formData, config)
       .then((response) => {
-        uploadObj.status = STATUS.SUCCESS;
+        uploadObj.status = UPLOADING_STATUS.SUCCESS;
+        onFinished(UPLOADING_STATUS.SUCCESS);
         this.packagesCreateAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        uploadObj.status = STATUS.ERROR;
+        uploadObj.status = UPLOADING_STATUS.ERROR;
+        if (error.message !== SOFTWARE_VERSION_UPLOAD_CANCEL_MESSAGE) {
+          onFinished(UPLOADING_STATUS.ERROR);
+        }
         this.packagesCreateAsync = handleAsyncError(error);
       });
     uploadObj.source = source;

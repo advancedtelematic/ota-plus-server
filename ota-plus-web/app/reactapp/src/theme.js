@@ -14,6 +14,7 @@ const theme = {
     primaryLight: COLORS.PRIMARY_LIGHT,
     primaryTranslucent: COLORS.PRIMARY_TRANSLUCENT,
     primaryDarkened: COLORS.PRIMARY_DARKENED,
+    primaryDarkenedAlpha_03: COLORS.PRIMARY_DARKENED_ALPHA_03,
     primaryDarkened2: COLORS.PRIMARY_DARKENED_2,
     secondary: COLORS.SECONDARY,
     secondaryTranslucent: COLORS.SECONDARY_TRANSLUCENT,
@@ -24,6 +25,7 @@ const theme = {
     whiteAlpha04: COLORS.WHITE_ALPHA_04,
     whiteAlpha08: COLORS.WHITE_ALPHA_08,
     lightGrey: COLORS.LIGHT_GREY,
+    green: COLORS.GREEN,
     lightGreen: COLORS.LIGHT_GREEN,
     headerGrey: COLORS.HEADER_GREY,
     whiteTranslucent: COLORS.WHITE_TRANSLUCENT,
@@ -41,7 +43,8 @@ const theme = {
     accents: {
       dark: COLORS.ACCENTS_DARK,
       light: COLORS.ACCENTS_LIGHT_DARK
-    }
+    },
+    progressFill: COLORS.PROGRESS_FILL
   },
   shadows: {
     upwards: SHADOWS.UPWARDS,

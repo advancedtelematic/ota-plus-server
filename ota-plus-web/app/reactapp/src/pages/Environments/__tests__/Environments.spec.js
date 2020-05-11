@@ -96,7 +96,7 @@ describe('<Environments />', () => {
     wrapper.unmount();
     mockedStores.userStore.maxEnvReached = true;
     wrapper = mountComponent();
-    wrapper.find('#cancel-btn').first().simulate('click');
+    wrapper.find('#warning-cancel-btn').first().simulate('click');
     expect(mockedStores.userStore.maxEnvReached).toEqual(false);
   });
 

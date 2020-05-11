@@ -102,20 +102,20 @@ describe('<EnvironmentDetails />', () => {
     expect(wrapper.exists('#warning-modal')).toEqual(false);
     wrapper.find('#memberemail-remove-btn').first().simulate('click');
     expect(wrapper.exists('#warning-modal')).toEqual(true);
-    wrapper.find('#cancel-btn').first().simulate('click');
+    wrapper.find('#warning-cancel-btn').first().simulate('click');
     expect(wrapper.exists('#warning-modal')).toEqual(false);
   });
 
   it('should handle member removal', () => {
     // Remove member
     wrapper.find('#memberemail-remove-btn').first().simulate('click');
-    wrapper.find('#confirm-btn').first().simulate('click');
+    wrapper.find('#warning-confirm-btn').first().simulate('click');
     expect(mockDeleteMemberFromOrganization).toHaveBeenCalledWith('memberemail', true);
     expect(wrapper.exists('#warning-modal')).toEqual(false);
 
     // Leave environment
     wrapper.find('#owneremail-remove-btn').first().simulate('click');
-    wrapper.find('#confirm-btn').first().simulate('click');
+    wrapper.find('#warning-confirm-btn').first().simulate('click');
     expect(mockDeleteMemberFromOrganization).toHaveBeenCalledWith('owneremail', false);
     expect(wrapper.exists('#warning-modal')).toEqual(false);
   });

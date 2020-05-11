@@ -20,11 +20,11 @@ const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps
       <Title>{title}</Title>
       <Description>{desc}</Description>
       <ButtonsWrapper>
-        <CancelButton id="cancel-btn" colorTheme={type} onClick={onClose}>
+        <CancelButton id="warning-cancel-btn" colorTheme={type} onClick={onClose}>
           {cancelButtonProps.title}
         </CancelButton>
         {confirmButtonProps && (
-          <ConfirmButton id="confirm-btn" colorTheme={type} onClick={confirmButtonProps.onClick}>
+          <ConfirmButton id="warning-confirm-btn" colorTheme={type} onClick={confirmButtonProps.onClick}>
             {confirmButtonProps.title}
           </ConfirmButton>
         )}

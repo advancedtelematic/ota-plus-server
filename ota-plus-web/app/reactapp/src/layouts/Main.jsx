@@ -18,7 +18,6 @@ import Routes from '../Routes';
 import { FadeAnimation, WebsocketHandler } from '../utils';
 import { doLogout } from '../utils/Common';
 import { getCurrentLocation } from '../utils/Helpers';
-import { UploadBox } from '../partials';
 import { Footer } from '../partials/Footer';
 import Navbar from '../partials/Navbar';
 import SubNavBar from '../partials/SubNavBar';
@@ -252,7 +251,6 @@ class Main extends Component {
                   uiCredentialsDownload={this.uiCredentialsDownload}
                 />
               </FadeAnimation>
-              <UploadBox minimized={this.uploadBoxMinimized} toggleUploadBoxMode={this.toggleUploadBoxMode} />
               {this.wizards}
               <Minimized
                 uploadBoxMinimized={this.uploadBoxMinimized}
