@@ -11,17 +11,17 @@ import Filter from './Filter';
 import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
 import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
 
-const options = {
-  nameFilterOptions: ['Device ID'],
-  extraFilterOptions: ['contains', 'has a character equal to', 'has a character different from'],
-};
-
 @inject('stores')
 @observer
 class SmartFilters extends Component {
   @observable lastGivenId = 1;
 
   @observable expressionForSmartGroup = '';
+
+  @observable options = {
+    nameFilterOptions: ['Device ID'],
+    extraFilterOptions: ['contains', 'has a character equal to', 'has a character different from'],
+  };
 
   @observable filters = [
     {
@@ -31,6 +31,20 @@ class SmartFilters extends Component {
       operation: 'and',
     },
   ];
+
+  componentDidMount() {
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    const { customDeviceFields } = devicesStore;
+    customDeviceFields.forEach(({ tagId, tagName }) => {
+      this.options.nameFilterOptions.push({
+        id: tagId,
+        value: tagName,
+        text: tagName,
+        disabled: true
+      });
+    });
+  }
 
   addFilter = () => {
     this.lastGivenId += 1;
@@ -145,7 +159,7 @@ class SmartFilters extends Component {
             )}
             <div>
               <Filter
-                options={options}
+                options={this.options}
                 id={filter.id}
                 addFilter={this.addFilter}
                 removeFilter={this.removeFilter}

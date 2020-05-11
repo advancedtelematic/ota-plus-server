@@ -21,6 +21,7 @@ export const API_RECENTLY_CREATED = '/recently_created?types=$types&limit=10';
 /*
  *  User
  */
+export const API_ORG_CUSTOM_DEVICE_FIELDS = '/organization/custom_device_fields';
 export const API_ORGANIZATIONS = '/organizations';
 export const API_ORGANIZATIONS_USERS = namespace => `/organizations/${namespace}/users`;
 export const API_USER_DETAILS = '/user/profile';
@@ -384,6 +385,7 @@ export const FEATURES = {
   ADVANCED_SOFTWARE: 'advanced_software',
   AUTO_CAMPAIGN: 'automatic_campaign',
   CAMPAIGN_USER_CONSENT_REUSE: 'campaign_user_consent_reuse_text',
+  CUSTOM_DEVICE_FIELDS: 'custom_device_fields',
   DASHBOARD_CHARTS: 'dashboard_charts',
   DEPENDENCY_CAMPAIGN: 'dependency_campaign',
   DEPENDENCY_SOFTWARE: 'dependency_software',

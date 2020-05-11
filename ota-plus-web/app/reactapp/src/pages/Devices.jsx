@@ -34,6 +34,12 @@ class Devices extends Component {
     groupsStore.fetchGroups();
   }
 
+  componentDidMount() {
+    const { stores } = this.props;
+    const { devicesStore } = stores;
+    devicesStore.getCustomDeviceFields();
+  }
+
   componentWillUnmount() {
     const { stores } = this.props;
     const { devicesStore, groupsStore } = stores;

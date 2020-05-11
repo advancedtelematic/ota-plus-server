@@ -87,6 +87,7 @@ class FormSelect extends Component {
             const option = value;
             return (
               <option
+                disabled={option.disabled}
                 key={index}
                 onClick={this.selectOption.bind(this, option)}
                 id={`${id}-${option.id}`}
