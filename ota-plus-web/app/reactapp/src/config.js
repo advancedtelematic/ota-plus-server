@@ -177,8 +177,9 @@ export const WIZARD_KEY = 'wizard';
  * packages
  */
 
-export const PACKAGES_DEFAULT_TAB = 'compact';
 export const PACKAGES_ADVANCED_TAB = 'advanced';
+export const PACKAGES_BLACKLISTED_TAB = 'blacklisted';
+export const PACKAGES_DEFAULT_TAB = 'compact';
 
 /**
  * campaigns

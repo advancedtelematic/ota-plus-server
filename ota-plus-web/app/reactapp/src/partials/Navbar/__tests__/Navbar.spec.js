@@ -7,7 +7,6 @@ import theme from '../../../theme';
 import stores from '../../../stores';
 import Navbar from '..';
 import AccountSidebar from '../../AccountSidebar';
-import { FEATURES } from '../../../config';
 
 function mountNavbar(features, props) {
   if (features) {
@@ -41,13 +40,6 @@ describe('<Navbar />', () => {
 
   it('renders correctly', () => {
     expect(wrapper.find('nav').length).toBe(1);
-  });
-
-  it('should display Impact tab when feature flag is toggled', () => {
-    expect(wrapper.exists('#navbar-link-impact-analysis')).toEqual(false);
-    wrapper.unmount();
-    wrapper = mountNavbar([FEATURES.IMPACT_ANALYSIS]);
-    expect(wrapper.exists('#navbar-link-impact-analysis')).toEqual(true);
   });
 
   it('should display Avatar(account sidebar toggle) if uiUserProfileMenu is set to true', () => {

@@ -45,6 +45,7 @@
         "functions": "ignore"
       }
     ],
+    "import/no-cycle": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {

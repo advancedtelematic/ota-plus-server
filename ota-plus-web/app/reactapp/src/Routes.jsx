@@ -11,11 +11,9 @@ import {
   SoftwareRepositoryPage,
   UpdatesPage,
   CampaignsPage,
-  ImpactAnalysisPage,
   ProfilePage,
   NoMatchPage,
   FireworksPage,
-  SoftwareRepositoryAlpha,
   TermsAndConditions,
   HomePage,
 } from './pages';
@@ -28,7 +26,6 @@ const Routes = ({
   addNewWizard,
   features,
   uiUserProfileEdit,
-  switchToSWRepo,
   uiUserProfileMenu,
   uiAutoFeatureActivation,
   uiCredentialsDownload
@@ -49,12 +46,10 @@ const Routes = ({
     <Route path="/device/:id" component={DevicePage} />
     <Route
       path="/software-repository/:packageName?"
-      render={props => <SoftwareRepositoryPage {...props} switchToSWRepo={switchToSWRepo} />}
+      render={props => <SoftwareRepositoryPage {...props} />}
     />
     <Route path="/updates/:updateName?" component={UpdatesPage} />
     <Route path="/campaigns/:campaignId?" render={props => <CampaignsPage {...props} addNewWizard={addNewWizard} />} />
-    <Route path="/impact-analysis" component={ImpactAnalysisPage} />
-    <Route path="/software-repository-alpha" component={SoftwareRepositoryAlpha} />
     <Route path="/policy" component={TermsAndConditions} />
     <Route path="/environments" component={EnvironmentsPage} />
     <Route
@@ -88,7 +83,6 @@ Routes.propTypes = {
   addNewWizard: PropTypes.func,
   features: PropTypes.arrayOf(PropTypes.string),
   uiUserProfileEdit: PropTypes.bool,
-  switchToSWRepo: PropTypes.bool,
   uiAutoFeatureActivation: PropTypes.bool,
   uiUserProfileMenu: PropTypes.bool,
   uiCredentialsDownload: PropTypes.bool,

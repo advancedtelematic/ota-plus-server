@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { action, observable, observe, onBecomeObserved } from 'mobx';
+import { action, observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
@@ -16,13 +16,21 @@ import {
   SoftwareDependenciesManager,
   SoftwareEditCommentModal
 } from '../components/software';
-import { ACTIVE_TAB_KEY, ADVANCED_TAB_KEY, FEATURES, SOFTWARE_ICON, SWITCH_TO_SW_REPO_KEY, PLUS_ICON } from '../config';
+import {
+  ACTIVE_TAB_KEY,
+  PACKAGES_DEFAULT_TAB,
+  PACKAGES_BLACKLISTED_TAB,
+  PACKAGES_ADVANCED_TAB,
+  SOFTWARE_ICON,
+  PLUS_ICON
+} from '../config';
 import { MetaData } from '../utils';
 import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
 import { setAnalyticsView } from '../helpers/analyticsHelper';
 import ReadMore from '../partials/ReadMore';
 import UnderlinedLink from '../partials/UnderlinedLink';
 import { URL_SOFTWARE_UPLOAD_METHODS } from '../constants/urlConstants';
+import { ImpactAnalysisPage } from '../pages';
 
 @inject('stores')
 @observer
@@ -55,7 +63,7 @@ class Software extends Component {
 
   @observable activePackageFilepath = '';
 
-  @observable switchToSWRepo = false;
+  @observable switchToTab = PACKAGES_DEFAULT_TAB;
 
   static propTypes = {
     stores: PropTypes.shape({}),
@@ -72,14 +80,10 @@ class Software extends Component {
 
   componentDidMount() {
     const { stores } = this.props;
-    const { softwareStore, featuresStore } = stores;
-    const { features } = featuresStore;
-    if (features.includes(FEATURES.ADVANCED_SOFTWARE)) {
-      this.cancelObserveTabChange = observe(softwareStore, (change) => {
-        this.applyTab(change);
-      });
-      onBecomeObserved(this, SWITCH_TO_SW_REPO_KEY, this.resumeScope);
-    }
+    const { softwareStore } = stores;
+    this.cancelObserveTabChange = observe(softwareStore, (change) => {
+      this.applyTab(change);
+    });
     const { history } = this.props;
     const { state } = history.location;
     if (state && state.openWizard) {
@@ -97,8 +101,7 @@ class Software extends Component {
   @action setActive = (tab) => {
     const { stores } = this.props;
     const { softwareStore } = stores;
-
-    this.switchToSWRepo = tab === ADVANCED_TAB_KEY;
+    this.switchToTab = tab;
     softwareStore.activeTab = tab;
     this.updateHeaderTitle();
   };
@@ -213,12 +216,19 @@ class Software extends Component {
 
   updateHeaderTitle = () => {
     const { t } = this.props;
-    if (this.switchToSWRepo) {
-      this.title = t('software.advanced.title');
-    } else if (this.expandedPackageName) {
-      this.title = t('software.details.title');
-    } else {
-      this.title = t('software.title');
+    switch (this.switchToTab) {
+      case PACKAGES_ADVANCED_TAB:
+        this.title = t('software.advanced.title');
+        break;
+      case PACKAGES_BLACKLISTED_TAB:
+        this.title = t('software.tabs.blacklisted');
+        break;
+      default:
+        this.title = t('software.title');
+        if (this.expandedPackageName) {
+          this.title = t('software.details.title');
+        }
+        break;
     }
   };
 
@@ -234,8 +244,8 @@ class Software extends Component {
             </div>
           ) : softwareStore.packagesCount ? (
             <div className="packages-container">
-              <SoftwareHeader showCreateModal={this.showCreateModal} switchToSWRepo={this.switchToSWRepo} />
-              {!this.switchToSWRepo ? (
+              <SoftwareHeader showCreateModal={this.showCreateModal} switchToTab={this.switchToTab} />
+              {this.switchToTab === PACKAGES_DEFAULT_TAB && (
                 <SoftwareList
                   onFileDrop={this.onFileDrop}
                   highlightedPackage={highlightedPackage}
@@ -246,8 +256,12 @@ class Software extends Component {
                   setExpandedPackageName={this.setExpandedPackageName}
                   showEditComment={this.showEditComment}
                 />
-              ) : (
+              )}
+              {this.switchToTab === PACKAGES_ADVANCED_TAB && (
                 <SoftwareRepositoryAlpha />
+              )}
+              {this.switchToTab === PACKAGES_BLACKLISTED_TAB && (
+                <ImpactAnalysisPage />
               )}
             </div>
           ) : (

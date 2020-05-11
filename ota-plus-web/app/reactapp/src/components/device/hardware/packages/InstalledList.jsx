@@ -7,9 +7,11 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import Dropzone from 'react-dropzone';
 import { withTranslation } from 'react-i18next';
+import { Tag } from 'antd';
 
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../../../utils';
+import { FEATURES } from '../../../../config';
 
 const HEADER_HEIGHT = 28;
 
@@ -144,7 +146,8 @@ class InstalledList extends Component {
 
   render() {
     const { device, showPackageBlacklistModal, onFileDrop, stores, t } = this.props;
-    const { softwareStore } = stores;
+    const { featuresStore, softwareStore } = stores;
+    const { features } = featuresStore;
     const {
       ondevicePackagesCurrentPage,
       ondevicePackagesTotalCount,
@@ -153,6 +156,14 @@ class InstalledList extends Component {
     return (
       <span>
         <div className="ios-list" ref={this.listRef}>
+          {features.includes(FEATURES.IMPACT_ANALYSIS) && (
+            <div id="blacklist-header-title">
+              {t('software.blacklist-modal.title')}
+              <Tag color="#48dad0" className="alpha-tag">
+                {t('miscellaneous.beta')}
+              </Tag>
+            </div>
+          )}
           <InfiniteScroll
             className="wrapper-infinite-scroll"
             hasMore={ondevicePackagesCurrentPage < ondevicePackagesTotalCount / ondevicePackagesLimit}
@@ -182,6 +193,7 @@ class InstalledList extends Component {
                         pack={pack}
                         showPackageBlacklistModal={showPackageBlacklistModal}
                         key={index}
+                        features={features}
                       />
                     ))}
                   </span>

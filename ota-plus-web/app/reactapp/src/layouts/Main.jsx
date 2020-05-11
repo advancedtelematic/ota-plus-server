@@ -203,10 +203,6 @@ class Main extends Component {
     this.uploadBoxMinimized = !this.uploadBoxMinimized;
   };
 
-  toggleSWRepo = () => {
-    this.switchToSWRepo = !this.switchToSWRepo;
-  };
-
   navigate = (path) => {
     const { history } = this.props;
     history.push(path);
@@ -229,7 +225,6 @@ class Main extends Component {
                 location={pageId}
                 toggleSWRepo={this.toggleSWRepo}
                 uiUserProfileEdit={this.uiUserProfileEdit}
-                switchToSWRepo={this.switchToSWRepo}
                 uiUserProfileMenu={this.uiUserProfileMenu}
                 uiCredentialsDownload={this.uiCredentialsDownload}
                 addNewWizard={this.addNewWizard}
@@ -245,7 +240,6 @@ class Main extends Component {
                   addNewWizard={this.addNewWizard}
                   features={features}
                   uiUserProfileEdit={this.uiUserProfileEdit}
-                  switchToSWRepo={this.switchToSWRepo}
                   uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                   uiUserProfileMenu={this.uiUserProfileMenu}
                   uiCredentialsDownload={this.uiCredentialsDownload}

@@ -986,6 +986,25 @@ input {
 
 }
 
+#blacklist-header-title {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  z-index: 999;
+  width: 100px;
+  .alpha-tag {
+    font-size: 10px;
+    line-height: 10px;
+    height: 12px;
+    padding: 1px 2px;
+    margin: 0 3px;
+  }
+}
+
+.content-full-height {
+  min-height: calc(#{$main-content-height} - 40px);
+}
+
 .page-intro {
   color: #fff;
   background-color: black;
@@ -1177,27 +1196,6 @@ input {
 
     &.selected {
       background: $device-active-item-bg;
-    }
-  }
-
-  .btn-blacklist {
-    background: url($blacklist-default) no-repeat center;
-    background-size: 20px 20px !important;
-    height: 32px;
-    padding: 0 25px;
-    margin: 0 0 0 6px;
-    border: 0;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    float: right;
-    @include transition;
-
-    &:hover {
-      background-image: url($blacklist-active);
-    }
-
-    &.edit {
-      background-image: url($blacklist-active);
     }
   }
 }
@@ -1818,7 +1816,7 @@ input {
 .chart-panel {
   text-align: center;
   background: #fff;
-  height: 100%;
+  height: $main-content-height;
   position: relative;
   overflow-y: hidden;
 
