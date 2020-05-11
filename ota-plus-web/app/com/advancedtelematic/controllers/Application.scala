@@ -12,8 +12,6 @@ import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
 import javax.inject.{Inject, Singleton}
-import org.slf4j.LoggerFactory
-import play.api._
 import play.api.i18n.I18nSupport
 import play.api.libs.streams.Accumulator
 import play.api.libs.ws._
