@@ -19,6 +19,8 @@ image::img::upload_software_button.png[image,300]
 . From *Control unit types*, select the type or types of the engine control unit (ECU) for which your software version is intended.
 . Click *Choose a file*, and then select the needed file that contains your software version.
 +
+You can upload one file at a time. The progress bar will show how much data has been processed. You can also cancel the file upload before the data has been entirely processed.
++
 NOTE: On the portal, the maximum file size limit for uploads is 1 GB. If you want to upload larger files (up to 3 GB), use the `garage-sign` tool on the command line.
 +
 [.lightbackground]
