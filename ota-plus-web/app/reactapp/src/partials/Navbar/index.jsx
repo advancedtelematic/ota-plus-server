@@ -9,11 +9,9 @@ import { COLORS } from '../../constants/styleConstants';
 import {
   LOCATION_CAMPAIGNS,
   LOCATION_ENVIRONMENTS,
-  LOCATION_IMPACT_ANALYSIS,
   LOCATION_UPDATES,
   LOCATION_SOFTWARE_REPOSITORY
 } from '../../constants/locationConstants';
-import { FEATURES } from '../../config';
 import {
   OTA_NAV_DEVICES,
   OTA_NAV_ENVIRONMENTS,
@@ -21,7 +19,6 @@ import {
   OTA_NAV_SOFTWARE_VERSIONS,
   OTA_NAV_SOFTWARE_UPDATES,
   OTA_NAV_CAMPAIGNS,
-  OTA_NAV_IMPACT
 } from '../../constants/analyticsActions';
 import AccountSidebar from '../AccountSidebar';
 import HelpSidebar from '../HelpSidebar';
@@ -75,14 +72,6 @@ const Navbar = ({ uiUserProfileMenu }) => {
         isBeta: false
       }
     );
-    if (features.includes(FEATURES.IMPACT_ANALYSIS)) {
-      publicLinks.push({
-        actionType: OTA_NAV_IMPACT,
-        name: t('navigation.impact-analysis'),
-        to: `/${LOCATION_IMPACT_ANALYSIS}`,
-        isBeta: false
-      });
-    }
     publicLinks.push(
       {
         actionType: OTA_NAV_ENVIRONMENTS,

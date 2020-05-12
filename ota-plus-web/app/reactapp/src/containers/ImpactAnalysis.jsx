@@ -45,13 +45,13 @@ class ImpactAnalysis extends Component {
             <Loader />
           </div>
         ) : softwareStore.blacklistCount ? (
-          <span>
+          <span id="page-impact-analysis">
             <BlacklistedPackages />
             <ImpactAnalysisChart />
           </span>
         ) : (
           <div className="wrapper-center">
-            <div className="page-intro">
+            <div className="page-intro content-full-height">
               <img src={SOFTWARE_ICON} alt="Icon" />
               <div>{t('impact.empty.no-packages-1')}</div>
               <ReadMore>{t('impact.empty.no-packages-2')}</ReadMore>

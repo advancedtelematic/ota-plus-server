@@ -639,7 +639,7 @@
         font-size: 10px;
 
         .item {
-          height: 30px;
+          height: 40px;
           color: $hardware-overlay-item-color;
           padding: 0 20px;
           background-color: #fff;
@@ -679,10 +679,25 @@
                 }
 
                 .btn-blacklist {
-                  height: 28px;
-                  margin: 0 -17px 0 15px;
-                  border-right: 0;
-                  background-size: 20px 20px !important;
+                  min-width: auto;
+                  width: 100%;
+                  height: 25px;
+                  margin: 0 -15px 0 20px;
+                  font-size: 11px;
+                  color: #48dad0;
+                  border-color: #48dad0;
+                  &:hover {
+                    background-color: #48dad0;
+                    color: white;
+                  }
+                  &.bl-remove {
+                    border-color: #C41C33;
+                    color: #C41C33;
+                    &:hover {
+                      background-color: #C41C33;
+                      color: white;
+                    }
+                  }
                 }
               }
             }

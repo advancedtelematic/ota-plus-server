@@ -3,11 +3,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
-import { FEATURES, PACKAGES_ADVANCED_TAB, PACKAGES_DEFAULT_TAB } from '../../config';
-import { sendAction } from '../../helpers/analyticsHelper';
+import { FEATURES, PACKAGES_ADVANCED_TAB, PACKAGES_DEFAULT_TAB, PACKAGES_BLACKLISTED_TAB } from '../../config';
+import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import {
   OTA_SOFTWARE_ADD_SOFTWARE,
   OTA_SOFTWARE_FAIL_ROTATION,
@@ -17,6 +17,7 @@ import {
 import { Button, ExternalLink, SubHeader, WarningModal } from '../../partials';
 import { WARNING_MODAL_COLOR } from '../../constants';
 import { URL_ROTATING_KEYS } from '../../constants/urlConstants';
+import { ANALYTICS_VIEW_IMPACT_ANALYSIS } from '../../constants/analyticsViews';
 
 @inject('stores')
 @observer
@@ -24,7 +25,7 @@ class Header extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     showCreateModal: PropTypes.func.isRequired,
-    switchToSWRepo: PropTypes.bool.isRequired,
+    switchToTab: PropTypes.oneOf([PACKAGES_DEFAULT_TAB, PACKAGES_ADVANCED_TAB, PACKAGES_BLACKLISTED_TAB]),
     t: PropTypes.func.isRequired
   };
 
@@ -50,7 +51,7 @@ class Header extends Component {
   }
 
   componentWillUnmount() {
-    this.storeActive(this.activeTab);
+    this.storeActive(PACKAGES_DEFAULT_TAB);
   }
 
   toggleKeysOfflineModal = () => {
@@ -88,14 +89,14 @@ class Header extends Component {
   isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
 
   render() {
-    const { stores, switchToSWRepo, t } = this.props;
+    const { stores, switchToTab, t } = this.props;
     const { showKeysOfflineModal } = this.state;
     const { featuresStore } = stores;
     const { features } = featuresStore;
     return (
       <div>
         <div className="tab-navigation">
-          {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
+          {(features.includes(FEATURES.ADVANCED_SOFTWARE) || features.includes(FEATURES.IMPACT_ANALYSIS)) && (
             <ul className="tab-navigation__links">
               <li
                 onClick={() => {
@@ -106,23 +107,45 @@ class Header extends Component {
               >
                 <span>{t('software.tabs.compact')}</span>
               </li>
-              <li
-                onClick={() => {
-                  this.setActive(PACKAGES_ADVANCED_TAB);
-                  sendAction(OTA_SOFTWARE_SEE_ADVANCED);
-                }}
-                className={`tab-navigation__link ${this.isActive(PACKAGES_ADVANCED_TAB)}`}
-              >
-                <span>
-                  {t('software.tabs.advanced')}
-                  <Tag color="#48dad0" className="alpha-tag">
+              {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
+                <li
+                  onClick={() => {
+                    this.setActive(PACKAGES_ADVANCED_TAB);
+                    sendAction(OTA_SOFTWARE_SEE_ADVANCED);
+                  }}
+                  className={`tab-navigation__link ${this.isActive(PACKAGES_ADVANCED_TAB)}`}
+                >
+                  <Tooltip placement="bottom" title={t('software.tabs.tooltip.external')}>
+                    <span>
+                      {t('software.tabs.advanced')}
+                      <Tag color="#48dad0" className="alpha-tag">
                     BETA
-                  </Tag>
-                </span>
-              </li>
+                      </Tag>
+                    </span>
+                  </Tooltip>
+                </li>
+              )}
+              {features.includes(FEATURES.IMPACT_ANALYSIS) && (
+                <li
+                  onClick={() => {
+                    this.setActive(PACKAGES_BLACKLISTED_TAB);
+                    setAnalyticsView(ANALYTICS_VIEW_IMPACT_ANALYSIS);
+                  }}
+                  className={`tab-navigation__link ${this.isActive(PACKAGES_BLACKLISTED_TAB)}`}
+                >
+                  <Tooltip placement="bottom" title={t('software.tabs.tooltip.blacklisted')}>
+                    <span>
+                      {t('software.tabs.blacklisted')}
+                      <Tag color="#48dad0" className="alpha-tag">
+                    BETA
+                      </Tag>
+                    </span>
+                  </Tooltip>
+                </li>
+              )}
             </ul>
           )}
-          {!switchToSWRepo && (
+          {switchToTab === PACKAGES_DEFAULT_TAB && (
             <div className="tab-navigation__buttons">
               <Button
                 id="add-new-software"
@@ -133,11 +156,13 @@ class Header extends Component {
             </div>
           )}
         </div>
-        <SubHeader className="software-repository-subheader">
-          <div className="software-repository-subheader__item">{t('software.header.name')}</div>
-          <div className="software-repository-subheader__item versions">{t('software.header.versions')}</div>
-          <div className="software-repository-subheader__item installed-on">{t('software.header.coverage')}</div>
-        </SubHeader>
+        {switchToTab !== PACKAGES_BLACKLISTED_TAB && (
+          <SubHeader className="software-repository-subheader">
+            <div className="software-repository-subheader__item">{t('software.header.name')}</div>
+            <div className="software-repository-subheader__item versions">{t('software.header.versions')}</div>
+            <div className="software-repository-subheader__item installed-on">{t('software.header.coverage')}</div>
+          </SubHeader>
+        )}
         {showKeysOfflineModal && (
           <WarningModal
             id="keys-offline-modal"

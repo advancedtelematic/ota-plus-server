@@ -197,7 +197,7 @@ class BlacklistModal extends Component {
       <OTAModal
         title={blacklistAction.mode === 'edit'
           ? t('software.blacklist_modal.edit_title')
-          : t('software.blacklist_modal.title')
+          : t('software.blacklist-modal.title')
         }
         topActions={(
           <div className="top-actions flex-end">
