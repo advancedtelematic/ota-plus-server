@@ -271,7 +271,6 @@ const AddSoftwareModal = ({ hide }) => {
     if (softwareStore.packagesUploading[UPLOAD_INDEX]) {
       softwareStore.packagesUploading[UPLOAD_INDEX].source.cancel(SOFTWARE_VERSION_UPLOAD_CANCEL_MESSAGE);
     }
-    softwareStore.packagesUploading = [];
   };
 
   return (

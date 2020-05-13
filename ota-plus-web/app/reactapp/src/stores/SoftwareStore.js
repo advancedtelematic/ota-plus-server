@@ -327,8 +327,9 @@ export default class SoftwareStore {
   packageURI = (entryName, name, version, hardwareIds) => `${API_UPLOAD_SOFTWARE}/${entryName}?name=${encodeURIComponent(name)}&version=${encodeURIComponent(version)}&hardwareIds=${hardwareIds}`;
 
   createPackage(data, formData, hardwareIds, onUploadProgress, onFinished) {
+    this.packagesUploading = [];
     const source = axios.CancelToken.source();
-    const length = this.packagesUploading.push({
+    this.packagesUploading.push({
       status: null,
       size: 0,
       uploaded: 0,
@@ -339,7 +340,8 @@ export default class SoftwareStore {
         version: data.version,
       },
     });
-    const uploadObj = this.packagesUploading[length - 1];
+    // 0 - we can upload only one file in the same time
+    const uploadObj = this.packagesUploading[0];
     const config = {
       onUploadProgress(progressEvent) {
         const currentTime = new Date().getTime();
