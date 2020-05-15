@@ -7,7 +7,8 @@
 . In the *Groups* pane, select *All devices*, and then select the needed device.
 . In the *Hardware* pane, click the *Primary control unit* type.
 +
-image::img::primary_control_unit.png[image,300]
+image::img::primary_control_unit.png[image,55%]
+
 . In the *Software* pane, locate the software that you want to install, and then click the software name.
 +
 You see a list of all applicable versions of that software.

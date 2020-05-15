@@ -9,7 +9,7 @@ You can find all of the provisioned devices on the *Devices* tab.
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . In the *Groups* pane, select *All devices*.
 +
-image::img::all_devices.png[image,400]
+image::img::all_devices.png[image,60%]
 +
 You get the list of all devices that are provisioned in your environment. 
 
