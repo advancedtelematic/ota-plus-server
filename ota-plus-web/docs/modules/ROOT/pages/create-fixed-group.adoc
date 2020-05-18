@@ -8,7 +8,7 @@ To create a fixed group, you need to add the devices that you want to group by <
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . In the *Groups* pane, click *Create group*.
 +
-image::img::create_group.png[image,500]
+image::img::create_group.png[image,50%]
 . Select *Fixed device group*, and then click *Next*.
 . Specify the group name.
 . Click *Create*.
@@ -39,7 +39,7 @@ Make sure there are no carriage return characters, and the lines are separated o
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . In the *Groups* pane, click *Create group*.
 +
-image::img::create_group.png[image,500]
+image::img::create_group.png[image,50%]
 . Select *Fixed device group*, and then click *Next*.
 . Specify the group name.
 . Click *Choose file*.
