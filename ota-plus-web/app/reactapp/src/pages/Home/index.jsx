@@ -107,9 +107,7 @@ const Home = ({ uiAutoFeatureActivation, uiUserProfileMenu }) => {
             : provisioningStore.namespaceSetupFetchAsync.isFetching
               ? renderLoader
               : <SanityCheckContainer />
-          : userStore.contractsFetchAsync.isFetching
-            ? renderLoader
-            : (contractsCheckCompleted ? <Terms /> : renderLoader)
+          : (contractsCheckCompleted ? <Terms /> : renderLoader)
         : renderDashboard
       }
     </FadeAnimation>
