@@ -13,4 +13,8 @@ export const HeaderWrapper = styled.div`
   width: 100vw;
   padding: 0 30px;
   background-color: ${({ theme }) => theme.palette.backgroundLight};
+  #button-create-env {
+    min-width: 200px;
+    width: auto;
+  }
 `;
