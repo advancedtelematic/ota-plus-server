@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { makeAcronym } from '../../utils/stringUtils';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
-import { FEATURES, ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
+import { ALPHA_TAG, FEATURES, ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_NAV_SIGNOUT,
@@ -77,7 +77,7 @@ const AccountSidebar = () => {
           <Title size="small">
             {t(`account-settings.links.${name}`)}
           </Title>
-          {isBeta && <BetaTag>{t('miscellaneous.beta')}</BetaTag>}
+          {isBeta && <BetaTag>{ALPHA_TAG}</BetaTag>}
         </LinkContent>
       </Link>
     ))

@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { Tag } from 'antd';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
+import { ALPHA_TAG } from '../../config';
 
 const headerHeight = 30;
 
@@ -136,8 +137,8 @@ class BlacklistedPackages extends Component {
       <div className="blacklisted-packages-panel">
         <div className="section-header">
           Blacklisted packages
-          <Tag color="#48dad0" className="alpha-tag">
-            BETA
+          <Tag color="#00B6B2" className="alpha-tag">
+            {ALPHA_TAG}
           </Tag>
         </div>
         <div className="ios-list" ref={this.listRef}>

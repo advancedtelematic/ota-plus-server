@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 
 import { WizardGroupsList, WizardOLPGroupsListItem } from './step2Files';
 import { Loader } from '../../../partials';
-import { FEATURES } from '../../../config';
+import { ALPHA_TAG, FEATURES } from '../../../config';
 
 const { TabPane } = Tabs;
 
@@ -92,7 +92,7 @@ class WizardStep2 extends Component {
           tab={(
             <div>
                 OLP
-              <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
+              <Tag color="#00B6B2" className="alpha-tag">{ALPHA_TAG}</Tag>
             </div>
             )}
         >

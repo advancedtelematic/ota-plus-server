@@ -11,7 +11,7 @@ import { Tag } from 'antd';
 
 import ListItem from './ListItem';
 import { InfiniteScroll } from '../../../../utils';
-import { FEATURES } from '../../../../config';
+import { ALPHA_TAG, FEATURES } from '../../../../config';
 
 const HEADER_HEIGHT = 28;
 
@@ -159,8 +159,8 @@ class InstalledList extends Component {
           {features.includes(FEATURES.IMPACT_ANALYSIS) && (
             <div id="blacklist-header-title">
               {t('software.blacklist-modal.title')}
-              <Tag color="#48dad0" className="alpha-tag">
-                {t('miscellaneous.beta')}
+              <Tag color="#00B6B2" className="alpha-tag">
+                {ALPHA_TAG}
               </Tag>
             </div>
           )}

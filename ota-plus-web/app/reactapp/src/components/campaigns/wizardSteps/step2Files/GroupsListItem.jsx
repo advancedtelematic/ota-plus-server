@@ -9,7 +9,7 @@ import { Checkbox, Tag } from 'antd';
 import { withTranslation } from 'react-i18next';
 
 import { GROUP_GROUP_TYPE_STATIC } from '../../../../constants/groupConstants';
-import { FEATURES } from '../../../../config';
+import { ALPHA_TAG, FEATURES } from '../../../../config';
 import { SLIDE_ANIMATION_TYPE } from '../../../../constants';
 
 @inject('stores')
@@ -64,7 +64,7 @@ class GroupsListItem extends Component {
               <div>
                 <span>
                   {'automatic campaign'}
-                  <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
+                  <Tag color="#00B6B2" className="alpha-tag">{ALPHA_TAG}</Tag>
                 </span>
                 <div className={`switch${this.automaticCampaign ? ' switchOn' : ''}`} />
               </div>

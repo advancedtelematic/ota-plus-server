@@ -2192,10 +2192,12 @@ input {
 }
 
 .alpha-tag {
-  line-height: 18px;
-  height: 18px;
-  padding: 0 5px;
+  line-height: 13px;
+  letter-spacing: 0.2px;
+  height: 14px;
+  padding: 0 4px;
   margin: 10px;
+  border-radius: 3px;
   font-weight: 400;
   &--small-margins {
     margin: 4px 0 2px;

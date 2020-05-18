@@ -339,6 +339,7 @@ export const INFO_ICON_WHITE = '/assets/img/icons/white/info.svg';
 export const KEY_ICON_BLACK = '/assets/img/icons/black/key.svg';
 export const KEY_ICON_WHITE = '/assets/img/icons/white/key.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
+export const LOCKPAD_ICON = '/assets/img/new-app/24/test-feature-flag.svg';
 export const MANAGER_ICON_DANGER_WHITE = '/assets/img/icons/white/manager-danger.png';
 export const MANAGER_ICON_SUCCESS = '/assets/img/icons/manager-success.svg';
 export const MANAGER_ICON_SUCCESS_WHITE = '/assets/img/icons/white/manager-success.png';
@@ -441,3 +442,5 @@ export const i18ToMomenLocaleMapping = {
 };
 
 export const SOFTWARE_VERSION_FILE_LIMIT = 1024 * 1024 * 1024; // 1 GB
+
+export const ALPHA_TAG = 'ALPHA';

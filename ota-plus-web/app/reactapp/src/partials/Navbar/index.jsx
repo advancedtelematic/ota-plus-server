@@ -6,6 +6,7 @@ import { useObserver } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 import { useStores } from '../../stores/hooks';
 import { COLORS } from '../../constants/styleConstants';
+import { ALPHA_TAG } from '../../config';
 import {
   LOCATION_CAMPAIGNS,
   LOCATION_ENVIRONMENTS,
@@ -106,7 +107,7 @@ const Navbar = ({ uiUserProfileMenu }) => {
           onClick={() => onClick(actionType)}
         >
           {name}
-          {isBeta && <BetaTag>{t('miscellaneous.beta')}</BetaTag>}
+          {isBeta && <BetaTag>{ALPHA_TAG}</BetaTag>}
         </Link>
       </Li>
     ))

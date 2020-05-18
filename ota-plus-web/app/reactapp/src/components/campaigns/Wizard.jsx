@@ -23,13 +23,14 @@ import {
 import { HTTP_CODE_400_BAD_REQUEST } from '../../constants/httpCodes';
 import { CAMPAIGN_ERROR_CODE_WITHOUT_DEVICES } from '../../constants/campaignErrorCodes';
 import {
+  ALPHA_TAG,
   assets,
   CAMPAIGNS_ICON_GRAY,
   EXIT_FULLSCREEN_ICON,
   FEATURES,
   MAXIMIZE_ICON,
   MINIMIZE_ICON,
-  NOTIFICATION_DURATION_SEC
+  NOTIFICATION_DURATION_SEC,
 } from '../../config';
 import { DATA_TYPE, STATUS } from '../../constants';
 import { sendAction } from '../../helpers/analyticsHelper';
@@ -395,7 +396,7 @@ class Wizard extends Component {
                       {index + 1}
                     </button>
                     <div className="stepnum">{step.title}</div>
-                    {step.hasAlphaTag && <Tag color="#48dad0" className="alpha-tag">BETA</Tag>}
+                    {step.hasAlphaTag && <Tag color="#00B6B2" className="alpha-tag">{ALPHA_TAG}</Tag>}
                   </div>
                 ))}
               </div>

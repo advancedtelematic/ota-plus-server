@@ -6,7 +6,13 @@ import { inject, observer } from 'mobx-react';
 import { Tag, Tooltip } from 'antd';
 import { action } from 'mobx';
 import { withTranslation } from 'react-i18next';
-import { FEATURES, PACKAGES_ADVANCED_TAB, PACKAGES_DEFAULT_TAB, PACKAGES_BLACKLISTED_TAB } from '../../config';
+import {
+  ALPHA_TAG,
+  FEATURES,
+  PACKAGES_ADVANCED_TAB,
+  PACKAGES_DEFAULT_TAB,
+  PACKAGES_BLACKLISTED_TAB
+} from '../../config';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import {
   OTA_SOFTWARE_ADD_SOFTWARE,
@@ -118,8 +124,8 @@ class Header extends Component {
                   <Tooltip placement="bottom" title={t('software.tabs.tooltip.external')}>
                     <span>
                       {t('software.tabs.advanced')}
-                      <Tag color="#48dad0" className="alpha-tag">
-                    BETA
+                      <Tag color="#00B6B2" className="alpha-tag">
+                        {ALPHA_TAG}
                       </Tag>
                     </span>
                   </Tooltip>
@@ -136,8 +142,8 @@ class Header extends Component {
                   <Tooltip placement="bottom" title={t('software.tabs.tooltip.blacklisted')}>
                     <span>
                       {t('software.tabs.blacklisted')}
-                      <Tag color="#48dad0" className="alpha-tag">
-                    BETA
+                      <Tag color="#00B6B2" className="alpha-tag">
+                        {ALPHA_TAG}
                       </Tag>
                     </span>
                   </Tooltip>
