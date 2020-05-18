@@ -85,7 +85,12 @@ export const MenuItemStyled = styled(Menu.Item)`
     background: ${({ theme }) => theme.palette.primary};
     outline: none;
   }
-}
+  & > img {
+    display: block;
+    float: right;
+    height: 16px;
+    margin: 2px 0 0 2px;
+  }
 `;
 
 export const MenuStyled = styled(Menu)`

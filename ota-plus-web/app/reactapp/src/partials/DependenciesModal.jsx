@@ -14,7 +14,7 @@ import OTAModal from './OTAModal';
 import { AsyncStatusCallbackHandler } from '../utils';
 import { getSHA256Hash } from '../utils/Helpers';
 
-import { assets } from '../config';
+import { assets, ALPHA_TAG } from '../config';
 
 const defaultOpacity = '0.2';
 const highlightedOpacity = '0.5';
@@ -634,8 +634,8 @@ class DependenciesModal extends Component {
         title={(
           <span>
             {'Dependencies'}
-            <Tag color="#48dad0" className="alpha-tag alpha-tag--gutter-horizontal">
-              {'BETA'}
+            <Tag color="#00B6B2" className="alpha-tag alpha-tag--gutter-horizontal">
+              {ALPHA_TAG}
             </Tag>
           </span>
         )}

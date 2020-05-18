@@ -34,7 +34,7 @@ import {
   URL_FOOTER_PRIVACY_POLICY,
   URL_FOOTER_SERVICE_TERMS
 } from '../../constants/urlConstants';
-import { FEATURES, SUPPORTED_LANGUAGES, LANGUAGE_SYMBOL_PSEUDO } from '../../config';
+import { FEATURES, SUPPORTED_LANGUAGES, LANGUAGE_SYMBOL_PSEUDO, LOCKPAD_ICON } from '../../config';
 import i18n from '../../i18n';
 import { useStores } from '../../stores/hooks';
 
@@ -57,6 +57,7 @@ const languageMenu = (t, handleLanguageMenuClick, supportedLanguages) => (
     {languages(t, supportedLanguages).map((item, index) => (
       <MenuItemStyled id={`footer-language-menu-item-${index}`} key={`${index}`}>
         {item}
+        {item === t('footer.language.pseudo') && <img src={LOCKPAD_ICON} />}
       </MenuItemStyled>
     ))}
   </MenuStyled>

@@ -10,6 +10,7 @@ import Button from '../Button';
 import SearchBar from '../SearchBar';
 import { ButtonStyled, ButtonText, IconStyled, MenuItemStyled, MenuStyled } from './styled';
 import {
+  ALPHA_TAG,
   CAMPAIGNS_STATUSES,
   CAMPAIGNS_STATUS_TAB_TITLE,
   CAMPAIGNS_DEFAULT_TAB,
@@ -17,7 +18,7 @@ import {
   CAMPAIGNS_STATUS_PREPARED,
   CAMPAIGNS_STATUS_LAUNCHED,
   CAMPAIGNS_STATUS_FINISHED,
-  CAMPAIGNS_STATUS_CANCELLED
+  CAMPAIGNS_STATUS_CANCELLED,
 } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
@@ -195,8 +196,8 @@ class TabNavigation extends Component {
               >
                 <span>
                   {'Advanced'}
-                  <Tag color="#48dad0" className="alpha-tag">
-                    BETA
+                  <Tag color="#00B6B2" className="alpha-tag">
+                    {ALPHA_TAG}
                   </Tag>
                 </span>
               </li>

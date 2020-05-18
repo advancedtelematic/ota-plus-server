@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 
 import { FormTextarea, FormInput, TimePicker } from '../../../partials';
-import { FEATURES } from '../../../config';
+import { ALPHA_TAG, FEATURES } from '../../../config';
 import { METADATA_TYPES } from '../../../constants';
 import { DEVICE_CONSENT_PENDING_TIME_DATA_FORMAT } from '../../../constants/datesTimesConstants';
 
@@ -132,7 +132,7 @@ class WizardStep4 extends Component {
                   <i className="fa fa-search icon-search icon-search--alpha" />
                   <i className="fa fa-close icon-close icon-close--alpha" onClick={this.clearInput} />
                 </FormInput>
-                <Tag color="#48dad0" className="alpha-tag">BETA</Tag>
+                <Tag color="#00B6B2" className="alpha-tag">{ALPHA_TAG}</Tag>
               </>
             )}
           </div>

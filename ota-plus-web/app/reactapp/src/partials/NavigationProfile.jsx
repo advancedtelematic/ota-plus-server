@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react';
 
 import { Tag } from 'antd';
 import Dropdown from './Dropdown';
-import { ORGANIZATION_NAMESPACE_COOKIE } from '../config';
+import { ALPHA_TAG, ORGANIZATION_NAMESPACE_COOKIE } from '../config';
 
 @inject('stores')
 @observer
@@ -71,7 +71,7 @@ class NavigationProfile extends Component {
                 onClick={hideDropdown}
               >
                 {'Environment'}
-                <Tag color="#48dad0" className="alpha-tag--nav">BETA</Tag>
+                <Tag color="#00B6B2" className="alpha-tag--nav">{ALPHA_TAG}</Tag>
               </Link>
             </li>
             <li>

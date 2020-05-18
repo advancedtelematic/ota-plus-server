@@ -17,6 +17,7 @@ import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { ARTIFICIAL } from '../../constants';
 import {
+  ALPHA_TAG,
   DEVICES_FETCH_NAME_DEVICES_FILTER,
   DEVICES_LIMIT_PER_PAGE,
   DEVICES_PAGE_NUMBER_DEFAULT,
@@ -249,8 +250,8 @@ class ContentPanel extends Component {
             <div className="devices-panel__dashboard">
               <div className="devices-panel__title devices-panel__title--margin">
                 {t('devices.dashboard.title')}
-                <Tag color="#48dad0" className="alpha-tag">
-                  {'BETA'}
+                <Tag color="#00B6B2" className="alpha-tag">
+                  {ALPHA_TAG}
                 </Tag>
               </div>
               <div className="devices-panel__top-wrapper">
