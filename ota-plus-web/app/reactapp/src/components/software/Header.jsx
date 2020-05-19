@@ -105,6 +105,7 @@ class Header extends Component {
           {(features.includes(FEATURES.ADVANCED_SOFTWARE) || features.includes(FEATURES.IMPACT_ANALYSIS)) && (
             <ul className="tab-navigation__links">
               <li
+                id="tab-software-page"
                 onClick={() => {
                   this.setActive(PACKAGES_DEFAULT_TAB);
                   sendAction(OTA_SOFTWARE_SEE_ALL);
@@ -115,6 +116,7 @@ class Header extends Component {
               </li>
               {features.includes(FEATURES.ADVANCED_SOFTWARE) && (
                 <li
+                  id="tab-ext-contributors-page"
                   onClick={() => {
                     this.setActive(PACKAGES_ADVANCED_TAB);
                     sendAction(OTA_SOFTWARE_SEE_ADVANCED);
@@ -133,6 +135,7 @@ class Header extends Component {
               )}
               {features.includes(FEATURES.IMPACT_ANALYSIS) && (
                 <li
+                  id="tab-impact-page"
                   onClick={() => {
                     this.setActive(PACKAGES_BLACKLISTED_TAB);
                     setAnalyticsView(ANALYTICS_VIEW_IMPACT_ANALYSIS);

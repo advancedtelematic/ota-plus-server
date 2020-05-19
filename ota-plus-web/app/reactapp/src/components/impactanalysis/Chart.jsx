@@ -48,7 +48,10 @@ class Chart extends Component {
     const legend = _.map(
       stats.datasets[0].data,
       (stat, index) => (
-        <li key={`color-${stats.datasets[0].backgroundColor[index]}-${stats.datasets[0].backgroundColor[index]}`}>
+        <li
+          id={`color-${stats.datasets[0].backgroundColor[index]}-${stats.datasets[0].backgroundColor[index]}`}
+          key={`color-${stats.datasets[0].backgroundColor[index]}-${stats.datasets[0].backgroundColor[index]}`}
+        >
           <div className="color-box" style={{ backgroundColor: stats.datasets[0].backgroundColor[index] }} />
           <div className="title-box">{stats.datasets[0].label[index]}</div>
           <div className="subtitle-box">{t('devices.device_count', { count: stat })}</div>
@@ -60,7 +63,7 @@ class Chart extends Component {
       <div className="chart-panel">
         <div className="section-header" />
         <div className="wrapper-center">
-          <div>
+          <div id="doughnut-wrapper">
             <Doughnut
               data={stats}
               width={400}
