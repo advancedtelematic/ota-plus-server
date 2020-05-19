@@ -18,7 +18,6 @@
 * xref:software-upload-methods.adoc[Upload methods]
 ** xref:upload-software-ui.adoc[Upload a software version]
 // TODO: * xref:manage-software.adoc[Manage software versions]
-// * xref:blacklist-software.adoc[Blacklist bad software packages]
 
 
 .Software updates
