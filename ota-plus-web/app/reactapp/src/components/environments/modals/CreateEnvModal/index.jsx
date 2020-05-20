@@ -25,13 +25,14 @@ const CreateEnvModal = ({ onClose, onConfirm }) => {
   const [environmentName, setEnvironmentName] = useState('');
 
   const onInputChange = (event) => {
-    if (event.target.value.length > MAX_ENV_LENGTH) {
+    const value = event.target.value.trim();
+    if (value.length > MAX_ENV_LENGTH) {
       setError({
         isError: true,
         msg: t('profile.organization.create-modal.input-error2')
       });
-    } else if (ENVIRONMENT_NAME_REGEX.test(event.target.value)) {
-      setEnvironmentName(event.target.value);
+    } else if (ENVIRONMENT_NAME_REGEX.test(value)) {
+      setEnvironmentName(value);
       setError(noError);
     } else {
       setError({

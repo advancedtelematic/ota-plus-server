@@ -378,7 +378,7 @@
     "profile.organization.create-env": "Create environment",
     "profile.organization.create-modal.cancel": "Cancel",
     "profile.organization.create-modal.create": "Create",
-    "profile.organization.create-modal.input-error1": "Names can contain only letters, numbers and these characters: ' \\ \" , ; : . - _ / ( )",
+    "profile.organization.create-modal.input-error1": "Names can contain only letters, numbers, spaces and these characters: ' \\ \" , ; : . - _ / ( )",
     "profile.organization.create-modal.input-error2": "Names have to be 30 characters or fewer.",
     "profile.organization.create-modal.input-label": "NAME",
     "profile.organization.create-modal.input-placeholder": "Enter environment name",
