@@ -57,6 +57,7 @@ export const OTA_SOFTWARE_FAIL_SIZE = 'OTA_Software_Fail_Size';
 export const OTA_SOFTWARE_CANCEL_UPLOAD = 'OTA_Software_Cancel_Upload';
 export const OTA_SOFTWARE_FAIL_UPLOAD = 'OTA_Software_Fail_Upload';
 export const OTA_SOFTWARE_SUCCESS_UPLOAD = 'OTA_Software_Success_Upload';
+export const OTA_SOFTWARE_READ_CLI = 'OTA_Software_Read_CLI';
 
 /* Updates */
 export const OTA_UPDATES_SEE_ALL = 'OTA_Updates_See_All';
