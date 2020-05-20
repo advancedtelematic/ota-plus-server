@@ -35,11 +35,11 @@ export const weightVariants = {
   }
 };
 
-export default styled(ExternalLink)(({ theme, weight = 'default' }) => ({
+export default styled(ExternalLink)(({ theme, color = theme.palette.primary, weight = 'default' }) => ({
   textDecoration: 'none',
   fontSize: '1em',
   '&, :hover': {
-    color: theme.palette.primary,
+    color,
     ...weightVariants[weight]
   }
 }));

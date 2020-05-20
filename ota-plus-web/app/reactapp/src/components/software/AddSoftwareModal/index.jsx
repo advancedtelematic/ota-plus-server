@@ -37,12 +37,15 @@ import {
   OTA_SOFTWARE_CANCEL_UPLOAD,
   OTA_SOFTWARE_FAIL_SIZE,
   OTA_SOFTWARE_FAIL_UPLOAD,
+  OTA_SOFTWARE_READ_CLI,
   OTA_SOFTWARE_SUCCESS_UPLOAD
 } from '../../../constants/analyticsActions';
 import { INFO_STATUS_BAR_TYPE, UPLOADING_STATUS, WARNING_MODAL_COLOR } from '../../../constants';
 import { InfoStatusBar } from '../../../partials/InfoStatusBar';
-import { WarningModal } from '../../../partials';
+import { ExternalLink, WarningModal } from '../../../partials';
 import { SOFTWARE_VERSION_UPLOAD_CANCEL_MESSAGE } from '../../../constants/softwareConstants';
+import { URL_FILE_UPLOADING_CLI } from '../../../constants/urlConstants';
+import { COLORS } from '../../../constants/styleConstants';
 
 const SelectOption = Select.Option;
 
@@ -413,7 +416,21 @@ const AddSoftwareModal = ({ hide }) => {
               </>
             )
             : (
-              <span>{t('software.create-modal.file-information')}</span>
+              <span>
+                {t('software.create-modal.file-information-1')}
+                {' '}
+                <ExternalLink
+                  key={'cli-link'}
+                  onClick={() => sendAction(OTA_SOFTWARE_READ_CLI)}
+                  url={URL_FILE_UPLOADING_CLI}
+                  color={COLORS.TEXT_BLACK}
+                  weight="medium"
+                >
+                  {t('software.create-modal.file-information-cli')}
+                </ExternalLink>
+                {'. '}
+                {t('software.create-modal.file-information-2')}
+              </span>
             )}
         </UploadFileSection>
         <ButtonsWrapper id="buttons-wrapper">
