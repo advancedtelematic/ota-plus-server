@@ -21,7 +21,7 @@ image::img::upload_software_button.png[image,300]
 +
 You can upload one file at a time. The progress bar will show how much data has been processed. You can also cancel the file upload before the data has been entirely processed.
 +
-NOTE: On the portal, the maximum file size limit for uploads is 1 GB. If you want to upload larger files (up to 3 GB), use the `garage-sign` tool on the command line.
+NOTE: On the portal, the maximum file size limit for uploads is 1 GB. If you want to upload larger files (up to 3 GB), use the link:https://github.com/advancedtelematic/ota-tuf/blob/master/cli/README.adoc#user-content-uploading-a-target-binary-to-reposerver[garage-sign, window="_blank"] tool on the command line.
 +
 [.lightbackground]
 image::img::upload_software_new_design.png[image,90%]
