@@ -11,6 +11,8 @@ import Filter from './Filter';
 import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
 import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
 
+const FETCHING_DEVICES_MSG = 'Filtering devices can take some time';
+
 @inject('stores')
 @observer
 class SmartFilters extends Component {
@@ -36,13 +38,8 @@ class SmartFilters extends Component {
     const { stores } = this.props;
     const { devicesStore } = stores;
     const { customDeviceFields } = devicesStore;
-    customDeviceFields.forEach(({ tagId, tagName }) => {
-      this.options.nameFilterOptions.push({
-        id: tagId,
-        value: tagName,
-        text: tagName,
-        disabled: true
-      });
+    customDeviceFields.forEach((field) => {
+      this.options.nameFilterOptions.push(field);
     });
   }
 
@@ -123,16 +120,20 @@ class SmartFilters extends Component {
 
   render() {
     const { stores } = this.props;
-    const { numberOfDevicesByExpression } = stores.groupsStore;
+    const { isFetchingDevicesCount, numberOfDevicesByExpression } = stores.groupsStore;
 
     return (
       <div className="filters">
         <div className="filters--devices__number">
           <span className="title">Number of devices:</span>
           <span className="devices-number">
-            {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
-            {' '}
-            Devices
+            {isFetchingDevicesCount ? FETCHING_DEVICES_MSG : (
+              <>
+                {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
+                {' '}
+                Devices
+              </>
+            )}
           </span>
         </div>
         {_.map(this.filters, (filter, index) => (

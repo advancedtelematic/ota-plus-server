@@ -7,7 +7,10 @@ import { observable } from 'mobx';
 import _ from 'lodash';
 import { FormInput, FormSelect } from '../../../../partials/index';
 import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
+import { sendAction } from '../../../../helpers/analyticsHelper';
+import { OTA_DEVICES_SELECT_DEVICE_ID, OTA_DEVICES_SELECT_CUSTOM_FIELD } from '../../../../constants/analyticsActions';
 
+const DEVICE_ID = 'Device ID';
 @observer
 class Filter extends Component {
   @observable expressionObject = {};
@@ -25,8 +28,10 @@ class Filter extends Component {
     const { condition, word, character } = this.expressionObject;
     let expressionToSend = '';
 
-    if (name === 'Device ID') {
+    if (name === DEVICE_ID) {
       name = 'deviceid';
+    } else {
+      name = `tag(${name})`;
     }
 
     // the position equals to: "in position X", we need to get X from the string (X is a number)
@@ -70,9 +75,12 @@ class Filter extends Component {
             appendMenuToBodyTag
             options={options.nameFilterOptions}
             multiple={false}
-            visibleFieldsCount={options.nameFilterOptions.length > 1 ? options.nameFilterOptions.length : 2}
+            visibleFieldsCount={options.nameFilterOptions.length > 1 ? 5 : 2}
             name="nameFilter"
-            onChange={e => this.handleOnChange(e, 'name')}
+            onChange={(e) => {
+              sendAction(e === DEVICE_ID ? OTA_DEVICES_SELECT_DEVICE_ID : OTA_DEVICES_SELECT_CUSTOM_FIELD);
+              this.handleOnChange(e, 'name');
+            }}
           />
         </div>
         <div className="filter__block" style={{ flex: 2 }}>
