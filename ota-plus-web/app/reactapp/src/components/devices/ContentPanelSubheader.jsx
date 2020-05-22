@@ -33,6 +33,7 @@ class ContentPanelSubheader extends Component {
         let customDeviceField;
         if (singleExpressionAfterSplit[0].split('(')[0] === TAG) {
           customDeviceField = singleExpressionAfterSplit.slice(0, singleExpressionAfterSplit.length - 2).join(' ');
+          [, customDeviceField] = customDeviceField.match(CHARACTER_POSITION_REGEXP_PATTERN);
         }
 
         singleExpressionToDisplay = [
@@ -61,6 +62,7 @@ class ContentPanelSubheader extends Component {
         let customDeviceField;
         if (singleExpressionAfterSplit[0].split('(')[0] === TAG) {
           customDeviceField = singleExpressionAfterSplit.slice(0, singleExpressionAfterSplit.length - 3).join(' ');
+          [, customDeviceField] = customDeviceField.match(CHARACTER_POSITION_REGEXP_PATTERN);
         }
         if (element.search('not') < 0) {
           singleExpressionToDisplay = [customDeviceField || DEVICE_ID, GROUPS_FILTER_CONDITIONS.EQUAL_CHAR, position, `in position ${character}`];
