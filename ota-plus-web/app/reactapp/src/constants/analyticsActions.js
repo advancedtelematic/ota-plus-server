@@ -111,6 +111,11 @@ export const OTA_FOOTER_PRIVACY = 'OTA_Footer_privacy';
 export const OTA_FOOTER_CONTACT = 'OTA_Footer_Contact';
 export const OTA_FOOTER_LANGUAGES = 'OTA_Footer_Languages';
 
+/* Groups */
+export const OTA_DEVICES_FIXED_IMPORT = 'OTA_Devices_Fixed_Import';
+export const OTA_DEVICES_FIXED_IMPORT_READ_MORE = 'OTA_Devices_Fixed_Import_Read_More';
+export const OTA_DEVICES_CONFIGURE_READ_MORE = 'OTA_Devices_Configure_Read_More';
+
 /* Homepage */
 export const OTA_HOME_ADD_MEMBERS = 'OTA_Home_Add_Members';
 export const OTA_HOME_CREATE_ENVIRONMENT = 'OTA_Home_Create_Env';

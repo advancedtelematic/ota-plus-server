@@ -4,6 +4,7 @@ export const URL_CAMPAIGNS_INTRO = 'https://docs.ota.here.com/ota-web/dev/campai
 export const URL_CAMPAIGNS_MONITOR = 'https://docs.ota.here.com/ota-web/dev/monitor-campaigns.html';
 export const URL_CONFIGURING_DEVICE = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';
 export const URL_CREATE_FIXED_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html';
+export const URL_CREATE_FIXED_GROUP_IMPORT_LIST = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html#upload-list';
 export const URL_CREATE_SMART_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-smart-group.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
 export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';

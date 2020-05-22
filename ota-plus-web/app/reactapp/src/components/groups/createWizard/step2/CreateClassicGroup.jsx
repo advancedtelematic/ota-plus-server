@@ -7,14 +7,20 @@ import { Row, Col } from 'antd';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
-import { AsyncResponse, OTAForm, FormInput, OperationCompletedInfo } from '../../../../partials';
+import { AsyncResponse, OTAForm, FormInput, OperationCompletedInfo, ExternalLink } from '../../../../partials';
 import {
   GROUP_DATA_TYPE_FILE,
   GROUP_DATA_TYPE_NAME,
   GROUP_INPUT_FILE_ACCEPT_EXTENSION,
   GROUP_INPUT_FILE_ACCEPT_FILTER,
 } from '../../../../constants/groupConstants';
-import { URL_AKTUALIZR_CONFIG_OPTIONS } from '../../../../constants/urlConstants';
+import { URL_AKTUALIZR_CONFIG_OPTIONS, URL_CREATE_FIXED_GROUP_IMPORT_LIST } from '../../../../constants/urlConstants';
+import { sendAction } from '../../../../helpers/analyticsHelper';
+import {
+  OTA_DEVICES_FIXED_IMPORT,
+  OTA_DEVICES_FIXED_IMPORT_READ_MORE,
+  OTA_DEVICES_CONFIGURE_READ_MORE
+} from '../../../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -41,6 +47,7 @@ class CreateClassicGroup extends Component {
     }
     const file = files[0];
     const { name } = file;
+    sendAction(OTA_DEVICES_FIXED_IMPORT);
     if (!name.endsWith(GROUP_INPUT_FILE_ACCEPT_EXTENSION)) {
       // reset the native input to do not show invalid file selected
       event.target.value = ''; // eslint-disable-line no-param-reassign
@@ -62,18 +69,6 @@ class CreateClassicGroup extends Component {
     onStep2DataSelect(GROUP_DATA_TYPE_FILE, file);
     return true;
   };
-
-  getDocumentationLink = name => (
-    <a
-      className="menu-text"
-      href={URL_AKTUALIZR_CONFIG_OPTIONS}
-      id="developer_documentation-link"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {name}
-    </a>
-  );
 
   render() {
     const { onStep2DataSelect, stores, t } = this.props;
@@ -106,8 +101,28 @@ class CreateClassicGroup extends Component {
             </div>
             <div className="file-input-container">
               <div className="file-input-description">
-                {t('groups.creating.file_uploading.description')}
-                {this.getDocumentationLink(t('groups.creating.file_uploading.developer_documentation'))}
+                {t('groups.creating.file-uploading.description-1')}
+                {' '}
+                <ExternalLink
+                  key={'developer_documentation-link'}
+                  onClick={() => sendAction(OTA_DEVICES_FIXED_IMPORT_READ_MORE)}
+                  url={URL_CREATE_FIXED_GROUP_IMPORT_LIST}
+                  weight="medium"
+                >
+                  {t('groups.creating.file-uploading.import-list')}
+                </ExternalLink>
+                {' '}
+                {t('groups.creating.file-uploading.description-2')}
+                {' '}
+                <ExternalLink
+                  key={'developer_documentation-link'}
+                  onClick={() => sendAction(OTA_DEVICES_CONFIGURE_READ_MORE)}
+                  url={URL_AKTUALIZR_CONFIG_OPTIONS}
+                  weight="medium"
+                >
+                  {t('groups.creating.file-uploading.developer-documentation')}
+                </ExternalLink>
+                {'.'}
               </div>
               <div className="file-input-button-container">
                 <label className="file-input-button" htmlFor="file-input-group">
