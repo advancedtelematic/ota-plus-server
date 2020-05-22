@@ -45,7 +45,6 @@ import { InfoStatusBar } from '../../../partials/InfoStatusBar';
 import { ExternalLink, WarningModal } from '../../../partials';
 import { SOFTWARE_VERSION_UPLOAD_CANCEL_MESSAGE } from '../../../constants/softwareConstants';
 import { URL_FILE_UPLOADING_CLI } from '../../../constants/urlConstants';
-import { COLORS } from '../../../constants/styleConstants';
 
 const SelectOption = Select.Option;
 
@@ -423,7 +422,6 @@ const AddSoftwareModal = ({ hide }) => {
                   key={'cli-link'}
                   onClick={() => sendAction(OTA_SOFTWARE_READ_CLI)}
                   url={URL_FILE_UPLOADING_CLI}
-                  color={COLORS.TEXT_BLACK}
                   weight="medium"
                 >
                   {t('software.create-modal.file-information-cli')}
