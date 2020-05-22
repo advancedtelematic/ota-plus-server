@@ -88,6 +88,8 @@ export default class GroupsStore {
 
   @observable hasMoreWizardGroups = false;
 
+  @observable isFetchingDevicesCount = false;
+
   constructor() {
     resetAsync(this.groupsFetchAsync);
     resetAsync(this.groupsLoadMoreFetchAsync);
@@ -407,13 +409,16 @@ export default class GroupsStore {
 
   // for smartGroup creation wizard
   fetchNumberOfDevicesByExpression(expression, async = NUM_DEVICES_BY_EXP_ASYNC) {
+    this.isFetchingDevicesCount = true;
     return axios
       .get(`${API_DEVICES_SEARCH}/count?expression=${expression}`)
       .then((response) => {
         this.numberOfDevicesByExpression = response.data;
+        this.isFetchingDevicesCount = false;
         this[async] = handleAsyncSuccess(response);
       })
       .catch((error) => {
+        this.isFetchingDevicesCount = false;
         this[async] = handleAsyncError(error);
       });
   }

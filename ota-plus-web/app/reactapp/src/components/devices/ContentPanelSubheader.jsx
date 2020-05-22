@@ -7,7 +7,9 @@ import { SubHeader, FormInput } from '../../partials';
 import { GROUPS_FILTER_CONDITIONS } from '../../config';
 
 const CHARACTER_POSITION_REGEXP_PATTERN = '\\((.*?)\\)';
+const TAG_CHARACTER_POSITION_REGEXP_PATTERN = /\(([^)]+)\)/g;
 const DEVICE_ID = 'Device ID';
+const TAG = 'tag';
 
 @inject('stores')
 @observer
@@ -27,7 +29,17 @@ class ContentPanelSubheader extends Component {
         if (singleExpressionAfterSplit[2].charAt(singleExpressionAfterSplit[2].length - 1) === ')') {
           singleExpressionAfterSplit[2] = singleExpressionAfterSplit[2].slice(0, -1);
         }
-        singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.CONTAINS, singleExpressionAfterSplit[2]];
+
+        let customDeviceField;
+        if (singleExpressionAfterSplit[0].split('(')[0] === TAG) {
+          customDeviceField = singleExpressionAfterSplit.slice(0, singleExpressionAfterSplit.length - 2).join(' ');
+        }
+
+        singleExpressionToDisplay = [
+          customDeviceField || DEVICE_ID,
+          GROUPS_FILTER_CONDITIONS.CONTAINS,
+          singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1]
+        ];
 
         return expressionsArrayToDisplay.push({
           expression: singleExpressionToDisplay,
@@ -37,12 +49,23 @@ class ContentPanelSubheader extends Component {
       if (element.search(GROUPS_FILTER_CONDITIONS.POSITION) > 0) {
         // we need to get value between () brackets
         // for example: the input is "deviceid,position(13),is,8" and the output is ["(15)", "15"]
-        const [, character] = element.match(CHARACTER_POSITION_REGEXP_PATTERN);
+        let character;
+        if (singleExpressionAfterSplit[0].split('(')[0] === TAG) {
+          [, character] = element.match(TAG_CHARACTER_POSITION_REGEXP_PATTERN);
+          character = character.replace(/[()]/g, '');
+        } else {
+          [, character] = element.match(CHARACTER_POSITION_REGEXP_PATTERN);
+        }
+
         const position = singleExpressionAfterSplit[singleExpressionAfterSplit.length - 1];
+        let customDeviceField;
+        if (singleExpressionAfterSplit[0].split('(')[0] === TAG) {
+          customDeviceField = singleExpressionAfterSplit.slice(0, singleExpressionAfterSplit.length - 3).join(' ');
+        }
         if (element.search('not') < 0) {
-          singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.EQUAL_CHAR, position, `in position ${character}`];
+          singleExpressionToDisplay = [customDeviceField || DEVICE_ID, GROUPS_FILTER_CONDITIONS.EQUAL_CHAR, position, `in position ${character}`];
         } else if (element.search('not') > 0) {
-          singleExpressionToDisplay = [DEVICE_ID, GROUPS_FILTER_CONDITIONS.DIFF_CHAR, position, `in position ${character}`];
+          singleExpressionToDisplay = [customDeviceField || DEVICE_ID, GROUPS_FILTER_CONDITIONS.DIFF_CHAR, position, `in position ${character}`];
         }
 
         return expressionsArrayToDisplay.push({
