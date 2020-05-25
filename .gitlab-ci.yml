@@ -12,6 +12,9 @@ variables:
 
 test:
   stage: test
+  except:
+    refs:
+      - deploy/sit
   image: advancedtelematic/gitlab-jobs:0.2.4
   script:
     - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
