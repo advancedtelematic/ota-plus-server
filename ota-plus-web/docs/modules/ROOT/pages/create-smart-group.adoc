@@ -2,6 +2,8 @@
 
 Smart groups are based on a device filter. They automatically group newly provisioned devices that match your selection criteria.
 
+// tag::smart_group[]
+
 *To create a smart group:*
 
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
@@ -11,12 +13,14 @@ image::img::create_group.png[image,50%]
 . Select *Smart device group*, and then click *Next*.
 . Specify the group name and define a filter for your devices.
 +
-A filter helps OTA Connect assign each device to a group. Currently, OTA Connect can filter based on characters in the device ID. The device ID is defined in the OTA Connect client configuration. If no ID is configured for the device, OTA Connect automatically generates one for you. But developers can xref:ota-client::use-your-own-deviceid.adoc[configure device IDs] to be whatever you want.
+A filter helps HERE OTA Connect assign each device to a group. Currently, OTA Connect can filter based on characters in the device ID. The device ID is defined in the OTA Connect client configuration, and is set on the server when the device connects for the first time.footnote:[To learn how to xref:ota-client::use-your-own-deviceid.adoc[configure device IDs\], see the developer documentation. Note that the device ID can't be changed after it's set.] If no ID is configured on the device, a random ID is automatically generated.
 +
-*Example (a vehicle identification number (VIN) is used as a device ID):*
+*Example:*
++
+You need to provision 2019 car models. Each device ID is a https://en.wikipedia.org/wiki/Vehicle_identification_number[vehicle identification number (VIN), window="_blank"] where the 10th character is the letter K.
 
 .. From the *Data* list, select *Device ID*.
-.. Since every character in the VIN has a meaning, select *Has character equal to*, enter the letter *M*, and select *in position 10* (the 10th character in a VIN is usually the model).
+.. Since every character in the VIN has a meaning, select *Has character equal to*, enter the letter *K*, and select *in position 10*  (the 10th character in a VIN is usually the model).
 +
 OTA Connect shows how many devices match your filter criteria.
 +
@@ -27,4 +31,6 @@ IMPORTANT: You cannot change the criteria of a smart group after you create it. 
 
 . Click *Create*.
 +
-The created group appears in the *Groups* pane. If a new provisioned device meets the specified filter criteria, it is automatically added to the group.
+The created group appears in the *Groups* pane. If a new provisioned device meets the specified filter criteria, it is automatically added to the group. If a device is deleted, it is automatically removed from the group.
+
+// end::smart_group[]

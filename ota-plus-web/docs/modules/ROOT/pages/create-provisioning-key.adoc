@@ -1,12 +1,12 @@
-== Get a provisioning key
-:page-partial:
+= Get a provisioning key
+
 // tag::provisioning[]
 
-To provision devices, you need to attach individual credentials and certificates to a device. {product-name} automates this process for you: you can use the same unmodified disk image on many different devices and register each device with {product-name-short} when you boot it for the first time.
+To provision devices, you need to attach individual credentials and certificates to a device. HERE OTA Connect automates this process for you: you can use the same unmodified disk image on many different devices and register each device with OTA Connect when you boot it for the first time.
 
 *To get a provisioning key:*
 
-1. Go to the {app-url}/#/profile/access-keys[**Credentials (provisioning)**, window="_blank"] tab of your profile.
+1. Go to the https://connect.ota.here.com/#/profile/access-keys[**Credentials (provisioning)**, window="_blank"] tab of your profile.
 2. Click **Add key**.
 +
 [.lightbackground]
@@ -17,7 +17,7 @@ image::img::add_key.png[image,700]
 [.lightbackground]
 image::img::add_new_key.png[image,400]
 
-The .zip file is added to the list of credentials. The file contains the provisioning key and credentials that your build system uses to publish images. You do not need to unzip the file. Save it somewhere on your computer. You will need the file when you set up your Yocto build or configure the {product-name} client.
+The .zip file is added to the list of credentials. The file contains the provisioning key and credentials that your build system uses to publish images. You do not need to unzip the file. Save it somewhere on your computer. You will need the file when you set up your Yocto build or configure the HERE OTA Connect client.
 
 For a more in-depth technical description of device provisioning, see the xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Client guide.
 

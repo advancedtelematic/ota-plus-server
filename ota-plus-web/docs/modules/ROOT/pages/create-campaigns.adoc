@@ -1,5 +1,7 @@
 = Create a campaign
 
+// tag::campaign[]
+
 You need a campaign to deploy software updates to groups of devices.
 
 *To create a campaign:*
@@ -15,5 +17,7 @@ image::img::create_campaign_button.png[image,300]
 . At the *Summary* step, review the campaign summary, and then do one of the following:
 * If the campaign is not configured properly, to change the configuration details, go to the needed step, and then change the details.
 * If the campaign is configured properly, to start the campaign, click *Launch*.
+
+// end::campaign[]
 
 The campaign appears in the campaigns list. You can xref:monitor-campaigns.adoc[monitor] the campaign status.

@@ -1,5 +1,7 @@
 = Create a software update
 
+// tag::update[]
+
 When you create an update configuration, you need to define two basic assignment criteria:
 
 * The *type of control unit (ECU)* to which the software version applies.
@@ -7,20 +9,20 @@ When you create an update configuration, you need to define two basic assignment
 
 *To create a software update:*
 
-. Go to the https://connect.ota.here.com/#/updates[*Software updates*, window="_blank"].
+. Go to the https://connect.ota.here.com/#/updates[*Software updates*, window="_blank"] tab.
 . In the upper-right corner, under the name of your active environment, click *Create update*.
 +
 image::img::create_update_button.png[image,300]
 . In *Software update name*, specify the name of your software update.
 . (Optional) Provide a description of your software update.
-. In *Select multiple control unit types*, select the ECU types that you want to update.
+. In *Select multiple control unit types*, select the control unit types that you want to update.
 +
 [.lightbackground]
 image::img::create_update_1.png[image,600]
 . Click *Continue*.
-. Define the update criteria for each ECU software packages:
-* If you want to update ECUs that are running a specific software version only, in the *From* section, select the relevant items from the *Software* and **Version** lists.
-* If you want to update to the new software version on all ECUs, select the following option: *Update to my selected version regardless of what is currently installed*
+. Define the update criteria for each control unit software package:
+* If you want to update control units that are running a specific software version only, in the *From* section, select the relevant items from the *Software* and **Version** lists.
+* If you want to update to the new software version on all control units, select the following option: *Update to my selected version regardless of what is currently installed*
 +
 NOTE: Older software versions might not upgrade properly due to version incompatibility, and devices already updated will receive the same update.
 . To specify to which software version you want to update, in the *To* section, select the relevant items from the *Software* and **Version** lists.
@@ -28,5 +30,7 @@ NOTE: Older software versions might not upgrade properly due to version incompat
 [.lightbackground]
 image::img::create_update_2.png[image,650]
 . Click *Save*.
+
+// end::update[]
 
 The new software update appears in the software updates list. To send your software update to a device group, xref:create-campaigns.adoc[create a campaign].
