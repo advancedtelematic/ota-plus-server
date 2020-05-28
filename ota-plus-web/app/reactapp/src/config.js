@@ -444,3 +444,4 @@ export const i18ToMomenLocaleMapping = {
 export const SOFTWARE_VERSION_FILE_LIMIT = 1024 * 1024 * 1024; // 1 GB
 
 export const ALPHA_TAG = 'ALPHA';
+export const BETA_TAG = 'BETA';

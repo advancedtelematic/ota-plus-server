@@ -6,6 +6,8 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../../../theme';
 import stores from '../../../stores';
 import HelpSidebar from '..';
+import * as analyticsHelper from '../../../helpers/analyticsHelper';
+import { OTA_NAV_API_GUIDE } from '../../../constants/analyticsActions';
 
 function mountComponent(props) {
   return mount(
@@ -46,8 +48,8 @@ describe('<HelpSidebar />', () => {
     expect(wrapper.exists('.ant-drawer-open')).toEqual(false);
   });
 
-  it('should display 5 links', () => {
-    const linksCount = 5;
+  it('should display 6 links', () => {
+    const linksCount = 6;
     wrapper.find('#help-icon').first().simulate('click');
     expect(wrapper.find('a').length).toBe(linksCount);
   });
@@ -57,5 +59,12 @@ describe('<HelpSidebar />', () => {
     wrapper.find('a').forEach((node) => {
       expect(node.props().target).toEqual('_blank');
     });
+  });
+
+  it('should call analytics action', () => {
+    analyticsHelper.sendAction = jest.fn();
+    wrapper.find('#help-icon').first().simulate('click');
+    wrapper.find('#help-sidebar-beta-icon-api-guide').first().simulate('click');
+    expect(analyticsHelper.sendAction).toBeCalledWith(OTA_NAV_API_GUIDE);
   });
 });
