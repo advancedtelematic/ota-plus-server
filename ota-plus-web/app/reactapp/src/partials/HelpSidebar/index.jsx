@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useObserver } from 'mobx-react';
 import { Title } from '..';
 import Sidebar from '../Sidebar';
-import { HELP_ICON_DARK } from '../../config';
+import { BETA_TAG, HELP_ICON_DARK } from '../../config';
 import {
+  URL_API_GUIDE,
   MAIL_SUPPORT,
   URL_DEV_GUIDE,
   URL_GET_STARTED,
@@ -13,6 +14,7 @@ import {
 } from '../../constants/urlConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
+  OTA_NAV_API_GUIDE,
   OTA_NAV_CONTACT,
   OTA_NAV_DEV_GUIDE,
   OTA_NAV_GET_STARTED,
@@ -20,6 +22,7 @@ import {
   OTA_NAV_USER_GUIDE
 } from '../../constants/analyticsActions';
 import {
+  BetaTag,
   HelpIcon,
   LinksContainer,
   SidebarHeader,
@@ -45,6 +48,7 @@ const HelpSidebar = () => {
     { actionType: OTA_NAV_GET_STARTED, name: 'get-started', to: URL_GET_STARTED },
     { actionType: OTA_NAV_DEV_GUIDE, name: 'developer-guide', to: URL_DEV_GUIDE },
     { actionType: OTA_NAV_USER_GUIDE, name: 'user-guide', to: URL_USER_GUIDE },
+    { actionType: OTA_NAV_API_GUIDE, name: 'api-guide', to: URL_API_GUIDE, isBeta: true },
     { actionType: OTA_NAV_RELEASE_NOTES, name: 'release-notes', to: URL_RELEASE_NOTES },
     { actionType: OTA_NAV_CONTACT, name: 'contact', to: MAIL_SUPPORT }
   ];
@@ -62,7 +66,7 @@ const HelpSidebar = () => {
   };
 
   const renderLinks = linkList => (
-    linkList.map(({ actionType, name, to }) => (
+    linkList.map(({ actionType, isBeta, name, to }) => (
       <a
         id={`help-sidebar-link-${name}`}
         href={to}
@@ -71,7 +75,9 @@ const HelpSidebar = () => {
         target="_blank"
         onClick={() => onClick(actionType)}
       >
-        {`${t(`help-sidebar.links.${name}`)} ${ARROW_RIGHT}`}
+        {t(`help-sidebar.links.${name}`)}
+        {isBeta && <BetaTag id={`help-sidebar-beta-icon-${name}`}>{BETA_TAG}</BetaTag>}
+        {ARROW_RIGHT}
       </a>
     ))
   );

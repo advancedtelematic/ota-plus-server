@@ -1,5 +1,18 @@
 import styled from 'styled-components';
 
+export const BetaTag = styled.span`
+  line-height: 13px;
+  letter-spacing: 0.2px;
+  height: 14px;
+  padding: 0 4px;
+  margin: 10px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  background-color: ${({ theme }) => theme.palette.primary};
+  color: ${({ theme }) => theme.palette.white};
+`;
+
 export const Support = styled.div`
   background: url(/assets/img/new-app/24/help-solid-active-24.svg) no-repeat;
   background-size: contain;

@@ -349,6 +349,7 @@
     "groups.renaming.rename_group": "Rename device group",
     "groups.save": "Save",
     "groups.ungrouped_devices": "Ungrouped devices",
+    "help-sidebar.links.api-guide": "API guide",
     "help-sidebar.links.contact": "Contact support (English only)",
     "help-sidebar.links.developer-guide": "Developer guide",
     "help-sidebar.links.get-started": "Get started",
