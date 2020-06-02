@@ -109,6 +109,7 @@ class Application @Inject() (ws: TraceWSClient,
     case (_, "devices" :: _) => devicesApiUri
     case (_, "device_groups" :: _) => devicesApiUri
     case (_, "device_count" :: _) => devicesApiUri
+    case (_, "device_tags" :: _) => devicesApiUri
     case (_, "active_device_count" :: _) => devicesApiUri
     case (_, "device_packages" :: _) => devicesApiUri
     case (_, "package_lists" :: _) => devicesApiUri
