@@ -1,4 +1,4 @@
-== Upload software versions
+= Upload software versions
 
 Follow this procedure if you want to work with software packages rather than software images. It is also useful if you want to test that your devices can detect and download new file updates.
 

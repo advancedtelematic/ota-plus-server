@@ -1,7 +1,7 @@
-== Upload Software Versions in the OTA Connect Portal
+= Upload Software Versions in the OTA Connect Portal
 
 This procedure mostly relevant if you want to work with software packages rather than disk images. It's also useful if you just want to test that your devices can detect and download new file updates.
-Otherwise, the most efficent way to upload software is to build disk images that contain your new software versions. The disk images are automatically uploaded during the build process. You can find more information about this process in the OTA Connect Client guide.
+Otherwise, the most efficient way to upload software is to build disk images that contain your new software versions. The disk images are automatically uploaded during the build process. You can find more information about this process in the OTA Connect Client guide.
 
 *To upload a software version in the OTA Connect Portal, follow these steps:*
 
