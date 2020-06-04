@@ -1,0 +1,99 @@
+= Create custom device fields image:img::beta-icon.svg[Beta]
+
+To filter devices in a smart group, you can use their IDs or custom device fields. If you have already created custom device fields, you can always <<modify, change>> their values or add new fields.
+
+== Create your first custom device fields 
+
+Custom device fields help you assign specific values to device IDs. Before you create new fields, make sure that you already provisioned the needed device IDs. Otherwise, they will be ignored.
+
+*To create custom device fields for the first time:*
+
+. Create a link:https://en.wikipedia.org/wiki/Delimiter-separated_values[delimiter-separated file] containing custom device fields.
++
+Make sure the file you upload meets all of the following requirements, or it will be rejected:
+
+* The delimiter is a semi-colon (;).
+* Field and value names are not less than one character or exceed 20 characters and only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+* The first line of the file has the column headings corresponding to the custom device fields that you want to add.
+* The first column heading is *DeviceID*.
+* Each subsequent column heading is the name of a custom device field.
+* Each subsequent line of the file contains the value that you want to add in the custom device fields for a specific device.
++
+IMPORTANT: If you do not want to specify a value for some of your devices, you can leave an empty value. Later, when creating a smart device group, if you set a filter value to add devices with a field that has a character different from _X_, the filter will also match devices that have an empty value in this field.
+* There are no comments in the file.
++
+.Example
+====
+You want to add two custom device fields, *Trim* and *Region*, to a short list of devices. The file you upload should look like this:
+
+```
+DeviceID;Trim;Region
+CAR1;STD;NA
+CAR2;PREM;NA
+CAR3;BASIC;APAC
+```
+====
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Click *Upload file*.
++
+image::img::upload_custom_fields_file.png[image,350]
+
+. In *Upload custom device fields*, click *Choose a file*, and then select the delimiter-separated file that you created.
++
+[.lightbackground]
+image::img::upload_file_dialog_box.png[image,700]
+. Click *Upload*.
+. When the file with your custom device fields is uploaded, click *Done*.
+
+You can now use your custom device fields to xref:ota-web::create-smart-group.adoc[create a smart group].
+
+[[modify]]
+== Modify custom device fields
+
+If you need to change any value in a custom device field and delete or add new devices or fields, upload a new delimiter-separated file.
+
+When you add a new or modified file, pay attention to the following details:
+
+* The *DeviceID* column should be the first column. The order of other columns is not important as they will be completely overwritten.
+* You can have no more than 20 custom device fields in one file.
+
+*To add a new custom device field, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs to which you want to add a new custom device field.
++
+If you do not include a device ID in the file, its field names and values do not change. Therefore, when you add a new field, make sure to add all the devices in the file.
+. In the next columns, specify all the existing custom device fields and the related values.
+. In the last column, specify the name of the new custom device field and all its values.
+
+*To edit or remove values in the custom device fields, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs for which you want to edit values.
++
+If a device ID is included in the file, its field names and values are fully overwritten. Therefore, when you want to edit several devices, no need to include devices for which all values are unchanged.
+
+. In the next columns, specify all the existing custom device fields and the related values.
+. Edit or remove the needed values.
+
+*To remove custom device fields, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs that have the custom device field that you want to remove.
+. In the next columns, specify all the existing custom device fields and the related values but omit the fields that you want to remove.
++
+When you remove a field in a file:
++
+** If you include several devices and omit a field, the field will have empty values for the included devices. You will still be able to use this field to group other devices.
+** If you include all devices and omit a field, the field will be deleted. You will not be able to group devices using this field.
+** If you include all devices and a field has empty values, the field will still exist and show empty values. You will not be able to group devices using this field.
+
+After you modified your custom device fields:
+
+* Smart device groups are adjusted accordingly:
+** Devices that no longer match filter criteria are removed from your smart groups.
+** Devices that now match filter criteria are automatically added to relevant smart groups.
+* Existing campaigns are not adjusted: devices cannot be added or removed after a campaign has already begun.
++
+.Example
+====
+You created the *Premium German devices* smart group that was set to automatically match devices with the *Premium* value in the *Trim level* field and the *Germany* value in the *Country* field. Then, you launched the *January Update - Premium Germany*  campaign that targeted this smart group. Now, you upload a new delimiter-separated file that includes only three existing devices with a changed value in the *Trim level* field to *Standard*, and ten newly provisioned devices with the *Premium* value in the *Trim level* field. Consequently, the three downgraded devices no longer appear in the *Premium German devices* group, and the ten new devices start to appear in this group. However, the *January Update - Premium Germany* campaign still targets the three downgraded devices and not the ten new devices.
+====
