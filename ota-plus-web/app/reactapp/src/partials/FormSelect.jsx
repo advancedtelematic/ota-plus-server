@@ -59,7 +59,13 @@ class FormSelect extends Component {
   };
 
   appendSelectFieldsToBody = (e) => {
-    const { multiple = true, options, id, visibleFieldsCount = options.length > 1 ? options.length : 2 } = this.props;
+    const {
+      multiple = true,
+      newVersion = false,
+      options,
+      id,
+      visibleFieldsCount = options.length > 1 ? options.length : 2
+    } = this.props;
     const { showDropDown, selectedOptions } = this.state;
     const renderContainer = document.createElement('div');
     const inputPosition = e.target.getBoundingClientRect();
@@ -77,7 +83,7 @@ class FormSelect extends Component {
           width: inputPosition.width,
           height: options.length > 1 ? 'auto' : '35px',
         }}
-        className="c-form__select"
+        className={`c-form__select ${newVersion ? 'new-form-select' : ''} ${newVersion && options.length > 3 ? 'custom-sb' : ''}`}
         multiple={multiple}
         id="dropdown"
       >
@@ -151,6 +157,7 @@ class FormSelect extends Component {
 
   render() {
     const {
+      newVersion = false,
       multiple = true,
       label,
       placeholder,
@@ -193,7 +200,7 @@ class FormSelect extends Component {
             name={name}
             disabled={disabled}
           />
-          {inputValue.length ? (
+          {!newVersion && inputValue.length ? (
             <i
               className="fa fa-check c-form__select-icon"
             />
@@ -204,7 +211,7 @@ class FormSelect extends Component {
               style={{
                 height: options.length > 1 ? 'auto' : '35px',
               }}
-              className="c-form__select"
+              className={`c-form__select ${newVersion ? 'new-form-select' : ''}`}
               multiple={multiple}
               id={`select-${id}`}
             >
@@ -247,6 +254,7 @@ class FormSelect extends Component {
 }
 
 FormSelect.propTypes = {
+  newVersion: PropTypes.bool,
   multiple: PropTypes.bool,
   label: PropTypes.string,
   appendMenuToBodyTag: PropTypes.bool,

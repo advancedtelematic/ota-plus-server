@@ -1565,7 +1565,7 @@ input {
   background: #fff;
   width: 20px;
   height: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #979797;
   border-radius: 50%;
 
   &.checked {
@@ -2155,6 +2155,43 @@ input {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+.custom-sb {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #D8D8D8;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #BAB9B9;
+  }
+}
+
+.new-form-select {
+  border: 1px solid #F7F8F8;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.2);
+  .c-form {
+    &__option {
+      font-size: 16px;
+      color: $color-option-text;
+      padding: 10px;
+      overflow-x: scroll;
+      &:not(:last-child) {
+        border-bottom: 1px solid $color-option-border;
+      }
+      &--selected {
+        background-color: $color-option-highlighted;
+        &:before {
+          content: '';
+        }
       }
     }
   }

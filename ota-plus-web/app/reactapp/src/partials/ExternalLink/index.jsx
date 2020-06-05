@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const ExternalLink = ({ className, children, onClick, url }) => (
-  <a className={className} href={url} onClick={onClick} target="_blank" rel="noopener noreferrer">
+const ExternalLink = ({ className, children, id, onClick, url }) => (
+  <a id={id} className={className} href={url} onClick={onClick} target="_blank" rel="noopener noreferrer">
     {children}
   </a>
 );
@@ -14,6 +14,7 @@ ExternalLink.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  id: PropTypes.string,
   onClick: PropTypes.func,
   url: PropTypes.string
 };

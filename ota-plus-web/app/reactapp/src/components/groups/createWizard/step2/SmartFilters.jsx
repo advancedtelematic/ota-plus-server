@@ -1,17 +1,26 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-param-reassign */
 /** @format */
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { observable } from 'mobx';
 import _ from 'lodash';
 
 import Filter from './Filter';
 import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
-import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
-
-const FETCHING_DEVICES_MSG = 'Filtering devices can take some time';
+import { GROUPS_FILTER_CONDITIONS, PLUS_ICON } from '../../../../config';
+import {
+  AddFilterButton,
+  FieldLabel,
+  FilterColumnHeader,
+  FilterRow,
+  FiltersContainer,
+  FiltersHeader,
+  TargetedDevicesHint,
+} from './smartGroup/SmartGroupWizard/styled';
 
 @inject('stores')
 @observer
@@ -22,7 +31,20 @@ class SmartFilters extends Component {
 
   @observable options = {
     nameFilterOptions: ['Device ID'],
-    extraFilterOptions: ['contains', 'has a character equal to', 'has a character different from'],
+    extraFilterOptions: [
+      {
+        value: 'contains',
+        text: this.props.t('groups.creating.smart-group.filters.contains')
+      },
+      {
+        value: 'has a character equal to',
+        text: this.props.t('groups.creating.smart-group.filters.char-equal')
+      },
+      {
+        value: 'has a character different from',
+        text: this.props.t('groups.creating.smart-group.filters.char-not-equal')
+      }
+    ],
   };
 
   @observable filters = [
@@ -119,66 +141,91 @@ class SmartFilters extends Component {
   };
 
   render() {
-    const { stores } = this.props;
-    const { isFetchingDevicesCount, numberOfDevicesByExpression } = stores.groupsStore;
+    const { stores, t } = this.props;
+    const { groupsStore } = stores;
+    const { isFetchingDevicesCount, numberOfDevicesByExpression } = groupsStore;
 
     return (
-      <div className="filters">
-        <div className="filters--devices__number">
-          <span className="title">Number of devices:</span>
-          <span className="devices-number">
-            {isFetchingDevicesCount ? FETCHING_DEVICES_MSG : (
-              <>
-                {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
-                {' '}
-                Devices
-              </>
-            )}
-          </span>
-        </div>
-        {_.map(this.filters, (filter, index) => (
-          <div key={filter.id}>
-            {index !== 0 && (
-            <div className="filters--operations">
-              <div className="filters--operations__single" onClick={e => this.selectOperationType(e, filter.id, 'and')}>
-                <button
-                  type="button"
-                  id="filter--operation-and"
-                  className={`btn-radio ${filter.operation === 'and' ? ' checked' : ''}`}
-                />
-                <span>And</span>
+      <>
+        <FiltersHeader>
+          <FieldLabel>{t('groups.creating.smart-group.labels.filters')}</FieldLabel>
+          <AddFilterButton
+            id="filter-plus"
+            light="true"
+            onClick={() => this.addFilter()}
+          >
+            <img src={PLUS_ICON} />
+            {t('groups.creating.smart-group.buttons.add-filter')}
+          </AddFilterButton>
+        </FiltersHeader>
+        <FiltersContainer scrollbarVisible={this.filters.length > 2}>
+          <FilterRow>
+            <FilterColumnHeader>{t('groups.creating.smart-group.filters.filter')}</FilterColumnHeader>
+            <FilterColumnHeader>{t('groups.creating.smart-group.filters.type')}</FilterColumnHeader>
+            <FilterColumnHeader>{t('groups.creating.smart-group.filters.value')}</FilterColumnHeader>
+          </FilterRow>
+          <div className="filters">
+            {_.map(this.filters, (filter, index) => (
+              <div key={filter.id}>
+                {index !== 0 && (
+                <div className="filters--operations">
+                  <div
+                    className="filters--operations__single"
+                    onClick={e => this.selectOperationType(e, filter.id, 'and')}
+                  >
+                    <button
+                      type="button"
+                      id="filter--operation-and"
+                      className={`btn-radio ${filter.operation === 'and' ? ' checked' : ''}`}
+                    />
+                    <span>{t('groups.creating.smart-group.operations.and')}</span>
+                  </div>
+                  <div
+                    className="filters--operations__single"
+                    onClick={e => this.selectOperationType(e, filter.id, 'or')}
+                  >
+                    <button
+                      type="button"
+                      id="filter-operation-or"
+                      className={`btn-radio ${filter.operation === 'or' ? ' checked' : ''}`}
+                    />
+                    <span>{t('groups.creating.smart-group.operations.or')}</span>
+                  </div>
+                </div>
+                )}
+                <div>
+                  <Filter
+                    options={this.options}
+                    id={filter.id}
+                    removeFilter={this.removeFilter}
+                    setType={this.setType}
+                    type={filter.type}
+                    setExpressionForSingleFilter={this.setExpressionForSingleFilter}
+                  />
+                </div>
               </div>
-              <div className="filters--operations__single" onClick={e => this.selectOperationType(e, filter.id, 'or')}>
-                <button
-                  type="button"
-                  id="filter-operation-or"
-                  className={`btn-radio ${filter.operation === 'or' ? ' checked' : ''}`}
-                />
-                <span>Or</span>
-              </div>
-            </div>
-            )}
-            <div>
-              <Filter
-                options={this.options}
-                id={filter.id}
-                addFilter={this.addFilter}
-                removeFilter={this.removeFilter}
-                setType={this.setType}
-                type={filter.type}
-                setExpressionForSingleFilter={this.setExpressionForSingleFilter}
-              />
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </FiltersContainer>
+        <TargetedDevicesHint>
+          {isFetchingDevicesCount ? t('groups.creating.smart-group.fetching-devices') : (
+            <>
+              <div>{t('groups.creating.smart-group.devices-targeted')}</div>
+              <div>
+                {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
+              </div>
+            </>
+          )}
+        </TargetedDevicesHint>
+      </>
     );
   }
 }
 
 SmartFilters.propTypes = {
   onStep2DataSelect: PropTypes.func,
-  stores: PropTypes.shape({})
+  stores: PropTypes.shape({}),
+  t: PropTypes.func
 };
 
-export default SmartFilters;
+export default withTranslation()(SmartFilters);

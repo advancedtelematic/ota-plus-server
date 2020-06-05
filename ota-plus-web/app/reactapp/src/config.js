@@ -317,6 +317,7 @@ export const CAMPAIGNS_ICON_GREEN = '/assets/img/new-app/24/campaigns-active-sol
 export const CAMPAIGNS_ICON_WHITE = '/assets/img/icons/white/campaigns.svg';
 export const CANCEL_ICON_THIN = '/assets/img/icons/black/cancel-thin.svg';
 export const CLOSE_MODAL_ICON = '/assets/img/new-app/24/close-cross-24.svg';
+export const CLOSE_MODAL_ICON_RED = '/assets/img/new-app/24/close-cross-24-red.svg';
 export const CROSS_ICON_WHITE = '/assets/img/new-app/24/close-cross-white-24.svg';
 export const CROSS_ICON_RED = '/assets/img/icons/red_cross.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
