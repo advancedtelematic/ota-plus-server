@@ -138,6 +138,7 @@ export const UPLOADING_STATUS = {
   ERROR: 'error',
   IDLE: 'idle',
   IN_PROGRESS: 'in_progress',
+  MALFORMED: 'malformed',
   SUCCESS: 'success',
 };
 

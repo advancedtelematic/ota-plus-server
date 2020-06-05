@@ -14,6 +14,12 @@
     height: 100%;
     float: left;
 
+    &__divider {
+      background-color: $section-header-border-color;
+      height: 1px;
+      margin: 0 30px;
+    }
+
     &__header {
       display: flex;
       justify-content: space-between;
