@@ -25,6 +25,7 @@ import UnderlinedLink from '../partials/UnderlinedLink';
 import { URL_PROVISIONING_CREDS } from '../constants/urlConstants';
 import ReadMore from '../partials/ReadMore';
 import { PATH_CREDENTIALS } from '../constants/locationConstants';
+import CustomFieldsUploadModal from '../components/devices/CustomFieldsUploadModal';
 
 @inject('stores')
 @observer
@@ -41,6 +42,9 @@ class Devices extends Component {
 
   @observable
   createGroupModalShown = false;
+
+  @observable
+  uploadDeviceCustomFieldsModalShown = false;
 
   @observable
   deleteConfirmationShown = false;
@@ -89,6 +93,16 @@ class Devices extends Component {
     const { groupsStore } = stores;
     this.createGroupModalShown = false;
     resetAsync(groupsStore.groupsCreateAsync);
+  };
+
+  showUploadDeviceCustomFieldsModal = (e) => {
+    if (e) e.preventDefault();
+    this.uploadDeviceCustomFieldsModalShown = true;
+  };
+
+  hideUploadDeviceCustomFieldsModal = (e) => {
+    if (e) e.preventDefault();
+    this.uploadDeviceCustomFieldsModalShown = false;
   };
 
   showDeleteConfirmation = (device, e) => {
@@ -210,7 +224,7 @@ class Devices extends Component {
 
   render() {
     const { addNewWizard, stores, t } = this.props;
-    const { devicesStore, groupsStore } = stores;
+    const { devicesStore, featuresStore, groupsStore } = stores;
     const { devicesInitialTotalCount } = devicesStore;
     const isFetching = devicesStore.devicesFetchAsync.isFetching
       || groupsStore.groupsAddDeviceAsync.isFetching
@@ -224,9 +238,11 @@ class Devices extends Component {
         ) : devicesInitialTotalCount ? (
           <span>
             <DevicesGroupsPanel
+              features={featuresStore.features}
               showCreateGroupModal={this.showCreateGroupModal}
               selectGroup={this.selectGroup}
               onDeviceDrop={this.onDeviceDrop}
+              uploadDeviceCustomFields={this.showUploadDeviceCustomFieldsModal}
             />
             <DevicesContentPanel
               changeSort={this.changeSort}
@@ -268,6 +284,9 @@ class Devices extends Component {
             hide={this.hideEditName}
             device={this.itemToEdit}
           />
+        )}
+        {this.uploadDeviceCustomFieldsModalShown && (
+          <CustomFieldsUploadModal hide={this.hideUploadDeviceCustomFieldsModal} />
         )}
       </span>
     );

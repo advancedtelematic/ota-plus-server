@@ -44,6 +44,7 @@ export const API_FEATURES_FETCH = '/user/feature_flags';
 /*
  *  Devices
  */
+export const API_DEVICES_CUSTOM_FIELDS = '/api/v1/device_tags';
 export const API_DEVICES_SEARCH = '/api/v1/devices';
 export const API_DEVICES_NETWORK_INFO = '/api/v1/devices';
 export const API_DIRECTOR_DEVICES_SEARCH = '/api/v1/admin/devices';

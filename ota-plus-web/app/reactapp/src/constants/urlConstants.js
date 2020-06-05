@@ -8,6 +8,7 @@ export const URL_CREATE_FIXED_GROUP = 'https://docs.ota.here.com/ota-web/dev/cre
 export const URL_CREATE_FIXED_GROUP_IMPORT_LIST = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html#upload-list';
 export const URL_CREATE_SMART_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-smart-group.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
+export const URL_DEVICES_CUSTOM_FIELDS = 'https://docs.ota.here.com/ota-web/dev/create-custom-device-fields.html';
 export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';
 export const URL_FILE_UPLOADING_CLI = 'https://github.com/advancedtelematic/ota-tuf/blob/master/cli/README.adoc#user-content-uploading-a-target-binary-to-reposerver';
 export const URL_FOOTER_CONTACT_US = 'mailto:otaconnect.support@here.com';

@@ -92,9 +92,9 @@ const lightStyleVariants = theme => ({
 
 const styleVariants = (theme, light) => light ? lightStyleVariants(theme) : darkStyleVariants(theme);
 
-const Button = styled(AntdButton)(({ theme, type = 'default', light = false }) => ({
+const Button = styled(AntdButton)(({ theme, type = 'default', light = false, minwidth = '180px' }) => ({
   borderRadius: '1px',
-  minWidth: '180px',
+  minWidth: minwidth,
   fontWeight: 500,
   fontSize: '1em',
   '&.ant-btn-lg': {

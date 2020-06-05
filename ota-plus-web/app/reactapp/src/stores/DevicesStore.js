@@ -7,6 +7,7 @@ import _ from 'lodash';
 import encodeUrl from 'encodeurl';
 
 import {
+  API_DEVICES_CUSTOM_FIELDS,
   API_DEVICES_SEARCH,
   API_DEVICES_NETWORK_INFO,
   API_DIRECTOR_DEVICES_SEARCH,
@@ -42,10 +43,10 @@ import {
   SHA_256,
   SORT_DIR_ASC,
   SORT_DIR_DESC,
-  STATUS,
+  STATUS, UPLOADING_STATUS,
 } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { HTTP_CODE_200_OK, HTTP_CODE_404_NOT_FOUND } from '../constants/httpCodes';
+import { HTTP_CODE_200_OK, HTTP_CODE_400_BAD_REQUEST, HTTP_CODE_404_NOT_FOUND } from '../constants/httpCodes';
 
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
@@ -87,6 +88,8 @@ export default class DevicesStore {
   @observable approvalPendingCampaignsFetchAsync = {};
 
   @observable ungroupedDevicesCountFetchAsync = {};
+
+  @observable uploadCustomFieldsAsync = {};
 
   @observable devices = [];
 
@@ -166,6 +169,7 @@ export default class DevicesStore {
     resetAsync(this.eventsFetchAsync);
     resetAsync(this.approvalPendingCampaignsFetchAsync);
     resetAsync(this.getCustomDeviceFieldsAsync);
+    resetAsync(this.uploadCustomFieldsAsync);
     this.devicesLimit = DEVICES_LIMIT_PER_PAGE;
   }
 
@@ -792,6 +796,28 @@ export default class DevicesStore {
       })
       .catch((error) => {
         this.devicesRenameAsync = handleAsyncError(error);
+      });
+  }
+
+  uploadCustomFields(formData, onFinished) {
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    };
+    axios
+      .post(API_DEVICES_CUSTOM_FIELDS, formData, config)
+      .then((response) => {
+        onFinished(UPLOADING_STATUS.SUCCESS);
+        this.uploadCustomFieldsAsync = handleAsyncSuccess(response);
+      })
+      .catch((error) => {
+        if (error.response.status === HTTP_CODE_400_BAD_REQUEST) {
+          onFinished(UPLOADING_STATUS.MALFORMED);
+        } else {
+          onFinished(UPLOADING_STATUS.ERROR);
+        }
+        this.uploadCustomFieldsAsync = handleAsyncError(error);
       });
   }
 
