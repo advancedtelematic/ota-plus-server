@@ -2,15 +2,20 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'lodash';
 import { FormInput, FormSelect } from '../../../../partials/index';
-import { GROUPS_FILTER_CONDITIONS } from '../../../../config';
+import { GROUPS_FILTER_CONDITIONS, CLOSE_MODAL_ICON_RED } from '../../../../config';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import { OTA_DEVICES_SELECT_DEVICE_ID, OTA_DEVICES_SELECT_CUSTOM_FIELD } from '../../../../constants/analyticsActions';
+import { DoubleFieldWrapper, RemoveFilterButton, FilterRow } from './smartGroup/SmartGroupWizard/styled';
 
 const DEVICE_ID = 'Device ID';
+const MAX_VISIBLE_FIELDS = 3;
+const DEFAULT_VISIBLE_FIELDS = 2;
+
 @observer
 class Filter extends Component {
   @observable expressionObject = {};
@@ -65,17 +70,18 @@ class Filter extends Component {
   };
 
   render() {
-    const { removeFilter, addFilter, id, options, type } = this.props;
+    const { removeFilter, id, options, t, type } = this.props;
     return (
-      <div key={id} className="filter">
-        <div className="filter__block" style={{ flex: 1 }}>
+      <FilterRow key={id}>
+        <div>
           <FormSelect
+            newVersion
             id="name-filter"
-            placeholder="Data"
+            placeholder={t('groups.creating.smart-group.placeholders.select')}
             appendMenuToBodyTag
             options={options.nameFilterOptions}
             multiple={false}
-            visibleFieldsCount={options.nameFilterOptions.length > 1 ? 5 : 2}
+            visibleFieldsCount={options.nameFilterOptions.length > 1 ? MAX_VISIBLE_FIELDS : DEFAULT_VISIBLE_FIELDS}
             name="nameFilter"
             onChange={(e) => {
               sendAction(e === DEVICE_ID ? OTA_DEVICES_SELECT_DEVICE_ID : OTA_DEVICES_SELECT_CUSTOM_FIELD);
@@ -83,68 +89,71 @@ class Filter extends Component {
             }}
           />
         </div>
-        <div className="filter__block" style={{ flex: 2 }}>
+        <div>
           <FormSelect
+            newVersion
             id="condition-filter"
-            placeholder="Filter"
+            placeholder={t('groups.creating.smart-group.placeholders.select')}
             appendMenuToBodyTag
             options={options.extraFilterOptions}
             multiple={false}
             visibleFieldsCount={options.extraFilterOptions.length}
             name="condition"
             onChange={(e) => {
-              this.changeType(id, e);
-              this.handleOnChange(e, 'condition');
+              this.changeType(id, e.value);
+              this.handleOnChange(e.value, 'condition');
             }}
           />
         </div>
-
         {type === 'containsFilter' && (
-          <div className="filter__block" style={{ flex: 3 }}>
+          <div>
             <FormInput
               id="word"
               name="word"
               className="input-wrapper"
-              placeholder="Type here"
+              placeholder={t('groups.creating.smart-group.placeholders.enter-chars')}
               onChange={e => this.handleOnChange(e.target.value, 'word')}
             />
           </div>
         )}
         {type === 'positionFilter' && (
-          <div className="filter__block filter__block--double" style={{ display: 'flex', flex: 3 }}>
-            <div className="filter__block" style={{ flex: 1 }}>
+          <DoubleFieldWrapper>
+            <div>
               <FormInput
                 id="character"
                 name="character"
                 className="input-wrapper"
-                placeholder="Type here"
+                placeholder={t('groups.creating.smart-group.placeholders.enter-chars')}
                 onChange={e => this.handleOnChange(e.target.value, 'character')}
                 maxLength="1"
               />
             </div>
-            <div className="filter__block" style={{ flex: 2 }}>
+            <div>
               <FormSelect
+                newVersion
                 id="position-filter"
-                placeholder="Character position"
+                placeholder={t('groups.creating.smart-group.placeholders.select')}
                 appendMenuToBodyTag
                 options={_.range(1, 21)
                   .map(String)
-                  .map(el => `in position ${el}`)}
+                  .map(el => ({
+                    value: `in position ${el}`,
+                    text: `${t('groups.creating.smart-group.filters.position')} ${el}`
+                  }))}
                 multiple={false}
-                visibleFieldsCount={5}
+                visibleFieldsCount={MAX_VISIBLE_FIELDS}
                 name="position"
-                onChange={e => this.handleOnChange(e, 'position')}
+                onChange={(e) => {
+                  this.handleOnChange(e.value, 'position');
+                }}
               />
             </div>
-          </div>
+          </DoubleFieldWrapper>
         )}
-        <div className="filter__block filter__block--fake" id="filter-minus" onClick={removeFilter.bind(this, id)}>
-          -
-        </div>
-        <div className="filter__block filter__block--fake" id="filter-plus" onClick={addFilter}>
-          +
-        </div>
-      </div>
+        <RemoveFilterButton id="filter-minus" onClick={() => removeFilter(id)}>
+          <img src={CLOSE_MODAL_ICON_RED} />
+        </RemoveFilterButton>
+      </FilterRow>
     );
   }
 }
@@ -153,10 +162,10 @@ Filter.propTypes = {
   setType: PropTypes.func,
   setExpressionForSingleFilter: PropTypes.func,
   removeFilter: PropTypes.func,
-  addFilter: PropTypes.func,
   id: PropTypes.number,
   options: PropTypes.shape({}),
+  t: PropTypes.func,
   type: PropTypes.string
 };
 
-export default Filter;
+export default withTranslation()(Filter);

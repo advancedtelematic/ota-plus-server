@@ -7,6 +7,7 @@ export const URL_CONFIGURING_DEVICE = 'https://docs.ota.here.com/ota-client/dev/
 export const URL_CREATE_FIXED_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html';
 export const URL_CREATE_FIXED_GROUP_IMPORT_LIST = 'https://docs.ota.here.com/ota-web/dev/create-fixed-group.html#upload-list';
 export const URL_CREATE_SMART_GROUP = 'https://docs.ota.here.com/ota-web/dev/create-smart-group.html';
+export const URL_CUSTOM_DEVICE_FIELDS = 'https://docs.ota.here.com/ota-web/dev/create-custom-device-fields.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
 export const URL_DEVICES_CUSTOM_FIELDS = 'https://docs.ota.here.com/ota-web/dev/create-custom-device-fields.html';
 export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';

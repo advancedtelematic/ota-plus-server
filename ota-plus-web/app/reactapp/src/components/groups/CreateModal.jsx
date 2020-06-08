@@ -22,7 +22,15 @@ import {
 } from '../../constants/groupConstants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_SMART_GROUP, OTA_DEVICES_CREATE_FIXED_GROUP } from '../../constants/analyticsActions';
-import { assets, GROUP_ICON_GRAY, GROUP_DYNAMIC_ICON } from '../../config';
+import { assets, GROUP_ICON_GRAY, CLOSE_MODAL_ICON } from '../../config';
+import {
+  ButtonsWrapper,
+  ModalTitle,
+  StyledButton,
+  StyledOTAModal
+} from './createWizard/step2/smartGroup/SmartGroupWizard/styled';
+
+const SMART_GROUP_MODAL_WIDTH = '818px';
 
 const wizardSteps = [
   {
@@ -209,45 +217,74 @@ class CreateModal extends Component {
           onStep1DataSelect={this.onStep1DataSelect}
           onStep2DataSelect={this.onStep2DataSelect}
         />}
-        <div className="body-actions">
-          {this.isLastStep() ? (
-            <Button
+        {!(groupType === GROUP_GROUP_TYPE_SMART && this.isLastStep()) ? (
+          <div className="body-actions">
+            {this.isLastStep() ? (
+              <Button
+                light="true"
+                type="primary"
+                className="pull-right"
+                id="wizard-launch-butto"
+                disabled={!currentStep.isFinished}
+                onClick={this.createGroup}
+              >
+                {t('groups.creating.buttons.create')}
+              </Button>
+            ) : (
+              <Button
+                light="true"
+                type="primary"
+                disabled={!currentStep.isFinished}
+                id="next"
+                onClick={this.nextStep}
+              >
+                {t('groups.creating.next')}
+              </Button>
+            )}
+          </div>
+        ) : (
+          <ButtonsWrapper>
+            <StyledButton
+              light="true"
+              id="wizard-cancel-butto"
+              onClick={hide}
+            >
+              {t('groups.creating.buttons.cancel')}
+            </StyledButton>
+            <StyledButton
               light="true"
               type="primary"
-              className="pull-right"
               id="wizard-launch-butto"
               disabled={!currentStep.isFinished}
               onClick={this.createGroup}
             >
-              {t('groups.creating.button_title')}
-            </Button>
-          ) : (
-            <Button
-              light="true"
-              type="primary"
-              disabled={!currentStep.isFinished}
-              id="next"
-              onClick={this.nextStep}
-            >
-              {t('groups.creating.next')}
-            </Button>
-          )}
-        </div>
+              {t('groups.creating.buttons.create')}
+            </StyledButton>
+          </ButtonsWrapper>
+        )}
       </span>
     );
-    return (
+    return this.isLastStep() && groupType === GROUP_GROUP_TYPE_SMART ? (
+      <StyledOTAModal
+        title={(
+          <ModalTitle>
+            {t('groups.creating.create-new-group')}
+          </ModalTitle>
+        )}
+        topActions={<img src={CLOSE_MODAL_ICON} onClick={hide} />}
+        width={SMART_GROUP_MODAL_WIDTH}
+        className="create-group-modal"
+        content={step}
+        visible={shown}
+      />
+    ) : (
       <OTAModal
         title={(
           <ModalTitleWrapper>
             {this.isLastStep() && (
-              <img
-                src={groupType === GROUP_GROUP_TYPE_CLASSIC
-                  ? GROUP_ICON_GRAY
-                  : GROUP_DYNAMIC_ICON
-              }
-              />
+              <img src={GROUP_ICON_GRAY} />
             )}
-            {t('groups.creating.create_new_group')}
+            {t('groups.creating.create-new-group')}
           </ModalTitleWrapper>
         )}
         topActions={(

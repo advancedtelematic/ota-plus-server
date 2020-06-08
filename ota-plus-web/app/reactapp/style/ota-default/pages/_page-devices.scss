@@ -455,6 +455,12 @@
     font-weight: 500;
   }
 
+  &__teaser {
+    font-weight: 400;
+    padding-right: 20px;
+    line-height: 18px;
+  }
+
   &__option {
     flex: 1;
     padding: 30px 0;
@@ -503,19 +509,22 @@
 .filters {
   &--operations {
     display: flex;
-    margin: 20px 5px;
+    margin: 0 5px 8px;
 
     &__single {
       display: flex;
       align-items: center;
-      margin-right: 15px;
+      margin-right: 10px;
       cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(15,22,33,0.6);
     }
 
     .btn-radio {
-      width: 15px;
-      height: 15px;
-      margin-right: 5px;
+      width: 16px;
+      height: 16px;
+      margin-right: 10px;
     }
   }
 

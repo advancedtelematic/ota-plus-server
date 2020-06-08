@@ -15,13 +15,13 @@ class Step1 extends Component {
     const { t } = props;
     this.options = [
       {
-        title: t('groups.creating.fixed_group_title'),
-        teaser: t('groups.creating.fixed_group_teaser'),
+        title: t('groups.creating.fixed-group-title'),
+        teaser: t('groups.creating.fixed-group-teaser'),
         alias: GROUP_GROUP_TYPE_CLASSIC,
       },
       {
-        title: t('groups.creating.smart_group_title'),
-        teaser: t('groups.creating.smart_group_teaser'),
+        title: t('groups.creating.smart-group-title'),
+        teaser: t('groups.creating.smart-group-teaser'),
         alias: GROUP_GROUP_TYPE_SMART,
       },
     ];
