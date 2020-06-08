@@ -6,8 +6,8 @@ lazy val Library = new {
   object Version {
     val Akka            = "2.5.9"
     val MockWs          = "2.6.2"
-    val LibAts          = "0.3.0-98-g11dd194"
-    val LibTuf          = "0.7.0-100-g789baa5"
+    val LibAts          = "0.3.0-109-ge12f057"
+    val LibTuf          = "0.7.1-6-gd36661d"
     val Netty           = "4.1.19.Final"
     val ScalaCheck      = "1.13.4"
     val ScalaTestPlay   = "3.1.2"
