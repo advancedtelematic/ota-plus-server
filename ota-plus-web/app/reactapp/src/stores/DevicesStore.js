@@ -43,7 +43,8 @@ import {
   SHA_256,
   SORT_DIR_ASC,
   SORT_DIR_DESC,
-  STATUS, UPLOADING_STATUS,
+  STATUS,
+  UPLOADING_STATUS,
 } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import { HTTP_CODE_200_OK, HTTP_CODE_400_BAD_REQUEST, HTTP_CODE_404_NOT_FOUND } from '../constants/httpCodes';
@@ -810,6 +811,7 @@ export default class DevicesStore {
       .then((response) => {
         onFinished(UPLOADING_STATUS.SUCCESS);
         this.uploadCustomFieldsAsync = handleAsyncSuccess(response);
+        this.getCustomDeviceFields();
       })
       .catch((error) => {
         if (error.response.status === HTTP_CODE_400_BAD_REQUEST) {
