@@ -17,7 +17,7 @@ import {
   UploadFileSection,
   UploadIputFileSection
 } from './styled';
-import { CLOSE_MODAL_ICON, UPLOAD_ICON } from '../../../config';
+import { DEVICES_LIMIT_PER_PAGE, CLOSE_MODAL_ICON, UPLOAD_ICON } from '../../../config';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
   OTA_DEVICES_CUSTOM_CANCEL,
@@ -95,7 +95,16 @@ const CustomFieldsUploadModal = ({ hide }) => {
     customFieldsData.append('custom-device-fields', fileUploadRef.current.files[0]);
     customFieldsData.append('name', 'custom-device-fields');
     customFieldsData.append('type', 'file');
-    stores.devicesStore.uploadCustomFields(customFieldsData, onFinished);
+    const { devicesStore, groupsStore } = stores;
+    devicesStore.uploadCustomFields(customFieldsData, onFinished);
+    const group = groupsStore.selectedGroup;
+    if (group.isSmart) {
+      const groupId = group.id || null;
+      const ungrouped = group.ungrouped || null;
+      devicesStore.resetPageNumber();
+      devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
+      groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
+    }
   };
 
   const onFileUploadClick = (e) => {
