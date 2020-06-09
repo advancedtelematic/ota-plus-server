@@ -2183,7 +2183,7 @@ input {
       font-size: 16px;
       color: $color-option-text;
       padding: 10px;
-      overflow-x: scroll;
+      overflow-x: auto;
       &:not(:last-child) {
         border-bottom: 1px solid $color-option-border;
       }

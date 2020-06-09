@@ -22,6 +22,15 @@ import {
   TargetedDevicesHint,
 } from './smartGroup/SmartGroupWizard/styled';
 
+const INITIAL_FILTER_VALUES = [
+  {
+    id: 1,
+    type: 'containsFilter',
+    expression: '',
+    operation: 'and',
+  },
+];
+
 @inject('stores')
 @observer
 class SmartFilters extends Component {
@@ -47,14 +56,7 @@ class SmartFilters extends Component {
     ],
   };
 
-  @observable filters = [
-    {
-      id: 1,
-      type: 'containsFilter',
-      expression: '',
-      operation: 'and',
-    },
-  ];
+  @observable filters = INITIAL_FILTER_VALUES;
 
   componentDidMount() {
     const { stores } = this.props;
@@ -195,6 +197,7 @@ class SmartFilters extends Component {
                 )}
                 <div>
                   <Filter
+                    filtersLength={this.filters.length}
                     options={this.options}
                     id={filter.id}
                     removeFilter={this.removeFilter}

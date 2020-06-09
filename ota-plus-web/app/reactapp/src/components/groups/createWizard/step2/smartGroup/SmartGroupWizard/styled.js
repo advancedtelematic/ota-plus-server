@@ -113,7 +113,7 @@ const customSbStyles = css`
 export const FiltersContainer = styled.div`
   max-height: 160px;
   padding: 10px 40px;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-top: 1px solid ${({ theme }) => theme.palette.accents.dark};
   border-bottom: 1px solid ${({ theme }) => theme.palette.accents.dark};
   ${({ scrollbarVisible }) => scrollbarVisible && customSbStyles};

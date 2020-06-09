@@ -70,7 +70,7 @@ class Filter extends Component {
   };
 
   render() {
-    const { removeFilter, id, options, t, type } = this.props;
+    const { filtersLength, removeFilter, id, options, t, type } = this.props;
     return (
       <FilterRow key={id}>
         <div>
@@ -150,15 +150,18 @@ class Filter extends Component {
             </div>
           </DoubleFieldWrapper>
         )}
-        <RemoveFilterButton id="filter-minus" onClick={() => removeFilter(id)}>
-          <img src={CLOSE_MODAL_ICON_RED} />
-        </RemoveFilterButton>
+        {filtersLength > 1 && (
+          <RemoveFilterButton id="filter-minus" onClick={() => removeFilter(id)}>
+            <img src={CLOSE_MODAL_ICON_RED} />
+          </RemoveFilterButton>
+        )}
       </FilterRow>
     );
   }
 }
 
 Filter.propTypes = {
+  filtersLength: PropTypes.number,
   setType: PropTypes.func,
   setExpressionForSingleFilter: PropTypes.func,
   removeFilter: PropTypes.func,
