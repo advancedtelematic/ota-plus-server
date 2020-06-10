@@ -81,9 +81,23 @@ const CustomFieldsUploadModal = ({ hide }) => {
     });
   };
 
-  const onFinished = (status) => {
+  const onFinished = async (status) => {
     setUploadStatus(status);
-    if (status !== UPLOADING_STATUS.SUCCESS) {
+    if (status === UPLOADING_STATUS.SUCCESS) {
+      const { devicesStore, groupsStore } = stores;
+      const group = groupsStore.selectedGroup;
+      if (group.isSmart) {
+        const groupId = group.id || null;
+        const ungrouped = group.ungrouped || null;
+        devicesStore.resetPageNumber();
+        await devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
+        groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
+        const groupFound = groupsStore.groups.find(groupIterated => groupIterated.id === group.id);
+        const index = groupsStore.groups.indexOf(groupFound);
+        groupsStore.groups[index].devices.total = devicesStore.devices.length;
+        groupsStore.prepareGroups(groupsStore.groups);
+      }
+    } else {
       sendAction(OTA_DEVICES_CUSTOM_FAILED);
       removeFile();
     }
@@ -95,16 +109,8 @@ const CustomFieldsUploadModal = ({ hide }) => {
     customFieldsData.append('custom-device-fields', fileUploadRef.current.files[0]);
     customFieldsData.append('name', 'custom-device-fields');
     customFieldsData.append('type', 'file');
-    const { devicesStore, groupsStore } = stores;
+    const { devicesStore } = stores;
     devicesStore.uploadCustomFields(customFieldsData, onFinished);
-    const group = groupsStore.selectedGroup;
-    if (group.isSmart) {
-      const groupId = group.id || null;
-      const ungrouped = group.ungrouped || null;
-      devicesStore.resetPageNumber();
-      devicesStore.fetchDevices(devicesStore.devicesFilter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0);
-      groupsStore.fetchExpressionForSelectedGroup(groupsStore.selectedGroup.id);
-    }
   };
 
   const onFileUploadClick = (e) => {
