@@ -7,14 +7,15 @@ Smart groups are based on a device filter. They automatically group newly provis
 *To create a smart group:*
 
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
-. In the *Groups* pane, click *Create group*.
+. Click *Create group*.
 +
-image::img::create_group.png[image,450]
+image::img::create_group.png[image,350]
+
 . Select *Smart device group*, and then click *Next*.
 . Specify the group name.
 . Define a filter for your devices.
 +
-Filters help HERE OTA Connect assign each device to a group. For example, OTA Connect can filter based on characters in the device ID. The device ID is defined in the OTA Connect client configuration, and is set on the server when the device connects for the first time.footnote:[To learn how to xref:ota-client::use-your-own-deviceid.adoc[configure device IDs\], see the developer documentation. Note that the device ID cannot be changed after it is set.] If no ID is configured on the device, a random ID is automatically generated.
+A filter helps HERE OTA Connect match each device to a group. Currently, OTA Connect can filter based on characters in the device ID or your xref:ota-web::create-custom-device-fields.adoc[custom device fields]. The device ID is defined in the OTA Connect client configuration, and is set on the server when the device connects for the first time.footnote:[To learn how to xref:ota-client::use-your-own-deviceid.adoc[configure device IDs\], see the developer documentation. Note that the device ID can't be changed after it's set.] If no ID is configured on the device, a random ID is automatically generated.
 +
 *Example:*
 +
