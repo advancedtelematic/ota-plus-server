@@ -38,10 +38,10 @@ import {
 } from '../../../../constants/analyticsActions';
 
 export const getStepStatus = (activeCondition, doneCondition) => {
+  if (doneCondition) {
+    return STEP_STATUS.DONE;
+  }
   if (activeCondition) {
-    if (doneCondition) {
-      return STEP_STATUS.DONE;
-    }
     return STEP_STATUS.ACTIVE;
   }
   return STEP_STATUS.INACTIVE;
@@ -150,7 +150,10 @@ const DashboardStepper = () => {
   const groupsStepStatus = getStepStatus(devicesStepStatus === STEP_STATUS.DONE, groupsTotal);
   const updatesStepStatus = getStepStatus(softwareStepStatus === STEP_STATUS.DONE, updatesTotalCount);
   const campaignsStepStatus = getStepStatus(
-    groupsStepStatus === STEP_STATUS.DONE && updatesStepStatus === STEP_STATUS.DONE,
+    devicesStepStatus === STEP_STATUS.DONE
+    && softwareStepStatus === STEP_STATUS.DONE
+    && groupsStepStatus === STEP_STATUS.DONE
+    && updatesStepStatus === STEP_STATUS.DONE,
     campaignsTotal
   );
 
