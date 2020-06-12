@@ -18,7 +18,10 @@ const baseInputStyles = css`
 `;
 
 export const Pill = styled.div`
-  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  display: flex;
   height: 24px;
   line-height: 24px;
   padding: 0 12px;
@@ -120,7 +123,7 @@ export const ButtonsWrapper = styled.div`
 `;
 
 export const UploadButton = styled(Button)`
-  min-width: 148px;
+  min-width: 168px;
   height: 40px;
   font-size: 16px;
   margin-right: 16px;
@@ -133,8 +136,21 @@ export const FileInfoSection = styled.div`
     margin-top: 24px;
 `;
 
+export const FileDescription = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const TagInfoText = styled.div`
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 200px; 
+  white-space: nowrap;
+`;
+
 export const UploadFileSection = styled.div`
-  display: ${({ displayed }) => displayed ? 'block' : 'none'};
+  display: ${({ displayed }) => displayed ? 'inline-flex' : 'none'};
   margin-top: 23px;
   margin-bottom: 40px;
   & > span {
