@@ -1,3 +1,0 @@
-= Manage Updates
-
-You can view and rename updates. TODO
