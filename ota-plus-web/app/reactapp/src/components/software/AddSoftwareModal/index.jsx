@@ -12,6 +12,7 @@ import {
   CloseIcon,
   Description,
   EcuSelect,
+  FileDescription,
   FileInfoSection,
   Info,
   InfoStatusBarContainer,
@@ -25,6 +26,7 @@ import {
   ProgressBarText,
   ProgressBarTextContainer,
   StyledButton,
+  TagInfoText,
   TextLabelInput,
   Title,
   UploadButton,
@@ -377,6 +379,7 @@ const AddSoftwareModal = ({ hide }) => {
           </FileInfoSection>
         )}
         <UploadFileSection
+          id="file-upload-section"
           displayed={uploadStatus !== UPLOADING_STATUS.SUCCESS && uploadStatus !== UPLOADING_STATUS.IN_PROGRESS}
         >
           <input
@@ -397,9 +400,9 @@ const AddSoftwareModal = ({ hide }) => {
           </UploadButton>
           {fileInfo.fileName
             ? (
-              <>
+              <FileDescription id="file-description-attached">
                 <Tag id="attached-file-pill" onClose={removeFile}>
-                  <div>{fileInfo.fileName}</div>
+                  <TagInfoText id="tag-info-text">{fileInfo.fileName}</TagInfoText>
                 </Tag>
                 <Info error={fileInfo.fileTooLarge}>
                   <span id="file-size-tip">{fileInfo.filePrettySize}</span>
@@ -412,23 +415,25 @@ const AddSoftwareModal = ({ hide }) => {
                     </>
                   )}
                 </Info>
-              </>
+              </FileDescription>
             )
             : (
-              <span>
-                {t('software.create-modal.file-information-1')}
-                {' '}
-                <ExternalLink
-                  key={'cli-link'}
-                  onClick={() => sendAction(OTA_SOFTWARE_READ_CLI)}
-                  url={URL_FILE_UPLOADING_CLI}
-                  weight="medium"
-                >
-                  {t('software.create-modal.file-information-cli')}
-                </ExternalLink>
-                {'. '}
-                {t('software.create-modal.file-information-2')}
-              </span>
+              <FileDescription id="file-description">
+                <span>
+                  {t('software.create-modal.file-information-1')}
+                  {' '}
+                  <ExternalLink
+                    key={'cli-link'}
+                    onClick={() => sendAction(OTA_SOFTWARE_READ_CLI)}
+                    url={URL_FILE_UPLOADING_CLI}
+                    weight="medium"
+                  >
+                    {t('software.create-modal.file-information-cli')}
+                  </ExternalLink>
+                  {'. '}
+                  {t('software.create-modal.file-information-2')}
+                </span>
+              </FileDescription>
             )}
         </UploadFileSection>
         <ButtonsWrapper id="buttons-wrapper">
