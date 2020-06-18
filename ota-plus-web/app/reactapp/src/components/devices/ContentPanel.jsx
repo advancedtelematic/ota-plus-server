@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { observe } from 'mobx';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
-import { Pagination, Tag } from 'antd';
+import { Collapse, Pagination, Tag } from 'antd';
 
 import DeviceItem from './Item';
 import BarChart from './BarChart';
@@ -30,6 +30,7 @@ import ReadMore from '../../partials/ReadMore';
 import UnderlinedLink from '../../partials/UnderlinedLink';
 import { URL_CREATE_FIXED_GROUP, URL_CREATE_SMART_GROUP } from '../../constants/urlConstants';
 
+const { Panel } = Collapse;
 
 const connections = {
   live: {
@@ -167,18 +168,84 @@ class ContentPanel extends Component {
       );
     });
 
+    const fakeDashboard = (
+      <>
+        <div className="devices-panel__top-wrapper">
+          <div className="devices-panel__dashboard-top">
+            <div className="devices-panel__title">{t('devices.dashboard.simultaneous_connections')}</div>
+            {'560/600'}
+            <div className="devices-panel__dashboard-top-icon" />
+          </div>
+          <div className="devices-panel__dashboard-top">
+            <div className="devices-panel__title">{t('devices.dashboard.total_devices')}</div>
+            {'134.000'}
+          </div>
+          <div className="devices-panel__dashboard-top">
+            <div className="devices-panel__title">{t('devices.dashboard.total_connections')}</div>
+            {'69.000'}
+            <div className="devices-panel__dashboard-top-icon" />
+          </div>
+        </div>
+        <div className="devices-panel__dashboard-bottom">
+          <div className="devices-panel__dashboard-content">
+            <div className="devices-panel__title">{t('devices.dashboard.live_connections')}</div>
+            <div className="devices-panel__dashboard-data">
+              <BarChart connections={connections} />
+            </div>
+          </div>
+          <div className="devices-panel__dashboard-content">
+            <div className="devices-panel__title">{t('devices.dashboard.certificate_rollover')}</div>
+            <div className="devices-panel__dashboard-data">
+              <Stats data={certificateRolloverData.stats} indicatorColors />
+            </div>
+          </div>
+          <div className="devices-panel__dashboard-content">
+            <div className="devices-panel__title">{t('devices.dashboard.connections')}</div>
+            <div className="devices-panel__dashboard-data">
+              <Stats data={connectionsData.stats} indicatorColors={false} />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+
     return (
       <div className="devices-panel">
         <ContentPanelHeader devicesFilter={devicesFilter} changeFilter={changeFilter} addNewWizard={addNewWizard} />
-        {isSmart
-          && (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
-            <div className="wrapper-center">
-              <Loader />
-            </div>
-          ) : (
-            <ContentPanelSubheader />
-          ))}
         <div className={`devices-panel__wrapper ${isSmart ? 'devices-panel__wrapper--smart' : ''}`}>
+          <div className="devices-panel__dashboard">
+            <Collapse accordion>
+              {isSmart && (groupsStore.expressionForSelectedGroupFetchAsync.isFetching ? (
+                <div className="wrapper-center">
+                  <Loader />
+                </div>
+              ) : (
+                <Panel
+                  header={(
+                    <div className="devices-panel__title">
+                      {t('groups.panels.filters.title')}
+                    </div>
+                  )}
+                >
+                  <ContentPanelSubheader />
+                </Panel>
+              ))}
+              {isSmart && isGroupsKPIEnabled && (
+                <Panel
+                  header={(
+                    <div className="devices-panel__title">
+                      {t('devices.dashboard.title')}
+                      <Tag color="#00B6B2" className="alpha-tag">
+                        {ALPHA_TAG}
+                      </Tag>
+                    </div>
+                  )}
+                >
+                  {fakeDashboard}
+                </Panel>
+              )}
+            </Collapse>
+          </div>
           <div
             className={`devices-panel__list${isGroupsKPIEnabled ? ' devices-panel__list--alpha' : ''}`}
           >
@@ -246,7 +313,7 @@ class ContentPanel extends Component {
               </div>
             )}
           </div>
-          {isGroupsKPIEnabled && (
+          {!isSmart && isGroupsKPIEnabled && (
             <div className="devices-panel__dashboard">
               <div className="devices-panel__title devices-panel__title--margin">
                 {t('devices.dashboard.title')}
@@ -254,42 +321,7 @@ class ContentPanel extends Component {
                   {ALPHA_TAG}
                 </Tag>
               </div>
-              <div className="devices-panel__top-wrapper">
-                <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{t('devices.dashboard.simultaneous_connections')}</div>
-                  {'560/600'}
-                  <div className="devices-panel__dashboard-top-icon" />
-                </div>
-                <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{t('devices.dashboard.total_devices')}</div>
-                  {'134.000'}
-                </div>
-                <div className="devices-panel__dashboard-top">
-                  <div className="devices-panel__title">{t('devices.dashboard.total_connections')}</div>
-                  {'69.000'}
-                  <div className="devices-panel__dashboard-top-icon" />
-                </div>
-              </div>
-              <div className="devices-panel__dashboard-bottom">
-                <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{t('devices.dashboard.live_connections')}</div>
-                  <div className="devices-panel__dashboard-data">
-                    <BarChart connections={connections} />
-                  </div>
-                </div>
-                <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{t('devices.dashboard.certificate_rollover')}</div>
-                  <div className="devices-panel__dashboard-data">
-                    <Stats data={certificateRolloverData.stats} indicatorColors />
-                  </div>
-                </div>
-                <div className="devices-panel__dashboard-content">
-                  <div className="devices-panel__title">{t('devices.dashboard.connections')}</div>
-                  <div className="devices-panel__dashboard-data">
-                    <Stats data={connectionsData.stats} indicatorColors={false} />
-                  </div>
-                </div>
-              </div>
+              {fakeDashboard}
             </div>
           )}
         </div>

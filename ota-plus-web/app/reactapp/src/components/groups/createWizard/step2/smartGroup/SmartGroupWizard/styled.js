@@ -111,19 +111,39 @@ const customSbStyles = css`
 `;
 
 export const FiltersContainer = styled.div`
-  max-height: 160px;
-  padding: 10px 40px;
+  max-height: 246px;
+  padding: 10px 24px;
   overflow-y: auto;
-  border-top: 1px solid ${({ theme }) => theme.palette.accents.dark};
-  border-bottom: 1px solid ${({ theme }) => theme.palette.accents.dark};
+  background-color: #F7F8F8;
   ${({ scrollbarVisible }) => scrollbarVisible && customSbStyles};
+`;
+
+export const FiltersCluster = styled.div`
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15);
+  padding: 16px 16px 10px;
+  margin-bottom: 8px;
+`;
+
+export const ClusterHeader = styled.div`
+  height: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > div:last-child {
+    display: flex;
+    #filter-minus {
+      width: 40px;
+      margin-left: 16px;
+    }
+  }
 `;
 
 export const FilterRow = styled.div`
   display: flex;
-  :first-of-type {
-    margin-bottom: 8px;
-  }
+  margin-bottom: 8px;
   input {
     height: 40px;
     border: 1px solid rgba(35,52,89,0.35);
@@ -145,8 +165,7 @@ export const FilterRow = styled.div`
       max-width: 215px;
     }
     :nth-child(3) {
-      min-width: 285px;
-      max-width: 285px;
+      flex: 1;
     }
     :nth-child(4) {
       min-width: 40px;

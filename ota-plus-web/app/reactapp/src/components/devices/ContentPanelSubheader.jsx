@@ -3,19 +3,22 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { Trans, withTranslation } from 'react-i18next';
+import { Tooltip } from 'antd';
 import { SubHeader, FormInput } from '../../partials';
-import { GROUPS_FILTER_CONDITIONS } from '../../config';
+import { AND_ICON_LIGHT, GROUPS_FILTER_CONDITIONS, HELP_ICON_LIGHT, OR_ICON_LIGHT } from '../../config';
 
 const CHARACTER_POSITION_REGEXP_PATTERN = '\\((.*?)\\)';
 const TAG_CHARACTER_POSITION_REGEXP_PATTERN = /\(([^)]+)\)/g;
 const DEVICE_ID = 'Device ID';
+const OR_CONJUNCTION = 'or';
 const TAG = 'tag';
 
 @inject('stores')
 @observer
 class ContentPanelSubheader extends Component {
   render() {
-    const { stores } = this.props;
+    const { stores, t } = this.props;
     const { groupsStore } = stores;
     const expressionsArray = groupsStore.selectedGroup.expression.split(/ and | or /);
     const operationsArray = groupsStore.selectedGroup.expression.match(/and|or/g);
@@ -133,8 +136,22 @@ class ContentPanelSubheader extends Component {
           )}
         </div>
         {operationsArray && index < operationsArray.length ? (
-          <div className="filters--operation_dark">
-            {operationsArray[index]}
+          <div className={`filters--operation_dark ${operationsArray[index] === OR_CONJUNCTION ? 'filters--operation_dark__or' : ''}`}>
+            <div>
+              <img src={operationsArray[index] === OR_CONJUNCTION ? OR_ICON_LIGHT : AND_ICON_LIGHT} />
+              {operationsArray[index]}
+            </div>
+            <Tooltip
+              title={(
+                <Trans>
+                  {t(operationsArray[index] === OR_CONJUNCTION ? 'groups.tooltips.or' : 'groups.tooltips.and')}
+                </Trans>
+              )}
+              arrowPointAtCenter
+              placement="left"
+            >
+              <img className="tooltip-icon" src={HELP_ICON_LIGHT} />
+            </Tooltip>
           </div>
         ) : ''}
       </div>
@@ -145,7 +162,8 @@ class ContentPanelSubheader extends Component {
 }
 
 ContentPanelSubheader.propTypes = {
-  stores: PropTypes.shape({})
+  stores: PropTypes.shape({}),
+  t: PropTypes.func
 };
 
-export default ContentPanelSubheader;
+export default withTranslation()(ContentPanelSubheader);

@@ -183,10 +183,12 @@
 
       &--filters {
         background: $fake-header-text;
-        margin: 0 35px 5px 30px;
-        padding: 0 15px;
+        margin: 10px 0;
+        padding: 0 12px;
         display: block;
         height: auto;
+        max-height: 316px;
+        overflow-y: auto;
       }
     }
 
@@ -205,16 +207,18 @@
     }
 
     &__wrapper {
-      height: calc(100% - 60px);
+      height: calc(100% - 80px);
       padding: 0 30px;
       position: relative;
 
       &--smart {
-        height: calc(100% - 125px);
+        display: flex;
+        flex-direction: column;
       }
     }
 
     &__list {
+      flex: 1;
       height: 100%;
       overflow-y: auto;
       position: relative;
@@ -229,10 +233,10 @@
       color: $devices-group-inactive;
       text-transform: uppercase;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 400;
 
       &--margin {
-        margin-bottom: 5px;
+        margin-top: 5px;
       }
     }
 
@@ -241,8 +245,30 @@
       bottom: 30px;
       left: 30px;
       right: 30px;
-      margin-top: 2%;
+      margin-bottom: 12px;
       position: static;
+      .ant-collapse {
+        background-color: transparent;
+        border: none;
+      }
+      .ant-collapse-item {
+        border-bottom: none;
+      }
+      .ant-collapse-arrow {
+        color: #787D82;
+        left: 0;
+      }
+      .ant-collapse-content {
+        border-radius: 0;
+        border-top: none;
+        background-color: transparent;
+      }
+      .ant-collapse-content-box {
+        padding: 0;
+      }
+      .ant-collapse-header {
+        padding: 0 16px;
+      }
     }
 
     &__top-wrapper {
@@ -509,16 +535,30 @@
 .filters {
   &--operations {
     display: flex;
-    margin: 0 5px 8px;
+    margin: 0 0 8px;
 
     &__single {
       display: flex;
       align-items: center;
-      margin-right: 10px;
-      cursor: pointer;
+      justify-content: space-between;
+      width: 100%;
       font-size: 13px;
       font-weight: 500;
       color: rgba(15,22,33,0.6);
+      span {
+        display: block;
+        line-height: 24px;
+      }
+      & > img {
+        width: 14px;
+      }
+      & > div:first-child {
+        display: flex;
+        & > img {
+          margin-right: 6px;
+          opacity: 0.6;
+        }
+      }
     }
 
     .btn-radio {
@@ -529,9 +569,24 @@
   }
 
   &--operation_dark {
-    padding-top: 10px;
-    padding-left: 10px;
-    color: white;
+    color: #B8B9BC;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__or {
+      padding: 6px 0;
+      margin: 0 -12px;
+      background-color: $dashboard-bg;
+    }
+    img {
+      margin-right: 4px;
+    }
+    .tooltip-icon {
+      margin-right: 0; 
+      width: 14px;
+    }
   }
 
   &--devices__number {
@@ -546,9 +601,7 @@
     display: flex;
 
     &--dark {
-      &:last-child {
-        margin-bottom: 10px;
-      }
+      margin-bottom: 10px;
       &:not(:last-child) {
         &:after {
           color: white;

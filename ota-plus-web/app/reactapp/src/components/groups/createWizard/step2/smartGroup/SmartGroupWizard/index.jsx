@@ -10,6 +10,11 @@ import { GROUP_DATA_TYPE_NAME } from '../../../../../../constants/groupConstants
 import SmartFilters from '../../SmartFilters';
 import { ExternalLink } from '../../../../../../partials';
 import { URL_CONFIGURING_DEVICE, URL_CUSTOM_DEVICE_FIELDS } from '../../../../../../constants/urlConstants';
+import { sendAction } from '../../../../../../helpers/analyticsHelper';
+import {
+  OTA_DEVICES_CONFIGURE_READ_MORE,
+  OTA_DEVICES_SMART_CUSTOM_READ_MORE
+} from '../../../../../../constants/analyticsActions';
 
 const SmartGroupWizard = ({ onStep2DataSelect }) => {
   const { t } = useTranslation();
@@ -21,6 +26,7 @@ const SmartGroupWizard = ({ onStep2DataSelect }) => {
         <ExternalLink
           id="cdf-link"
           url={URL_CUSTOM_DEVICE_FIELDS}
+          onClick={() => sendAction(OTA_DEVICES_SMART_CUSTOM_READ_MORE)}
         >
           {t('groups.creating.smart-group.description-url-1')}
         </ExternalLink>
@@ -30,6 +36,7 @@ const SmartGroupWizard = ({ onStep2DataSelect }) => {
         <ExternalLink
           id="dev-docs-link"
           url={URL_CONFIGURING_DEVICE}
+          onClick={() => sendAction(OTA_DEVICES_CONFIGURE_READ_MORE)}
         >
           {t('groups.creating.smart-group.description-url-2')}
         </ExternalLink>
