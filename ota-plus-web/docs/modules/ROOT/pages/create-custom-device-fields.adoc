@@ -10,6 +10,8 @@ Custom device fields help you assign specific values to device IDs. Before you c
 
 . Create a link:https://en.wikipedia.org/wiki/Delimiter-separated_values[delimiter-separated file] containing custom device fields.
 +
+TIP: You can use Microsoft Excel to generate CSV files. If you are working with Excel, keep your data in it until you are ready to export the data to CSV. Once you export to CSV, do not open the CSV file with Excel because Excel can change the data. If you want to verify the data in your CSV file, open it with a text editor, like Notepad on Windows or TextEdit on macOS.
++
 Make sure the file you upload meets all of the following requirements, or it will be rejected:
 
 * The delimiter is a semi-colon (;).
