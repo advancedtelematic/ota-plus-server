@@ -309,6 +309,8 @@ export const assets = {
   DEFAULT_CLOSE_ICON: '/assets/img/icons/close.svg',
   DEFAULT_COLLAPSE_CAMPAIGN: 'assets/img/icons/black/arrow-up.svg'
 };
+export const AND_ICON = '/assets/img/new-app/24/and.svg';
+export const AND_ICON_LIGHT = '/assets/img/new-app/24/and-light.svg';
 export const ATTENTION_ICON = '/assets/img/new-app/24/attention.svg';
 export const BAN_ICON_RED = '/assets/img/icons/ban_red.png';
 export const CAMPAIGNS_ICON = '/assets/img/new-app/24/campaigns-active-solid-24.svg';
@@ -334,6 +336,7 @@ export const GROUP_DYNAMIC_ICON = '/assets/img/new-app/24/LUI-icon-pd-device_gro
 export const GROUP_ICON = '/assets/img/new-app/24/device-group-active-outline-24.svg';
 export const GROUP_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_group_connected-outline-24.svg';
 export const HELP_ICON_DARK = '/assets/img/new-app/24/help-24-dark.svg';
+export const HELP_ICON_LIGHT = '/assets/img/new-app/24/help-24-light.svg';
 export const HERE_ICON = '/assets/img/HERE_pos.png';
 export const IMPACT_TOOLTIP_IMG = '/assets/img/impact_tooltip.jpg';
 export const INFO_ICON_BLACK = '/assets/img/icons/black/info.svg';
@@ -348,6 +351,8 @@ export const MANAGER_ICON_SUCCESS_WHITE = '/assets/img/icons/white/manager-succe
 export const MANAGER_ICON_WARNING_WHITE = '/assets/img/icons/white/manager-warning.png';
 export const MAXIMIZE_ICON = '/assets/img/icons/maximize.svg';
 export const MINIMIZE_ICON = '/assets/img/icons/minimize.svg';
+export const OR_ICON = '/assets/img/new-app/24/or.svg';
+export const OR_ICON_LIGHT = '/assets/img/new-app/24/or-light.svg';
 export const PEOPLE_ICON = '/assets/img/new-app/24/people-active-outline-24.svg';
 export const PLUS_ICON = '/assets/img/new-app/24/icon-plus-aqua-24x24.svg';
 export const POINTS_GIF = '/assets/img/icons/points.gif';

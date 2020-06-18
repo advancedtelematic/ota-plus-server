@@ -15,18 +15,19 @@ import { DoubleFieldWrapper, RemoveFilterButton, FilterRow } from './smartGroup/
 const DEVICE_ID = 'Device ID';
 const MAX_VISIBLE_FIELDS = 3;
 const DEFAULT_VISIBLE_FIELDS = 2;
+const DISABLED_OPACITY = 0.4;
 
 @observer
 class Filter extends Component {
   @observable expressionObject = {};
 
   changeType = (id, value) => {
-    const { setType } = this.props;
-    setType(id, value);
+    const { clusterId, setType } = this.props;
+    setType(id, value, clusterId);
   };
 
   handleOnChange = (value, key) => {
-    const { setExpressionForSingleFilter, id } = this.props;
+    const { setExpressionForSingleFilter, id, clusterId } = this.props;
 
     this.expressionObject[key] = value;
     let { name, position } = this.expressionObject;
@@ -66,7 +67,7 @@ class Filter extends Component {
         break;
     }
 
-    setExpressionForSingleFilter(expressionToSend, id);
+    setExpressionForSingleFilter(expressionToSend, id, clusterId);
   };
 
   render() {
@@ -150,11 +151,13 @@ class Filter extends Component {
             </div>
           </DoubleFieldWrapper>
         )}
-        {filtersLength > 1 && (
-          <RemoveFilterButton id="filter-minus" onClick={() => removeFilter(id)}>
-            <img src={CLOSE_MODAL_ICON_RED} />
-          </RemoveFilterButton>
-        )}
+        <RemoveFilterButton
+          style={{ opacity: filtersLength < 2 && DISABLED_OPACITY }}
+          id="filter-minus"
+          onClick={() => filtersLength > 1 && removeFilter(id)}
+        >
+          <img src={CLOSE_MODAL_ICON_RED} />
+        </RemoveFilterButton>
       </FilterRow>
     );
   }
@@ -166,6 +169,7 @@ Filter.propTypes = {
   setExpressionForSingleFilter: PropTypes.func,
   removeFilter: PropTypes.func,
   id: PropTypes.number,
+  clusterId: PropTypes.number,
   options: PropTypes.shape({}),
   t: PropTypes.func,
   type: PropTypes.string

@@ -1,5 +1,7 @@
 
 /* Devices */
+export const OTA_DEVICES_ADD_CLUSTER = 'OTA_Devices_Add_Cluster';
+export const OTA_DEVICES_ADD_FILTER = 'OTA_Devices_Add_Filter';
 export const OTA_DEVICES_CUSTOM_CANCEL = 'OTA_Devices_Custom_Cancel';
 export const OTA_DEVICES_CUSTOM_FAILED = 'OTA_Devices_Custom_Failed';
 export const OTA_DEVICES_CUSTOM_READ_MORE = 'OTA_Devices_Custom_Read_More';
