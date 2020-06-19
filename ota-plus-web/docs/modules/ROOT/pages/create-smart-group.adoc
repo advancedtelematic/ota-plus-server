@@ -13,12 +13,15 @@ image::img::create_group.png[image,350]
 
 . Select *Smart device group*, and then click *Next*.
 . Specify the group name.
-. Define a filter for your devices.
+. In the *Cluster* section, define a filter for your devices.
 +
-A filter helps HERE OTA Connect match each device to a group. Currently, OTA Connect can filter based on characters in the device ID or your xref:ota-web::create-custom-device-fields.adoc[custom device fields]. The device ID is defined in the OTA Connect client configuration, and is set on the server when the device connects for the first time.footnote:[To learn how to xref:ota-client::use-your-own-deviceid.adoc[configure device IDs\], see the developer documentation. Note that the device ID can't be changed after it's set.] If no ID is configured on the device, a random ID is automatically generated.
+Filters help HERE OTA Connect match each device to a group. Currently, OTA Connect can filter based on characters in the device ID or your xref:ota-web::create-custom-device-fields.adoc[custom device fields]. The device ID is defined in the OTA Connect client configuration and is set on the server when the device connects for the first time.footnote:[To learn how to xref:ota-client::use-your-own-deviceid.adoc[configure device IDs\], see the developer documentation. Note that the device ID can't be changed after it's set.] If no ID is configured on the device, a random ID is automatically generated.
 +
-*Example:*
+IMPORTANT: You cannot change the filter criteria of a smart group after you create it. If you made a mistake with the filter criteria, create another smart group.
 +
+.Example
++
+====
 You need to provision 2019 car models. Each device ID is a https://en.wikipedia.org/wiki/Vehicle_identification_number[vehicle identification number (VIN), window="_blank"] where the 10th character is the letter K.
 
 .. From the *Filter* list, select *Device ID*.
@@ -29,12 +32,28 @@ OTA Connect shows how many devices match your filter criteria.
 +
 [.lightbackground]
 image::img::smart_group_example.png[image,600]
-+
-IMPORTANT: You cannot change the criteria of a smart group after you create it. If you made a mistake with the filter criteria, create another smart group.
+====
 
-. (Optional) To add additional filters, click **Add filter**, specify its criteria, and select one of the following filter combinations:
-** If you want to add devices that match both of the filters, select **And**.
-** If you want to add devices that match one of the filters, select **Or**.
+. (Optional) Add more filters:
+** If you want to target devices that match both filters, in the same *Cluster* section, click *Add filter*, and then specify its criteria.
+** If you want to target devices that match one of the filters or filter combinations, click *Add cluster*, and then specify the needed filter or filters.
++
+.Example
+====
+You want to target devices with the *Premium* value in the *Trim level* field and the *Germany* or *France* value in the *Market* field. You have already created the following xref:create-custom-device-fields.adoc[custom device fields]: *Trim level* and *Market*. In the *Create device group* dialog box, specify the following filters:
+
+.. In the first *Cluster* section, select the *Market* filter and the *Contains* type, and then specify the *Germany* value.
+.. Click *Add filter*.
+.. In the new filter fields, select the *Trim level* filter and the *Contains* type, and then specify the *Premium* value.
+.. Click *Add cluster*.
+.. In the new cluster, select the *Market* filter and the *Contains* type, and then specify the *France* value.
+.. Click *Add filter*.
+.. In the new filter fields, select the *Trim level* filter and the *Contains* type, and then specify the *Premium* value.
++
+[.lightbackground]
+image::img::smart_group_example_clusters.png[image,600]
+====
+
 . Click *Create*.
 +
 The created group appears in the *Groups* pane. If a new provisioned device meets the specified filter criteria, it is automatically added to the group. If a device is deleted, it is automatically removed from the group.
