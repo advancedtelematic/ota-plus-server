@@ -250,7 +250,7 @@ class SmartFilters extends Component {
                     </AddFilterButton>
                     <RemoveFilterButton
                       style={{ opacity: this.clusters.length < 2 && DISABLED_OPACITY }}
-                      id="filter-minus"
+                      id="cluster-minus"
                       onClick={() => this.clusters.length > 1 && this.removeCluster(id)}
                     >
                       <img src={CLOSE_MODAL_ICON_RED} />
