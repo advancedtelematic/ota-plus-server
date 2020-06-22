@@ -51,6 +51,12 @@ const WebsocketHandler = function (wsUrl, stores) {
             case WEB_EVENTS.DEVICE_UPDATE_STATUS:
               if (_.isString(data.device) && _.isString(data.status)) {
                 devicesStore.updateDeviceData(data.device, { deviceStatus: data.status });
+                if (isDDVOpen) {
+                  const ddvDeviceId = window.location.href.split('/').pop();
+                  if (data.device === ddvDeviceId) {
+                    devicesStore.fetchMultiTargetUpdates(data.device);
+                  }
+                }
               }
               break;
             case WEB_EVENTS.DEVICE_CREATED:
