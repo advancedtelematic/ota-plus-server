@@ -201,7 +201,7 @@ class SmartFilters extends Component {
         <FiltersHeader>
           <FieldLabel>{t('groups.creating.smart-group.labels.filters')}</FieldLabel>
           <AddFilterButton
-            id="filter-plus"
+            id="cluster-plus"
             light="true"
             onClick={() => this.addCluster()}
           >
