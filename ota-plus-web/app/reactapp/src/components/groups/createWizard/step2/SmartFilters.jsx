@@ -236,7 +236,7 @@ class SmartFilters extends Component {
                   </div>
                 </div>
               )}
-              <FiltersCluster>
+              <FiltersCluster id={`cluster-${id}`}>
                 <ClusterHeader>
                   <FilterColumnHeader>{t('groups.creating.smart-group.cluster')}</FilterColumnHeader>
                   <div>
@@ -264,7 +264,7 @@ class SmartFilters extends Component {
                 </FilterRow>
                 <div className="filters">
                   {_.map(filters, (filter, index) => (
-                    <div key={filter.id}>
+                    <div key={filter.id} id={`cluster${id}-filter-${filter.id}`}>
                       {index !== 0 && (
                       <div className="filters--operations">
                         <div className="filters--operations__single">
@@ -275,7 +275,7 @@ class SmartFilters extends Component {
                           <Tooltip
                             title={(
                               <Trans>
-                                {t('groups.tooltips.or')}
+                                {t('groups.tooltips.and')}
                               </Trans>
                             )}
                             arrowPointAtCenter
@@ -309,7 +309,7 @@ class SmartFilters extends Component {
           {isFetchingDevicesCount ? t('groups.creating.smart-group.fetching-devices') : (
             <>
               <div>{t('groups.creating.smart-group.devices-targeted')}</div>
-              <div>
+              <div id="tag-device-count">
                 {this.expressionForSmartGroup ? numberOfDevicesByExpression : '0'}
               </div>
             </>
