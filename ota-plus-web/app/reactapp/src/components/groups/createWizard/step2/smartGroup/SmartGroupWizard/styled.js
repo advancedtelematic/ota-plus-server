@@ -134,7 +134,7 @@ export const ClusterHeader = styled.div`
   align-items: center;
   & > div:last-child {
     display: flex;
-    #filter-minus {
+    #filter-minus, #cluster-minus {
       width: 40px;
       margin-left: 16px;
     }
