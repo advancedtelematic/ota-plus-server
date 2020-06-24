@@ -204,7 +204,7 @@
     "devices.dashboard.total_connections": "Total connections",
     "devices.dashboard.total_devices": "Total devices",
     "devices.delete": "Delete device",
-    "devices.delete_confirmation": "Remove {{device_name}} permanently?<br/><br/><br/>When you delete a device, it is removed from the user interface and the update history is deleted, but you can still provision it again.<br/><br/><br/>If the device is a part of any active campaigns, any devices that haven't installed it yet will fail the campaign.<br/><br/><br/><b>This action cannot be undone.</b>",
+    "devices.delete_confirmation": "Remove {{device_name}} permanently?<br/><br/><br/>When you delete a device, it is removed from the user interface and the update history is deleted, but you can still provision it again.<br/><br/><br/>If the device is a part of any active campaigns, any devices that haven't installed it yet will fail the campaign.<br/><br/><br/><strong>This action cannot be undone.</strong>",
     "devices.device_control_units": "Device Control Units",
     "devices.device_count": "{{count}} device",
     "devices.device_count-plural": "{{count}} devices",
