@@ -224,7 +224,7 @@ class Devices extends Component {
 
   render() {
     const { addNewWizard, stores, t } = this.props;
-    const { devicesStore, featuresStore, groupsStore } = stores;
+    const { devicesStore, groupsStore } = stores;
     const { devicesInitialTotalCount } = devicesStore;
     const isFetching = devicesStore.devicesFetchAsync.isFetching
       || groupsStore.groupsAddDeviceAsync.isFetching
@@ -238,7 +238,6 @@ class Devices extends Component {
         ) : devicesInitialTotalCount ? (
           <span>
             <DevicesGroupsPanel
-              features={featuresStore.features}
               showCreateGroupModal={this.showCreateGroupModal}
               selectGroup={this.selectGroup}
               onDeviceDrop={this.onDeviceDrop}
