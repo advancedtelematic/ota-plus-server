@@ -104,7 +104,7 @@ class CreateClassicGroup extends Component {
                 {t('groups.creating.file-uploading.description-1')}
                 {' '}
                 <ExternalLink
-                  key={'developer_documentation-link'}
+                  key={'developer_documentation-import-link'}
                   onClick={() => sendAction(OTA_DEVICES_FIXED_IMPORT_READ_MORE)}
                   url={URL_CREATE_FIXED_GROUP_IMPORT_LIST}
                   weight="medium"
@@ -115,7 +115,7 @@ class CreateClassicGroup extends Component {
                 {t('groups.creating.file-uploading.description-2')}
                 {' '}
                 <ExternalLink
-                  key={'developer_documentation-link'}
+                  key={'developer_documentation-configure-link'}
                   onClick={() => sendAction(OTA_DEVICES_CONFIGURE_READ_MORE)}
                   url={URL_AKTUALIZR_CONFIG_OPTIONS}
                   weight="medium"
