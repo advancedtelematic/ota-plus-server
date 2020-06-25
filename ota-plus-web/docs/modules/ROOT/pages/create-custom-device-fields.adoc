@@ -1,4 +1,4 @@
-= Create custom device fields image:img::beta-icon.svg[Beta]
+= Create custom device fields
 
 To filter devices in a smart group, you can use their IDs or custom device fields. If you have already created custom device fields, you can always <<modify, change>> their values or add new fields.
 
