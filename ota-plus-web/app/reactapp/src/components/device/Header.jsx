@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Trans, withTranslation } from 'react-i18next';
+import { withRouter } from 'react-router-dom';
 
 import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation } from '../../utils';
@@ -186,4 +187,4 @@ Header.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withTranslation()(Header);
+export default withTranslation()(withRouter(Header));
