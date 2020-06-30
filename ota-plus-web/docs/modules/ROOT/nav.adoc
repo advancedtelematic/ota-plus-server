@@ -9,7 +9,7 @@
 * xref:device-groups.adoc[Device groups]
 ** xref:create-fixed-group.adoc[Create a fixed group]
 ** xref:create-smart-group.adoc[Create a smart group]
-** xref:create-custom-device-fields.adoc[Create custom device fields] image:img::beta-icon.svg[Beta]
+** xref:create-custom-device-fields.adoc[Create custom device fields]
 * xref:manage-devices.adoc[Manage devices]
 // TODO * Update a Smart Group
 // TODO * Delete groups
