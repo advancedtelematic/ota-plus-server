@@ -1,6 +1,8 @@
 = Create a fixed group
 
-To create a fixed group, you need to add the devices that you want to group by <<drag, dragging>> them to the group or xref:upload-list[uploading] a list of device IDs. 
+You can use a fixed device group to test a software update on a few devices before you launch a bigger campaign.
+
+To create a fixed group, you need to add devices by <<drag, dragging>> them to the group or xref:upload-list[uploading] a list of device IDs. 
 
 [[drag]]
 *To create a fixed device group by dragging devices:*
@@ -16,7 +18,6 @@ image::img::create_group.png[image,350]
 +
 The created group appears in the *Groups* pane.
 . In the *Groups* pane, click the *All devices* section or the needed item in the *Ungrouped devices* section, and then drag the needed devices to the group that you created.
-// MC: Add animated gif and automate it
 
 You group is now populated with devices.
 
@@ -25,14 +26,13 @@ anchor:upload-list[]
 *Advanced: Create a fixed device group by uploading a list of device IDs*
 +++ </summary><div> +++
 
-If you have a large number of devices, you can add them to a fixed group by importing a list of device IDs.
+You can also add devices to a fixed group by importing a list of device IDs.
 
 To group devices by adding a list of device IDs:
 
 . Create a list of device IDs.
 +
 Currently, there is no way to export a list of provisioned device IDs from the OTA Connect portal. The best way to create this list is to have your developers xref:ota-client::use-your-own-deviceid.adoc[define the device IDs] and ask them for the list of the device IDs that they provisioned.
-// MC: This would be solved by https://saeljira.it.here.com/browse/OTA-3306 if anyone besides me cared about it.
 +
 Your list of device IDs needs to be a `.txt` file with one ID on each line. 
 Make sure there are no carriage return characters, and the lines are separated only by new line characters.
