@@ -38,6 +38,7 @@ import {
   UNGROUPED,
   UNGROUPED_DEVICES_COUNT_FETCH_ASYNC,
   API_ORG_CUSTOM_DEVICE_FIELDS,
+  API_DEVICE_TAGS,
 } from '../config';
 import {
   SHA_256,
@@ -152,6 +153,8 @@ export default class DevicesStore {
 
   @observable getCustomDeviceFieldsAsync = {};
 
+  @observable renameCustomDeviceFieldAsync = {};
+
   constructor() {
     resetAsync(this.devicesFetchAsync);
     resetAsync(this.ungroupedDevicesCountFetchAsync);
@@ -171,6 +174,7 @@ export default class DevicesStore {
     resetAsync(this.approvalPendingCampaignsFetchAsync);
     resetAsync(this.getCustomDeviceFieldsAsync);
     resetAsync(this.uploadCustomFieldsAsync);
+    resetAsync(this.renameCustomDeviceFieldAsync);
     this.devicesLimit = DEVICES_LIMIT_PER_PAGE;
   }
 
@@ -236,6 +240,17 @@ export default class DevicesStore {
       this.getCustomDeviceFieldsAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getCustomDeviceFieldsAsync = handleAsyncError(error);
+    }
+  }
+
+  renameCustomDeviceField = async (currentFieldName, newFieldName) => {
+    resetAsync(this.renameCustomDeviceFieldAsync, true);
+    try {
+      const response = await axios.put(encodeUrl(`${API_DEVICE_TAGS}/${currentFieldName}`), { tagId: newFieldName });
+      this.getCustomDeviceFields();
+      this.renameCustomDeviceFieldAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.renameCustomDeviceFieldAsync = handleAsyncError(error);
     }
   }
 

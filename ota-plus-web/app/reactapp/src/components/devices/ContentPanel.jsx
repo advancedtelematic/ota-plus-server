@@ -30,7 +30,8 @@ import ReadMore from '../../partials/ReadMore';
 import UnderlinedLink from '../../partials/UnderlinedLink';
 import { URL_CREATE_FIXED_GROUP, URL_CREATE_SMART_GROUP } from '../../constants/urlConstants';
 
-const { Panel } = Collapse;
+// eslint-disable-next-line prefer-destructuring
+const Panel = Collapse.Panel;
 
 const connections = {
   live: {
