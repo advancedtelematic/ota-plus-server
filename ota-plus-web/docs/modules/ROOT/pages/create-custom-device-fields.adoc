@@ -53,7 +53,7 @@ You can now use your custom device fields to xref:ota-web::create-smart-group.ad
 [[modify]]
 == Modify custom device fields
 
-If you need to change any value in a custom device field and delete or add new devices or fields, upload a new delimiter-separated file.
+If you need to change any value in a custom device field and delete or add new devices or fields, upload a new delimiter-separated file. You can also rename custom device fields on the OTA Connect Portal.
 
 When you add a new or modified file, pay attention to the following details:
 
@@ -87,6 +87,26 @@ When you remove a field in a file:
 ** If you include several devices and omit a field, the field will have empty values for the included devices. You will still be able to use this field to group other devices.
 ** If you include all devices and omit a field, the field will be deleted. You will not be able to group devices using this field.
 ** If you include all devices and a field has empty values, the field will still exist and show empty values. You will not be able to group devices using this field.
+
+*To rename a custom device field:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Next to *Custom device fields*, click the cogwheel.
++
+image::img::cogwheel.png[image,350]
+
+. In the *Custom device fields* dialog box, next to the title of the field that you want to rename, click the pencil icon.
++
+[.lightbackground]
+image::img::rename_field.png[image,450]
+
+. Rename the field, and then click the save icon.
++
+TIP: The name should not repeat the other field names. It also should not be less than one character or exceed 20 characters and only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+
+. Click *Close*.
++
+The custom device field now has the new name in the list of device filters and smart groups that are based on it. The field values remain unchanged.
 
 After you modified your custom device fields:
 
