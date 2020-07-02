@@ -63,3 +63,5 @@ kube-env.sh
 *.env.gpg
 /tmp
 release-izumi.zip
+ota-plus-web/app/reactapp/dist
+ota-plus-web/app/reactapp/css
