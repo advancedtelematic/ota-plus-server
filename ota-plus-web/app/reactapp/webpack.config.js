@@ -1,6 +1,6 @@
 /** @format */
 
-const { join, resolve } = require('path');
+const { resolve } = require('path');
 
 const jsOutput = 'assets/js';
 
@@ -16,16 +16,12 @@ module.exports = {
   output: {
     path: resolve(__dirname, '..', jsOutput),
     filename: 'app.js',
+    sourceMapFilename: 'otaconnectsourcemap.js.map',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
   devtool: 'source-map',
-  output: {
-    path: join(__dirname, 'dist'),
-    filename: 'otaconnectsourcemap.js',
-    sourceMapFilename: 'otaconnectsourcemap.js.map',
-  },
   module: {
     rules: [
       {
