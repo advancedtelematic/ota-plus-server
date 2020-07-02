@@ -44,6 +44,7 @@ export const API_FEATURES_FETCH = '/user/feature_flags';
 /*
  *  Devices
  */
+export const API_DEVICE_TAGS = '/api/v1/device_tags';
 export const API_DEVICES_CUSTOM_FIELDS = '/api/v1/device_tags';
 export const API_DEVICES_SEARCH = '/api/v1/devices';
 export const API_DEVICES_NETWORK_INFO = '/api/v1/devices';
@@ -353,10 +354,13 @@ export const MAXIMIZE_ICON = '/assets/img/icons/maximize.svg';
 export const MINIMIZE_ICON = '/assets/img/icons/minimize.svg';
 export const OR_ICON = '/assets/img/new-app/24/or.svg';
 export const OR_ICON_LIGHT = '/assets/img/new-app/24/or-light.svg';
+export const PENCIL_ICON_OUTLINE = '/assets/img/new-app/24/LUI-icon-pd-edit-outline-24.svg';
+export const PENCIL_ICON_SOLID = '/assets/img/new-app/24/LUI-icon-pd-edit-solid-24.svg';
 export const PEOPLE_ICON = '/assets/img/new-app/24/people-active-outline-24.svg';
 export const PLUS_ICON = '/assets/img/new-app/24/icon-plus-aqua-24x24.svg';
 export const POINTS_GIF = '/assets/img/icons/points.gif';
 export const REOPEN_ICON = '/assets/img/icons/reopen.svg';
+export const SAVE_ICON = '/assets/img/new-app/24/LUI-icon-pd-save-outline-24.svg';
 export const SETTINGS_ICON_BIG = '/assets/img/icons/Settings_Icon_big.svg';
 export const SIGN_OUT_ICON = '/assets/img/new-app/24/sign-out.svg';
 export const SOFTWARE_ICON = '/assets/img/new-app/24/software-versions-active-outline-24.svg';
@@ -368,6 +372,7 @@ export const UPDATE_ICON = '/assets/img/new-app/24/software-updates-active-outli
 export const UPDATE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-tuner-outline-24.svg';
 export const UPDATE_ICON_GREEN = '/assets/img/new-app/24/software-updates-active-outline-24-green.svg';
 export const WARNING_ICON = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1.svg';
+export const WARNING_ICON_RED = '/assets/img/new-app/16/LUI-icon-pd-attention-solid-16-1-red.svg';
 export const NO_ITEMS_ICON = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24.svg';
 export const NO_ITEMS_ICON_WHITE = '/assets/img/new-app/24/LUI-icon-pd-substract-outline-24-white.svg';
 export const QUESTIONMARK_ICON_BLACK = '/assets/img/icons/black/questionmark.svg';

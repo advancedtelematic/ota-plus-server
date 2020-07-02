@@ -14,6 +14,18 @@
     height: 100%;
     float: left;
 
+    &__cogwheel {
+      cursor: pointer;
+      margin-left: 10px;
+      &--disabled {
+        cursor: auto;
+      }
+    }
+
+    &__title {
+      display: flex;
+    }
+
     &__divider {
       background-color: $section-header-border-color;
       height: 1px;

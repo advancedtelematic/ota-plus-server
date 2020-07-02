@@ -405,6 +405,21 @@
     }
 }
 
+.cdf-rename-modal {
+  width: 818px !important;
+  .ant-modal-content {
+    border-radius: 3px;
+    .ant-modal-header {
+      margin: 0;
+      padding: 40px 40px 20px;
+      border-bottom: none;
+    }
+    .ant-modal-body {
+      padding: 0;
+    }
+  }
+}
+
 .dialog-campaign-wizard {
   max-width: 1000px !important;
 

@@ -39,7 +39,7 @@ describe('<DashboardStepper />', () => {
 
   it('should calculate step status correctly', () => {
     expect(getStepStatus(false, false)).toBe(STEP_STATUS.INACTIVE);
-    expect(getStepStatus(false, true)).toBe(STEP_STATUS.INACTIVE);
+    expect(getStepStatus(false, true)).toBe(STEP_STATUS.DONE);
     expect(getStepStatus(true, false)).toBe(STEP_STATUS.ACTIVE);
     expect(getStepStatus(true, true)).toBe(STEP_STATUS.DONE);
   });

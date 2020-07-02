@@ -13,6 +13,7 @@ export const OTA_DEVICES_SEE_DEVICE_DETAILS = 'OTA_Devices_See_Device_Details';
 export const OTA_DEVICES_CREATE_SMART_GROUP = 'OTA_Devices_Create_Smart_Group';
 export const OTA_DEVICES_CREATE_FIXED_GROUP = 'OTA_Devices_Create_Fixed_Group';
 export const OTA_DEVICES_CREATE_CAMPAIGN = 'OTA_Devices_Create_Campaign';
+export const OTA_DEVICES_CUSTOM_RENAME = 'OTA_Devices_Custom_Rename';
 export const OTA_DEVICES_SEARCH_DEVICE = 'OTA_Devices_Search_Device';
 export const OTA_DEVICES_SELECT_CUSTOM_FIELD = 'OTA_Devices_Select_Custom_Field';
 export const OTA_DEVICES_SELECT_DEVICE_ID = 'OTA_Devices_Select_DeviceID';
