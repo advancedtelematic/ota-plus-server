@@ -38,7 +38,7 @@ class MtuQueueList extends Component {
               {_.map(devicesStore.multiTargetUpdates, (update, index) => {
                 const { inFlight } = update;
                 const itemEvents = devicesStore.deviceEvents.filter((el) => {
-                  if (el.payload.correlationId) {
+                  if (el.payload && el.payload.correlationId) {
                     return el.payload.correlationId === update.correlationId;
                   }
                   return null;
