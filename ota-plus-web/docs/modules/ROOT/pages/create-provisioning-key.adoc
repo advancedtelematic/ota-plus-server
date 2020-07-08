@@ -9,12 +9,12 @@ To provision devices, you need to attach individual credentials and certificates
 1. Go to the https://connect.ota.here.com/#/profile/access-keys[**Credentials (provisioning)**, window="_blank"] tab of your profile.
 2. Click **Add key**.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::add_key.png[image,700]
 
 3. In the *Add new key* dialog box, specify the key description, select its period of validity, and then click **Add key**.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::add_new_key.png[image,400]
 
 The .zip file is added to the list of credentials. The file contains the provisioning key and credentials that your build system uses to publish images. You do not need to unzip the file. Save it somewhere on your computer. You will need the file when you set up your Yocto build or configure the HERE OTA Connect client.

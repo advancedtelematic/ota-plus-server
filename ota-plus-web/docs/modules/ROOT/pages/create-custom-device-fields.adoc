@@ -39,11 +39,12 @@ CAR3;BASIC;APAC
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . Click *Upload file*.
 +
+[.align_img_left]
 image::img::upload_custom_fields_file.png[image,350]
 
 . In *Upload custom device fields*, click *Choose a file*, and then select the delimiter-separated file that you created.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::upload_file_dialog_box.png[image,700]
 . Click *Upload*.
 . When the file with your custom device fields is uploaded, click *Done*.
@@ -93,11 +94,12 @@ When you remove a field in a file:
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . Next to *Custom device fields*, click the cogwheel.
 +
+[.align_img_left]
 image::img::cogwheel.png[image,350]
 
 . In the *Custom device fields* dialog box, next to the title of the field that you want to rename, click the pencil icon.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::rename_field.png[image,450]
 
 . Rename the field, and then click the save icon.
