@@ -51,7 +51,7 @@ class MtuList extends Component {
               {_.map(packagesHistory, (historyItem, index) => {
                 if (!_.isEmpty(devicesStore.deviceEvents)) {
                   const itemEvents = devicesStore.deviceEvents.filter((event) => {
-                    if (event.payload.correlationId) {
+                    if (event.payload && event.payload.correlationId) {
                       return event.payload.correlationId === historyItem.correlationId;
                     }
                     return null;
