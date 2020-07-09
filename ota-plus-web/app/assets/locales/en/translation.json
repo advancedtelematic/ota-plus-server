@@ -475,6 +475,8 @@
     "profile.provisioning-keys.no-keys-button-title": "Create credentials",
     "profile.provisioning-keys.no-keys-description-1": "No credentials in this environment",
     "profile.provisioning-keys.no-keys-description-2": "Create credentials, and they will show up here. It may take some time to generate credentials in your repository.",
+    "profile.provisioning-keys.read-more.description": "When you provision a device, specify your unique device ID. You can use it later to add custom device fields and group devices.",
+    "profile.provisioning-keys.read-more.link": "Read more",
     "profile.provisioning_keys.add_key": "Add key",
     "profile.provisioning_keys.no-keys-button-title": "Create credentials",
     "profile.provisioning_keys.provisioning_not_activated": "Provisioning not activated.",
