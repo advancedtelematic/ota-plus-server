@@ -7,7 +7,7 @@ import { observable, observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 
-import { Loader } from '../partials';
+import { ExternalLink, Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
 import {
   ProvisioningTooltip,
@@ -15,8 +15,10 @@ import {
   ProvisioningList,
   ProvisioningCreateModal
 } from '../components/profile/access-keys';
-import { setAnalyticsView } from '../helpers/analyticsHelper';
+import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import { ANALYTICS_VIEW_CREDENTIALS_PROVISIONING } from '../constants/analyticsViews';
+import { OTA_PROVISIONING_READ_MORE } from '../constants/analyticsActions';
+import { URL_PROVISIONING_READ_MORE } from '../constants/urlConstants';
 
 @inject('stores')
 @observer
@@ -88,6 +90,19 @@ class Provisioning extends Component {
           </div>
         ) : provisioningStore.provisioningStatus.active ? (
           <span>
+            <p id={'profile-provisioning-keys-read-more-description'}>
+              {t('profile.provisioning-keys.read-more.description')}
+              {' '}
+              <ExternalLink
+                id={'profile-provisioning-keys-read-more-link'}
+                key={'profile-provisioning-keys-read-more'}
+                onClick={() => sendAction(OTA_PROVISIONING_READ_MORE)}
+                url={URL_PROVISIONING_READ_MORE}
+                weight="medium"
+              >
+                {t('profile.provisioning-keys.read-more.link')}
+              </ExternalLink>
+            </p>
             <ProvisioningHeader
               showCreateModal={this.showCreateModal}
               provisioningFilter={provisioningStore.provisioningFilter}

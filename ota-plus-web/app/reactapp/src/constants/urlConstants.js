@@ -20,6 +20,7 @@ export const URL_QUICKSTART = 'https://docs.ota.here.com/getstarted/dev/get-star
 export const URL_PRIVACY = 'https://legal.here.com/en-gb/privacy';
 export const URL_PROVISIONING_CREDS = 'https://docs.ota.here.com/getstarted/dev/generating-provisioning-credentials.html';
 export const URL_PROVISIONING_KEY = 'https://docs.ota.here.com/ota-web/dev/create-provisioning-key.html';
+export const URL_PROVISIONING_READ_MORE = 'https://docs.ota.here.com/ota-client/latest/use-your-own-deviceid.html';
 export const URL_RELEASE_NOTES = 'https://docs.ota.here.com/ota-rns/dev/index.html';
 export const URL_ROTATING_KEYS = 'https://docs.ota.here.com/ota-client/latest/rotating-signing-keys.html';
 export const URL_SINGLE_DEVICE_UPDATE = 'https://docs.ota.here.com/ota-web/dev/manage-devices.html#_install_a_software_update_on_a_single_device';
