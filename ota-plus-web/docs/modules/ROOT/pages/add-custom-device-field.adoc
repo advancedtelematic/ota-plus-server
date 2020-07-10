@@ -1,0 +1,53 @@
+= Add a custom device field
+
+If you want to add new custom device fields, upload a new or modified delimiter-separated file. 
+
+// tag::modified_csv[]
+
+When you add a file, pay attention to the following details:
+
+* The *DeviceID* column should be the first column. The order of other columns is not important as they will be completely overwritten.
+* You can have no more than 20 custom device fields in one file.
+
+// end::modified_csv[]
+
+*To add custom device field, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs to which you want to add a new custom device field.
++
+If you do not include a device ID in the file, its field names and values do not change. Therefore, when you add a new field, make sure to add all the devices in the file.
+. In the next columns, specify all the existing custom device fields and the related values.
+. In the last column, specify the name of the new custom device field and all its values.
+
+You can now use the new field to target devices to smart groups.
+
+.Add a field
+====
+In your future campaign, *February Update - Premium Berlin*, you want to target all your premium devices that are in Berlin.
+
+You have already created the *Trim level* custom device field. Now, you need to add the *City* field with the *Berlin* value.
+
+The file you upload should look like this:
+
+```
+DeviceID;Trim level;City
+CAR1;Premium;Berlin
+CAR2;Premium;Berlin
+CAR3;Premium;Berlin
+```
+
+For a campaign, you want to create a *Premium Berlin* smart device group, and set it to target devices that match the following filter criteria:
+
+* The *Trim level* field contains the *Premium* value.
+* The *City* field contains the *Berlin* value.
++
+You get three matching devices.
++
+[.align_img_left]
+image::img::example_premium_berlin.png[image,600]
+
+Now, you can target the *Premium Berlin* group in the *February Update - Premium Berlin* campaign.
+====
+
+You can also xref:manage-values-of-custom-device-fields.adoc[change the values] of your custom device fields and  xref:rename-custom-device-fields.adoc[rename] or xref:remove-custom-device-field.adoc[delete] your fields.
+

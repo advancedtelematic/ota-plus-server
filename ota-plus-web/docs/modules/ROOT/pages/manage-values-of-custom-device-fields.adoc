@@ -1,0 +1,44 @@
+= Manage values of custom device fields
+
+If you want to edit or remove values of your custom device fields, upload a new or modified delimiter-separated file.
+
+include::add-custom-device-field.adoc[tag=modified_csv]
+
+*To manage values in the custom device fields, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs for which you want to edit values.
++
+If a device ID is included in the file, its field names and values are fully overwritten. Therefore, when you want to edit several devices, no need to include devices for which all values are unchanged.
+
+. In the next columns, specify all the existing custom device fields and the related values.
+. Edit or remove the needed values.
+
+Your smart groups that are based on the fields with modified values are automatically updated with the latest changes. However, campaigns that targeted devices with the modified values are not adjusted: devices cannot be added or removed after a campaign has already begun.
+
+.Edit field values
+====
+// tag::premium_german_example[]
+Your *January Update - Premium Germany* campaign targets two devices of the *Premium German* smart group with the following IDs: *CAR1* and *CAR2*. Your *Premium German* group is based on the following filter criteria:
+
+* The *Trim level* field contains the *Premium* value.
+* The *Country* field contains the *Germany* value.
+// end::premium_german_example[]
+
+Now, you need to change the *Trim level* filed of *CAR2* from *Premium* to *Standard* and add the *Premium* value to the newly provisioned device (*CAR3*).
+
+The file you upload should look like this:
+
+```
+DeviceID;Trim level;Country
+CAR1;Premium;Germany
+CAR2;Standard;Germany
+CAR3;Premium;Germany
+```
+
+The *Premium German* group now automatically targets *CAR1* and *CAR3*, but not *CAR2*. However, the *January Update - Premium Germany* running campaign remains unchanged and still targets *CAR1* and *CAR2*, but not *CAR3*.
+
+[.align_img_left]
+image::img::example_premium_german_eddited.png[image,600]
+====
+
+You can also xref:add-custom-device-field.adoc[add], xref:rename-custom-device-fields.adoc[rename], or xref:remove-custom-device-field.adoc[delete] your custom device fields.

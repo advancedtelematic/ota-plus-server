@@ -1,0 +1,40 @@
+= Remove a custom device field
+
+If you want to remove any of your custom device fields, upload a new or modified delimiter-separated file.
+
+include::add-custom-device-field.adoc[tag=modified_csv]
+
+*To remove custom device fields, modify your file in the following way:*
+
+. In the first column, specify all of the device IDs that have the custom device field that you want to remove.
+. In the next columns, specify all the existing custom device fields and the related values but omit the fields that you want to remove.
++
+When you remove a field in a file:
++
+** If you include several devices and omit a field, the field will have empty values for the included devices. You will still be able to use this field to group other devices.
+** If you include all devices and omit a field, the field will be deleted. You will not be able to group devices using this field.
+** If you include all devices and a field has empty values, the field will still exist and show empty values. You will not be able to group devices using this field.
+
+Your smart groups that are based on the removed field no longer target devices with this field. However, campaigns that targeted devices with this field are not adjusted: devices cannot be added or removed after a campaign has already begun.
+
+.Remove an obsolete field
+====
+For three provisioned devices, *CAR1*, *CAR2*, and *CAR3*, you have created three custom device fields: *Trim level*, *Country*, and *City*.
+
+include::manage-values-of-custom-device-fields.adoc[tags=premium_german_example]
+
+Now, you no longer need the *Country* field and want to remove it. 
+
+The file you upload should look like this:
+
+```
+DeviceID;Trim level;City
+CAR1;Premium;Berlin
+CAR2;Premium;Berlin
+CAR3;Premium;Berlin
+```
+
+Now, you cannot create a new smart group based on the deleted *Country* field. Also, your *Premium German* group no longer contains the *Country* field. However, the list of devices in the *January Update - Premium Germany* running campaign remains unchanged. It still targets *CAR1* and *CAR2*.
+====
+
+You can also xref:manage-values-of-custom-device-fields.adoc[change the values] of your custom device fields and xref:add-custom-device-field.adoc[add] or xref:rename-custom-device-fields.adoc[rename] your fields.
