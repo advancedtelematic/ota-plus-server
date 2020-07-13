@@ -36,6 +36,13 @@ class FormSelect extends Component {
     $('body').unbind('click');
   };
 
+  clearField = () => {
+    this.setState({
+      showDropDown: false,
+      selectedOptions: [],
+    });
+  };
+
   toggleMenu = (e) => {
     const { appendMenuToBodyTag } = this.props;
     const existContainer = document.getElementById('dropdown-render-container');

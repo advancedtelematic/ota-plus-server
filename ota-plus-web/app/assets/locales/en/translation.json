@@ -356,6 +356,7 @@
     "groups.creating.placeholder": "Name",
     "groups.creating.smart-group.buttons.add-cluster": "Add cluster",
     "groups.creating.smart-group.buttons.add-filter": "Add filter",
+    "groups.creating.smart-group.buttons.delete-cluster": "Delete cluster",
     "groups.creating.smart-group.cluster": "CLUSTER",
     "groups.creating.smart-group.description-1": "You can filter for devices based on the device ID or your ",
     "groups.creating.smart-group.description-2": "The device ID is defined in the OTA Connect client configuration. If no ID is configured for the device, OTA Connect automatically generates one for you. However, this feature works best when you preconfigure your own IDs, such as device serial numbers. For more information on how to configure the device ID, see the ",

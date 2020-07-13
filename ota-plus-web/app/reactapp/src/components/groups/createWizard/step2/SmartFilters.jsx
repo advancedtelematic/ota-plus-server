@@ -14,7 +14,6 @@ import Filter from './Filter';
 import { GROUP_DATA_TYPE_EXPRESSION } from '../../../../constants/groupConstants';
 import {
   AND_ICON,
-  CLOSE_MODAL_ICON_RED,
   GROUPS_FILTER_CONDITIONS,
   HELP_ICON_LIGHT,
   OR_ICON,
@@ -25,16 +24,19 @@ import {
   ClusterHeader,
   FieldLabel,
   FilterColumnHeader,
-  FilterRow,
+  FilterRowHeader,
   FiltersCluster,
   FiltersContainer,
   FiltersHeader,
-  RemoveFilterButton,
+  RemoveClusterButton,
   TargetedDevicesHint,
 } from './smartGroup/SmartGroupWizard/styled';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import { OTA_DEVICES_ADD_CLUSTER, OTA_DEVICES_ADD_FILTER } from '../../../../constants/analyticsActions';
 
+const SINGLE_CLUSTER_MAX_FILTERS_HEIGHT_PX = '415px';
+const MULTIPLE_CLUSTERS_MAX_FILTERS_HEIGHT_PX = '540px';
+const MIN_CLUSTER_COUNT_TO_ENABLE_DELETE = 2;
 const DISABLED_OPACITY = 0.4;
 const INITIAL_FILTER_VALUES = [
   {
@@ -191,6 +193,10 @@ class SmartFilters extends Component {
     }
   };
 
+  getMaxFiltersHeight = () => this.clusters.length === 1
+    ? SINGLE_CLUSTER_MAX_FILTERS_HEIGHT_PX
+    : MULTIPLE_CLUSTERS_MAX_FILTERS_HEIGHT_PX;
+
   render() {
     const { stores, t } = this.props;
     const { groupsStore } = stores;
@@ -209,10 +215,7 @@ class SmartFilters extends Component {
             {t('groups.creating.smart-group.buttons.add-cluster')}
           </AddFilterButton>
         </FiltersHeader>
-        <FiltersContainer
-          scrollbarVisible={this.clusters.findIndex(cluster => cluster.filters.length > 2) > -1
-            || this.clusters.length > 1}
-        >
+        <FiltersContainer maxHeight={this.getMaxFiltersHeight()}>
           {this.clusters.map(({ id, filters }, idx) => (
             <React.Fragment key={id}>
               {idx !== 0 && (
@@ -248,20 +251,20 @@ class SmartFilters extends Component {
                       <img src={PLUS_ICON} />
                       {t('groups.creating.smart-group.buttons.add-filter')}
                     </AddFilterButton>
-                    <RemoveFilterButton
-                      style={{ opacity: this.clusters.length < 2 && DISABLED_OPACITY }}
+                    <RemoveClusterButton
+                      style={{ opacity: this.clusters.length < MIN_CLUSTER_COUNT_TO_ENABLE_DELETE && DISABLED_OPACITY }}
                       id="cluster-minus"
                       onClick={() => this.clusters.length > 1 && this.removeCluster(id)}
                     >
-                      <img src={CLOSE_MODAL_ICON_RED} />
-                    </RemoveFilterButton>
+                      {t('groups.creating.smart-group.buttons.delete-cluster')}
+                    </RemoveClusterButton>
                   </div>
                 </ClusterHeader>
-                <FilterRow>
+                <FilterRowHeader>
                   <FilterColumnHeader>{t('groups.creating.smart-group.filters.filter')}</FilterColumnHeader>
                   <FilterColumnHeader>{t('groups.creating.smart-group.filters.type')}</FilterColumnHeader>
                   <FilterColumnHeader>{t('groups.creating.smart-group.filters.value')}</FilterColumnHeader>
-                </FilterRow>
+                </FilterRowHeader>
                 <div className="filters">
                   {_.map(filters, (filter, index) => (
                     <div key={filter.id} id={`cluster${id}-filter-${filter.id}`}>
