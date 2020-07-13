@@ -384,7 +384,6 @@
     "groups.creating.title": "Device Group Name",
     "groups.edit_group": "Edit Group",
     "groups.grouped_devices": "Grouped devices",
-    "groups.not_in_a_fixed_group": "Not in a fixed device group: ",
     "groups.panels.filters.title": "FILTERS",
     "groups.renaming.group_name": "Device Group Name",
     "groups.renaming.name": "Name",
