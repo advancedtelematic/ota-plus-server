@@ -10,16 +10,34 @@ import { FormInput, FormSelect } from '../../../../partials/index';
 import { GROUPS_FILTER_CONDITIONS, CLOSE_MODAL_ICON_RED } from '../../../../config';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import { OTA_DEVICES_SELECT_DEVICE_ID, OTA_DEVICES_SELECT_CUSTOM_FIELD } from '../../../../constants/analyticsActions';
-import { DoubleFieldWrapper, RemoveFilterButton, FilterRow } from './smartGroup/SmartGroupWizard/styled';
+import {
+  DeviceFieldWrapper,
+  DoubleFieldWrapper,
+  FilterRow,
+  FilterTypeFieldWrapper,
+  RemoveFilterButton,
+  ValueFieldWrapper
+} from './smartGroup/SmartGroupWizard/styled';
 
+const CONTAINS_CHAR_FILTER_KEY = 'containsFilter';
+const CHAR_POSITION_FILTER_KEY = 'positionFilter';
 const DEVICE_ID = 'Device ID';
 const MAX_VISIBLE_FIELDS = 3;
 const DEFAULT_VISIBLE_FIELDS = 2;
 const DISABLED_OPACITY = 0.4;
+const MIN_FILTERS_COUNT_TO_ENABLE_DELETE = 2;
 
 @observer
 class Filter extends Component {
   @observable expressionObject = {};
+
+  constructor(props) {
+    super(props);
+    this.filterRef = React.createRef();
+    this.typeRef = React.createRef();
+    this.charInputRef = React.createRef();
+    this.charPosRef = React.createRef();
+  }
 
   changeType = (id, value) => {
     const { clusterId, setType } = this.props;
@@ -70,12 +88,38 @@ class Filter extends Component {
     setExpressionForSingleFilter(expressionToSend, id, clusterId);
   };
 
+  handleRemoveClick = (id) => {
+    const { filtersLength, removeFilter, type } = this.props;
+    if (Object.keys(this.expressionObject).length) {
+      this.filterRef.current.clearField();
+      this.typeRef.current.clearField();
+      if (type === CONTAINS_CHAR_FILTER_KEY) {
+        this.charInputRef.current.clearField();
+      }
+      if (type === CHAR_POSITION_FILTER_KEY) {
+        this.charInputRef.current.clearField();
+        this.charPosRef.current.clearField();
+      }
+      this.expressionObject = {};
+    }
+    if (filtersLength > 1) {
+      removeFilter(id);
+    }
+  }
+
+  shouldDisableRemoveButton = () => {
+    const { filtersLength } = this.props;
+    return filtersLength < MIN_FILTERS_COUNT_TO_ENABLE_DELETE && !Object.keys(this.expressionObject).length;
+  }
+
   render() {
-    const { filtersLength, removeFilter, id, options, t, type } = this.props;
+    const { id, options, t, type } = this.props;
+
     return (
       <FilterRow key={id}>
-        <div>
+        <DeviceFieldWrapper>
           <FormSelect
+            ref={this.filterRef}
             newVersion
             id="name-filter"
             placeholder={t('groups.creating.smart-group.placeholders.select')}
@@ -89,9 +133,10 @@ class Filter extends Component {
               this.handleOnChange(e, 'name');
             }}
           />
-        </div>
-        <div>
+        </DeviceFieldWrapper>
+        <FilterTypeFieldWrapper>
           <FormSelect
+            ref={this.typeRef}
             newVersion
             id="condition-filter"
             placeholder={t('groups.creating.smart-group.placeholders.select')}
@@ -105,32 +150,34 @@ class Filter extends Component {
               this.handleOnChange(e.value, 'condition');
             }}
           />
-        </div>
-        {type === 'containsFilter' && (
-          <div>
+        </FilterTypeFieldWrapper>
+        {type === CONTAINS_CHAR_FILTER_KEY && (
+          <ValueFieldWrapper>
             <FormInput
+              ref={this.charInputRef}
               id="word"
               name="word"
               className="input-wrapper"
               placeholder={t('groups.creating.smart-group.placeholders.enter-chars')}
               onChange={e => this.handleOnChange(e.target.value, 'word')}
             />
-          </div>
+          </ValueFieldWrapper>
         )}
-        {type === 'positionFilter' && (
+        {type === CHAR_POSITION_FILTER_KEY && (
           <DoubleFieldWrapper>
             <div>
               <FormInput
+                ref={this.charInputRef}
                 id="character"
                 name="character"
                 className="input-wrapper"
-                placeholder={t('groups.creating.smart-group.placeholders.enter-chars')}
                 onChange={e => this.handleOnChange(e.target.value, 'character')}
                 maxLength="1"
               />
             </div>
             <div>
               <FormSelect
+                ref={this.charPosRef}
                 newVersion
                 id="position-filter"
                 placeholder={t('groups.creating.smart-group.placeholders.select')}
@@ -152,9 +199,9 @@ class Filter extends Component {
           </DoubleFieldWrapper>
         )}
         <RemoveFilterButton
-          style={{ opacity: filtersLength < 2 && DISABLED_OPACITY }}
+          style={{ opacity: this.shouldDisableRemoveButton() && DISABLED_OPACITY }}
           id="filter-minus"
-          onClick={() => filtersLength > 1 && removeFilter(id)}
+          onClick={() => this.handleRemoveClick(id)}
         >
           <img src={CLOSE_MODAL_ICON_RED} />
         </RemoveFilterButton>

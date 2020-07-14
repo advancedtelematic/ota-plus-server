@@ -34,14 +34,14 @@ export const StyledOTAModal = styled(OTAModal)`
         }
         input {
           font-size: 16px !important;
-          padding: 10px 30px 10px 10px;
+          padding: 10px 26px 10px 8px;
         }
       } 
       .c-form__select-icon {
         font-size: 21px;
         color: inherit;
         margin-top: -11px;
-        right: 10px;
+        right: 8px;
       }
     }
   }
@@ -86,7 +86,7 @@ export const FiltersHeader = styled.div`
 export const AddFilterButton = styled(Button)`
   height: 40px;
   font-size: 16px;
-  min-width: 153px;
+  min-width: 142px;
   line-height: 38px;
   padding: 0 18px;
   display: flex;
@@ -95,6 +95,21 @@ export const AddFilterButton = styled(Button)`
     width: 28px;
     height: 28px;
     margin-right: 4px;
+  }
+`;
+
+export const RemoveClusterButton = styled(Button)`
+  height: 40px;
+  font-size: 16px;
+  min-width: 132px;
+  line-height: 38px;
+  padding: 0 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &, &:hover, &:focus {
+    border: 1px solid #CF001A;
+    color: ${({ theme }) => theme.palette.error};
   }
 `;
 
@@ -111,11 +126,11 @@ const customSbStyles = css`
 `;
 
 export const FiltersContainer = styled.div`
-  max-height: 246px;
+  max-height: ${({ maxHeight }) => maxHeight};
   padding: 10px 24px;
   overflow-y: auto;
   background-color: #F7F8F8;
-  ${({ scrollbarVisible }) => scrollbarVisible && customSbStyles};
+  ${customSbStyles};
 `;
 
 export const FiltersCluster = styled.div`
@@ -156,22 +171,43 @@ export const FilterRow = styled.div`
     :not(:last-of-type) {
       margin-right: 16px;
     }
-    :nth-child(1) {
-      min-width: 150px;
-      max-width: 150px;
-    }
-    :nth-child(2) {
-      min-width: 215px;
-      max-width: 215px;
-    }
-    :nth-child(3) {
-      flex: 1;
-    }
     :nth-child(4) {
       min-width: 40px;
       max-width: 40px;
     }
   }
+`;
+
+export const FilterRowHeader = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+  & > div {
+    max-height: 40px;
+    :not(:last-of-type) {
+      margin-right: 16px;
+    }
+    :nth-child(1) {
+      width: 230px;
+    }
+    :nth-child(2) {
+      width: 234px;
+    }
+    :nth-child(3) {
+      width: 186px;
+    }
+  }
+`;
+
+export const DeviceFieldWrapper = styled.div`
+  width: 230px;
+`;
+
+export const FilterTypeFieldWrapper = styled.div`
+  width: 234px;
+`;
+
+export const ValueFieldWrapper = styled.div`
+  width: 186px;
 `;
 
 export const FilterColumnHeader = styled.div`
@@ -237,6 +273,12 @@ export const DoubleFieldWrapper = styled.div`
   display: flex;
   & > div:first-child {
     margin-right: 16px;
-    width: 141px;
+    width: 42px;
+    input {
+      padding: 0 0 0 8px !important;
+    }
+  }
+  & > div:last-child {
+    width: 128px;
   }
 `;

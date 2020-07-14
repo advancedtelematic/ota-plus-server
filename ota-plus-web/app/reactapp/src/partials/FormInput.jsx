@@ -28,6 +28,10 @@ class FormInput extends Component {
     }
   }
 
+  clearField() {
+    this.input.value = '';
+  }
+
   render() {
     const {
       title = '',
