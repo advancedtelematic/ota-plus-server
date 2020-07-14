@@ -2,6 +2,8 @@
 
 You can register for a free account to get access to the OTA Connect Portal.
 
+NOTE: HERE OTA Connect is only supported on the Google Chrome browser.
+
 *To register for the account:*
 
 1. Go to the https://connect.ota.here.com[OTA Connect Portal^].
