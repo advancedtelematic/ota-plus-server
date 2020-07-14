@@ -109,10 +109,6 @@ export default class DevicesStore {
 
   @observable devicesUngroupedCountInAnyGroup = 0;
 
-  @observable devicesUngroupedCountNotInSmartGroup = 0;
-
-  @observable devicesUngroupedCountNotInFixedGroup = 0;
-
   @observable devicesOffset = 0;
 
   @observable devicesFilter = '';
@@ -284,21 +280,6 @@ export default class DevicesStore {
         if (this.devicesInitialTotalCount === null && groupId !== UNGROUPED) {
           this.devicesInitialTotalCount = response.data.total;
         }
-        if (groupId && groupId === UNGROUPED) {
-          switch (ungrouped) {
-            case IN_ANY_GROUP:
-              this.devicesUngroupedCountInAnyGroup = response.data.total;
-              break;
-            case NOT_IN_SMART_GROUP:
-              this.devicesUngroupedCountNotInSmartGroup = response.data.total;
-              break;
-            case NOT_IN_FIXED_GROUP:
-              this.devicesUngroupedCountNotInFixedGroup = response.data.total;
-              break;
-            default:
-              break;
-          }
-        }
         this.prepareDevices();
         this.devicesFetchingError = false;
         this.devicesFetchAsync = handleAsyncSuccess(response);
@@ -316,12 +297,10 @@ export default class DevicesStore {
   fetchUngroupedDevicesCount(async = UNGROUPED_DEVICES_COUNT_FETCH_ASYNC) {
     resetAsync(this[async], true);
     return axios
-      .all([axios.get(`${API_DEVICES_SEARCH}?grouped=false`), axios.get(`${API_DEVICES_SEARCH}?grouped=false&groupType=dynamic`), axios.get(`${API_DEVICES_SEARCH}?grouped=false&groupType=static`)])
+      .all([axios.get(`${API_DEVICES_SEARCH}?grouped=false`)])
       .then(
-        axios.spread((inAnyGroup, notInSmartGroup, notInFixedGroup) => {
+        axios.spread((inAnyGroup) => {
           this.devicesUngroupedCountInAnyGroup = inAnyGroup.data.total;
-          this.devicesUngroupedCountNotInSmartGroup = notInSmartGroup.data.total;
-          this.devicesUngroupedCountNotInFixedGroup = notInFixedGroup.data.total;
           this[async] = handleAsyncSuccess();
         }),
       )
