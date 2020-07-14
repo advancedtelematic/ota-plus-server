@@ -23,7 +23,7 @@ In the campaigns list, you can find the following information about each campaig
 +
 You get information on the campaign total progress.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::campaign_details.png[image,1000]
 +
 You see a summary of all the update attempts for each device grouped by status:

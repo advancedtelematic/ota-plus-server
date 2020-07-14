@@ -9,6 +9,7 @@ Smart groups are based on a device filter. They automatically group newly provis
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
 . Click *Create group*.
 +
+[.align_img_left]
 image::img::create_group.png[image,350]
 
 . Select *Smart device group*, and then click *Next*.
@@ -30,7 +31,7 @@ You need to provision 2019 car models. Each device ID is a https://en.wikipedia.
 +
 OTA Connect shows how many devices match your filter criteria.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::smart_group_example.png[image,600]
 ====
 
@@ -50,7 +51,7 @@ You want to target devices with the *Premium* value in the *Trim level* field an
 .. Click *Add filter*.
 .. In the new filter fields, select the *Trim level* filter and the *Contains* type, and then specify the *Premium* value.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::smart_group_example_clusters.png[image,600]
 ====
 

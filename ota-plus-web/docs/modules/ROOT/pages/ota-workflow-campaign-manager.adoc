@@ -8,7 +8,8 @@ A campaign consists of the following elements:
 * The new software versions to which you want to update.
 * The groups of devices that you want to target for this update.
 
-image::img::campaign-elements.png[image,600, align="left"]
+[.align_img_left]
+image::img::campaign-elements.png[image,600]
 
 In the OTA workflow, you set up each of these elements in a specific order.
 

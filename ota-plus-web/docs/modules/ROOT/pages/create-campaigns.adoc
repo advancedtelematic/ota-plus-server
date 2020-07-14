@@ -9,6 +9,7 @@ You need a campaign to deploy software updates to groups of devices.
 . Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
 . In the upper-right corner, under the name of your active environment, click *Create campaign*.
 +
+[.align_img_left]
 image::img::create_campaign_button.png[image,300]
 . Specify the campaign name, and then click *Next*.
 . Select the device groups to which you want to deploy the software update, and then click *Next*.

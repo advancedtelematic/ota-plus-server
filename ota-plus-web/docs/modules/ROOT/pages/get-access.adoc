@@ -14,7 +14,7 @@ NOTE: HERE needs to verify your date of birth to ensure that you are of the lega
 
 6. In *Security check*, enter the security code that you see in the picture.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::log_in_dialog_box.png[image,45%,align="left"]
 7. Click *Next*.
 +
@@ -28,5 +28,5 @@ When you log in for the first time, to continue using the application, do the fo
 1. When the application requests access to your profile and email address, click *Accept*.
 2. In the trial notification,  agree to the HERE Location Platform Services terms and conditions and privacy policy, and then click **Continue**.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::log_in_trial.png[image,30%]

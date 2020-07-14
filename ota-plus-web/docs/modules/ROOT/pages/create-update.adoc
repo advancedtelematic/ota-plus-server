@@ -12,12 +12,13 @@ When you create an update configuration, you need to define two basic assignment
 . Go to the https://connect.ota.here.com/#/updates[*Software updates*, window="_blank"] tab.
 . In the upper-right corner, under the name of your active environment, click *Create update*.
 +
+[.align_img_left]
 image::img::create_update_button.png[image,300]
 . In *Software update name*, specify the name of your software update.
 . (Optional) Provide a description of your software update.
 . In *Select multiple control unit types*, select the control unit types that you want to update.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::create_update_1.png[image,600]
 . Click *Continue*.
 . Define the update criteria for each control unit software package:
@@ -27,7 +28,7 @@ image::img::create_update_1.png[image,600]
 NOTE: Older software versions might not upgrade properly due to version incompatibility, and devices already updated will receive the same update.
 . To specify to which software version you want to update, in the *To* section, select the relevant items from the *Software* and **Version** lists.
 +
-[.lightbackground]
+[.lightbackground.align_img_left]
 image::img::create_update_2.png[image,650]
 . Click *Save*.
 
