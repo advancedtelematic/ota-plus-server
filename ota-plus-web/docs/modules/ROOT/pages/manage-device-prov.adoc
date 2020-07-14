@@ -11,7 +11,7 @@ Alternatively, if you feel comfortable with the Linux command line, you can prov
 1. xref:create-provisioning-key.adoc[Generate and download] a provisioning key.
 2. xref:getstarted::simulate-device-workstation.adoc[Simulate] the device on your workstation.
 
-NOTE: When you provision devices, OTA Connect generates a random device ID for you, but you can also specify your own device ID. To learn more, see the xref:ota-client::use-your-own-deviceid.adoc[related section] in the OTA Connect Developer Guide..
+NOTE: When you provision devices, OTA Connect generates a random device ID for you, but you can also specify your own device ID. To learn more, see the xref:ota-client::use-your-own-deviceid.adoc[related section] in the OTA Connect Developer Guide.
 
 To understand how provisioning works in detail, see the xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Developer Guide.
 
