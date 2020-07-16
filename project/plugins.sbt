@@ -26,4 +26,6 @@ addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.13")
 
 addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.0")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
+
 addSbtPlugin("com.github.mwz" % "sbt-sonar" % "2.1.1")
