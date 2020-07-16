@@ -19,6 +19,6 @@ image::img::add_new_key.png[image,400]
 
 The .zip file is added to the list of credentials. The file contains the provisioning key and credentials that your build system uses to publish images. You do not need to unzip the file. Save it somewhere on your computer. You will need the file when you set up your Yocto build or configure the HERE OTA Connect client.
 
-For a more in-depth technical description of device provisioning, see the xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods] section of the OTA Connect Client guide.
+For a more in-depth technical description of device provisioning, see xref:ota-client::client-provisioning-methods.adoc[Device Provisioning Methods]. To learn how to provision devices with a custom device ID, see xref:ota-client::use-your-own-deviceid.adoc[Configure your own device IDs].
 
 // end::provisioning[]
