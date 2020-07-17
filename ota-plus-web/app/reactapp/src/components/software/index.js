@@ -1,7 +1,7 @@
 /** @format */
 
 import SoftwareCreateModal from './AddSoftwareModal';
-import PackageBlacklistModal from './BlacklistModal';
+import PackageBlocklistModal from './BlocklistModal';
 import SoftwareHeader from './Header';
 import SoftwareList from './List';
 import SoftwareDependenciesManager from './DependenciesManager';
@@ -9,7 +9,7 @@ import SoftwareEditCommentModal from './EditCommentModal';
 
 export {
   SoftwareCreateModal,
-  PackageBlacklistModal,
+  PackageBlocklistModal,
   SoftwareHeader,
   SoftwareList,
   SoftwareDependenciesManager,

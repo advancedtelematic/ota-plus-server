@@ -7,7 +7,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import { Tooltip } from 'antd';
 import { Button } from '../../../../partials';
 import { sendAction } from '../../../../helpers/analyticsHelper';
-import { OTA_DEVICE_BLACKLIST_PRIMARY_PACKAGE } from '../../../../constants/analyticsActions';
+import { OTA_DEVICE_BLOCKLIST_PRIMARY_PACKAGE } from '../../../../constants/analyticsActions';
 import { FEATURES } from '../../../../config';
 
 const ACTION_TYPE_ADD = 'add';
@@ -17,14 +17,14 @@ const ACTION_TYPE_EDIT = 'edit';
 class ListItem extends Component {
   constructor(props) {
     super(props);
-    this.showPackageBlacklistModal = this.showPackageBlacklistModal.bind(this);
+    this.showPackageBlocklistModal = this.showPackageBlocklistModal.bind(this);
   }
 
-  showPackageBlacklistModal(name, version, action) {
-    const { showPackageBlacklistModal } = this.props;
-    showPackageBlacklistModal(name, version, action);
+  showPackageBlocklistModal(name, version, action) {
+    const { showPackageBlocklistModal } = this.props;
+    showPackageBlocklistModal(name, version, action);
     if (action === ACTION_TYPE_ADD) {
-      sendAction(OTA_DEVICE_BLACKLIST_PRIMARY_PACKAGE);
+      sendAction(OTA_DEVICE_BLOCKLIST_PRIMARY_PACKAGE);
     }
   }
 
@@ -39,30 +39,30 @@ class ListItem extends Component {
           </div>
           {features.includes(FEATURES.IMPACT_ANALYSIS) && (
             <>
-              {pack.isBlackListed ? (
-                <Tooltip title={<Trans>{t('devices.software.blacklist.delete-tooltip')}</Trans>}>
+              {pack.isBlockListed ? (
+                <Tooltip title={<Trans>{t('devices.software.blocklist.delete-tooltip')}</Trans>}>
                   <Button
-                    className="btn-blacklist bl-remove"
+                    className="btn-blocklist bl-remove"
                     htmlType="button"
                     onClick={() => {
-                      this.showPackageBlacklistModal(pack.name, pack.version, ACTION_TYPE_EDIT);
+                      this.showPackageBlocklistModal(pack.name, pack.version, ACTION_TYPE_EDIT);
                     }}
-                    id={`button-edit-blacklisted-package-${pack.name}-${pack.version}`}
+                    id={`button-edit-blocklisted-package-${pack.name}-${pack.version}`}
                   >
-                    {t('software.blacklist-modal.buttons.remove')}
+                    {t('software.blocklist-modal.buttons.remove')}
                   </Button>
                 </Tooltip>
               ) : (
-                <Tooltip title={<Trans>{t('devices.software.blacklist.add-tooltip')}</Trans>}>
+                <Tooltip title={<Trans>{t('devices.software.blocklist.add-tooltip')}</Trans>}>
                   <Button
-                    className="btn-blacklist"
+                    className="btn-blocklist"
                     htmlType="button"
                     onClick={() => {
-                      this.showPackageBlacklistModal(pack.name, pack.version, ACTION_TYPE_ADD);
+                      this.showPackageBlocklistModal(pack.name, pack.version, ACTION_TYPE_ADD);
                     }}
-                    id={`button-blacklist-package-${pack.name}-${pack.version}`}
+                    id={`button-blocklist-package-${pack.name}-${pack.version}`}
                   >
-                    {t('software.blacklist-modal.buttons.add')}
+                    {t('software.blocklist-modal.buttons.add')}
                   </Button>
                 </Tooltip>
               )}
@@ -77,7 +77,7 @@ class ListItem extends Component {
 ListItem.propTypes = {
   features: PropTypes.arrayOf(PropTypes.string),
   pack: PropTypes.shape({}).isRequired,
-  showPackageBlacklistModal: PropTypes.func.isRequired,
+  showPackageBlocklistModal: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 

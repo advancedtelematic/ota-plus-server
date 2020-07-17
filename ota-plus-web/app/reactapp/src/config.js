@@ -106,11 +106,11 @@ export const API_UPLOAD_SOFTWARE = '/api/v1/user_repo/targets';
  */
 export const API_PACKAGES_COUNT_VERSION_BY_NAME = '/api/v1/device_packages';
 export const API_PACKAGES_COUNT_DEVICE_AND_GROUP = '/api/v1/device_count';
-export const API_PACKAGES_BLACKLIST_FETCH = '/api/v1/package_lists';
-export const API_PACKAGES_PACKAGE_BLACKLISTED_FETCH = '/api/v1/package_lists';
-export const API_PACKAGES_BLACKLIST = '/api/v1/package_lists';
-export const API_PACKAGES_UPDATE_BLACKLISTED = '/api/v1/package_lists';
-export const API_PACKAGES_REMOVE_FROM_BLACKLIST = '/api/v1/package_lists';
+export const API_PACKAGES_BLOCKLIST_FETCH = '/api/v1/package_lists';
+export const API_PACKAGES_PACKAGE_BLOCKLISTED_FETCH = '/api/v1/package_lists';
+export const API_PACKAGES_BLOCKLIST = '/api/v1/package_lists';
+export const API_PACKAGES_UPDATE_BLOCKLISTED = '/api/v1/package_lists';
+export const API_PACKAGES_REMOVE_FROM_BLOCKLIST = '/api/v1/package_lists';
 
 /*
  *  Campaigns
@@ -180,7 +180,7 @@ export const WIZARD_KEY = 'wizard';
  */
 
 export const PACKAGES_ADVANCED_TAB = 'advanced';
-export const PACKAGES_BLACKLISTED_TAB = 'blacklisted';
+export const PACKAGES_BLOCKLISTED_TAB = 'blocklisted';
 export const PACKAGES_DEFAULT_TAB = 'compact';
 
 /**

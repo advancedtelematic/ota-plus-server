@@ -14,7 +14,7 @@ const headerHeight = 30;
 
 @inject('stores')
 @observer
-class BlacklistedPackages extends Component {
+class BlocklistedPackages extends Component {
   @observable firstShownIndex = 0;
 
   @observable lastShownIndex = 50;
@@ -96,7 +96,7 @@ class BlacklistedPackages extends Component {
         headersPositions,
         (position, index) => {
           if (scrollTop >= position) {
-            newFakeHeaderLetter = Object.keys(softwareStore.preparedBlacklist)[index];
+            newFakeHeaderLetter = Object.keys(softwareStore.preparedBlocklist)[index];
             return true;
           }
           if (scrollTop >= position - headerHeight) {
@@ -132,11 +132,11 @@ class BlacklistedPackages extends Component {
   render() {
     const { stores } = this.props;
     const { softwareStore } = stores;
-    const blacklist = softwareStore.preparedBlacklist;
+    const blocklist = softwareStore.preparedBlocklist;
     return (
-      <div className="blacklisted-packages-panel">
+      <div className="blocklisted-packages-panel">
         <div className="section-header">
-          Blacklisted packages
+          Blocklisted packages
           <Tag color="#00B6B2" className="alpha-tag">
             {ALPHA_TAG}
           </Tag>
@@ -146,7 +146,7 @@ class BlacklistedPackages extends Component {
             <div className="left-box">{this.fakeHeaderLetter}</div>
             <div className="right-box">Impacted devices</div>
           </div>
-          {_.map(blacklist, (packs, letter) => (
+          {_.map(blocklist, (packs, letter) => (
             <span key={letter}>
               <div className="header">
                 <div className="left-box">{letter}</div>
@@ -157,7 +157,7 @@ class BlacklistedPackages extends Component {
                   <button
                     type="button"
                     className={`item${this.expandedPackage === pack.packageName ? ' selected' : ''}`}
-                    id={`impact-analysis-blacklisted-${pack.packageName}`}
+                    id={`impact-analysis-blocklisted-${pack.packageName}`}
                     onClick={this.togglePackage.bind(this, pack.packageName)}
                     key={pack.packageName}
                   >
@@ -179,8 +179,8 @@ class BlacklistedPackages extends Component {
   }
 }
 
-BlacklistedPackages.propTypes = {
+BlocklistedPackages.propTypes = {
   stores: PropTypes.shape({}),
 };
 
-export default BlacklistedPackages;
+export default BlocklistedPackages;

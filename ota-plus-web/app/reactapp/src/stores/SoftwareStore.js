@@ -7,12 +7,12 @@ import _ from 'lodash';
 import {
   API_SOFTWARE,
   API_UPLOAD_SOFTWARE,
-  API_PACKAGES_BLACKLIST_FETCH,
+  API_PACKAGES_BLOCKLIST_FETCH,
   API_PACKAGES_COUNT_DEVICE_AND_GROUP,
-  API_PACKAGES_PACKAGE_BLACKLISTED_FETCH,
-  API_PACKAGES_BLACKLIST,
-  API_PACKAGES_UPDATE_BLACKLISTED,
-  API_PACKAGES_REMOVE_FROM_BLACKLIST,
+  API_PACKAGES_PACKAGE_BLOCKLISTED_FETCH,
+  API_PACKAGES_BLOCKLIST,
+  API_PACKAGES_UPDATE_BLOCKLISTED,
+  API_PACKAGES_REMOVE_FROM_BLOCKLIST,
   API_SOFTWARE_DEVICE_SOFTWARE,
   API_SOFTWARE_DEVICE_HISTORY,
   API_SOFTWARE_DIRECTOR_DEVICE_AUTO_INSTALL,
@@ -55,15 +55,15 @@ export default class SoftwareStore {
 
   @observable packagesCreateAsync = {};
 
-  @observable packagesBlacklistFetchAsync = {};
+  @observable packagesBlocklistFetchAsync = {};
 
-  @observable packagesOneBlacklistedFetchAsync = {};
+  @observable packagesOneBlocklistedFetchAsync = {};
 
-  @observable packagesBlacklistAsync = {};
+  @observable packagesBlocklistAsync = {};
 
-  @observable packagesUpdateBlacklistedAsync = {};
+  @observable packagesUpdateBlocklistedAsync = {};
 
-  @observable packagesRemoveFromBlacklistAsync = {};
+  @observable packagesRemoveFromBlocklistAsync = {};
 
   @observable packagesOndeviceFetchAsync = {};
 
@@ -99,11 +99,11 @@ export default class SoftwareStore {
 
   @observable packagesUploading = [];
 
-  @observable blacklist = [];
+  @observable blocklist = [];
 
-  @observable preparedBlacklist = [];
+  @observable preparedBlocklist = [];
 
-  @observable blacklistedPackage = {};
+  @observable blocklistedPackage = {};
 
   @observable autoInstalledPackages = [];
 
@@ -139,11 +139,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesFetchAsync);
     resetAsync(this.packagesSafeFetchAsync);
     resetAsync(this.packagesCreateAsync);
-    resetAsync(this.packagesBlacklistFetchAsync);
-    resetAsync(this.packagesOneBlacklistedFetchAsync);
-    resetAsync(this.packagesBlacklistAsync);
-    resetAsync(this.packagesUpdateBlacklistedAsync);
-    resetAsync(this.packagesRemoveFromBlacklistAsync);
+    resetAsync(this.packagesBlocklistFetchAsync);
+    resetAsync(this.packagesOneBlocklistedFetchAsync);
+    resetAsync(this.packagesBlocklistAsync);
+    resetAsync(this.packagesUpdateBlocklistedAsync);
+    resetAsync(this.packagesRemoveFromBlocklistAsync);
     resetAsync(this.packagesOndeviceFetchAsync);
     resetAsync(this.packagesAutoInstalledFetchAsync);
     resetAsync(this.packagesHistoryFetchAsync);
@@ -298,7 +298,7 @@ export default class SoftwareStore {
           version: pack.custom ? pack.custom.version : pack.hashes.sha256,
         },
         installedOnEcus: 0,
-        isBlackListed: false,
+        isBlockListed: false,
         namespace: null,
         signature: null,
         size: 0,
@@ -374,20 +374,20 @@ export default class SoftwareStore {
     uploadObj.source = source;
   }
 
-  fetchBlacklist(ifWithStats = false, ifPrepareBlacklist = false) {
-    resetAsync(this.packagesBlacklistFetchAsync, true);
+  fetchBlocklist(ifWithStats = false, ifPrepareBlocklist = false) {
+    resetAsync(this.packagesBlocklistFetchAsync, true);
     return axios
-      .get(API_PACKAGES_BLACKLIST_FETCH)
+      .get(API_PACKAGES_BLOCKLIST_FETCH)
       .then((response) => {
         if (ifWithStats) {
-          const blacklist = response.data;
-          if (blacklist.length) {
+          const blocklist = response.data;
+          if (blocklist.length) {
             const after = _.after(
-              blacklist.length,
+              blocklist.length,
               () => {
-                this.blacklist = blacklist;
-                if (ifPrepareBlacklist) {
-                  this.prepareBlacklist();
+                this.blocklist = blocklist;
+                if (ifPrepareBlocklist) {
+                  this.prepareBlocklist();
                 }
                 switch (this.page) {
                   case PAGE_DEVICE:
@@ -399,11 +399,11 @@ export default class SoftwareStore {
                   default:
                     break;
                 }
-                this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
+                this.packagesBlocklistFetchAsync = handleAsyncSuccess(response);
               },
               this,
             );
-            _.each(blacklist, (pack) => {
+            _.each(blocklist, (pack) => {
               axios
                 .get(`${API_PACKAGES_COUNT_DEVICE_AND_GROUP}/${pack.packageId.name}/${pack.packageId.version}`)
                 .then((count) => {
@@ -416,14 +416,14 @@ export default class SoftwareStore {
                 });
             });
           } else {
-            this.blacklist = blacklist;
-            if (ifPrepareBlacklist) {
+            this.blocklist = blocklist;
+            if (ifPrepareBlocklist) {
               this.preparePackages(this.packagesSort, true);
             }
-            this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
+            this.packagesBlocklistFetchAsync = handleAsyncSuccess(response);
           }
         } else {
-          this.blacklist = response.data;
+          this.blocklist = response.data;
           switch (this.page) {
             case PAGE_DEVICE:
               this.prepareDevicePackages();
@@ -435,64 +435,64 @@ export default class SoftwareStore {
             default:
               break;
           }
-          this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
+          this.packagesBlocklistFetchAsync = handleAsyncSuccess(response);
         }
       })
       .catch((error) => {
-        this.packagesBlacklistFetchAsync = handleAsyncError(error);
+        this.packagesBlocklistFetchAsync = handleAsyncError(error);
       });
   }
 
-  fetchBlacklistedPackage(data) {
-    this.blacklistedPackage = {};
-    resetAsync(this.packagesOneBlacklistedFetchAsync, true);
+  fetchBlocklistedPackage(data) {
+    this.blocklistedPackage = {};
+    resetAsync(this.packagesOneBlocklistedFetchAsync, true);
     return axios
-      .get(`${API_PACKAGES_PACKAGE_BLACKLISTED_FETCH}/${data.name}/${data.version}`, data.details)
+      .get(`${API_PACKAGES_PACKAGE_BLOCKLISTED_FETCH}/${data.name}/${data.version}`, data.details)
       .then((response) => {
-        this.blacklistedPackage = response.data;
-        this.packagesOneBlacklistedFetchAsync = handleAsyncSuccess(response);
+        this.blocklistedPackage = response.data;
+        this.packagesOneBlocklistedFetchAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        this.packagesOneBlacklistedFetchAsync = handleAsyncError(error);
+        this.packagesOneBlocklistedFetchAsync = handleAsyncError(error);
       });
   }
 
-  blacklistPackage(data) {
-    resetAsync(this.packagesBlacklistAsync, true);
+  blocklistPackage(data) {
+    resetAsync(this.packagesBlocklistAsync, true);
     return axios
-      .post(API_PACKAGES_BLACKLIST, data)
+      .post(API_PACKAGES_BLOCKLIST, data)
       .then((response) => {
-        this.fetchBlacklist();
-        this.packagesBlacklistAsync = handleAsyncSuccess(response);
+        this.fetchBlocklist();
+        this.packagesBlocklistAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        this.packagesBlacklistAsync = handleAsyncError(error);
+        this.packagesBlocklistAsync = handleAsyncError(error);
       });
   }
 
-  updateBlacklistedPackage(data) {
-    resetAsync(this.packagesUpdateBlacklistedAsync, true);
+  updateBlocklistedPackage(data) {
+    resetAsync(this.packagesUpdateBlocklistedAsync, true);
     return axios
-      .put(API_PACKAGES_UPDATE_BLACKLISTED, data)
+      .put(API_PACKAGES_UPDATE_BLOCKLISTED, data)
       .then((response) => {
-        this.fetchBlacklist();
-        this.packagesUpdateBlacklistedAsync = handleAsyncSuccess(response);
+        this.fetchBlocklist();
+        this.packagesUpdateBlocklistedAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        this.packagesUpdateBlacklistedAsync = handleAsyncError(error);
+        this.packagesUpdateBlocklistedAsync = handleAsyncError(error);
       });
   }
 
-  removePackageFromBlacklist(data) {
-    resetAsync(this.packagesRemoveFromBlacklistAsync, true);
+  removePackageFromBlocklist(data) {
+    resetAsync(this.packagesRemoveFromBlocklistAsync, true);
     return axios
-      .delete(`${API_PACKAGES_REMOVE_FROM_BLACKLIST}/${data.name}/${data.version}`)
+      .delete(`${API_PACKAGES_REMOVE_FROM_BLOCKLIST}/${data.name}/${data.version}`)
       .then((response) => {
-        this.fetchBlacklist();
-        this.packagesRemoveFromBlacklistAsync = handleAsyncSuccess(response);
+        this.fetchBlocklist();
+        this.packagesRemoveFromBlocklistAsync = handleAsyncSuccess(response);
       })
       .catch((error) => {
-        this.packagesRemoveFromBlacklistAsync = handleAsyncError(error);
+        this.packagesRemoveFromBlocklistAsync = handleAsyncError(error);
       });
   }
 
@@ -747,21 +747,21 @@ export default class SoftwareStore {
 
     if (packages.length) {
       const { autoInstalledPackages } = this;
-      const { blacklist } = this;
+      const { blocklist } = this;
       const groupedPackages = {};
       let sortedPackages = {};
-      const parsedBlacklist = [];
+      const parsedBlocklist = [];
 
-      _.each(blacklist, (pack) => {
-        parsedBlacklist[`${pack.packageId.name}-${pack.packageId.version}`] = {
-          isBlackListed: true,
+      _.each(blocklist, (pack) => {
+        parsedBlocklist[`${pack.packageId.name}-${pack.packageId.version}`] = {
+          isBlockListed: true,
           comment: pack.comment,
         };
       });
 
       _.each(packages, (packInstalled) => {
-        if (!_.isUndefined(parsedBlacklist[`${packInstalled.id.name}-${packInstalled.id.version}`])) {
-          packInstalled.isBlackListed = true;
+        if (!_.isUndefined(parsedBlocklist[`${packInstalled.id.name}-${packInstalled.id.version}`])) {
+          packInstalled.isBlockListed = true;
         }
         if (autoInstalledPackages.indexOf(packInstalled.id.name) > -1) packInstalled.isAutoInstallEnabled = true;
       });
@@ -772,7 +772,7 @@ export default class SoftwareStore {
             versions: [],
             packageName: pack.id.name,
             hardwareIds: pack.hardwareIds,
-            isBlackListed: pack.isBlackListed,
+            isBlockListed: pack.isBlockListed,
             isAutoInstallEnabled: pack.isAutoInstallEnabled,
           };
         }
@@ -814,10 +814,10 @@ export default class SoftwareStore {
       const packages = [];
       const groupedPackages = {};
       let sortedPackages = {};
-      const parsedBlacklist = [];
+      const parsedBlocklist = [];
 
-      _.each(this.blacklist, (pack) => {
-        parsedBlacklist[`${pack.packageId.name}-${pack.packageId.version}`] = true;
+      _.each(this.blocklist, (pack) => {
+        parsedBlocklist[`${pack.packageId.name}-${pack.packageId.version}`] = true;
       });
 
       _.each(this.ondevicePackages, (pack) => {
@@ -825,14 +825,14 @@ export default class SoftwareStore {
           const newPack = {
             name: pack.packageId.name,
             version: pack.packageId.version,
-            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[`${pack.packageId.name}-${pack.packageId.version}`]),
+            isBlockListed: pack.isBlockListed || !_.isUndefined(parsedBlocklist[`${pack.packageId.name}-${pack.packageId.version}`]),
           };
           packages.push(newPack);
         } else {
           const newPack = {
             name: pack.name,
             version: pack.version,
-            isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[`${pack.name}-${pack.version}`]),
+            isBlockListed: pack.isBlockListed || !_.isUndefined(parsedBlocklist[`${pack.name}-${pack.version}`]),
           };
           packages.push(newPack);
         }
@@ -875,10 +875,10 @@ export default class SoftwareStore {
     }
   }
 
-  prepareBlacklist() {
+  prepareBlocklist() {
     let groupedPackages = {};
     let sortedPackages = {};
-    _.each(this.blacklist, (obj, index) => {
+    _.each(this.blocklist, (obj, index) => {
       if (_.isUndefined(groupedPackages[obj.packageId.name])) {
         groupedPackages[obj.packageId.name] = {};
         groupedPackages[obj.packageId.name] = {
@@ -896,7 +896,7 @@ export default class SoftwareStore {
           groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds
         );
       }
-      groupedPackages[obj.packageId.name].versions.push(this.blacklist[index]);
+      groupedPackages[obj.packageId.name].versions.push(this.blocklist[index]);
     });
     _.each(groupedPackages, (obj, index) => {
       groupedPackages[index].versions = _.sortBy(obj.versions, version => version.statistics.deviceCount).reverse();
@@ -921,16 +921,16 @@ export default class SoftwareStore {
       sortedPackages = Object.assign(specialGroup, sortedPackages);
     }
 
-    this.preparedBlacklist = sortedPackages;
-    this.preparedBlacklistRaw = groupedPackages;
+    this.preparedBlocklist = sortedPackages;
+    this.preparedBlocklistRaw = groupedPackages;
   }
 
-  resetBlacklistActions() {
-    resetAsync(this.packagesOneBlacklistedFetchAsync);
-    resetAsync(this.packagesBlacklistAsync);
-    resetAsync(this.packagesUpdateBlacklistedAsync);
-    resetAsync(this.packagesRemoveFromBlacklistAsync);
-    this.blacklistedPackage = {};
+  resetBlocklistActions() {
+    resetAsync(this.packagesOneBlocklistedFetchAsync);
+    resetAsync(this.packagesBlocklistAsync);
+    resetAsync(this.packagesUpdateBlocklistedAsync);
+    resetAsync(this.packagesRemoveFromBlocklistAsync);
+    this.blocklistedPackage = {};
   }
 
   reset() {
@@ -938,11 +938,11 @@ export default class SoftwareStore {
     resetAsync(this.packagesFetchAsync);
     resetAsync(this.packagesSafeFetchAsync);
     resetAsync(this.packagesCreateAsync);
-    resetAsync(this.packagesBlacklistFetchAsync);
-    resetAsync(this.packagesOneBlacklistedFetchAsync);
-    resetAsync(this.packagesBlacklistAsync);
-    resetAsync(this.packagesUpdateBlacklistedAsync);
-    resetAsync(this.packagesRemoveFromBlacklistAsync);
+    resetAsync(this.packagesBlocklistFetchAsync);
+    resetAsync(this.packagesOneBlocklistedFetchAsync);
+    resetAsync(this.packagesBlocklistAsync);
+    resetAsync(this.packagesUpdateBlocklistedAsync);
+    resetAsync(this.packagesRemoveFromBlocklistAsync);
     resetAsync(this.packagesAutoInstalledFetchAsync);
     resetAsync(this.packagesHistoryFetchAsync);
     resetAsync(this.packagesEnableAutoInstallAsync);
@@ -955,10 +955,10 @@ export default class SoftwareStore {
     this.preparedOndevicePackages = {};
     this.packagesOndeviceSort = SORT_DIR_ASC;
     this.packagesUploading = [];
-    this.blacklist = [];
-    this.preparedBlacklist = [];
-    this.preparedBlacklistRaw = [];
-    this.blacklistedPackage = {};
+    this.blocklist = [];
+    this.preparedBlocklist = [];
+    this.preparedBlocklistRaw = [];
+    this.blocklistedPackage = {};
     this.autoInstalledPackages = [];
     this.packagesHistory = [];
     this.ondevicePackages = [];
@@ -1022,7 +1022,7 @@ export default class SoftwareStore {
         version,
       },
       installedOnEcus: 0,
-      isBlackListed: false,
+      isBlockListed: false,
       namespace: pack.namespace,
       signature: null,
       timestamp: null,
@@ -1058,7 +1058,7 @@ export default class SoftwareStore {
   }
 
   @computed
-  get blacklistCount() {
-    return this.blacklist.length;
+  get blocklistCount() {
+    return this.blocklist.length;
   }
 }

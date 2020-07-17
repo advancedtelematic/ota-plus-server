@@ -145,7 +145,7 @@ class InstalledList extends Component {
   }
 
   render() {
-    const { device, showPackageBlacklistModal, onFileDrop, stores, t } = this.props;
+    const { device, showPackageBlocklistModal, onFileDrop, stores, t } = this.props;
     const { featuresStore, softwareStore } = stores;
     const { features } = featuresStore;
     const {
@@ -157,8 +157,8 @@ class InstalledList extends Component {
       <span>
         <div className="ios-list" ref={this.listRef}>
           {features.includes(FEATURES.IMPACT_ANALYSIS) && (
-            <div id="blacklist-header-title">
-              {t('software.blacklist-modal.title')}
+            <div id="blocklist-header-title">
+              {t('software.blocklist-modal.title')}
               <Tag color="#00B6B2" className="alpha-tag">
                 {ALPHA_TAG}
               </Tag>
@@ -191,7 +191,7 @@ class InstalledList extends Component {
                     {_.map(packages, (pack, index) => (
                       <ListItem
                         pack={pack}
-                        showPackageBlacklistModal={showPackageBlacklistModal}
+                        showPackageBlocklistModal={showPackageBlocklistModal}
                         key={index}
                         features={features}
                       />
@@ -214,7 +214,7 @@ class InstalledList extends Component {
 InstalledList.propTypes = {
   stores: PropTypes.shape({}),
   device: PropTypes.shape({}).isRequired,
-  showPackageBlacklistModal: PropTypes.func.isRequired,
+  showPackageBlocklistModal: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired
 };

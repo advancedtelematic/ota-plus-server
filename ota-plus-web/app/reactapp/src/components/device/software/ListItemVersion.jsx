@@ -21,20 +21,20 @@ class ListItemVersion extends Component {
     sendAction(OTA_DEVICE_SEE_SOFTWARE);
   };
 
-  isPackageBlacklisted(version) {
+  isPackageBlocklisted(version) {
     const { stores } = this.props;
     const { softwareStore } = stores;
-    const isPackageBlacklisted = _.find(
-      softwareStore.blacklist,
+    const isPackageBlocklisted = _.find(
+      softwareStore.blocklist,
       dev => dev.packageId.name === version.id.name && dev.packageId.version === version.id.version
     );
-    return isPackageBlacklisted || false;
+    return isPackageBlocklisted || false;
   }
 
   render() {
     const { version, queuedPackage, installedPackage, stores, t } = this.props;
     const { softwareStore } = stores;
-    const blacklistedPackage = this.isPackageBlacklisted(version);
+    const blocklistedPackage = this.isPackageBlocklisted(version);
     const isSelected = version.filepath === softwareStore.expandedPackage.filepath;
     return (
       <li
@@ -57,18 +57,18 @@ class ListItemVersion extends Component {
           </div>
         </div>
         <div className="software-panel__version-right">
-          {blacklistedPackage && version.id.version === installedPackage ? (
+          {blocklistedPackage && version.id.version === installedPackage ? (
             <img
               className="software-panel__version-icon"
               src={CROSS_ICON_RED}
-              id={`image-blacklisted-and-installed-${version.id.version.substring(0, 8)}`}
+              id={`image-blocklisted-and-installed-${version.id.version.substring(0, 8)}`}
               alt="Icon"
             />
-          ) : blacklistedPackage ? (
+          ) : blocklistedPackage ? (
             <img
               className="software-panel__version-icon"
               src={BAN_ICON_RED}
-              id={`image-blacklisted-${version.id.version.substring(0, 8)}`}
+              id={`image-blocklisted-${version.id.version.substring(0, 8)}`}
               alt="Icon"
             />
           ) : version.filepath === queuedPackage ? (

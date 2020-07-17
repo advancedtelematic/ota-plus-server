@@ -32,7 +32,7 @@ class PrimaryEcu extends Component {
   render() {
     const {
       active,
-      showPackageBlacklistModal,
+      showPackageBlocklistModal,
       onFileDrop,
       changeHardwareOverlayVisibility,
       hardwareOverlayShown,
@@ -73,7 +73,7 @@ class PrimaryEcu extends Component {
                 hardwareOverlayShown={hardwareOverlayShown}
                 changeHardwareOverlayVisibility={changeHardwareOverlayVisibility}
                 device={device}
-                showPackageBlacklistModal={showPackageBlacklistModal}
+                showPackageBlocklistModal={showPackageBlocklistModal}
                 onFileDrop={onFileDrop}
                 active={active}
               />
@@ -101,7 +101,7 @@ PrimaryEcu.propTypes = {
   popoverShown: PropTypes.bool.isRequired,
   selectEcu: PropTypes.func,
   stores: PropTypes.shape({}),
-  showPackageBlacklistModal: PropTypes.func,
+  showPackageBlocklistModal: PropTypes.func,
   onFileDrop: PropTypes.func,
   changeHardwareOverlayVisibility: PropTypes.func,
   hardwareOverlayShown: PropTypes.bool,

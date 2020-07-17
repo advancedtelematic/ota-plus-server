@@ -9,7 +9,7 @@ import { withTranslation } from 'react-i18next';
 
 import { DeviceHardwareSecondaryEcuDetails, DevicePrimaryEcu, DeviceSecondaryEcu } from './hardware';
 import { FadeAnimation } from '../../utils';
-import { PackageBlacklistModal } from '../software';
+import { PackageBlocklistModal } from '../software';
 import { QUESTIONMARK_ICON_BLACK, QUESTIONMARK_ICON_WHITE } from '../../config';
 
 @inject('stores')
@@ -28,10 +28,10 @@ class HardwarePanel extends Component {
   hardwareOverlayShown = false;
 
   @observable
-  packageBlacklistModalShown = false;
+  packageBlocklistModalShown = false;
 
   @observable
-  packageBlacklistAction = {};
+  packageBlocklistAction = {};
 
   onSelectQueue = () => {
     const { selectQueue } = this.props;
@@ -70,10 +70,10 @@ class HardwarePanel extends Component {
     this.hardwareOverlayShown = !!visibility;
   };
 
-  showPackageBlacklistModal = (name, version, mode, e) => {
+  showPackageBlocklistModal = (name, version, mode, e) => {
     if (e) e.preventDefault();
-    this.packageBlacklistModalShown = true;
-    this.packageBlacklistAction = {
+    this.packageBlocklistModalShown = true;
+    this.packageBlocklistAction = {
       name,
       version,
       mode,
@@ -82,13 +82,13 @@ class HardwarePanel extends Component {
     this.hardwareOverlayShown = false;
   };
 
-  hidePackageBlacklistModal = (e) => {
+  hidePackageBlocklistModal = (e) => {
     const { stores } = this.props;
     const { softwareStore } = stores;
     if (e) e.preventDefault();
-    this.packageBlacklistModalShown = false;
-    this.packageBlacklistAction = {};
-    softwareStore.resetBlacklistActions();
+    this.packageBlocklistModalShown = false;
+    this.packageBlocklistAction = {};
+    softwareStore.resetBlocklistActions();
   };
 
   render() {
@@ -100,7 +100,7 @@ class HardwarePanel extends Component {
       <span>
         <div className="hardware-panel__title">{t('devices.hardware.primary_ecus_title')}</div>
         <DevicePrimaryEcu
-          showPackageBlacklistModal={this.showPackageBlacklistModal}
+          showPackageBlocklistModal={this.showPackageBlocklistModal}
           onFileDrop={onFileDrop}
           hardwareOverlayShown={this.hardwareOverlayShown}
           changeHardwareOverlayVisibility={this.changeHardwareOverlayVisibility}
@@ -184,10 +184,10 @@ class HardwarePanel extends Component {
             </FadeAnimation>
           ) : null}
         </div>
-        <PackageBlacklistModal
-          shown={this.packageBlacklistModalShown}
-          hide={this.hidePackageBlacklistModal}
-          blacklistAction={this.packageBlacklistAction}
+        <PackageBlocklistModal
+          shown={this.packageBlocklistModalShown}
+          hide={this.hidePackageBlocklistModal}
+          blocklistAction={this.packageBlocklistAction}
         />
       </div>
     );

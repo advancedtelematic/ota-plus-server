@@ -71,8 +71,8 @@ const WebsocketHandler = function (wsUrl, stores) {
             case WEB_EVENTS.TUF_TARGET_ADDED:
               softwareStore.addPackage(data);
               break;
-            case WEB_EVENTS.PACKAGE_BLACKLISTED:
-              softwareStore.fetchBlacklist();
+            case WEB_EVENTS.PACKAGE_BLOCKLISTED:
+              softwareStore.fetchBlocklist();
               break;
             case WEB_EVENTS.UPDATE_SPEC:
               if (isDDVOpen && devicesStore.device.uuid === data.device) {

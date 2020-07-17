@@ -11,7 +11,7 @@ class Versions extends Component {
   render() {
     const { versions } = this.props;
     return (
-      <div className="versions" id="impact-analysis-blacklisted-versions">
+      <div className="versions" id="impact-analysis-blocklisted-versions">
         <ul>
           {_.map(versions, (version, index) => <VersionsItem version={version} key={index} />)}
         </ul>

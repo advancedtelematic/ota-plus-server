@@ -9,14 +9,14 @@ const Tooltip = ({ shown, hide }) => (
   <OTAModal
     title={(
       <div className="heading">
-        <div className="internal">Blacklist</div>
+        <div className="internal">Blocklist</div>
       </div>
     )}
     content={(
       <span>
         <div className="text-center">
           {'With HERE OTA Connect, you can '}
-          <strong>blacklist</strong>
+          <strong>blocklist</strong>
           {' problem packages, ensuring they '}
           <br />
           {'won\'t get installed on any of your devices.'}
@@ -26,7 +26,7 @@ const Tooltip = ({ shown, hide }) => (
           <strong>Impact analysis tab</strong>
           {', you can view which of your devices already'}
           <br />
-          {'have the blacklisted version of the package installed, letting you'}
+          {'have the blocklisted version of the package installed, letting you'}
           <br />
           {'proactively troubleshoot and update those devices to a fixed version,'}
           <br />
