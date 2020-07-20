@@ -26,7 +26,7 @@ class Overlay extends Component {
     const { hardwareStore, softwareStore } = stores;
     hardwareStore.fetchHardware(device.uuid);
     softwareStore.fetchOndevicePackages(device.uuid);
-    softwareStore.fetchBlacklist();
+    softwareStore.fetchBlocklist();
   }
 
   showPackagesList = (e) => {
@@ -60,7 +60,7 @@ class Overlay extends Component {
       changeHardwareOverlayVisibility,
       hardwareOverlayShown,
       device,
-      showPackageBlacklistModal,
+      showPackageBlocklistModal,
       onFileDrop,
       active,
       stores,
@@ -116,7 +116,7 @@ class Overlay extends Component {
           <div className="packages-details">
             <DeviceHardwarePackagesInstalledList
               device={device}
-              showPackageBlacklistModal={showPackageBlacklistModal}
+              showPackageBlocklistModal={showPackageBlocklistModal}
               onFileDrop={onFileDrop}
             />
           </div>
@@ -168,7 +168,7 @@ Overlay.propTypes = {
   device: PropTypes.shape({}),
   changeHardwareOverlayVisibility: PropTypes.func,
   hardwareOverlayShown: PropTypes.bool,
-  showPackageBlacklistModal: PropTypes.func.isRequired,
+  showPackageBlocklistModal: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func,
   active: PropTypes.bool,
   t: PropTypes.func.isRequired

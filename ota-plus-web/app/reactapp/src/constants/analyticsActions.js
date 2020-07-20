@@ -31,7 +31,7 @@ export const OTA_DEVICE_SEE_PRIMARY_PACKAGE = 'OTA_Device_See_Primary_Package';
 export const OTA_DEVICE_LAUNCH_AUTOMATIC_UPDATE = 'OTA_Device_Launch_Automatic_Update';
 export const OTA_DEVICE_LAUNCH_SINGLE_UPDATE = 'OTA_Device_Launch_Single_Update';
 export const OTA_DEVICE_CANCEL_CAMPAIGN = 'OTA_Device_Cancel_Campaign';
-export const OTA_DEVICE_BLACKLIST_PRIMARY_PACKAGE = 'OTA_Device_Blacklist_Primary_Package';
+export const OTA_DEVICE_BLOCKLIST_PRIMARY_PACKAGE = 'OTA_Device_Blocklist_Primary_Package';
 
 /* Navbar */
 export const OTA_NAV_HOMEPAGE = 'OTA_Nav_Homepage';

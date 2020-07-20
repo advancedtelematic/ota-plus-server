@@ -343,7 +343,7 @@
   }
 }
 
-.blacklist-modal {
+.blocklist-modal {
   .subactions {
     text-align: left;
     margin-top: 20px;
@@ -693,7 +693,7 @@
                   @include textoverflowEllipsis;
                 }
 
-                .btn-blacklist {
+                .btn-blocklist {
                   min-width: auto;
                   width: 100%;
                   height: 25px;

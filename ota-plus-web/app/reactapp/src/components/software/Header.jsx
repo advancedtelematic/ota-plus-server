@@ -11,7 +11,7 @@ import {
   FEATURES,
   PACKAGES_ADVANCED_TAB,
   PACKAGES_DEFAULT_TAB,
-  PACKAGES_BLACKLISTED_TAB
+  PACKAGES_BLOCKLISTED_TAB
 } from '../../config';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import {
@@ -31,7 +31,7 @@ class Header extends Component {
   static propTypes = {
     stores: PropTypes.shape({}),
     showCreateModal: PropTypes.func.isRequired,
-    switchToTab: PropTypes.oneOf([PACKAGES_DEFAULT_TAB, PACKAGES_ADVANCED_TAB, PACKAGES_BLACKLISTED_TAB]),
+    switchToTab: PropTypes.oneOf([PACKAGES_DEFAULT_TAB, PACKAGES_ADVANCED_TAB, PACKAGES_BLOCKLISTED_TAB]),
     t: PropTypes.func.isRequired
   };
 
@@ -137,14 +137,14 @@ class Header extends Component {
                 <li
                   id="tab-impact-page"
                   onClick={() => {
-                    this.setActive(PACKAGES_BLACKLISTED_TAB);
+                    this.setActive(PACKAGES_BLOCKLISTED_TAB);
                     setAnalyticsView(ANALYTICS_VIEW_IMPACT_ANALYSIS);
                   }}
-                  className={`tab-navigation__link ${this.isActive(PACKAGES_BLACKLISTED_TAB)}`}
+                  className={`tab-navigation__link ${this.isActive(PACKAGES_BLOCKLISTED_TAB)}`}
                 >
-                  <Tooltip placement="bottom" title={t('software.tabs.tooltip.blacklisted')}>
+                  <Tooltip placement="bottom" title={t('software.tabs.tooltip.blocklisted')}>
                     <span>
-                      {t('software.tabs.blacklisted')}
+                      {t('software.tabs.blocklisted')}
                       <Tag color="#00B6B2" className="alpha-tag">
                         {ALPHA_TAG}
                       </Tag>
@@ -165,7 +165,7 @@ class Header extends Component {
             </div>
           )}
         </div>
-        {switchToTab !== PACKAGES_BLACKLISTED_TAB && (
+        {switchToTab !== PACKAGES_BLOCKLISTED_TAB && (
           <SubHeader className="software-repository-subheader">
             <div className="software-repository-subheader__item">{t('software.header.name')}</div>
             <div className="software-repository-subheader__item versions">{t('software.header.versions')}</div>

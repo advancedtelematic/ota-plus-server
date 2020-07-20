@@ -44,7 +44,7 @@ export const WEB_EVENTS = {
   DEVICE_SEEN: 'DeviceSeen',
   DEVICE_SYSTEM_INFO_CHANGED: 'DeviceSystemInfoChanged',
   DEVICE_UPDATE_STATUS: 'DeviceUpdateStatus',
-  PACKAGE_BLACKLISTED: 'PackageBlacklisted',
+  PACKAGE_BLOCKLISTED: 'PackageBlocklisted',
   TUF_TARGET_ADDED: 'TufTargetAdded',
   UPDATE_SPEC: 'UpdateSpec'
 };

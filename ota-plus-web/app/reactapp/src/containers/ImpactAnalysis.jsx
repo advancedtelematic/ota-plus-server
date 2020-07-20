@@ -6,7 +6,7 @@ import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import { Loader } from '../partials';
-import { BlacklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip } from '../components/impactanalysis';
+import { BlocklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip } from '../components/impactanalysis';
 import { setAnalyticsView } from '../helpers/analyticsHelper';
 import { ANALYTICS_VIEW_IMPACT_ANALYSIS } from '../constants/analyticsViews';
 import { SOFTWARE_ICON } from '../config';
@@ -35,18 +35,18 @@ class ImpactAnalysis extends Component {
   render() {
     const { stores, t } = this.props;
     const { softwareStore, impactAnalysisStore } = stores;
-    const { packagesBlacklistFetchAsync } = softwareStore;
+    const { packagesBlocklistFetchAsync } = softwareStore;
     const { impactAnalysisFetchAsync } = impactAnalysisStore;
-    const isFetching = packagesBlacklistFetchAsync.isFetching || impactAnalysisFetchAsync.isFetching;
+    const isFetching = packagesBlocklistFetchAsync.isFetching || impactAnalysisFetchAsync.isFetching;
     return (
       <span>
         {isFetching ? (
           <div className="wrapper-center">
             <Loader />
           </div>
-        ) : softwareStore.blacklistCount ? (
+        ) : softwareStore.blocklistCount ? (
           <span id="page-impact-analysis">
-            <BlacklistedPackages />
+            <BlocklistedPackages />
             <ImpactAnalysisChart />
           </span>
         ) : (

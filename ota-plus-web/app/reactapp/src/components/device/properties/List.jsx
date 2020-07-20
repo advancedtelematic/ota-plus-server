@@ -62,7 +62,7 @@ class List extends Component {
     const { installPackage, stores, t } = this.props;
     const { softwareStore, devicesStore } = stores;
 
-    const isPackageBlacklisted = false;
+    const isPackageBlocklisted = false;
     let isPackageQueued = false;
     let isPackageInstalled = false;
     let unmanaged = false;
@@ -95,28 +95,28 @@ class List extends Component {
                 {expandedPackage.id.name}
               </div>
               <div className="properties-panel__info-status">
-                {isPackageBlacklisted && isPackageInstalled ? (
+                {isPackageBlocklisted && isPackageInstalled ? (
                   <div>
-                    <span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
+                    <span id={this.generateIdTag('blocklisted-and-installed', expandedPackage)}>
                       {t('common.statuses.installed')}
                     </span>
                     <img
                       className="properties-panel__info-status-icon"
                       src={CROSS_ICON_RED}
                       alt=""
-                      id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)}
+                      id={this.generateIdTag('blocklisted-and-installed-icon', expandedPackage)}
                     />
                   </div>
-                ) : isPackageBlacklisted ? (
+                ) : isPackageBlocklisted ? (
                   <div>
-                    <span id={this.generateIdTag('blacklisted', expandedPackage)}>
-                      {t('common.statuses.blacklisted')}
+                    <span id={this.generateIdTag('blocklisted', expandedPackage)}>
+                      {t('common.statuses.blocklisted')}
                     </span>
                     <img
                       className="properties-panel__info-status-icon"
                       src={BAN_ICON_RED}
                       alt=""
-                      id={this.generateIdTag('blacklisted-icon', expandedPackage)}
+                      id={this.generateIdTag('blocklisted-icon', expandedPackage)}
                     />
                   </div>
                 ) : isPackageQueued ? (
@@ -272,13 +272,13 @@ class List extends Component {
             </Tooltip>
           </div>
         )}
-        {isPackageBlacklisted && isPackageInstalled ? (
+        {isPackageBlocklisted && isPackageInstalled ? (
           <div className="properties-panel__bottom-status properties-panel__bottom-status--red">
             {t('common.statuses.installed')}
           </div>
-        ) : isPackageBlacklisted ? (
+        ) : isPackageBlocklisted ? (
           <div className="properties-panel__bottom-status properties-panel__bottom-status--red">
-            {t('common.statuses.blacklisted')}
+            {t('common.statuses.blocklisted')}
           </div>
         ) : isPackageQueued ? (
           <div className="properties-panel__bottom-status properties-panel__bottom-status--orange">

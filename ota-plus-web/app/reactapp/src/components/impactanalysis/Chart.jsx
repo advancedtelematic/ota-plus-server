@@ -13,7 +13,7 @@ class Chart extends Component {
   render() {
     const { t, stores } = this.props;
     const { softwareStore } = stores;
-    const blacklist = softwareStore.preparedBlacklistRaw;
+    const blocklist = softwareStore.preparedBlocklistRaw;
     const availableColors = ['#DFF9F8', '#B2E7E5', '#7ED7D3', '#4CC7C4', '#00AFAA'];
     const groupedStatsName = 'Other';
     let colorIndex = -1;
@@ -30,7 +30,7 @@ class Chart extends Component {
       ],
     };
     _.each(
-      blacklist,
+      blocklist,
       (pack, index) => {
         const colorsCount = availableColors.length - 1;
         if (pack.deviceCount && index < availableColors.length) {

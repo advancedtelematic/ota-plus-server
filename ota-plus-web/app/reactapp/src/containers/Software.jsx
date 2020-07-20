@@ -19,7 +19,7 @@ import {
 import {
   ACTIVE_TAB_KEY,
   PACKAGES_DEFAULT_TAB,
-  PACKAGES_BLACKLISTED_TAB,
+  PACKAGES_BLOCKLISTED_TAB,
   PACKAGES_ADVANCED_TAB,
   SOFTWARE_ICON,
   PLUS_ICON
@@ -220,8 +220,8 @@ class Software extends Component {
       case PACKAGES_ADVANCED_TAB:
         this.title = t('software.advanced.title');
         break;
-      case PACKAGES_BLACKLISTED_TAB:
-        this.title = t('software.tabs.blacklisted');
+      case PACKAGES_BLOCKLISTED_TAB:
+        this.title = t('software.tabs.blocklisted');
         break;
       default:
         this.title = t('software.title');
@@ -260,7 +260,7 @@ class Software extends Component {
               {this.switchToTab === PACKAGES_ADVANCED_TAB && (
                 <SoftwareRepositoryAlpha />
               )}
-              {this.switchToTab === PACKAGES_BLACKLISTED_TAB && (
+              {this.switchToTab === PACKAGES_BLOCKLISTED_TAB && (
                 <ImpactAnalysisPage />
               )}
             </div>

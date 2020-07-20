@@ -1,7 +1,7 @@
 /** @format */
 
-import BlacklistedPackages from './BlacklistedPackages';
+import BlocklistedPackages from './BlocklistedPackages';
 import ImpactAnalysisChart from './Chart';
 import ImpactAnalysisTooltip from './Tooltip';
 
-export { BlacklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip };
+export { BlocklistedPackages, ImpactAnalysisChart, ImpactAnalysisTooltip };
