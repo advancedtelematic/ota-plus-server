@@ -1,0 +1,26 @@
+= Rename a custom device field
+
+You can change names of your custom device fields on the OTA Connect Portal.
+
+*To rename a custom device field:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Next to *Custom device fields*, click the cogwheel.
++
+[.align_img_left]
+image::img::cogwheel.png[image,350]
+
+. In the *Custom device fields* dialog box, next to the title of the field that you want to rename, click the pencil icon.
++
+[.lightbackground.align_img_left]
+image::img::rename_field.png[image,450]
+
+. Rename the field, and then click the save icon.
++
+TIP: The name should not repeat the other field names. It also should not be less than one character or exceed 20 characters and only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+
+. Click *Close*.
++
+The custom device field now has the new name in the list of device filters and smart groups that are based on it. The field values remain unchanged.
+
+You can also xref:manage-values-of-custom-device-fields.adoc[change the values] of your custom device fields and xref:add-custom-device-field.adoc[add] or xref:remove-custom-device-field.adoc[delete] your fields.

@@ -9,7 +9,12 @@
 * xref:device-groups.adoc[Device groups]
 ** xref:create-fixed-group.adoc[Create a fixed group]
 ** xref:create-smart-group.adoc[Create a smart group]
+* xref:custom-device-fields.adoc[Custom device fields]
 ** xref:create-custom-device-fields.adoc[Create custom device fields]
+** xref:rename-custom-device-fields.adoc[Rename a custom device field]
+** xref:manage-values-of-custom-device-fields.adoc[Manage values of custom device fields]
+** xref:add-custom-device-field.adoc[Add a custom device field]
+** xref:remove-custom-device-field.adoc[Remove a custom device field]
 * xref:manage-devices.adoc[Manage devices]
 // TODO * Update a Smart Group
 // TODO * Delete groups

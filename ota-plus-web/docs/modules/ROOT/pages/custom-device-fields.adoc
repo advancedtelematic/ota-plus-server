@@ -1,0 +1,14 @@
+= Custom device fields
+
+Custom device fields are filter criteria that you can assign to each device ID to target your devices to a specific smart group.
+
+To xref:create-custom-device-fields.adoc[create] your first custom device fields, you will need to upload a CSV file.
+
+If you need to xref:manage-values-of-custom-device-fields.adoc[change values] of custom device fields and xref:add-custom-device-field.adoc[add] or xref:remove-custom-device-field.adoc[delete] devices or fields, you will need to upload a new delimiter-separated file. You can also xref:rename-custom-device-fields.adoc[rename] custom device fields on the OTA Connect Portal.
+
+After you modified your custom device fields:
+
+* Smart device groups are adjusted accordingly:
+** Devices that no longer match filter criteria are removed from your smart groups.
+** Devices that now match filter criteria are automatically added to relevant smart groups.
+* Existing campaigns are not adjusted: devices cannot be added or removed from a campaign list after the campaign is launched.
