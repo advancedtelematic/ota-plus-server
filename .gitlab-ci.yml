@@ -3,19 +3,20 @@ stages:
   - build image
   - publish-docs-if-changed
   - trigger deploy
-  - veracode scan
-  - deps scan
-  - generate pages
+  - static scans
+  - publish pages
 
 variables:
   VAULT_ADDR: "http://vault.sit-ota.aws.in.here.com"
+  # The same image have to be used by test and code coverage jobs:
+  TEST_IMAGE: advancedtelematic/gitlab-jobs:0.2.4
 
 test:
   stage: test
   except:
     refs:
       - deploy/sit
-  image: advancedtelematic/gitlab-jobs:0.2.4
+  image: $TEST_IMAGE
   script:
     - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
   cache:
@@ -77,50 +78,6 @@ trigger sit deploy:
     project: OLP/EDGE/OTA/infra/deployment-descriptors
     branch: master
 
-veracode scan:
-  # prepare and submit for static code analysis
-  stage: veracode scan
-  only:
-    variables:
-      - $VERACODE_API_ID
-  image: advancedtelematic/veracode:0.1.2
-  before_script:
-    - tar -f scan.tar --append ota-plus-web/app/reactapp
-  script:
-    - java -jar /opt/veracode/veracode-wrapper.jar -vid ${VERACODE_API_ID} -vkey ${VERACODE_API_KEY}
-      -action UploadAndScan -appname "OTA Frontend" -createprofile true -autoscan true
-      -filepath scan.tar -version "job ${CI_JOB_ID} in pipeline ${CI_PIPELINE_ID} for ${CI_PROJECT_NAME} repo"
-  artifacts:
-    paths:
-      - scan.tar
-
-deps scan:
-  # perform dependencies CVE analysis
-  stage: deps scan
-  only:
-    - schedules
-  image: advancedtelematic/gitlab-jobs:0.2.0
-  script:
-    - ./sbt dependencyCheckAggregate
-    - mv target/scala-*/dependency-check-report.html ./depchk.html
-  artifacts:
-    paths:
-      - depchk.html
-
-pages:
-  stage: generate pages
-  only:
-    - schedules
-  dependencies:
-    - deps scan
-  script:
-    - mkdir -p public
-    - mv depchk.html public/index.html
-  artifacts:
-    paths:
-      - public
-    expire_in: 64 days
-
 trigger-docsite-build:
   stage: publish-docs-if-changed
   except:
@@ -133,3 +90,12 @@ trigger-docsite-build:
   trigger:
     project: olp/edge/ota/documentation/ota-connect-docs
     branch: master
+
+
+include:
+  - template: SAST.gitlab-ci.yml
+  - template: Secret-Detection.gitlab-ci.yml
+  - template: License-Scanning.gitlab-ci.yml
+  - project: olp/edge/ota/infra/security
+    ref: v0.0.7
+    file: /shared.yaml
