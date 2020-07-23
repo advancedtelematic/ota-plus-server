@@ -18,7 +18,8 @@ import {
   OTA_DEVICES_SEE_ALL,
   OTA_DEVICES_SEE_GROUPED,
   OTA_DEVICES_SEE_UNGROUPED,
-  OTA_DEVICES_SEARCH_DEVICE
+  OTA_DEVICES_SEARCH_DEVICE,
+  OTA_DEVICE_DELETE
 } from '../constants/analyticsActions';
 import { DEVICE_ICON, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC, PLUS_ICON } from '../config';
 import UnderlinedLink from '../partials/UnderlinedLink';
@@ -134,6 +135,7 @@ class Devices extends Component {
       devicesStore.devicesInitialTotalCount -= 1;
       this.hideDeleteConfirmation();
     });
+    sendAction(OTA_DEVICE_DELETE);
   };
 
   hideDeleteConfirmation = () => {

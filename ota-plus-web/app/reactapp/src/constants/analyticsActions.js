@@ -32,6 +32,9 @@ export const OTA_DEVICE_LAUNCH_AUTOMATIC_UPDATE = 'OTA_Device_Launch_Automatic_U
 export const OTA_DEVICE_LAUNCH_SINGLE_UPDATE = 'OTA_Device_Launch_Single_Update';
 export const OTA_DEVICE_CANCEL_CAMPAIGN = 'OTA_Device_Cancel_Campaign';
 export const OTA_DEVICE_BLOCKLIST_PRIMARY_PACKAGE = 'OTA_Device_Blocklist_Primary_Package';
+export const OTA_DEVICE_RENAME = 'OTA_Device_Rename';
+export const OTA_DEVICE_DELETE = 'OTA_Device_Delete';
+
 
 /* Navbar */
 export const OTA_NAV_HOMEPAGE = 'OTA_Nav_Homepage';

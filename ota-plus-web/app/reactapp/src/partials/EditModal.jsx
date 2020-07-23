@@ -11,6 +11,8 @@ import OTAForm from './OTAForm';
 import FormInput from './FormInput';
 import { AsyncStatusCallbackHandler } from '../utils';
 import { assets } from '../config';
+import { sendAction } from '../helpers/analyticsHelper';
+import { OTA_DEVICE_RENAME } from '../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -45,6 +47,7 @@ class EditModal extends Component {
       deviceName: formData.deviceName,
       deviceType: 'Other',
     });
+    sendAction(OTA_DEVICE_RENAME);
   }
 
   handleRenameResponse() {
