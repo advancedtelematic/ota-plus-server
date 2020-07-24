@@ -14,6 +14,8 @@ import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
 import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE } from '../../constants/deviceConstants';
 import { DEVICE_SUMMARY_DATE_FORMAT } from '../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
+import { sendAction } from '../../helpers/analyticsHelper';
+import { OTA_DEVICE_DELETE } from '../../constants/analyticsActions';
 
 @inject('stores')
 @observer
@@ -58,6 +60,7 @@ class Header extends Component {
     devicesStore.deleteDevice(device.uuid).then(() => {
       history.push('/devices');
     });
+    sendAction(OTA_DEVICE_DELETE);
   };
 
   render() {
