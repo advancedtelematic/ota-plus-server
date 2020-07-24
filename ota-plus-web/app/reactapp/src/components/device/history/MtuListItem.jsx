@@ -80,6 +80,12 @@ class MtuListItem extends Component {
               const { hardwareId: secondaryHardwareId } = serialFromSecondary;
               hardwareId = secondaryHardwareId;
             }
+            const ecuEvents = [];
+            events.forEach((event) => {
+              if (ecuSerial === event.payload.ecu) {
+                ecuEvents.push(event);
+              }
+            });
 
             return (
               <div className="overview-panel__operation" key={ecuSerial}>
@@ -106,13 +112,13 @@ class MtuListItem extends Component {
                       <span id={`target-${item.correlationId}`}>{ecuReport.target.join()}</span>
                     </div>
                   </div>
-                  {events.length ? (
+                  {ecuEvents.length ? (
                     devicesStore.eventsFetchAsync.isFetching ? (
                       <div className="wrapper-center">
                         <Loader />
                       </div>
                     ) : (
-                      <InstallationEvents events={events} />
+                      <InstallationEvents events={ecuEvents} />
                     )
                   ) : null}
                 </div>
