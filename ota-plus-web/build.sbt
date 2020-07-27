@@ -30,7 +30,7 @@ val runWebpack = taskKey[Seq[Int]]("Run webpack:10")
 runWebpack := {
   Seq(
     Process(
-    "sh" :: "-c" :: s"cd ${baseDirectory.value.toString}/app/reactapp && npm install && webpack -p" ::
+    "sh" :: "-c" :: s"cd ${baseDirectory.value.toString}/app/reactapp && npm ci && webpack -p" ::
         Nil
     ) !
   )
