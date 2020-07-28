@@ -1,6 +1,41 @@
 = Manage values of custom device fields
 
-If you want to edit or remove values of your custom device fields, upload a new or modified delimiter-separated file.
+If you want to edit or remove values of custom device fields, <<csv, upload a new or modified delimiter-separated file>>. You can also <<portal, edit field values on the OTA Connect portal>>.
+
+[[portal]]
+== Edit field values on the OTA Connect portal
+
+You can edit any field value of a device on the page with device details.
+
+*To edit a field value on the portal:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Click the device for which you want to change the field value.
++
+The page with device details opens.
+
+. On the navigation pane, click *Custom device fields*.
++
+[.lightbackground.align_img_left]
+image::img::custom_device_fields_ddv.png[image,350]
+
+. Next to the value that you want to edit, click the pencil icon.
++
+[.lightbackground.align_img_left]
+image::img::edit_value_ddv.png[image,600]
+
+. Edit the value.
++
+NOTE: The value should not be less than one character or exceed 20 characters and can only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+
+. Click the save icon.
+
+The device has now a new field value. After you reload the OTA Connect portal, your smart groups that are based on the field with the modified value are automatically updated with the latest changes. However, campaigns that targeted the device with the modified value are not adjusted: devices cannot be added or removed after a campaign has already begun.
+
+[[csv]]
+== Edit and delete field values using a CSV file
+
+You can use a CSV file to manage values of custom device fields.
 
 include::add-custom-device-field.adoc[tag=modified_csv]
 
