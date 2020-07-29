@@ -3,21 +3,27 @@
 //  tag::single-device-install-steps[]
 *To install a software version on a single device:*
 
+// tag::automatic-updates[]
 . Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
-. In the *Groups* pane, select *All devices*, and then select the needed device.
-. In the *Hardware* pane, click the *Primary control unit* type.
+. Select the needed device.
+. In the *Hardware* section, select the needed control unit type.
 +
 [.align_img_left]
 image::img::primary_control_unit.png[image,300]
+// end::automatic-updates[]
 
-. In the *Software* pane, locate the software that you want to install, and then click the software name.
+. On the *Software* pane, select the software that you want to install.
 +
-You see a list of all applicable versions of that software.
+You see a list of all applicable versions of the selected software.
 .  Select the version that you want to install.
 +
-In the *Properties* pane, see more details about the selected software version. The status should be *Not Installed*.
+On the *Properties* pane, you can find more details about the selected software version. The status should be *Not Installed*.
+
+. If the status of the software version is *Not Installed*, on the *Properties* pane, scroll down and click *Install*.
 +
-. If the status of the software version is *Not Installed*, at the bottom of the *Properties* pane, click *Install*.
+[.lightbackground.align_img_left]
+image::img::install_update.png[image,450]
+
 
 OTA Connect remotely installs the software version on your device.
 //  end::single-device-install-steps[]

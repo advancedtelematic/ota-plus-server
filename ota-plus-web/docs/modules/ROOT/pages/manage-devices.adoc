@@ -1,39 +1,33 @@
-= Manage devices
+= Single-device update
 
-== See all devices
+You can send software updates to devices in the following ways:
 
-You can find all of the provisioned devices on the *Devices* tab.
+- To target multiple devices, xref:create-campaigns.adoc[create a campaign].
+- To troubleshoot one device, <<install,install a single-device update>>.
+- To send automatic tests to a device, <<turn-on, turn on automatic updates>>.
 
-*To see all your devices:*
-
-. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
-. In the *Groups* pane, select *All devices*.
-+
-[.align_img_left]
-image::img::all_devices.png[image,50%]
-+
-You get the list of all devices that are provisioned in your environment. 
-
-To see more details about a device, click the needed device. The page with device details opens.
-
+[[install]]
 == Install a software update on a single device
 
-If you just want to update the software on a single device, you can skip the normal workflow of creating software updates and campaigns. You can install the software directly on the device details page.
+If you just want to troubleshoot a device, you can skip the normal workflow of creating software updates and campaigns. You can install a software update directly on the page with device details.
 
 include::partial$devices.adoc[tags=single-device-install-steps]
 
-//// 
+[[turn-on]]
+== Turn on automatic updates on a single device
 
-== Monitor Updates Running on a Device
+If you need to send automatic tests to a device, you can set your device to update automatically any time you push a new software version.
 
-TODO
+NOTE: Automatic updates only get created when you push a new image while auto-updates are turned on. Turning on auto-updates for a device does not trigger updates for any images that were already in the repository at the time auto-updates were activated.
 
-== Cancel Updates Running on a Device
+*To turn on automatic updates:*
 
-TODO
+include::partial$devices.adoc[tags=automatic-updates]
 
-== Understanding the Device Details
+. On the *Software* pane, select the software for which you want to turn on automatic updates.
+. Next to the software name, turn on the *Automatic update* toggle.
++
+[.lightbackground.align_img_left]
+image::img::automatic_update.png[image]
 
-TODO
-
-////
+The automatic update is now activated for the selected software. The update is automatically triggered when you push a new software image or a new version of a software package.
