@@ -15,7 +15,7 @@
 ** xref:manage-values-of-custom-device-fields.adoc[Manage values of custom device fields]
 ** xref:add-custom-device-field.adoc[Add a custom device field]
 ** xref:remove-custom-device-field.adoc[Remove a custom device field]
-* xref:manage-devices.adoc[Manage devices]
+* xref:manage-devices.adoc[Single-device updates]
 // TODO * Update a Smart Group
 // TODO * Delete groups
 
