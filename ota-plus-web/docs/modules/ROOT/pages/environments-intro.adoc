@@ -8,6 +8,12 @@ Apart from your home environment, you can xref:create-environment.adoc[create] u
 
 IMPORTANT: The limit of 10 additional environments applies even if you leave the environments that you have created. There is currently no way to delete environments.
 
+All environments are isolated for security. If you provision a device in one environment, you cannot access it from another environment. One device can be provisioned and connected only to one environment. For example, if you provision a device in the production environment, it can match different groups inside your production environment, but you cannot target this device in groups of the pre-production environment. If you want to move a device to a different environment, you have to xref:ota-client::client-provisioning-methods.adoc[reprovision] it.
+
+You can still use the same software in different environments simultaneously. For example, you can first upload your software to the pre-production environment for testing, and then decide which of the tested versions you want to upload to your production environment. To upload software, use the xref:ota-client::upload-large-binary.adoc[garage-deploy] and xref:ota-client::cross-deploy-images.adoc[garage-sign] tools on the command line. 
+
+If you need to test your software on the same devices that you use for production, instead of creating different environments for pre-production and production, create different groups inside one environment.
+
 If you need to work together with colleagues on device provisioning, device groups, software versions, software updates, and campaigns, you can xref:manage-members.adoc[add] your colleagues to your environment. You can also become a member of other environments and collaborate on their projects.
 If you no longer need to access resources in other environments, you can always xref:leave-environment.adoc[leave] them.
 
