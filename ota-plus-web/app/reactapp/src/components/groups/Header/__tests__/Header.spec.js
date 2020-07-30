@@ -51,7 +51,10 @@ describe('<Header />', () => {
     showCreateGroupModal: mockShowCreateGroupModal,
     uploadDeviceCustomFields: mockUploadDeviceCustomFields
   };
-  mockedStores.devicesStore.customDeviceFields = [{ tagId: 'TRIM LEVEL' }, { tagId: 'COUNTRY' }];
+  mockedStores.devicesStore.customDeviceFields = [
+    { tagId: 'TRIM LEVEL', isDelible: true },
+    { tagId: 'COUNTRY', isDelible: true }
+  ];
   mockedStores.devicesStore.renameCustomDeviceField = mockRenameCustomDeviceField;
   mockedStores.devicesStore.deleteCustomDeviceField = mockDeleteCustomDeviceField;
   mockedStores.groupsStore.fetchExpressionForSelectedGroup = mockFetchExpressionForSelectedGroup;
@@ -101,15 +104,14 @@ describe('<Header />', () => {
   it('should show delete warning modal', () => {
     mockedStores.groupsStore.selectedGroup = { isSmart: true };
     wrapper.find('#groups-cogwheel').simulate('click');
-    console.log('wrapper.debug(): ', wrapper.debug());
     wrapper.find('#delete-name-btn-COUNTRY').first().simulate('click');
     expect(wrapper.exists('#warning-modal')).toBe(true);
   });
 
-  // it('should call delete function in device store', () => {
-  //   wrapper.find('#groups-cogwheel').simulate('click');
-  //   wrapper.find('#delete-name-btn-COUNTRY').first().simulate('click');
-  //   wrapper.find('#warning-confirm-btn').first().simulate('click');
-  //   expect(mockDeleteCustomDeviceField).toHaveBeenCalled();
-  // });
+  it('should call delete function in device store', () => {
+    wrapper.find('#groups-cogwheel').simulate('click');
+    wrapper.find('#delete-name-btn-COUNTRY').first().simulate('click');
+    wrapper.find('#warning-confirm-btn').first().simulate('click');
+    expect(mockDeleteCustomDeviceField).toHaveBeenCalled();
+  });
 });
