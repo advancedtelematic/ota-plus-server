@@ -18,10 +18,11 @@ export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v1/assignments';
 export const API_CANCEL_UPDATE_PENDING_APPROVAL = '/api/v2/campaigns';
 export const API_NAMESPACE_SETUP_STEPS = '/organization/setup';
 export const API_RECENTLY_CREATED = '/recently_created?types=$types&limit=10';
+
 /*
  *  User
  */
-export const API_ORG_CUSTOM_DEVICE_FIELDS = '/organization/custom_device_fields';
+export const API_ORG_CUSTOM_DEVICE_FIELDS = '/api/v1/device_tags';
 export const API_ORGANIZATIONS = '/organizations';
 export const API_ORGANIZATIONS_USERS = namespace => `/organizations/${namespace}/users`;
 export const API_USER_DETAILS = '/user/profile';

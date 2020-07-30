@@ -11,14 +11,29 @@ import {
   TopBar
 } from './styled';
 import { WARNING_MODAL_COLOR } from '../../constants';
+import { ExternalLink } from '../index';
 
-const WarningModal = ({ type, title, desc, cancelButtonProps, confirmButtonProps, onClose }) => (
+const WarningModal = ({ type, title, desc, cancelButtonProps, readMore, confirmButtonProps, onClose }) => (
   <>
     <BackgroundMask onClick={onClose} />
     <ModalContainer id="warning-modal">
       <TopBar colorTheme={type} />
       <Title>{title}</Title>
-      <Description>{desc}</Description>
+      <Description>
+        {desc}
+        {readMore && (
+          <>
+            {' '}
+            <ExternalLink
+              key={'warning-modal-read-more'}
+              url={readMore.url}
+              weight="regular"
+            >
+              {readMore.title}
+            </ExternalLink>
+          </>
+        )}
+      </Description>
       <ButtonsWrapper>
         <CancelButton id="warning-cancel-btn" colorTheme={type} onClick={onClose}>
           {cancelButtonProps.title}
@@ -39,6 +54,10 @@ WarningModal.propTypes = {
   desc: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   cancelButtonProps: PropTypes.shape({
     title: PropTypes.string.isRequired,
+  }),
+  readMore: PropTypes.shape({
+    title: PropTypes.string,
+    url: PropTypes.string
   }),
   confirmButtonProps: PropTypes.shape({
     title: PropTypes.string.isRequired,

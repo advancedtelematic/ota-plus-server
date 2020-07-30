@@ -9,6 +9,10 @@ export const ModalTitleWrapper = styled.div`
   }
 `;
 
+export const ButtonsContainer = styled.span`
+  display: flex;
+`;
+
 export const ModalTitle = styled.h2`
   font-size: 22px;
   font-weight: bold;
@@ -56,12 +60,28 @@ export const CDFList = styled.div`
       letter-spacing: 0;
       line-height: 20px;
     }
+   .cdf-delete-name {
+      background: url(/assets/img/new-app/24/LUI-icon-pd-delete-outline-24.svg);
+      cursor: pointer;
+      width: 22px;
+      height: 22px;
+      :hover {
+        background: url(/assets/img/new-app/24/LUI-icon-pd-delete-solid-24.svg);
+      }
+    }
+    .cdf-delete-name-disabled {
+      opacity: 0.3;
+      background: url(/assets/img/new-app/24/LUI-icon-pd-delete-outline-24.svg);
+      width: 22px;
+      height: 22px;
+    }
     .cdf-edit-name {
       opacity: 0.6;
       background: url(/assets/img/new-app/24/LUI-icon-pd-edit-outline-24.svg);
       cursor: pointer;
       width: 22px;
       height: 22px;
+      margin-right: 16px;
       :hover {
         background: url(/assets/img/new-app/24/LUI-icon-pd-edit-solid-24.svg);
       }

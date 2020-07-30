@@ -26,7 +26,7 @@ export const ButtonsWrapper = styled.div`
 export const Description = styled.div`
   font-size: 1.231em;
   font-weight: 400;
-  padding: 0 60px;
+  padding: 0 32px;
   line-height: 20px;
   text-align: center;
   background-color: ${({ theme }) => theme.palette.white};

@@ -89,7 +89,7 @@ class SmartFilters extends Component {
     const { devicesStore } = stores;
     const { customDeviceFields } = devicesStore;
     customDeviceFields.forEach((field) => {
-      this.options.nameFilterOptions.push(field);
+      this.options.nameFilterOptions.push(field.tagId);
     });
   }
 
