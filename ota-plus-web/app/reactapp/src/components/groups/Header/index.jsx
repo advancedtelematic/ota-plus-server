@@ -6,13 +6,29 @@ import { useTranslation } from 'react-i18next';
 import { useObserver } from 'mobx-react';
 import { Input, Tooltip } from 'antd';
 import { useStores } from '../../../stores/hooks';
-import { Button, OTAModal } from '../../../partials';
+import { Button, OTAModal, WarningModal } from '../../../partials';
 import { ICON_GROUPS_DEVICES_CUSTOM_FIELDS_SETTINGS } from '../../../constants/iconsConstants';
-import { CLOSE_MODAL_ICON, HELP_ICON_LIGHT, SAVE_ICON, WARNING_ICON_RED } from '../../../config';
-import { CDFFooter, CDFList, CDFListHeader, InputWrapper, ModalTitleWrapper, ModalTitle } from './styled';
+import {
+  CLOSE_MODAL_ICON,
+  DEVICES_LIMIT_PER_PAGE,
+  HELP_ICON_LIGHT,
+  SAVE_ICON,
+  WARNING_ICON_RED
+} from '../../../config';
+import {
+  ButtonsContainer,
+  CDFFooter,
+  CDFList,
+  CDFListHeader,
+  InputWrapper,
+  ModalTitleWrapper,
+  ModalTitle
+} from './styled';
 import { CUSTOM_DEVICE_FIELD_REGEX } from '../../../constants/regexPatterns';
 import { sendAction } from '../../../helpers/analyticsHelper';
-import { OTA_DEVICES_CUSTOM_RENAME } from '../../../constants/analyticsActions';
+import { OTA_DEVICES_CUSTOM_RENAME, OTA_DEVICES_CUSTOM_DELETE } from '../../../constants/analyticsActions';
+import { WARNING_MODAL_COLOR } from '../../../constants';
+import { URL_CUSTOM_DEVICE_FIELDS_REMOVE } from '../../../constants/urlConstants';
 
 function useStoreData() {
   const { stores } = useStores();
@@ -27,11 +43,18 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [newFieldName, setNewFieldName] = useState('');
   const [error, setError] = useState(null);
+  const [displayDeleteMessage, setDisplayDeleteMessage] = useState(false);
+  const [currentDeleteFieldName, setCurrentDeleteFieldName] = useState(false);
   const { stores } = useStores();
   const { customDeviceFields } = useStoreData();
 
   const toggleRenameModalOpen = () => {
     setRenameModalOpen(val => !val);
+  };
+
+  const handleDeleteField = (fieldName) => {
+    setDisplayDeleteMessage(true);
+    setCurrentDeleteFieldName(fieldName);
   };
 
   const handleRenameField = (fieldName) => {
@@ -42,7 +65,7 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
   const handleInputChange = (event) => {
     const { value } = event.target;
     if (value.toLowerCase() !== editingField.name.toLowerCase()
-      && customDeviceFields.find(cdf => cdf.toLowerCase() === value.toLowerCase())) {
+      && customDeviceFields.find(cdf => cdf.tagId.toLowerCase() === value.toLowerCase())) {
       setError(t('devices.custom-fields.rename-modal.errors.name-exists'));
     } else if (!value.match(CUSTOM_DEVICE_FIELD_REGEX)) {
       setError(t('devices.custom-fields.rename-modal.errors.invalid-format'));
@@ -52,9 +75,28 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
     setNewFieldName(event.target.value);
   };
 
+  const updateSmartGroupData = () => {
+    const group = stores.groupsStore.selectedGroup;
+    if (group.isSmart) {
+      const groupId = group.id || null;
+      const ungrouped = group.ungrouped || null;
+      stores.devicesStore.resetPageNumber();
+      stores.devicesStore.fetchDevices(
+        stores.devicesStore.devicesFilter, groupId, ungrouped, DEVICES_LIMIT_PER_PAGE, 0
+      );
+      stores.groupsStore.fetchExpressionForSelectedGroup(stores.groupsStore.selectedGroup.id);
+    }
+  };
+
+  const deleteCustomField = () => {
+    stores.devicesStore.deleteCustomDeviceField(currentDeleteFieldName, updateSmartGroupData);
+    sendAction(OTA_DEVICES_CUSTOM_DELETE);
+    setDisplayDeleteMessage(false);
+  };
+
   const handleSave = () => {
     if (!error) {
-      stores.devicesStore.renameCustomDeviceField(editingField.name, newFieldName.trim());
+      stores.devicesStore.renameCustomDeviceField(editingField.name, newFieldName.trim(), updateSmartGroupData);
       sendAction(OTA_DEVICES_CUSTOM_RENAME);
       setEditingField({ isEditing: false, name: '' });
     }
@@ -120,13 +162,13 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
               </CDFListHeader>
               <CDFList isError={error}>
                 {customDeviceFields.map(field => (
-                  <div key={field} id={`cdf-${field}`}>
-                    {editingField.isEditing && editingField.name === field ? (
+                  <div key={field.tagId} id={`cdf-${field.tagId}`}>
+                    {editingField.isEditing && editingField.name === field.tagId ? (
                       <>
                         <InputWrapper>
                           <Input
                             id="cdf-name-input"
-                            defaultValue={field}
+                            defaultValue={field.tagId}
                             onChange={handleInputChange}
                           />
                           <img
@@ -143,8 +185,29 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
                       </>
                     ) : (
                       <>
-                        <span id={`cdf-title-${field}`}>{field}</span>
-                        <div id="edit-name-btn" className="cdf-edit-name" onClick={() => handleRenameField(field)} />
+                        <span id={`cdf-title-${field.tagId}`}>{field.tagId}</span>
+                        <ButtonsContainer>
+                          <div
+                            id="edit-name-btn"
+                            className="cdf-edit-name"
+                            onClick={() => handleRenameField(field.tagId)}
+                          />
+                          {field.isDelible
+                            ? (
+                              <div
+                                id={`delete-name-btn-${field.tagId}`}
+                                className="cdf-delete-name"
+                                onClick={() => handleDeleteField(field.tagId)}
+                              />
+                            ) : (
+                              <Tooltip title={t('devices.custom-fields.delete-modal.cannot')} placement="top">
+                                <div
+                                  id={`delete-name-btn-disabled-${field.tagId}`}
+                                  className="cdf-delete-name-disabled"
+                                />
+                              </Tooltip>
+                            )}
+                        </ButtonsContainer>
                       </>
                     )}
                   </div>
@@ -163,6 +226,25 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
         hideOnClickOutside
         onRequestClose={toggleRenameModalOpen}
       />
+      {displayDeleteMessage && (
+        <WarningModal
+          id="cdf-delete-warning-modal"
+          type={WARNING_MODAL_COLOR.DANGER}
+          title={t('devices.custom-fields.delete-modal.title')}
+          desc={t('devices.custom-fields.delete-modal.description')}
+          readMore={{ title: t('devices.custom-fields.delete-modal.read-more'), url: URL_CUSTOM_DEVICE_FIELDS_REMOVE }}
+          cancelButtonProps={{
+            title: t('devices.custom-fields.delete-modal.cancel'),
+          }}
+          confirmButtonProps={{
+            title: t('devices.custom-fields.delete-modal.confirm'),
+            onClick: deleteCustomField
+          }}
+          onClose={() => {
+            setDisplayDeleteMessage(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -113,7 +113,7 @@ class CreateModal extends Component {
   createGroup = () => {
     const { file, groupName, groupType, smartExpression } = this.wizardData;
     const { stores } = this.props;
-    const { groupsStore } = stores;
+    const { devicesStore, groupsStore } = stores;
     if (groupType === GROUP_GROUP_TYPE_CLASSIC) {
       if (file) {
         groupsStore.createGroupWithFileData({
@@ -135,7 +135,7 @@ class CreateModal extends Component {
         name: groupName,
         groupType: GROUP_GROUP_TYPE_DYNAMIC,
         expression: smartExpression,
-      });
+      }, devicesStore.getCustomDeviceFields);
       sendAction(OTA_DEVICES_CREATE_SMART_GROUP);
     }
   };

@@ -293,7 +293,7 @@ export default class GroupsStore {
       });
   }
 
-  createGroup(data) {
+  createGroup(data, onFinished) {
     resetAsync(this.groupsCreateAsync, true);
     return axios
       .post(API_GROUPS_CREATE, data, {
@@ -305,6 +305,7 @@ export default class GroupsStore {
         this.latestCreatedGroupId = response.data;
         this.fetchGroups(GROUPS_CREATE_FETCH_ASYNC);
         this.groupsCreateAsync = handleAsyncSuccess(response);
+        onFinished();
       })
       .catch((error) => {
         this.groupsCreateAsync = handleAsyncError(error);

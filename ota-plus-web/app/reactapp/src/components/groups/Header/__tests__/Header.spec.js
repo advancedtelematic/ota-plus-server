@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
 import DevicesStore from '../../../../stores/DevicesStore';
+import GroupsStore from '../../../../stores/GroupsStore';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -20,6 +21,7 @@ jest.mock('react-i18next', () => ({
 
 const mockedStores = {
   devicesStore: new DevicesStore(),
+  groupsStore: new GroupsStore(),
 };
 
 function mountComponent(props, stores = mockedStores) {
@@ -32,18 +34,28 @@ function mountComponent(props, stores = mockedStores) {
   );
 }
 
+
 describe('<Header />', () => {
   let wrapper;
   const mockShowCreateGroupModal = jest.fn();
   const mockUploadDeviceCustomFields = jest.fn();
-  const mockRenameCustomDeviceField = jest.fn();
+  const mockRenameCustomDeviceField = jest.fn((oldName, newName, onFinished) => {
+    onFinished();
+  });
+  const mockDeleteCustomDeviceField = jest.fn((name, onFinished) => {
+    onFinished();
+  });
+  const mockFetchExpressionForSelectedGroup = jest.fn();
 
   const props = {
     showCreateGroupModal: mockShowCreateGroupModal,
     uploadDeviceCustomFields: mockUploadDeviceCustomFields
   };
-  mockedStores.devicesStore.customDeviceFields = ['TRIM LEVEL', 'COUNTRY'];
+  mockedStores.devicesStore.customDeviceFields = [{ tagId: 'TRIM LEVEL' }, { tagId: 'COUNTRY' }];
   mockedStores.devicesStore.renameCustomDeviceField = mockRenameCustomDeviceField;
+  mockedStores.devicesStore.deleteCustomDeviceField = mockDeleteCustomDeviceField;
+  mockedStores.groupsStore.fetchExpressionForSelectedGroup = mockFetchExpressionForSelectedGroup;
+  mockedStores.groupsStore.selectedGroup = { isSmart: false };
   beforeEach(() => {
     wrapper = mountComponent(props, mockedStores);
   });
@@ -76,4 +88,28 @@ describe('<Header />', () => {
     wrapper.find('#save-name-btn').simulate('click');
     expect(mockRenameCustomDeviceField).toHaveBeenCalled();
   });
+
+  it('should call expressions', () => {
+    mockedStores.groupsStore.selectedGroup = { isSmart: true };
+    wrapper.find('#groups-cogwheel').simulate('click');
+    wrapper.find('#edit-name-btn').first().simulate('click');
+    wrapper.find('#cdf-name-input').find('input').simulate('change', { target: { value: 'Newname' } });
+    wrapper.find('#save-name-btn').simulate('click');
+    expect(mockFetchExpressionForSelectedGroup).toHaveBeenCalled();
+  });
+
+  it('should show delete warning modal', () => {
+    mockedStores.groupsStore.selectedGroup = { isSmart: true };
+    wrapper.find('#groups-cogwheel').simulate('click');
+    console.log('wrapper.debug(): ', wrapper.debug());
+    wrapper.find('#delete-name-btn-COUNTRY').first().simulate('click');
+    expect(wrapper.exists('#warning-modal')).toBe(true);
+  });
+
+  // it('should call delete function in device store', () => {
+  //   wrapper.find('#groups-cogwheel').simulate('click');
+  //   wrapper.find('#delete-name-btn-COUNTRY').first().simulate('click');
+  //   wrapper.find('#warning-confirm-btn').first().simulate('click');
+  //   expect(mockDeleteCustomDeviceField).toHaveBeenCalled();
+  // });
 });

@@ -151,6 +151,8 @@ export default class DevicesStore {
 
   @observable renameCustomDeviceFieldAsync = {};
 
+  @observable deleteCustomDeviceFieldAsync = {};
+
   constructor() {
     resetAsync(this.devicesFetchAsync);
     resetAsync(this.ungroupedDevicesCountFetchAsync);
@@ -171,6 +173,7 @@ export default class DevicesStore {
     resetAsync(this.getCustomDeviceFieldsAsync);
     resetAsync(this.uploadCustomFieldsAsync);
     resetAsync(this.renameCustomDeviceFieldAsync);
+    resetAsync(this.deleteCustomDeviceFieldAsync);
     this.devicesLimit = DEVICES_LIMIT_PER_PAGE;
   }
 
@@ -239,14 +242,27 @@ export default class DevicesStore {
     }
   }
 
-  renameCustomDeviceField = async (currentFieldName, newFieldName) => {
+  renameCustomDeviceField = async (currentFieldName, newFieldName, onFinished) => {
     resetAsync(this.renameCustomDeviceFieldAsync, true);
     try {
       const response = await axios.put(encodeUrl(`${API_DEVICE_TAGS}/${currentFieldName}`), { tagId: newFieldName });
+      onFinished();
       this.getCustomDeviceFields();
       this.renameCustomDeviceFieldAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.renameCustomDeviceFieldAsync = handleAsyncError(error);
+    }
+  }
+
+  deleteCustomDeviceField = async (fieldName, onFinished) => {
+    resetAsync(this.deleteCustomDeviceFieldAsync, true);
+    try {
+      const response = await axios.delete(encodeUrl(`${API_DEVICE_TAGS}/${fieldName}`));
+      onFinished();
+      this.getCustomDeviceFields();
+      this.deleteCustomDeviceFieldAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.deleteCustomDeviceFieldAsync = handleAsyncError(error);
     }
   }
 
