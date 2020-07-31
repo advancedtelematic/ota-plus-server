@@ -46,6 +46,7 @@ export const API_FEATURES_FETCH = '/user/feature_flags';
  *  Devices
  */
 export const API_DEVICE_TAGS = '/api/v1/device_tags';
+export const API_DEVICE_SPECIFIC_TAGS = deviceId => `/api/v1/devices/${deviceId}/device_tags`;
 export const API_DEVICES_CUSTOM_FIELDS = '/api/v1/device_tags';
 export const API_DEVICES_SEARCH = '/api/v1/devices';
 export const API_DEVICES_NETWORK_INFO = '/api/v1/devices';
@@ -324,6 +325,7 @@ export const CLOSE_MODAL_ICON = '/assets/img/new-app/24/close-cross-24.svg';
 export const CLOSE_MODAL_ICON_RED = '/assets/img/new-app/24/close-cross-24-red.svg';
 export const CROSS_ICON_WHITE = '/assets/img/new-app/24/close-cross-white-24.svg';
 export const CROSS_ICON_RED = '/assets/img/icons/red_cross.svg';
+export const CUSTOM_DEVICE_FIELDS_ICON = '/assets/img/new-app/24/custom_device_fields.svg';
 export const DEVICE_ICON = '/assets/img/new-app/24/devices-active-outline-24.svg';
 export const DEVICE_ICON_GRAY = '/assets/img/new-app/24/LUI-icon-pd-device_connected-outline-24.svg';
 export const DEVICE_ICON_GREEN = '/assets/img/new-app/24/devices-active-outline-24-green.svg';

@@ -1,3 +1,7 @@
+/* App URLs */
+export const APP_ROUTE_DEVICES = '/devices';
+
+/* Misc URLs */
 export const MAIL_SUPPORT = 'mailto:otaconnect.support@here.com';
 export const URL_API_GUIDE = 'https://docs.ota.here.com/api/latest/index.html';
 export const URL_AKTUALIZR_CONFIG_OPTIONS = 'https://docs.ota.here.com/ota-client/dev/aktualizr-config-options.html';

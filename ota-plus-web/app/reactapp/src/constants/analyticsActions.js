@@ -21,6 +21,7 @@ export const OTA_DEVICES_SELECT_DEVICE_ID = 'OTA_Devices_Select_DeviceID';
 export const OTA_DEVICES_SMART_CUSTOM_READ_MORE = 'OTA_Devices_Smart_Custom_Read_More';
 
 /* Device */
+export const OTA_DEVICE_CUSTOM_VALUE_EDIT = 'OTA_Device_Custom_Value_Edit';
 export const OTA_DEVICE_SEE_OVERVIEW = 'OTA_Device_See_Overview';
 export const OTA_DEVICE_SEE_HISTORY = 'OTA_Device_See_History';
 export const OTA_DEVICE_SEE_INSTALLATION_PENDING = 'OTA_Device_See_Installation_Pending';
