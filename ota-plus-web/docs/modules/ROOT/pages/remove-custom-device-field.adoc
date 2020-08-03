@@ -1,6 +1,35 @@
 = Remove a custom device field
 
-If you want to remove any of your custom device fields, upload a new or modified delimiter-separated file.
+If you want to remove any of your custom device fields, <<portal, modify them on the OTA Connect portal>> or <<csv, upload a new or modified delimiter-separated file>>.
+
+NOTE: You cannot delete a field if it is the only filter in at least one of your smart device groups.
+
+[[portal]]
+== Remove a field on the OTA Connect portal
+
+You can delete any of your custom device fields on the OTA Connect portal.
+
+*To delete a field on the portal:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Next to *Custom device fields*, click the cogwheel.
++
+[.align_img_left]
+image::img::cogwheel.png[image,350]
+
+. In the *Custom device fields* dialog box, next to the title of the field that you want to delete, click the bin icon.
++
+[.lightbackground.align_img_left]
+image::img::delete_field.png[image,450]
+
+. Click *Yes, delete*.
+
+The custom device field is deleted. Your smart groups that have the removed field as one of the filters now only target devices based on the remaining fields that you have selected for these smart groups. However, campaigns that targeted devices with this field are not adjusted: devices cannot be added or removed after a campaign has already begun.
+
+[[csv]]
+== Remove a field using a CSV file
+
+You can use a CSV file to delete a custom device field.
 
 include::add-custom-device-field.adoc[tag=modified_csv]
 
