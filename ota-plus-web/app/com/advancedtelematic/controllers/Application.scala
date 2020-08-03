@@ -21,7 +21,6 @@ import play.api.Configuration
 
 import scala.concurrent.Future
 import com.advancedtelematic.controllers.Data.OmnitureSource
-import com.advancedtelematic.libats.data.DataType.Namespace
 
 final case class UiToggles(
   atsGarageTheme: Boolean,
@@ -79,7 +78,7 @@ class Application @Inject() (ws: TraceWSClient,
    * @param path The path of the request
    * @return The service to proxy to
    */
-  private def apiByPath(ns: Namespace, version: ApiVersion, path: String) : Option[OtaApiUri] = {
+  private def apiByPath(version: ApiVersion, path: String) : Option[OtaApiUri] = {
     val pathComponents = path.split("/").toList
 
     val proxiedPrefixes =
@@ -174,7 +173,7 @@ class Application @Inject() (ws: TraceWSClient,
    */
   def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
     apiAuth.async(bodySource) { implicit req =>
-      apiByPath(req.namespace, version, path) match {
+      apiByPath(version, path) match {
         case Some(p) => proxyTo(p)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
       }
