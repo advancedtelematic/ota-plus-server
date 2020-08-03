@@ -39,6 +39,7 @@ import {
   UNGROUPED_DEVICES_COUNT_FETCH_ASYNC,
   API_ORG_CUSTOM_DEVICE_FIELDS,
   API_DEVICE_TAGS,
+  API_DEVICE_SPECIFIC_TAGS,
 } from '../config';
 import {
   SHA_256,
@@ -147,7 +148,11 @@ export default class DevicesStore {
 
   @observable customDeviceFields = [];
 
+  @observable deviceSpecificTags = [];
+
   @observable getCustomDeviceFieldsAsync = {};
+
+  @observable getDeviceSpecificTagsAsync = {};
 
   @observable renameCustomDeviceFieldAsync = {};
 
@@ -239,6 +244,32 @@ export default class DevicesStore {
       this.getCustomDeviceFieldsAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getCustomDeviceFieldsAsync = handleAsyncError(error);
+    }
+  }
+
+  getDeviceSpecificTags = async (id) => {
+    resetAsync(this.getDeviceSpecificTagsAsync, true);
+    try {
+      const response = await axios.get(encodeUrl(API_DEVICE_SPECIFIC_TAGS(id)));
+      const { data } = response;
+      this.deviceSpecificTags = data;
+      this.getDeviceSpecificTagsAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getDeviceSpecificTagsAsync = handleAsyncError(error);
+    }
+  }
+
+  renameDeviceSpecificTagValue = async (id, tagId, tagValue) => {
+    resetAsync(this.getDeviceSpecificTagsAsync, true);
+    try {
+      const response = await axios.patch(encodeUrl(API_DEVICE_SPECIFIC_TAGS(id)), { tagId, tagValue });
+      const { data } = response;
+      // TODO: Handle response
+      console.log(data);
+
+      this.getDeviceSpecificTagsAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getDeviceSpecificTagsAsync = handleAsyncError(error);
     }
   }
 

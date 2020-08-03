@@ -13,6 +13,7 @@ import {
   DeviceOverviewPanel
 } from '../components/device';
 import { SoftwareCreateModal } from '../components/software';
+import CustomDeviceFieldsEditor from '../components/device/CustomDeviceFieldsEditor';
 import { getDeviceHttpStatusErrorMessage } from '../helpers/deviceHelper';
 import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
@@ -36,6 +37,8 @@ import { DDV_ACTIVE_TAB_ID, UNMANAGED_KEY } from '../config';
 @inject('stores')
 @observer
 class Device extends Component {
+  @observable cdfPanelSelected = false;
+
   @observable packageCreateModalShown = false;
 
   @observable fileDropped = null;
@@ -77,6 +80,16 @@ class Device extends Component {
     sendAction(OTA_DEVICE_CANCEL_CAMPAIGN);
   };
 
+  resetActiveEcu = () => {
+    const { stores } = this.props;
+    const { hardwareStore } = stores;
+    hardwareStore.activeEcu = {
+      hardwareId: null,
+      serial: null,
+      type: null,
+    };
+  };
+
   selectEcu = (hardwareId, serial, filepath, type, e) => {
     if (e) e.preventDefault();
     const { stores } = this.props;
@@ -101,20 +114,20 @@ class Device extends Component {
     }
     softwareStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
     this.triggerPackages = true;
-
+    this.cdfPanelSelected = false;
     this.ECUselected = true;
   };
 
   selectQueue = () => {
+    this.cdfPanelSelected = false;
     this.ECUselected = false;
-    const { stores } = this.props;
-    const { hardwareStore } = stores;
-    hardwareStore.activeEcu = {
-      hardwareId: null,
-      serial: null,
-      type: null,
-    };
+    this.resetActiveEcu();
     sendAction(OTA_DEVICE_SEE_OVERVIEW);
+  };
+
+  toggleCDFPanel = (value) => {
+    this.cdfPanelSelected = value;
+    this.resetActiveEcu();
   };
 
   installPackage = (data) => {
@@ -215,13 +228,17 @@ class Device extends Component {
               </div>
             ) : (
               <DeviceHardwarePanel
+                cdfPanelSelected={this.cdfPanelSelected}
+                toggleCDFPanel={this.toggleCDFPanel}
                 selectEcu={this.selectEcu}
                 onFileDrop={this.onFileDrop}
                 ECUselected={this.ECUselected}
                 selectQueue={this.selectQueue}
               />
             )}
-            {!this.ECUselected ? (
+            {this.cdfPanelSelected ? (
+              <CustomDeviceFieldsEditor />
+            ) : !this.ECUselected ? (
               devicesStore.approvalPendingCampaignsFetchAsync.isFetching
                 ? (
                   <ul className="overview-panel__list">

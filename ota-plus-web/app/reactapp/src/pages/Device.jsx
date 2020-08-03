@@ -35,6 +35,7 @@ class Device extends Component {
     devicesStore.fetchDeviceNetworkInfo(params.id);
     devicesStore.fetchMultiTargetUpdates(params.id);
     devicesStore.fetchEvents(params.id);
+    devicesStore.getDeviceSpecificTags(params.id);
     devicesStore.fetchApprovalPendingCampaigns(params.id);
   }
 

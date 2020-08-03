@@ -38,6 +38,11 @@ class HardwarePanel extends Component {
     selectQueue();
   };
 
+  showCDFPanel = () => {
+    const { toggleCDFPanel } = this.props;
+    toggleCDFPanel(true);
+  };
+
   showSecondaryDescription = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -92,7 +97,7 @@ class HardwarePanel extends Component {
   };
 
   render() {
-    const { selectEcu, onFileDrop, ECUselected, stores, t } = this.props;
+    const { cdfPanelSelected, selectEcu, onFileDrop, ECUselected, stores, t } = this.props;
     const { devicesStore, hardwareStore } = stores;
     const { device } = devicesStore;
     const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore.getPrimaryHardwareId();
@@ -162,11 +167,21 @@ class HardwarePanel extends Component {
     return (
       <div className="hardware-panel">
         <div
-          className={`hardware-panel__overview ${!ECUselected ? 'hardware-panel__overview--selected' : ''}`}
+          id="overview-toggle-wrapper"
+          className={`hardware-panel__overview ${!ECUselected && !cdfPanelSelected ? 'hardware-panel__overview--selected' : ''}`}
           onClick={this.onSelectQueue}
         >
-          <button type="button" className="hardware-panel__overview-button">
+          <button type="button" id="overview-toggle" className="hardware-panel__overview-button">
             {t('devices.hardware.overview')}
+          </button>
+        </div>
+        <div
+          id="cdf-toggle-wrapper"
+          className={`hardware-panel__overview ${cdfPanelSelected ? 'hardware-panel__overview--selected' : ''}`}
+          onClick={this.showCDFPanel}
+        >
+          <button type="button" id="cdf-toggle" className="hardware-panel__overview-button">
+            {t('devices.ddv.cdf-title')}
           </button>
         </div>
         <div className="hardware-panel__header">{t('devices.hardware.title')}</div>
@@ -195,12 +210,14 @@ class HardwarePanel extends Component {
 }
 
 HardwarePanel.propTypes = {
+  cdfPanelSelected: PropTypes.bool,
   stores: PropTypes.shape({}),
   selectEcu: PropTypes.func.isRequired,
   onFileDrop: PropTypes.func.isRequired,
   selectQueue: PropTypes.func,
   ECUselected: PropTypes.bool,
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  toggleCDFPanel: PropTypes.func,
 };
 
 export default withTranslation()(HardwarePanel);
