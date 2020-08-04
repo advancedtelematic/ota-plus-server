@@ -18,11 +18,19 @@ test:
       - deploy/sit
   image: $TEST_IMAGE
   script:
-    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" ut:test
   cache:
     paths:
       - .ivy2/
       - .sbt/
+
+code coverage:
+  extends: .report_scala_coverage
+  allow_failure: true
+  image: $TEST_IMAGE
+  script:
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" coverageReport sonarScan
+    - mv target/scala-*/scoverage-report coverage
 
 build docker image:
   stage: build image
