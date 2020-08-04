@@ -264,9 +264,7 @@ export default class DevicesStore {
     try {
       const response = await axios.patch(encodeUrl(API_DEVICE_SPECIFIC_TAGS(id)), { tagId, tagValue });
       const { data } = response;
-      // TODO: Handle response
-      console.log(data);
-
+      this.deviceSpecificTags = data;
       this.getDeviceSpecificTagsAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getDeviceSpecificTagsAsync = handleAsyncError(error);
