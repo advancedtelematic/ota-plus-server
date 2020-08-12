@@ -22,6 +22,7 @@ export const OTA_DEVICES_SMART_CUSTOM_READ_MORE = 'OTA_Devices_Smart_Custom_Read
 
 /* Device */
 export const OTA_DEVICE_CUSTOM_VALUE_EDIT = 'OTA_Device_Custom_Value_Edit';
+export const OTA_DEVICE_ID_COPY_TO_CLIPBOARD = 'OTA_Device_Copy_DeviceID';
 export const OTA_DEVICE_SEE_OVERVIEW = 'OTA_Device_See_Overview';
 export const OTA_DEVICE_SEE_HISTORY = 'OTA_Device_See_History';
 export const OTA_DEVICE_SEE_INSTALLATION_PENDING = 'OTA_Device_See_Installation_Pending';

@@ -17,6 +17,7 @@ import FormTextarea from './FormTextarea';
 import Dropdown from './Dropdown';
 import DropdownMenu from './DropdownMenu';
 import ConfirmationModal from './ConfirmationModal';
+import CopyableValue from './CopyableValue';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
 import EditSoftwareModal from './EditSoftwareModal';
@@ -49,6 +50,7 @@ export {
   Dropdown,
   DropdownMenu,
   ConfirmationModal,
+  CopyableValue,
   EditModal,
   EditCampaignModal,
   EditSoftwareModal,

@@ -7,7 +7,7 @@ import { observable } from 'mobx';
 import { Trans, withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 
-import { Header as BaseHeader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
+import { Header as BaseHeader, ConfirmationModal, CopyableValue, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 import { getDeviceHttpStatusErrorMessage } from '../../helpers/deviceHelper';
@@ -86,9 +86,12 @@ class Header extends Component {
         title={(
           <FadeAnimation>
             {!devicesStore.devicesOneFetchAsync.isFetching && (
-            <div id="device-name" className="page-header__device-name">
-              {device.deviceName}
-            </div>
+            <>
+              <div id="device-name" className="page-header__device-name">
+                {device.deviceName}
+              </div>
+              <CopyableValue title={t('devices.ddv.copyable.title')} value={device.uuid} />
+            </>
             )}
           </FadeAnimation>
         )}
