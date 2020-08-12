@@ -560,7 +560,6 @@ export default class SoftwareStore {
       .get(`${API_SOFTWARE_DEVICE_HISTORY}/${id}/installation_history?${limit}&${offset}`)
       .then((response) => {
         const data = response.data.values;
-
         const after = _.after(
           data.length,
           () => {

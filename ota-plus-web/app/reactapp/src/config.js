@@ -323,6 +323,7 @@ export const CAMPAIGNS_ICON_WHITE = '/assets/img/icons/white/campaigns.svg';
 export const CANCEL_ICON_THIN = '/assets/img/icons/black/cancel-thin.svg';
 export const CLOSE_MODAL_ICON = '/assets/img/new-app/24/close-cross-24.svg';
 export const CLOSE_MODAL_ICON_RED = '/assets/img/new-app/24/close-cross-24-red.svg';
+export const COMPUTER_CHIP_ICON = '/assets/img/new-app/16/LUI-icon-pd-computer_chip-solid-16.svg';
 export const CROSS_ICON_WHITE = '/assets/img/new-app/24/close-cross-white-24.svg';
 export const CROSS_ICON_RED = '/assets/img/icons/red_cross.svg';
 export const CUSTOM_DEVICE_FIELDS_ICON = '/assets/img/new-app/24/custom_device_fields.svg';

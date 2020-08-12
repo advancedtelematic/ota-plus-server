@@ -15,6 +15,7 @@ export const URL_CUSTOM_DEVICE_FIELDS = 'https://docs.ota.here.com/ota-web/dev/c
 export const URL_CUSTOM_DEVICE_FIELDS_REMOVE = 'https://docs.ota.here.com/ota-web/dev/remove-custom-device-field.html';
 export const URL_DEV_GUIDE = 'https://docs.ota.here.com/ota-client/latest/index.html';
 export const URL_DEVICES_CUSTOM_FIELDS = 'https://docs.ota.here.com/ota-web/dev/create-custom-device-fields.html';
+export const URL_ECU_REPLACEMENT = 'https://docs.ota.here.com/ota-web/dev/control-unit-replacement.html';
 export const URL_ENVIRONMENTS_READ_MORE = 'https://docs.ota.here.com/ota-web/dev/environments-intro.html';
 export const URL_FILE_UPLOADING_CLI = 'https://github.com/advancedtelematic/ota-tuf/blob/master/cli/README.adoc#user-content-uploading-a-target-binary-to-reposerver';
 export const URL_FOOTER_CONTACT_US = 'mailto:otaconnect.support@here.com';

@@ -9,6 +9,7 @@ import { Pagination } from 'antd';
 
 import MtuListItem from './MtuListItem';
 import { CAMPAIGNS_ICON_GRAY, DEVICE_HISTORY_LIMIT } from '../../../config';
+import EcuReplacementListItem from './EcuReplacementListItem';
 
 const PAGE_NUMBER_DEFAULT = 1;
 
@@ -56,7 +57,11 @@ class MtuList extends Component {
                     }
                     return null;
                   });
-                  return <MtuListItem item={historyItem} key={index} events={itemEvents} />;
+                  return !historyItem.former ? (
+                    <MtuListItem item={historyItem} key={index} events={itemEvents} />
+                  ) : (
+                    <EcuReplacementListItem item={historyItem} key={index} />
+                  );
                 }
                 return null;
               })}

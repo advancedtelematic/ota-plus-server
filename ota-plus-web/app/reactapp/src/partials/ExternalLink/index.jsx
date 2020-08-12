@@ -25,6 +25,9 @@ styled.propTypes = {
 };
 
 export const weightVariants = {
+  bold: {
+    fontWeight: 700
+  },
   medium: {
     fontWeight: 500
   },
