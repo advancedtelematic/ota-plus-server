@@ -25,6 +25,10 @@
     border-bottom: 1px solid $panel-delimiter-color;
     margin: 0;
 
+    &__title {
+      margin: 13px 0 0 0;
+    }
+
     &__left {
       display: flex;
       align-items: center;
