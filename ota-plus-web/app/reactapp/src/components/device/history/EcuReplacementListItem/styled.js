@@ -104,3 +104,7 @@ export const InfoBlock = styled.div`
     margin-right: 4px;
   }
 `;
+
+export const HalfBlock = styled.div`
+  width: 50%;
+`;
