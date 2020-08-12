@@ -1,211 +1,142 @@
-= Update engine shutdown calibration on an ECM 
+= Update engine shutdown calibration on an ECM
 
-Suppose that you work for a vehicle brand called "Lannista". Your vehicles are popular in Scandinavia, but you have been receiving complaints about a specific problem: in winter, people keep their engines on when waiting in their vehicles so that they can use the heating system to stay warm. However, the engines keep automatically shutting down after a minute or so. This means that people have to constantly restart their engines.
-Your head developer tells you that this is the software problem. To save energy, an idling engine is configured to shut down after the temperature falls below a certain level. Luckily, you can fix this issue with an OTA update.
+As an OTA Campaign Manager, you are responsible for sending updates to devices owned by Premium and Standard customers in Europe. Your team has found the following bug in devices owned by your Premium French and German customers: engines keep automatically shutting down after a minute to save energy. Now, for these customers to be able to keep their engine on when waiting in their vehicles and stay warm, you need to send a bug fix to the effected Engine Control Module (ECM). Luckily, you can do this with an OTA update.
 
-== Your production environment
+== Test software in your pre-production environment
 
-You have your vehicle data in a sophisticated system called CarHQ that integrates with your customer database called CustomerHQ. 
+To test software updates, the Software Manager created a pre-production environment. You are a member of this environment and can follow the quality of the developed software versions. The Software Manager also provisioned a test device and set it to automatically receive any new software version uploaded to the pre-production environment.
 
-Your CarHQ system contains the following detailed information about all the vehicles in your fleet: model, build date, warranty date, and region. It can also tell you information about customers, what vehicle they have purchased, and what support contract they're on.
+The new version is configured to update the software on the Engine Control Module (ECM) in the following way:
 
-== A new release is announced
+* Extend the engine idle time as much as possible to allow the Heating, ventilation, and air conditioning (HVAC) to keep the driver comfortable during extreme weather conditions.
 
-Your release manager contacts you and says that they want to update the software on the Engine Control Module (ECM) in the following way: 
+*  If the temperature falls below 7.2 degrees Celsius or rises above 35 degrees Celsius, the updated software overrides the engine shutdown.
 
-* Extend the engine idle time as much as possible to allow the Heating, ventilation, and air conditioning (HVAC) to keep the driver comfortable during extreme weather conditions. 
-* If the temperature falls below 7.2 degrees Celsius or above 35 degrees Celsius, the updated software overrides the engine shutdown.
+After the testing, you need to send this new version to customers who selected the Premium support type.
 
-They have the following release conditions:
+== Set up your production environment
 
-* The release only applies to editions of the Lannista "Tireon" model built after 2018.
-* Restrict the software update to the Scandinavian market.
-* Target only customers who selected premium support.
+In the project production environment, the Head of the embedded team has already provisioned all devices owned by customers with Premium and Standard subscription across Europe.
 
-== Create a device group
+Now, you can group these devices to target them in different campaigns.
 
-You can run detailed search queries in CarHQ and export the data to a CSV file. Your search query might look something like this. It is simplified for this tutorial.
+=== Upload custom device fields
 
-[source,sql]
-----
-Select VIN
-FROM CustomerView
-WHERE model="Tireon" AND "BuildDate => 2018-01-01" AND Region IN ('DK, NO, SE, FI') AND SupportLevel ="010A"
-----
+To easily group devices, you can create the following custom device fields: *Trim level* and *Country*.
 
-In this case, create a fixed device group. A smart device group is not sophisticated enough for your query since smart groups can only filter by device ID. Instead, you can use a fixed group and import the search results that you exported from CarHQ.
+*To create the custom device fields:*
 
-// MC: Hack to make this section collapsible
-+++ <details><summary> +++
-*Prerequisites* 
-+++ </summary><div> +++
-
-Before you group your vehicles, they must already exist as devices in OTA Connect. In other words, your developers should have provisioned these devices with a proper device identifier. For our tutorial, we are using the VIN.
-
-+++ </div></details> +++
-
-For the sake of this use case, let's assume that you exported a file called *Tireon-vins.txt* from CarHQ.
-
-*To create the device group:*
-
-. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
-. In the *Groups* pane, click *Create group*.
-. Select *Fixed device group*, and then click *Next*.
-. Specify the group name: *Tireon-2018-Scandinavia-010A*.
-. Click *Choose file*, navigate to the *Tireon-vins.txt* file, and then select it.
+. In a CSV file, create the following three columns: *DeviceID*, *Trim level*, and *Country*.
 +
-You should see matching devices that show up in your group. For the sake of simplicity, let's say that the group contains exactly 1,000 devices. This is useful to know when you track the progress of your software updates.
+```
+DeviceID;Trim level;Country
+```
 
-== Create a software update
+. In the *DeviceID* column, list all of the devices provisioned in your production environment.
+. In the *Trim level* column, specify the type of subscription for each device: *Premium* or *Standard*.
+. In the *Country* column, specify the region where each device is registered: *France* or *Germany*.
+. Upload the CSV file to the production environment.
 
-// MC: Hack to make this section collapsible
-+++ <details><summary> +++
-*Prerequisites* 
-+++ </summary><div> +++
+Now, you can create a device group based on your custom device fields.
 
-Your developers have built a baseline disk image that contains the compatible software for your control unit (ECU) hardware. In this case, the ECU uses a Renesas RL78 board that has the following criteria:
+=== Create a device group
 
-* The exact board model is a Renesas RL78/F15, so the machine configuration is `RL7815`.
-* The software for the ECM is based on the FreeRTOS kernel.
-* The name of the image is a combination of the board model and ECM: `ECM-RL7815-FRTOS`.
+Your new software update is aimed at French and German devices with the Premium subscription type. You can create the *French and German Premium* smart group that is based on the following clusters:
 
-Version 1.0 of this image contains the problematic calibration for the engine idle shutdown timer.
-
-To prepare the new software update, your developers have to:
-
-* Build a version of the baseline disk image
-* Change the minor version to V1.0.1.
+* The first cluster contains the filters listed in the table below.
 +
-It is a minor release because the calibration for the engine idle shutdown timer is the only thing that your developers changed on the disk image.
+.The filters in the first cluster
+[.release_notes]
+[cols=3*]
+|====================
+| *Filter* | *Type* | *Value*
+| Market | Contains | Germany
+| Trim level | Contains | Premium
+|====================
 
-+++ </div></details> +++
-
-As part of the build process, the disk image is automatically uploaded to your OTA Connect software versions. Your developers have kindly left the following internal release note.
-
-.Release Note
-====
-Update for RL78/15 ECMs on post-2018 Tireon models.
-
-CHANGES:
-
-* Engine idle shutdown timer calibration now overrides engine shutdown if the temperature falls below 7.2°C or above 35°C.
-====
-
-So you know that you need version 1.0.1 of the disk image for Renesas RL78/15 microcontrollers that are used as engine control modules on all Lannista "Tireon" models produced after 2018.
-
-*To create the software update:*
-
-. Go to the https://connect.ota.here.com/#/updates[*Software updates*, window="_blank"] tab.
-. In the upper-right corner, under the name of your active environment, click *Create update*.
-. In *Software update name*, specify the name of your software update.
+* The second cluster contains the filters listed in the table below.
 +
-.Software update name
+.The filters in the second cluster
+[.release_notes]
+[cols=3*]
+|====================
+| *Filter* | *Type* | *Value*
+| Market | Contains | France
+| Trim level | Contains | Premium
+|====================
+
+You should see matching devices that show up in your group. For the sake of simplicity, let’s say that the group contains exactly 1,000 devices. This is useful to know when you track the progress of your software updates.
+
+Now, the Software Manager can upload the software update tested in the pre-production environment.
+
+=== Create a software update
+
+In the new software update, the Software Manager decides to target only one control unit, the Engine Control Module (ECM), and upload the update as the new version of the last update, *ECM-RL7815-FRTOS*. When creating a software update, the Software Manager specifies the information listed in the table below.
+
+.The software update details
+[.release_notes]
+[cols="30h,70a"]
+|====================
+| Software update name |Improve Heating, Ventilation, and Air Conditioning (HVAC) in extreme weather conditions
+| Description | Update the Engine Idle Shutdown Timer Calibration on the ECM.
+| Control unit type | ECM
+| Software from | ECM-RL7815-FRTOS
+| Version from | 1.0.0.
+| Version to | 1.0.1.
+|====================
+
+Now, you can deploy this update to the device group that you created.
+
+=== Create a campaign
+
+As an OTA campaign manager, you can create a campaign and name it *HVAC improvement for German and French Premium devices*. You can set this campaign to deploy the *Improve Heating, Ventilation, and Air Conditioning (HVAC) in extreme weather conditions* software update to the devices targeted in the *French and German Premium* smart group.
+
+You can also configure a notification for end users. The text of this notification is then sent to the OTA Connect client software version that runs on the device.
+
+.Notification
 ====
-Improve HVAC in extreme weather conditions
-====
-. (Optional) Provide a description of your software update.
-+
-.Software update description
-====
-* Update Engine Idle Shutdown Timer Calibration on Renesas RL78/15 ECMs in "Tireon" models produced after 2018. 
-
-* Improve HVAC in extreme weather conditions (Initially for the Scandinavian market).
-====
-. In *Select multiple control unit types*, select *ECM (RL78/15)*.
-. Click *Continue*.
-. In the *From* and *To* sections, from the *Software* list, select *ECM-RL7815-FRTOS*.
-. In the *From* section, from the *Version* list, select *1.0.0*.
-. In the *To* section, from the *Version* list, select *1.0.1*.
-. Click *Save*.
-
-The software update appears in the software updates list.
-
-== Set up a campaign
-
-Now, you need to deploy your software update to your vehicles.
-
-// MC: Hack to make this section collapsible
-+++ <details><summary> +++
-*Prerequisites* 
-+++ </summary><div> +++
-
-// MC: Might need more details
-When you create a campaign, you can configure a notification for end users. The text of this notification is then passed on to the OTA Connect client software version that runs on the vehicle. The OTA Connect client can output the text of this message, but your developers need to make sure that this message is passed to the IVI and displayed on-screen in the dashboard so that the vehicle owner can reply to requests for their consent. 
-
-+++ </div></details> +++
-
-*To create the campaign:*
-
-. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
-. In the upper-right corner, under the name of your active environment, click *Create campaign*.
-. Specify the campaign name, and then click *Next*.
-+
-.Campaign name
-====
-Deploy HVAC improvement - Scandinavia/Tireon post-2018
-====
-. Select the *Tireon-2018-Scandinavia-010A* device group, and then click *Next*.
-. Select the *Improve HVAC in extreme conditions* software update, and then click *Next*.
-. Since the installation is going to affect the operation of the engine, you need to ask the vehicle owner if you can temporarily disable the engine and install the software update. For that, select *Request end user's consent*.
-. In the *Release note* field, enter the following notification text, and then click *Next*.
-+
-.Example Release Note
-====
-The Lannista customer care team has released a new software update that improves your vehicle's heating and air conditioning in extreme weather conditions.
+Our care team has released a new software update that improves your vehicle's heating and air conditioning in extreme weather conditions.
 
 To install this software update, your engine will shut down for about 15 seconds.
 
 Do you want to download and install this software update to your vehicle? 
 ====
-. At the *Summary* step, to start the campaign, click *Launch*.
 
-+
-The campaign starts to run. You can monitor devices that detect and download the new software update.
+You can monitor devices that detect and download the new software update.
 
-== Monitor the campaign 
+=== Monitor the campaign 
 
-Now that you have launched the campaign, you may want to see what percentage of 1,000 vehicles have successfully installed the software update. This might take a while since not all the vehicles will connect and install the software update at the same time. Additionally, some end users might decline to install the update, and in a few cases, the update might fail to install for various technical reasons.
+Now that you have launched the *HVAC improvement for German and French Premium device* campaign, you can check what percentage of 1,000 vehicles have successfully installed the software update. This might take a while since not all the vehicles will connect and install the software update at the same time. Additionally, some end users might decline to install the update, and in a few cases, the update might fail to install for various technical reasons.
 
-You can get a good overview of the progress on the campaign details page.
+To get a good overview of the campaign progress, on the *Campaigns* tab, navigate to the *HVAC improvement for German and French Premium device* campaign, and then click it. The section with campaign details expands. You can see what has happened with the campaign. Suppose that you see the following statistics:
 
-*To see the campaign details:*
-
-. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
-. Navigate to the *Deploy HVAC improvement - Scandinavia/Tireon post-2018* campaign, and then click it.
-
-The section with campaign details expands.
-
-After one day, you can check in and see what has happened with the campaign. Suppose that you see the following statistics:
-
-.Status report for the campaign "Deploy HVAC improvement - Scandinavia/Tireon post-2018"
-[width="100%",options="header"]
+.Campaign status report
+[.release_notes]
+[width="100%"]
 |====================
-| Status | % | Number  
+| *Status* | *%* | *Number* 
+| Failed | 2% | 20  
 | Successful | 83% | 830 
 | Installing | 9% | 90 
 | Not applicable | 6% | 60  
-| Failed | 2% | 20 
 |====================
 
-The good news is that control units on most devices can install the software update. A few devices are still installing it or have not connected yet.
+Control units on most devices can install the software update. A few devices are still installing it or have not connected yet. There are also a few devices that have not installed the software update -- either because they are not applicable or the software update has failed for whatever reason.
 
-What you may be concerned about the devices that have not installed the software update -- either because they are not applicable or the software update has failed for whatever reason.
-
-== Troubleshoot failed updates 
+=== Troubleshoot the campaign
 
 Some of your devices failed to install the software update, so you may want to search for the installation report.
 
 *To get the installation report:*
 
-. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
-. Navigate to the *Deploy HVAC improvement - Scandinavia/Tireon post-2018* campaign, and then click it.
+. On the *Campaigns* tab, navigate to the *HVAC improvement for German and French Premium device* campaign, and then click it.
 +
-The campaign details section expands. The section also contains a list of failure codes.
+The campaign details section expands. The section contains the campaign statistics and a list of failure codes.
 . To get more information about each failure code and see the affected devices, in the *Export device statistics* column, next to the needed failure code, click the export button (image:img::download.png[Icon,20,20]).
 +
 You get a CSV file with the following details on the failure: the ID of the affected device, failure code, and failure description.
 
-The failures in the *Deploy HVAC improvement - Scandinavia/Tireon post-2018* campaign occurred due to the following reasons:
+The failures in the *HVAC improvement for German and French Premium device* campaign occurred due to the following reasons:
 
 * Users rejected the software update.
 +
