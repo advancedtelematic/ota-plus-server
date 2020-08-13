@@ -90,7 +90,7 @@ class Header extends Component {
               <div id="device-name" className="page-header__device-name">
                 {device.deviceName}
               </div>
-              <CopyableValue title={t('devices.ddv.copyable.title')} value={device.uuid} />
+              <CopyableValue title={t('devices.ddv.copyable.title')} value={device.deviceId} />
             </>
             )}
           </FadeAnimation>
