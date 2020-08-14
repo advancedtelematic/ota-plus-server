@@ -1,5 +1,8 @@
 package com.advancedtelematic.api
 
+import akka.http.scaladsl.model.StatusCodes
+import com.advancedtelematic.libats.data.ErrorCode
+import com.advancedtelematic.libats.http.Errors.RawError
 import play.api.libs.ws.WSResponse
 import play.api.mvc.Result
 
@@ -21,4 +24,9 @@ object Errors {
 
   case class ConfigurationException(msg: String = "")
     extends Exception(s"Could not get required configuration " + msg) with NoStackTrace
+
+  val OtaUserDoesNotExists = RawError(
+    ErrorCode("ota_user_does_not_exist"),
+    StatusCodes.Unauthorized,
+    "There is no OTA user corresponding to this Here Account.")
 }

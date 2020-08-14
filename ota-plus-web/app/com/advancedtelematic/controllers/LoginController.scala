@@ -5,7 +5,7 @@ import java.time.Instant
 import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.api.Errors.UnexpectedResponse
+import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, UnexpectedResponse}
 import com.advancedtelematic.auth._
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
@@ -23,18 +23,19 @@ final case class LoginData(username: String, password: String)
 
 final case class UserLogin(id: String, identity: Option[IdentityClaims], namespace: Namespace, timestamp: Instant)
 
+case class RejectedNewUserLogin(userId: UserId, name: String, email: String, when: Instant = Instant.now)
+
 object UserLogin {
   private[this] val log = Logger(this.getClass)
 
   import com.advancedtelematic.libats.codecs.CirceAnyVal.{anyValStringDecoder, anyValStringEncoder}
 
-  private[this] implicit val identityClaimsEncoder = io.circe.generic.semiauto.deriveEncoder[IdentityClaims]
-  private[this] implicit val identityClaimsDecoder = io.circe.generic.semiauto.deriveDecoder[IdentityClaims]
+  private[this] implicit val identityClaimsCodec = io.circe.generic.semiauto.deriveCodec[IdentityClaims]
+  private[this] implicit val userLoginCodec = io.circe.generic.semiauto.deriveCodec[UserLogin]
+  private[this] implicit val rejectedNewUserLoginCodec = io.circe.generic.semiauto.deriveCodec[RejectedNewUserLogin]
 
-  private[this] implicit val UserLoginEncoder: Encoder[UserLogin] = io.circe.generic.semiauto.deriveEncoder[UserLogin]
-  private[this] implicit val UserLoginDecoder: Decoder[UserLogin] = io.circe.generic.semiauto.deriveDecoder[UserLogin]
-
-  implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
+  implicit val userLoginMsgLike = MessageLike[UserLogin](_.id)
+  implicit val rejectedNewUserLoginMsgLike = MessageLike[RejectedNewUserLogin](_.userId.id)
 
   def apply(futureIdentityClaims: Future[IdentityClaims], userId: String, namespace: Namespace)
            (implicit ec: ExecutionContext): Future[UserLogin] =
@@ -131,6 +132,8 @@ class OAuthOidcController @Inject()(
         case t: UnexpectedResponse =>
           log.debug("Error while exchanging authz code for tokens", t)
           RedirectToLogin
+        case e@OtaUserDoesNotExists =>
+          authorizationFailed(e.code.code, e.desc)
       }
     }
 
