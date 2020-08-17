@@ -36,13 +36,13 @@ class RetryModal extends Component {
         </div>
         <ol>
           <Trans>
-            {t('campaigns.retry.description_1', { returnObjects: true })}
+            {t('campaigns.retry.description_1', { returnObjects: true }).map(text => (<li>{text}</li>))}
           </Trans>
         </ol>
         <div className="list-header">{t('campaigns.retry.header_2')}</div>
         <ol>
           <Trans>
-            {t('campaigns.retry.description_2', { returnObjects: true })}
+            {t('campaigns.retry.description_2', { returnObjects: true }).map(text => (<li>{text}</li>))}
           </Trans>
         </ol>
         <div className="body-actions">

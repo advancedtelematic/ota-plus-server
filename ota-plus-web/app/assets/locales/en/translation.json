@@ -37,15 +37,15 @@
     "campaigns.no-campaigns-running": "No running campaigns in this environment.",
     "campaigns.no-campaigns.filtered": "There aren't any campaigns in this status at the moment.",
     "campaigns.retry.description_1": [
-        "<li>OTA Connect retries installation on each devices once only.</li>",
-        "<li>After this retry cycle is completed, you'll see fresh failure statistics for all installation attempts in this retry cycle.</li>",
-        "<li>You cannot start a retry cycle for another error type before this retry cycle is finished.</li>",
-        "<li>If a device is installing another update, this retry cycle will not apply to the device.</li>"
+        "OTA Connect retries installation on each devices once only.",
+        "After this retry cycle is completed, you'll see fresh failure statistics for all installation attempts in this retry cycle.",
+        "You cannot start a retry cycle for another error type before this retry cycle is finished.",
+        "If a device is installing another update, this retry cycle will not apply to the device."
     ],
     "campaigns.retry.description_2": [
-        "<li>You'll need to diagnose what's going wrong and possibly update your software.</li>",
-        "<li>You can export the list of devices with failed installations to help with your analysis.</li>",
-        "<li>Once you've figured it out, create another update and deploy it in another campaign.</li>"
+        "You'll need to diagnose what's going wrong and possibly update your software.",
+        "You can export the list of devices with failed installations to help with your analysis.",
+        "Once you've figured it out, create another update and deploy it in another campaign."
     ],
     "campaigns.retry.header_1": "For this campaign, retry all installations that failed due to the following error: ",
     "campaigns.retry.header_2": "If some installations still fail...",
