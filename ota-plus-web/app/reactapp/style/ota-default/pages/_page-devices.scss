@@ -84,7 +84,11 @@
       align-items: center;
       padding: 0 30px;
       cursor: pointer;
-
+      &:hover {
+        .dots {
+          opacity: 1;
+        }
+      }
       .hover-area {
         position: absolute;
         top: 0;
@@ -137,12 +141,6 @@
         right: 10px;
         left: auto;
       }
-
-      &:hover {
-        .dots {
-          opacity: 1;
-        }
-      }
     }
 
     &__item-title {
@@ -161,6 +159,9 @@
       opacity: 0;
       transition: opacity 0.4s ease;
       top: 28px;
+      right: 8px;
+      width: 30px;
+      align-items: center;
       span {
         background-color: $color-mint;
       }
