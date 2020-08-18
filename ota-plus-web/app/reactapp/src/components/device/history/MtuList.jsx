@@ -57,13 +57,13 @@ class MtuList extends Component {
                     }
                     return null;
                   });
-                  return !historyItem.former ? (
+                  return !historyItem.former && (
                     <MtuListItem item={historyItem} key={index} events={itemEvents} />
-                  ) : (
-                    <EcuReplacementListItem item={historyItem} key={index} />
                   );
                 }
-                return null;
+                return historyItem.former ? (
+                  <EcuReplacementListItem item={historyItem} key={index} />
+                ) : null;
               })}
               <div className="ant-pagination__wrapper ant-pagination__wrapper--absolute clearfix">
                 <Pagination
