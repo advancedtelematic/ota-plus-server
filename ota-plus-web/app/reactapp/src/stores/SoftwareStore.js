@@ -565,7 +565,7 @@ export default class SoftwareStore {
           () => {
             this.packagesHistoryCurrentPage += 1;
             this.packagesHistoryTotalCount = response.data.total;
-            this.packagesHistory = _.uniqBy(data, item => item.correlationId);
+            this.packagesHistory = _.uniqBy(data, item => item.correlationId || item);
             this.preparePackagesHistory();
           },
           this,
