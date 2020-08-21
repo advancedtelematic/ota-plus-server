@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+export const Description = styled.div`
+  color: ${({ theme }) => theme.palette.texts.darkGrey};
+  font-size: 1em;
+  line-height: 24px;
+  font-weight: 400;
+`;
+
 export const EnvIcon = styled.img`
   margin: 4px;
 `;
