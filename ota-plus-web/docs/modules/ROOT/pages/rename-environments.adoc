@@ -10,7 +10,10 @@ You can rename any environment to which you have access, even if it is not your 
 The page with environment details opens.
 
 . Next to the environment creation details, click *Rename*.
-. In the *Rename environment* dialog box, enter the environment name.
++
+[.lightbackground.align_img_left]
+image::img::rename_env.png[image,900]
+. In the *Rename environment* dialog box, enter the new environment name.
 +
 The environment name should not exceed 30 characters and can contain letters, numbers, and the following specific characters: `' " . , : ; _ - / ( )`.
 
