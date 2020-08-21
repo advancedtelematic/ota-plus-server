@@ -8,9 +8,12 @@ If you are no longer involved in a software update project and do not need acces
 . Click the environment that you want to leave.
 +
 The page with environment details opens.
-. In the *Member* list, next to your email, click *Leave*.
+. In the *Members* list, next to your email, click *Leave*.
 +
 NOTE: If you are the only member of the environment, after you leave it, the environment will be permanently deleted.
++
+[.lightbackground.align_img_left]
+image::img::leave_env.png[image,900]
 . In the *Leave environment* dialog box, click *Yes, leave*.
 
 You are no longer a member of this environment and cannot access its resources. If you want to join the environment again, an environment member should xref:manage-members.adoc[add] you to it.

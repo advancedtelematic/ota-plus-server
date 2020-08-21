@@ -7,9 +7,12 @@ You can share your environment with your colleagues and become a member of other
 1. Log in to your https://connect.ota.here.com[OTA Connect account, window="_blank"].
 2. Under the *Support* and profile menus, point to the name of the active environment.
 +
+[.align_img_left]
+image::img::active_env_name.png[image,270]
++
 You see the list of environments to which you have access.
 +
-TIP: You can also see the list of environments to which you have access on the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
+TIP: You can also find the list of environments to which you have access on the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
 
 3. Click the environment to which you want to switch.
 +

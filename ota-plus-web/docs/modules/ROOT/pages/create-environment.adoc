@@ -1,6 +1,6 @@
 = Create an environment
 
-You may need to have different environments for pre-production and production. Instead of creating multiple accounts for each environment, you can now create up to 10 additional environments using only one account.
+Upon registration, you become the owner of one environment. You may also need to create additional environments for pre-production and production. Instead of creating multiple accounts for each environment, you can now create up to 10 additional environments using only one account. It is recommended to create new environments for collaboration, rather than use your home environment because owners cannot leave or be removed from their home environments.
 
 IMPORTANT: The limit of 10 additional environments applies even if you leave the environments that you have created. There is currently no way to delete environments.
 
@@ -8,12 +8,20 @@ IMPORTANT: The limit of 10 additional environments applies even if you leave the
 
 . Go to the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
 . Click *Create environment*.
++
+[.lightbackground.align_img_left]
+image::img::create_env_button.png[image,210]
 . In the *Create environment* dialog box, enter the environment name.
 +
 The environment name should not exceed 30 characters and can contain letters, numbers, and the following specific characters: `' " . , : ; _ - / ( )`.
++
+[.lightbackground.align_img_left]
+image::img::create_env_dialog_box.png[image,420]
 
 . Click *Create*.
 +
-The page with the details about the created environment opens. In the *Members* list, next to your email, the *Creator* label appears. As an environment creator, you can leave or be removed from your additional environments. However, you cannot leave or be removed from your home environment that you get upon registration. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
+The created environment appears in the *Environments* list.
+
+To find more details about the new environment, click it. The page with environment details opens. In the *Members* list, next to your email, you can find the *Creator* label. As an environment creator, you can leave or be removed from the additional environments that you created after registration. However, you cannot leave or be removed from your home environment that you got upon registration because you are its owner. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
 
 You can now xref:manage-members.adoc[add] your colleagues to the environment.

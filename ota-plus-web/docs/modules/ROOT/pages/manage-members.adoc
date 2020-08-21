@@ -8,18 +8,29 @@ You can add colleagues to your environments to collaborate on devices, device gr
 . Click the environment in which you want to manage members.
 +
 The page with environment details opens.
-. In the *Member* list, do one of the following:
+. In the *Members* list, do one of the following:
     * To add a member:
     .. Click *Add member*.
++
+[.lightbackground.align_img_left]
+image::img::add_member_button.png[image,250]
     .. Specify the email of the user that you want to add to the environment.
++
+[.lightbackground.align_img_left]
+image::img::add_member_dialog_box.png[image,420]
     .. Click *Add*.
 +
-The new member appears in the *Members* section and has access to all the resources in the environment.
+The new member appears in the *Members* list and has access to all the resources in the environment.
 +
 IMPORTANT: The user should be registered in OTA Connect before you add them to the environment. Otherwise, they will not see the environment. If the user is added before they are registered, for the user to see the environment, remove the user, register this user, and then add again.
 
-    * To remove a member, next to the email of the member that you want to remove, click *Remove*, and then click *Yes, remove*.
+    * To remove a member:
+    .. Next to the email of the member that you want to remove, click *Remove*.
 +
-You can remove a member with the *Creator* label but not the member with the *Owner* label as it is their home environment. To learn more about different types of environments, see xref:environments-intro.adoc[What is an environment].
+[.lightbackground.align_img_left]
+image::img::remove_member.png[image,900]
++
+NOTE: You can remove a member with the *Creator* label but not the member with the *Owner* label as it is their home environment. To learn more about environments, see xref:environments-intro.adoc[What is an environment].
+.. In the *Remove member* dialog box, click *Yes, remove*.
 +
 The member that you removed can no longer access the resources in the environment.
