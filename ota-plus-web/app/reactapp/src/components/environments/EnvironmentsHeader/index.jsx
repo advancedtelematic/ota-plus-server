@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
 import { Button, PageHeader, Title } from '../../../partials';
 import { ENVIRONMENTS_ICON, HELP_ICON_DARK } from '../../../config';
-import { EnvIcon, HelpIcon, LinkPrimary, Subtitle, TextsWrapper } from './styled';
+import { Description, EnvIcon, HelpIcon, LinkPrimary, Subtitle, TextsWrapper } from './styled';
+import ExternalLink from '../../../partials/ExternalLink';
+import { sendAction } from '../../../helpers/analyticsHelper';
+import { OTA_ENVIRONMENT_READ_MORE } from '../../../constants/analyticsActions';
+import { URL_ENVIRONMENTS_READ_MORE } from '../../../constants/urlConstants';
 
 const EnvironmentsHeader = ({ homeEnvName, onCreateEnvBtnClick, onHomeEnvClick }) => {
   const { t } = useTranslation();
@@ -35,6 +39,19 @@ const EnvironmentsHeader = ({ homeEnvName, onCreateEnvBtnClick, onHomeEnvClick }
                 )}
               </span>
             </Subtitle>
+            <Description id="profile-organization-header-description">
+              {t('profile.organization.header.description')}
+              {' '}
+              <ExternalLink
+                id={'profile-organization-header-link'}
+                key={'profile-organization-header-link'}
+                onClick={() => sendAction(OTA_ENVIRONMENT_READ_MORE)}
+                url={URL_ENVIRONMENTS_READ_MORE}
+                weight="regular"
+              >
+                {t('profile.organization.header.read-more')}
+              </ExternalLink>
+            </Description>
           </TextsWrapper>
         </>
       )}
