@@ -565,7 +565,17 @@ export default class SoftwareStore {
           () => {
             this.packagesHistoryCurrentPage += 1;
             this.packagesHistoryTotalCount = response.data.total;
-            this.packagesHistory = _.uniqBy(data, item => item.correlationId || item);
+            const updatesHistory = [];
+            const replacementEvents = [];
+            data.forEach((item) => {
+              if (item.correlationId) {
+                updatesHistory.push(item);
+              } else {
+                replacementEvents.push(item);
+              }
+            });
+            const uniqUpdatesHistory = _.uniqBy(updatesHistory, item => item.correlationId);
+            this.packagesHistory = [...uniqUpdatesHistory, ...replacementEvents];
             this.preparePackagesHistory();
           },
           this,

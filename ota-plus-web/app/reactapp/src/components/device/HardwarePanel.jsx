@@ -142,21 +142,25 @@ class HardwarePanel extends Component {
           )}
         </div>
         {!_.isEmpty(device.directorAttributes.secondary) || device.directorAttributes.secondary.length ? (
-          _.map(device.directorAttributes.secondary, (item, index) => (
-            <DeviceSecondaryEcu
-              active={hardwareStore.activeEcu.serial === item.id}
-              device={device}
-              ecu={item}
-              selectEcu={selectEcu}
-              popoverShown={this.popoverShownFor === item.id}
-              changePopoverVisibility={this.changePopoverVisibility}
-              changeHardwareOverlayVisibility={this.changeHardwareOverlayVisibility}
-              copyPublicKey={this.copyPublicKey}
-              publicKeyCopied={this.publicKeyCopiedFor === item.id}
-              key={index}
-              index={index}
-            />
-          ))
+          _.map(
+            device.directorAttributes.secondary
+              .slice()
+              .sort((a, b) => a.hardwareId > b.hardwareId ? 1 : -1), (item, index) => (
+                <DeviceSecondaryEcu
+                  active={hardwareStore.activeEcu.serial === item.id}
+                  device={device}
+                  ecu={item}
+                  selectEcu={selectEcu}
+                  popoverShown={this.popoverShownFor === item.id}
+                  changePopoverVisibility={this.changePopoverVisibility}
+                  changeHardwareOverlayVisibility={this.changeHardwareOverlayVisibility}
+                  copyPublicKey={this.copyPublicKey}
+                  publicKeyCopied={this.publicKeyCopiedFor === item.id}
+                  key={index}
+                  index={index}
+                />
+            )
+          )
         ) : (
           <div className="hardware-panel__no-ecus" id="hardware-secondary-not-available">
             {t('devices.hardware.no_ecus')}

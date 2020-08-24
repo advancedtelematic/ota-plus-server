@@ -50,6 +50,9 @@ class MtuList extends Component {
           ? (
             <>
               {_.map(packagesHistory, (historyItem, index) => {
+                if (historyItem.former) {
+                  return <EcuReplacementListItem item={historyItem} key={index} />;
+                }
                 if (!_.isEmpty(devicesStore.deviceEvents)) {
                   const itemEvents = devicesStore.deviceEvents.filter((event) => {
                     if (event.payload && event.payload.correlationId) {
@@ -57,13 +60,11 @@ class MtuList extends Component {
                     }
                     return null;
                   });
-                  return !historyItem.former && (
+                  return (
                     <MtuListItem item={historyItem} key={index} events={itemEvents} />
                   );
                 }
-                return historyItem.former ? (
-                  <EcuReplacementListItem item={historyItem} key={index} />
-                ) : null;
+                return null;
               })}
               <div className="ant-pagination__wrapper ant-pagination__wrapper--absolute clearfix">
                 <Pagination
