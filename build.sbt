@@ -83,7 +83,7 @@ lazy val dockerSettings = {
     daemonUser in Docker := "daemon",
     dockerRepository := Some("advancedtelematic"),
     dockerUpdateLatest := true,
-    dockerBaseImage := "advancedtelematic/alpine-jre:adoptopenjdk-jdk8u222",
+    dockerBaseImage := "advancedtelematic/alpine-jre:adoptopenjdk-jre8u262-b10",
     dockerAliases += dockerAlias.value.withTag(git.gitHeadCommit.value)
   )
 }
