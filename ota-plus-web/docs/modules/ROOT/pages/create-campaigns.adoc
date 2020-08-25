@@ -4,6 +4,8 @@
 
 You need a campaign to deploy software updates to groups of devices.
 
+Before you create and launch a new campaign, to make sure that the offline devices get the latest updates when they connect, cancel the existing campaigns that target the older versions of the software that you want to deploy.
+
 *To create a campaign:*
 
 . Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.

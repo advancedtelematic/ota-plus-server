@@ -89,7 +89,8 @@ Now, you can deploy this update to the device group that you created.
 
 === Create a campaign
 
-As an OTA campaign manager, you can create a campaign and name it *HVAC improvement for German and French Premium devices*. You can set this campaign to deploy the *Improve Heating, Ventilation, and Air Conditioning (HVAC) in extreme weather conditions* software update to the devices targeted in the *French and German Premium* smart group.
+As an OTA campaign manager, before you launch a new campaign, to make sure that the offline devices get the latest updates when they connect, you need to cancel all the ongoing campaigns that contain the older versions of the *ECM-RL7815-FRTOS* software.
+Then, you can create a campaign and name it *HVAC improvement for German and French Premium devices*. You can set this campaign to deploy the *Improve Heating, Ventilation, and Air Conditioning (HVAC) in extreme weather conditions* software update to the devices targeted in the *French and German Premium* smart group.
 
 You can also configure a notification for end users. The text of this notification is then sent to the OTA Connect client software version that runs on the device.
 
