@@ -16,6 +16,7 @@
 ** xref:add-custom-device-field.adoc[Add a custom device field]
 ** xref:remove-custom-device-field.adoc[Remove a custom device field]
 * xref:manage-devices.adoc[Single-device updates]
+* xref:control-unit-replacement.adoc[Control unit replacement]
 // TODO * Update a Smart Group
 // TODO * Delete groups
 
