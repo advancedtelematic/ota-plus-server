@@ -2,7 +2,7 @@
 
 // tag::groups[]
 
-You can organize devices provisioned in one environment into groups to target them in campaigns. Each provisioned device can be targeted in different groups, but you cannot target devices from different environments in one group. For more information, see xref:environments-intro.adoc[What is an environment].
+You can organize devices provisioned in one environment into groups to target them in campaigns. Each provisioned device can be targeted in different groups, but you cannot target devices from different environments in one group. For more information, see xref:ota-web::environments-intro.adoc[What is an environment].
 
 There are two types of device groups:
 
