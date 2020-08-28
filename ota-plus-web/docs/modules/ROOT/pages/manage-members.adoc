@@ -22,7 +22,7 @@ image::img::add_member_dialog_box.png[image,420]
 +
 The new member appears in the *Members* list and has access to all the resources in the environment.
 +
-IMPORTANT: The user should be registered in OTA Connect before you add them to the environment. Otherwise, they will not see the environment. If the user is added before they are registered, for the user to see the environment, remove the user, register this user, and then add again.
+IMPORTANT: The user should be registered in OTA Connect before you add them to the environment. Otherwise, they will not see the environment. If the user is added before they are registered, for the user to see the environment, remove the user, xref:get-access.adoc[register] this user, and then add again.
 
     * To remove a member:
     .. Next to the email of the member that you want to remove, click *Remove*.
