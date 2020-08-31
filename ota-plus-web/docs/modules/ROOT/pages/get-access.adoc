@@ -8,6 +8,14 @@ NOTE: HERE OTA Connect is only supported on the Google Chrome browser.
 *To get access to the OTA Connect Portal:*
 
 . On the link:https://developer.here.com[HERE Developer Portal, window="_blank"], register for a HERE account.
-. Contact us at otaconnect.support@here.com, and the OTA team will give you access to the OTA Connect Portal.
+. Contact us at otaconnect.support@here.com with the information below:
+
+
+    * Which HERE OTA Connect customer do you belong to,
+    * To which existing OTA environment will you be added as a member,
+    * Who is the registered user of HERE OTA Connect which is your sponsor,
+    * Approval email from the environment owner
+    
+and the OTA team will give you access to the OTA Connect Portal.
 
 When you log in to the OTA Connect Portal, you can start with xref:create-provisioning-credentials.adoc[provisioning devices] for your software update projects.
