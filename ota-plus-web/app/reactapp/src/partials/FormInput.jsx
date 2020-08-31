@@ -34,6 +34,7 @@ class FormInput extends Component {
 
   render() {
     const {
+      autoFocus = false,
       title = '',
       name,
       placeholder = '',
@@ -60,6 +61,7 @@ class FormInput extends Component {
           <div className="c-form__input-wrapper">
             {children}
             <input
+              autoFocus={autoFocus}
               ref={(input) => {
                 this.input = input;
                 getInputRef(input);
@@ -84,6 +86,7 @@ class FormInput extends Component {
 }
 
 FormInput.propTypes = {
+  autoFocus: PropTypes.bool,
   previousValue: PropTypes.string,
   isEditable: PropTypes.bool,
   defaultValue: PropTypes.string,
