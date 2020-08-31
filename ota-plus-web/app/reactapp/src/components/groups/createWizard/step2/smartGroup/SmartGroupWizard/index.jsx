@@ -46,6 +46,7 @@ const SmartGroupWizard = ({ onStep2DataSelect }) => {
         <FieldLabel>{t('groups.creating.smart-group.labels.name')}</FieldLabel>
         <Input
           id="device-group-name"
+          autoFocus
           placeholder={t('groups.creating.smart-group.placeholders.name')}
           name="groupName"
           onChange={(event) => {

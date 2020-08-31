@@ -310,6 +310,7 @@ const AddSoftwareModal = ({ hide }) => {
           </TextLabelInput>
         ) : (
           <Input
+            autoFocus
             id="add-new-software-name"
             placeholder={t('software.create-modal.software-name.placeholder')}
             name="packageName"
@@ -423,7 +424,7 @@ const AddSoftwareModal = ({ hide }) => {
                   {t('software.create-modal.file-information-1')}
                   {' '}
                   <ExternalLink
-                    key={'cli-link'}
+                    key="cli-link"
                     onClick={() => sendAction(OTA_SOFTWARE_READ_CLI)}
                     url={URL_FILE_UPLOADING_CLI}
                     weight="medium"

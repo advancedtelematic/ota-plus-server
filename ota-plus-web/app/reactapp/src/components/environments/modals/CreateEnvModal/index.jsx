@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -23,6 +23,10 @@ const CreateEnvModal = ({ onClose, onConfirm }) => {
   const { t } = useTranslation();
   const [error, setError] = useState(noError);
   const [environmentName, setEnvironmentName] = useState('');
+
+  useEffect(() => {
+    document.getElementById('name-input').focus();
+  }, []);
 
   const onInputChange = (event) => {
     const value = event.target.value.trim();

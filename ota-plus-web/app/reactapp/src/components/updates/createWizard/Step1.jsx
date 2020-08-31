@@ -45,6 +45,7 @@ class Step1 extends Component {
         <Row className="row name-container">
           <Col span={12}>
             <FormInput
+              autoFocus
               label={t('updates.creating.wizard.update_list_name')}
               placeholder={t('updates.creating.wizard.update_list_name_placeholder')}
               name="updateName"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -27,6 +27,10 @@ const SingleInputModal = ({
   value
 }) => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    document.getElementsByClassName('ant-input')[0].focus();
+  }, []);
 
   return (
     <>

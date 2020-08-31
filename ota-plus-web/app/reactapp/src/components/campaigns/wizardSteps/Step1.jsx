@@ -41,6 +41,7 @@ class WizardStep1 extends Component {
           </Row>
           <OTAForm formWidth={FORM_WIDTH} id="add-campaign-name-form" onSubmit={e => e.preventDefault()}>
             <FormInput
+              autoFocus
               label={t('campaigns.wizard.name')}
               name="name"
               placeholder={t('campaigns.wizard.name')}
