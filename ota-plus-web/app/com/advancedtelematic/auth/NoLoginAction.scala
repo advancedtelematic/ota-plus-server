@@ -1,4 +1,4 @@
-package com.advancedtelematic.auth.garage
+package com.advancedtelematic.auth
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -7,15 +7,14 @@ import java.util.Base64
 import akka.actor.ActorSystem
 import brave.play.{TraceData, ZipkinTraceServiceLike}
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.Errors.RemoteApiError
-import com.advancedtelematic.auth.{AccessTokenBuilder, IdToken, IdentityClaims, SessionCodecs}
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.controllers.{UserId, UserLogin}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.Inject
-import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
-import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
+import play.api.mvc._
+import play.api.{Configuration, Logger}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try

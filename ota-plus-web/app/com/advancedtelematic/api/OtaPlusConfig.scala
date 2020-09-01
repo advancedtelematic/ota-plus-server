@@ -9,8 +9,6 @@ trait OtaPlusConfig {
 
   val devicesApiUri = OtaApiUri("device-registry", conf.underlying.getString("deviceregistry.uri"))
 
-  val authPlusApiUri = OtaApiUri("auth-plus", conf.underlying.getString("authplus.uri"))
-
   val userProfileApiUri = OtaApiUri("user-profile", conf.underlying.getString("userprofile.uri"))
 
   val auditorApiUri = OtaApiUri("auditor", conf.underlying.getString("auditor.uri"))

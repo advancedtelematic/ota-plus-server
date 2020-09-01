@@ -2,7 +2,6 @@ package com.advancedtelematic.api
 
 import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.api.clients._
-import com.advancedtelematic.auth.garage.Auth0Api
 import play.api.Configuration
 
 trait ApiClientSupport {
@@ -11,10 +10,6 @@ trait ApiClientSupport {
   val tracer: ZipkinTraceServiceLike
 
   private implicit val _tracer = tracer
-
-  val authPlusApi = new AuthPlusApi(conf, clientExec)
-
-  val auth0Api = new Auth0Api(conf, clientExec)
 
   val userProfileApi = new UserProfileApi(conf, clientExec)
 
