@@ -26,13 +26,6 @@ object PathBinders {
     def unbind(key: String, value: Namespace): String = value.get
   }
 
-  implicit object bindableFeature extends PathBindable[FeatureName] {
-    def bind(key: String, value: String): Either[String, FeatureName] = {
-      Right(FeatureName(value))
-    }
-    def unbind(key: String, value: FeatureName): String = value.get
-  }
-
   implicit object bindableQueryInteger extends QueryStringBindable.Parsing[Integer](
     _.toInt,
     _.toString,
@@ -75,5 +68,3 @@ object PathBinders {
     }
   }
 }
-
-final case class FeatureName(get: String)

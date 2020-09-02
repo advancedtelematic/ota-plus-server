@@ -7,10 +7,9 @@ import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.Errors.{RemoteApiError, UnexpectedResponse}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.oidc.OidcGateway
-import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction, IdentityClaims}
+import com.advancedtelematic.auth.{IdentityAction, IdentityClaims}
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import play.api.mvc.Results.EmptyContent
@@ -26,7 +25,6 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       val clientExec: ApiClientExec,
                                       implicit val tracer: ZipkinTraceServiceLike,
                                       authAction: IdentityAction,
-                                      accessTokenBuilder: AccessTokenBuilder,
                                       oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
   extends AbstractController(components)
@@ -97,21 +95,6 @@ class UserProfileController @Inject()(val conf: Configuration,
 
   def updateBillingInfo(): Action[JsValue] = authAction.async(components.parsers.json) { implicit request =>
     userProfileApi.updateBillingInfo(request.idToken.userId, request.queryString, request.body)
-  }
-
-  implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
-
-  def getFeatures(): Action[AnyContent] = authAction.async { implicit request =>
-    userProfileApi
-      .getFeatures(request.namespace)
-      .map { features =>
-        Ok(Json.toJson(features))
-      }
-      .recover {
-        case RemoteApiError(r, _) if r.header.status == 404 =>
-          Ok(Json.toJson(Seq.empty[FeatureName]))
-        case RemoteApiError(r, _) => r
-      }
   }
 
   def getUserCredentialsBundle(keyUuid: UUID): Action[AnyContent] = authAction.async { implicit request =>

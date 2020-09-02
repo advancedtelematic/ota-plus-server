@@ -10,11 +10,9 @@ import com.advancedtelematic.auth._
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
-import io.circe.{Decoder, Encoder}
 import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Logger}
+import play.api.Logger
 import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,9 +54,6 @@ final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable 
 final case class CallbackError(msg: String) extends Throwable(msg)
 
 class LoginController @Inject()(components: ControllerComponents,
-                                conf: Configuration,
-                                ws: WSClient,
-                                authAction: UiAuthAction,
                                 val login: LoginAction,
                                 val logout: LogoutAction)
     extends AbstractController(components) {
@@ -79,8 +74,6 @@ class LoginController @Inject()(components: ControllerComponents,
 class OAuthOidcController @Inject()(
     oidcGateway: OidcGateway,
     messageBus: PlayMessageBusPublisher,
-    conf: Configuration,
-    ws: WSClient,
     tokenExchange: TokenExchange,
     namespaceProvider: NamespaceProvider,
     components: ControllerComponents

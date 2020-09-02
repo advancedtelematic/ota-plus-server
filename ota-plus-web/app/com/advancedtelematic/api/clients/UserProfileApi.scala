@@ -7,7 +7,7 @@ import brave.play.{TraceData, ZipkinTraceServiceLike}
 import cats.syntax.option._
 import com.advancedtelematic.api._
 import com.advancedtelematic.controllers.PathBinders.segment
-import com.advancedtelematic.controllers.{FeatureName, UserId}
+import com.advancedtelematic.controllers.UserId
 import com.advancedtelematic.libats.data.DataType.Namespace
 import play.api.Configuration
 import play.api.libs.json._
@@ -23,15 +23,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
   private def userProfileRequest(path: String)(implicit traceData: TraceData) =
     ApiRequest.traced("user-profile", userProfileApiUri.uri + "/api/v1/" + path)
 
-  implicit val featureNameR: Reads[FeatureName] = Reads.StringReads.map(FeatureName)
-  implicit val featureNameW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
   implicit val namespaceR: Reads[Namespace] = Reads.StringReads.map(Namespace(_))
-
-  implicit val featureR: Reads[Feature] = {(
-    (__ \ "feature").read[FeatureName] and
-      (__ \ "client_id").readNullable[UUID] and
-      (__ \ "enabled").read[Boolean]
-    )(Feature.apply _)}
 
   implicit val userOrganizationR: Reads[UserOrganization] = {
     (
@@ -53,22 +45,6 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .transform(_.withMethod("POST"))
       .transform(_.withBody(params))
       .execJsonValue(apiExec)
-  }
-
-  def getFeature(namespace: Namespace, feature: FeatureName)(implicit traceData: TraceData): Future[Feature] =
-    userProfileRequest("organizations/" + segment(namespace.get) + "/features/" + feature.get)
-      .execJson[Feature](apiExec)
-
-  def getFeatures(namespace: Namespace)(implicit traceData: TraceData): Future[Seq[FeatureName]] =
-    userProfileRequest("organizations/" + segment(namespace.get) + "/features").execJson[Seq[FeatureName]](apiExec)
-
-  def activateFeature(namespace: Namespace, feature: FeatureName, clientId: UUID)
-                     (implicit traceData: TraceData): Future[Result] = {
-    val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
-
-    userProfileRequest(s"organizations/${segment(namespace.get)}/features")
-      .transform(_.withMethod("POST").withBody(requestBody))
-      .execResult(apiExec)
   }
 
   def updateDisplayName(userId: UserId, newName: String)

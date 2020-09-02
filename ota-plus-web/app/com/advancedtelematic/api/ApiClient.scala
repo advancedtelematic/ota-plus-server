@@ -1,11 +1,9 @@
 package com.advancedtelematic.api
 
-import java.util.UUID
-
 import akka.util.ByteString
 import brave.play.{TraceData, TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.ApiRequest.UserOptions
-import com.advancedtelematic.controllers.{FeatureName, UserId}
+import com.advancedtelematic.controllers.UserId
 import com.advancedtelematic.libats.data.DataType.Namespace
 import play.api.libs.json._
 import play.api.libs.ws.{BodyWritable, InMemoryBody, WSAuthScheme, WSClient, WSRequest, WSResponse}
@@ -19,8 +17,6 @@ object ApiVersion extends Enumeration {
 }
 
 case class UserPass(user: String, pass: String)
-
-case class Feature(feature: FeatureName, client_id: Option[UUID], enabled: Boolean)
 
 case class UserOrganization(namespace: Namespace, name: String)
 
