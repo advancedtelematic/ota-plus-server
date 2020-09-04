@@ -16,7 +16,6 @@ module.exports = {
   output: {
     path: resolve(__dirname, '..', jsOutput),
     filename: 'app.js',
-    sourceMapFilename: 'otaconnectsourcemap.js.map',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
