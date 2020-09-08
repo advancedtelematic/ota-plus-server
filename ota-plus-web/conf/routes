@@ -57,5 +57,6 @@ PATCH   /organization                     com.advancedtelematic.controllers.Orga
 PATCH   /organizations/:namespace         com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path="", namespace: Namespace)
 POST    /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 POST    /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
+PUT     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 DELETE  /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 DELETE  /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
