@@ -42,3 +42,7 @@ export const TextsWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const Box = styled.div`
+  margin-top: 30px;
+`;

@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
-import { ListHeader, ListItem, ListStyled, OwnerTag, RemoveButton } from './styled';
+import { Form } from 'formsy-antd';
+import { Dropdown, SearchBar } from '../../../partials';
+import { ListHeader, ListItem, ListStyled, OwnerTag, LowImportanceText } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
-import { DOOR_EXIT_ICON, TRASHBIN_ICON } from '../../../config';
+import { DOOR_EXIT_ICON, TRASHBIN_ICON, DROPDOWN_TOGGLE_ICON } from '../../../config';
 
 const EnvironmentMembersList = ({ envInfo, environmentMembers, onRemoveBtnClick, user }) => {
   const { t } = useTranslation();
+  const [selectedItemEmail, setSelectedItemEmail] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const { creatorEmail, isInitial } = envInfo;
+
+  const toggleMenu = (email) => {
+    setSelectedItemEmail(prevValue => prevValue ? '' : email);
+  };
 
   return (
     <ListStyled
       id="members-list"
-      dataSource={environmentMembers}
+      dataSource={environmentMembers.filter(el => el.email.match(searchValue))}
       header={(
         <ListHeader>
-          <span>{t('profile.organization.details.list.email')}</span>
-          <span>{t('profile.organization.details.list.added')}</span>
+          <h2>{t('profile.organization.members')}</h2>
+          <Form>
+            <SearchBar
+              placeholder={t('profile.organization.members.search-ph')}
+              value={searchValue}
+              changeAction={setSearchValue}
+              id="members-search-bar"
+            />
+          </Form>
         </ListHeader>
       )}
       renderItem={({ email, addedAt }) => (
         <ListItem id={email} key={email}>
-          <span>
+          <div>
             {email}
             {email === creatorEmail && (isInitial
               ? (
@@ -36,27 +51,36 @@ const EnvironmentMembersList = ({ envInfo, environmentMembers, onRemoveBtnClick,
                   <OwnerTag>{t('profile.organization.creator')}</OwnerTag>
                 </Tooltip>
               ))}
-          </span>
-          <span>{getFormattedDateTime(addedAt, RECENTLY_CREATED_DATE_FORMAT)}</span>
+          </div>
+          <div>
+            <LowImportanceText>{t('profile.organization.details.list.added')}</LowImportanceText>
+            {' '}
+            <span>{getFormattedDateTime(addedAt, RECENTLY_CREATED_DATE_FORMAT)}</span>
+          </div>
+          {selectedItemEmail === email && (
+            <Dropdown hideSubmenu={() => toggleMenu(email)}>
+              <li
+                id={`${email}-remove-btn`}
+                onClick={() => onRemoveBtnClick(email === user.email ? false : email)}
+              >
+                {email === user.email
+                  ? (
+                    <>
+                      <img src={DOOR_EXIT_ICON} />
+                      <span>{t('profile.organization.members.leave')}</span>
+                    </>
+                  )
+                  : (
+                    <>
+                      <img src={TRASHBIN_ICON} />
+                      <span>{t('profile.organization.members.remove')}</span>
+                    </>
+                  )}
+              </li>
+            </Dropdown>
+          )}
           {((envInfo && email !== creatorEmail) || !isInitial) && (
-            <RemoveButton
-              id={`${email}-remove-btn`}
-              onClick={() => onRemoveBtnClick(email === user.email ? false : email)}
-            >
-              {email === user.email
-                ? (
-                  <>
-                    <img src={DOOR_EXIT_ICON} />
-                    <span>{t('profile.organization.members.leave')}</span>
-                  </>
-                )
-                : (
-                  <>
-                    <img src={TRASHBIN_ICON} />
-                    <span>{t('profile.organization.members.remove')}</span>
-                  </>
-                )}
-            </RemoveButton>
+            <img src={DROPDOWN_TOGGLE_ICON} onClick={() => toggleMenu(email)} />
           )}
         </ListItem>
       )}

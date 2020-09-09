@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
 import { Button, PageHeader, Title } from '../../../partials';
 import { ENVIRONMENTS_ICON, HELP_ICON_DARK } from '../../../config';
-import { Description, EnvIcon, HelpIcon, LinkPrimary, Subtitle, TextsWrapper } from './styled';
+import { Box, Description, EnvIcon, HelpIcon, LinkPrimary, Subtitle, TextsWrapper } from './styled';
 import ExternalLink from '../../../partials/ExternalLink';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import { OTA_ENVIRONMENT_READ_MORE } from '../../../constants/analyticsActions';
@@ -43,8 +43,8 @@ const EnvironmentsHeader = ({ homeEnvName, onCreateEnvBtnClick, onHomeEnvClick }
               {t('profile.organization.header.description')}
               {' '}
               <ExternalLink
-                id={'profile-organization-header-link'}
-                key={'profile-organization-header-link'}
+                id="profile-organization-header-link"
+                key="profile-organization-header-link"
                 onClick={() => sendAction(OTA_ENVIRONMENT_READ_MORE)}
                 url={URL_ENVIRONMENTS_READ_MORE}
                 weight="regular"
@@ -56,16 +56,18 @@ const EnvironmentsHeader = ({ homeEnvName, onCreateEnvBtnClick, onHomeEnvClick }
         </>
       )}
       sideContent={(
-        <Button
-          htmlType="button"
-          type="primary"
-          light="true"
-          id="button-create-env"
-          size="large"
-          onClick={onCreateEnvBtnClick}
-        >
-          {t('profile.organization.create-env')}
-        </Button>
+        <Box>
+          <Button
+            htmlType="button"
+            type="primary"
+            light="true"
+            id="button-create-env"
+            size="large"
+            onClick={onCreateEnvBtnClick}
+          >
+            {t('profile.organization.create-env')}
+          </Button>
+        </Box>
       )}
     />
   );

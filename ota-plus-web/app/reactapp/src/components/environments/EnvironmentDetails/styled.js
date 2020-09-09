@@ -1,36 +1,47 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components';
-import { Tabs } from 'antd';
-import { SIZES } from '../../../constants/styleConstants';
 
-export const StyledTabs = styled(Tabs)`
-  min-height: ${SIZES.PAGE_WITH_HEADER_HEIGHT};
+export const SplitContainer = styled.div`
+  padding: 30px 40px 0 0;
   background-color: ${({ theme }) => theme.palette.white};
-  .ant-tabs-bar {
-    padding-left: 30px;
-    background-color: ${({ theme }) => theme.palette.backgroundLight};
-    border-bottom: none;
-    margin: 0;
+  display: flex;
+  height: calc(100vh - 276px);
+`;
+
+export const Sidepanel = styled.div`
+  width: 330px;
+`;
+
+export const ContentWrapper = styled.div`
+  flex: 1;
+  padding-left: 30px;
+  & > h2 {
+    font-size: 22px;
+    line-height: 30px;
+    margin-bottom: 10px;
   }
-  .ant-tabs-tab {
-    height: 40px;
-    font-size: 16px;
-    background-color: ${({ theme }) => theme.palette.white};
-    border-radius: 3px 3px 0 0;
-    padding: 10px 20px;
-    line-height: 20px;
-    &, :hover {
-      color: ${({ theme }) => theme.palette.texts.black};
-    }
+  & > div:first-of-type {
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0;
+    line-height: 15px;
+    margin-bottom: 30px;
   }
-  .ant-tabs-ink-bar {
-    bottom: 5px;
-    height: 3px;
-    background-color: ${({ theme }) => theme.palette.primaryDarkened};
-    width: 87px !important;
-    margin-left: 10px;
+`;
+
+export const FeaturesListHeader = styled.div`
+  padding: 0 20px;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.texts.darkGrey};
+  font-weight: 500;
+  & > img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
   }
-  .ant-tabs-tabpane {
-    padding: 30px;
+  &, :hover {
+    background-color: ${({ theme }) => theme.palette.headerGrey};
   }
 `;
