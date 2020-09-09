@@ -112,6 +112,19 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
       .withUser(userId)
       .execResult(apiExec)
 
+  def organizationUserUiFeatures(namespace: Namespace,
+                                 userId: UserId,
+                                 uiFeature: String,
+                                 method: String,
+                                )(implicit traceData: TraceData): Future[Result] = {
+    val pathPrefix = s"organizations/${segment(namespace.get)}/users/${segment(userId.id)}/ui_features"
+    val path = if (uiFeature == "") pathPrefix else s"$pathPrefix/$uiFeature"
+    userProfileRequest(path)
+      .transform(_.withMethod(method))
+      .withUser(userId)
+      .execResult(apiExec)
+  }
+
   def getCredentialsBundle(namespace: Namespace, keyUuid: UUID)(implicit traceData: TraceData): Future[Result] =
     userProfileRequest(s"${segment(namespace.get)}/credentials/$keyUuid")
       .transform(_.withMethod("GET"))

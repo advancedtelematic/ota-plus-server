@@ -54,6 +54,11 @@ class OrganizationController @Inject()(val conf: Configuration,
       deviceRegistryApi.availableDeviceTags(request.namespace).map(Ok(_))
     }
 
+  def uiFeatures(uiFeature: String): Action[AnyContent] =
+    authAction.async { implicit request =>
+      userProfileApi.organizationUserUiFeatures(request.namespace, request.idToken.userId, uiFeature, request.method)
+    }
+
   private def buildOrganizationRequest(path: String, namespace: Namespace)
                                       (implicit request: AuthorizedSessionRequest[AnyContent]): Future[Result] =
     userProfileApi.organizationRequest(

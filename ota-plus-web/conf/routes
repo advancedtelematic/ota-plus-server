@@ -36,6 +36,11 @@ GET     /health/version                          com.advancedtelematic.controlle
 GET     /metric/:name                           com.advancedtelematic.controllers.MetricsController.metric(name: String)
 GET     /metrics                                 com.advancedtelematic.controllers.MetricsController.metricSamples(name: List[String])
 
+# UI features
+GET     /ui_features                             com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature="")
+PUT     /ui_features/:uiFeature                  com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature: String)
+DELETE  /ui_features/:uiFeature                  com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature: String)
+
 # User profile
 GET     /user/profile                            com.advancedtelematic.controllers.UserProfileController.getUserProfile
 PUT     /user/profile                            com.advancedtelematic.controllers.UserProfileController.updateUserProfile
@@ -57,6 +62,5 @@ PATCH   /organization                     com.advancedtelematic.controllers.Orga
 PATCH   /organizations/:namespace         com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path="", namespace: Namespace)
 POST    /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 POST    /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
-PUT     /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 DELETE  /organization/*path               com.advancedtelematic.controllers.OrganizationController.proxyRequest(path: String)
 DELETE  /organizations/:namespace/*path   com.advancedtelematic.controllers.OrganizationController.proxyRequestForNs(path: String, namespace: Namespace)
