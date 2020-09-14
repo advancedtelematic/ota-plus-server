@@ -1,5 +1,5 @@
 
-const crypto = require('crypto')
+const crypto = require('crypto');
 const fs = require('fs-extra');
 const https = require('https');
 const unzip = require('unzipper');
@@ -215,7 +215,6 @@ const run = () => {
                 console.log('');
                 console.log('\x1b[31m', 'New strings found in Izumi');
                 console.log('');
-                process.exit(-1);
               } else {
                 console.log('');
                 console.log('\x1b[32m', 'No new strings found in Izumi');
