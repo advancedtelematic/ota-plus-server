@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const ButtonsWrapper = styled.div`
   display: flex;
+  margin-top: 30px;
   & > button {
     min-width: 160px;
     width: auto;
@@ -14,32 +15,35 @@ export const ButtonsWrapper = styled.div`
 `;
 
 export const MainContent = styled.div`
-  & > h1 {
-    font-size: 22px;
-    line-height: 30px;
-    margin: 0;
-  }
+  padding: 30px 0;
 `;
 
 export const TextsWrapper = styled.div`
-  line-height: 22px;
+  margin-top: 10px;
+  line-height: 15px;
   font-size: 13px;
   font-weight: 400;
   color: ${({ theme }) => theme.palette.texts.black};
   display: flex;
   align-items: center;
-  & > div:first-of-type {
-    width: 400px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  & > div {
+    margin-right: 30px;
+  }
+  #copyable-value-container { 
+    display: block;
+    width: auto;
+    #copyable-value-value {
+      margin-left: 0;
+      font-size: 13px;
+      font-weight: 400;
+      color: ${({ theme }) => theme.palette.texts.black};
+      max-width: 116px;
+      width: auto;
+    }
   }
 `;
 
 export const Prefix = styled.span`
   color: ${({ theme }) => theme.palette.secondaryTranslucent};
-  margin-right: 5px;
-  :not(:first-child ){
-    margin-left: 30px;
-  }
+  margin-bottom: 3px;
 `;

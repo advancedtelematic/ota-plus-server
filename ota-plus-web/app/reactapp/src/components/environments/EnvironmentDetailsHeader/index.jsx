@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Button, PageHeader, Title } from '../../../partials';
+import { Button, CopyableValue, PageHeader, Title } from '../../../partials';
 import { ButtonsWrapper, MainContent, Prefix, TextsWrapper } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
@@ -24,14 +24,20 @@ const EnvironmentDetailsHeader = ({
         <MainContent>
           {namespace && (
             <>
-              <Title>{name}</Title>
+              <Title size="large">{name}</Title>
               <TextsWrapper>
-                <Prefix>{t('profile.organization.details.id')}</Prefix>
-                <div>{namespace}</div>
-                <Prefix>{t('profile.organization.details.created')}</Prefix>
-                <div>{getFormattedDateTime(createdAt, RECENTLY_CREATED_DATE_FORMAT)}</div>
-                <Prefix>{t('profile.organization.details.by')}</Prefix>
-                <div>{creatorEmail}</div>
+                <div>
+                  <Prefix>{t('profile.organization.details.id')}</Prefix>
+                  <CopyableValue value={namespace} />
+                </div>
+                <div>
+                  <Prefix>{t('profile.organization.details.created')}</Prefix>
+                  <div>{getFormattedDateTime(createdAt, RECENTLY_CREATED_DATE_FORMAT)}</div>
+                </div>
+                <div>
+                  <Prefix>{t('profile.organization.details.by')}</Prefix>
+                  <div>{creatorEmail}</div>
+                </div>
               </TextsWrapper>
             </>
           )}
