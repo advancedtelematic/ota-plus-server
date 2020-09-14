@@ -311,3 +311,56 @@ run ```npm rebuild node-sass``` to download the binding for your current environ
 ```sh
 https://localhost:9443/
 ```
+
+
+# Frontend development
+
+####Project structure
+
+Frontend application is located in ```ota-plus-server/ota-plus-web/app/reactapp``` directory.
+
+Structure:
+```contracts``` - terms and conditions after signing up\
+```coverage``` - unit tests coverage for jest and enzyme\
+```node_modules``` - all installed node.js modules by npm\
+```scripts``` - scripts for Izumi and devices creating\
+```src``` - code source files\
+```.eslintrc.json``` -  linter tool for identifying and reporting on patterns in JavaScript\
+```package.json``` - configuration file of npm
+
+####Legacy and new code (components)
+All the components without unit tests are old ones.
+
+####Unit tests
+For unit tests we are using Enzyme (tool for testing React components) and Jest (framework for tests running).
+
+To run unit tests call ```npm run test```\
+To run tests with coverage call ```npm run test:coverage```\
+If you want to run unit tests only on a specific component call ```npm run test src/partials/Footer/__tests__/Footer.spec.js ```
+
+####ESLint
+To run linter call ```npm run lint```
+
+####Texts & Izumi
+The texts can be found in ```ota-plus-server/ota-plus-web/app/assets/locales/en/translation.json```
+
+Izumi project is [here](https://izumi.ext.here.com/otaconnect/)
+
+To check new updates in Izumi call ```npm run izumi-check```
+To update all the strings from Izumi call ```npm run izumi-update```
+
+####How to debug
+For example we want to debug an click action of a "Create environment" button (id: "button-create-env") in "Environments" tab.
+ - At first we have to find a body of the click action, which is the a function "onCreateEnvBtnClick" declared in ```src/components/environments/EnvironmentsHeader/index.jsx```.\
+ - The "onCreateEnvBtnClick" function calls another function named "toggleCreateEnvModal" declared in ```src/pages/Environments/index.jsx```.\
+ - Now we have to open Developer tools in web browser and navigate to "Sources" tab.
+ - In the page section navigate to ```webpack://``` -> ```.``` -> ```src``` -> ```pages``` -> ```Environments``` and open ```index.js``` file.
+ - Set a breakpoint in ```toggleCreateEnvModal``` function body.
+ - Click on the "Create environment" button.
+ - Now debugger is in "Pause" mode
+ - In ```Scope\Closure (Environments)``` section you can see ```createEnvModalOpen``` parameter has ```false``` value.
+ - Click on ```Resume script execution``` button.
+ - Close the "Create environment" window.
+ - Now debugger is in "Pause" mode again.
+ - In ```Scope\Closure (Environments)``` section you can see ```createEnvModalOpen``` parameter has ```true``` value.
+ 
