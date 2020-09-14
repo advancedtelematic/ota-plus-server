@@ -37,9 +37,9 @@ GET     /metric/:name                           com.advancedtelematic.controller
 GET     /metrics                                 com.advancedtelematic.controllers.MetricsController.metricSamples(name: List[String])
 
 # UI features
-GET     /ui_features                             com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature="")
-PUT     /ui_features/:uiFeature                  com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature: String)
-DELETE  /ui_features/:uiFeature                  com.advancedtelematic.controllers.OrganizationController.uiFeatures(uiFeature: String)
+GET     /organizations/:ns/ui_features           com.advancedtelematic.controllers.OrganizationController.uiFeatures(ns: Namespace, feature="")
+POST    /organizations/:ns/ui_features/:feature  com.advancedtelematic.controllers.OrganizationController.uiFeatures(ns: Namespace, feature: String)
+DELETE  /organizations/:ns/ui_features/:feature  com.advancedtelematic.controllers.OrganizationController.uiFeatures(ns: Namespace, feature: String)
 
 # User profile
 GET     /user/profile                            com.advancedtelematic.controllers.UserProfileController.getUserProfile
