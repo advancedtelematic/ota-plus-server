@@ -16,6 +16,7 @@ import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_SOFTWARE_SEE_DETAILS, OTA_SOFTWARE_DELETE_SOFTWARE } from '../../constants/analyticsActions';
 import { EVENTS, SLIDE_ANIMATION_TYPE } from '../../constants';
+import { UI_FEATURES, isFeatureEnabled } from '../../config';
 
 const headerHeight = 28;
 const HEADERS_CUMULATIVE_HEIGHT = 150;
@@ -223,7 +224,7 @@ class List extends Component {
       showEditComment,
       t
     } = this.props;
-    const { softwareStore } = stores;
+    const { softwareStore, userStore } = stores;
 
     return (
       <div className="ios-list" ref={this.listRef}>
@@ -272,30 +273,32 @@ class List extends Component {
                         <div className="c-package__details">
                           <div className="c-package__main-name">
                             <span>{pack.packageName}</span>
-                            <div className="dots" id="package-menu" onClick={() => this.showSubmenu()}>
-                              <span />
-                              <span />
-                              <span />
-                              {this.submenuIsShown && (
-                                <Dropdown hideSubmenu={this.hideSubmenu}>
-                                  <li className="package-dropdown-item">
-                                    <a
-                                      className="package-dropdown-item"
-                                      href="#"
-                                      id="edit-comment"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        this.packVersions = pack.versions;
-                                        this.showDeleteModal();
-                                        sendAction(OTA_SOFTWARE_DELETE_SOFTWARE);
-                                      }}
-                                    >
-                                      {t('software.action_buttons.delete_software')}
-                                    </a>
-                                  </li>
-                                </Dropdown>
-                              )}
-                            </div>
+                            {isFeatureEnabled(userStore.uiFeatures, UI_FEATURES.DELETE_SOFTWARE) && (
+                              <div className="dots" id="package-menu" onClick={() => this.showSubmenu()}>
+                                <span />
+                                <span />
+                                <span />
+                                {this.submenuIsShown && (
+                                  <Dropdown hideSubmenu={this.hideSubmenu}>
+                                    <li className="package-dropdown-item">
+                                      <a
+                                        className="package-dropdown-item"
+                                        href="#"
+                                        id="edit-comment"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          this.packVersions = pack.versions;
+                                          this.showDeleteModal();
+                                          sendAction(OTA_SOFTWARE_DELETE_SOFTWARE);
+                                        }}
+                                      >
+                                        {t('software.action_buttons.delete_software')}
+                                      </a>
+                                    </li>
+                                  </Dropdown>
+                                )}
+                              </div>
+                            )}
                           </div>
                           <div className="c-package__versions-wrapper">
                             <div className="c-package__chart">

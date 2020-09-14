@@ -12,13 +12,14 @@ class ListItem extends Component {
     const {
       device,
       installedPackage,
+      isAutoUpdateEnabled,
       isSelected,
       pack,
       queuedPackage,
       showPackageDetails,
       toggleAutoInstall,
       togglePackage,
-      t
+      t,
     } = this.props;
     return !pack.unmanaged ? (
       <span>
@@ -79,7 +80,7 @@ class ListItem extends Component {
                 </div>
               ) : null
             ) : null}
-            {isSelected ? (
+            {isSelected && isAutoUpdateEnabled ? (
               <div className="software-panel__auto-update">
                 {t('devices.software.automatic_update')}
                 <Tooltip title={t('devices.software.automatic_update_tooltip')} placement="top">
@@ -124,13 +125,14 @@ class ListItem extends Component {
 ListItem.propTypes = {
   device: PropTypes.shape({}).isRequired,
   installedPackage: PropTypes.string,
+  isAutoUpdateEnabled: PropTypes.bool,
   isSelected: PropTypes.bool.isRequired,
   pack: PropTypes.shape({}).isRequired,
   queuedPackage: PropTypes.string,
   showPackageDetails: PropTypes.func.isRequired,
   toggleAutoInstall: PropTypes.func.isRequired,
   togglePackage: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
 };
 
 export default withTranslation()(ListItem);

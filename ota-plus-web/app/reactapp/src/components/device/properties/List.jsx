@@ -10,7 +10,7 @@ import { Tooltip } from 'antd';
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 import { DEVICE_PROPERTIES_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
-import { BAN_ICON_RED, CROSS_ICON_RED, TICK_ICON_GREEN } from '../../../config';
+import { BAN_ICON_RED, CROSS_ICON_RED, TICK_ICON_GREEN, isFeatureEnabled, UI_FEATURES } from '../../../config';
 
 @inject('stores')
 @observer
@@ -60,7 +60,8 @@ class List extends Component {
 
   render() {
     const { installPackage, stores, t } = this.props;
-    const { softwareStore, devicesStore } = stores;
+    const { softwareStore, devicesStore, userStore } = stores;
+    const { uiFeatures } = userStore;
 
     const isPackageBlocklisted = false;
     let isPackageQueued = false;
@@ -246,7 +247,7 @@ class List extends Component {
         ) : (
           noPackage
         )}
-        {!isPackageInstalled && (
+        {!isPackageInstalled && isFeatureEnabled(uiFeatures, UI_FEATURES.LAUNCH_SINGLE_DEVICE_UPDATE) && (
           <div className={isPackageQueued ? 'properties-panel__install' : 'properties-panel__install not-installed'}>
             <Tooltip title={t('devices.mtu.properties.install_tooltip')} placement="left">
               <button

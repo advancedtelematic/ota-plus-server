@@ -67,7 +67,13 @@ const Environments = () => {
     sendAction(OTA_ENVIRONMENT_DETAILS);
   };
 
-  const getInitialNamespaceName = () => environments.find(env => env.namespace === profile.initialNamespace).name;
+  const getInitialNamespaceName = () => {
+    const initialNamespace = environments.find(env => env.namespace === profile.initialNamespace);
+    if (initialNamespace) {
+      return initialNamespace.name;
+    }
+    return '';
+  };
 
   return (
     <MetaData title={t('profile.organization.title')}>

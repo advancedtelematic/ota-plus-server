@@ -16,6 +16,7 @@ import { DEVICE_SUMMARY_DATE_FORMAT } from '../../constants/datesTimesConstants'
 import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICE_DELETE } from '../../constants/analyticsActions';
+import { isFeatureEnabled, UI_FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -65,8 +66,9 @@ class Header extends Component {
 
   render() {
     const { stores, t } = this.props;
-    const { devicesStore } = stores;
+    const { devicesStore, userStore } = stores;
     const { device } = devicesStore;
+    const { uiFeatures } = userStore;
     let deviceStatus = t('devices.statuses.unknown');
     switch (device.deviceStatus) {
       case DEVICE_STATUS_UP_TO_DATE:
@@ -142,16 +144,24 @@ class Header extends Component {
                     <span />
                     {this.headerMenuShown && (
                       <Dropdown hideSubmenu={this.hideHeaderMenu} customClassName="relative">
-                        <li className="device-dropdown-item">
-                          <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
-                            {t('devices.rename')}
-                          </a>
-                        </li>
-                        <li className="device-dropdown-item">
-                          <a className="device-dropdown-item" id="delete-device" onClick={this.showDeleteConfirmation}>
-                            {t('devices.delete')}
-                          </a>
-                        </li>
+                        {isFeatureEnabled(uiFeatures, UI_FEATURES.RENAME_DEVICE) && (
+                          <li className="device-dropdown-item">
+                            <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
+                              {t('devices.rename')}
+                            </a>
+                          </li>
+                        )}
+                        {isFeatureEnabled(uiFeatures, UI_FEATURES.DELETE_DEVICE) && (
+                          <li className="device-dropdown-item">
+                            <a
+                              className="device-dropdown-item"
+                              id="delete-device"
+                              onClick={this.showDeleteConfirmation}
+                            >
+                              {t('devices.delete')}
+                            </a>
+                          </li>
+                        )}
                       </Dropdown>
                     )}
                   </div>

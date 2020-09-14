@@ -25,7 +25,10 @@ const CreateEnvModal = ({ onClose, onConfirm }) => {
   const [environmentName, setEnvironmentName] = useState('');
 
   useEffect(() => {
-    document.getElementById('name-input').focus();
+    const inputField = document.getElementById('name-input');
+    if (inputField) {
+      inputField.focus();
+    }
   }, []);
 
   const onInputChange = (event) => {

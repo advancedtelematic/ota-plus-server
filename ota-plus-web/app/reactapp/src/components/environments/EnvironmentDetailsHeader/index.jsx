@@ -1,10 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useObserver } from 'mobx-react';
+import { useStores } from '../../../stores/hooks';
 import { Button, CopyableValue, PageHeader, Title } from '../../../partials';
 import { ButtonsWrapper, MainContent, Prefix, TextsWrapper } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
+import { isFeatureEnabled, UI_FEATURES } from '../../../config';
+
+function useStoreData() {
+  const { stores } = useStores();
+  return useObserver(() => ({
+    uiFeatures: stores.userStore.uiFeatures,
+  }));
+}
 
 const EnvironmentDetailsHeader = ({
   envInfo: {
@@ -17,6 +27,7 @@ const EnvironmentDetailsHeader = ({
   onRenameBtnClick
 }) => {
   const { t } = useTranslation();
+  const { uiFeatures } = useStoreData();
 
   return (
     <PageHeader
@@ -45,25 +56,29 @@ const EnvironmentDetailsHeader = ({
       )}
       sideContent={(
         <ButtonsWrapper>
-          <Button
-            htmlType="button"
-            light="true"
-            id="btn-rename-env"
-            size="large"
-            onClick={onRenameBtnClick}
-          >
-            {t('profile.organization.details.rename')}
-          </Button>
-          <Button
-            htmlType="button"
-            type="primary"
-            light="true"
-            id="btn-add-member"
-            size="large"
-            onClick={onAddMemberBtnClick}
-          >
-            {t('profile.organization.details.add-member')}
-          </Button>
+          {isFeatureEnabled(uiFeatures, UI_FEATURES.RENAME_ENV) && (
+            <Button
+              htmlType="button"
+              light="true"
+              id="btn-rename-env"
+              size="large"
+              onClick={onRenameBtnClick}
+            >
+              {t('profile.organization.details.rename')}
+            </Button>
+          )}
+          {isFeatureEnabled(uiFeatures, UI_FEATURES.ADD_MEMBER) && (
+            <Button
+              htmlType="button"
+              type="primary"
+              light="true"
+              id="btn-add-member"
+              size="large"
+              onClick={onAddMemberBtnClick}
+            >
+              {t('profile.organization.details.add-member')}
+            </Button>
+          )}
         </ButtonsWrapper>
       )}
     />

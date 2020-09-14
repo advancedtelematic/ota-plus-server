@@ -12,6 +12,14 @@ import {
   OTA_HOME_CREATE_ENVIRONMENT,
   OTA_HOME_READ_MORE_ENVIRONMENT
 } from '../../../../../constants/analyticsActions';
+import { UI_FEATURES } from '../../../../../config';
+
+const USER_UI_FEATURES = [
+  {
+    id: UI_FEATURES.ADD_MEMBER,
+    isAllowed: true
+  },
+];
 
 const mockedStores = {
   userStore: new UserStore(),
@@ -38,6 +46,7 @@ describe('<BuildTeam />', () => {
 
   beforeEach(() => {
     mockedStores.userStore.getOrganizationUsers = mockGetOrganizationUsers;
+    mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
     wrapper = mountComponent();
   });
 

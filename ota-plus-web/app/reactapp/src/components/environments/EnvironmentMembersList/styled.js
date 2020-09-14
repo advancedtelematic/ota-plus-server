@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { List } from 'antd';
 import { Button } from '../../../partials';
 
@@ -21,6 +21,17 @@ export const ListItem = styled(List.Item)`
   color: ${({ theme }) => theme.palette.texts.black};
   padding: 15px 20px;
   position: relative;
+  ${({ active }) => active && css`
+    ::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background-color: ${({ theme }) => theme.palette.primary};
+    }
+  `}
   :hover {
     background-color: ${({ theme }) => theme.palette.backgroundLight};
   }
@@ -28,6 +39,9 @@ export const ListItem = styled(List.Item)`
     font-weight: 500;
     height: 20px;
     margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-right: 12px;
   }
   & > div:last-child {
     line-height: 15px;
@@ -126,6 +140,17 @@ export const OwnerTag = styled.div`
   letter-spacing: 0;
   margin-left: 6px;
   text-transform: uppercase;
+`;
+
+export const FullRestrictionTag = styled(OwnerTag)`
+  background-color: ${({ theme }) => theme.palette.white};
+  color: ${({ theme }) => theme.palette.lightGrey};
+  border: 1px solid ${({ theme }) => theme.palette.lightGrey};
+  line-height: 12px;
+`;
+
+export const AccessManagerTag = styled(OwnerTag)`
+  background-color: #EC610E;
 `;
 
 export const RemoveButton = styled(Button)`

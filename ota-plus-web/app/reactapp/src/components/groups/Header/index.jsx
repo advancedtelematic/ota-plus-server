@@ -13,7 +13,9 @@ import {
   DEVICES_LIMIT_PER_PAGE,
   HELP_ICON_LIGHT,
   SAVE_ICON,
-  WARNING_ICON_RED
+  WARNING_ICON_RED,
+  UI_FEATURES,
+  isFeatureEnabled
 } from '../../../config';
 import {
   ButtonsContainer,
@@ -34,6 +36,7 @@ function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
     customDeviceFields: stores.devicesStore.customDeviceFields,
+    uiFeatures: stores.userStore.uiFeatures
   }));
 }
 
@@ -46,7 +49,7 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
   const [displayDeleteMessage, setDisplayDeleteMessage] = useState(false);
   const [currentDeleteFieldName, setCurrentDeleteFieldName] = useState(false);
   const { stores } = useStores();
-  const { customDeviceFields } = useStoreData();
+  const { customDeviceFields, uiFeatures } = useStoreData();
 
   const toggleRenameModalOpen = () => {
     setRenameModalOpen(val => !val);
@@ -125,24 +128,28 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
               </Tooltip>
             )}
           </div>
-          <Button
-            id="groups-panel-custom-fields-upload-button"
-            onClick={uploadDeviceCustomFields}
-            minwidth="100px"
-          >
-            <span>{t('devices.custom-fields.upload-button')}</span>
-          </Button>
+          {isFeatureEnabled(uiFeatures, UI_FEATURES.UPLOAD_FILE_CUSTOM_FIELDS) && (
+            <Button
+              id="groups-panel-custom-fields-upload-button"
+              onClick={uploadDeviceCustomFields}
+              minwidth="100px"
+            >
+              <span>{t('devices.custom-fields.upload-button')}</span>
+            </Button>
+          )}
         </div>
         <div className="groups-panel__divider" />
       </>
       <div className="groups-panel__header">
         <div className="groups-panel__title">Groups</div>
-        <Button
-          id="add-new-group"
-          onClick={showCreateGroupModal}
-        >
-          <span>{t('groups.add_group')}</span>
-        </Button>
+        {isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_DEVICE_GROUP) && (
+          <Button
+            id="add-new-group"
+            onClick={showCreateGroupModal}
+          >
+            <span>{t('groups.add_group')}</span>
+          </Button>
+        )}
       </div>
       <OTAModal
         width="818px"
@@ -187,26 +194,32 @@ const Header = ({ showCreateGroupModal, uploadDeviceCustomFields }) => {
                       <>
                         <span id={`cdf-title-${field.tagId}`}>{field.tagId}</span>
                         <ButtonsContainer>
-                          <div
-                            id="edit-name-btn"
-                            className="cdf-edit-name"
-                            onClick={() => handleRenameField(field.tagId)}
-                          />
-                          {field.isDelible
-                            ? (
-                              <div
-                                id={`delete-name-btn-${field.tagId}`}
-                                className="cdf-delete-name"
-                                onClick={() => handleDeleteField(field.tagId)}
-                              />
-                            ) : (
-                              <Tooltip title={t('devices.custom-fields.delete-modal.cannot')} placement="top">
-                                <div
-                                  id={`delete-name-btn-disabled-${field.tagId}`}
-                                  className="cdf-delete-name-disabled"
-                                />
-                              </Tooltip>
-                            )}
+                          {isFeatureEnabled(uiFeatures, UI_FEATURES.RENAME_CUSTOM_FIELD) && (
+                            <div
+                              id="edit-name-btn"
+                              className="cdf-edit-name"
+                              onClick={() => handleRenameField(field.tagId)}
+                            />
+                          )}
+                          {isFeatureEnabled(uiFeatures, UI_FEATURES.DELETE_CUSTOM_FIELD) && (
+                            <>
+                              {field.isDelible
+                                ? (
+                                  <div
+                                    id={`delete-name-btn-${field.tagId}`}
+                                    className="cdf-delete-name"
+                                    onClick={() => handleDeleteField(field.tagId)}
+                                  />
+                                ) : (
+                                  <Tooltip title={t('devices.custom-fields.delete-modal.cannot')} placement="top">
+                                    <div
+                                      id={`delete-name-btn-disabled-${field.tagId}`}
+                                      className="cdf-delete-name-disabled"
+                                    />
+                                  </Tooltip>
+                                )}
+                            </>
+                          )}
                         </ButtonsContainer>
                       </>
                     )}

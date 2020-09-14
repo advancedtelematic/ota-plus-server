@@ -15,6 +15,8 @@ import {
   PLUS_ICON,
   SAVE_ICON,
   WARNING_ICON_RED,
+  isFeatureEnabled,
+  UI_FEATURES,
 } from '../../../config';
 import { CUSTOM_DEVICE_SPECIFIC_FIELD_REGEX } from '../../../constants/regexPatterns';
 import { sendAction } from '../../../helpers/analyticsHelper';
@@ -28,6 +30,7 @@ function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
     deviceSpecificTags: stores.devicesStore.deviceSpecificTags,
+    uiFeatures: stores.userStore.uiFeatures
   }));
 }
 
@@ -38,7 +41,7 @@ const CustomDeviceFieldsEditor = () => {
   const [newFieldName, setNewFieldName] = useState('');
   const [error, setError] = useState(null);
   const { stores } = useStores();
-  const { deviceSpecificTags } = useStoreData();
+  const { deviceSpecificTags, uiFeatures } = useStoreData();
 
   const handleRenameField = (fieldName, value) => {
     setNewFieldName(value);
@@ -102,11 +105,13 @@ const CustomDeviceFieldsEditor = () => {
                 ) : (
                   <>
                     <span id={`cdf-value-${tagId}`}>{tagValue}</span>
-                    <div
-                      id="edit-name-btn"
-                      className="cdf-edit-name"
-                      onClick={() => handleRenameField(tagId, tagValue)}
-                    />
+                    {isFeatureEnabled(uiFeatures, UI_FEATURES.EDIT_CUSTOM_FIELD_VALUE) && (
+                      <div
+                        id="edit-name-btn"
+                        className="cdf-edit-name"
+                        onClick={() => handleRenameField(tagId, tagValue)}
+                      />
+                    )}
                   </>
                 )}
               </div>

@@ -21,6 +21,7 @@ import {
   API_USER_ORGANIZATIONS,
   API_USER_ORGANIZATIONS_GET_USERS,
   ORGANIZATION_NAMESPACE_COOKIE,
+  API_UI_FEATURES,
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -78,6 +79,10 @@ export default class UserStore {
 
   @observable ifLogout = false;
 
+  @observable uiFeatures = [];
+
+  @observable currentEnvUIFeatures = {};
+
   constructor() {
     this.activatedDevices = observable.map();
     this.activeDevices = observable.map();
@@ -91,7 +96,10 @@ export default class UserStore {
     this.getCurrentOrganizationAsync = observable.map();
     this.getOrganizationsAsync = observable.map();
     this.getOrganizationUsersAsync = observable.map();
+    this.getUIFeaturesAsync = observable.map();
     this.addUserToOrganizationAsync = observable.map();
+    this.toggleFeatureOnAsync = observable.map();
+    this.toggleFeatureOffAsync = observable.map();
     resetAsync(this.userFetchAsync);
     resetAsync(this.userUpdateAsync);
     resetAsync(this.userChangePasswordAsync);
@@ -103,6 +111,7 @@ export default class UserStore {
     resetAsync(this.getCurrentOrganizationAsync);
     resetAsync(this.getOrganizationsAsync);
     resetAsync(this.getOrganizationUsersAsync);
+    resetAsync(this.getUIFeaturesAsync);
     resetAsync(this.addUserToOrganizationAsync);
   }
 
@@ -198,6 +207,55 @@ export default class UserStore {
       this.getOrganizationUsersAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.getOrganizationUsersAsync = handleAsyncError(error);
+    }
+  };
+
+  getUIFeatures = async (
+    namespace = this.userOrganizationNamespace,
+    email = this.user.email,
+    notInitial,
+    resetUserUIFeatures
+  ) => {
+    resetAsync(this.getUIFeaturesAsync, true);
+    try {
+      const encodedEmail = encodeURIComponent(email);
+      const response = await axios.get(encodeUrl(`${API_UI_FEATURES(namespace)}?email=${encodedEmail}`));
+      const { data } = response;
+      if (!notInitial) {
+        this.uiFeatures = data;
+      } else {
+        this.currentEnvUIFeatures = { ...this.currentEnvUIFeatures, [email]: data };
+      }
+      if (resetUserUIFeatures) {
+        this.uiFeatures = data;
+      }
+      this.getUIFeaturesAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.getUIFeaturesAsync = handleAsyncError(error);
+    }
+  };
+
+  toggleFeatureOn = async (namespace, email, id) => {
+    resetAsync(this.toggleFeatureOnAsync, true);
+    try {
+      const encodedEmail = encodeURIComponent(email);
+      const response = await axios.post(encodeUrl(`${API_UI_FEATURES(namespace)}/${id}?email=${encodedEmail}`));
+      this.getUIFeatures(namespace, email, true, this.user.email === email);
+      this.toggleFeatureOnAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.toggleFeatureOnAsync = handleAsyncError(error);
+    }
+  };
+
+  toggleFeatureOff = async (namespace, email, id) => {
+    resetAsync(this.toggleFeatureOffAsync, true);
+    try {
+      const encodedEmail = encodeURIComponent(email);
+      const response = await axios.delete(encodeUrl(`${API_UI_FEATURES(namespace)}/${id}?email=${encodedEmail}`));
+      this.getUIFeatures(namespace, email, true, this.user.email === email);
+      this.toggleFeatureOffAsync = handleAsyncSuccess(response);
+    } catch (error) {
+      this.toggleFeatureOffAsync = handleAsyncError(error);
     }
   };
 

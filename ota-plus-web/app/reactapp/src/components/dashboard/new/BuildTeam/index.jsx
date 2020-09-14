@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useObserver } from 'mobx-react';
 import { useStores } from '../../../../stores/hooks';
 import { Title } from '../../../../partials';
 import { AddMembersButton, BuildTeamWrapper, Description, StyledIcon, TitleWrapper } from './styled';
-import { PEOPLE_ICON, PLUS_ICON } from '../../../../config';
+import { PEOPLE_ICON, PLUS_ICON, isFeatureEnabled, UI_FEATURES } from '../../../../config';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import {
   OTA_HOME_ADD_MEMBERS,
@@ -14,8 +15,16 @@ import {
 import ExternalLink from '../../../../partials/ExternalLink';
 import { URL_ENVIRONMENTS_READ_MORE } from '../../../../constants/urlConstants';
 
+function useStoreData() {
+  const { stores } = useStores();
+  return useObserver(() => ({
+    uiFeatures: stores.userStore.uiFeatures
+  }));
+}
+
 const BuildTeam = () => {
   const { t } = useTranslation();
+  const { uiFeatures } = useStoreData();
   const { stores } = useStores();
 
   const handleAddMemberClick = () => {
@@ -41,19 +50,21 @@ const BuildTeam = () => {
         {t('dashboard.build-team.description')}
         {' '}
         <ExternalLink
-          key={'build-team-read-more-link'}
+          key="build-team-read-more-link"
           onClick={() => sendAction(OTA_HOME_READ_MORE_ENVIRONMENT)}
           url={URL_ENVIRONMENTS_READ_MORE}
         >
           {t('dashboard.build-team.read-more')}
         </ExternalLink>
       </Description>
-      <Link to="/environments">
-        <AddMembersButton type="link" id="build-team-add-btn" onClick={() => handleAddMemberClick()}>
-          <img src={PLUS_ICON} />
-          {t('dashboard.build-team.button-title-add-members')}
-        </AddMembersButton>
-      </Link>
+      {isFeatureEnabled(uiFeatures, UI_FEATURES.ADD_MEMBER) && (
+        <Link to="/environments">
+          <AddMembersButton type="link" id="build-team-add-btn" onClick={() => handleAddMemberClick()}>
+            <img src={PLUS_ICON} />
+            {t('dashboard.build-team.button-title-add-members')}
+          </AddMembersButton>
+        </Link>
+      )}
       <Link to="/environments">
         <AddMembersButton type="link" id="build-team-create-env-btn" onClick={() => handleCreateEnvironmentClick()}>
           <img src={PLUS_ICON} />

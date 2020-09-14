@@ -1,8 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { Provider } from 'mobx-react';
 import EnvironmentDetailsHeader from '..';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
+import UserStore from '../../../../stores/UserStore';
+import { UI_FEATURES } from '../../../../config';
 
 const ENV_INFO = {
   createdAt: '2020-03-24T11:06:32Z',
@@ -11,11 +14,28 @@ const ENV_INFO = {
   namespace: 'envnamespace',
 };
 
-function mountComponent(props) {
+const USER_UI_FEATURES = [
+  {
+    id: UI_FEATURES.RENAME_ENV,
+    isAllowed: true
+  },
+  {
+    id: UI_FEATURES.ADD_MEMBER,
+    isAllowed: true
+  },
+];
+
+const mockedStores = {
+  userStore: new UserStore(),
+};
+
+function mountComponent(props, stores = mockedStores) {
   return mount(
-    <ThemeProvider theme={theme}>
-      <EnvironmentDetailsHeader {...props} />
-    </ThemeProvider>
+    <Provider stores={stores}>
+      <ThemeProvider theme={theme}>
+        <EnvironmentDetailsHeader {...props} />
+      </ThemeProvider>
+    </Provider>
   );
 }
 
@@ -39,6 +59,7 @@ describe('<EnvironmentDetailsHeader />', () => {
       onAddMemberBtnClick: mockOnAddMemberBtnClick,
       onRenameBtnClick: mockOnRenameBtnClick
     };
+    mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
     wrapper = mountComponent(props);
   });
 

@@ -8,7 +8,7 @@ import { withTranslation } from 'react-i18next';
 
 import { Button, Tooltip } from 'antd';
 import { EditCampaignModal, Dropdown } from '../../partials';
-import { CAMPAIGNS_STATUS_LAUNCHED, CAMPAIGNS_STATUS_SCHEDULED } from '../../config';
+import { CAMPAIGNS_STATUS_LAUNCHED, CAMPAIGNS_STATUS_SCHEDULED, isFeatureEnabled, UI_FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -22,6 +22,7 @@ class SubHeader extends Component {
   static propTypes = {
     campaign: PropTypes.shape({}).isRequired,
     showCancelCampaignModal: PropTypes.func,
+    stores: PropTypes.shape({}),
     t: PropTypes.func.isRequired
   };
 
@@ -50,14 +51,17 @@ class SubHeader extends Component {
   };
 
   render() {
-    const { campaign, showCancelCampaignModal, t } = this.props;
+    const { campaign, showCancelCampaignModal, stores, t } = this.props;
+    const { userStore } = stores;
+    const { uiFeatures } = userStore;
     const { name } = campaign;
     return (
       <div className="statistics__campaign-name">
         <h3>{campaign.name}</h3>
         <div className="statistics__campaign-actions">
           {(campaign.statistics.status === CAMPAIGNS_STATUS_LAUNCHED
-            || campaign.statistics.status === CAMPAIGNS_STATUS_SCHEDULED) && (
+          || campaign.statistics.status === CAMPAIGNS_STATUS_SCHEDULED)
+          && isFeatureEnabled(uiFeatures, UI_FEATURES.CANCEL_CAMPAIGN) && (
             <Tooltip title={t('campaigns.details.cancel_tooltip')} placement="left">
               <div className="cancel-campaign">
                 <Button

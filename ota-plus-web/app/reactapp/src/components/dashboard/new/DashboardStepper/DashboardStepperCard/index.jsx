@@ -34,7 +34,17 @@ const renderStats = (id, statValue, description) => (
   </>
 );
 
-const DashboardStepperCard = ({ id, buttonTitle, description, iconPath, statValue, status, title, links }) => {
+const DashboardStepperCard = ({
+  id,
+  buttonTitle,
+  description,
+  showActionBtn,
+  iconPath,
+  statValue,
+  status,
+  title,
+  links
+}) => {
   const { t } = useTranslation();
   const history = useHistory();
 
@@ -89,15 +99,17 @@ const DashboardStepperCard = ({ id, buttonTitle, description, iconPath, statValu
           )
       }
       </div>
-      <div>
-        {links.tooltip && status === STEP_STATUS.INACTIVE
-          ? (
-            <Tooltip title={links.tooltip} overlayClassName="stepper-btn-tooltip">
-              {renderActionButton()}
-            </Tooltip>
-          )
-          : renderActionButton()}
-      </div>
+      {showActionBtn && (
+        <div>
+          {links.tooltip && status === STEP_STATUS.INACTIVE
+            ? (
+              <Tooltip title={links.tooltip} overlayClassName="stepper-btn-tooltip">
+                {renderActionButton()}
+              </Tooltip>
+            )
+            : renderActionButton()}
+        </div>
+      )}
     </Card>
   );
 };
@@ -108,6 +120,7 @@ DashboardStepperCard.propTypes = {
     PropTypes.string,
     PropTypes.node
   ]),
+  showActionBtn: PropTypes.bool,
   iconPath: PropTypes.string,
   id: PropTypes.string.isRequired,
   statValue: PropTypes.number,

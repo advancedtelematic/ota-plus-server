@@ -56,17 +56,17 @@ describe('<AccountSidebar />', () => {
     expect(wrapper.exists('.ant-drawer-open')).toEqual(false);
   });
 
-  it('should display 4 links, sign-out link by default and without usage link', () => {
-    const linksCount = 3;
+  it('should display 2 links, sign-out link by default and without usage link', () => {
+    const linksCount = 2;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);
     expect(wrapper.exists('#account-sidebar-link-usage')).toEqual(false);
   });
 
-  it('should display 5 links, sign-out link by default and usage link', () => {
+  it('should display 3 links, sign-out link by default and usage link', () => {
     wrapper = mountComponent([FEATURES.USAGE]);
-    const linksCount = 4;
+    const linksCount = 3;
     wrapper.find('#sidebar-avatar').first().simulate('click');
     expect(wrapper.find(LinkContent).length).toBe(linksCount);
     expect(wrapper.find(Signout).length).toBe(1);

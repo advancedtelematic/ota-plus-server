@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useObserver } from 'mobx-react';
+import { Checkbox, Tooltip } from 'antd';
 import { useStores } from '../../../stores/hooks';
 import EnvironmentDetailsHeader from '../EnvironmentDetailsHeader';
 import EnvironmentMembersList from '../EnvironmentMembersList';
 import AddMemberModal from '../modals/AddMemberModal';
 import RenameEnvModal from '../modals/RenameEnvModal';
 import { WarningModal, ExternalLink } from '../../../partials';
-import { FeaturesListHeader, SplitContainer, Sidepanel, ContentWrapper } from './styled';
+import { FeaturesListHeader, SplitContainer, Sidepanel, ContentWrapper, FeatureBlock } from './styled';
 import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
@@ -16,13 +17,16 @@ import {
   OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
-import { LAYERS_ICON_BLANK } from '../../../config';
+import { LAYERS_ICON_BLANK, UI_FEATURES, isFeatureEnabled } from '../../../config';
+import { URL_FEATURE_ACCESS_READ_MORE } from '../../../constants/urlConstants';
 
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
     currentEnvironment: stores.userStore.currentOrganization,
     environmentMembers: stores.userStore.userOrganizationUsers,
+    currentEnvUIFeatures: stores.userStore.currentEnvUIFeatures,
+    uiFeatures: stores.userStore.uiFeatures,
     user: stores.userStore.user,
   }));
 }
@@ -30,16 +34,19 @@ function useStoreData() {
 const EnvironmentDetails = () => {
   const { t } = useTranslation();
   const { stores } = useStores();
-  const { currentEnvironment, environmentMembers, user } = useStoreData();
+  const { currentEnvironment, environmentMembers, currentEnvUIFeatures, uiFeatures, user } = useStoreData();
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
   const [renameEnvModalOpen, setRenameEnvModalOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState('');
   const [removalModal, setRemovalModal] = useState({
     type: undefined
   });
   const { name, namespace } = currentEnvironment;
+  const canManageAccess = isFeatureEnabled(uiFeatures, UI_FEATURES.MANAGE_FEATURE_ACCESS);
 
   useEffect(() => () => {
     stores.userStore.userOrganizationUsers = [];
+    stores.userStore.currentEnvUIFeatures = {};
     stores.userStore.currentOrganization = {};
     stores.userStore.showEnvDetails = false;
   }, []);
@@ -54,6 +61,15 @@ const EnvironmentDetails = () => {
       toggleAddMemberModal();
     }
   }, []);
+
+  useEffect(() => {
+    if (environmentMembers.length > 0 && currentEnvironment) {
+      setSelectedMember(environmentMembers[0]);
+      environmentMembers.forEach((member) => {
+        stores.userStore.getUIFeatures(currentEnvironment.namespace, member.email, true);
+      });
+    }
+  }, [currentEnvironment, environmentMembers]);
 
   const handleAddMember = (email) => {
     stores.userStore.addUserToOrganization(email, namespace);
@@ -86,6 +102,10 @@ const EnvironmentDetails = () => {
   const setUserOrganization = (newNamespace) => {
     changeUserEnvironment(newNamespace);
     sendAction(OTA_ENVIRONMENT_SWITCH);
+  };
+
+  const handleMemberSelect = (member) => {
+    setSelectedMember(member);
   };
 
   const handleMemberRemoval = (email) => {
@@ -135,6 +155,14 @@ const EnvironmentDetails = () => {
     }
   };
 
+  const toggleFeature = (event, featureId) => {
+    if (event.target.checked) {
+      stores.userStore.toggleFeatureOn(currentEnvironment.namespace, selectedMember.email, featureId);
+    } else {
+      stores.userStore.toggleFeatureOff(currentEnvironment.namespace, selectedMember.email, featureId);
+    }
+  };
+
   return (
     <div>
       <EnvironmentDetailsHeader
@@ -146,9 +174,12 @@ const EnvironmentDetails = () => {
         <Sidepanel>
           {environmentMembers.length > 0 && (
             <EnvironmentMembersList
+              currentEnvUIFeatures={currentEnvUIFeatures}
               envInfo={currentEnvironment}
               environmentMembers={environmentMembers}
               onRemoveBtnClick={openRemovalModal}
+              onListItemClick={handleMemberSelect}
+              selectedUserEmail={selectedMember.email}
               user={user}
             />
           )}
@@ -158,7 +189,7 @@ const EnvironmentDetails = () => {
           <div>
             <span>{t('profile.organization.features.desc')}</span>
             {' '}
-            <ExternalLink weight="regular" id="feature-access-read-more" url="/">
+            <ExternalLink weight="regular" id="feature-access-read-more" url={URL_FEATURE_ACCESS_READ_MORE}>
               {t('profile.organization.features.read-more')}
             </ExternalLink>
           </div>
@@ -168,6 +199,24 @@ const EnvironmentDetails = () => {
             </span>
             <img src={LAYERS_ICON_BLANK} />
           </FeaturesListHeader>
+          {selectedMember
+            && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
+            && currentEnvUIFeatures[selectedMember.email]
+              .map(feature => (
+                <FeatureBlock key={feature.id} id={feature.id}>
+                  <span>{feature.name}</span>
+                  {selectedMember.email !== currentEnvironment.creatorEmail && (
+                    <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
+                      <Checkbox
+                        disabled={!canManageAccess}
+                        id={`feature-checkbox-${feature.isAllowed}`}
+                        onChange={event => toggleFeature(event, feature.id)}
+                        checked={feature.isAllowed}
+                      />
+                    </Tooltip>
+                  )}
+                </FeatureBlock>
+              ))}
         </ContentWrapper>
       </SplitContainer>
       {addMemberModalOpen && (
