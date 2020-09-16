@@ -26,7 +26,7 @@ image::img::edit_value_ddv.png[image,600]
 
 . Edit the value.
 +
-NOTE: The value should not be less than one character or exceed 20 characters and can only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+NOTE: The value should not be less than one character or exceed 20 characters and can only contain ASCII characters [a–zA–Z0–9], spaces, underscores ( _ ), and hyphens (-).
 
 . Click the save icon.
 
