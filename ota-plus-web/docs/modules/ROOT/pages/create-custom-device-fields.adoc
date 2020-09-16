@@ -11,7 +11,7 @@ TIP: You can use Microsoft Excel to generate CSV files. If you are working with 
 Make sure the file you upload meets all of the following requirements, or it will be rejected:
 
 * The delimiter is a semi-colon (;).
-* Field and value names are not less than one character or exceed 20 characters and only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+* Field and value names are not less than one character or exceed 20 characters and only contain ASCII characters [a–zA–Z0–9], spaces, underscores ( _ ), and hyphens (-).
 * The first line of the file has the column headings corresponding to the custom device fields that you want to add.
 * The first column heading is *DeviceID*.
 * Each subsequent column heading is the name of a custom device field.

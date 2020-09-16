@@ -17,7 +17,7 @@ image::img::rename_field.png[image,450]
 
 . Rename the field.
 +
-NOTE: The name should not repeat the other field names. It also should not be less than one character or exceed 20 characters and can only contain letters, numbers, spaces, underscores ( _ ), and hyphens (-).
+NOTE: The name should not repeat the other field names. It also should not be less than one character or exceed 20 characters and can only contain ASCII characters [a–zA–Z0–9], spaces, underscores ( _ ), and hyphens (-).
 
 . Click the save icon, and then click *Close*.
 +
