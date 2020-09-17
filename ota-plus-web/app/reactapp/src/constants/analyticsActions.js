@@ -113,6 +113,7 @@ export const OTA_ENVIRONMENT_SWITCH = 'OTA_Environment_Switch';
 export const OTA_ENVIRONMENT_ADD_MEMBER = 'OTA_Environment_Add_Member';
 export const OTA_ENVIRONMENT_BACK_TO_LIST = 'OTA_Environment_Back_To_List';
 export const OTA_ENVIRONMENT_CREATE_ENV = 'OTA_Environment_Create_Env';
+export const OTA_ENVIRONMENT_CREATE_ENV_READ_MORE = 'OTA_Environment_Create_Read_More';
 export const OTA_ENVIRONMENT_DETAILS = 'OTA_Environment_Details';
 export const OTA_ENVIRONMENT_LEAVE = 'OTA_Environment_Leave';
 export const OTA_ENVIRONMENT_LEAVE_EMPTY = 'OTA_Environment_Leave_Empty';

@@ -440,6 +440,8 @@
     "profile.organization.add-member-modal.add": "Add",
     "profile.organization.add-member-modal.error-msg": "Check email",
     "profile.organization.add-member-modal.input-label": "EMAIL",
+    "profile.organization.add-member-modal.owner-warning-description": "It is not recommended to collaborate in home environments because owners cannot leave or be removed from them. Create new environments instead because creators can leave or be removed from additional environments.",
+    "profile.organization.add-member-modal.owner-warning-read-more": "Read more",
     "profile.organization.add-member-modal.placeholder": "Enter email",
     "profile.organization.add-member-modal.title": "Add member",
     "profile.organization.add-registered-members": "Add members",
