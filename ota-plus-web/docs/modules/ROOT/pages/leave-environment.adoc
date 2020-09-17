@@ -8,6 +8,11 @@ If you are no longer involved in a software update project and do not need acces
 . Click the environment that you want to leave.
 +
 The page with environment details opens.
+
+. If you are the only member who can manage feature access, before you leave the environment, allow another member to manage environment features.
++
+For instructions, see  xref:ota-web::manage-access-to-features.adoc[Manage access to features].
+
 . In the *Members* list, next to your email, click *Leave*.
 +
 NOTE: If you are the only member of the environment, after you leave it, the environment will be permanently deleted.
