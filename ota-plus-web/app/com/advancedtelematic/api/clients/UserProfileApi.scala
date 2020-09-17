@@ -114,13 +114,15 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec)(implic
 
   def organizationUserUiFeatures(namespace: Namespace,
                                  userId: UserId,
+                                 email: Option[String],
                                  uiFeature: String,
                                  method: String,
                                 )(implicit traceData: TraceData): Future[Result] = {
-    val pathPrefix = s"organizations/${segment(namespace.get)}/users/${segment(userId.id)}/ui_features"
+    val pathPrefix = s"organizations/${segment(namespace.get)}/ui_features"
     val path = if (uiFeature == "") pathPrefix else s"$pathPrefix/$uiFeature"
     userProfileRequest(path)
       .transform(_.withMethod(method))
+      .transform(r => email.fold(r)(e => r.withQueryStringParameters("email" -> e)))
       .withUser(userId)
       .execResult(apiExec)
   }
