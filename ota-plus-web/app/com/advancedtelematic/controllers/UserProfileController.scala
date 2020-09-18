@@ -12,7 +12,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
-import play.api.mvc.Results.EmptyContent
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,11 +64,10 @@ class UserProfileController @Inject()(val conf: Configuration,
     }
   }
 
-  val changePassword: Action[AnyContent] = authAction.async { request =>
-    for {
-      claims <- oidcGateway.getUserInfo(request.accessToken)
-      _      <- auth0Api.changePassword(claims.email)
-    } yield Ok(EmptyContent())
+  val changePassword: Action[AnyContent] = authAction.async { _ =>
+    Future.successful {
+      NotImplemented("Change password functionality is not implemented.")
+    }
   }
 
   def updateUserProfile(): Action[JsValue] = authAction.async(components.parsers.json) { implicit request =>

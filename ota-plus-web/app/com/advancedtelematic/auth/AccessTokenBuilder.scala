@@ -18,7 +18,7 @@ class AccessTokenBuilder @Inject() (conf: Configuration) {
     new SecretKeySpec( Base64.decode(encodedKey), "HMAC" )
   }
 
-  val authPlusConfig = AuthPlusConfig(conf).getOrElse(throw new IllegalStateException("Unable to load Auth+ config."))
+  val authPlusConfig = AuthPlusCredentials(conf)
 
   def mkToken(subject: String, expiresAt: Instant, scope: Set[String]): AccessToken = {
     val claims = Json.obj(

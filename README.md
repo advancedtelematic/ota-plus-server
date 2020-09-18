@@ -57,8 +57,8 @@ To quickly start the application without any login authentication, set the follo
 Variable                    | Value
 -------------------:        | :------------------
 `OIDC_NS_PROVIDER`          | com.advancedtelematic.auth.oidc.ConfiguredNamespace
-`OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.garage.NoLoginAction
-`OIDC_LOGOUT_ACTION`        | com.advancedtelematic.auth.garage.NoLogoutAction
+`OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.NoLoginAction
+`OIDC_LOGOUT_ACTION`        | com.advancedtelematic.auth.NoLogoutAction
 `OIDC_TOKEN_EXCHANGE`       | com.advancedtelematic.auth.NoExchange
 
 #### OpenID Connect
@@ -81,15 +81,6 @@ Variable                    | Description
 `AUTH0_CLIENT_SECRET`       | Client Secret
 
 #### OAuth2
-
-To enable login with an Single-Sign On service such as Auth0, and perform JWT token exchange with an OAuth2 authorization server such as ATS Auth+, set the following environment variables:
-
-Variable                    | Value
--------------------:        | :------------------
-`OIDC_NS_PROVIDER`          | com.advancedtelematic.auth.oidc.ConfiguredNamespace
-`OIDC_LOGIN_ACTION`         | com.advancedtelematic.auth.garage.LoginAction
-`OIDC_LOGOUT_ACTION`        | com.advancedtelematic.auth.garage.LogoutAction
-`OIDC_TOKEN_EXCHANGE`       | com.advancedtelematic.auth.garage.AuthPlusTokenExchange
 
 To configure the Auth+ OAuth2 client application, set the following environment variables:
 

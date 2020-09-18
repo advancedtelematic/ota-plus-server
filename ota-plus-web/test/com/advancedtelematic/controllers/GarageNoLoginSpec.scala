@@ -3,8 +3,7 @@ package com.advancedtelematic.controllers
 import java.util.Base64
 
 import _root_.akka.stream.Materializer
-import com.advancedtelematic.auth.UiAuthAction
-import com.advancedtelematic.auth.garage.NoLoginAction
+import com.advancedtelematic.auth.{NoLoginAction, UiAuthAction}
 import mockws.MockWS
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -39,7 +38,7 @@ class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Result
     .configure("userprofile.uri" -> userProfileUri)
     .configure("authplus.token" -> "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow")
     .configure("oidc.namespace" -> testNamespace)
-    .configure("oidc.loginAction" -> "com.advancedtelematic.auth.garage.NoLoginAction")
+    .configure("oidc.loginAction" -> "com.advancedtelematic.auth.NoLoginAction")
     .build
 
   implicit val mat = application.injector.instanceOf[Materializer]
