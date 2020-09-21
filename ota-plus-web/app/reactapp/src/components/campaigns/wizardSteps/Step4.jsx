@@ -141,8 +141,7 @@ class WizardStep4 extends Component {
             label={!isConsentReuseEnabled ? t('campaigns.wizard.steps.user_consent.release_note') : ''}
             id="internal_driver-description"
             defaultValue={DESCRIPTION || ''}
-            onValid={e => this.addToWizardData(METADATA_TYPES.DESCRIPTION, e.target.value)}
-            onInvalid={e => this.addToWizardData(METADATA_TYPES.DESCRIPTION, e.target.value)}
+            onChange={e => this.addToWizardData(METADATA_TYPES.DESCRIPTION, e.target.value)}
           />
         </div>
         <div className="translations">
