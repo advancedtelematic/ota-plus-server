@@ -16,7 +16,7 @@ In the campaigns list, you can find the following information about each campaig
 ** *In preparation*—your campaign is preparing for the launch.
 ** *Running*—your campaign is still in the process and has not finished.
 ** *Finished*—your campaign has completed.
-** *Canceled*—your campaign was canceled for all or several devices.
+** *Canceled*—your campaign was xref:cancel-campaign.adoc[canceled] for all or several devices.
 * Number of devices that are included in the campaign
 * Percentage of devices with the *Failed*, *Successful*, *Installing*, and *Not applicable* statuses.
 . Navigate to the needed campaign, and next to it, click *More info*.
@@ -28,7 +28,7 @@ image::img::campaign_details.png[image,1000]
 +
 You see a summary of all the update attempts for each device grouped by status:
 
-* *Failed*—indicates the number of devices that failed to install at least one software update. For example, a failure may be caused by a format error or low storage capacity. For more details about the failure, see the reported failure code. To get a list of individual devices affected by the failure code, next to the relevant failure code, click the export button (image:img::download.png[Icon,20,20]).
+* *Failed*—indicates the number of devices that failed to install at least one software update. For example, a failure may be caused by a format error or low storage capacity. For more details about the failure, see the reported failure code. To get a list of individual devices affected by the failure code, next to the relevant failure code, click the export button (image:img::download.png[Icon,20,20]). You can also xref:retry-campaign.adoc[retry failed update campaigns].
 * *Success*—indicates the number of devices that successfully installed the software updates.
 * *Installing*—indicates the number of devices that are still installing one or more software updates.
 * *Not applicable*—indicates the number of devices where none of the control units or software versions match the targeting criteria of the software update. It can also indicate devices that are now installing software updates from another campaign, or devices where the software update has been canceled.

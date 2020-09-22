@@ -1,0 +1,14 @@
+= Retry a campaign
+
+You can retry a campaign for devices that failed to install updates.
+
+*To retry a campaign:*
+
+. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
+. Select the campaign that you want to retry.
++
+The campaign details section expands. The section contains campaign statistics and a list of failure codes.
+
+. In the *Retry the update installation* column, next to the needed failure code, click the retry button (image:img::retry.png[Icon,20,20]).
+
+The campaign retries for the devices that failed to install it.

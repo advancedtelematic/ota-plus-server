@@ -1,0 +1,25 @@
+= Delete software or its version
+
+When you work on new software or a software version, you may have lots of their test variants. Once you come up with the final variant of the software or its version, you can delete all the other variants.
+
+WARNING: If you delete software or a software version that is a part of an active campaign, devices that have not installed it will fail the campaign.
+
+*To delete software or its version:*
+
+. Go to the https://connect.ota.here.com/#/software-repository[*Software versions*, window="_blank"] tab.
+. Select the needed software, and then do one of the following:
+** If you want to delete the software:
+.. Next to the software name, click the menu, and then select *Delete software*.
++
+[.lightbackground.align_img_left]
+image::img::delete_sw.png[image,750]
+
+** If you want to delete a software version:
+.. Navigate to the software version that you want to delete.
+.. Next to the *Comment* section, click the menu, and then select *Delete version*.
++
+[.lightbackground.align_img_left]
+image::img::delete_sw_version.png[image,800]
+. Click *Continue*.
++
+The software or its version is deleted, and you can no longer use it in software updates. If you delete the only version of the related software, the software is also deleted. If the deleted software or its version is used in a campaign, devices that have not installed it fail the campaign.
