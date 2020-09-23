@@ -1,0 +1,15 @@
+= Edit comments to software versions
+
+Comments to software versions help your team better understand the latest software changes. You can add them when you xref:upload-software-ui.adoc[upload a software version] or after it.
+
+*To edit a comment to a software version after you uploaded it:*
+
+. Go to the https://connect.ota.here.com/#/software-repository[*Software versions*, window="_blank"] tab.
+. Select the needed software, and then navigate to the software version comment to which you want to edit.
+. Next to the *Comment* section, click the menu, and then select *Edit comment*.
++
+[.lightbackground.align_img_left]
+image::img::edit_comment.png[image,800]
+. Specify the new comment, and then click *Save comment*.
+
+In the *Comment* section, you can now find the new comment.

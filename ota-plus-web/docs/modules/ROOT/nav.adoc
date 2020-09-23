@@ -17,13 +17,16 @@
 ** xref:remove-custom-device-field.adoc[Remove a custom device field]
 * xref:manage-devices.adoc[Single-device updates]
 * xref:control-unit-replacement.adoc[Control unit replacement]
+* xref:rename-device.adoc[Rename a device]
+* xref:delete-device.adoc[Delete a device]
 // TODO * Update a Smart Group
 // TODO * Delete groups
 
 .Software versions
 * xref:software-upload-methods.adoc[Upload methods]
 ** xref:upload-software-ui.adoc[Upload a software version]
-// TODO: * xref:manage-software.adoc[Manage software versions]
+* xref:edit-comments.adoc[Edit comments to software versions]
+* xref:delete-sw-or-its-version.adoc[Delete software or its version]
 
 
 .Software updates
@@ -35,9 +38,8 @@
 * xref:campaigns-intro.adoc[What is a campaign?]
 * xref:create-campaigns.adoc[Create a campaign]
 * xref:monitor-campaigns.adoc[Monitor campaigns]
-
-// TODO * xref:retry-campaigns.adoc[Retry failed installations]
-// TODO * xref:manage-campaigns.adoc[Manage campaigns]
+* xref:retry-campaign.adoc[Retry a campaign]
+* xref:cancel-campaign.adoc[Cancel a campaign]
 
 .Environments
 * xref:environments-intro.adoc[What is an environment?]

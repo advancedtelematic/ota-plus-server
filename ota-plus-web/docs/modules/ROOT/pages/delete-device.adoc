@@ -1,0 +1,19 @@
+= Delete a device
+
+If you no longer need a device, you can delete it. You may also need to delete a device if you xref:control-unit-replacement.adoc[replaced a control unit offline] when a device was installing updates.
+
+*To delete a device:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+
+. Point to the device that you want to delete.
++
+The menu icon appears.
+
+. Click the menu, and then select *Delete device*.
++
+[.align_img_left]
+image::img::delete_device.png[image,700]
+. Click *Continue*.
+
+The device is removed from the list of provisioned devices, and you cannot target it in update campaigns.

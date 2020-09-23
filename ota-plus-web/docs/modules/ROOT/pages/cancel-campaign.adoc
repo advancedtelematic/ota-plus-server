@@ -1,0 +1,44 @@
+= Cancel a campaign
+
+If you want to launch a new version of a software update, to make sure that the offline devices get the latest update when they connect, cancel all the ongoing campaigns that contain the older versions of this software update.
+
+You can cancel campaigns for a <<group, group of devices>> or a <<single_dev, single device>>.
+When you cancel a campaign for a group of devices, you cancel it only for the devices that are offline and have not checked for the update yet. If you want to cancel the update for devices that are currently installing it, you need to cancel it for each device separately. 
+
+[[group]]
+== Cancel a campaign for a group of devices
+
+You can cancel a software update campaign for a group of devices on the *Campaigns* tab. 
+
+When you cancel a campaign for a group of devices, any update operations that are pending or already in progress will still complete. You can only cancel a campaign for devices that are offline and have not checked for updates yet.
+
+*To cancel a campaign for a group of devices:*
+
+. Go to the https://connect.ota.here.com/#/campaigns[*Campaigns*, window="_blank"] tab.
+. Select the campaign that you want to cancel.
+. Click *Cancel campaign*.
++
+[.lightbackground.align_img_left]
+image::img::cancel_campaign_all_devices.png[image,900]
+. Click *Confirm*.
+
+The campaign is canceled for the devices that have not checked for the new update.
+
+[[single_dev]]
+== Cancel a campaign for a single device
+
+
+Devices cannot get new updates if they are installing another update. If you want a certain device to get a new update, cancel the current update.
+
+*To cancel a campaign for a single device:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+. Select the needed device for which you want to cancel the campaign.
++
+The page with device details opens.
+. On the *Installation pending* tab, click *Cancel*.
++
+[.lightbackground.align_img_left]
+image::img::cancel_campaign_single_device.png[image,900]
+
+The campaign disappears, and the device does not get the updates. You can now install new updates on the device.

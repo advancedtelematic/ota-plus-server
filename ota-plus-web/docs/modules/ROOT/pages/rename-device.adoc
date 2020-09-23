@@ -1,0 +1,19 @@
+= Rename a device
+
+When you provision a device, by default, the device ID becomes its name. You can rename any provisioned device on the OTA Connect.
+
+*To rename a device:*
+
+. Go to the https://connect.ota.here.com/#/devices[*Devices*, window="_blank"] tab.
+
+. Point to the device that you want to rename.
++
+The menu icon appears.
+
+. Click the menu, and then select *Rename device*.
++
+[.align_img_left]
+image::img::rename_device.png[image,700]
+. Specify the new name of the device, and then click *Rename*.
+
+The device now has the new name.
