@@ -7,6 +7,7 @@ import { Form } from 'formsy-antd';
 import { Button, SearchBar, SubHeader } from '../../partials';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_UPDATES_CREATE_UPDATE } from '../../constants/analyticsActions';
+import { isFeatureEnabled, UI_FEATURES } from '../../config';
 
 @inject('stores')
 @observer
@@ -25,7 +26,9 @@ class Header extends Component {
 
   render() {
     const { filterChangeCallback, showCreateModal, stores } = this.props;
-    const { updatesStore } = stores;
+    const { updatesStore, userStore } = stores;
+    const { uiFeatures } = userStore;
+
     return (
       <>
         {(updatesStore.updatesTotalCount > 0 || updatesStore.updateFilter.length) ? (
@@ -39,15 +42,17 @@ class Header extends Component {
                     id="search-updates-input"
                   />
                 </Form>
-                <Button
-                  id="add-new-update"
-                  onClick={() => {
-                    showCreateModal(null);
-                    sendAction(OTA_UPDATES_CREATE_UPDATE);
-                  }}
-                >
-                  {'Create update'}
-                </Button>
+                {isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_SOFTWARE_UPDATE) && (
+                  <Button
+                    id="add-new-update"
+                    onClick={() => {
+                      showCreateModal(null);
+                      sendAction(OTA_UPDATES_CREATE_UPDATE);
+                    }}
+                  >
+                    {'Create update'}
+                  </Button>
+                )}
               </div>
             </div>
             <SubHeader className="update-subheader">

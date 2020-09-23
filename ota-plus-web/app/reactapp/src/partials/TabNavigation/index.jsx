@@ -19,6 +19,8 @@ import {
   CAMPAIGNS_STATUS_LAUNCHED,
   CAMPAIGNS_STATUS_FINISHED,
   CAMPAIGNS_STATUS_CANCELLED,
+  isFeatureEnabled,
+  UI_FEATURES,
 } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
@@ -170,8 +172,9 @@ class TabNavigation extends Component {
   }
 
   render() {
-    const { location, showCreateCampaignModal } = this.props;
+    const { location, showCreateCampaignModal, stores } = this.props;
     const { filterValue } = this.state;
+    const { userStore } = stores;
     const packagesTabsActive = location === 'page-software-repository';
     const campaignsTabsActive = location === 'page-campaigns';
 
@@ -220,16 +223,18 @@ class TabNavigation extends Component {
               <Form className="tab-navigation__form-search-campaigns-filter">
                 <SearchBar value={filterValue} changeAction={this.filterChangeCallback} id="search-campaigns-filter" />
               </Form>
-              <Button
-                id="button-create-campaign"
-                onClick={(event) => {
-                  event.preventDefault();
-                  showCreateCampaignModal();
-                  sendAction(OTA_CAMPAIGNS_CREATE_CAMPAIGN);
-                }}
-              >
-                {'Create campaign'}
-              </Button>
+              {isFeatureEnabled(userStore.uiFeatures, UI_FEATURES.CREATE_CAMPAIGN) && (
+                <Button
+                  id="button-create-campaign"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    showCreateCampaignModal();
+                    sendAction(OTA_CAMPAIGNS_CREATE_CAMPAIGN);
+                  }}
+                >
+                  {'Create campaign'}
+                </Button>
+              )}
             </div>
           </div>
         )}

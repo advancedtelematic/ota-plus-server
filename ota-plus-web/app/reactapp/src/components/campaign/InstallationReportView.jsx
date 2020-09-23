@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { Button, Tooltip } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-import { API_CAMPAIGNS_STATISTICS_SINGLE, DOWNLOAD_ICON } from '../../config';
+import { API_CAMPAIGNS_STATISTICS_SINGLE, DOWNLOAD_ICON, isFeatureEnabled, UI_FEATURES } from '../../config';
 import { CAMPAIGN_RETRY_STATUS_TOOLTIPS, CAMPAIGN_RETRY_STATUSES } from '../../constants';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_CAMPAIGNS_EXTRACT_FAILED_DEVICES } from '../../constants/analyticsActions';
@@ -47,8 +47,9 @@ class InstallationReportView extends Component {
 
   render() {
     const { showRetryModal, stores, t } = this.props;
-    const { campaignsStore } = stores;
+    const { campaignsStore, userStore } = stores;
     const { campaign } = campaignsStore;
+    const { uiFeatures } = userStore;
     const devicesTotal = campaign.statistics.processed;
     const { failures } = campaign.statistics;
     const isAnyRetryLaunched = _.find(failures, failure => failure.retryStatus === CAMPAIGN_RETRY_STATUSES.LAUNCHED);
@@ -112,15 +113,17 @@ class InstallationReportView extends Component {
                   </div>
                 </div>
                 <div className="col-actions">
-                  <div>
-                    <RetryButtonWithTooltip
-                      status={retryStatus}
-                      tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[retryStatus]}
-                      onClick={() => {
-                        showRetryModal(failure.code);
-                      }}
-                    />
-                  </div>
+                  {isFeatureEnabled(uiFeatures, UI_FEATURES.RETRY_FAILED_UPDATE) && (
+                    <div>
+                      <RetryButtonWithTooltip
+                        status={retryStatus}
+                        tooltipText={CAMPAIGN_RETRY_STATUS_TOOLTIPS[retryStatus]}
+                        onClick={() => {
+                          showRetryModal(failure.code);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             );

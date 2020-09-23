@@ -10,6 +10,7 @@ import {
   OTA_ENVIRONMENT_ADD_MEMBER,
   OTA_ENVIRONMENT_RENAME,
 } from '../../../../constants/analyticsActions';
+import { UI_FEATURES } from '../../../../config';
 
 const ENV_MEMBERS = [
   { email: 'owneremail', addedAt: '2020-03-23T08:29:56Z' },
@@ -30,6 +31,76 @@ const USER = {
     defaultNamespace: 'NAMESPACE_1',
     email: 'owneremail'
   }
+};
+
+const USER_UI_FEATURES = [
+  {
+    id: UI_FEATURES.REMOVE_MEMBER,
+    name: 'Remove member',
+    isAllowed: true
+  },
+  {
+    id: UI_FEATURES.ADD_MEMBER,
+    name: 'Add member',
+    isAllowed: true
+  },
+  {
+    id: UI_FEATURES.RENAME_ENV,
+    name: 'Rename env',
+    isAllowed: true,
+  },
+  {
+    id: UI_FEATURES.MANAGE_FEATURE_ACCESS,
+    name: 'Manage access',
+    isAllowed: true,
+  }
+];
+
+const UI_FEATURES_MOCK = {
+  owneremail: [
+    {
+      id: UI_FEATURES.REMOVE_MEMBER,
+      name: 'Remove member',
+      isAllowed: true
+    },
+    {
+      id: UI_FEATURES.ADD_MEMBER,
+      name: 'Add member',
+      isAllowed: true
+    },
+    {
+      id: UI_FEATURES.RENAME_ENV,
+      name: 'Rename env',
+      isAllowed: true,
+    },
+    {
+      id: UI_FEATURES.MANAGE_FEATURE_ACCESS,
+      name: 'Manage access',
+      isAllowed: true,
+    }
+  ],
+  memberemail: [
+    {
+      id: UI_FEATURES.REMOVE_MEMBER,
+      name: 'Remove member',
+      isAllowed: true
+    },
+    {
+      id: UI_FEATURES.ADD_MEMBER,
+      name: 'Add member',
+      isAllowed: true
+    },
+    {
+      id: UI_FEATURES.RENAME_ENV,
+      name: 'Rename env',
+      isAllowed: true,
+    },
+    {
+      id: UI_FEATURES.MANAGE_FEATURE_ACCESS,
+      name: 'Manage access',
+      isAllowed: true,
+    }
+  ]
 };
 
 jest.mock('react-i18next', () => ({
@@ -66,8 +137,10 @@ describe('<EnvironmentDetails />', () => {
   beforeEach(() => {
     window.location.replace = jest.fn();
     mockedStores.userStore.currentOrganization = ENV_INFO;
+    mockedStores.userStore.currentEnvUIFeatures = UI_FEATURES_MOCK;
     mockedStores.userStore.userOrganizationUsers = ENV_MEMBERS;
     mockedStores.userStore.user = USER;
+    mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
     mockedStores.userStore.deleteMemberFromOrganization = mockDeleteMemberFromOrganization;
     mockedStores.userStore.editOrganizationName = mockEditOrganizationName;
     mockedStores.userStore.addUserToOrganization = mockAddUserToOrganization;
@@ -100,6 +173,7 @@ describe('<EnvironmentDetails />', () => {
 
   it('should display "Remove member" modal upon clicking corresponding button', () => {
     expect(wrapper.exists('#warning-modal')).toEqual(false);
+    wrapper.find('#memberemail-submenu-toggle').simulate('click', 'memberemail');
     wrapper.find('#memberemail-remove-btn').first().simulate('click');
     expect(wrapper.exists('#warning-modal')).toEqual(true);
     wrapper.find('#warning-cancel-btn').first().simulate('click');
@@ -108,12 +182,16 @@ describe('<EnvironmentDetails />', () => {
 
   it('should handle member removal', () => {
     // Remove member
+    wrapper.find('#memberemail-submenu-toggle').simulate('click', 'memberemail');
     wrapper.find('#memberemail-remove-btn').first().simulate('click');
     wrapper.find('#warning-confirm-btn').first().simulate('click');
     expect(mockDeleteMemberFromOrganization).toHaveBeenCalledWith('memberemail', true);
     expect(wrapper.exists('#warning-modal')).toEqual(false);
+  });
 
+  it('should handle leaving env', () => {
     // Leave environment
+    wrapper.find('#owneremail-submenu-toggle').simulate('click', 'owneremail');
     wrapper.find('#owneremail-remove-btn').first().simulate('click');
     wrapper.find('#warning-confirm-btn').first().simulate('click');
     expect(mockDeleteMemberFromOrganization).toHaveBeenCalledWith('owneremail', false);
@@ -122,7 +200,7 @@ describe('<EnvironmentDetails />', () => {
 
   it('should handle rename env action', () => {
     wrapper.find('#btn-rename-env').first().simulate('click');
-    wrapper.find('input').simulate('change', { target: { value: 'New-env-name' } });
+    wrapper.find('input').last().simulate('change', { target: { value: 'New-env-name' } });
     wrapper.find('#confirm-btn').first().simulate('click');
     expect(mockEditOrganizationName).toHaveBeenCalledWith('New-env-name', ENV_INFO.namespace);
     expect(analyticsHelper.sendAction).toHaveBeenCalledWith(OTA_ENVIRONMENT_RENAME);
@@ -131,7 +209,7 @@ describe('<EnvironmentDetails />', () => {
 
   it('should handle add member action', () => {
     wrapper.find('#btn-add-member').first().simulate('click');
-    wrapper.find('input').simulate('change', { target: { value: 'dummy@here.com' } });
+    wrapper.find('input').last().simulate('change', { target: { value: 'dummy@here.com' } });
     wrapper.find('#confirm-btn').first().simulate('click');
     expect(mockAddUserToOrganization).toHaveBeenCalledWith('dummy@here.com', ENV_INFO.namespace);
     expect(analyticsHelper.sendAction).toHaveBeenCalledWith(OTA_ENVIRONMENT_ADD_MEMBER);
@@ -139,6 +217,7 @@ describe('<EnvironmentDetails />', () => {
   });
 
   it('should reset adding member value', () => {
+    wrapper.unmount();
     mockedStores.userStore.environmentsAddMember = true;
     wrapper = mountComponent();
     expect(mockedStores.userStore.environmentsAddMember).toEqual(false);

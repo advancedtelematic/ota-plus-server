@@ -6,7 +6,14 @@ import Cookies from 'js-cookie';
 import { makeAcronym } from '../../utils/stringUtils';
 import { Title } from '..';
 import { useStores } from '../../stores/hooks';
-import { ALPHA_TAG, FEATURES, ORGANIZATION_NAMESPACE_COOKIE, SIGN_OUT_ICON } from '../../config';
+import {
+  ALPHA_TAG,
+  FEATURES,
+  isFeatureEnabled,
+  ORGANIZATION_NAMESPACE_COOKIE,
+  SIGN_OUT_ICON,
+  UI_FEATURES
+} from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_NAV_SIGNOUT,
@@ -31,6 +38,7 @@ function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
     features: stores.featuresStore.features,
+    uiFeatures: stores.userStore.uiFeatures,
     user: stores.userStore.user,
     organizationName: stores.userStore.userOrganizationName
   }));
@@ -39,7 +47,7 @@ function useStoreData() {
 const AccountSidebar = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { t } = useTranslation();
-  const { features, organizationName, user } = useStoreData();
+  const { features, organizationName, uiFeatures, user } = useStoreData();
 
   const links = [];
 
@@ -47,7 +55,9 @@ const AccountSidebar = () => {
   if (features.includes(FEATURES.USAGE)) {
     links.push({ actionType: OTA_NAV_USAGE, name: 'usage', to: '/profile/usage', isBeta: false });
   }
-  links.push({ actionType: OTA_NAV_CREDENTIALS, name: 'keys', to: '/profile/access-keys', isBeta: false });
+  if (isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS)) {
+    links.push({ actionType: OTA_NAV_CREDENTIALS, name: 'keys', to: '/profile/access-keys', isBeta: false });
+  }
   links.push({ actionType: OTA_NAV_TERMS, name: 'terms', to: '/policy', isBeta: false });
 
   const onClose = () => {

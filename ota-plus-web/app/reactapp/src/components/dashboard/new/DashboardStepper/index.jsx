@@ -4,7 +4,7 @@ import { useObserver } from 'mobx-react';
 import { useStores } from '../../../../stores/hooks';
 import DashboardStepperCard from './DashboardStepperCard';
 import { CardsWrapper, Step, StepperWrapper, Stepper } from './styled';
-import { ICON_PATHS } from '../../../../config';
+import { ICON_PATHS, isFeatureEnabled, UI_FEATURES } from '../../../../config';
 import { ANT_STEP_STATUS, STEP_STATUS, STEP_TYPES } from '../../../../constants';
 import {
   URL_STEPPER_CAMPAIGNS_CTA,
@@ -68,6 +68,7 @@ function useStoreData() {
     ungroupedDevicesTotal: stores.devicesStore.ungroupedDevicesTotal,
     groupsTotal: stores.groupsStore.groupsTotal,
     versionsTotal: stores.softwareStore.versionsTotal,
+    uiFeatures: stores.userStore.uiFeatures,
     updatesTotalCount: stores.updatesStore.updatesTotalCount,
   }));
 }
@@ -82,7 +83,8 @@ const DashboardStepper = () => {
     groupsTotal,
     updatesTotalCount,
     campaignsTotal,
-    campaignsWithErrorsTotal
+    campaignsWithErrorsTotal,
+    uiFeatures
   } = useStoreData();
 
   const LINKS_DATA = [
@@ -161,27 +163,32 @@ const DashboardStepper = () => {
     {
       primaryStatValue: devicesTotalCount,
       secondaryStatValue: notSeenRecentlyDevicesTotal,
-      status: devicesStepStatus
+      status: devicesStepStatus,
+      isActionEnabled: isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS)
     },
     {
       primaryStatValue: versionsTotal,
       secondaryStatValue: null,
-      status: softwareStepStatus
+      status: softwareStepStatus,
+      isActionEnabled: isFeatureEnabled(uiFeatures, UI_FEATURES.UPLOAD_SOFTWARE)
     },
     {
       primaryStatValue: groupsTotal,
       secondaryStatValue: ungroupedDevicesTotal,
-      status: groupsStepStatus
+      status: groupsStepStatus,
+      isActionEnabled: isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_DEVICE_GROUP)
     },
     {
       primaryStatValue: updatesTotalCount,
       secondaryStatValue: null,
-      status: updatesStepStatus
+      status: updatesStepStatus,
+      isActionEnabled: isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_SOFTWARE_UPDATE)
     },
     {
       primaryStatValue: campaignsTotal,
       secondaryStatValue: campaignsWithErrorsTotal,
-      status: campaignsStepStatus
+      status: campaignsStepStatus,
+      isActionEnabled: isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_CAMPAIGN)
     }
   ];
 
@@ -196,7 +203,7 @@ const DashboardStepper = () => {
         ))}
       </Stepper>
       <CardsWrapper>
-        {steps.map(({ primaryStatValue, secondaryStatValue, status }, index) => {
+        {steps.map(({ primaryStatValue, secondaryStatValue, status, isActionEnabled }, index) => {
           const {
             id,
             iconPath,
@@ -210,6 +217,7 @@ const DashboardStepper = () => {
               key={id}
               id={id}
               iconPath={iconPath}
+              showActionBtn={isActionEnabled}
               status={status}
               description={status === STEP_STATUS.DONE ? descriptionDone : description}
               {...rest}

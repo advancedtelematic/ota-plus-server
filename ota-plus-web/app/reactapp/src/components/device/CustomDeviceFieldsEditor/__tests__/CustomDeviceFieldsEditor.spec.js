@@ -6,6 +6,8 @@ import { Provider } from 'mobx-react';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
 import DevicesStore from '../../../../stores/DevicesStore';
+import UserStore from '../../../../stores/UserStore';
+import { UI_FEATURES } from '../../../../config';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -29,8 +31,16 @@ jest.mock('react-router-dom', () => ({
   }
 }));
 
+const USER_UI_FEATURES = [
+  {
+    id: UI_FEATURES.EDIT_CUSTOM_FIELD_VALUE,
+    isAllowed: true
+  },
+];
+
 const mockedStores = {
   devicesStore: new DevicesStore(),
+  userStore: new UserStore()
 };
 
 function mountComponent(props, stores = mockedStores) {
@@ -49,6 +59,7 @@ describe('<CustomDeviceFieldsEditor />', () => {
 
   beforeEach(() => {
     mockedStores.devicesStore.deviceSpecificTags = [['TRIM LEVEL', 'Premium'], ['COUNTRY', 'Germany']];
+    mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
     wrapper = mountComponent({}, mockedStores);
   });
 

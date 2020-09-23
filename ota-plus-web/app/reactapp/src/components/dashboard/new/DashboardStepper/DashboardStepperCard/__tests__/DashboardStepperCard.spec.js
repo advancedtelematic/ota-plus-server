@@ -29,6 +29,7 @@ const generateCardProps = status => ({
   buttonTitle: 'Create group',
   description: 'Dummy desc',
   iconPath: ICON_PATHS[2],
+  showActionBtn: true,
   statValue: 20,
   status,
   title: 'Device group',

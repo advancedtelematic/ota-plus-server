@@ -137,7 +137,7 @@ class ContentPanel extends Component {
 
   render() {
     const { stores, changeFilter, showDeleteConfirmation, showEditName, addNewWizard, t } = this.props;
-    const { devicesStore, featuresStore, groupsStore } = stores;
+    const { devicesStore, featuresStore, groupsStore, userStore } = stores;
     const { features } = featuresStore;
     const {
       devices,
@@ -165,6 +165,7 @@ class ContentPanel extends Component {
             featuresStore,
             groupsStore,
           }}
+          uiFeatures={userStore.uiFeatures}
         />
       );
     });

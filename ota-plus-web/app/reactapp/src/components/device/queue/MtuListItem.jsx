@@ -9,6 +9,7 @@ import { Tooltip } from 'antd';
 
 import InstallationEvents from '../InstallationEvents';
 import Loader from '../../../partials/Loader';
+import { isFeatureEnabled, UI_FEATURES } from '../../../config';
 
 const MTU_TYPE = {
   CAMPAIGN: 'campaign',
@@ -20,8 +21,9 @@ const MTU_TYPE = {
 class MtuListItem extends Component {
   render() {
     const { cancelMtuUpdate, events, inFlight, stores, t, update } = this.props;
-    const { devicesStore } = stores;
+    const { devicesStore, userStore } = stores;
     const { device } = devicesStore;
+    const { uiFeatures } = userStore;
     const devicePrimaryEcu = device.directorAttributes.primary;
     const deviceSecondaryEcus = device.directorAttributes.secondary;
     const { correlationId, targets, campaign } = update;
@@ -39,7 +41,7 @@ class MtuListItem extends Component {
                 <span id={`update-id-${correlationId}`}>{campaign.name}</span>
               </div>
               <div>
-                {!inFlight && (
+                {!inFlight && isFeatureEnabled(uiFeatures, UI_FEATURES.CANCEL_CAMPAIGN) && (
                   <Tooltip title={t('devices.mtu.approval_pending.cancel_tooltip_info')} placement="left">
                     <button
                       type="button"

@@ -14,6 +14,7 @@ import ListItemVersion from './ListItemVersion';
 import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
 import { ECU_TYPE_PRIMARY, ECU_TYPE_SECONDARY } from '../../../constants/deviceConstants';
 import { EVENTS, SLIDE_ANIMATION_TYPE } from '../../../constants';
+import { isFeatureEnabled, UI_FEATURES } from '../../../config';
 
 const HEADER_HEIGHT = 28;
 const HEADERS_CUMULATIVE_HEIGHT = 225;
@@ -301,7 +302,8 @@ class List extends Component {
       stores,
       t
     } = this.props;
-    const { devicesStore } = stores;
+    const { devicesStore, userStore } = stores;
+    const { uiFeatures } = userStore;
     const { device } = devicesStore;
     const { preparedPackages } = this;
     return (
@@ -343,6 +345,7 @@ class List extends Component {
                       togglePackage={togglePackage}
                       toggleAutoInstall={togglePackageAutoUpdate}
                       showPackageDetails={showPackageDetails}
+                      isAutoUpdateEnabled={isFeatureEnabled(uiFeatures, UI_FEATURES.SET_AUTO_UPDATE)}
                     />
                     <VelocityTransitionGroup
                       enter={{

@@ -11,7 +11,9 @@ import {
   FEATURES,
   PACKAGES_ADVANCED_TAB,
   PACKAGES_DEFAULT_TAB,
-  PACKAGES_BLOCKLISTED_TAB
+  PACKAGES_BLOCKLISTED_TAB,
+  isFeatureEnabled,
+  UI_FEATURES
 } from '../../config';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import {
@@ -97,8 +99,9 @@ class Header extends Component {
   render() {
     const { stores, switchToTab, t } = this.props;
     const { showKeysOfflineModal } = this.state;
-    const { featuresStore } = stores;
+    const { featuresStore, userStore } = stores;
     const { features } = featuresStore;
+    const { uiFeatures } = userStore;
     return (
       <div>
         <div className="tab-navigation">
@@ -154,7 +157,7 @@ class Header extends Component {
               )}
             </ul>
           )}
-          {switchToTab === PACKAGES_DEFAULT_TAB && (
+          {switchToTab === PACKAGES_DEFAULT_TAB && isFeatureEnabled(uiFeatures, UI_FEATURES.UPLOAD_SOFTWARE) && (
             <div className="tab-navigation__buttons">
               <Button
                 id="add-new-software"

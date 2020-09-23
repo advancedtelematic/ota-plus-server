@@ -13,6 +13,7 @@ import { DEVICE_STATUS_ERROR, DEVICE_STATUS_OUTDATED, DEVICE_STATUS_UP_TO_DATE }
 import { GROUP_GROUP_TYPE_REAL, GROUP_GROUP_TYPE_STATIC } from '../../constants/groupConstants';
 import { DEVICE_LAST_UPDATED_DATE_FORMAT } from '../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
+import { UI_FEATURES, isFeatureEnabled } from '../../config';
 
 const deviceSource = {
   beginDrag(props) {
@@ -58,9 +59,10 @@ class Item extends Component {
 
   render() {
     const semiTransparent = 0.4;
-    const { device, goToDetails, showDeleteConfirmation, showEditName, t } = this.props;
+    const { device, goToDetails, showDeleteConfirmation, showEditName, t, uiFeatures } = this.props;
     const { uuid, deviceId, deviceName, deviceStatus, lastSeen } = device;
     const { isDragging, connectDragSource } = this.props;
+
     const opacity = isDragging ? semiTransparent : 1;
     let deviceStatusMessage = t('devices.statuses.unknown');
     switch (deviceStatus) {
@@ -94,24 +96,28 @@ class Item extends Component {
         </div>
         {this.menuShown && (
           <Dropdown hideSubmenu={this.hideMenu} customClassName="align">
-            <li className="device-dropdown-item">
-              <a
-                className="device-dropdown-item"
-                id="edit-device"
-                onClick={showEditName.bind(this, device)}
-              >
-                {t('devices.rename')}
-              </a>
-            </li>
-            <li className="device-dropdown-item">
-              <a
-                className="device-dropdown-item"
-                id="delete-device"
-                onClick={showDeleteConfirmation.bind(this, device)}
-              >
-                {t('devices.delete')}
-              </a>
-            </li>
+            {isFeatureEnabled(uiFeatures, UI_FEATURES.RENAME_DEVICE) && (
+              <li className="device-dropdown-item">
+                <a
+                  className="device-dropdown-item"
+                  id="edit-device"
+                  onClick={showEditName.bind(this, device)}
+                >
+                  {t('devices.rename')}
+                </a>
+              </li>
+            )}
+            {isFeatureEnabled(uiFeatures, UI_FEATURES.DELETE_DEVICE) && (
+              <li className="device-dropdown-item">
+                <a
+                  className="device-dropdown-item"
+                  id="delete-device"
+                  onClick={showDeleteConfirmation.bind(this, device)}
+                >
+                  {t('devices.delete')}
+                </a>
+              </li>
+            )}
           </Dropdown>
         )}
         <div className="devices-panel__device-icon">
@@ -151,7 +157,8 @@ Item.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   showDeleteConfirmation: PropTypes.func,
   showEditName: PropTypes.func,
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  uiFeatures: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 export default DragSource('device', deviceSource, collect)(withTranslation()(Item));

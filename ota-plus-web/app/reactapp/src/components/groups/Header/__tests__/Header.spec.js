@@ -7,6 +7,27 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../../../../theme';
 import DevicesStore from '../../../../stores/DevicesStore';
 import GroupsStore from '../../../../stores/GroupsStore';
+import UserStore from '../../../../stores/UserStore';
+import { UI_FEATURES } from '../../../../config';
+
+const USER_UI_FEATURES = [
+  {
+    id: UI_FEATURES.DELETE_CUSTOM_FIELD,
+    isAllowed: true
+  },
+  {
+    id: UI_FEATURES.CREATE_DEVICE_GROUP,
+    isAllowed: true
+  },
+  {
+    id: UI_FEATURES.RENAME_CUSTOM_FIELD,
+    isAllowed: true,
+  },
+  {
+    id: UI_FEATURES.UPLOAD_FILE_CUSTOM_FIELDS,
+    isAllowed: true,
+  }
+];
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -22,6 +43,7 @@ jest.mock('react-i18next', () => ({
 const mockedStores = {
   devicesStore: new DevicesStore(),
   groupsStore: new GroupsStore(),
+  userStore: new UserStore(),
 };
 
 function mountComponent(props, stores = mockedStores) {
@@ -59,6 +81,7 @@ describe('<Header />', () => {
   mockedStores.devicesStore.deleteCustomDeviceField = mockDeleteCustomDeviceField;
   mockedStores.groupsStore.fetchExpressionForSelectedGroup = mockFetchExpressionForSelectedGroup;
   mockedStores.groupsStore.selectedGroup = { isSmart: false };
+  mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
   beforeEach(() => {
     wrapper = mountComponent(props, mockedStores);
   });

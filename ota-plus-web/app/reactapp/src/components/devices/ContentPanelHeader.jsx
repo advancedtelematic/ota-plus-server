@@ -9,7 +9,7 @@ import { withTranslation } from 'react-i18next';
 import { Button, SubHeader, SearchBar } from '../../partials';
 import { sendAction } from '../../helpers/analyticsHelper';
 import { OTA_DEVICES_CREATE_CAMPAIGN } from '../../constants/analyticsActions';
-import { UNGROUPED } from '../../config';
+import { UNGROUPED, isFeatureEnabled, UI_FEATURES } from '../../config';
 import { DATA_TYPE } from '../../constants';
 
 @inject('stores')
@@ -25,11 +25,13 @@ class ContentPanelHeader extends Component {
 
   render() {
     const { stores, devicesFilter, changeFilter, addNewWizard, t } = this.props;
-    const { groupsStore } = stores;
+    const { groupsStore, userStore } = stores;
+    const { uiFeatures } = userStore;
     const { selectedGroup } = groupsStore;
     return (
       <SubHeader>
-        {selectedGroup.id && selectedGroup.id !== UNGROUPED && (
+        {selectedGroup.id && selectedGroup.id !== UNGROUPED
+          && isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_CAMPAIGN) && (
           <div className="add-group-campaign">
             <Button
               htmlType="button"

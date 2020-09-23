@@ -123,8 +123,9 @@ class Main extends Component {
       if (history.location.pathname === DASHBOARD_PATH.OLD) {
         history.push(DASHBOARD_PATH.NEW);
       }
-      userStore.getOrganizations();
+      await userStore.getOrganizations();
       userStore.fetchContracts();
+      userStore.getUIFeatures();
     }
     moment.locale(getMomentLocale(getLanguage()));
   }

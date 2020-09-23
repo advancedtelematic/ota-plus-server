@@ -33,7 +33,10 @@ const SingleInputModal = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    document.getElementsByClassName('ant-input')[0].focus();
+    const inputField = document.getElementsByClassName('ant-input')[0];
+    if (inputField) {
+      inputField.focus();
+    }
   }, []);
 
   return (

@@ -25,6 +25,7 @@ export const API_RECENTLY_CREATED = '/recently_created?types=$types&limit=10';
 export const API_ORG_CUSTOM_DEVICE_FIELDS = '/api/v1/device_tags';
 export const API_ORGANIZATIONS = '/organizations';
 export const API_ORGANIZATIONS_USERS = namespace => `/organizations/${namespace}/users`;
+export const API_UI_FEATURES = namespace => `/organizations/${namespace}/ui_features`;
 export const API_USER_DETAILS = '/user/profile';
 export const API_USER_CONTRACTS = '/user/contracts';
 export const API_USER_UPDATE = '/user/profile';
@@ -417,6 +418,41 @@ export const FEATURES = {
   PSEUDO_LOCALISATION: 'pseudo_localisation',
   SEQUENCER_CAMPAIGN: 'sequencer_campaign',
   USAGE: 'usage'
+};
+
+/**
+ * UI Features
+ */
+export const UI_FEATURES = {
+  ACCESS_CREDS: 'access_credentials',
+  ADD_MEMBER: 'add_member',
+  CANCEL_CAMPAIGN: 'cancel_campaign',
+  CREATE_CAMPAIGN: 'create_campaign',
+  CREATE_DEVICE_GROUP: 'create_device_group',
+  CREATE_SOFTWARE_UPDATE: 'create_software_update',
+  DELETE_CUSTOM_FIELD: 'delete_custom_field',
+  DELETE_DEVICE: 'delete_device',
+  DELETE_SOFTWARE: 'delete_software',
+  DELETE_SOFTWARE_VERSION: 'delete_software_version',
+  EDIT_CUSTOM_FIELD_VALUE: 'edit_custom_field_value',
+  EDIT_SOFTWARE_COMMENT: 'edit_software_comment',
+  LAUNCH_SINGLE_DEVICE_UPDATE: 'launch_single_device_update',
+  MANAGE_FEATURE_ACCESS: 'manage_feature_access',
+  REMOVE_MEMBER: 'remove_member',
+  RENAME_CUSTOM_FIELD: 'rename_custom_field',
+  RENAME_DEVICE: 'rename_device',
+  RENAME_ENV: 'rename_environment',
+  RETRY_FAILED_UPDATE: 'retry_failed_update',
+  SET_AUTO_UPDATE: 'set_automatic_update_on_device',
+  UPLOAD_FILE_CUSTOM_FIELDS: 'upload_file_with_custom_fields',
+  UPLOAD_SOFTWARE: 'upload_software'
+};
+
+export const isFeatureEnabled = (features, featureId) => {
+  if (features.length) {
+    return features.find(el => el.id === featureId).isAllowed;
+  }
+  return false;
 };
 
 /**

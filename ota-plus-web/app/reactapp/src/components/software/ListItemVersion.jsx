@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import _ from 'lodash';
 import { withTranslation } from 'react-i18next';
 import { Dropdown } from '../../partials';
-import { FEATURES } from '../../config';
+import { FEATURES, isFeatureEnabled, UI_FEATURES } from '../../config';
 import { sendAction } from '../../helpers/analyticsHelper';
 import {
   OTA_SOFTWARE_DELETE_VERSION,
@@ -57,7 +57,7 @@ class ListItemVersion extends Component {
 
   render() {
     const { stores, version, t } = this.props;
-    const { softwareStore, featuresStore } = stores;
+    const { softwareStore, featuresStore, userStore } = stores;
     const { compatibilityData } = softwareStore;
     const { features } = featuresStore;
     const isDependencySoftwareEnabled = features.includes(FEATURES.DEPENDENCY_SOFTWARE);
@@ -257,19 +257,21 @@ class ListItemVersion extends Component {
           <span />
           {this.isShown && (
             <Dropdown hideSubmenu={this.hideSubmenu}>
-              <li className="package-dropdown-item">
-                <a
-                  className="package-dropdown-item"
-                  href="#"
-                  id="edit-comment"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.showEditComment(version.filepath, version.comment);
-                  }}
-                >
-                  {t('software.action_buttons.edit_comment')}
-                </a>
-              </li>
+              {isFeatureEnabled(userStore.uiFeatures, UI_FEATURES.EDIT_SOFTWARE_COMMENT) && (
+                <li className="package-dropdown-item">
+                  <a
+                    className="package-dropdown-item"
+                    href="#"
+                    id="edit-comment"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.showEditComment(version.filepath, version.comment);
+                    }}
+                  >
+                    {t('software.action_buttons.edit_comment')}
+                  </a>
+                </li>
+              )}
               {isDependencySoftwareEnabled && (
                 <li className="package-dropdown-item">
                   <a
@@ -285,19 +287,21 @@ class ListItemVersion extends Component {
                   </a>
                 </li>
               )}
-              <li className="package-dropdown-item">
-                <a
-                  className="package-dropdown-item"
-                  href="#"
-                  id="delete-version"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.showDeleteConfirmation(version.filepath, 'version');
-                  }}
-                >
-                  {t('software.action_buttons.delete_version')}
-                </a>
-              </li>
+              {isFeatureEnabled(userStore.uiFeatures, UI_FEATURES.DELETE_SOFTWARE_VERSION) && (
+                <li className="package-dropdown-item">
+                  <a
+                    className="package-dropdown-item"
+                    href="#"
+                    id="delete-version"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.showDeleteConfirmation(version.filepath, 'version');
+                    }}
+                  >
+                    {t('software.action_buttons.delete_version')}
+                  </a>
+                </li>
+              )}
             </Dropdown>
           )}
         </div>
