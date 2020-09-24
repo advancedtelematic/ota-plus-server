@@ -41,7 +41,7 @@ image::img::smart_group_example.png[image,600]
 +
 .Example
 ====
-You want to target devices with the *Premium* value in the *Trim level* field and the *Germany* or *France* value in the *Market* field. You have already created the following xref:create-custom-device-fields.adoc[custom device fields]: *Trim level* and *Market*. In the *Create device group* dialog box, specify the following filters:
+You want to target devices with the *Premium* value in the *Trim level* field and the *Germany* or *France* value in the *Market* field. You have already created the following xref:ota-web::create-custom-device-fields.adoc[custom device fields]: *Trim level* and *Market*. In the *Create device group* dialog box, specify the following filters:
 
 .. In the first *Cluster* section, select the *Market* filter and the *Contains* type, and then specify the *Germany* value.
 .. Click *Add filter*.
