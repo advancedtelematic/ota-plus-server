@@ -50,8 +50,8 @@ class MtuList extends Component {
           ? (
             <>
               {_.map(packagesHistory, (historyItem, index) => {
-                if (historyItem.former) {
-                  return <EcuReplacementListItem item={historyItem} key={index} />;
+                if (!historyItem.namespace) {
+                  return <EcuReplacementListItem success={historyItem.success} item={historyItem} key={index} />;
                 }
                 if (!_.isEmpty(devicesStore.deviceEvents)) {
                   const itemEvents = devicesStore.deviceEvents.filter((event) => {

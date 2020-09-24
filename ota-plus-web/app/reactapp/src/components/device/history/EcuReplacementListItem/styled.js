@@ -1,10 +1,45 @@
 import styled from 'styled-components';
+import { WARNING_MODAL_COLOR } from '../../../../constants';
+
+export const ReplacedTag = styled.div`
+  padding: 2px 0;
+  width: 74px;
+  border-radius: 4px;
+  text-align: center;
+  color: ${({ theme }) => theme.palette.white};
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 12px;
+  margin-right: 8px;
+`;
+
+export const StatusBar = styled.div`
+  min-height: 40px;
+  font-size: 16px;
+  color: ${({ theme }) => theme.palette.white};
+  padding: 10px 20px;
+  & > a {
+    margin-left: 4px;
+    color: ${({ theme }) => theme.palette.white} !important;
+    line-height: 17px;
+    border-bottom: 2px solid ${({ theme }) => theme.palette.white};
+    :hover {
+      border-bottom-color: transparent;
+    }
+  }
+`;
 
 export const EcuReplacementContainer = styled.div`
-  margin: 15px;
+  margin: 15px 25px;
   border: 1px solid ${({ theme }) => theme.palette.borderLight};
   border-radius: 2px;
   background-color: ${({ theme }) => theme.palette.backgroundLight};
+  ${ReplacedTag} {
+    background-color: ${({ success, theme }) => success ? theme.palette.green : WARNING_MODAL_COLOR.DANGER};
+  }
+  ${StatusBar} {
+    background-color: ${({ success, theme }) => success ? theme.palette.green : WARNING_MODAL_COLOR.DANGER};
+  }
 `;
 
 export const BodyContainer = styled.div`
@@ -28,25 +63,6 @@ export const Header = styled.div`
     font-size: 13px;
     font-weight: 500;
     line-height: 15px;
-  }
-`;
-
-export const StatusBar = styled.div`
-  height: 40px;
-  background-color: ${({ theme }) => theme.palette.green};
-  font-size: 16px;
-  color: ${({ theme }) => theme.palette.white};
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  & > a {
-    margin-left: 4px;
-    color: ${({ theme }) => theme.palette.white} !important;
-    line-height: 17px;
-    border-bottom: 2px solid ${({ theme }) => theme.palette.white};
-    :hover {
-      border-bottom-color: transparent;
-    }
   }
 `;
 
@@ -80,19 +96,6 @@ export const Row = styled.div`
       margin: 0 0 4px 2px;
     }
   }
-`;
-
-export const ReplacedTag = styled.div`
-  padding: 2px 0;
-  width: 74px;
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.palette.green};
-  text-align: center;
-  color: ${({ theme }) => theme.palette.white};
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 12px;
-  margin-right: 8px;
 `;
 
 export const InfoBlock = styled.div`
