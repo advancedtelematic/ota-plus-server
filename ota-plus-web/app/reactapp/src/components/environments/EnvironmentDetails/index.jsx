@@ -42,7 +42,6 @@ const EnvironmentDetails = () => {
     type: undefined
   });
   const { name, namespace } = currentEnvironment;
-  const canManageAccess = isFeatureEnabled(uiFeatures, UI_FEATURES.MANAGE_FEATURE_ACCESS);
 
   useEffect(() => () => {
     stores.userStore.userOrganizationUsers = [];
@@ -205,10 +204,12 @@ const EnvironmentDetails = () => {
               .map(feature => (
                 <FeatureBlock key={feature.id} id={feature.id}>
                   <span>{feature.name}</span>
-                  {selectedMember.email !== currentEnvironment.creatorEmail && (
+                  {(isFeatureEnabled(
+                    currentEnvUIFeatures[user.email],
+                    UI_FEATURES.MANAGE_FEATURE_ACCESS
+                  ) && currentEnvironment.creatorEmail !== selectedMember.email) && (
                     <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
                       <Checkbox
-                        disabled={!canManageAccess}
                         id={`feature-checkbox-${feature.isAllowed}`}
                         onChange={event => toggleFeature(event, feature.id)}
                         checked={feature.isAllowed}
