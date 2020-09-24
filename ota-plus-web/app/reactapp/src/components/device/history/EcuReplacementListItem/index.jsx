@@ -21,7 +21,7 @@ import { getFormattedDateTime } from '../../../../helpers/datesTimesHelper';
 import { sendAction } from '../../../../helpers/analyticsHelper';
 import { OTA_DEVICE_HISTORY_REPLACEMENT_READ } from '../../../../constants/analyticsActions';
 
-const EcuReplacementListItem = ({ item }) => {
+const EcuReplacementListItem = ({ item, success }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -29,14 +29,14 @@ const EcuReplacementListItem = ({ item }) => {
   }, []);
 
   return (
-    <EcuReplacementContainer id="ecu-replacement-container">
+    <EcuReplacementContainer success={success} id="ecu-replacement-container">
       <Header>
         <img src={COMPUTER_CHIP_ICON} />
         <span>{t('devices.ddv.ecu-replace.title')}</span>
       </Header>
       <BodyContainer>
         <StatusBar>
-          {t('devices.ddv.ecu-replace.status')}
+          {t(success ? 'devices.ddv.ecu-replace.status' : 'devices.ddv.ecu-replace.status-failure')}
           <ExternalLink
             id="ecu-replacement-read-more"
             weight="bold"
@@ -51,30 +51,34 @@ const EcuReplacementListItem = ({ item }) => {
             <ReplacedTag>{t('devices.ddv.ecu-replace.status-tag')}</ReplacedTag>
             <span id="ecu-replacement-timestamp">{getFormattedDateTime(item.eventTime, DEVICE_MTU_RECEIVED_AT)}</span>
           </TopRow>
-          <Row>
-            <InfoBlock>
-              <div>{t('devices.ddv.ecu-replace.type.former')}</div>
-              <div id="ecu-replacement-former-hwid">{item.former.hardwareId}</div>
-            </InfoBlock>
-            <InfoBlock>
-              <div>{t('devices.ddv.ecu-replace.type.current')}</div>
-              <div id="ecu-replacement-current-hwid">{item.current.hardwareId}</div>
-            </InfoBlock>
-          </Row>
-          <Row>
-            <HalfBlock id="ecu-replacement-former-ecuid">
-              <CopyableValue
-                title={t('devices.ddv.ecu-replace.id.former')}
-                value={item.former.ecuId}
-              />
-            </HalfBlock>
-            <HalfBlock id="ecu-replacement-current-ecuid">
-              <CopyableValue
-                title={t('devices.ddv.ecu-replace.id.current')}
-                value={item.current.ecuId}
-              />
-            </HalfBlock>
-          </Row>
+          {success && (
+            <>
+              <Row>
+                <InfoBlock>
+                  <div>{t('devices.ddv.ecu-replace.type.former')}</div>
+                  <div id="ecu-replacement-former-hwid">{item.former.hardwareId}</div>
+                </InfoBlock>
+                <InfoBlock>
+                  <div>{t('devices.ddv.ecu-replace.type.current')}</div>
+                  <div id="ecu-replacement-current-hwid">{item.current.hardwareId}</div>
+                </InfoBlock>
+              </Row>
+              <Row>
+                <HalfBlock id="ecu-replacement-former-ecuid">
+                  <CopyableValue
+                    title={t('devices.ddv.ecu-replace.id.former')}
+                    value={item.former.ecuId}
+                  />
+                </HalfBlock>
+                <HalfBlock id="ecu-replacement-current-ecuid">
+                  <CopyableValue
+                    title={t('devices.ddv.ecu-replace.id.current')}
+                    value={item.current.ecuId}
+                  />
+                </HalfBlock>
+              </Row>
+            </>
+          )}
         </ContentBox>
       </BodyContainer>
     </EcuReplacementContainer>
@@ -83,6 +87,7 @@ const EcuReplacementListItem = ({ item }) => {
 
 EcuReplacementListItem.propTypes = {
   item: PropTypes.shape({}),
+  success: PropTypes.bool.isRequired
 };
 
 export default EcuReplacementListItem;

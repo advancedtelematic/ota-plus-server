@@ -228,6 +228,7 @@
     "devices.ddv.ecu-replace.id.former": "Initial control unit ID:",
     "devices.ddv.ecu-replace.read-more": "Read more",
     "devices.ddv.ecu-replace.status": "The control unit was replaced offline.",
+    "devices.ddv.ecu-replace.status-failure": "The control unit was replaced offline during an OTA update. The replacement has failed, and the device installation cannot be terminated. To finish the OTA update, revert the offline replacement. Otherwise, delete and reprovision the device.",
     "devices.ddv.ecu-replace.status-tag": "REPLACED",
     "devices.ddv.ecu-replace.title": "CONTROL UNIT REPLACEMENT",
     "devices.ddv.ecu-replace.type.current": "New control unit type:",
