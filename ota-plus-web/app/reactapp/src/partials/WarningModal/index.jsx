@@ -12,6 +12,7 @@ import {
 } from './styled';
 import { WARNING_MODAL_COLOR } from '../../constants';
 import { ExternalLink } from '../index';
+import { sendAction } from '../../helpers/analyticsHelper';
 
 const WarningModal = ({ type, title, desc, cancelButtonProps, readMore, confirmButtonProps, onClose }) => (
   <>
@@ -25,9 +26,10 @@ const WarningModal = ({ type, title, desc, cancelButtonProps, readMore, confirmB
           <>
             {' '}
             <ExternalLink
-              key={'warning-modal-read-more'}
+              key="warning-modal-read-more"
               url={readMore.url}
               weight="regular"
+              onClick={() => readMore.analyticsAction && sendAction(readMore.analyticsAction)}
             >
               {readMore.title}
             </ExternalLink>
@@ -56,8 +58,9 @@ WarningModal.propTypes = {
     title: PropTypes.string.isRequired,
   }),
   readMore: PropTypes.shape({
+    analyticsAction: PropTypes.string,
     title: PropTypes.string,
-    url: PropTypes.string
+    url: PropTypes.string,
   }),
   confirmButtonProps: PropTypes.shape({
     title: PropTypes.string.isRequired,

@@ -13,12 +13,13 @@ import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
   OTA_ENVIRONMENT_ADD_MEMBER,
+  OTA_ENVIRONMENT_LEAVE_READ_MORE,
   OTA_ENVIRONMENT_RENAME,
   OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 import { LAYERS_ICON_BLANK, UI_FEATURES, isFeatureEnabled } from '../../../config';
-import { URL_FEATURE_ACCESS_READ_MORE } from '../../../constants/urlConstants';
+import { URL_FEATURE_ACCESS_READ_MORE, URL_ENVIRONMENTS_LEAVE } from '../../../constants/urlConstants';
 
 function useStoreData() {
   const { stores } = useStores();
@@ -34,7 +35,7 @@ function useStoreData() {
 const EnvironmentDetails = () => {
   const { t } = useTranslation();
   const { stores } = useStores();
-  const { currentEnvironment, environmentMembers, currentEnvUIFeatures, uiFeatures, user } = useStoreData();
+  const { currentEnvironment, environmentMembers, currentEnvUIFeatures, user } = useStoreData();
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
   const [renameEnvModalOpen, setRenameEnvModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState('');
@@ -123,11 +124,16 @@ const EnvironmentDetails = () => {
     switch (type) {
       case REMOVAL_MODAL_TYPE.SELF_REMOVAL:
         return {
-          type: lastToLeave ? WARNING_MODAL_COLOR.DANGER : WARNING_MODAL_COLOR.DEFAULT,
+          type: WARNING_MODAL_COLOR.DANGER,
           title: t('profile.organization.remove-modal.title.self'),
           desc: t(lastToLeave
             ? 'profile.organization.remove-modal.desc.self.last'
             : 'profile.organization.remove-modal.desc.self'),
+          readMore: !lastToLeave ? {
+            analyticsAction: OTA_ENVIRONMENT_LEAVE_READ_MORE,
+            title: t('profile.organization.remove-modal.desc.self.read-more'),
+            url: URL_ENVIRONMENTS_LEAVE,
+          } : null,
           cancelButtonProps: {
             title: t('profile.organization.remove-modal.cancel'),
           },
