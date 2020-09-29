@@ -29,8 +29,9 @@ code coverage:
   allow_failure: true
   image: $TEST_IMAGE
   script:
-    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" coverageReport sonarScan
-    - mv target/scala-*/scoverage-report coverage
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
+    - mkdir -p target/scala-2.12/coverage-report
+    - cp ota-plus-web/target/scala-2.12/coverage-report/cobertura.xml target/scala-2.12/coverage-report/cobertura.xml
 
 build docker image:
   stage: build image
