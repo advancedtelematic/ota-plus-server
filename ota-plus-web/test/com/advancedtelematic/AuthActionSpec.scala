@@ -2,7 +2,6 @@ package com.advancedtelematic
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 import _root_.akka.stream.Materializer
 import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction, SessionCodecs}
@@ -18,9 +17,7 @@ import scala.concurrent.Future
 
 class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
 
-  val application = new GuiceApplicationBuilder()
-    .configure("authplus.client_id"     -> UUID.randomUUID().toString)
-    .build
+  val application = new GuiceApplicationBuilder().build
 
   implicit val mat = application.injector.instanceOf[Materializer]
 

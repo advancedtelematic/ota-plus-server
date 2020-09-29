@@ -14,18 +14,17 @@ import play.api.libs.json.Json
 class AccessTokenBuilder @Inject() (conf: Configuration) {
 
   private[this] val secret = {
-    val encodedKey = conf.get[String]("authplus.token")
+    val encodedKey = conf.get[String]("oauth.token")
     new SecretKeySpec( Base64.decode(encodedKey), "HMAC" )
   }
-
-  val authPlusConfig = AuthPlusCredentials(conf)
 
   def mkToken(subject: String, expiresAt: Instant, scope: Set[String]): AccessToken = {
     val claims = Json.obj(
       "iss" -> "https://auth-plus.advancedtelematic.com",
       "jti" -> UUID.randomUUID().toString,
       "sub" -> subject,
-      "client_id" -> authPlusConfig.clientId,
+      // web-events is not actually validating this, as long as it is a UUID.
+      "client_id" -> "00000000-0000-0000-0000-000000000000",
       "iat" -> Instant.now().getEpochSecond,
       "exp" -> expiresAt.getEpochSecond,
       "scope" -> scope.mkString(" "),

@@ -17,7 +17,7 @@ import play.api.test.Helpers._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
+class NoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
   private val userProfileUri = "http://user-profile.com"
   private val testNamespace = "test-namespace"
 
@@ -36,7 +36,7 @@ class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Result
   lazy val application = new GuiceApplicationBuilder()
     .overrides(bind[WSClient].to(mock))
     .configure("userprofile.uri" -> userProfileUri)
-    .configure("authplus.token" -> "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow")
+    .configure("oauth.token" -> "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow")
     .configure("oidc.namespace" -> testNamespace)
     .configure("oidc.loginAction" -> "com.advancedtelematic.auth.NoLoginAction")
     .build
