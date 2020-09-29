@@ -29,7 +29,7 @@ const EcuReplacementListItem = ({ item, success }) => {
   }, []);
 
   return (
-    <EcuReplacementContainer success={success} id="ecu-replacement-container">
+    <EcuReplacementContainer success={success} id={`ecu-replacement-container${!success ? '-failure' : ''}`}>
       <Header>
         <img src={COMPUTER_CHIP_ICON} />
         <span>{t('devices.ddv.ecu-replace.title')}</span>
@@ -49,7 +49,9 @@ const EcuReplacementListItem = ({ item, success }) => {
         <ContentBox>
           <TopRow>
             <ReplacedTag>{t('devices.ddv.ecu-replace.status-tag')}</ReplacedTag>
-            <span id="ecu-replacement-timestamp">{getFormattedDateTime(item.eventTime, DEVICE_MTU_RECEIVED_AT)}</span>
+            <span id={`ecu-replacement-timestamp${!success ? '-failure' : ''}`}>
+              {getFormattedDateTime(item.eventTime, DEVICE_MTU_RECEIVED_AT)}
+            </span>
           </TopRow>
           {success && (
             <>
