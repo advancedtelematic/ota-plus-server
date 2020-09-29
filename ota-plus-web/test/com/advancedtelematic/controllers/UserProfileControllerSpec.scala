@@ -18,14 +18,9 @@ class UserProfileControllerSpec extends PlaySpec with GuiceOneAppPerSuite with M
   import play.api.inject.bind
   import play.api.mvc.Results._
 
-  val AuthPlusUri = "http://auth-plus.com"
-
   implicit override lazy val app: play.api.Application = new GuiceApplicationBuilder()
     .overrides(bind[WSClient].toInstance(mockClient))
     .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
-    .configure("authplus.client_id" -> "")
-    .configure("authplus.secret" -> "")
-    .configure("authplus.uri" -> AuthPlusUri)
     .build()
 
   lazy val providerMeta = ProviderMetadata.fromConfig(app.configuration.get[Configuration]("oidc.fallback"))

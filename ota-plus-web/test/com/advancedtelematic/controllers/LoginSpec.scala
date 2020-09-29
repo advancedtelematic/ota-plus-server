@@ -17,23 +17,17 @@ import play.api.libs.ws.WSClient
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers with BeforeAndAfterAll {
+class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers with BeforeAndAfterAll {
 
   import play.api.inject.bind
   import play.api.mvc.Results._
 
-  val AuthPlusUri = "http://auth-plus.com"
-
   implicit override lazy val app: play.api.Application = new GuiceApplicationBuilder()
     .overrides(bind[WSClient].toInstance(mockClient))
     .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
-    // the following 2 entries should come from the environment in production
-    .configure("authplus.client_id" -> "")
-    .configure("authplus.secret" -> "")
-    .configure("authplus.uri" -> AuthPlusUri)
     .build()
 
-  lazy val auth0Config: OAuthConfig = OAuthConfig(app.configuration)
+  lazy val oAuthConfig: OAuthConfig = OAuthConfig(app.configuration)
 
   lazy val providerMeta = ProviderMetadata.fromConfig(app.configuration.get[Configuration]("oidc.fallback"))
 

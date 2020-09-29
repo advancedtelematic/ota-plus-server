@@ -132,7 +132,7 @@ class ApiAuthAction @Inject()(val config: Configuration,
   extends SecuredAction[AuthorizedRequest] {
 
   private[this] val secret = {
-    val encodedKey = config.get[String]("authplus.token")
+    val encodedKey = config.get[String]("oauth.token")
     new SecretKeySpec( Base64.decode(encodedKey), "HMAC" )
   }
   private[this] def extractBearerToken[A](request: Request[A]): Try[String] = {
