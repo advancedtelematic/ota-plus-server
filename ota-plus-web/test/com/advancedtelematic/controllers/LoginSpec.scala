@@ -2,7 +2,6 @@ package com.advancedtelematic.controllers
 
 import brave.play.ZipkinTraceServiceLike
 import com.advancedtelematic.TokenUtils
-import com.advancedtelematic.auth.OAuthConfig
 import com.advancedtelematic.auth.oidc.ProviderMetadata
 import com.advancedtelematic.provisioning.NoOpZipkinTraceService
 import mockws.{MockWS, MockWSHelpers}
@@ -26,8 +25,6 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
     .overrides(bind[WSClient].toInstance(mockClient))
     .overrides(bind[ZipkinTraceServiceLike].to(new NoOpZipkinTraceService))
     .build()
-
-  lazy val oAuthConfig: OAuthConfig = OAuthConfig(app.configuration)
 
   lazy val providerMeta = ProviderMetadata.fromConfig(app.configuration.get[Configuration]("oidc.fallback"))
 
