@@ -11,6 +11,7 @@ export const FooterContainer = styled.footer`
   align-items: center;
   line-height: 0.86em;
   width: 100%;
+  z-index: 99;
   ${ExternalLink}:not(:first-of-type) {
     padding-left: 10px;
   };

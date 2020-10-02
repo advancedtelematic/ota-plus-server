@@ -7,6 +7,7 @@ export const ListStyled = styled(List)`
   border-left: none;
   border-top: none;
   height: 100%;
+  overflow-y: auto;
   .ant-list-header {
     padding: 0;
     border-bottom: none;

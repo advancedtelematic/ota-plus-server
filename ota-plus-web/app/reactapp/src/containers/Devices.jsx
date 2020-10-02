@@ -21,7 +21,14 @@ import {
   OTA_DEVICES_SEARCH_DEVICE,
   OTA_DEVICE_DELETE
 } from '../constants/analyticsActions';
-import { DEVICE_ICON, DEVICES_LIMIT_PER_PAGE, GROUPS_FETCH_DEVICES_ASYNC, PLUS_ICON } from '../config';
+import {
+  DEVICE_ICON,
+  DEVICES_LIMIT_PER_PAGE,
+  GROUPS_FETCH_DEVICES_ASYNC,
+  PLUS_ICON,
+  isFeatureEnabled,
+  UI_FEATURES
+} from '../config';
 import UnderlinedLink from '../partials/UnderlinedLink';
 import { URL_PROVISIONING_CREDS } from '../constants/urlConstants';
 import ReadMore from '../partials/ReadMore';
@@ -205,24 +212,32 @@ class Devices extends Component {
     history.push(PATH_CREDENTIALS);
   };
 
-  getEmptyDevicesMessage = (t, devicesFetchingError) => devicesFetchingError
-    ? (
-      <div>
-        <div>{t('devices.empty.technical-issues')}</div>
-      </div>
-    ) : (
-      <div>
-        <div>{t('devices.empty.no-devices-1')}</div>
-        <ReadMore>
-          <span>{t('devices.empty.no-devices-2')}</span>
-          <UnderlinedLink url={URL_PROVISIONING_CREDS}>{t('miscellaneous.read-more')}</UnderlinedLink>
-        </ReadMore>
-        <SecondaryButton type="link" onClick={this.handleProvisioningPopup}>
-          <img src={PLUS_ICON} />
-          {t('devices.empty.button-title')}
-        </SecondaryButton>
-      </div>
-    );
+  getEmptyDevicesMessage = (t, devicesFetchingError) => {
+    const { stores } = this.props;
+    const { userStore } = stores;
+    const { uiFeatures } = userStore;
+
+    return devicesFetchingError
+      ? (
+        <div>
+          <div>{t('devices.empty.technical-issues')}</div>
+        </div>
+      ) : (
+        <div>
+          <div>{t('devices.empty.no-devices-1')}</div>
+          <ReadMore>
+            <span>{t('devices.empty.no-devices-2')}</span>
+            <UnderlinedLink url={URL_PROVISIONING_CREDS}>{t('miscellaneous.read-more')}</UnderlinedLink>
+          </ReadMore>
+          {uiFeatures.length > 0 && isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS) && (
+            <SecondaryButton type="link" onClick={this.handleProvisioningPopup}>
+              <img src={PLUS_ICON} />
+              {t('devices.empty.button-title')}
+            </SecondaryButton>
+          )}
+        </div>
+      );
+  }
 
   render() {
     const { addNewWizard, stores, t } = this.props;
