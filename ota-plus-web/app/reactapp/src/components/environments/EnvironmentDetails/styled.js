@@ -73,6 +73,9 @@ export const FeatureBlock = styled.div`
       transform: rotate(45deg) scale(1) translate(-55%,-55%);
     }
   }
+  .ant-checkbox-disabled {
+    opacity: 0.4;
+  }
   .ant-checkbox-checked {
     .ant-checkbox-inner {
       border: none !important;

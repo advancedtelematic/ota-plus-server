@@ -210,18 +210,21 @@ const EnvironmentDetails = () => {
               .map(feature => (
                 <FeatureBlock key={feature.id} id={feature.id}>
                   <span>{feature.name}</span>
-                  {(isFeatureEnabled(
-                    currentEnvUIFeatures[user.email],
-                    UI_FEATURES.MANAGE_FEATURE_ACCESS
-                  ) && currentEnvironment.creatorEmail !== selectedMember.email) && (
-                    <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
-                      <Checkbox
-                        id={`feature-checkbox-${feature.isAllowed}`}
-                        onChange={event => toggleFeature(event, feature.id)}
-                        checked={feature.isAllowed}
-                      />
-                    </Tooltip>
-                  )}
+                  <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
+                    <Checkbox
+                      disabled={
+                        !isFeatureEnabled(
+                          currentEnvUIFeatures[user.email],
+                          UI_FEATURES.MANAGE_FEATURE_ACCESS
+                        )
+                        || currentEnvironment.creatorEmail === selectedMember.email
+                        || selectedMember.email === user.email
+                      }
+                      id={`feature-checkbox-${feature.isAllowed}`}
+                      onChange={event => toggleFeature(event, feature.id)}
+                      checked={feature.isAllowed}
+                    />
+                  </Tooltip>
                 </FeatureBlock>
               ))}
         </ContentWrapper>
