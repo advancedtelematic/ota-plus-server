@@ -53,3 +53,27 @@ export const URL_DOCS_LINKS_CREATE_CAMPAIGNS = 'https://docs.ota.here.com/ota-we
 export const URL_DOCS_LINKS_DEVICE_GROUPS = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_device_groups';
 export const URL_DOCS_LINKS_SOFTWARE_UPDATES = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_preparing_the_software_update';
 export const URL_DOCS_LINKS_TROUBLESHOOT_CAMPAIGN = 'https://docs.ota.here.com/ota-web/dev/use-case-ecm.html#_monitoring_the_campaign';
+
+/* Feature Access */
+export const URL_FEATURE_ACCESS_MANAGE = 'https://docs.ota.here.com/ota-web/dev/manage-access-to-features.html';
+export const URL_FEATURE_ACCESS_CREDENTIALS = 'https://docs.ota.here.com/ota-client/latest/client-provisioning-methods.html#_what_is_device_provisioning';
+export const URL_FEATURE_ACCESS_ENVIRONMENT_RENAME = 'https://docs.ota.here.com/ota-web/dev/rename-environments.html';
+export const URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_ADD = 'https://docs.ota.here.com/ota-web/dev/manage-members.html';
+export const URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_REMOVE = 'https://docs.ota.here.com/ota-web/dev/manage-members.html';
+export const URL_FEATURE_ACCESS_DEVICE_GROUPS = 'https://docs.ota.here.com/ota-web/dev/device-groups.html';
+export const URL_FEATURE_ACCESS_DEVICE_SET_AUTOMATIC_UPDATES = 'https://docs.ota.here.com/ota-web/dev/manage-devices.html#turn-on';
+export const URL_FEATURE_ACCESS_DEVICE_LAUNCH_SINGLE_DEVICE_UPDATES = 'https://docs.ota.here.com/ota-web/dev/manage-devices.html#install';
+export const URL_FEATURE_ACCESS_DEVICE_DELETE = 'https://docs.ota.here.com/ota-web/dev/delete-device.html';
+export const URL_FEATURE_ACCESS_DEVICE_RENAME = 'https://docs.ota.here.com/ota-web/dev/rename-device.html';
+export const URL_FEATURE_ACCESS_CUSTOM_FIELD_CREATE = 'https://docs.ota.here.com/ota-web/dev/create-custom-device-fields.html';
+export const URL_FEATURE_ACCESS_CUSTOM_FIELD_RENAME = 'https://docs.ota.here.com/ota-web/dev/rename-custom-device-fields.html';
+export const URL_FEATURE_ACCESS_CUSTOM_FIELD_VALUES_EDIT = 'https://docs.ota.here.com/ota-web/dev/manage-values-of-custom-device-fields.html';
+export const URL_FEATURE_ACCESS_CUSTOM_FIELD_DELETE = 'https://docs.ota.here.com/ota-web/dev/remove-custom-device-field.html';
+export const URL_FEATURE_ACCESS_SOFTWARE_UPLOAD = 'https://docs.ota.here.com/ota-web/dev/upload-software-ui.html';
+export const URL_FEATURE_ACCESS_SOFTWARE_COMMENTS_EDIT = 'https://docs.ota.here.com/ota-web/dev/edit-comments.html';
+export const URL_FEATURE_ACCESS_SOFTWARE_VERSIONS_DELETE = 'https://docs.ota.here.com/ota-web/dev/delete-sw-or-its-version.html';
+export const URL_FEATURE_ACCESS_SOFTWARE_DELETE = 'https://docs.ota.here.com/ota-web/dev/delete-sw-or-its-version.html';
+export const URL_FEATURE_ACCESS_UPDATE_CREATE = 'https://docs.ota.here.com/ota-web/dev/create-update.html';
+export const URL_FEATURE_ACCESS_CAMPAIGN_CREATE = 'https://docs.ota.here.com/ota-web/dev/create-campaigns.html';
+export const URL_FEATURE_ACCESS_CAMPAIGN_CANCEL = 'https://docs.ota.here.com/ota-web/dev/cancel-campaign.html';
+export const URL_FEATURE_ACCESS_CAMPAIGN_RETRY = 'https://docs.ota.here.com/ota-web/dev/retry-campaign.html';
