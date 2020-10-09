@@ -448,6 +448,17 @@ export const UI_FEATURES = {
   UPLOAD_SOFTWARE: 'upload_software'
 };
 
+export const FEATURE_CATEGORIES = {
+  ACCESS: 'access',
+  CREDENTIALS: 'credentials',
+  ENVIRONMENT: 'environment',
+  DEVICE: 'device',
+  CUSTOM_FIELD: 'cdf',
+  SOFTWARE: 'software',
+  UPDATE: 'update',
+  CAMPAIGN: 'campaign'
+};
+
 export const isFeatureEnabled = (features, featureId) => {
   if (features.length) {
     return features.find(el => el.id === featureId).isAllowed;

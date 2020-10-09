@@ -22,6 +22,8 @@ import {
   API_USER_ORGANIZATIONS_GET_USERS,
   ORGANIZATION_NAMESPACE_COOKIE,
   API_UI_FEATURES,
+  FEATURE_CATEGORIES,
+  UI_FEATURES
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -82,6 +84,8 @@ export default class UserStore {
   @observable uiFeatures = [];
 
   @observable currentEnvUIFeatures = {};
+
+  @observable currentEnvUIFeaturesCategorized = {};
 
   constructor() {
     this.activatedDevices = observable.map();
@@ -221,10 +225,67 @@ export default class UserStore {
       const encodedEmail = encodeURIComponent(email);
       const response = await axios.get(encodeUrl(`${API_UI_FEATURES(namespace)}?email=${encodedEmail}`));
       const { data } = response;
+      const categorizedData = {
+        [FEATURE_CATEGORIES.ACCESS]: [],
+        [FEATURE_CATEGORIES.CREDENTIALS]: [],
+        [FEATURE_CATEGORIES.ENVIRONMENT]: [],
+        [FEATURE_CATEGORIES.DEVICE]: [],
+        [FEATURE_CATEGORIES.CUSTOM_FIELD]: [],
+        [FEATURE_CATEGORIES.SOFTWARE]: [],
+        [FEATURE_CATEGORIES.UPDATE]: [],
+        [FEATURE_CATEGORIES.CAMPAIGN]: [],
+      };
+      data.forEach((el) => {
+        if (el.id === UI_FEATURES.MANAGE_FEATURE_ACCESS) {
+          categorizedData[FEATURE_CATEGORIES.ACCESS].push(el);
+        }
+        if (el.id === UI_FEATURES.ACCESS_CREDS) {
+          categorizedData[FEATURE_CATEGORIES.CREDENTIALS].push(el);
+        }
+        if ([UI_FEATURES.ADD_MEMBER, UI_FEATURES.REMOVE_MEMBER, UI_FEATURES.RENAME_ENV].includes(el.id)) {
+          categorizedData[FEATURE_CATEGORIES.ENVIRONMENT].push(el);
+        }
+        if ([
+          UI_FEATURES.CREATE_DEVICE_GROUP,
+          UI_FEATURES.RENAME_DEVICE,
+          UI_FEATURES.SET_AUTO_UPDATE,
+          UI_FEATURES.LAUNCH_SINGLE_DEVICE_UPDATE,
+          UI_FEATURES.DELETE_DEVICE
+        ].includes(el.id)) {
+          categorizedData[FEATURE_CATEGORIES.DEVICE].push(el);
+        }
+        if ([
+          UI_FEATURES.EDIT_CUSTOM_FIELD_VALUE,
+          UI_FEATURES.DELETE_CUSTOM_FIELD,
+          UI_FEATURES.RENAME_CUSTOM_FIELD,
+          UI_FEATURES.UPLOAD_FILE_CUSTOM_FIELDS,
+        ].includes(el.id)) {
+          categorizedData[FEATURE_CATEGORIES.CUSTOM_FIELD].push(el);
+        }
+        if ([
+          UI_FEATURES.DELETE_SOFTWARE_VERSION,
+          UI_FEATURES.DELETE_SOFTWARE,
+          UI_FEATURES.UPLOAD_SOFTWARE,
+          UI_FEATURES.EDIT_SOFTWARE_COMMENT,
+        ].includes(el.id)) {
+          categorizedData[FEATURE_CATEGORIES.SOFTWARE].push(el);
+        }
+        if (el.id === UI_FEATURES.CREATE_SOFTWARE_UPDATE) {
+          categorizedData[FEATURE_CATEGORIES.UPDATE].push(el);
+        }
+        if ([
+          UI_FEATURES.CANCEL_CAMPAIGN,
+          UI_FEATURES.CREATE_CAMPAIGN,
+          UI_FEATURES.RETRY_FAILED_UPDATE,
+        ].includes(el.id)) {
+          categorizedData[FEATURE_CATEGORIES.CAMPAIGN].push(el);
+        }
+      });
       if (!notInitial) {
         this.uiFeatures = data;
       } else {
         this.currentEnvUIFeatures = { ...this.currentEnvUIFeatures, [email]: data };
+        this.currentEnvUIFeaturesCategorized = { ...this.currentEnvUIFeaturesCategorized, [email]: categorizedData };
       }
       if (resetUserUIFeatures) {
         this.uiFeatures = data;
