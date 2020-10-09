@@ -12,7 +12,8 @@ import { isFeatureEnabled, UI_FEATURES } from '../../../config';
 function useStoreData() {
   const { stores } = useStores();
   return useObserver(() => ({
-    uiFeatures: stores.userStore.uiFeatures,
+    currentEnvUIFeatures: stores.userStore.currentEnvUIFeatures,
+    user: stores.userStore.user,
   }));
 }
 
@@ -27,7 +28,7 @@ const EnvironmentDetailsHeader = ({
   onRenameBtnClick
 }) => {
   const { t } = useTranslation();
-  const { uiFeatures } = useStoreData();
+  const { currentEnvUIFeatures, user } = useStoreData();
 
   return (
     <PageHeader
@@ -54,9 +55,9 @@ const EnvironmentDetailsHeader = ({
           )}
         </MainContent>
       )}
-      sideContent={(
+      sideContent={currentEnvUIFeatures[user.email] && (
         <ButtonsWrapper>
-          {isFeatureEnabled(uiFeatures, UI_FEATURES.RENAME_ENV) && (
+          {isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.RENAME_ENV) && (
             <Button
               htmlType="button"
               light="true"
@@ -67,7 +68,7 @@ const EnvironmentDetailsHeader = ({
               {t('profile.organization.details.rename')}
             </Button>
           )}
-          {isFeatureEnabled(uiFeatures, UI_FEATURES.ADD_MEMBER) && (
+          {isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.ADD_MEMBER) && (
             <Button
               htmlType="button"
               type="primary"
