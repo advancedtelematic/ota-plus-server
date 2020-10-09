@@ -8,7 +8,14 @@ import EnvironmentMembersList from '../EnvironmentMembersList';
 import AddMemberModal from '../modals/AddMemberModal';
 import RenameEnvModal from '../modals/RenameEnvModal';
 import { WarningModal, ExternalLink } from '../../../partials';
-import { FeaturesListHeader, SplitContainer, Sidepanel, ContentWrapper, FeatureBlock } from './styled';
+import {
+  FeaturesListHeader,
+  SplitContainer,
+  Sidepanel,
+  ContentWrapper,
+  FeatureCategoryBlock,
+  FeatureBlock
+} from './styled';
 import { changeUserEnvironment } from '../../../helpers/environmentHelper';
 import { sendAction } from '../../../helpers/analyticsHelper';
 import {
@@ -18,8 +25,19 @@ import {
   OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
-import { LAYERS_ICON_BLANK, UI_FEATURES, isFeatureEnabled } from '../../../config';
+import { LAYERS_ICON_BLANK, UI_FEATURES, isFeatureEnabled, FEATURE_CATEGORIES } from '../../../config';
 import { URL_FEATURE_ACCESS_READ_MORE, URL_ENVIRONMENTS_LEAVE } from '../../../constants/urlConstants';
+
+const FEATURE_CATEGORIES_TRANSLATED = {
+  [FEATURE_CATEGORIES.ACCESS]: 'profile.organization.feature-category.access',
+  [FEATURE_CATEGORIES.CREDENTIALS]: 'profile.organization.feature-category.credentials',
+  [FEATURE_CATEGORIES.ENVIRONMENT]: 'profile.organization.feature-category.environment',
+  [FEATURE_CATEGORIES.DEVICE]: 'profile.organization.feature-category.device',
+  [FEATURE_CATEGORIES.CUSTOM_FIELD]: 'profile.organization.feature-category.custom-field',
+  [FEATURE_CATEGORIES.SOFTWARE]: 'profile.organization.feature-category.software',
+  [FEATURE_CATEGORIES.UPDATE]: 'profile.organization.feature-category.update',
+  [FEATURE_CATEGORIES.CAMPAIGN]: 'profile.organization.feature-category.campaign',
+};
 
 function useStoreData() {
   const { stores } = useStores();
@@ -27,6 +45,7 @@ function useStoreData() {
     currentEnvironment: stores.userStore.currentOrganization,
     environmentMembers: stores.userStore.userOrganizationUsers,
     currentEnvUIFeatures: stores.userStore.currentEnvUIFeatures,
+    currentEnvUIFeaturesCategorized: stores.userStore.currentEnvUIFeaturesCategorized,
     uiFeatures: stores.userStore.uiFeatures,
     user: stores.userStore.user,
   }));
@@ -35,7 +54,13 @@ function useStoreData() {
 const EnvironmentDetails = () => {
   const { t } = useTranslation();
   const { stores } = useStores();
-  const { currentEnvironment, environmentMembers, currentEnvUIFeatures, user } = useStoreData();
+  const {
+    currentEnvironment,
+    environmentMembers,
+    currentEnvUIFeatures,
+    currentEnvUIFeaturesCategorized,
+    user
+  } = useStoreData();
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
   const [renameEnvModalOpen, setRenameEnvModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState('');
@@ -47,6 +72,7 @@ const EnvironmentDetails = () => {
   useEffect(() => () => {
     stores.userStore.userOrganizationUsers = [];
     stores.userStore.currentEnvUIFeatures = {};
+    stores.userStore.currentEnvUIFeaturesCategorized = {};
     stores.userStore.currentOrganization = {};
     stores.userStore.showEnvDetails = false;
   }, []);
@@ -63,7 +89,7 @@ const EnvironmentDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (environmentMembers.length > 0 && currentEnvironment) {
+    if (environmentMembers.length > 0 && Object.keys(currentEnvironment).length) {
       setSelectedMember(environmentMembers[0]);
       environmentMembers.forEach((member) => {
         stores.userStore.getUIFeatures(currentEnvironment.namespace, member.email, true);
@@ -200,32 +226,45 @@ const EnvironmentDetails = () => {
           </div>
           <FeaturesListHeader>
             <span>
-              {t('profile.organization.features.header.title')}
+              {t('profile.organization.features.header.feature-category')}
+            </span>
+            <span>
+              {t('profile.organization.features.header.feature-name')}
+            </span>
+            <span>
+              {t('profile.organization.features.header.docs')}
             </span>
             <img src={LAYERS_ICON_BLANK} />
           </FeaturesListHeader>
           {selectedMember
-            && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
-            && currentEnvUIFeatures[selectedMember.email]
-              .map(feature => (
-                <FeatureBlock key={feature.id} id={feature.id}>
-                  <span>{feature.name}</span>
-                  <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
-                    <Checkbox
-                      disabled={
-                        !isFeatureEnabled(
-                          currentEnvUIFeatures[user.email],
-                          UI_FEATURES.MANAGE_FEATURE_ACCESS
-                        )
-                        || currentEnvironment.creatorEmail === selectedMember.email
-                        || selectedMember.email === user.email
-                      }
-                      id={`feature-checkbox-${feature.isAllowed}`}
-                      onChange={event => toggleFeature(event, feature.id)}
-                      checked={feature.isAllowed}
-                    />
-                  </Tooltip>
-                </FeatureBlock>
+            && Object.keys(currentEnvUIFeaturesCategorized).length === environmentMembers.length
+            && Object.entries(currentEnvUIFeaturesCategorized[selectedMember.email])
+              .map(([categoryId, features]) => (
+                <>
+                  <FeatureCategoryBlock key={categoryId} id={categoryId}>
+                    {t(FEATURE_CATEGORIES_TRANSLATED[categoryId])}
+                  </FeatureCategoryBlock>
+                  {features.map(feature => (
+                    <FeatureBlock key={feature.id} id={feature.id}>
+                      <span>{feature.name}</span>
+                      <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
+                        <Checkbox
+                          disabled={
+                            !isFeatureEnabled(
+                              currentEnvUIFeatures[user.email],
+                              UI_FEATURES.MANAGE_FEATURE_ACCESS
+                            )
+                            || currentEnvironment.creatorEmail === selectedMember.email
+                            || selectedMember.email === user.email
+                          }
+                          id={`feature-checkbox-${feature.isAllowed}`}
+                          onChange={event => toggleFeature(event, feature.id)}
+                          checked={feature.isAllowed}
+                        />
+                      </Tooltip>
+                    </FeatureBlock>
+                  ))}
+                </>
               ))}
         </ContentWrapper>
       </SplitContainer>

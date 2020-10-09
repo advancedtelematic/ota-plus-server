@@ -38,6 +38,17 @@ export const FeaturesListHeader = styled.div`
   align-items: center;
   color: ${({ theme }) => theme.palette.texts.darkGrey};
   font-weight: 500;
+  & > span {
+    :nth-child(1) {
+      width: 20%;
+    }
+    :nth-child(2) {
+      width: 40%;
+    }
+    :nth-child(3) {
+      width: 40%;
+    }
+  }
   & > img {
     width: 24px;
     height: 24px;
@@ -49,8 +60,17 @@ export const FeaturesListHeader = styled.div`
   }
 `;
 
+export const FeatureCategoryBlock = styled.div`
+  height: 34px;
+  padding-left: 28px;
+  line-height: 34px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #F7F8F8;
+`;
+
 export const FeatureBlock = styled.div`
-  padding: 0 24px;
+  padding: 0 24px 0 21%;
   height: 50px;
   display: flex;
   justify-content: space-between;
