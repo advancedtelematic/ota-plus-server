@@ -26,9 +26,34 @@ import {
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 import { UI_FEATURES, isFeatureEnabled, FEATURE_CATEGORIES } from '../../../config';
-import { URL_FEATURE_ACCESS_READ_MORE, URL_ENVIRONMENTS_LEAVE } from '../../../constants/urlConstants';
+import {
+  URL_FEATURE_ACCESS_READ_MORE,
+  URL_ENVIRONMENTS_LEAVE,
+  URL_FEATURE_ACCESS_MANAGE,
+  URL_FEATURE_ACCESS_CREDENTIALS,
+  URL_FEATURE_ACCESS_ENVIRONMENT_RENAME,
+  URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_ADD,
+  URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_REMOVE,
+  URL_FEATURE_ACCESS_DEVICE_GROUPS,
+  URL_FEATURE_ACCESS_DEVICE_SET_AUTOMATIC_UPDATES,
+  URL_FEATURE_ACCESS_DEVICE_LAUNCH_SINGLE_DEVICE_UPDATES,
+  URL_FEATURE_ACCESS_DEVICE_DELETE,
+  URL_FEATURE_ACCESS_DEVICE_RENAME,
+  URL_FEATURE_ACCESS_CUSTOM_FIELD_CREATE,
+  URL_FEATURE_ACCESS_CUSTOM_FIELD_RENAME,
+  URL_FEATURE_ACCESS_CUSTOM_FIELD_VALUES_EDIT,
+  URL_FEATURE_ACCESS_CUSTOM_FIELD_DELETE,
+  URL_FEATURE_ACCESS_SOFTWARE_UPLOAD,
+  URL_FEATURE_ACCESS_SOFTWARE_COMMENTS_EDIT,
+  URL_FEATURE_ACCESS_SOFTWARE_VERSIONS_DELETE,
+  URL_FEATURE_ACCESS_SOFTWARE_DELETE,
+  URL_FEATURE_ACCESS_UPDATE_CREATE,
+  URL_FEATURE_ACCESS_CAMPAIGN_CREATE,
+  URL_FEATURE_ACCESS_CAMPAIGN_CANCEL,
+  URL_FEATURE_ACCESS_CAMPAIGN_RETRY
+} from '../../../constants/urlConstants';
 
-const FEATURE_CATEGORIES_TRANSLATED = {
+const FEATURE_CATEGORIES_TRANSLATION_KEYS = {
   [FEATURE_CATEGORIES.ACCESS]: 'profile.organization.feature-category.access',
   [FEATURE_CATEGORIES.CREDENTIALS]: 'profile.organization.feature-category.credentials',
   [FEATURE_CATEGORIES.ENVIRONMENT]: 'profile.organization.feature-category.environment',
@@ -37,6 +62,31 @@ const FEATURE_CATEGORIES_TRANSLATED = {
   [FEATURE_CATEGORIES.SOFTWARE]: 'profile.organization.feature-category.software',
   [FEATURE_CATEGORIES.UPDATE]: 'profile.organization.feature-category.update',
   [FEATURE_CATEGORIES.CAMPAIGN]: 'profile.organization.feature-category.campaign',
+};
+
+const FEATURES_READ_MORE_LINKS = {
+  [UI_FEATURES.ACCESS_CREDS]: URL_FEATURE_ACCESS_CREDENTIALS,
+  [UI_FEATURES.ADD_MEMBER]: URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_ADD,
+  [UI_FEATURES.CANCEL_CAMPAIGN]: URL_FEATURE_ACCESS_CAMPAIGN_CANCEL,
+  [UI_FEATURES.CREATE_CAMPAIGN]: URL_FEATURE_ACCESS_CAMPAIGN_CREATE,
+  [UI_FEATURES.CREATE_DEVICE_GROUP]: URL_FEATURE_ACCESS_DEVICE_GROUPS,
+  [UI_FEATURES.CREATE_SOFTWARE_UPDATE]: URL_FEATURE_ACCESS_UPDATE_CREATE,
+  [UI_FEATURES.DELETE_CUSTOM_FIELD]: URL_FEATURE_ACCESS_CUSTOM_FIELD_DELETE,
+  [UI_FEATURES.DELETE_DEVICE]: URL_FEATURE_ACCESS_DEVICE_DELETE,
+  [UI_FEATURES.DELETE_SOFTWARE]: URL_FEATURE_ACCESS_SOFTWARE_DELETE,
+  [UI_FEATURES.DELETE_SOFTWARE_VERSION]: URL_FEATURE_ACCESS_SOFTWARE_VERSIONS_DELETE,
+  [UI_FEATURES.EDIT_CUSTOM_FIELD_VALUE]: URL_FEATURE_ACCESS_CUSTOM_FIELD_VALUES_EDIT,
+  [UI_FEATURES.EDIT_SOFTWARE_COMMENT]: URL_FEATURE_ACCESS_SOFTWARE_COMMENTS_EDIT,
+  [UI_FEATURES.LAUNCH_SINGLE_DEVICE_UPDATE]: URL_FEATURE_ACCESS_DEVICE_LAUNCH_SINGLE_DEVICE_UPDATES,
+  [UI_FEATURES.MANAGE_FEATURE_ACCESS]: URL_FEATURE_ACCESS_MANAGE,
+  [UI_FEATURES.REMOVE_MEMBER]: URL_FEATURE_ACCESS_ENVIRONMENT_MEMBERS_REMOVE,
+  [UI_FEATURES.RENAME_CUSTOM_FIELD]: URL_FEATURE_ACCESS_CUSTOM_FIELD_RENAME,
+  [UI_FEATURES.RENAME_DEVICE]: URL_FEATURE_ACCESS_DEVICE_RENAME,
+  [UI_FEATURES.RENAME_ENV]: URL_FEATURE_ACCESS_ENVIRONMENT_RENAME,
+  [UI_FEATURES.RETRY_FAILED_UPDATE]: URL_FEATURE_ACCESS_CAMPAIGN_RETRY,
+  [UI_FEATURES.SET_AUTO_UPDATE]: URL_FEATURE_ACCESS_DEVICE_SET_AUTOMATIC_UPDATES,
+  [UI_FEATURES.UPLOAD_FILE_CUSTOM_FIELDS]: URL_FEATURE_ACCESS_CUSTOM_FIELD_CREATE,
+  [UI_FEATURES.UPLOAD_SOFTWARE]: URL_FEATURE_ACCESS_SOFTWARE_UPLOAD,
 };
 
 function useStoreData() {
@@ -239,13 +289,23 @@ const EnvironmentDetails = () => {
             && Object.keys(currentEnvUIFeaturesCategorized).length === environmentMembers.length
             && Object.entries(currentEnvUIFeaturesCategorized[selectedMember.email])
               .map(([categoryId, features]) => (
-                <>
-                  <FeatureCategoryBlock key={categoryId} id={categoryId}>
-                    {t(FEATURE_CATEGORIES_TRANSLATED[categoryId])}
+                <div key={categoryId}>
+                  <FeatureCategoryBlock id={categoryId}>
+                    {t(FEATURE_CATEGORIES_TRANSLATION_KEYS[categoryId])}
                   </FeatureCategoryBlock>
                   {features.map(feature => (
                     <FeatureBlock key={feature.id} id={feature.id}>
+                      <span />
                       <span>{feature.name}</span>
+                      <span>
+                        <ExternalLink
+                          weight="regular"
+                          id={`${feature.id}-read-more`}
+                          url={FEATURES_READ_MORE_LINKS[feature.id]}
+                        >
+                          {t('profile.organization.features.read-more')}
+                        </ExternalLink>
+                      </span>
                       <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
                         <Checkbox
                           disabled={
@@ -263,7 +323,7 @@ const EnvironmentDetails = () => {
                       </Tooltip>
                     </FeatureBlock>
                   ))}
-                </>
+                </div>
               ))}
         </ContentWrapper>
       </SplitContainer>

@@ -30,13 +30,11 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-export const FeaturesListHeader = styled.div`
+export const FeatureListBlock = styled.div`
+  position: relative;
   padding: 0 20px;
-  height: 30px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  color: ${({ theme }) => theme.palette.texts.darkGrey};
   font-weight: 500;
   & > span {
     :nth-child(1) {
@@ -49,11 +47,18 @@ export const FeaturesListHeader = styled.div`
       width: 40%;
     }
   }
+`;
+
+export const FeaturesListHeader = styled(FeatureListBlock)`
+  height: 30px;
+  color: ${({ theme }) => theme.palette.texts.darkGrey};
   & > img {
     width: 24px;
     height: 24px;
     opacity: 0.6;
     transform: scaleX(-1);
+    position: absolute;
+    right: 20px;
   }
   &, :hover {
     background-color: ${({ theme }) => theme.palette.headerGrey};
@@ -62,24 +67,27 @@ export const FeaturesListHeader = styled.div`
 
 export const FeatureCategoryBlock = styled.div`
   height: 34px;
-  padding-left: 28px;
+  padding-left: 26px;
   line-height: 34px;
   font-size: 13px;
   font-weight: 500;
   background-color: #F7F8F8;
 `;
 
-export const FeatureBlock = styled.div`
-  padding: 0 24px 0 21%;
+export const FeatureBlock = styled(FeatureListBlock)`
   height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 13px;
-  font-weight: 500;
   letter-spacing: 0;
   line-height: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderLight};
+  a {
+    text-decoration: underline;
+    color: ${({ theme }) => theme.palette.primaryDarkened};
+  }
+  .ant-checkbox-wrapper {
+    position: absolute;
+    right: 20px;
+  }
   .ant-checkbox-inner {
     width: 18px;
     height: 18px;

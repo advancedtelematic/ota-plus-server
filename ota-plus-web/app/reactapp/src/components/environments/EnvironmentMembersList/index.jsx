@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useObserver } from 'mobx-react';
 import { Tooltip } from 'antd';
 import { Form } from 'formsy-antd';
-import { useStores } from '../../../stores/hooks';
 import { Dropdown, SearchBar } from '../../../partials';
 import {
   AccessManagerTag,
@@ -21,13 +19,6 @@ import { DOOR_EXIT_ICON, TRASHBIN_ICON, DROPDOWN_TOGGLE_ICON, isFeatureEnabled, 
 
 const MANAGE_FEATURES_ACCESS_ID = 'manage_feature_access';
 
-function useStoreData() {
-  const { stores } = useStores();
-  return useObserver(() => ({
-    uiFeatures: stores.userStore.uiFeatures
-  }));
-}
-
 const EnvironmentMembersList = ({
   currentEnvUIFeatures,
   envInfo,
@@ -38,11 +29,12 @@ const EnvironmentMembersList = ({
   user
 }) => {
   const { t } = useTranslation();
-  const { uiFeatures } = useStoreData();
   const [selectedItemEmail, setSelectedItemEmail] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const { creatorEmail, isInitial } = envInfo;
-  const canRemoveMembers = isFeatureEnabled(uiFeatures, UI_FEATURES.REMOVE_MEMBER);
+  const canRemoveMembers = currentEnvUIFeatures[user.email] && isFeatureEnabled(
+    currentEnvUIFeatures[user.email], UI_FEATURES.REMOVE_MEMBER
+  );
 
   const toggleMenu = (email) => {
     setSelectedItemEmail(prevValue => prevValue ? '' : email);
