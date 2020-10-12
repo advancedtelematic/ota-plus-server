@@ -25,7 +25,7 @@ import {
   OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
-import { LAYERS_ICON_BLANK, UI_FEATURES, isFeatureEnabled, FEATURE_CATEGORIES } from '../../../config';
+import { UI_FEATURES, isFeatureEnabled, FEATURE_CATEGORIES } from '../../../config';
 import { URL_FEATURE_ACCESS_READ_MORE, URL_ENVIRONMENTS_LEAVE } from '../../../constants/urlConstants';
 
 const FEATURE_CATEGORIES_TRANSLATED = {
@@ -234,7 +234,6 @@ const EnvironmentDetails = () => {
             <span>
               {t('profile.organization.features.header.docs')}
             </span>
-            <img src={LAYERS_ICON_BLANK} />
           </FeaturesListHeader>
           {selectedMember
             && Object.keys(currentEnvUIFeaturesCategorized).length === environmentMembers.length
