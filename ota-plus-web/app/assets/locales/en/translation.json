@@ -463,6 +463,7 @@
     "profile.organization.details.id": "Environment ID",
     "profile.organization.details.list.added": "Added:",
     "profile.organization.details.list.email": "EMAIL",
+    "profile.organization.details.list.identity-provider": "Identity provider:",
     "profile.organization.details.rename": "Rename",
     "profile.organization.features.accessible": "Accessible",
     "profile.organization.features.desc": "Restricted features are hidden, and the selected user cannot access them in this environment.",

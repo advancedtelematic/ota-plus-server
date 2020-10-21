@@ -80,7 +80,7 @@ const EnvironmentMembersList = ({
           </Form>
         </ListHeader>
       )}
-      renderItem={({ email, addedAt }) => (
+      renderItem={({ email, identityProvider, addedAt }) => (
         <ListItem
           id={email}
           key={email}
@@ -106,6 +106,11 @@ const EnvironmentMembersList = ({
             <LowImportanceText>{t('profile.organization.details.list.added')}</LowImportanceText>
             {' '}
             <span>{getFormattedDateTime(addedAt, RECENTLY_CREATED_DATE_FORMAT)}</span>
+          </div>
+          <div>
+            <LowImportanceText>{t('profile.organization.details.list.identity-provider')}</LowImportanceText>
+            {' '}
+            <span>{identityProvider}</span>
           </div>
           {selectedItemEmail === email && (
             <Dropdown hideSubmenu={() => toggleMenu(email)}>

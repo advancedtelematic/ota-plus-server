@@ -16,7 +16,7 @@ export const ListStyled = styled(List)`
 
 export const ListItem = styled(List.Item)`
   cursor: pointer;
-  height: 74px;
+  height: 93px;
   display: block;
   font-size: 13px;
   color: ${({ theme }) => theme.palette.texts.black};
