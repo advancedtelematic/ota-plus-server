@@ -25,7 +25,13 @@ import {
   OTA_ENVIRONMENT_SWITCH,
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
-import { UI_FEATURES, isFeatureEnabled, FEATURE_CATEGORIES } from '../../../config';
+import {
+  isFeatureEnabled,
+  FEATURE_CATEGORIES,
+  LAYERS_ICON_BLANK,
+  LAYERS_ICON_CHECKED,
+  UI_FEATURES,
+} from '../../../config';
 import {
   URL_FEATURE_ACCESS_READ_MORE,
   URL_ENVIRONMENTS_LEAVE,
@@ -236,14 +242,24 @@ const EnvironmentDetails = () => {
     }
   };
 
-  const toggleFeature = (event, featureId) => {
-    if (event.target.checked) {
+  const toggleFeature = (checked, featureId) => {
+    if (checked) {
       stores.userStore.toggleFeatureOn(currentEnvironment.namespace, selectedMember.email, featureId);
     } else {
       stores.userStore.toggleFeatureOff(currentEnvironment.namespace, selectedMember.email, featureId);
     }
   };
 
+  let allFeaturesAllowed = false;
+  if (currentEnvironment.creatorEmail !== selectedMember.email
+    && selectedMember.email !== user.email
+    && selectedMember
+    && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
+    && currentEnvUIFeatures[selectedMember.email]
+    && Object.entries(currentEnvUIFeatures[selectedMember.email])) {
+    allFeaturesAllowed = Object.entries(currentEnvUIFeatures[selectedMember.email])
+      .every(([, feature]) => feature.isAllowed);
+  }
   return (
     <div>
       <EnvironmentDetailsHeader
@@ -284,6 +300,22 @@ const EnvironmentDetails = () => {
             <span>
               {t('profile.organization.features.header.docs')}
             </span>
+            {currentEnvironment.creatorEmail !== selectedMember.email
+            && selectedMember.email !== user.email
+            && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
+            && currentEnvUIFeatures[selectedMember.email]
+            && Object.entries(currentEnvUIFeatures[selectedMember.email])
+            && (
+              <Tooltip title={t(`profile.organization.features.${allFeaturesAllowed ? 'accessible' : 'restricted'}`)}>
+                <img
+                  onClick={() => {
+                    toggleFeature(!allFeaturesAllowed, UI_FEATURES.ALL);
+                  }}
+                  src={allFeaturesAllowed ? LAYERS_ICON_CHECKED : LAYERS_ICON_BLANK}
+                />
+              </Tooltip>
+            )
+            }
           </FeaturesListHeader>
           {selectedMember
             && Object.keys(currentEnvUIFeaturesCategorized).length === environmentMembers.length
@@ -317,7 +349,7 @@ const EnvironmentDetails = () => {
                             || selectedMember.email === user.email
                           }
                           id={`feature-checkbox-${feature.isAllowed}`}
-                          onChange={event => toggleFeature(event, feature.id)}
+                          onChange={event => toggleFeature(event.target.checked, feature.id)}
                           checked={feature.isAllowed}
                         />
                       </Tooltip>
