@@ -17,4 +17,4 @@ If you need to test your software on the same devices that you use for productio
 If you need to work together with colleagues on device provisioning, device groups, software versions, software updates, and campaigns, you can xref:manage-members.adoc[add] your colleagues to your environment. You can also become a member of other environments and collaborate on their projects.
 If you no longer need to access resources in other environments, you can always xref:leave-environment.adoc[leave] them.
 
-In the environments to which you have access, you can xref:manage-members.adoc[add and remove] members as well as xref:find-and-change-environments.adoc[switch] between the environments.
+In the environments to which you have access, you can xref:manage-members.adoc[add and remove] members as well as xref:find-and-change-environments.adoc[switch] between the environments. You can also xref:manage-access-to-features.adoc[manage access to features] in the environments that you own, created, or have the *Access Manager* access rights.

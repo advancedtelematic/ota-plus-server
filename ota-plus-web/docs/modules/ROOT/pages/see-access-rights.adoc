@@ -1,0 +1,14 @@
+= Learn about your access rights
+
+You can have different access rights in each environment that you are a member of.
+
+*To find the list of features that you can access:*
+
+. Go to the https://connect.ota.here.com/#/environments[*Environments*, window="_blank"] tab.
+. Click the environment in which you want to find the list of features that you can access.
+. From the *Members* list, select your email.
++
+All the features that you can access in this environment are selected and marked as accessible.
+
+If you are an environment owner, creator, or have the *Manage feature access* feature enabled, you can also xref:manage-access-to-features.adoc[manage access to features] for other members of the environment.
+
