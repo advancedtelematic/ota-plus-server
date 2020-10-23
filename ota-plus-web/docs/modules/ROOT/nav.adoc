@@ -47,6 +47,7 @@
 * xref:create-environment.adoc[Create an environment]
 * xref:manage-members.adoc[Manage members in environments]
 * xref:manage-access-to-features.adoc[Manage access to features]
+* xref:see-access-rights.adoc[Learn about your access rights]
 * xref:rename-environments.adoc[Rename environments]
 * xref:leave-environment.adoc[Leave an environment]
 

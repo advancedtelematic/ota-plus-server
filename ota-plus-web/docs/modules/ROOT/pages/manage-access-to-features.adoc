@@ -11,11 +11,21 @@ NOTE: You can restrict access to features on the OTA Connect Portal, but you can
 . Click the environment in which you want to manage access to features.
 +
 The page with environment details opens.
-. In the *Members* list, select a user for whom you want to manage access, and do one of the following:
+. From the *Members* list, select a user for whom you want to manage access.
++
+In the *Feature access* section, you can find which features the selected user can already access. 
+
+. Do one of the following:
 ** To give access to a feature, select a check box next to it.
++
+[.lightbackground.align_img_left]
+image::img::grant_access.png[image,800]
 +
 Now, the user has access to the allowed feature in this environment.
 
 ** To restrict access to a feature, clear a check box next to it.
++
+[.lightbackground.align_img_left]
+image::img::remove_access.png[image,800]
 +
 Now, the user has no access to the restricted feature in this environment on the OTA Connect Portal.
