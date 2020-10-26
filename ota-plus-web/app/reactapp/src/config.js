@@ -351,6 +351,7 @@ export const INFO_ICON_WHITE = '/assets/img/icons/white/info.svg';
 export const KEY_ICON_BLACK = '/assets/img/icons/black/key.svg';
 export const KEY_ICON_WHITE = '/assets/img/icons/white/key.svg';
 export const LAYERS_ICON_BLANK = '/assets/img/new-app/24/LUI-icon-pd-layers-outline-24.svg';
+export const LAYERS_ICON_CHECKED = '/assets/img/new-app/24/checkbox-multiple-marked.svg';
 export const LINK_BUTTON_ICON = '/assets/img/icons/link_button.svg';
 export const LOCKPAD_ICON = '/assets/img/new-app/24/test-feature-flag.svg';
 export const MANAGER_ICON_DANGER_WHITE = '/assets/img/icons/white/manager-danger.png';
@@ -426,6 +427,7 @@ export const FEATURES = {
 export const UI_FEATURES = {
   ACCESS_CREDS: 'access_credentials',
   ADD_MEMBER: 'add_member',
+  ALL: 'all',
   CANCEL_CAMPAIGN: 'cancel_campaign',
   CREATE_CAMPAIGN: 'create_campaign',
   CREATE_DEVICE_GROUP: 'create_device_group',

@@ -55,10 +55,9 @@ export const FeaturesListHeader = styled(FeatureListBlock)`
   & > img {
     width: 24px;
     height: 24px;
-    opacity: 0.6;
-    transform: scaleX(-1);
     position: absolute;
     right: 20px;
+    cursor: pointer;
   }
   &, :hover {
     background-color: ${({ theme }) => theme.palette.headerGrey};
