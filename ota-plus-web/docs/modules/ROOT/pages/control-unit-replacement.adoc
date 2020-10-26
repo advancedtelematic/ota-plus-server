@@ -2,7 +2,9 @@
 
 In the Uptane framework, there are two types of control units: Primary and Secondary. A Primary control unit downloads, verifies, and distributes software to Secondaries. A Secondary control unit receives software and also verifies and installs its own metadata and images. You can find a list of Primary and Secondary control units that a device has on a page with device details. To learn more, see the xref:ota-client::uptane.adoc#_primary_and_secondary_ecus[related] section in the Developer Guide.
 
-Control units can be replaced offline. On a device details page, on the *History* tab, you can find information related to their replacement. 
+NOTE: Before you replace a control unit offline, make sure you use aktualizr 2020.8 or later. Otherwise, to send updates to a device with a replaced control unit, you will need to delete and reprovision the device.
+
+Control units can be replaced offline. On a device details page, on the *History* tab, you can find information related to their replacement.
 
 [.lightbackground.align_img_left]
 image::img::ecu_replacement.png[image,900]
