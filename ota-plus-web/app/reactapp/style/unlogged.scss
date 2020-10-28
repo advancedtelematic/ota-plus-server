@@ -106,10 +106,25 @@ a:focus {
         text-align: center;
       }
 
+      .multi-line-description {
+        height: 25px;
+        color: #3F454D;
+        font-family: Fira Sans;
+        font-size: 16px;
+        letter-spacing: 0.01px;
+        line-height: 50px;
+        margin-bottom: 0;
+        text-align: center;
+
+        a {
+          color: #1890ff;
+        }
+      }
+
       .divider {
         background-color: #CFD0D3;
         height: 1px;
-        width: 433px;
+        width: 100%;
         margin-top: 20px;
         margin-bottom: 30px;
       }
@@ -117,7 +132,7 @@ a:focus {
 
     .button {
       height: 41px;
-      width: 433px;
+      width: 100%;
       border-radius: 20px;
       background: linear-gradient(90deg, #AE77FF 0%, #61D7D6 100%);
 

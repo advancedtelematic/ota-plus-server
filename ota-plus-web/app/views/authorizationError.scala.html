@@ -11,6 +11,23 @@
 
         <div class="wrapper-center">
           @flash.get("authzError") match {
+            case Some("ota_user_does_not_exist") => {
+              <div class="info">
+                <div class="logo text-center">
+                  <a href="#"><img src='@routes.Assets.versioned("img/Here_logo.svg")' id="logo"></a>
+                </div>
+                <div class="header">
+                  <p class="welcome">Welcome!</p>
+                  <p class="multi-line-description">We cannot sign you in. If you need a new account,</p>
+                  <p class="multi-line-description">please contact a registered sponsor user. <a href="https://docs.ota.here.com/ota-web/dev/get-access.html" target="_blank">Read more</a></p>
+                  <div class="divider"></div>
+                  <p class="description">For support, please</p>
+                </div>
+                <div class="button">
+                  <a href="mailto:otaconnect.support@@here.com">contact us</a>
+                </div>
+              </div>
+            }
             case _ => {
               <div class="info">
                 <div class="logo text-center">
@@ -20,7 +37,7 @@
                   <p class="welcome">Welcome!</p>
                   <p class="description">WE could not log you in at this time. Please try again later.</p>
                   <div class="divider"></div>
-                  <p class="description">For support please,</p>
+                  <p class="description">For support, please</p>
                 </div>
                 <div class="button">
                   <a href="mailto:otaconnect.support@@here.com">contact us</a>
