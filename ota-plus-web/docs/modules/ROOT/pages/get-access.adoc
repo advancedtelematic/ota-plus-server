@@ -1,16 +1,26 @@
 = Get access
 
-You can only request to create a new account if you are a registered sponsor user.
+The process of new account creation is now restricted and only available to contracted Customers due to the xref:getstarted::sunset.adoc[HERE OTA Connect sunset].
 
 NOTE: HERE OTA Connect is only supported on the Google Chrome browser.
 
-*To get access to the OTA Connect Portal:*
+== Preconditions to create a new user account
 
-. Ask the user for whom you request access to do the following:
-.. Create a HERE account on the link:https://developer.here.com[HERE Developer Portal, window="_blank"].
-.. Try to sign in to the link:https://connect.ota.here.com[OTA Connect Portal].
+Please take into account the following:
+
+* New user accounts can be created only for contracted Customers.
+* The request has to be sent from an already registered OTA sponsor or key user of the Customer.
+
+== Procedure of new account creation
+
+The procedure to create a new account is no longer self-service and requires the following steps:
+
+[.align_img_left]
+image::img::create_account_flow.png[image,600]
+
+. The new user creates a HERE account on the link:https://developer.here.com[HERE Developer Portal^].
+. The new user signs in to the link:https://connect.ota.here.com[OTA Connect Portal^].
 +
 The user will fail to sign in to the OTA Connect Portal, but we will get the user HERE ID needed to create an account.
-. Send an email with an email address of the user for whom you request access to otaconnect.support@here.com.
-
-The OTA team will create the account and notify you when the access is enabled.
+. Afterwards, the sponsor/key user has to send an email including the email address of the new user to otaconnect.support@here.com.
+. The OTA team creates the account and notifies the new user and the sponsor/key user when the access is enabled.
