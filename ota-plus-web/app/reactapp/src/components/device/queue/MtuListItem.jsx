@@ -108,6 +108,7 @@ class MtuListItem extends Component {
             const hash = target.image.fileinfo.hashes.sha256;
             const { filepath } = target.image;
             const { length } = target.image.fileinfo;
+            const eventsForEcu = events.filter(e => e.payload.ecu ? e.payload.ecu === serial : true);
             return (
               <div className="overview-panel__operation overview-panel__operation__queued" key={hash}>
                 <div className="overview-panel__label overview-panel__label--queued">{t('common.statuses.queued')}</div>
@@ -152,7 +153,7 @@ class MtuListItem extends Component {
                         <Loader />
                       </div>
                     ) : (
-                      <InstallationEvents events={events} />
+                      <InstallationEvents events={eventsForEcu} />
                     )
                   ) : null}
                 </div>

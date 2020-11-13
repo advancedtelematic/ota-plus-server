@@ -21,68 +21,60 @@ import { getFormattedDateTime } from '../../helpers/datesTimesHelper';
 class InstallationEvents extends Component {
   render() {
     const { events, t } = this.props;
-    const preparedEvents = {
-      ecuDownloadStarted: {
-        receivedAt: moment(),
-        time: INSTALLATION_EVENT_PENDING,
-        status: INSTALLATION_EVENT_PENDING,
-      },
-      ecuDownloadCompleted: {
-        receivedAt: moment.unix(0),
-        time: INSTALLATION_EVENT_PENDING,
-        status: INSTALLATION_EVENT_PENDING,
-      },
-      ecuInstallationStarted: {
-        receivedAt: moment(),
-        time: INSTALLATION_EVENT_PENDING,
-        status: INSTALLATION_EVENT_PENDING,
-      },
-      ecuInstallationCompleted: {
-        receivedAt: moment.unix(0),
-        time: INSTALLATION_EVENT_PENDING,
-        status: INSTALLATION_EVENT_PENDING,
-      },
+
+    const pendingEvent = {
+      time: INSTALLATION_EVENT_PENDING,
+      status: INSTALLATION_EVENT_PENDING,
     };
 
-    events
-      && events.map((el) => {
-        const receivedAt = moment(el.receivedAt);
-        const time = getFormattedDateTime(el.receivedAt, DEVICE_INSTALLATION_EVENT_DATE_FORMAT);
-        switch (el.eventType.id) {
-          case 'EcuDownloadStarted':
-            if (preparedEvents.ecuDownloadStarted.receivedAt.isAfter(receivedAt)) {
-              preparedEvents.ecuDownloadStarted.receivedAt = receivedAt;
-              preparedEvents.ecuDownloadStarted.time = time;
-              preparedEvents.ecuDownloadStarted.status = INSTALLATION_EVENT_SUCCESS;
-            }
-            break;
-          case 'EcuDownloadCompleted':
-            if (preparedEvents.ecuDownloadCompleted.receivedAt.isBefore(receivedAt)) {
-              preparedEvents.ecuDownloadCompleted.receivedAt = receivedAt;
-              preparedEvents.ecuDownloadCompleted.time = time;
-              preparedEvents.ecuDownloadCompleted.status = el.payload.success
-                ? INSTALLATION_EVENT_SUCCESS : INSTALLATION_EVENT_ERROR;
-            }
-            break;
-          case 'EcuInstallationStarted':
-            if (preparedEvents.ecuInstallationStarted.receivedAt.isAfter(receivedAt)) {
-              preparedEvents.ecuInstallationStarted.receivedAt = receivedAt;
-              preparedEvents.ecuInstallationStarted.time = time;
-              preparedEvents.ecuInstallationStarted.status = INSTALLATION_EVENT_SUCCESS;
-            }
-            break;
-          case 'EcuInstallationCompleted':
-            if (preparedEvents.ecuInstallationCompleted.receivedAt.isBefore(receivedAt)) {
-              preparedEvents.ecuInstallationCompleted.receivedAt = receivedAt;
-              preparedEvents.ecuInstallationCompleted.time = time;
-              preparedEvents.ecuInstallationCompleted.status = el.payload.success
-                ? INSTALLATION_EVENT_SUCCESS : INSTALLATION_EVENT_ERROR;
-            }
-            break;
-          default:
-            break;
-        }
-      });
+    const preparedEvents = {
+      ecuDownloadStarted: pendingEvent,
+      ecuDownloadCompleted: pendingEvent,
+      ecuInstallationStarted: pendingEvent,
+      ecuInstallationCompleted: pendingEvent
+    };
+
+    const toPreparedEvent = (e) => {
+      const time = getFormattedDateTime(e.receivedAt, DEVICE_INSTALLATION_EVENT_DATE_FORMAT);
+      const status = {}.hasOwnProperty.call(e.payload, 'success')
+        ? (e.payload.success ? INSTALLATION_EVENT_SUCCESS : INSTALLATION_EVENT_ERROR) : INSTALLATION_EVENT_SUCCESS;
+      return { time, status };
+    };
+
+    const firstSuccessOrLastFailed = (eventsArray) => {
+      const maybeSuccess = eventsArray.find(e => e.payload.success);
+      return maybeSuccess || eventsArray[eventsArray.length - 1];
+    };
+
+    const compare = (a, b) => moment(a.receivedAt).isBefore(moment(b.receivedAt)) ? -1 : 1;
+
+    const sortedByDateEvents = events ? events.sort(compare) : [];
+
+    const downloadStartedEvent = sortedByDateEvents.find(e => e.eventType.id === 'EcuDownloadStarted');
+
+    const installationStartedEvent = sortedByDateEvents.find(e => e.eventType.id === 'EcuInstallationStarted');
+
+    const downloadCompletedEvents = sortedByDateEvents.filter(e => e.eventType.id === 'EcuDownloadCompleted');
+    const downloadCompletedEvent = firstSuccessOrLastFailed(downloadCompletedEvents);
+
+    const installationCompletedEvents = sortedByDateEvents.filter(e => e.eventType.id === 'EcuInstallationCompleted');
+    const installationCompletedEvent = firstSuccessOrLastFailed(installationCompletedEvents);
+
+    if (downloadStartedEvent) {
+      preparedEvents.ecuDownloadStarted = toPreparedEvent(downloadStartedEvent);
+    }
+
+    if (downloadCompletedEvent) {
+      preparedEvents.ecuDownloadCompleted = toPreparedEvent(downloadCompletedEvent);
+    }
+
+    if (installationStartedEvent) {
+      preparedEvents.ecuInstallationStarted = toPreparedEvent(installationStartedEvent);
+    }
+
+    if (installationCompletedEvent) {
+      preparedEvents.ecuInstallationCompleted = toPreparedEvent(installationCompletedEvent);
+    }
 
     return (
       <div className="overview-panel__operation-events">
