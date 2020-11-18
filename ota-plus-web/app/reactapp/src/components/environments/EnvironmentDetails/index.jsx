@@ -251,8 +251,7 @@ const EnvironmentDetails = () => {
   };
 
   let allFeaturesAllowed = false;
-  if (currentEnvironment.creatorEmail !== selectedMember.email
-    && selectedMember.email !== user.email
+  if (selectedMember.email !== user.email
     && selectedMember
     && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
     && currentEnvUIFeatures[selectedMember.email]
@@ -260,6 +259,15 @@ const EnvironmentDetails = () => {
     allFeaturesAllowed = Object.entries(currentEnvUIFeatures[selectedMember.email])
       .every(([, feature]) => feature.isAllowed);
   }
+
+  const isNotAllowedEditAccess = (feature) => {
+    const isNotAccessManager = !isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.MANAGE_FEATURE_ACCESS);
+    const isRevokingAccessManagementFeatureForCreatorOrCurrentUser = feature.id === UI_FEATURES.MANAGE_FEATURE_ACCESS
+      && feature.isAllowed
+      && (currentEnvironment.creatorEmail === selectedMember.email || selectedMember.email === user.email);
+    return isNotAccessManager || isRevokingAccessManagementFeatureForCreatorOrCurrentUser;
+  };
+
   return (
     <div>
       <EnvironmentDetailsHeader
@@ -300,11 +308,11 @@ const EnvironmentDetails = () => {
             <span>
               {t('profile.organization.features.header.docs')}
             </span>
-            {currentEnvironment.creatorEmail !== selectedMember.email
-            && selectedMember.email !== user.email
+            {selectedMember.email !== user.email
             && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
             && currentEnvUIFeatures[selectedMember.email]
             && Object.entries(currentEnvUIFeatures[selectedMember.email])
+            && isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.MANAGE_FEATURE_ACCESS)
             && (
               <Tooltip title={t(`profile.organization.features.${allFeaturesAllowed ? 'accessible' : 'restricted'}`)}>
                 <img
@@ -340,14 +348,7 @@ const EnvironmentDetails = () => {
                       </span>
                       <Tooltip title={t(`profile.organization.features.${feature.isAllowed ? 'accessible' : 'restricted'}`)}>
                         <Checkbox
-                          disabled={
-                            !isFeatureEnabled(
-                              currentEnvUIFeatures[user.email],
-                              UI_FEATURES.MANAGE_FEATURE_ACCESS
-                            )
-                            || currentEnvironment.creatorEmail === selectedMember.email
-                            || selectedMember.email === user.email
-                          }
+                          disabled={isNotAllowedEditAccess(feature)}
                           id={`feature-checkbox-${feature.isAllowed}`}
                           onChange={event => toggleFeature(event.target.checked, feature.id)}
                           checked={feature.isAllowed}
