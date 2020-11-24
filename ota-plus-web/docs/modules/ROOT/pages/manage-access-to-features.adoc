@@ -1,6 +1,7 @@
 = Manage access to features
 
 If you are an environment owner, creator, or have the *Access Manager* access rights, you can give or restrict access to features for other members of the environment.
+You cannot restrict access to the *Manage feature access* feature for yourself, environment owners, and environment creators.
 Members with the *Fully restricted* access rights cannot use any of the environment features.
 
 NOTE: You can restrict access to features on the OTA Connect Portal, but you cannot restrict access at the API level.
