@@ -279,6 +279,10 @@
     &#provisioning {
       padding: 20px 40px;
 
+      .text-white {
+        color: $color-white;
+      }
+
       .subheader {
         background-color: transparent;
         border: 0;
