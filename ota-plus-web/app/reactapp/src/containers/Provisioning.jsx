@@ -90,7 +90,10 @@ class Provisioning extends Component {
           </div>
         ) : provisioningStore.provisioningStatus.active ? (
           <span>
-            <p id={'profile-provisioning-keys-read-more-description'}>
+            <p
+              id="profile-provisioning-keys-read-more-description"
+              className={`${provisioningStore.preparedProvisioningKeys.length ? '' : 'text-white'}`}
+            >
               {t('profile.provisioning-keys.read-more.description')}
               {' '}
               <ExternalLink
