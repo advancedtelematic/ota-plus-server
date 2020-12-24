@@ -23,14 +23,31 @@ class B3HeaderPropagation @Inject() (implicit val mat: Materializer) extends Fil
   }
 }
 
+class StrictTransportSecurityHeaderFilter @Inject()(implicit val mat: Materializer) extends Filter {
+  import mat.executionContext
+
+  override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
+    nextFilter(requestHeader)
+      .map(_.withHeaders("Strict-Transport-Security" -> "max-age=31536000"))
+  }
+}
+
 class OtaPlusFilters  @Inject() (
                                   securityHeadersFilter: SecurityHeadersFilter,
                                   csrfFilter: CSRFFilter,
                                   log: LoggingFilter,
                                   b3HeaderPropagation: B3HeaderPropagation,
-                                  zipkinTraceFilter: ZipkinTraceFilter
+                                  zipkinTraceFilter: ZipkinTraceFilter,
+                                  strictTransportSecurityHeaderFilter: StrictTransportSecurityHeaderFilter
                         ) extends HttpFilters {
 
-  val filters = Seq(securityHeadersFilter, csrfFilter, zipkinTraceFilter, log, b3HeaderPropagation)
+  val filters = Seq(
+    securityHeadersFilter,
+    csrfFilter,
+    zipkinTraceFilter,
+    log,
+    b3HeaderPropagation,
+    strictTransportSecurityHeaderFilter
+  )
 }
 
