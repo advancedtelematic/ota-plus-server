@@ -22,7 +22,9 @@ import {
   PACKAGES_BLOCKLISTED_TAB,
   PACKAGES_ADVANCED_TAB,
   SOFTWARE_ICON,
-  PLUS_ICON
+  PLUS_ICON,
+  UI_FEATURES,
+  isFeatureEnabled
 } from '../config';
 import { MetaData } from '../utils';
 import { ANALYTICS_VIEW_SOFTWARE_VERSIONS } from '../constants/analyticsViews';
@@ -234,7 +236,8 @@ class Software extends Component {
 
   render() {
     const { stores, highlightedPackage, t } = this.props;
-    const { softwareStore } = stores;
+    const { softwareStore, userStore } = stores;
+    const { uiFeatures } = userStore;
     return (
       <span ref={this.componentRef}>
         <MetaData title={this.title}>
@@ -274,10 +277,12 @@ class Software extends Component {
                   <UnderlinedLink url={URL_SOFTWARE_UPLOAD_METHODS}>{t('miscellaneous.read-more')}</UnderlinedLink>
                 </ReadMore>
                 <div>
-                  <SecondaryButton type="link" id="add-new-software" onClick={this.showCreateModal}>
-                    <img src={PLUS_ICON} />
-                    {t('software.empty.add-new')}
-                  </SecondaryButton>
+                  {isFeatureEnabled(uiFeatures, UI_FEATURES.UPLOAD_SOFTWARE) && (
+                    <SecondaryButton type="link" id="add-new-software" onClick={this.showCreateModal}>
+                      <img src={PLUS_ICON} />
+                      {t('software.empty.add-new')}
+                    </SecondaryButton>
+                  )}
                 </div>
               </div>
             </div>

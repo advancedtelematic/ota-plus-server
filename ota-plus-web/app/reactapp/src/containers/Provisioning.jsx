@@ -19,6 +19,7 @@ import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import { ANALYTICS_VIEW_CREDENTIALS_PROVISIONING } from '../constants/analyticsViews';
 import { OTA_PROVISIONING_READ_MORE } from '../constants/analyticsActions';
 import { URL_PROVISIONING_READ_MORE } from '../constants/urlConstants';
+import { isFeatureEnabled, UI_FEATURES } from '../config';
 
 @inject('stores')
 @observer
@@ -80,9 +81,10 @@ class Provisioning extends Component {
 
   render() {
     const { stores, t } = this.props;
-    const { provisioningStore } = stores;
+    const { provisioningStore, userStore } = stores;
     const { openCreationPopup } = provisioningStore;
-    return (
+    const { uiFeatures } = userStore;
+    return isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS) && (
       <span>
         {provisioningStore.provisioningStatusFetchAsync.isFetching ? (
           <div className="wrapper-center">

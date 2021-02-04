@@ -11,7 +11,14 @@ import { withTranslation } from 'react-i18next';
 import { UpdateCreateModal, UpdateHeader, UpdateList } from '../components/updates';
 import { Loader, SecondaryButton } from '../partials';
 
-import { UPDATE_ICON, UPDATES_FETCH_ASYNC, UPDATES_LIMIT_PER_PAGE, PLUS_ICON } from '../config';
+import {
+  UPDATE_ICON,
+  UPDATES_FETCH_ASYNC,
+  UPDATES_LIMIT_PER_PAGE,
+  PLUS_ICON,
+  UI_FEATURES,
+  isFeatureEnabled
+} from '../config';
 import { MetaData } from '../utils';
 import { sendAction, setAnalyticsView } from '../helpers/analyticsHelper';
 import {
@@ -105,8 +112,9 @@ class Updates extends Component {
   render() {
     const { pageNumber } = this.state;
     const { stores, t } = this.props;
-    const { updatesStore } = stores;
+    const { updatesStore, userStore } = stores;
     const { isFetching } = updatesStore.updatesFetchAsync;
+    const { uiFeatures } = userStore;
     return (
       <span ref={this.componentRef}>
         <MetaData title={this.title}>
@@ -140,10 +148,12 @@ class Updates extends Component {
                     <UnderlinedLink url={URL_UPDATES_INTRO}>{t('miscellaneous.read-more')}</UnderlinedLink>
                   </ReadMore>
                   <div>
-                    <SecondaryButton id="add-new-update" type="link" onClick={this.showCreateModal}>
-                      <img src={PLUS_ICON} />
-                      {t('updates.empty.add-new')}
-                    </SecondaryButton>
+                    {isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_SOFTWARE_UPDATE) && (
+                      <SecondaryButton id="add-new-update" type="link" onClick={this.showCreateModal}>
+                        <img src={PLUS_ICON} />
+                        {t('updates.empty.add-new')}
+                      </SecondaryButton>
+                    )}
                   </div>
                 </div>
               </div>
