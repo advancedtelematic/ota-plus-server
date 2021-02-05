@@ -23,7 +23,7 @@ import {
   CAMPAIGNS_STATUS_ALL,
   PLUS_ICON,
   CAMPAIGNS_STATUS_LAUNCHED,
-  CAMPAIGNS_STATUS_FINISHED,
+  CAMPAIGNS_STATUS_FINISHED, isFeatureEnabled, UI_FEATURES,
 } from '../../config';
 import ReadMore from '../../partials/ReadMore';
 import UnderlinedLink from '../../partials/UnderlinedLink';
@@ -124,8 +124,9 @@ class ContentPanel extends Component {
     const { pageNumber } = this.state;
     const { addNewWizard, expandedCampaigns, showCancelCampaignModal, showDependenciesModal, showRetryModal,
       stores, t, toggleCampaign } = this.props;
-    const { campaignsStore } = stores;
+    const { campaignsStore, userStore } = stores;
     const { activeTab, campaignsFetchAsync, campaigns, campaignsFilter } = campaignsStore;
+    const { uiFeatures } = userStore;
 
     return (
       <span>
@@ -169,17 +170,19 @@ class ContentPanel extends Component {
                       </UnderlinedLink>
                     </ReadMore>
                     <div>
-                      <SecondaryButton
-                        type="link"
-                        id="add-new-campaign"
-                        onClick={(event) => {
-                          if (event) event.preventDefault();
-                          addNewWizard();
-                        }}
-                      >
-                        <img src={PLUS_ICON} />
-                        {t('campaigns.create')}
-                      </SecondaryButton>
+                      {isFeatureEnabled(uiFeatures, UI_FEATURES.CREATE_CAMPAIGN) && (
+                        <SecondaryButton
+                          type="link"
+                          id="add-new-campaign"
+                          onClick={(event) => {
+                            if (event) event.preventDefault();
+                            addNewWizard();
+                          }}
+                        >
+                          <img src={PLUS_ICON} />
+                          {t('campaigns.create')}
+                        </SecondaryButton>
+                      )}
                     </div>
                   </>
                 ) : (

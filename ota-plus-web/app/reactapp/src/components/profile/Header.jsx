@@ -4,15 +4,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import { FEATURES } from '../../config';
+import { FEATURES, isFeatureEnabled, UI_FEATURES } from '../../config';
 
 @inject('stores')
 @observer
 class Header extends Component {
   render() {
     const { stores, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
-    const { featuresStore } = stores;
+    const { featuresStore, userStore } = stores;
     const { features } = featuresStore;
+    const { uiFeatures } = userStore;
     const fullNavigation = (
       <div className="profile-nav__list">
         {uiUserProfileEdit && (
@@ -41,17 +42,19 @@ class Header extends Component {
             </div>
           </NavLink>
         )}
-        <NavLink
-          to="/profile/access-keys"
-          activeClassName="profile-nav__list-item--active"
-          className="profile-nav__list-item"
-          id="provisioning-keys-link"
-        >
-          <div>
-            {'Credentials (provisioning)'}
-            <span className="profile-nav__bottom-line" />
-          </div>
-        </NavLink>
+        {isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS) && (
+          <NavLink
+            to="/profile/access-keys"
+            activeClassName="profile-nav__list-item--active"
+            className="profile-nav__list-item"
+            id="provisioning-keys-link"
+          >
+            <div>
+              {'Credentials (provisioning)'}
+              <span className="profile-nav__bottom-line" />
+            </div>
+          </NavLink>
+        )}
       </div>
     );
     const fullNavigationWithoutProvisioningKeys = (
@@ -82,17 +85,19 @@ class Header extends Component {
     );
     const onlyProvisioningKeys = (
       <div className="profile-nav__list">
-        <NavLink
-          to="/profile/access-keys"
-          activeClassName="profile-nav__list-item--active"
-          className="profile-nav__list-item"
-          id="provisioning-keys-link"
-        >
-          <div>
-            {'Credentials (provisioning)'}
-            <span className="profile-nav__bottom-line" />
-          </div>
-        </NavLink>
+        {isFeatureEnabled(uiFeatures, UI_FEATURES.ACCESS_CREDS) && (
+          <NavLink
+            to="/profile/access-keys"
+            activeClassName="profile-nav__list-item--active"
+            className="profile-nav__list-item"
+            id="provisioning-keys-link"
+          >
+            <div>
+              {'Credentials (provisioning)'}
+              <span className="profile-nav__bottom-line" />
+            </div>
+          </NavLink>
+        )}
       </div>
     );
     return (
