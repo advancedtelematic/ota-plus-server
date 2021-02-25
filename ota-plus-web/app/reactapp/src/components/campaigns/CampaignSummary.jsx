@@ -14,7 +14,8 @@ import {
   CAMPAIGNS_STATUS_FINISHED,
   CAMPAIGNS_STATUS_LAUNCHED,
   CAMPAIGNS_STATUS_PREPARED,
-  CAMPAIGNS_STATUS_TAB_TITLE
+  CAMPAIGNS_STATUS_TAB_TITLE,
+  CAMPAIGNS_STATUS_CANCELLED
 } from '../../config';
 
 const LOADER_CONFIG = {
@@ -45,7 +46,8 @@ class CampaignSummary extends Component {
     let notApplicableCount = 0;
     let notApplicableRate = 0;
 
-    if (campaign.summary && (type === CAMPAIGNS_STATUS_LAUNCHED || type === CAMPAIGNS_STATUS_FINISHED)) {
+    if (campaign.summary && (type === CAMPAIGNS_STATUS_LAUNCHED || type === CAMPAIGNS_STATUS_FINISHED
+      || type === CAMPAIGNS_STATUS_CANCELLED)) {
       ({
         processedCount,
         failedCount,
