@@ -113,10 +113,12 @@ export default class ProvisioningStore {
       )
       .catch(
         (error) => {
-          const that = this;
-          setTimeout(() => {
-            that.namespaceSetup();
-          }, NAMESPACE_SETUP_TIMEOUT_MS);
+          if (!error.response || (error.response.status !== 401 && error.response.status !== 403)) {
+            const that = this;
+            setTimeout(() => {
+              that.namespaceSetup();
+            }, NAMESPACE_SETUP_TIMEOUT_MS);
+          }
           this.namespaceSetupFetchAsync = handleAsyncError(error);
         },
       );
