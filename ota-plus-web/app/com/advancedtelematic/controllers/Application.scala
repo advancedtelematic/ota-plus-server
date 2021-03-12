@@ -11,16 +11,18 @@ import brave.play.implicits.ZipkinTraceImplicits
 import brave.play.{TraceWSClient, ZipkinTraceServiceLike}
 import com.advancedtelematic.api.{ApiVersion, OtaApiUri, OtaPlusConfig}
 import com.advancedtelematic.auth.{AccessTokenBuilder, AuthorizedSessionRequest, OAuthConfig, PlainAction, UiAuthAction}
-import javax.inject.{Inject, Singleton}
+import com.advancedtelematic.controllers.Data.OmnitureSource
+import play.api.Configuration
 import play.api.i18n.I18nSupport
 import play.api.libs.streams.Accumulator
 import play.api.libs.ws._
 import play.api.mvc._
 import play.filters.csrf.CSRF
-import play.api.Configuration
 
+import java.util.concurrent.TimeUnit
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
-import com.advancedtelematic.controllers.Data.OmnitureSource
+import scala.concurrent.duration.FiniteDuration
 
 final case class UiToggles(
   atsGarageTheme: Boolean,
@@ -70,6 +72,8 @@ class Application @Inject() (ws: TraceWSClient,
   private[this] val wsHost = conf.underlying.getString("ws.host")
   private[this] val wsPort = conf.underlying.getString("ws.port")
   private[this] val wsPath = conf.underlying.getString("ws.path")
+  private[this] val fileUploadTimeout =
+    FiniteDuration(conf.underlying.getDuration("app.fileUploadTimeout").getSeconds, TimeUnit.SECONDS)
 
   /**
    * Returns the uri of the service to proxy to.
@@ -137,7 +141,7 @@ class Application @Inject() (ws: TraceWSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: OtaApiUri)
+  private def proxyTo(apiUri: OtaApiUri, enrichRequest: WSRequest => WSRequest = identity)
                      (implicit req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
     val allowedHeaders = Seq("content-type")
     def passHeaders(hdrs: Headers) =
@@ -152,7 +156,9 @@ class Application @Inject() (ws: TraceWSClient,
       .addHttpHeaders(("Authorization", "Bearer " + req.accessToken.value))
       .withBody(req.body)
 
-    wreq.stream().map { resp =>
+    val enrichedRequest = enrichRequest(wreq)
+
+    enrichedRequest.stream().map { resp =>
       val rStatus = resp.status
       val rHeaders = resp.headers
         .filterNot { case(k, v) => k == "Content-Length" }
@@ -178,6 +184,15 @@ class Application @Inject() (ws: TraceWSClient,
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
       }
     }
+
+  /**
+   * Controller method delegating uploading file to the TUF reposerver.
+   */
+  def uploadSoftwareProxy(fileName: String): Action[Source[ByteString, _]] = {
+    apiAuth.async(bodySource) { implicit req =>
+      proxyTo(repoApiUri, _.withRequestTimeout(fileUploadTimeout))
+    }
+  }
 
   /**
    * Renders index.html
