@@ -17,6 +17,8 @@ GET     /api/v1/provisioning/credentials/registration       com.advancedtelemati
 GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: UUID)
 GET     /api/v1/keys/status                      com.advancedtelematic.controllers.ProvisioningController.keysStatus
 
+PUT     /api/v1/user_repo/targets/:fileName      com.advancedtelematic.controllers.Application.uploadSoftwareProxy(fileName: String)
+
 GET     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
 PUT     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
 POST    /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
