@@ -7,7 +7,7 @@ stages:
   - publish pages
 
 variables:
-  VAULT_ADDR: "http://vault.sit-ota.aws.in.here.com"
+  # VAULT_ADDR: defined in GitLab variables
   # The same image have to be used by test and code coverage jobs:
   TEST_IMAGE: advancedtelematic/gitlab-jobs:0.2.5
 
