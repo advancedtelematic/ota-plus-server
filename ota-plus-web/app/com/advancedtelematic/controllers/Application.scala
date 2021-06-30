@@ -100,7 +100,6 @@ class Application @Inject() (ws: TraceWSClient,
   private val auditorProxiedPrefixes: Dispatcher = {
     case (_, "auditor" :: "devices_seen_in" :: _) => auditorApiUri
     case (_, "auditor" :: "update_reports" :: _) => auditorApiUri
-    case (_, "auditor" :: "campaign_report" :: _) => auditorApiUri
   }
 
   private val directorProxiedPrefixes: Dispatcher = {
