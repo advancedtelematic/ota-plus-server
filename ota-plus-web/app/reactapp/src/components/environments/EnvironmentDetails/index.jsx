@@ -147,6 +147,8 @@ const EnvironmentDetails = () => {
   useEffect(() => {
     if (environmentMembers.length > 0 && Object.keys(currentEnvironment).length) {
       setSelectedMember(environmentMembers[0]);
+      stores.userStore.currentEnvUIFeatures = {};
+      stores.userStore.currentEnvUIFeaturesCategorized = {};
       environmentMembers.forEach((member) => {
         stores.userStore.getUIFeatures(currentEnvironment.namespace, member.email, true);
       });
