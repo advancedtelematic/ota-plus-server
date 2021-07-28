@@ -88,7 +88,7 @@
   "devices.software.blacklist.delete-tooltip": "Remove this Linux package from the <strong>Blacklisted packages</strong> list",
   "devices.software.created-at": "创建于：",
   "devices.statuses.unknown": "从未上线",
-  "footer.copyright": "© 2020 HERE",
+  "footer.copyright": "© 2021 HERE",
   "footer.language": "语言",
   "footer.language.chinese": "中文",
   "footer.language.english": "English",
