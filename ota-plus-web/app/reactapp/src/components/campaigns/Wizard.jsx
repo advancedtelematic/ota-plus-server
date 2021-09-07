@@ -89,7 +89,7 @@ class Wizard extends Component {
 
   constructor(props) {
     super(props);
-    const { stores, t } = props;
+    const { stores, skipStep, wizardIdentifier, hideWizard, t } = props;
     const { campaignsStore, featuresStore } = stores;
     const { features } = featuresStore;
     const isDependencyManagementEnabled = features.includes(FEATURES.DEPENDENCY_CAMPAIGN);
@@ -107,8 +107,12 @@ class Wizard extends Component {
               description: t('campaigns.error_descriptions.campaign_without_devices'),
               duration: NOTIFICATION_DURATION_SEC
             });
-            const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === DATA_TYPE.GROUPS);
-            this.jumpToStep(groupsStepIndex);
+            if (skipStep && skipStep.name === DATA_TYPE.GROUPS) {
+              hideWizard(wizardIdentifier);
+            } else {
+              const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === DATA_TYPE.GROUPS);
+              this.jumpToStep(groupsStepIndex);
+            }
           } else if (change.object[change.name].status !== STATUS.ERROR) {
             this.handleCampaignCreated();
           }
