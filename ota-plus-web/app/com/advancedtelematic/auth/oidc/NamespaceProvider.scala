@@ -3,12 +3,13 @@ package com.advancedtelematic.auth.oidc
 import akka.http.scaladsl.util.FastFuture
 import brave.play.{TraceData, ZipkinTraceServiceLike}
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, RemoteApiError}
+import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, OtaUserIsDeactivated, RemoteApiError}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.{AccessToken, Tokens}
 import com.advancedtelematic.controllers.RejectedNewUserLogin
 import com.advancedtelematic.controllers.UserLogin.rejectedNewUserLoginMsgLike
 import com.advancedtelematic.libats.data.DataType.Namespace
+
 import javax.inject.Inject
 import play.api.Configuration
 import play.api.libs.json.JsValue
@@ -36,6 +37,10 @@ abstract class AbstractNamespaceProvider @Inject()(val conf: Configuration,
     val userId = tokens.idToken.userId
     userProfileApi
       .getUser(userId)
+      .flatMap {
+        case json if (json \ "isActive").as[Boolean] => Future.successful(json)
+        case json if !(json \ "isActive").as[Boolean] => Future.failed(OtaUserIsDeactivated)
+      }
       .recoverWith {
         case RemoteApiError(result, _) if result.header.status == 404 =>
           handleNewUser(tokens.accessToken)

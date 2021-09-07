@@ -29,4 +29,9 @@ object Errors {
     ErrorCode("ota_user_does_not_exist"),
     StatusCodes.Unauthorized,
     "There is no OTA user corresponding to this Here Account.")
+
+  val OtaUserIsDeactivated = RawError(
+    ErrorCode("ota_user_is_deactivated"),
+    StatusCodes.Unauthorized,
+    "The OTA user corresponding to this Here Account is deactivated.")
 }

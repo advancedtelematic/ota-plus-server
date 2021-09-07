@@ -28,6 +28,24 @@
                 </div>
               </div>
             }
+
+            case Some("ota_user_is_deactivated") => {
+              <div class="info">
+                <div class="logo text-center">
+                  <a href="#"><img src='@routes.Assets.versioned("img/Here_logo.svg")' id="logo"></a>
+                </div>
+                <div class="header">
+                  <p class="welcome">Welcome!</p>
+                  <p class="description">We could not log you in. Your OTA account was deactivated.</p>
+                  <div class="divider"></div>
+                  <p class="description">For support, please</p>
+                </div>
+                <div class="button">
+                  <a href="mailto:otaconnect.support@@here.com">contact us</a>
+                </div>
+              </div>
+            }
+
             case _ => {
               <div class="info">
                 <div class="logo text-center">
