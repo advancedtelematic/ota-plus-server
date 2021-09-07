@@ -107,7 +107,7 @@ class Wizard extends Component {
               description: t('campaigns.error_descriptions.campaign_without_devices'),
               duration: NOTIFICATION_DURATION_SEC
             });
-            if (skipStep && skipStep.name === DATA_TYPE.GROUPS) {
+            if (skipStep && skipStep === DATA_TYPE.GROUPS) {
               hideWizard(wizardIdentifier);
             } else {
               const groupsStepIndex = this.wizardSteps.findIndex(step => step.name === DATA_TYPE.GROUPS);
