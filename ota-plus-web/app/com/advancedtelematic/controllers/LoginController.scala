@@ -1,15 +1,15 @@
 package com.advancedtelematic.controllers
 
 import java.time.Instant
-
 import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
-import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, UnexpectedResponse}
+import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, OtaUserIsDeactivated, UnexpectedResponse}
 import com.advancedtelematic.auth._
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
+
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.Json
@@ -126,6 +126,8 @@ class OAuthOidcController @Inject()(
           log.debug("Error while exchanging authz code for tokens", t)
           RedirectToLogin
         case e@OtaUserDoesNotExists =>
+          authorizationFailed(e.code.code, e.desc)
+        case e@OtaUserIsDeactivated =>
           authorizationFailed(e.code.code, e.desc)
       }
     }

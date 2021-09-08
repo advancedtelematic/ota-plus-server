@@ -90,6 +90,7 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
       Action(_ => Ok(Json.obj(
         "defaultNamespace" -> namespace,
         "userId" -> "abc",
+        "isActive" -> true
       )))
 
     case (method, url) =>
