@@ -194,8 +194,9 @@ const EnvironmentDetails = () => {
 
   const handleMemberRemoval = (email) => {
     if (user.email === email) {
+      const leavesDefaultNamespace = stores.userStore.currentOrganization.namespace === user.profile.defaultNamespace;
       stores.userStore.deleteMemberFromOrganization(email, false);
-      setUserOrganization(user.profile.defaultNamespace);
+      setUserOrganization(leavesDefaultNamespace ? user.profile.initialNamespace : user.profile.defaultNamespace);
     } else {
       stores.userStore.deleteMemberFromOrganization(email, true);
     }
