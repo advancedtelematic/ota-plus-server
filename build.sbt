@@ -115,10 +115,13 @@ lazy val sonarSettings = Seq(
   "sonar.sources" -> "ota-plus-web/app",
   "sonar.tests" -> "ota-plus-web/test",
   "sonar.scala.scoverage.reportPath" -> "ota-plus-web/target/scala-2.12/scoverage-report/scoverage.xml",
-  "sonar.host.url" -> "http://sonar.in.here.com",
+  "sonar.host.url" -> "https://sonar7.devtools.in.here.com",
   "sonar.links.issue" -> "https://saeljira.it.here.com/projects/OTA/issues",
   "sonar.links.scm" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server",
   "sonar.links.ci" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server/pipelines",
+  "sonar.java.binaries" -> "./ota-plus-web/target/scala-*/classes", 
+  "sonar.scala.coverage.reportPaths"->"./ota-plus-web/target/scala-2.12/scoverage-report/scoverage.xml",
+  "sonar.exclusions" -> "**/*.js, **/*.jsx",
   "sonar.projectVersion" -> version.value,
   "sonar.language" -> "scala"))
 
