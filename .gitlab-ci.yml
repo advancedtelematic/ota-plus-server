@@ -10,6 +10,7 @@ variables:
   # VAULT_ADDR: defined in GitLab variables
   # The same image have to be used by test and code coverage jobs:
   TEST_IMAGE: advancedtelematic/gitlab-jobs:0.2.5
+  TEST_IMAGE_SONAR: advancedtelematic/gitlab-jobs-sonar:0.0.3
 
 test:
   stage: test
@@ -18,7 +19,10 @@ test:
       - deploy/sit
   image: $TEST_IMAGE
   script:
-    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" ut:test
+    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff
+  artifacts:
+    paths:
+      - "ota-plus-web/target/scala-*/"
   cache:
     paths:
       - .ivy2/
@@ -26,10 +30,11 @@ test:
 
 code coverage:
   extends: .report_scala_coverage
+  needs: ["test"]
   allow_failure: true
-  image: $TEST_IMAGE
+  image: $TEST_IMAGE_SONAR
   script:
-    - sbt -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" clean coverageOn ut:test coverageOff coverageReport sonarScan
+    - sbt -Dsonar.login=$SONARQUBE_TOKEN -sbt-dir ./.sbt -ivy ./.ivy2 "project ota-plus-web" coverageReport sonarScan
     - mkdir -p target/scala-2.12/coverage-report
     - cp ota-plus-web/target/scala-2.12/coverage-report/cobertura.xml target/scala-2.12/coverage-report/cobertura.xml
 
@@ -106,5 +111,5 @@ include:
   - template: Secret-Detection.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
   - project: olp/edge/ota/infra/security
-    ref: v0.0.9
+    ref: v0.1.0
     file: /shared.yaml
