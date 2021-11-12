@@ -26,7 +26,8 @@ import {
 } from '../../../constants/analyticsActions';
 import { REMOVAL_MODAL_TYPE, WARNING_MODAL_COLOR } from '../../../constants';
 import {
-  isFeatureEnabled,
+  isEnvFeatureEnabled,
+  equalIgnoreCase,
   FEATURE_CATEGORIES,
   LAYERS_ICON_BLANK,
   LAYERS_ICON_CHECKED,
@@ -193,7 +194,7 @@ const EnvironmentDetails = () => {
   };
 
   const handleMemberRemoval = (email) => {
-    if (user.email === email) {
+    if (equalIgnoreCase(user.email, email)) {
       const leavesDefaultNamespace = stores.userStore.currentOrganization.namespace === user.profile.defaultNamespace;
       stores.userStore.deleteMemberFromOrganization(email, false);
       setUserOrganization(leavesDefaultNamespace ? user.profile.initialNamespace : user.profile.defaultNamespace);
@@ -254,8 +255,8 @@ const EnvironmentDetails = () => {
   };
 
   let allFeaturesAllowed = false;
-  if (selectedMember.email !== user.email
-    && selectedMember
+  if (selectedMember
+    && !equalIgnoreCase(selectedMember.email, user.email)
     && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
     && currentEnvUIFeatures[selectedMember.email]
     && Object.entries(currentEnvUIFeatures[selectedMember.email])) {
@@ -264,11 +265,12 @@ const EnvironmentDetails = () => {
   }
 
   const isNotAllowedEditAccess = (feature) => {
-    const isNotAccessManager = !isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.MANAGE_FEATURE_ACCESS);
-    const isRevokingAccessManagementFeatureForCreatorOrCurrentUser = feature.id === UI_FEATURES.MANAGE_FEATURE_ACCESS
+    const notAccessManager = !isEnvFeatureEnabled(currentEnvUIFeatures, user.email, UI_FEATURES.MANAGE_FEATURE_ACCESS);
+    const revokingAccessManagementFeatureForCreatorOrCurrentUser = feature.id === UI_FEATURES.MANAGE_FEATURE_ACCESS
       && feature.isAllowed
-      && (currentEnvironment.creatorEmail === selectedMember.email || selectedMember.email === user.email);
-    return isNotAccessManager || isRevokingAccessManagementFeatureForCreatorOrCurrentUser;
+      && (currentEnvironment.creatorEmail === selectedMember.email
+            || equalIgnoreCase(selectedMember.email, user.email));
+    return notAccessManager || revokingAccessManagementFeatureForCreatorOrCurrentUser;
   };
 
   return (
@@ -311,11 +313,11 @@ const EnvironmentDetails = () => {
             <span>
               {t('profile.organization.features.header.docs')}
             </span>
-            {selectedMember.email !== user.email
+            {!equalIgnoreCase(selectedMember.email, user.email)
             && Object.keys(currentEnvUIFeatures).length === environmentMembers.length
             && currentEnvUIFeatures[selectedMember.email]
             && Object.entries(currentEnvUIFeatures[selectedMember.email])
-            && isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.MANAGE_FEATURE_ACCESS)
+            && isEnvFeatureEnabled(currentEnvUIFeatures, user.email, UI_FEATURES.MANAGE_FEATURE_ACCESS)
             && (
               <Tooltip title={t(`profile.organization.features.${allFeaturesAllowed ? 'accessible' : 'restricted'}`)}>
                 <img

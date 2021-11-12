@@ -7,7 +7,7 @@ import { Button, CopyableValue, PageHeader, Title } from '../../../partials';
 import { ButtonsWrapper, MainContent, Prefix, TextsWrapper } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
-import { isFeatureEnabled, UI_FEATURES } from '../../../config';
+import { isEnvFeatureEnabled, UI_FEATURES } from '../../../config';
 
 function useStoreData() {
   const { stores } = useStores();
@@ -55,9 +55,9 @@ const EnvironmentDetailsHeader = ({
           )}
         </MainContent>
       )}
-      sideContent={currentEnvUIFeatures[user.email] && (
+      sideContent={(
         <ButtonsWrapper>
-          {isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.RENAME_ENV) && (
+          {isEnvFeatureEnabled(currentEnvUIFeatures, user.email, UI_FEATURES.RENAME_ENV) && (
             <Button
               htmlType="button"
               light="true"
@@ -68,7 +68,7 @@ const EnvironmentDetailsHeader = ({
               {t('profile.organization.details.rename')}
             </Button>
           )}
-          {isFeatureEnabled(currentEnvUIFeatures[user.email], UI_FEATURES.ADD_MEMBER) && (
+          {isEnvFeatureEnabled(currentEnvUIFeatures, user.email, UI_FEATURES.ADD_MEMBER) && (
             <Button
               htmlType="button"
               type="primary"

@@ -461,9 +461,21 @@ export const FEATURE_CATEGORIES = {
   CAMPAIGN: 'campaign'
 };
 
+export const equalIgnoreCase = (a, b) => a && b && a.toLowerCase() === b.toLowerCase();
+
+const getIgnoreCase = (data, key) => data[Object.keys(data).find(k => equalIgnoreCase(k, key))];
+
 export const isFeatureEnabled = (features, featureId) => {
   if (features.length) {
     return features.find(el => el.id === featureId).isAllowed;
+  }
+  return false;
+};
+
+export const isEnvFeatureEnabled = (envMembersFeatures, email, featureId) => {
+  const features = getIgnoreCase(envMembersFeatures, email);
+  if (features) {
+    return isFeatureEnabled(features, featureId);
   }
   return false;
 };
