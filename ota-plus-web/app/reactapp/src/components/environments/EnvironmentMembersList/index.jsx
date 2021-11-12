@@ -15,7 +15,14 @@ import {
 } from './styled';
 import { RECENTLY_CREATED_DATE_FORMAT } from '../../../constants/datesTimesConstants';
 import { getFormattedDateTime } from '../../../helpers/datesTimesHelper';
-import { DOOR_EXIT_ICON, TRASHBIN_ICON, DROPDOWN_TOGGLE_ICON, isFeatureEnabled, UI_FEATURES } from '../../../config';
+import {
+  DOOR_EXIT_ICON,
+  TRASHBIN_ICON,
+  DROPDOWN_TOGGLE_ICON,
+  isEnvFeatureEnabled,
+  UI_FEATURES,
+  equalIgnoreCase
+} from '../../../config';
 
 const MANAGE_FEATURES_ACCESS_ID = 'manage_feature_access';
 
@@ -32,9 +39,7 @@ const EnvironmentMembersList = ({
   const [selectedItemEmail, setSelectedItemEmail] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const { creatorEmail, isInitial } = envInfo;
-  const canRemoveMembers = currentEnvUIFeatures[user.email] && isFeatureEnabled(
-    currentEnvUIFeatures[user.email], UI_FEATURES.REMOVE_MEMBER
-  );
+  const canRemoveMembers = isEnvFeatureEnabled(currentEnvUIFeatures, user.email, UI_FEATURES.REMOVE_MEMBER);
 
   const toggleMenu = (email) => {
     setSelectedItemEmail(prevValue => prevValue ? '' : email);
@@ -114,11 +119,11 @@ const EnvironmentMembersList = ({
           </div>
           {selectedItemEmail === email && (
             <Dropdown hideSubmenu={() => toggleMenu(email)}>
-              {email === user.email
+              {equalIgnoreCase(email, user.email)
                 ? (
                   <li
                     id={`${email}-remove-btn`}
-                    onClick={() => onRemoveBtnClick(email === user.email ? false : email)}
+                    onClick={() => onRemoveBtnClick(equalIgnoreCase(email, user.email) ? false : email)}
                   >
                     <img src={DOOR_EXIT_ICON} />
                     <span>{t('profile.organization.members.leave')}</span>
@@ -126,7 +131,7 @@ const EnvironmentMembersList = ({
                 ) : canRemoveMembers ? (
                   <li
                     id={`${email}-remove-btn`}
-                    onClick={() => onRemoveBtnClick(email === user.email ? false : email)}
+                    onClick={() => onRemoveBtnClick(equalIgnoreCase(email, user.email) ? false : email)}
                   >
                     <img src={TRASHBIN_ICON} />
                     <span>{t('profile.organization.members.remove')}</span>

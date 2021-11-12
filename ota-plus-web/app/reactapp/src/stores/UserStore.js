@@ -23,7 +23,8 @@ import {
   ORGANIZATION_NAMESPACE_COOKIE,
   API_UI_FEATURES,
   FEATURE_CATEGORIES,
-  UI_FEATURES
+  UI_FEATURES,
+  equalIgnoreCase
 } from '../config';
 
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
@@ -137,7 +138,7 @@ export default class UserStore {
     resetAsync(this.deleteMemberFromOrganizationAsync, true);
     try {
       const encodedEmail = encodeURIComponent(email);
-      if (email === this.user.email) {
+      if (equalIgnoreCase(email, this.user.email)) {
         sendAction(this.userOrganizationUsers.length === 1 ? OTA_ENVIRONMENT_LEAVE_EMPTY : OTA_ENVIRONMENT_LEAVE);
       } else {
         sendAction(OTA_ENVIRONMENT_REMOVE_MEMBER);
@@ -301,7 +302,7 @@ export default class UserStore {
     try {
       const encodedEmail = encodeURIComponent(email);
       const response = await axios.post(encodeUrl(`${API_UI_FEATURES(namespace)}/${id}?email=${encodedEmail}`));
-      this.getUIFeatures(namespace, email, true, this.user.email === email);
+      this.getUIFeatures(namespace, email, true, equalIgnoreCase(this.user.email, email));
       this.toggleFeatureOnAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.toggleFeatureOnAsync = handleAsyncError(error);
@@ -313,7 +314,7 @@ export default class UserStore {
     try {
       const encodedEmail = encodeURIComponent(email);
       const response = await axios.delete(encodeUrl(`${API_UI_FEATURES(namespace)}/${id}?email=${encodedEmail}`));
-      this.getUIFeatures(namespace, email, true, this.user.email === email);
+      this.getUIFeatures(namespace, email, true, equalIgnoreCase(this.user.email, email));
       this.toggleFeatureOffAsync = handleAsyncSuccess(response);
     } catch (error) {
       this.toggleFeatureOffAsync = handleAsyncError(error);
