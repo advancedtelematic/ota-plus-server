@@ -30,6 +30,9 @@ test:
 
 code coverage:
   extends: .report_scala_coverage
+  except:
+    refs:
+      - deploy/sit
   needs: ["test"]
   allow_failure: true
   image: $TEST_IMAGE_SONAR
