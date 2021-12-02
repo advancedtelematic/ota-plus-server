@@ -22,10 +22,7 @@ class MtuListItem extends Component {
   render() {
     const { cancelMtuUpdate, events, inFlight, stores, t, update } = this.props;
     const { devicesStore, userStore } = stores;
-    const { device } = devicesStore;
     const { uiFeatures } = userStore;
-    const devicePrimaryEcu = device.directorAttributes.primary;
-    const deviceSecondaryEcus = device.directorAttributes.secondary;
     const { correlationId, targets, campaign } = update;
     const type = campaign ? MTU_TYPE.CAMPAIGN : MTU_TYPE.SINGLE_INSTALLATION;
 
@@ -95,16 +92,7 @@ class MtuListItem extends Component {
         )}
         <div className="overview-panel__operations">
           {_.map(targets, (target, serial) => {
-            let hardwareId = null;
-            if (devicePrimaryEcu.id === serial) {
-              const { hardwareId: primaryHardwareId } = devicePrimaryEcu;
-              hardwareId = primaryHardwareId;
-            }
-            const serialFromSecondary = _.find(deviceSecondaryEcus, ecu => ecu.id === serial);
-            if (serialFromSecondary) {
-              const { hardwareId: secondaryHardwareId } = serialFromSecondary;
-              hardwareId = secondaryHardwareId;
-            }
+            const hardwareId = devicesStore.getECUType(serial);
             const hash = target.image.fileinfo.hashes.sha256;
             const { filepath } = target.image;
             const { length } = target.image.fileinfo;

@@ -396,7 +396,7 @@ export default class DevicesStore {
     return axios
       .all([
         axios.get(`${API_DEVICES_DEVICE_DETAILS}/${id}?status=true`),
-        axios.get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`, {
+        axios.get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}?includeReplaced=true`, {
           validateStatus(status) {
             return status === HTTP_CODE_200_OK || status === HTTP_CODE_404_NOT_FOUND;
           },
@@ -407,11 +407,13 @@ export default class DevicesStore {
           that.device = legacy.data;
           if (director.data.code !== MISSING_DEVICE_CODE) {
             that.device.isDirector = true;
-            const primary = _.filter(director.data, data => data.primary);
-            const secondary = _.filter(director.data, data => !data.primary);
+            const primary = _.filter(director.data, data => data.primary && !data.isReplaced);
+            const secondary = _.filter(director.data, data => !data.primary && !data.isReplaced);
+            const allECUsBySerial = new Map(director.data.map(ecu => [ecu.id, ecu]));
             that.device.directorAttributes = {
               primary: _.first(primary),
               secondary,
+              allECUsBySerial,
             };
           }
           that.devicesOneFetchAsync = handleAsyncSuccess(legacy);
@@ -720,12 +722,14 @@ export default class DevicesStore {
       return axios
         .get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`)
         .then((response) => {
-          const primary = _.filter(response.data, data => data.primary);
-          const secondary = _.filter(response.data, data => !data.primary);
+          const primary = _.filter(response.data, data => data.primary && !data.isReplaced);
+          const secondary = _.filter(response.data, data => !data.primary && !data.isReplaced);
+          const allECUsBySerial = new Map(response.data.map(ecu => [ecu.id, ecu]));
           extendObservable(this.device, {
             directorAttributes: {
               primary: _.first(primary),
               secondary,
+              allECUsBySerial,
             },
           });
           this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
@@ -738,12 +742,14 @@ export default class DevicesStore {
       return axios
         .get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}`)
         .then((response) => {
-          const primary = _.filter(response.data, data => data.primary);
-          const secondary = _.filter(response.data, data => !data.primary);
+          const primary = _.filter(response.data, data => data.primary && !data.isReplaced);
+          const secondary = _.filter(response.data, data => !data.primary && !data.isReplaced);
+          const allECUsBySerial = new Map(response.data.map(ecu => [ecu.id, ecu]));
           extendObservable(device, {
             directorAttributes: {
               primary: _.first(primary),
               secondary,
+              allECUsBySerial,
             },
           });
           this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
@@ -929,5 +935,13 @@ export default class DevicesStore {
 
   resetPageNumber() {
     this.devicesPageNumber = DEVICES_PAGE_NUMBER_DEFAULT;
+  }
+
+  getECUType(ecuSerial) {
+    const ecu = this.device.directorAttributes.allECUsBySerial.get(ecuSerial);
+    if (ecu) {
+      return ecu.hardwareId;
+    }
+    return '';
   }
 }
