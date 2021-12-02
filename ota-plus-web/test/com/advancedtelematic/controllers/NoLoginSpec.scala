@@ -88,14 +88,6 @@ class NoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
       session(result).data.keys must contain("access_token")
     }
 
-    "set namespace from basic auth if set" in {
-      val auth = Base64.getEncoder.encodeToString("MyNamespace:mypass".getBytes())
-      val request = FakeRequest(GET, "/login").withHeaders("Authorization" -> s"Basic $auth")
-      val result = call(loginAction, request)
-
-      session(result).data("namespace") must be("MyNamespace")
-    }
-
     "set namespace from config" in {
       val request = FakeRequest(GET, "/login")
       val result = call(loginAction, request)

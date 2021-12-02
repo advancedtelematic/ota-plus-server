@@ -19,6 +19,12 @@ import play.api.{Configuration, Logger}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
+object NoLoginData {
+  lazy val email    = "guest@here.com"
+  lazy val userName = "Guest User"
+
+}
+
 class NoLoginAction @Inject()(val conf: Configuration,
                               val parser: BodyParsers.Default,
                               val clientExec: ApiClientExec,
@@ -33,34 +39,21 @@ class NoLoginAction @Inject()(val conf: Configuration,
 
   private lazy val log           = Logger(this.getClass)
   private lazy val fakeNamespace = conf.get[String]("oidc.namespace")
-  private lazy val email         = "guest@here.com"
-  private lazy val userName      = "Guest User"
+  private lazy val fakeUser      = conf.get[String]("oidc.user")
   implicit private lazy val traceData = TraceData(tracer.tracing.tracer().newTrace())
-
-  private def namespace(request: Request[AnyContent]): String = {
-    val fromHeader = for {
-      authHeader <- request.headers.get("Authorization")
-      authBase64 <- authHeader.split(" ").tail.headOption
-      authData   <- Try(new String(Base64.getDecoder.decode(authBase64))).toOption
-      user       <- authData.split(":").headOption
-    } yield user
-
-    fromHeader.getOrElse(fakeNamespace)
-  }
 
   private def ensureNsExists(ns: Namespace, userId: UserId) =
     userProfileApi
       .getUser(userId)
       .recoverWith {
         case RemoteApiError(result, _) if result.header.status == 404 =>
-          userProfileApi.createUser(userId, userName, email, Some(ns))
+          userProfileApi.createUser(userId, NoLoginData.userName, NoLoginData.email, Some(ns))
       }
 
-  override def apply(request: Request[AnyContent]) = {
-    val fakeNamespace = namespace(request)
-    val idToken       = IdToken.from(fakeNamespace, userName , "guest", email)
+  override def apply(request: Request[AnyContent]): Future[Result] = {
+    val idToken = IdToken.from(fakeUser, NoLoginData.userName , "guest", NoLoginData.email)
     val accessToken =
-      tokenBuilder.mkToken(fakeNamespace, Instant.now().plus(30, ChronoUnit.DAYS), Set(s"namespace.${fakeNamespace}"))
+      tokenBuilder.mkToken(fakeUser, Instant.now().plus(30, ChronoUnit.DAYS), Set(s"namespace.${fakeNamespace}"))
 
     val result = Results
       .Redirect(com.advancedtelematic.controllers.routes.Application.index())
@@ -74,11 +67,11 @@ class NoLoginAction @Inject()(val conf: Configuration,
 
     messageBus.publishSafe(UserLogin(
         fakeNamespace,
-        Some(IdentityClaims(UserId(fakeNamespace), userName, None, email)),
+        Some(IdentityClaims(UserId(fakeUser), NoLoginData.userName, None, NoLoginData.email)),
         Namespace(fakeNamespace),
         Instant.now()))
 
-    ensureNsExists(Namespace(fakeNamespace), UserId(fakeNamespace)).map(_ => result)
+    ensureNsExists(Namespace(fakeNamespace), UserId(fakeUser)).map(_ => result)
   }
 }
 
