@@ -17,9 +17,6 @@ class MtuListItem extends Component {
   render() {
     const { item, events, stores, t } = this.props;
     const { devicesStore } = stores;
-    const { device } = devicesStore;
-    const devicePrimaryEcu = device.directorAttributes.primary;
-    const deviceSecondaryEcus = device.directorAttributes.secondary;
     const type = item.campaign ? 'campaign' : 'singleInstallation';
 
     return (
@@ -70,16 +67,7 @@ class MtuListItem extends Component {
         </div>
         <div className="overview-panel__operations">
           {_.map(item.ecuReports, (ecuReport, ecuSerial) => {
-            let hardwareId = null;
-            if (devicePrimaryEcu.id === ecuSerial) {
-              const { hardwareId: primaryHardwareId } = devicePrimaryEcu;
-              hardwareId = primaryHardwareId;
-            }
-            const serialFromSecondary = _.find(deviceSecondaryEcus, ecu => ecu.id === ecuSerial);
-            if (serialFromSecondary) {
-              const { hardwareId: secondaryHardwareId } = serialFromSecondary;
-              hardwareId = secondaryHardwareId;
-            }
+            const hardwareId = devicesStore.getECUType(ecuSerial);
             const ecuEvents = [];
             events.forEach((event) => {
               if (ecuSerial === event.payload.ecu) {
