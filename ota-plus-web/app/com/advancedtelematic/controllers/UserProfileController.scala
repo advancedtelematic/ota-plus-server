@@ -1,13 +1,13 @@
 package com.advancedtelematic.controllers
 
 import java.util.UUID
-
 import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.Errors.{RemoteApiError, UnexpectedResponse}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.auth.oidc.OidcGateway
+import com.advancedtelematic.auth.oidc.{IdentityClaimsProvider, OidcGateway}
 import com.advancedtelematic.auth.{IdentityAction, IdentityClaims}
+
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
 import play.api.libs.json._
@@ -24,7 +24,7 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       val clientExec: ApiClientExec,
                                       implicit val tracer: ZipkinTraceServiceLike,
                                       authAction: IdentityAction,
-                                      oidcGateway: OidcGateway,
+                                      identityClaimsProvider: IdentityClaimsProvider,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
   extends AbstractController(components)
     with ApiClientSupport with ZipkinTraceImplicits {
@@ -39,7 +39,7 @@ class UserProfileController @Inject()(val conf: Configuration,
 
   def getUserProfile: Action[AnyContent] = authAction.async { implicit request =>
     val fut = for {
-      claims  <- oidcGateway.getUserInfo(request.accessToken)
+      claims  <- identityClaimsProvider(request.accessToken)
       profile <- userProfileApi.getUser(claims.userId)
       displayName = parseDisplayName(claims, profile)
     } yield
@@ -75,7 +75,7 @@ class UserProfileController @Inject()(val conf: Configuration,
     (request.body \ "name").validate[String].toEither match {
       case Right(newName) =>
         userProfileApi.updateDisplayName(request.idToken.userId, newName).flatMap { _ =>
-          oidcGateway.getUserInfo(request.accessToken).map { claims =>
+          identityClaimsProvider(request.accessToken).map { claims =>
             Ok(
               Json.obj(
                 "fullName" -> newName,

@@ -22,7 +22,6 @@ trait NamespaceProvider extends (Tokens => Future[Namespace])
 abstract class AbstractNamespaceProvider @Inject()(val conf: Configuration,
                                                    val ws: WSClient,
                                                    val clientExec: ApiClientExec,
-                                                   val oidcGateway: OidcGateway,
                                                    val tracer: ZipkinTraceServiceLike,
                                                   )(implicit ec: ExecutionContext)
   extends NamespaceProvider with ApiClientSupport {
@@ -52,14 +51,13 @@ abstract class AbstractNamespaceProvider @Inject()(val conf: Configuration,
 class NamespaceFromUserProfile @Inject()(conf: Configuration,
                                          ws: WSClient,
                                          clientExec: ApiClientExec,
-                                         oidcGateway: OidcGateway,
+                                         identityClaimsProvider: IdentityClaimsProvider,
                                          tracer: ZipkinTraceServiceLike,
                                         )(implicit ec: ExecutionContext)
-  extends AbstractNamespaceProvider(conf, ws, clientExec, oidcGateway, tracer) {
+  extends AbstractNamespaceProvider(conf, ws, clientExec, tracer) {
 
   override def handleNewUser(accessToken: AccessToken): Future[JsValue] =
-    oidcGateway
-      .getUserInfo(accessToken)
+    identityClaimsProvider(accessToken)
       .flatMap { ic =>
         userProfileApi.createUser(ic.userId, ic.name, ic.email, None)
       }
@@ -68,15 +66,14 @@ class NamespaceFromUserProfile @Inject()(conf: Configuration,
 class RejectingNewUsers @Inject()(conf: Configuration,
                                   ws: WSClient,
                                   clientExec: ApiClientExec,
-                                  oidcGateway: OidcGateway,
+                                  identityClaimsProvider: IdentityClaimsProvider,
                                   tracer: ZipkinTraceServiceLike,
                                   messageBus: PlayMessageBusPublisher,
                                  )(implicit ec: ExecutionContext)
-  extends AbstractNamespaceProvider(conf, ws, clientExec, oidcGateway, tracer) {
+  extends AbstractNamespaceProvider(conf, ws, clientExec, tracer) {
 
   override def handleNewUser(accessToken: AccessToken): Future[JsValue] = {
-    oidcGateway
-      .getUserInfo(accessToken)
+    identityClaimsProvider(accessToken)
       .map(ic => RejectedNewUserLogin(ic.userId, ic.name, ic.email))
       .foreach(messageBus.publishSafe(_))
     Future.failed(OtaUserDoesNotExists)
