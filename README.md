@@ -119,9 +119,6 @@ Variable                    | Description
 `DIRECTOR_HOST`             | Host of Director service
 `DIRECTOR_PORT`             | Port of Director service
 `KAFKA_HOST`                | Kafka bootstrap servers
-`TREEHUB_HOST_PUB`          | Host of public Treehub service
-`TREEHUB_PORT_PUB`          | Port of public Treehub service
-`TREEHUB_SCHEME_PUB`        | Scheme of public Treehub service
 `TUF_KEYSERVER_HOST`        | Host of TUF Keyserver service
 `TUF_KEYSERVER_PORT`        | Port of TUF Keyserver service
 `TUF_REPOSERVER_HOST`       | Host of TUF Reposerver service
