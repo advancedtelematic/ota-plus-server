@@ -4,10 +4,10 @@ name := "ota-plus-server"
 
 lazy val Library = new {
   object Version {
-    val Akka            = "2.5.9"
+    val Akka            = "2.6.5"
     val MockWs          = "2.6.2"
-    val LibAts          = "0.3.0-109-ge12f057"
-    val LibTuf          = "0.7.1-6-gd36661d"
+    val LibAts          = "0.4.1-2-gf689d68"
+    val LibTuf          = "0.7.4-21-g94b8744"
     val Netty           = "4.1.19.Final"
     val ScalaCheck      = "1.13.4"
     val ScalaTestPlay   = "3.1.2"
@@ -119,7 +119,7 @@ lazy val sonarSettings = Seq(
   "sonar.links.issue" -> "https://saeljira.it.here.com/projects/OTA/issues",
   "sonar.links.scm" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server",
   "sonar.links.ci" -> "https://main.gitlab.in.here.com/olp/edge/ota/connect/web-app/ota-plus-server/pipelines",
-  "sonar.java.binaries" -> "./ota-plus-web/target/scala-*/classes", 
+  "sonar.java.binaries" -> "./ota-plus-web/target/scala-*/classes",
   "sonar.scala.coverage.reportPaths"->"./ota-plus-web/target/scala-2.12/scoverage-report/scoverage.xml",
   "sonar.exclusions" -> "**/*.js, **/*.jsx",
   "sonar.projectVersion" -> version.value,
