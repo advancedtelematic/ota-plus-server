@@ -50,14 +50,18 @@ build docker image:
   only:
     refs:
       - master
-  tags:
-    - docker-sock
-  image: advancedtelematic/app-gitlab-job:0.0.2
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:19.03.12-dind
+  image: advancedtelematic/app-gitlab-job:0.0.3
   script:
     - env | sort
-    - export VAULT_TOKEN=$(cat /opt/vault/token)
     - gitlab-docker-login $VAULT_ADDR
     - sbt -sbt-dir ./.sbt -ivy ./.ivy2 -batch ";project ota-plus-web;release" -Dsbt.log.noformat=true
+    - docker tag advancedtelematic/ota-plus-web:${CI_COMMIT_SHA} hcr.data.here.com/ota_saas/ota-plus-web:${CI_COMMIT_SHA}
+    - docker push hcr.data.here.com/ota_saas/ota-plus-web:${CI_COMMIT_SHA}
   cache:
     paths:
       - .ivy2/
