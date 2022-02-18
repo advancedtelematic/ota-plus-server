@@ -1,11 +1,12 @@
 package com.advancedtelematic.auth.oidc
 
 import java.security.PublicKey
-
 import akka.http.scaladsl.model.Uri
 import com.advancedtelematic.api.Errors.{MalformedResponse, UnexpectedResponse}
 import com.advancedtelematic.auth.oidc.OidcConfiguration.Url
 import com.advancedtelematic.auth._
+import com.advancedtelematic.controllers.Data
+
 import javax.crypto.SecretKey
 import javax.inject.{Inject, Singleton}
 import org.jose4j.jwa.AlgorithmConstraints
@@ -16,10 +17,11 @@ import play.api.cache.AsyncCacheApi
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
-import play.api.mvc.{Result, Results}
+import play.api.mvc.{Cookie, Result, Results}
 import play.api.{Configuration, Logger}
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
+import java.util.UUID
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Try}
@@ -76,6 +78,8 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
     config.get[String]("oidc.clientAuthentication"))
 
   def redirectToAuthorize()(implicit executionContext: ExecutionContext): Future[Result] = providerMeta().map { meta =>
+    val state = UUID.randomUUID().toString
+
     Results.Redirect(
       meta.authzEndpoint,
       Map(
@@ -83,10 +87,11 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
         "client_id"     -> Seq(oauthConfig.clientId),
         "redirect_uri"  -> Seq(oauthConfig.callbackURL),
         "scope"         -> Seq("openid profile email"),
-        "prompt"        -> Seq("login")
+        "prompt"        -> Seq("login"),
+        "state"         -> Seq(state)
       ) ++ oauthConfig.parameters.mapValues(Seq(_)),
       Status.SEE_OTHER
-    )
+    ).withCookies(Cookie(Data.StateCookieName, state))
   }
 
   def providerMeta()(implicit executionContext: ExecutionContext): Future[ProviderMetadata] = {
