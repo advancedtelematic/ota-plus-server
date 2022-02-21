@@ -10,6 +10,8 @@ import scala.collection.Seq
 
 object Data {
 
+  val StateCookieName = "state"
+
   final case class FeedResource(createdAt: Instant, _type: String, resource: JsObject)
   object FeedResource {
     def of(_type: String)(createdAt: Instant, resource: JsObject): FeedResource = {

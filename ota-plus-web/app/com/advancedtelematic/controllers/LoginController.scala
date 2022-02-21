@@ -132,10 +132,23 @@ class OAuthOidcController @Inject()(
       }
     }
 
+    def isStateValid(): Option[Boolean] = for {
+      cookieState <- request.cookies.get(Data.StateCookieName).map(_.value)
+      _ = log.info(s"Server state $cookieState.")
+      idpState    <- request.getQueryString("state")
+      _ = log.info(s"IdP state $idpState")
+    } yield cookieState == idpState
+
     request.getQueryString("error") match {
       case Some(errorCode) =>
         onAuthzError(errorCode)
       case None =>
+        /**
+         * TODO Next step.
+         * Redirect to login page if state is invalid.
+         * But first deploy this changes to PROD and verify all IdPs support state parameter
+         */
+        log.info(s"State parameter is valid: ${isStateValid()}")
         request.getQueryString("code").fold(Future.successful(RedirectToLogin))(onAuthzCode)
     }
   }
