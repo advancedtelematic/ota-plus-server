@@ -170,7 +170,6 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
         json              <- Future.fromTry(extractPayload(response))
         idTokenSerialized <- verifyToken(json \ "id_token")
         idToken           <- Future.fromTry(IdToken.fromCompactSerialization(idTokenSerialized))
-        _                 <- verifyToken(json \ "access_token")
         accessToken <- Future.fromTry(
           JsResult.toTry(json.validate[AccessToken](AccessToken.FromTokenResponseReads))
         )
@@ -204,14 +203,14 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   }
 
   // format: off
-  private[this] implicit val identityClaimsFormat: Format[IdentityClaims] = {
+  private[this] implicit val identityClaimsReads: Reads[IdentityClaims] = {
     import play.api.libs.functional.syntax._
     (
-      Tokens.subjClaimFormat and
-      (JsPath \ "name").format[String] and
-      (JsPath \ "picture").formatNullable[String] and
-      (JsPath \ "email").format[String]
-    )(IdentityClaims.apply, unlift(IdentityClaims.unapply))
+      Tokens.subjClaimFormat.map(identity) and
+      (JsPath \ "name").read[String].orElse((JsPath \ "email").read[String]) and
+      (JsPath \ "picture").readNullable[String] and
+      (JsPath \ "email").read[String]
+    )(IdentityClaims.apply _)
   }
   // format: on
 
