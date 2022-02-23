@@ -13,6 +13,7 @@ import play.api.Configuration
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsSuccess, Json}
 import play.api.libs.ws.WSClient
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -110,15 +111,30 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
 
   "Login" should {
     val controller = app.injector.instanceOf[OAuthOidcController]
+    val testState = "SomeTestState"
+    val stateCookies = Cookie(Data.StateCookieName, testState)
 
     "redirect to login if neither error or code passed" in {
-      val result = controller.callback()()(FakeRequest("GET", "/"))
+      val result = controller.callback()()(FakeRequest("GET", s"/?state=$testState").withCookies(stateCookies))
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some("/login")
+    }
+
+    "redirect to login if state mismatch" in {
+      val result = controller.callback()()(FakeRequest("GET", "/?state=SomeAnotherState").withCookies(stateCookies))
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some("/login")
+    }
+
+    "redirect to login if state is absent" in {
+      val result = controller.callback()()(FakeRequest("GET", "/").withCookies(stateCookies))
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/login")
     }
 
     "redirect to authorization error if error passed to callback" in {
-      val req = FakeRequest("GET", "/callback?error=unauthorized&error_description=Ups")
+      val req = FakeRequest("GET", "/callback?error=unauthorized&error_description=Ups&state=$testState")
+        .withCookies(stateCookies)
 
       val result = controller.callback()()(req)
       status(result) mustBe SEE_OTHER
@@ -126,7 +142,7 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
     }
 
     "redirect to login if Auth0 responds with error to the token request" in {
-      val req = FakeRequest("GET", "/callback?code=ERROR")
+      val req = FakeRequest("GET", s"/callback?code=ERROR&state=$testState").withCookies(stateCookies)
 
       val result = controller.callback()()(req)
       status(result) mustBe SEE_OTHER
@@ -134,7 +150,7 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
     }
 
     "set session token" in {
-      val req    = FakeRequest("POST", "/?code=AUTHORIZATIONCODE")
+      val req    = FakeRequest("POST", s"/?code=AUTHORIZATIONCODE&state=$testState").withCookies(stateCookies)
       val result = controller.callback()()(req)
       status(result) mustBe SEE_OTHER
       // redirects to login page on correct user data:
@@ -148,7 +164,7 @@ class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers wit
     }
 
     "handle rate limiting from Auth0" in {
-      val req = FakeRequest("GET", "/callback?code=RATELIMIT")
+      val req = FakeRequest("GET", s"/callback?code=RATELIMIT&state=$testState").withCookies(stateCookies)
 
       val result = controller.callback()()(req)
       status(result) mustBe SEE_OTHER
