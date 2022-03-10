@@ -398,7 +398,7 @@ export default class DevicesStore {
         axios.get(`${API_DEVICES_DEVICE_DETAILS}/${id}?status=true`),
         axios.get(`${API_DEVICES_DIRECTOR_DEVICE}/${id}?includeReplaced=true`, {
           validateStatus(status) {
-            return status === HTTP_CODE_200_OK || status === HTTP_CODE_404_NOT_FOUND;
+            return status === HTTP_CODE_200_OK;
           },
         }),
       ])
