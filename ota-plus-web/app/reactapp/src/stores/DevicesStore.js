@@ -49,7 +49,7 @@ import {
   UPLOADING_STATUS,
 } from '../constants';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
-import { HTTP_CODE_200_OK, HTTP_CODE_400_BAD_REQUEST, HTTP_CODE_404_NOT_FOUND } from '../constants/httpCodes';
+import { HTTP_CODE_200_OK, HTTP_CODE_400_BAD_REQUEST } from '../constants/httpCodes';
 
 export default class DevicesStore {
   @observable devicesFetchAsync = {};
