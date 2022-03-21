@@ -18,7 +18,7 @@ The procedure to create a new account is no longer self-service and requires the
 [.align_img_left]
 image::img::create_account_flow.png[image,600]
 
-. The new user creates a HERE account on the link:https://developer.here.com[HERE Developer Portal^].
+. The new user creates a link:https://account.here.com/sign-up[HERE account^].
 . The new user signs in to the link:https://connect.ota.here.com[OTA Connect Portal^].
 +
 The user will fail to sign in to the OTA Connect Portal, but we will get the user HERE ID needed to create an account.
