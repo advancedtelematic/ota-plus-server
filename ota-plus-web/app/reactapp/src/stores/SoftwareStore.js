@@ -620,7 +620,10 @@ export default class SoftwareStore {
                 afterCampaign();
               })
               .catch(() => {
-                afterCampaign();
+                item.campaign = {
+                  update: {}
+                };
+                after();
               });
           } else {
             after();

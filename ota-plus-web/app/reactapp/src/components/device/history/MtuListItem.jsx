@@ -29,7 +29,9 @@ class MtuListItem extends Component {
                   <span id={`update-id-title-${item.correlationId}`} className="overview-panel__item-header--title__label">
                     {t('devices.mtu.common.campaign')}
                   </span>
-                  <span id={`update-id-${item.correlationId}`}>{item.campaign.name}</span>
+                  <span id={`update-id-${item.correlationId}`}>
+                    {item.campaign.name ? item.campaign.name : t('devices.mtu.history.missing_campaign')}
+                  </span>
                 </div>
               </div>
               <div className="overview-panel__item-header--update">
