@@ -307,6 +307,7 @@
     "devices.mtu.common.target": "Target:",
     "devices.mtu.common.update_description": "Update description:",
     "devices.mtu.common.update_name": "Update name:",
+    "devices.mtu.history.missing_campaign": "Unknown campaign. Cannot load campaign info.",
     "devices.mtu.history.no-updates-1": "No updates installed on this device",
     "devices.mtu.history.no-updates-2": "Start by sending single-device updates",
     "devices.mtu.history.received_at": "Received at:",
