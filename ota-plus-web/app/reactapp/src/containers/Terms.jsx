@@ -75,11 +75,6 @@ class Terms extends Component {
           <div className="logo logo--terms">
             <img src={HERE_ICON} alt="HERE" />
           </div>
-          <div className="title title--terms">This is a 90-day trial, for evaluation purposes only</div>
-          <p className="subtitle--terms">
-            The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only
-             for the purposes of allowing you to test the service internally during the Trial Period.
-          </p>
           <div className="checkbox-wrapper">
             {!terms.accepted && (
               <Checkbox
@@ -114,6 +109,11 @@ class Terms extends Component {
               </div>
             </div>
           </div>
+          <p className="subtitle--terms">
+            For users without a commercial contract, this is a 90-day trial, for evaluation purposes only,
+             and the proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only
+              for the purposes of allowing you to test the service internally during the Trial Period.
+          </p>
           {!terms.accepted && (
             <div className="steps">
               <a href="/login" className="back btn-primary" id="terms-btn-back">
