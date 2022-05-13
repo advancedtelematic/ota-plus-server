@@ -301,7 +301,7 @@ export default class DevicesStore {
     this.devicesOffset = offset;
     this.devicesFilter = filter;
     this.devicesGroupFilter = groupId;
-    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${filter}&limit=${limit}&offset=${this.devicesOffset}`;
+    let apiAddress = `${API_DEVICES_SEARCH}?nameContains=${encodeURIComponent(filter)}&limit=${limit}&offset=${this.devicesOffset}`;
     if (groupId && groupId === UNGROUPED) {
       switch (ungrouped) {
         case IN_ANY_GROUP:
