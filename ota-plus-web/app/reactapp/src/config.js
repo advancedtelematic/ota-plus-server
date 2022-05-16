@@ -242,6 +242,8 @@ export const DEVICES_LIMIT_PER_PAGE = 24;
 export const DEVICES_PAGE_NUMBER_DEFAULT = 1;
 export const DEVICES_FETCH_NAME_DEVICES_FILTER = 'devicesFilter';
 export const EVENTS_FETCH_ASYNC = 'eventsFetchAsync';
+export const REQUIRED_EVENT_TYPES = 'EcuDownloadStarted,EcuDownloadCompleted,'
+                                  + 'EcuInstallationStarted,EcuInstallationCompleted';
 export const IN_ANY_GROUP = 'inAnyGroup';
 export const MISSING_DEVICE_CODE = 'missing_device';
 export const NOT_IN_SMART_GROUP = 'notInSmartGroup';
