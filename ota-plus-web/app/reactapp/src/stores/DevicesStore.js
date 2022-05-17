@@ -30,6 +30,7 @@ import {
   DEVICES_LIMIT_PER_PAGE,
   DEVICES_PAGE_NUMBER_DEFAULT,
   EVENTS_FETCH_ASYNC,
+  REQUIRED_EVENT_TYPES,
   IN_ANY_GROUP,
   MISSING_DEVICE_CODE,
   NOT_IN_SMART_GROUP,
@@ -568,8 +569,9 @@ export default class DevicesStore {
 
   fetchEvents(id, async = EVENTS_FETCH_ASYNC) {
     resetAsync(this[async], true);
+    const eventTypes = REQUIRED_EVENT_TYPES;
     return axios
-      .get(`${API_DEVICES_SEARCH}/${id}/events`)
+      .get(`${API_DEVICES_SEARCH}/${id}/events?eventTypes=${eventTypes}`)
       .then((response) => {
         this.deviceEvents = response.data;
         this[async] = handleAsyncSuccess(response);
