@@ -56,6 +56,9 @@ class UserProfileController @Inject()(val conf: Configuration,
       case UnexpectedResponse(u) if u.status == TOO_MANY_REQUESTS =>
         log.error(s"Too many requests: ${u.body}")
         TooManyRequests
+      case UnexpectedResponse(u) if u.status == UNAUTHORIZED =>
+        log.error(s"User is not authorized: ${u.body}")
+        Forbidden
       case e: RemoteApiError =>
         e.result.header.status match {
           case Unauthorized.header.status => Forbidden.sendEntity(e.result.body)
