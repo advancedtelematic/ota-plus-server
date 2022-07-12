@@ -42,7 +42,7 @@
     "react-tooltip": "^3.10.0",
     "react-vis": "1.11.6",
     "styled-components": "^4.4.1",
-    "validator": "11.0.0",
+    "validator": "13.7.0",
     "velocity-react": "1.4.1"
   },
   "devDependencies": {
@@ -61,7 +61,7 @@
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
     "enzyme-to-json": "3.4.3",
-    "eslint": "5.3.0",
+    "eslint": "5.16.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "3.3.0",
@@ -75,7 +75,7 @@
     "fs-extra": "8.1.0",
     "html-loader": "0.5.5",
     "html-loader-jest": "0.2.1",
-    "husky": "4.2.3",
+    "husky": "4.3.8",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-transform-stub": "2.0.0",
@@ -85,15 +85,15 @@
     "node-sass": "4.14.1",
     "path": "0.12.7",
     "prettier": "1.17.0",
-    "resolve-url-loader": "3.1.2",
+    "resolve-url-loader": "3.1.4",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "unzipper": "0.10.10",
     "url-loader": "1.1.2",
     "walk": "2.3.14",
-    "webpack": "4.30.0",
+    "webpack": "4.46.0",
     "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.0"
+    "webpack-dev-server": "3.11.3"
   },
   "jest": {
     "moduleDirectories": [
