@@ -14,6 +14,15 @@ const ENV_INFO = {
   namespace: 'envnamespace',
 };
 
+const USER = {
+  email: 'owneremail',
+  profile: {
+    initialNamespace: 'NAMESPACE_1',
+    defaultNamespace: 'NAMESPACE_1',
+    email: 'owneremail'
+  }
+};
+
 const USER_UI_FEATURES = [
   {
     id: UI_FEATURES.RENAME_ENV,
@@ -60,6 +69,8 @@ describe('<EnvironmentDetailsHeader />', () => {
       onRenameBtnClick: mockOnRenameBtnClick
     };
     mockedStores.userStore.uiFeatures = USER_UI_FEATURES;
+    mockedStores.userStore.user = USER;
+    mockedStores.userStore.currentEnvUIFeatures = { owneremail: USER_UI_FEATURES };
     wrapper = mountComponent(props);
   });
 

@@ -36,7 +36,15 @@ const USER_UI_FEATURES = [
     id: UI_FEATURES.REMOVE_MEMBER,
     isAllowed: true
   },
+  {
+    id: UI_FEATURES.MANAGE_FEATURE_ACCESS,
+    isAllowed: true
+  }
 ];
+
+const CURRENT_ENV_UI_FEATURES = {
+  member1email: USER_UI_FEATURES
+};
 
 const mockedStores = {
   userStore: new UserStore(),
@@ -66,6 +74,7 @@ describe('<EnvironmentMembersList />', () => {
   const mockOnListItemClick = jest.fn();
   const mockOnRemoveBtnClick = jest.fn();
   const props = {
+    currentEnvUIFeatures: CURRENT_ENV_UI_FEATURES,
     envInfo: ENV_INFO,
     environmentMembers: MEMBERS,
     onListItemClick: mockOnListItemClick,
