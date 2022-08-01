@@ -47,10 +47,16 @@ object SecuredAction {
     }
   }
 
+  private[this] def validateSessionExpiration(session: Session): Try[Unit] = for {
+    expiredAt <- readValue(session, "expired_at").flatMap(v => Try(Instant.ofEpochSecond(v.toLong)))
+    result    <- if (expiredAt.isBefore(Instant.now())) Failure(SessionExpired) else Success(())
+  } yield result
+
   def fromSession[A](request: Request[A]): Try[AuthorizedSessionRequest[A]] = {
     val session = request.session
 
     for {
+      _           <- validateSessionExpiration(session)
       idToken     <- readValue(session, "id_token").flatMap(IdToken.fromCompactSerialization)
       accessToken <- readValue(session, "access_token").flatMap(SessionCodecs.parseAccessToken)
       ns          <- readValue(session, "namespace").map(Namespace.apply)
@@ -62,6 +68,8 @@ object SecuredAction {
   final case class InvalidSignature(tokenValue: String) extends Throwable("Signature of the JWT is invalid.")
 
   final object AccessTokenExpired extends Throwable("The access token has expired.") with NoStackTrace
+
+  final object SessionExpired extends Throwable("The session has expired.") with NoStackTrace
 }
 
 abstract class SecuredAction[R[_] <: AuthorizedRequest[_]] extends ActionBuilder[R, AnyContent] {

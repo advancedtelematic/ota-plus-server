@@ -6,13 +6,13 @@ import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.Errors.{OtaUserDoesNotExists, OtaUserIsDeactivated, UnexpectedResponse}
 import com.advancedtelematic.auth._
+import com.advancedtelematic.utils.ResultExtensions.ResultOps
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
-import play.api.libs.json.Json
+import play.api.{Configuration, Logger}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -76,7 +76,8 @@ class OAuthOidcController @Inject()(
     messageBus: PlayMessageBusPublisher,
     tokenExchange: TokenExchange,
     namespaceProvider: NamespaceProvider,
-    components: ControllerComponents
+    components: ControllerComponents,
+    conf: Configuration
 )(implicit system: ActorSystem)
     extends AbstractController(components) {
 
@@ -84,9 +85,9 @@ class OAuthOidcController @Inject()(
 
   private[this] val log = Logger(this.getClass)
 
-  lazy val config = system.settings.config
-
   private[this] val RedirectToLogin = Redirect(com.advancedtelematic.controllers.routes.LoginController.login())
+
+  private val sessionTTL = conf.underlying.getDuration("play.http.session.ttl")
 
   val authorizationError: Action[AnyContent] = Action { implicit request =>
     Unauthorized(views.html.authorizationError())
@@ -116,11 +117,8 @@ class OAuthOidcController @Inject()(
         ns <- namespaceProvider(newTokens)
         _ <- publishLoginEvent(idToken.userId, ns, accessToken)
       } yield
-        Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
-          "namespace"    -> ns.get,
-          "id_token"     -> idToken.value,
-          "access_token" -> Json.stringify(Json.toJson(accessToken)(SessionCodecs.AccessTokenFormat))
-        )
+        Redirect(com.advancedtelematic.controllers.routes.Application.index())
+          .withAuthSession(ns, idToken, accessToken, sessionTTL)
       loginResult.recover {
         case t: UnexpectedResponse =>
           log.debug("Error while exchanging authz code for tokens", t)
