@@ -39,12 +39,13 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
 
   def makeSessionCookie(subj: String): String = {
     import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
+    val expiredAt = Instant.now().plusSeconds(3600)
     val session = Session(
       Map(
         "id_token"               -> TokenUtils.identityTokenFor(subj),
-        "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
-        "auth_plus_access_token" -> "",
+        "access_token"           -> Json.toJson(AccessToken("XXXX", expiredAt)).toString(),
         "namespace"              -> subj,
+        "expired_at"             -> expiredAt.getEpochSecond.toString,
         "csrfToken"              -> csrfToken
       ))
     Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(session)))

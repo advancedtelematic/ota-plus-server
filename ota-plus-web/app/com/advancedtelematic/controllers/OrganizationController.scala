@@ -4,6 +4,7 @@ import brave.play.ZipkinTraceServiceLike
 import brave.play.implicits.ZipkinTraceImplicits
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.auth.{AuthorizedSessionRequest, PlainAction, SessionCodecs}
+import com.advancedtelematic.utils.ResultExtensions.ResultOps
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
@@ -25,6 +26,8 @@ class OrganizationController @Inject()(val conf: Configuration,
   private val log = Logger(this.getClass)
   private val redirectToIndex = Redirect(com.advancedtelematic.controllers.routes.Application.index())
 
+  private val sessionTTL = conf.underlying.getDuration("play.http.session.ttl")
+
   implicit def namespaceBinder: PathBindable[Namespace] =
     new PathBindable[Namespace] {
       override def bind(key: String, ns: String): Either[String, Namespace] = Right(Namespace(key))
@@ -41,11 +44,7 @@ class OrganizationController @Inject()(val conf: Configuration,
         case true =>
           log.info(s"User ${userId.id} switches to the namespace ${namespace.get}")
           userProfileApi.setNewDefaultOrganization(userId, namespace)
-          redirectToIndex.withSession(
-            "namespace" -> namespace.get,
-            "id_token" -> request.idToken.value,
-            "access_token" -> Json.stringify(Json.toJson(request.accessToken)(SessionCodecs.AccessTokenFormat))
-          )
+          redirectToIndex.withAuthSession(namespace, request.idToken, request.accessToken, sessionTTL)
       }
     }
 

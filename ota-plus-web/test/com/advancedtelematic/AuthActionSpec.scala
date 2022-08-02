@@ -33,11 +33,12 @@ class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
   }
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
-    def withAuthSession(): FakeRequest[A] =
+    def withAuthSession(expiredAt: Instant = Instant.now().plusSeconds(3600)): FakeRequest[A] =
       request.withSession(
         "id_token"     -> TokenUtils.identityTokenFor("test"),
         "access_token" -> Json.stringify(Json.toJson(accessToken)(SessionCodecs.AccessTokenFormat)),
-        "namespace"    -> namespace
+        "namespace"    -> namespace,
+        "expired_at"   -> expiredAt.getEpochSecond.toString
       )
   }
 
@@ -80,6 +81,13 @@ class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
     "reject request without Authorization header or session cookie" in {
       val request = FakeRequest(GET, "/")
       val result  = call(fakeRoute(), request)
+      status(result) must be(403)
+    }
+
+    "reject request with expired session cookie" in {
+      val request = FakeRequest(GET, "/")
+        .withAuthSession(Instant.now().minusSeconds(10))
+      val result = call(fakeRoute(), request)
       status(result) must be(403)
     }
   }
