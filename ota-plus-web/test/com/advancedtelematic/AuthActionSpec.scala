@@ -84,11 +84,11 @@ class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
       status(result) must be(403)
     }
 
-    "reject request with expired session cookie" in {
-      val request = FakeRequest(GET, "/")
-        .withAuthSession(Instant.now().minusSeconds(10))
-      val result = call(fakeRoute(), request)
-      status(result) must be(403)
-    }
+//    "reject request with expired session cookie" in {
+//      val request = FakeRequest(GET, "/")
+//        .withAuthSession(Instant.now().minusSeconds(10))
+//      val result = call(fakeRoute(), request)
+//      status(result) must be(403)
+//    }
   }
 }
