@@ -56,7 +56,7 @@ object SecuredAction {
     val session = request.session
 
     for {
-//      _           <- validateSessionExpiration(session)
+      _           <- validateSessionExpiration(session)
       idToken     <- readValue(session, "id_token").flatMap(IdToken.fromCompactSerialization)
       accessToken <- readValue(session, "access_token").flatMap(SessionCodecs.parseAccessToken)
       ns          <- readValue(session, "namespace").map(Namespace.apply)
