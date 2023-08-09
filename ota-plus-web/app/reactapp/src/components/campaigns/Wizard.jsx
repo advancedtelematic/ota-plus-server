@@ -331,7 +331,6 @@ class Wizard extends Component {
     campaignsStore.launchCampaign(campaignsStore.campaignData.campaignId);
     hideWizard(wizardIdentifier);
     campaignsStore.fetchCampaigns(campaignsStore.activeTab, 'campaignsFetchAsync', 0);
-    campaignsStore.fetchStatusCounts();
   };
 
   changeFilter = (filterValue) => {

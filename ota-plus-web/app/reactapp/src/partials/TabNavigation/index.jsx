@@ -80,7 +80,6 @@ class TabNavigation extends Component {
     const { campaignsStore, softwareStore } = stores;
     if (this.isCampaignsPage(location)) {
       this.setActive(campaignsStore.activeTab);
-      this.fetchStatusCount();
       this.setFilter(campaignsStore.campaignsFilter);
     }
     if (this.isPackagesPage(location)) {
@@ -98,13 +97,6 @@ class TabNavigation extends Component {
   isCampaignsPage = location => location === 'page-campaigns';
 
   isActive = tab => (tab === this.activeTab ? 'tab-navigation__link--active' : '');
-
-  @action
-  fetchStatusCount = () => {
-    const { stores } = this.props;
-    const { campaignsStore } = stores;
-    campaignsStore.fetchStatusCounts();
-  };
 
 
   @action
@@ -140,7 +132,6 @@ class TabNavigation extends Component {
 
   handleMenuClick(event) {
     this.setActive(event.key);
-    this.fetchStatusCount();
     switch (event.key) {
       case CAMPAIGNS_STATUS_ALL:
       default:
@@ -167,7 +158,6 @@ class TabNavigation extends Component {
     this.setState({ filterValue: value });
     this.setFilter(value);
     campaignsStore.fetchCampaigns(this.activeTab, 'campaignsFetchAsync', 0);
-    this.fetchStatusCount();
     sendAction(OTA_CAMPAIGNS_SEARCH_CAMPAIGN);
   }
 

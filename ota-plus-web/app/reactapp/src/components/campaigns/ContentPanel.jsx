@@ -204,7 +204,7 @@ class ContentPanel extends Component {
               current={pageNumber}
               defaultPageSize={CAMPAIGNS_LIMIT_PER_PAGE}
               onChange={this.onPageChange}
-              total={campaignsStore.count[this.activeTab]}
+              total={campaignsStore.totalCount}
               showTotal={this.showTotalTemplate}
             />
           </div>

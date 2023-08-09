@@ -46,13 +46,7 @@ export default class CampaignsStore {
     cancelled: {},
   };
 
-  @observable count = {
-    all: 0,
-    prepared: 0,
-    launched: 0,
-    finished: 0,
-    cancelled: 0,
-  };
+  @observable totalCount = 0;
 
   @observable campaignsLatestFetchAsync = {};
 
@@ -175,22 +169,6 @@ export default class CampaignsStore {
 
   fetchCampaignStatistics = id => axios.get(`${API_CAMPAIGNS_STATISTICS_SINGLE}/${id}/stats`);
 
-  fetchStatusCounts() {
-    const isFetching = true;
-    CAMPAIGNS_STATUSES.forEach((status) => {
-      resetAsync(this.campaignsFetchAsync[status], isFetching);
-
-      this.fetch(status)
-        .then((response) => {
-          this.count[status] = response.data.total;
-          this.campaignsFetchAsync[status] = handleAsyncSuccess(response);
-        })
-        .catch((error) => {
-          this.campaignsFetchAsync[status] = handleAsyncError(error);
-        });
-    });
-  }
-
   fetchAllCampaignsStatistics(campaigns) {
     const campaignsIds = campaigns.map(campaign => campaign.id);
     if (!_.isEmpty(campaignsIds)) {
@@ -217,6 +195,7 @@ export default class CampaignsStore {
       .then((response) => {
         const campaigns = response && response.data && response.data.values;
         this.campaigns = campaigns;
+        this.totalCount = response && response.data && response.data.total;
         this.fetchAllCampaignsStatistics(this.campaigns);
 
         this[async][status] = handleAsyncSuccess(response);
