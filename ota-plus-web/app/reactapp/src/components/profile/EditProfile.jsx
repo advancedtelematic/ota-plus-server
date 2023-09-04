@@ -26,6 +26,8 @@ class EditProfile extends Component {
 
   @observable newNameLength = 0;
 
+  changePasswordEnabled = false;
+
   constructor(props) {
     super(props);
     const { stores, t } = props;
@@ -208,14 +210,16 @@ class EditProfile extends Component {
                   {userStore.user.email}
                 </div>
                 <div className="column">
+                  {this.changePasswordEnabled && (
                   <Button
                     htmlType="button"
                     className="btn-link add-button"
                     id="change-password-link"
                     onClick={this.changePassword}
                   >
-                    Change password
+                        Change password
                   </Button>
+                  )}
                 </div>
               </div>
             </span>
