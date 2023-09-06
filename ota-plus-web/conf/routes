@@ -47,7 +47,7 @@ DELETE  /organizations/:ns/ui_features/:feature  com.advancedtelematic.controlle
 GET     /user/profile                            com.advancedtelematic.controllers.UserProfileController.getUserProfile
 PUT     /user/profile                            com.advancedtelematic.controllers.UserProfileController.updateUserProfile
 PUT     /user/profile/billing_info               com.advancedtelematic.controllers.UserProfileController.updateBillingInfo
-POST    /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword
+GET     /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword
 GET     /user/credentials/:uuid                  com.advancedtelematic.controllers.UserProfileController.getUserCredentialsBundle(uuid: UUID)
 GET     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
 POST    /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)

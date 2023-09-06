@@ -25,6 +25,7 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       implicit val tracer: ZipkinTraceServiceLike,
                                       authAction: IdentityAction,
                                       identityClaimsProvider: IdentityClaimsProvider,
+                                      oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
   extends AbstractController(components)
     with ApiClientSupport with ZipkinTraceImplicits {
@@ -68,9 +69,7 @@ class UserProfileController @Inject()(val conf: Configuration,
   }
 
   val changePassword: Action[AnyContent] = authAction.async { _ =>
-    Future.successful {
-      NotImplemented("Change password functionality is not implemented.")
-    }
+    oidcGateway.providerMeta().map(meta => SeeOther(meta.issuer))
   }
 
   def updateUserProfile(): Action[JsValue] = authAction.async(components.parsers.json) { implicit request =>

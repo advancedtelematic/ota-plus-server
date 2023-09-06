@@ -13,7 +13,7 @@ import { AsyncStatusCallbackHandler, MetaData } from '../../utils';
 import { sendAction, setAnalyticsView } from '../../helpers/analyticsHelper';
 import { OTA_PROFILE_RENAME } from '../../constants/analyticsActions';
 import { ANALYTICS_VIEW_PROFILE } from '../../constants/analyticsViews';
-import { assets, CANCEL_ICON_THIN, SETTINGS_ICON_BIG, TICK_ICON_BLACK } from '../../config';
+import { API_USER_CHANGE_PASSWORD, assets, CANCEL_ICON_THIN, SETTINGS_ICON_BIG, TICK_ICON_BLACK } from '../../config';
 
 @inject('stores')
 @observer
@@ -25,8 +25,6 @@ class EditProfile extends Component {
   @observable newName = '';
 
   @observable newNameLength = 0;
-
-  changePasswordEnabled = false;
 
   constructor(props) {
     super(props);
@@ -60,9 +58,7 @@ class EditProfile extends Component {
 
   changePassword = (e) => {
     if (e) e.preventDefault();
-    const { stores } = this.props;
-    const { userStore } = stores;
-    userStore.changePassword();
+    window.open(API_USER_CHANGE_PASSWORD, '_blank', 'noopener,noreferrer');
   };
 
   enableRename = (e) => {
@@ -210,7 +206,6 @@ class EditProfile extends Component {
                   {userStore.user.email}
                 </div>
                 <div className="column">
-                  {this.changePasswordEnabled && (
                   <Button
                     htmlType="button"
                     className="btn-link add-button"
@@ -219,7 +214,6 @@ class EditProfile extends Component {
                   >
                         Change password
                   </Button>
-                  )}
                 </div>
               </div>
             </span>
