@@ -28,7 +28,7 @@ class UpdatesWizardDetailListItem extends Component {
     this.fromVersionSelect = React.createRef();
   }
 
-  formatVersions = (type, name) => {
+  formatVersions = (type, name, item) => {
     const { stores, t } = this.props;
     const { softwareStore } = stores;
     const { preparedPackages } = softwareStore;
@@ -37,7 +37,7 @@ class UpdatesWizardDetailListItem extends Component {
       const found = _.find(packs, pack => pack.name === name);
       if (found) {
         const { versions: foundVersions } = found;
-        versions = foundVersions;
+        versions = _.filter(foundVersions, pack => _.includes(pack.hardwareIds, item.name));
       }
     });
     const formattedData = versions
@@ -72,7 +72,8 @@ class UpdatesWizardDetailListItem extends Component {
       fromVersion,
       toVersion
     } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
-    const uniqPackages = _.uniqBy(softwareStore.packages, pack => pack.id.name);
+    const packagesForCurrentEcu = _.filter(softwareStore.packages, pack => _.includes(pack.hardwareIds, item.name));
+    const uniqPackages = _.uniqBy(packagesForCurrentEcu, pack => pack.id.name);
 
     const packages = _.map(uniqPackages, pack => ({
       text: pack.id.name,
@@ -119,7 +120,7 @@ class UpdatesWizardDetailListItem extends Component {
                 defaultValue={!this.updateFromAny && fromPack && fromPack.id && fromPack.id.name}
                 onChange={(value) => {
                   if (value && value.id) {
-                    this.formatVersions('from', value.id);
+                    this.formatVersions('from', value.id, item);
                     onStep2DataSelect(item, 'fromPack', value.item);
                   }
                 }}
@@ -138,7 +139,7 @@ class UpdatesWizardDetailListItem extends Component {
                 defaultValue={toPack && toPack.id && toPack.id.name}
                 onChange={(value) => {
                   if (value && value.id) {
-                    this.formatVersions('to', value.id);
+                    this.formatVersions('to', value.id, item);
                     onStep2DataSelect(item, 'toPack', value.item);
                   }
                 }}
