@@ -74,8 +74,9 @@ class UpdatesWizardDetailListItem extends Component {
     } = !_.isEmpty(update) && _.isObject(update[item.name]) && update[item.name];
     const packagesForCurrentEcu = _.filter(softwareStore.packages, pack => _.includes(pack.hardwareIds, item.name));
     const uniqPackages = _.uniqBy(packagesForCurrentEcu, pack => pack.id.name);
+    const sortedUniqPackages = _.sortBy(uniqPackages, pack => pack.id.name);
 
-    const packages = _.map(uniqPackages, pack => ({
+    const packages = _.map(sortedUniqPackages, pack => ({
       text: pack.id.name,
       id: pack.id.name,
       value: pack.id.name,
