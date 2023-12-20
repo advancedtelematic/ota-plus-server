@@ -142,7 +142,15 @@ class Devices extends Component {
         devicesStore.devicesUngroupedCountInAnyGroup -= 1;
       }
       devicesStore.devicesInitialTotalCount -= 1;
+      devicesStore.devicesTotalCount -= 1;
       this.hideDeleteConfirmation();
+      if (devicesStore.devices.length === 0 && devicesStore.devicesPageNumber > 1) {
+        const { devicesFilter, devicesGroupFilter } = devicesStore;
+        devicesStore.devicesPageNumber -= 1;
+        const limit = DEVICES_LIMIT_PER_PAGE;
+        const offset = (devicesStore.devicesPageNumber - 1) * DEVICES_LIMIT_PER_PAGE;
+        devicesStore.loadMoreDevices(devicesFilter, devicesGroupFilter, limit, offset);
+      }
     });
     sendAction(OTA_DEVICE_DELETE);
   };
