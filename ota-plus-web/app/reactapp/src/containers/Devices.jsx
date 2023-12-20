@@ -138,6 +138,8 @@ class Devices extends Component {
       const foundGroup = _.find(groupsStore.groups, group => group.devices.values.indexOf(deviceUuid) > -1);
       if (foundGroup) {
         foundGroup.devices.total -= 1;
+      } else {
+        devicesStore.devicesUngroupedCountInAnyGroup -= 1;
       }
       devicesStore.devicesInitialTotalCount -= 1;
       this.hideDeleteConfirmation();
