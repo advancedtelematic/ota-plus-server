@@ -88,7 +88,7 @@
   "devices.software.blacklist.delete-tooltip": "Remove this Linux package from the <strong>Blacklisted packages</strong> list",
   "devices.software.created-at": "作成日時:",
   "devices.statuses.unknown": "一度もオンラインになっていません",
-  "footer.copyright": "© 2023 HERE",
+  "footer.copyright": "© 2024 HERE",
   "footer.language": "言語",
   "footer.language.chinese": "中国語",
   "footer.language.english": "English",
